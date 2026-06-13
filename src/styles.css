@@ -113,9 +113,9 @@
 
   body {
     background-image:
-      radial-gradient(at 12% 8%, oklch(0.85 0.1 220 / 0.45) 0px, transparent 50%),
-      radial-gradient(at 88% 92%, oklch(0.82 0.12 195 / 0.4) 0px, transparent 50%),
-      radial-gradient(at 50% 50%, oklch(0.92 0.05 240 / 0.25) 0px, transparent 60%);
+      radial-gradient(at 12% 8%, oklch(0.85 0.12 155 / 0.45) 0px, transparent 50%),
+      radial-gradient(at 88% 92%, oklch(0.82 0.14 170 / 0.4) 0px, transparent 50%),
+      radial-gradient(at 50% 50%, oklch(0.92 0.05 150 / 0.25) 0px, transparent 60%);
     background-attachment: fixed;
     min-height: 100dvh;
   }
