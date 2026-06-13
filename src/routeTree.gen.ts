@@ -9,8 +9,44 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SinaisVitaisRouteImport } from './routes/sinais-vitais'
+import { Route as ProcedimentosRouteImport } from './routes/procedimentos'
+import { Route as PdcaRouteImport } from './routes/pdca'
+import { Route as EscalasRouteImport } from './routes/escalas'
+import { Route as DiarioRouteImport } from './routes/diario'
+import { Route as CalculadoraRouteImport } from './routes/calculadora'
 import { Route as IndexRouteImport } from './routes/index'
 
+const SinaisVitaisRoute = SinaisVitaisRouteImport.update({
+  id: '/sinais-vitais',
+  path: '/sinais-vitais',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProcedimentosRoute = ProcedimentosRouteImport.update({
+  id: '/procedimentos',
+  path: '/procedimentos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PdcaRoute = PdcaRouteImport.update({
+  id: '/pdca',
+  path: '/pdca',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EscalasRoute = EscalasRouteImport.update({
+  id: '/escalas',
+  path: '/escalas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DiarioRoute = DiarioRouteImport.update({
+  id: '/diario',
+  path: '/diario',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CalculadoraRoute = CalculadoraRouteImport.update({
+  id: '/calculadora',
+  path: '/calculadora',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -19,28 +55,116 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/calculadora': typeof CalculadoraRoute
+  '/diario': typeof DiarioRoute
+  '/escalas': typeof EscalasRoute
+  '/pdca': typeof PdcaRoute
+  '/procedimentos': typeof ProcedimentosRoute
+  '/sinais-vitais': typeof SinaisVitaisRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/calculadora': typeof CalculadoraRoute
+  '/diario': typeof DiarioRoute
+  '/escalas': typeof EscalasRoute
+  '/pdca': typeof PdcaRoute
+  '/procedimentos': typeof ProcedimentosRoute
+  '/sinais-vitais': typeof SinaisVitaisRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/calculadora': typeof CalculadoraRoute
+  '/diario': typeof DiarioRoute
+  '/escalas': typeof EscalasRoute
+  '/pdca': typeof PdcaRoute
+  '/procedimentos': typeof ProcedimentosRoute
+  '/sinais-vitais': typeof SinaisVitaisRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/calculadora'
+    | '/diario'
+    | '/escalas'
+    | '/pdca'
+    | '/procedimentos'
+    | '/sinais-vitais'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/calculadora'
+    | '/diario'
+    | '/escalas'
+    | '/pdca'
+    | '/procedimentos'
+    | '/sinais-vitais'
+  id:
+    | '__root__'
+    | '/'
+    | '/calculadora'
+    | '/diario'
+    | '/escalas'
+    | '/pdca'
+    | '/procedimentos'
+    | '/sinais-vitais'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CalculadoraRoute: typeof CalculadoraRoute
+  DiarioRoute: typeof DiarioRoute
+  EscalasRoute: typeof EscalasRoute
+  PdcaRoute: typeof PdcaRoute
+  ProcedimentosRoute: typeof ProcedimentosRoute
+  SinaisVitaisRoute: typeof SinaisVitaisRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sinais-vitais': {
+      id: '/sinais-vitais'
+      path: '/sinais-vitais'
+      fullPath: '/sinais-vitais'
+      preLoaderRoute: typeof SinaisVitaisRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/procedimentos': {
+      id: '/procedimentos'
+      path: '/procedimentos'
+      fullPath: '/procedimentos'
+      preLoaderRoute: typeof ProcedimentosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pdca': {
+      id: '/pdca'
+      path: '/pdca'
+      fullPath: '/pdca'
+      preLoaderRoute: typeof PdcaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/escalas': {
+      id: '/escalas'
+      path: '/escalas'
+      fullPath: '/escalas'
+      preLoaderRoute: typeof EscalasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/diario': {
+      id: '/diario'
+      path: '/diario'
+      fullPath: '/diario'
+      preLoaderRoute: typeof DiarioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/calculadora': {
+      id: '/calculadora'
+      path: '/calculadora'
+      fullPath: '/calculadora'
+      preLoaderRoute: typeof CalculadoraRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -53,7 +177,23 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CalculadoraRoute: CalculadoraRoute,
+  DiarioRoute: DiarioRoute,
+  EscalasRoute: EscalasRoute,
+  PdcaRoute: PdcaRoute,
+  ProcedimentosRoute: ProcedimentosRoute,
+  SinaisVitaisRoute: SinaisVitaisRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

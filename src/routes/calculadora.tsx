@@ -1,0 +1,169 @@
+import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
+import { AppShell, Card, PageHeader, DataTable } from "@/components/AppShell";
+import { Calculator } from "lucide-react";
+
+export const Route = createFileRoute("/calculadora")({
+  head: () => ({
+    meta: [
+      { title: "Cálculo de Medicamentos — Enfermagem em Foco" },
+      { name: "description", content: "Calculadoras de diluição, regra de três e gotejamento para enfermagem." },
+    ],
+  }),
+  component: CalcPage,
+});
+
+function Field({
+  label,
+  value,
+  onChange,
+  unit,
+  step = "any",
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  unit?: string;
+  step?: string;
+}) {
+  return (
+    <label className="block">
+      <span className="mb-1 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+        {label}
+      </span>
+      <div className="flex items-center gap-2 rounded-xl border border-border/70 bg-card/70 px-3 py-2 focus-within:ring-2 focus-within:ring-ring">
+        <input
+          type="number"
+          inputMode="decimal"
+          step={step}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className="w-full bg-transparent text-base font-semibold text-foreground outline-none"
+          placeholder="0"
+        />
+        {unit && <span className="text-sm font-medium text-muted-foreground">{unit}</span>}
+      </div>
+    </label>
+  );
+}
+
+function Result({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="mt-4 rounded-xl surface-gradient p-4 text-primary-foreground">
+      <p className="text-xs font-semibold uppercase tracking-widest opacity-90">{label}</p>
+      <p className="mt-1 font-display text-3xl font-bold">{value}</p>
+    </div>
+  );
+}
+
+function num(s: string) {
+  const n = parseFloat(s.replace(",", "."));
+  return isFinite(n) ? n : 0;
+}
+
+function RegraDeTres() {
+  const [pres, setPres] = useState("");
+  const [diluente, setDiluente] = useState("");
+  const [dose, setDose] = useState("");
+  const ml = pres && dose && num(pres) > 0 ? (num(dose) * num(diluente)) / num(pres) : 0;
+  return (
+    <Card>
+      <div className="flex items-center gap-2">
+        <Calculator className="h-5 w-5 text-primary" />
+        <h3 className="font-display text-lg font-bold">Diluição (regra de três)</h3>
+      </div>
+      <p className="mt-1 text-sm text-muted-foreground">
+        Quanto administrar em mL a partir de uma apresentação diluída.
+      </p>
+      <div className="mt-4 grid gap-3 sm:grid-cols-3">
+        <Field label="Apresentação" value={pres} onChange={setPres} unit="mg/UI" />
+        <Field label="Diluído em" value={diluente} onChange={setDiluente} unit="mL" />
+        <Field label="Dose prescrita" value={dose} onChange={setDose} unit="mg/UI" />
+      </div>
+      <Result label="Administrar" value={ml ? `${ml.toFixed(2)} mL` : "—"} />
+    </Card>
+  );
+}
+
+function Gotejamento() {
+  const [vol, setVol] = useState("");
+  const [horas, setHoras] = useState("");
+  const v = num(vol);
+  const h = num(horas);
+  const gtt = v && h ? v / (h * 3) : 0;
+  const mlh = v && h ? v / h : 0;
+  return (
+    <Card>
+      <div className="flex items-center gap-2">
+        <Calculator className="h-5 w-5 text-primary" />
+        <h3 className="font-display text-lg font-bold">Gotejamento (macrogotas)</h3>
+      </div>
+      <p className="mt-1 text-sm text-muted-foreground">
+        Equipo padrão: 1 mL ≈ 20 gotas. Microgotas: multiplique por 3.
+      </p>
+      <div className="mt-4 grid gap-3 sm:grid-cols-2">
+        <Field label="Volume total" value={vol} onChange={setVol} unit="mL" />
+        <Field label="Tempo de infusão" value={horas} onChange={setHoras} unit="h" />
+      </div>
+      <div className="mt-4 grid gap-3 sm:grid-cols-2">
+        <Result label="Macrogotas" value={gtt ? `${gtt.toFixed(0)} gtt/min` : "—"} />
+        <Result label="Bomba" value={mlh ? `${mlh.toFixed(1)} mL/h` : "—"} />
+      </div>
+    </Card>
+  );
+}
+
+function DosePorKg() {
+  const [peso, setPeso] = useState("");
+  const [dose, setDose] = useState("");
+  const total = num(peso) * num(dose);
+  return (
+    <Card>
+      <div className="flex items-center gap-2">
+        <Calculator className="h-5 w-5 text-primary" />
+        <h3 className="font-display text-lg font-bold">Dose por peso</h3>
+      </div>
+      <p className="mt-1 text-sm text-muted-foreground">
+        Dose total a partir de mg/kg ou mcg/kg.
+      </p>
+      <div className="mt-4 grid gap-3 sm:grid-cols-2">
+        <Field label="Peso do paciente" value={peso} onChange={setPeso} unit="kg" />
+        <Field label="Dose prescrita" value={dose} onChange={setDose} unit="/kg" />
+      </div>
+      <Result label="Dose total" value={total ? total.toFixed(2) : "—"} />
+    </Card>
+  );
+}
+
+function CalcPage() {
+  return (
+    <AppShell>
+      <PageHeader
+        eyebrow="Cálculos clínicos"
+        title="Cálculo de medicamentos"
+        description="Confirme sempre prescrição, rótulo e os cinco certos antes da administração."
+      />
+      <div className="grid gap-4 md:grid-cols-2">
+        <RegraDeTres />
+        <DosePorKg />
+        <Gotejamento />
+        <Card>
+          <h3 className="font-display text-lg font-bold">Equipos e conversões</h3>
+          <p className="mt-1 text-sm text-muted-foreground">Referência rápida.</p>
+          <div className="mt-4">
+            <DataTable
+              headers={["Equipo / unidade", "Equivalência"]}
+              rows={[
+                ["Macrogotas", "1 mL = 20 gotas"],
+                ["Microgotas", "1 mL = 60 microgotas"],
+                ["1 grama", "1.000 mg"],
+                ["1 mg", "1.000 mcg"],
+                ["UI insulina (U-100)", "1 mL = 100 UI"],
+              ]}
+            />
+          </div>
+        </Card>
+      </div>
+    </AppShell>
+  );
+}
