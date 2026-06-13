@@ -9,6 +9,8 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SvPediatricoRouteImport } from './routes/sv-pediatrico'
+import { Route as SvGestanteRouteImport } from './routes/sv-gestante'
 import { Route as SinaisVitaisRouteImport } from './routes/sinais-vitais'
 import { Route as ProcedimentosRouteImport } from './routes/procedimentos'
 import { Route as PdcaRouteImport } from './routes/pdca'
@@ -17,6 +19,16 @@ import { Route as DiarioRouteImport } from './routes/diario'
 import { Route as CalculadoraRouteImport } from './routes/calculadora'
 import { Route as IndexRouteImport } from './routes/index'
 
+const SvPediatricoRoute = SvPediatricoRouteImport.update({
+  id: '/sv-pediatrico',
+  path: '/sv-pediatrico',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SvGestanteRoute = SvGestanteRouteImport.update({
+  id: '/sv-gestante',
+  path: '/sv-gestante',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SinaisVitaisRoute = SinaisVitaisRouteImport.update({
   id: '/sinais-vitais',
   path: '/sinais-vitais',
@@ -61,6 +73,8 @@ export interface FileRoutesByFullPath {
   '/pdca': typeof PdcaRoute
   '/procedimentos': typeof ProcedimentosRoute
   '/sinais-vitais': typeof SinaisVitaisRoute
+  '/sv-gestante': typeof SvGestanteRoute
+  '/sv-pediatrico': typeof SvPediatricoRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -70,6 +84,8 @@ export interface FileRoutesByTo {
   '/pdca': typeof PdcaRoute
   '/procedimentos': typeof ProcedimentosRoute
   '/sinais-vitais': typeof SinaisVitaisRoute
+  '/sv-gestante': typeof SvGestanteRoute
+  '/sv-pediatrico': typeof SvPediatricoRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -80,6 +96,8 @@ export interface FileRoutesById {
   '/pdca': typeof PdcaRoute
   '/procedimentos': typeof ProcedimentosRoute
   '/sinais-vitais': typeof SinaisVitaisRoute
+  '/sv-gestante': typeof SvGestanteRoute
+  '/sv-pediatrico': typeof SvPediatricoRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -91,6 +109,8 @@ export interface FileRouteTypes {
     | '/pdca'
     | '/procedimentos'
     | '/sinais-vitais'
+    | '/sv-gestante'
+    | '/sv-pediatrico'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -100,6 +120,8 @@ export interface FileRouteTypes {
     | '/pdca'
     | '/procedimentos'
     | '/sinais-vitais'
+    | '/sv-gestante'
+    | '/sv-pediatrico'
   id:
     | '__root__'
     | '/'
@@ -109,6 +131,8 @@ export interface FileRouteTypes {
     | '/pdca'
     | '/procedimentos'
     | '/sinais-vitais'
+    | '/sv-gestante'
+    | '/sv-pediatrico'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -119,10 +143,26 @@ export interface RootRouteChildren {
   PdcaRoute: typeof PdcaRoute
   ProcedimentosRoute: typeof ProcedimentosRoute
   SinaisVitaisRoute: typeof SinaisVitaisRoute
+  SvGestanteRoute: typeof SvGestanteRoute
+  SvPediatricoRoute: typeof SvPediatricoRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sv-pediatrico': {
+      id: '/sv-pediatrico'
+      path: '/sv-pediatrico'
+      fullPath: '/sv-pediatrico'
+      preLoaderRoute: typeof SvPediatricoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sv-gestante': {
+      id: '/sv-gestante'
+      path: '/sv-gestante'
+      fullPath: '/sv-gestante'
+      preLoaderRoute: typeof SvGestanteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sinais-vitais': {
       id: '/sinais-vitais'
       path: '/sinais-vitais'
@@ -183,6 +223,8 @@ const rootRouteChildren: RootRouteChildren = {
   PdcaRoute: PdcaRoute,
   ProcedimentosRoute: ProcedimentosRoute,
   SinaisVitaisRoute: SinaisVitaisRoute,
+  SvGestanteRoute: SvGestanteRoute,
+  SvPediatricoRoute: SvPediatricoRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

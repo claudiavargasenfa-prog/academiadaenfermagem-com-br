@@ -77,14 +77,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
-      { title: "Enfermagem em Foco — Caderno de Estágio" },
+      { title: "Acadêmico de Bolso — Enfermagem" },
       {
         name: "description",
         content:
           "Aplicativo de bolso para acadêmicos de enfermagem: procedimentos, cálculos, escalas, PDCA e diário de estágio.",
       },
-      { name: "theme-color", content: "#2b7fd1" },
-      { property: "og:title", content: "Enfermagem em Foco" },
+      { name: "theme-color", content: "#1f9d6b" },
+      { property: "og:title", content: "Acadêmico de Bolso" },
       {
         property: "og:description",
         content: "Caderno de estágio interativo para acadêmicos de enfermagem.",
