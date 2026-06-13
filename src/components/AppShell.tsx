@@ -7,18 +7,23 @@ import {
   Activity,
   NotebookPen,
   Target,
+  Baby,
+  HeartPulse,
   Menu,
   X,
 } from "lucide-react";
 import { useState, type ReactNode } from "react";
+import { ReferencesFooter } from "./References";
 
 const nav = [
   { to: "/", label: "Início", icon: Home },
-  { to: "/procedimentos", label: "Procedimentos", icon: Stethoscope },
+  { to: "/procedimentos", label: "Procedim.", icon: Stethoscope },
   { to: "/calculadora", label: "Cálculos", icon: Calculator },
-  { to: "/sinais-vitais", label: "Sinais Vitais", icon: Activity },
+  { to: "/sinais-vitais", label: "SV Adulto", icon: Activity },
+  { to: "/sv-pediatrico", label: "SV Pediátr.", icon: Baby },
+  { to: "/sv-gestante", label: "SV Gestante", icon: HeartPulse },
   { to: "/escalas", label: "Escalas", icon: ClipboardList },
-  { to: "/pdca", label: "PDCA & ODS 3", icon: Target },
+  { to: "/pdca", label: "PDCA", icon: Target },
   { to: "/diario", label: "Diário", icon: NotebookPen },
 ] as const;
 
@@ -35,8 +40,8 @@ export function AppShell({ children }: { children: ReactNode }) {
               <Stethoscope className="h-5 w-5" />
             </div>
             <div className="leading-tight">
-              <p className="font-display text-base font-bold text-foreground">Enfermagem em Foco</p>
-              <p className="text-[11px] text-muted-foreground">Caderno de estágio</p>
+              <p className="font-display text-base font-bold text-foreground">Acadêmico de Bolso</p>
+              <p className="text-[11px] text-muted-foreground">Enfermagem · Caderno de estágio</p>
             </div>
           </Link>
           <button
@@ -92,7 +97,10 @@ export function AppShell({ children }: { children: ReactNode }) {
         )}
       </header>
 
-      <main className="mx-auto max-w-5xl px-4 pb-28 pt-6 page-enter md:pb-10">{children}</main>
+      <main className="mx-auto max-w-5xl px-4 pb-28 pt-6 page-enter md:pb-10">
+        {children}
+        <ReferencesFooter compact />
+      </main>
 
       {/* Mobile bottom tab nav */}
       <nav className="fixed bottom-3 left-1/2 z-40 -translate-x-1/2 md:hidden">
