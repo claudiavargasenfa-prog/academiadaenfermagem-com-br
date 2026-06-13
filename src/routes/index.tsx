@@ -14,7 +14,7 @@ import { useLocal } from "@/lib/storage";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Início — Enfermagem em Foco" },
+      { title: "Início — Acadêmico de Bolso" },
       {
         name: "description",
         content: "Painel do estágio com progresso PDCA e atalhos para procedimentos.",
@@ -27,7 +27,9 @@ export const Route = createFileRoute("/")({
 const shortcuts = [
   { to: "/procedimentos", label: "Procedimentos", icon: Stethoscope, hint: "Cefalocaudal & checklist" },
   { to: "/calculadora", label: "Cálculo de Medicamentos", icon: Calculator, hint: "Regra de três, gotejamento" },
-  { to: "/sinais-vitais", label: "Sinais Vitais", icon: Activity, hint: "PA, FC, FR, SatO₂, T°" },
+  { to: "/sinais-vitais", label: "SV Adulto", icon: Activity, hint: "PA, FC, FR, SatO₂, T°" },
+  { to: "/sv-pediatrico", label: "SV Pediátrico", icon: Activity, hint: "Por faixa etária + PALS" },
+  { to: "/sv-gestante", label: "SV Gestante", icon: Activity, hint: "Pré-eclâmpsia, hemorragia" },
   { to: "/escalas", label: "Escalas Clínicas", icon: ClipboardList, hint: "Glasgow, Braden, NIHSS" },
   { to: "/pdca", label: "PDCA & ODS 3", icon: Target, hint: "Planejamento do ciclo" },
   { to: "/diario", label: "Diário de Bordo", icon: NotebookPen, hint: "Anotações + PDF ABNT" },
