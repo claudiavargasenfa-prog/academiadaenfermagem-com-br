@@ -146,6 +146,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         </div>
       </nav>
     </div>
+    </AuthGate>
   );
 }
 
