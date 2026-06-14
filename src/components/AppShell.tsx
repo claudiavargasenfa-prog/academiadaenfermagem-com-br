@@ -12,9 +12,11 @@ import {
   HandHeart,
   Menu,
   X,
+  LogOut,
 } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import { ReferencesFooter } from "./References";
+import { AuthGate, signOut } from "./AuthGate";
 import logoAsset from "@/assets/logo.png.asset.json";
 
 const nav = [
