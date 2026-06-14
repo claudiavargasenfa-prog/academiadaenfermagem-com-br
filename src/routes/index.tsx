@@ -30,13 +30,13 @@ export const Route = createFileRoute("/")({
 const shortcuts = [
   { to: "/iras", label: "Time Contra as IRAS", icon: HandHeart, hint: "5 Momentos da OMS" },
   { to: "/seguranca", label: "Segurança do Paciente", icon: ShieldCheck, hint: "6 Metas Internacionais" },
-  { to: "/procedimentos", label: "Procedimentos", icon: Stethoscope, hint: "Cefalocaudal & checklist" },
+  { to: "/procedimentos", label: "Exame Físico", icon: Stethoscope, hint: "Cefalocaudal & checklist" },
   { to: "/calculadora", label: "Cálculo de Medicamentos", icon: Calculator, hint: "Regra de três, gotejamento" },
   { to: "/sinais-vitais", label: "SV Adulto", icon: Activity, hint: "PA, FC, FR, SatO₂, T°" },
-  { to: "/sv-pediatrico", label: "SV Pediátrico", icon: Baby, hint: "Por faixa etária + PALS" },
-  { to: "/sv-gestante", label: "SV Gestante", icon: HeartPulse, hint: "Pré-eclâmpsia, hemorragia" },
+  { to: "/sv-pediatrico", label: "SV em Pediatria", icon: Baby, hint: "Por faixa etária + PALS" },
+  { to: "/sv-gestante", label: "SV na Gestante", icon: HeartPulse, hint: "Pré-eclâmpsia, hemorragia" },
   { to: "/escalas", label: "Escalas Clínicas", icon: ClipboardList, hint: "Glasgow, Braden, Morse..." },
-  { to: "/diario", label: "Diário de Bordo", icon: NotebookPen, hint: "Anotações + PDF ABNT" },
+  { to: "/diario", label: "Relatório de Estágio", icon: NotebookPen, hint: "Anotações + PDF ABNT" },
 ] as const;
 
 function Dashboard() {
@@ -65,7 +65,7 @@ function Dashboard() {
                 Acadêmico de Bolso
               </p>
               <h2 className="font-display text-xl font-extrabold leading-tight">
-                Conhecimento que cabe no <span className="text-gold">bolso jaleco</span>.
+                Conhecimento que cabe no <span className="text-gold">bolso do jaleco</span>.
               </h2>
               <p className="mt-2 text-sm text-primary-foreground/80">
                 Sem login, sem cadastro — tudo salvo no seu aparelho.
