@@ -6,24 +6,27 @@ import {
   ClipboardList,
   Activity,
   NotebookPen,
-  Target,
   Baby,
   HeartPulse,
+  ShieldCheck,
+  HandHeart,
   Menu,
   X,
 } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import { ReferencesFooter } from "./References";
+import logoAsset from "@/assets/logo.png.asset.json";
 
 const nav = [
   { to: "/", label: "Início", icon: Home },
+  { to: "/iras", label: "IRAS", icon: HandHeart },
+  { to: "/seguranca", label: "Segurança", icon: ShieldCheck },
   { to: "/procedimentos", label: "Procedim.", icon: Stethoscope },
   { to: "/calculadora", label: "Cálculos", icon: Calculator },
   { to: "/sinais-vitais", label: "SV Adulto", icon: Activity },
   { to: "/sv-pediatrico", label: "SV Pediátr.", icon: Baby },
   { to: "/sv-gestante", label: "SV Gestante", icon: HeartPulse },
   { to: "/escalas", label: "Escalas", icon: ClipboardList },
-  { to: "/pdca", label: "PDCA", icon: Target },
   { to: "/diario", label: "Diário", icon: NotebookPen },
 ] as const;
 
@@ -33,21 +36,27 @@ export function AppShell({ children }: { children: ReactNode }) {
 
   return (
     <div className="min-h-dvh">
-      <header className="sticky top-0 z-40 glass-subtle border-b border-border/40">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="grid h-9 w-9 place-items-center rounded-xl surface-gradient shadow-[var(--shadow-glow)]">
-              <Stethoscope className="h-5 w-5" />
-            </div>
-            <div className="leading-tight">
-              <p className="font-display text-base font-bold text-foreground">Acadêmico de Bolso</p>
-              <p className="text-[11px] text-muted-foreground">Enfermagem · Caderno de estágio</p>
+      <header className="sticky top-0 z-40 border-b border-gold/30 bg-primary text-primary-foreground shadow-[var(--shadow-soft)]">
+        <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3">
+          <Link to="/" className="flex min-w-0 items-center gap-3">
+            <img
+              src={logoAsset.url}
+              alt="Logotipo Acadêmico de Bolsa"
+              className="h-11 w-11 shrink-0 rounded-xl object-contain bg-white/10 p-1 ring-1 ring-gold/40"
+            />
+            <div className="min-w-0 leading-tight">
+              <p className="truncate font-display text-base font-extrabold tracking-tight text-gold">
+                Acadêmico de Bolsa
+              </p>
+              <p className="truncate text-[11px] text-primary-foreground/70">
+                Enfermagem · Caderno de estágio
+              </p>
             </div>
           </Link>
           <button
             aria-label={open ? "Fechar menu" : "Abrir menu"}
             onClick={() => setOpen((o) => !o)}
-            className="grid h-10 w-10 place-items-center rounded-xl glass md:hidden"
+            className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-white/10 text-gold md:hidden"
           >
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
@@ -58,10 +67,10 @@ export function AppShell({ children }: { children: ReactNode }) {
                 <Link
                   key={n.to}
                   to={n.to}
-                  className={`rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                  className={`rounded-lg px-2.5 py-1.5 text-xs font-semibold transition-colors ${
                     active
-                      ? "bg-primary text-primary-foreground shadow-[var(--shadow-soft)]"
-                      : "text-muted-foreground hover:bg-secondary hover:text-foreground"
+                      ? "gold-gradient shadow-[var(--shadow-soft)]"
+                      : "text-primary-foreground/80 hover:bg-white/10 hover:text-gold"
                   }`}
                 >
                   {n.label}
@@ -71,7 +80,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           </nav>
         </div>
         {open && (
-          <div className="border-t border-border/40 px-4 py-3 md:hidden">
+          <div className="border-t border-gold/20 bg-primary/95 px-4 py-3 md:hidden">
             <div className="grid grid-cols-2 gap-2">
               {nav.map((n) => {
                 const Icon = n.icon;
@@ -83,8 +92,8 @@ export function AppShell({ children }: { children: ReactNode }) {
                     onClick={() => setOpen(false)}
                     className={`flex items-center gap-2 rounded-xl px-3 py-2.5 text-sm font-medium ${
                       active
-                        ? "bg-primary text-primary-foreground"
-                        : "glass text-foreground"
+                        ? "gold-gradient"
+                        : "bg-white/10 text-primary-foreground"
                     }`}
                   >
                     <Icon className="h-4 w-4" />
@@ -104,7 +113,7 @@ export function AppShell({ children }: { children: ReactNode }) {
 
       {/* Mobile bottom tab nav */}
       <nav className="fixed bottom-3 left-1/2 z-40 -translate-x-1/2 md:hidden">
-        <div className="glass flex items-center gap-1 rounded-2xl px-2 py-2">
+        <div className="flex items-center gap-1 rounded-2xl border border-gold/40 bg-primary/95 px-2 py-2 text-primary-foreground shadow-[var(--shadow-glass)] backdrop-blur">
           {nav.slice(0, 5).map((n) => {
             const Icon = n.icon;
             const active = pathname === n.to;
@@ -112,8 +121,8 @@ export function AppShell({ children }: { children: ReactNode }) {
               <Link
                 key={n.to}
                 to={n.to}
-                className={`flex min-w-14 flex-col items-center gap-0.5 rounded-xl px-2 py-1.5 text-[10px] font-medium ${
-                  active ? "bg-primary text-primary-foreground" : "text-muted-foreground"
+                className={`flex min-w-14 flex-col items-center gap-0.5 rounded-xl px-2 py-1.5 text-[10px] font-semibold ${
+                  active ? "gold-gradient" : "text-primary-foreground/80"
                 }`}
                 aria-label={n.label}
               >
@@ -140,7 +149,7 @@ export function PageHeader({
   return (
     <div className="mb-6">
       {eyebrow && (
-        <p className="mb-1 text-xs font-semibold uppercase tracking-widest text-primary">
+        <p className="mb-1 text-xs font-semibold uppercase tracking-widest text-gold">
           {eyebrow}
         </p>
       )}
@@ -174,7 +183,7 @@ export function DataTable({
   return (
     <div className="overflow-x-auto rounded-xl border border-border/60 bg-card/60 backdrop-blur-md">
       <table className="w-full text-sm">
-        <thead className="bg-secondary/70 text-secondary-foreground">
+        <thead className="bg-primary text-primary-foreground">
           <tr>
             {headers.map((h) => (
               <th key={h} className="px-4 py-3 text-left font-semibold">

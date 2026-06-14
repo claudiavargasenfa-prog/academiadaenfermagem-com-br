@@ -12,8 +12,9 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SvPediatricoRouteImport } from './routes/sv-pediatrico'
 import { Route as SvGestanteRouteImport } from './routes/sv-gestante'
 import { Route as SinaisVitaisRouteImport } from './routes/sinais-vitais'
+import { Route as SegurancaRouteImport } from './routes/seguranca'
 import { Route as ProcedimentosRouteImport } from './routes/procedimentos'
-import { Route as PdcaRouteImport } from './routes/pdca'
+import { Route as IrasRouteImport } from './routes/iras'
 import { Route as EscalasRouteImport } from './routes/escalas'
 import { Route as DiarioRouteImport } from './routes/diario'
 import { Route as CalculadoraRouteImport } from './routes/calculadora'
@@ -34,14 +35,19 @@ const SinaisVitaisRoute = SinaisVitaisRouteImport.update({
   path: '/sinais-vitais',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SegurancaRoute = SegurancaRouteImport.update({
+  id: '/seguranca',
+  path: '/seguranca',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProcedimentosRoute = ProcedimentosRouteImport.update({
   id: '/procedimentos',
   path: '/procedimentos',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PdcaRoute = PdcaRouteImport.update({
-  id: '/pdca',
-  path: '/pdca',
+const IrasRoute = IrasRouteImport.update({
+  id: '/iras',
+  path: '/iras',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EscalasRoute = EscalasRouteImport.update({
@@ -70,8 +76,9 @@ export interface FileRoutesByFullPath {
   '/calculadora': typeof CalculadoraRoute
   '/diario': typeof DiarioRoute
   '/escalas': typeof EscalasRoute
-  '/pdca': typeof PdcaRoute
+  '/iras': typeof IrasRoute
   '/procedimentos': typeof ProcedimentosRoute
+  '/seguranca': typeof SegurancaRoute
   '/sinais-vitais': typeof SinaisVitaisRoute
   '/sv-gestante': typeof SvGestanteRoute
   '/sv-pediatrico': typeof SvPediatricoRoute
@@ -81,8 +88,9 @@ export interface FileRoutesByTo {
   '/calculadora': typeof CalculadoraRoute
   '/diario': typeof DiarioRoute
   '/escalas': typeof EscalasRoute
-  '/pdca': typeof PdcaRoute
+  '/iras': typeof IrasRoute
   '/procedimentos': typeof ProcedimentosRoute
+  '/seguranca': typeof SegurancaRoute
   '/sinais-vitais': typeof SinaisVitaisRoute
   '/sv-gestante': typeof SvGestanteRoute
   '/sv-pediatrico': typeof SvPediatricoRoute
@@ -93,8 +101,9 @@ export interface FileRoutesById {
   '/calculadora': typeof CalculadoraRoute
   '/diario': typeof DiarioRoute
   '/escalas': typeof EscalasRoute
-  '/pdca': typeof PdcaRoute
+  '/iras': typeof IrasRoute
   '/procedimentos': typeof ProcedimentosRoute
+  '/seguranca': typeof SegurancaRoute
   '/sinais-vitais': typeof SinaisVitaisRoute
   '/sv-gestante': typeof SvGestanteRoute
   '/sv-pediatrico': typeof SvPediatricoRoute
@@ -106,8 +115,9 @@ export interface FileRouteTypes {
     | '/calculadora'
     | '/diario'
     | '/escalas'
-    | '/pdca'
+    | '/iras'
     | '/procedimentos'
+    | '/seguranca'
     | '/sinais-vitais'
     | '/sv-gestante'
     | '/sv-pediatrico'
@@ -117,8 +127,9 @@ export interface FileRouteTypes {
     | '/calculadora'
     | '/diario'
     | '/escalas'
-    | '/pdca'
+    | '/iras'
     | '/procedimentos'
+    | '/seguranca'
     | '/sinais-vitais'
     | '/sv-gestante'
     | '/sv-pediatrico'
@@ -128,8 +139,9 @@ export interface FileRouteTypes {
     | '/calculadora'
     | '/diario'
     | '/escalas'
-    | '/pdca'
+    | '/iras'
     | '/procedimentos'
+    | '/seguranca'
     | '/sinais-vitais'
     | '/sv-gestante'
     | '/sv-pediatrico'
@@ -140,8 +152,9 @@ export interface RootRouteChildren {
   CalculadoraRoute: typeof CalculadoraRoute
   DiarioRoute: typeof DiarioRoute
   EscalasRoute: typeof EscalasRoute
-  PdcaRoute: typeof PdcaRoute
+  IrasRoute: typeof IrasRoute
   ProcedimentosRoute: typeof ProcedimentosRoute
+  SegurancaRoute: typeof SegurancaRoute
   SinaisVitaisRoute: typeof SinaisVitaisRoute
   SvGestanteRoute: typeof SvGestanteRoute
   SvPediatricoRoute: typeof SvPediatricoRoute
@@ -170,6 +183,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SinaisVitaisRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/seguranca': {
+      id: '/seguranca'
+      path: '/seguranca'
+      fullPath: '/seguranca'
+      preLoaderRoute: typeof SegurancaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/procedimentos': {
       id: '/procedimentos'
       path: '/procedimentos'
@@ -177,11 +197,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProcedimentosRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/pdca': {
-      id: '/pdca'
-      path: '/pdca'
-      fullPath: '/pdca'
-      preLoaderRoute: typeof PdcaRouteImport
+    '/iras': {
+      id: '/iras'
+      path: '/iras'
+      fullPath: '/iras'
+      preLoaderRoute: typeof IrasRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/escalas': {
@@ -220,8 +240,9 @@ const rootRouteChildren: RootRouteChildren = {
   CalculadoraRoute: CalculadoraRoute,
   DiarioRoute: DiarioRoute,
   EscalasRoute: EscalasRoute,
-  PdcaRoute: PdcaRoute,
+  IrasRoute: IrasRoute,
   ProcedimentosRoute: ProcedimentosRoute,
+  SegurancaRoute: SegurancaRoute,
   SinaisVitaisRoute: SinaisVitaisRoute,
   SvGestanteRoute: SvGestanteRoute,
   SvPediatricoRoute: SvPediatricoRoute,

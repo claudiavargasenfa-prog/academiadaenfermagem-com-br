@@ -15,22 +15,25 @@ export const REFERENCES: { n: string; src: string }[] = [
 
 export function ReferencesFooter({ compact = false }: { compact?: boolean }) {
   return (
-    <section className="mt-10 rounded-2xl border border-border/60 bg-card/60 p-4 backdrop-blur-md">
-      <p className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-primary">
-        Referências bibliográficas
+    <section className="mt-10 rounded-2xl border border-gold/40 bg-primary/95 p-4 text-primary-foreground shadow-[var(--shadow-soft)]">
+      <p className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-gold">
+        Fontes & referências
       </p>
-      <ol className="grid gap-1.5 text-[11px] leading-relaxed text-muted-foreground md:grid-cols-2">
+      <p className="mb-3 text-[12px] leading-relaxed text-primary-foreground/85">
+        <strong className="text-gold">Fontes:</strong> Diretrizes PALS/AHA, SBP, OMS, ANVISA, Ministério da Saúde e FEBRASGO.
+      </p>
+      <ol className="grid gap-1.5 text-[11px] leading-relaxed text-primary-foreground/75 md:grid-cols-2">
         {REFERENCES.slice(0, compact ? 6 : REFERENCES.length).map((r, i) => (
           <li key={r.n} className="flex gap-2">
-            <span className="font-semibold text-foreground/80">{i + 1}.</span>
+            <span className="font-semibold text-gold/90">{i + 1}.</span>
             <span>
-              <span className="font-semibold text-foreground/90">{r.n}.</span> {r.src}
+              <span className="font-semibold text-gold">{r.n}.</span> {r.src}
             </span>
           </li>
         ))}
       </ol>
-      <p className="mt-3 text-[10px] italic text-muted-foreground">
-        Aviso: aplicativo educacional para apoio acadêmico — não substitui o julgamento clínico do profissional de saúde.
+      <p className="mt-3 text-[10px] italic text-primary-foreground/65">
+        Aviso: Este aplicativo tem caráter estritamente educacional para apoio acadêmico e não substitui o julgamento clínico do profissional de saúde.
       </p>
     </section>
   );

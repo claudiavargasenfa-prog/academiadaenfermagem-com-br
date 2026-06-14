@@ -4,20 +4,23 @@ import {
   Calculator,
   Activity,
   ClipboardList,
-  Target,
   NotebookPen,
-  TrendingUp,
+  Baby,
+  HeartPulse,
+  ShieldCheck,
+  HandHeart,
 } from "lucide-react";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
 import { useLocal } from "@/lib/storage";
+import logoAsset from "@/assets/logo.png.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Início — Acadêmico de Bolso" },
+      { title: "Início — Acadêmico de Bolsa" },
       {
         name: "description",
-        content: "Painel do estágio com progresso PDCA e atalhos para procedimentos.",
+        content: "Caderno de estágio interativo: IRAS, Segurança do Paciente, escalas e cálculos.",
       },
     ],
   }),
@@ -25,21 +28,18 @@ export const Route = createFileRoute("/")({
 });
 
 const shortcuts = [
+  { to: "/iras", label: "Time Contra as IRAS", icon: HandHeart, hint: "5 Momentos da OMS" },
+  { to: "/seguranca", label: "Segurança do Paciente", icon: ShieldCheck, hint: "6 Metas Internacionais" },
   { to: "/procedimentos", label: "Procedimentos", icon: Stethoscope, hint: "Cefalocaudal & checklist" },
   { to: "/calculadora", label: "Cálculo de Medicamentos", icon: Calculator, hint: "Regra de três, gotejamento" },
   { to: "/sinais-vitais", label: "SV Adulto", icon: Activity, hint: "PA, FC, FR, SatO₂, T°" },
-  { to: "/sv-pediatrico", label: "SV Pediátrico", icon: Activity, hint: "Por faixa etária + PALS" },
-  { to: "/sv-gestante", label: "SV Gestante", icon: Activity, hint: "Pré-eclâmpsia, hemorragia" },
-  { to: "/escalas", label: "Escalas Clínicas", icon: ClipboardList, hint: "Glasgow, Braden, NIHSS" },
-  { to: "/pdca", label: "PDCA & ODS 3", icon: Target, hint: "Planejamento do ciclo" },
+  { to: "/sv-pediatrico", label: "SV Pediátrico", icon: Baby, hint: "Por faixa etária + PALS" },
+  { to: "/sv-gestante", label: "SV Gestante", icon: HeartPulse, hint: "Pré-eclâmpsia, hemorragia" },
+  { to: "/escalas", label: "Escalas Clínicas", icon: ClipboardList, hint: "Glasgow, Braden, Morse..." },
   { to: "/diario", label: "Diário de Bordo", icon: NotebookPen, hint: "Anotações + PDF ABNT" },
 ] as const;
 
 function Dashboard() {
-  const [pdca] = useLocal("pdca-state", { p: "", d: "", c: "", a: "" });
-  const filled = (["p", "d", "c", "a"] as const).filter((k) => (pdca[k] || "").trim().length > 20).length;
-  const progress = (filled / 4) * 100;
-
   const [diario] = useLocal<{ id: string; data: string; texto: string }[]>("diario-entries", []);
   const [estagio] = useLocal("estagio-info", { campo: "", preceptor: "", periodo: "" });
 
@@ -48,53 +48,33 @@ function Dashboard() {
       <PageHeader
         eyebrow="Bem-vindo(a)"
         title="Seu estágio, em um só lugar."
-        description="Reúna referências clínicas, calcule doses com segurança e acompanhe seu Ciclo PDCA do início ao fim."
+        description="Reúna referências clínicas, calcule doses com segurança e fortaleça sua prática como acadêmico(a) de enfermagem."
       />
 
       <section className="mb-6 grid gap-4 md:grid-cols-3">
-        <Card className="md:col-span-2">
-          <div className="flex items-start justify-between gap-4">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-widest text-primary">
-                Ciclo PDCA
-              </p>
-              <h2 className="mt-1 font-display text-2xl font-bold">Progresso do estágio</h2>
-              <p className="mt-1 text-sm text-muted-foreground">
-                {filled} de 4 fases preenchidas com profundidade.
-              </p>
-            </div>
-            <div className="grid h-12 w-12 place-items-center rounded-2xl surface-gradient">
-              <TrendingUp className="h-6 w-6" />
-            </div>
-          </div>
-          <div className="mt-4 h-3 w-full overflow-hidden rounded-full bg-secondary">
-            <div
-              className="h-full rounded-full surface-gradient transition-all duration-500"
-              style={{ width: `${progress}%` }}
+        <div className="overflow-hidden rounded-3xl border border-gold/40 bg-primary p-5 text-primary-foreground shadow-[var(--shadow-glass)] md:col-span-2">
+          <div className="flex items-start gap-4">
+            <img
+              src={logoAsset.url}
+              alt="Logotipo Acadêmico de Bolsa"
+              className="h-16 w-16 shrink-0 rounded-2xl bg-white/10 object-contain p-1 ring-1 ring-gold/40"
             />
+            <div className="min-w-0">
+              <p className="text-[11px] font-semibold uppercase tracking-widest text-gold">
+                Acadêmico de Bolsa
+              </p>
+              <h2 className="font-display text-xl font-extrabold leading-tight">
+                Conhecimento que cabe no <span className="text-gold">bolso jaleco</span>.
+              </h2>
+              <p className="mt-2 text-sm text-primary-foreground/80">
+                Sem login, sem cadastro — tudo salvo no seu aparelho.
+              </p>
+            </div>
           </div>
-          <div className="mt-3 grid grid-cols-4 gap-2 text-center text-[11px] font-medium">
-            {(["P", "D", "C", "A"] as const).map((l, i) => (
-              <div
-                key={l}
-                className={`rounded-lg py-1.5 ${
-                  i < filled ? "bg-primary text-primary-foreground" : "bg-secondary text-muted-foreground"
-                }`}
-              >
-                {l}
-              </div>
-            ))}
-          </div>
-          <Link
-            to="/pdca"
-            className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-primary hover:underline"
-          >
-            Continuar planejamento →
-          </Link>
-        </Card>
+        </div>
 
         <Card>
-          <p className="text-xs font-semibold uppercase tracking-widest text-primary">
+          <p className="text-xs font-semibold uppercase tracking-widest text-gold">
             Identificação
           </p>
           <h3 className="mt-1 font-display text-lg font-bold">Meu estágio</h3>
@@ -113,10 +93,10 @@ function Dashboard() {
             </div>
           </dl>
           <Link
-            to="/pdca"
+            to="/diario"
             className="mt-3 inline-block text-sm font-semibold text-primary hover:underline"
           >
-            Editar dados
+            Editar no Diário
           </Link>
         </Card>
       </section>
@@ -132,7 +112,7 @@ function Dashboard() {
                 to={s.to}
                 className="group glass rounded-2xl p-4 transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-glow)]"
               >
-                <div className="grid h-11 w-11 place-items-center rounded-xl surface-gradient">
+                <div className="grid h-11 w-11 place-items-center rounded-xl gold-gradient">
                   <Icon className="h-5 w-5" />
                 </div>
                 <p className="mt-3 font-display text-base font-bold text-foreground">{s.label}</p>
@@ -147,7 +127,7 @@ function Dashboard() {
         <Card>
           <div className="flex items-start justify-between gap-4">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-widest text-primary">
+              <p className="text-xs font-semibold uppercase tracking-widest text-gold">
                 Diário de bordo
               </p>
               <h3 className="mt-1 font-display text-lg font-bold">
