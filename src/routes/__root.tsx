@@ -77,14 +77,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
-      { title: "Acadêmico de Bolsa — Enfermagem" },
+      { title: "Acadêmico de Bolso — Enfermagem" },
       {
         name: "description",
         content:
           "Aplicativo educacional para acadêmicos de enfermagem: IRAS, segurança do paciente, escalas, cálculos e diário de estágio.",
       },
       { name: "theme-color", content: "#0c3e21" },
-      { property: "og:title", content: "Acadêmico de Bolsa" },
+      { property: "og:title", content: "Acadêmico de Bolso" },
       {
         property: "og:description",
         content: "Caderno de estágio interativo para acadêmicos de enfermagem.",

@@ -46,10 +46,10 @@ export function AppShell({ children }: { children: ReactNode }) {
             />
             <div className="min-w-0 leading-tight">
               <p className="truncate font-display text-base font-extrabold tracking-tight text-gold">
-                Acadêmico de Bolsa
+                Acadêmico de Bolso
               </p>
               <p className="truncate text-[11px] text-primary-foreground/70">
-                Enfermagem · Caderno de estágio
+                Informações Atualizadas em suas mãos
               </p>
             </div>
           </Link>
