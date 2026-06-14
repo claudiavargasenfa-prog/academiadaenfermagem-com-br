@@ -77,20 +77,26 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
-      { title: "Acadêmico de Bolso — Enfermagem" },
+      { title: "ACADÊMICO DE BOLSO— Informações em suas mãos" },
       {
         name: "description",
         content:
-          "Aplicativo educacional para acadêmicos de enfermagem: IRAS, segurança do paciente, escalas, cálculos e diário de estágio.",
+          "Aplicativo de bolso para acadêmicos de enfermagem: procedimentos, cálculos, escalas, PDCA e diário de estágio.",
       },
-      { name: "theme-color", content: "#0c3e21" },
-      { property: "og:title", content: "Acadêmico de Bolso" },
+      { name: "theme-color", content: "#2b7fd1" },
+      { property: "og:title", content: "ACADÊMICO DE BOLSO— Informações em suas mãos" },
       {
         property: "og:description",
         content: "Caderno de estágio interativo para acadêmicos de enfermagem.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: "ACADÊMICO DE BOLSO— Informações em suas mãos" },
+      { name: "description", content: "Aplicativo atualizado, contendo calculadora de calculo, exame físico, tabela de sinais vitais do RV, criança, gestante, adulto e idoso.SAE e proc de enfermagem" },
+      { property: "og:description", content: "Aplicativo atualizado, contendo calculadora de calculo, exame físico, tabela de sinais vitais do RV, criança, gestante, adulto e idoso.SAE e proc de enfermagem" },
+      { name: "twitter:description", content: "Aplicativo atualizado, contendo calculadora de calculo, exame físico, tabela de sinais vitais do RV, criança, gestante, adulto e idoso.SAE e proc de enfermagem" },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/7PxPELOptZPDxG1fCljnAraycx32/social-images/social-1781397482453-LOGO_DO_APP._-_SEM_NOME.webp" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/7PxPELOptZPDxG1fCljnAraycx32/social-images/social-1781397482453-LOGO_DO_APP._-_SEM_NOME.webp" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
