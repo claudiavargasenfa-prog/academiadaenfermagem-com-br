@@ -17,7 +17,7 @@ import logoAsset from "@/assets/logo.png.asset.json";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Início — Acadêmico de Bolsa" },
+      { title: "Início — Acadêmico de Bolso" },
       {
         name: "description",
         content: "Caderno de estágio interativo: IRAS, Segurança do Paciente, escalas e cálculos.",
@@ -56,12 +56,13 @@ function Dashboard() {
           <div className="flex items-start gap-4">
             <img
               src={logoAsset.url}
-              alt="Logotipo Acadêmico de Bolsa"
+              alt="Logotipo Acadêmico de Bolso"
               className="h-16 w-16 shrink-0 rounded-2xl bg-white/10 object-contain p-1 ring-1 ring-gold/40"
+
             />
             <div className="min-w-0">
               <p className="text-[11px] font-semibold uppercase tracking-widest text-gold">
-                Acadêmico de Bolsa
+                Acadêmico de Bolso
               </p>
               <h2 className="font-display text-xl font-extrabold leading-tight">
                 Conhecimento que cabe no <span className="text-gold">bolso jaleco</span>.
