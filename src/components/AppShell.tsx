@@ -21,13 +21,13 @@ const nav = [
   { to: "/", label: "Início", icon: Home },
   { to: "/iras", label: "IRAS", icon: HandHeart },
   { to: "/seguranca", label: "Segurança", icon: ShieldCheck },
-  { to: "/procedimentos", label: "Procedim.", icon: Stethoscope },
+  { to: "/procedimentos", label: "Exame Físico", icon: Stethoscope },
   { to: "/calculadora", label: "Cálculos", icon: Calculator },
   { to: "/sinais-vitais", label: "SV Adulto", icon: Activity },
-  { to: "/sv-pediatrico", label: "SV Pediátr.", icon: Baby },
-  { to: "/sv-gestante", label: "SV Gestante", icon: HeartPulse },
+  { to: "/sv-pediatrico", label: "SV em Pediatria", icon: Baby },
+  { to: "/sv-gestante", label: "SV na Gestante", icon: HeartPulse },
   { to: "/escalas", label: "Escalas", icon: ClipboardList },
-  { to: "/diario", label: "Diário", icon: NotebookPen },
+  { to: "/diario", label: "Relatório de Estágio", icon: NotebookPen },
 ] as const;
 
 export function AppShell({ children }: { children: ReactNode }) {
@@ -49,7 +49,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                 Acadêmico de Bolso
               </p>
               <p className="truncate text-[11px] text-primary-foreground/70">
-                Informações Atualizadas em suas mãos
+                Informação Atualizada em suas Mãos
               </p>
             </div>
           </Link>
