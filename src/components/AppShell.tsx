@@ -12,9 +12,11 @@ import {
   HandHeart,
   Menu,
   X,
+  LogOut,
 } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import { ReferencesFooter } from "./References";
+import { AuthGate, signOut } from "./AuthGate";
 import logoAsset from "@/assets/logo.png.asset.json";
 
 const nav = [
@@ -35,6 +37,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   return (
+    <AuthGate>
     <div className="min-h-dvh">
       <header className="sticky top-0 z-40 border-b border-gold/30 bg-primary text-primary-foreground shadow-[var(--shadow-soft)]">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3">
@@ -53,13 +56,22 @@ export function AppShell({ children }: { children: ReactNode }) {
               </p>
             </div>
           </Link>
-          <button
-            aria-label={open ? "Fechar menu" : "Abrir menu"}
-            onClick={() => setOpen((o) => !o)}
-            className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-white/10 text-gold md:hidden"
-          >
-            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
+          <div className="flex items-center gap-1">
+            <button
+              aria-label="Sair"
+              onClick={() => signOut()}
+              className="hidden h-10 items-center gap-1.5 rounded-xl bg-white/10 px-3 text-xs font-semibold text-gold hover:bg-white/20 md:inline-flex"
+            >
+              <LogOut className="h-4 w-4" /> Sair
+            </button>
+            <button
+              aria-label={open ? "Fechar menu" : "Abrir menu"}
+              onClick={() => setOpen((o) => !o)}
+              className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-white/10 text-gold md:hidden"
+            >
+              {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
+          </div>
           <nav className="hidden items-center gap-1 md:flex">
             {nav.map((n) => {
               const active = pathname === n.to;
@@ -134,6 +146,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         </div>
       </nav>
     </div>
+    </AuthGate>
   );
 }
 
