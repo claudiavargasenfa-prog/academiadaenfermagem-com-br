@@ -10,10 +10,19 @@ import {
   HandHeart,
   GraduationCap,
   FileText,
+  Lock,
+  ShoppingBag,
 } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
 import { useLocal } from "@/lib/storage";
 import logoAsset from "@/assets/logo.png.asset.json";
+import {
+  fetchMiniApps,
+  fetchMyBasicSubscription,
+  fetchMyExtraAccess,
+  summarizeAccess,
+} from "@/lib/access";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -28,17 +37,19 @@ export const Route = createFileRoute("/")({
   component: Dashboard,
 });
 
+// Cada atalho aponta para um slug em `mini_apps`. `tier` define como é
+// liberado: `basico` = incluído na assinatura mensal; `extra` = compra avulsa.
 const shortcuts = [
-  { to: "/postura-etica", label: "Postura e Ética Profissional", icon: GraduationCap, hint: "Manual de conduta no estágio" },
-  { to: "/iras", label: "Time Contra as IRAS", icon: HandHeart, hint: "5 Momentos da OMS" },
-  { to: "/seguranca", label: "Segurança do Paciente", icon: ShieldCheck, hint: "6 Metas Internacionais" },
-  { to: "/exame-fisico-escalas", label: "Exame Físico e Escalas de Avaliação", icon: Stethoscope, hint: "Cefalocaudal + Glasgow, Braden, Morse..." },
-  { to: "/calculadora", label: "Cálculos de Medicamentos", icon: Calculator, hint: "Regra de três, gotejamento, dose/peso" },
-  { to: "/sinais-vitais", label: "Sinais Vitais", icon: Activity, hint: "PA, FC, FR, SatO₂, T°" },
-  { to: "/sv-pediatrico", label: "Sinais Vitais Pediátricos", icon: Baby, hint: "Por faixa etária + PALS + dor" },
-  { to: "/sv-gestante", label: "Sinais Vitais Gestante", icon: HeartPulse, hint: "Pré-eclâmpsia, hemorragia" },
-  { to: "/diario", label: "Diário de Bordo", icon: NotebookPen, hint: "Anotações de plantão" },
-  { to: "/relatorio-abnt", label: "Relatório de Estágio (ABNT)", icon: FileText, hint: "Gerar relatório automático" },
+  { to: "/postura-etica",        slug: "basico",               tier: "basico" as const, label: "Postura e Ética Profissional", icon: GraduationCap, hint: "Manual de conduta no estágio" },
+  { to: "/diario",               slug: "basico",               tier: "basico" as const, label: "Diário de Bordo",                icon: NotebookPen,   hint: "Anotações de plantão" },
+  { to: "/sinais-vitais",        slug: "basico",               tier: "basico" as const, label: "Sinais Vitais",                  icon: Activity,      hint: "PA, FC, FR, SatO₂, T°" },
+  { to: "/iras",                 slug: "iras",                 tier: "extra"  as const, label: "Time Contra as IRAS",            icon: HandHeart,     hint: "5 Momentos da OMS" },
+  { to: "/seguranca",            slug: "seguranca",            tier: "extra"  as const, label: "Segurança do Paciente",          icon: ShieldCheck,   hint: "6 Metas Internacionais" },
+  { to: "/exame-fisico-escalas", slug: "exame-fisico-escalas", tier: "extra"  as const, label: "Exame Físico e Escalas de Avaliação", icon: Stethoscope, hint: "Cefalocaudal + Glasgow, Braden, Morse..." },
+  { to: "/calculadora",          slug: "calculadora",          tier: "extra"  as const, label: "Cálculos de Medicamentos",       icon: Calculator,    hint: "Regra de três, gotejamento, dose/peso" },
+  { to: "/sv-pediatrico",        slug: "sv-pediatrico",        tier: "extra"  as const, label: "Sinais Vitais Pediátricos",      icon: Baby,          hint: "Por faixa etária + PALS + dor" },
+  { to: "/sv-gestante",          slug: "sv-gestante",          tier: "extra"  as const, label: "Sinais Vitais Gestante",         icon: HeartPulse,    hint: "Pré-eclâmpsia, hemorragia" },
+  { to: "/relatorio-abnt",       slug: "relatorio-abnt",       tier: "extra"  as const, label: "Relatório de Estágio (ABNT)",    icon: FileText,      hint: "Gerar relatório automático" },
 ] as const;
 
 
