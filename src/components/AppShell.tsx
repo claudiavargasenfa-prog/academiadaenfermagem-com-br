@@ -13,14 +13,20 @@ import {
   Menu,
   X,
   LogOut,
+  Store,
+  User,
+  Shield,
 } from "lucide-react";
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { ReferencesFooter } from "./References";
 import { AuthGate, signOut } from "./AuthGate";
+import { isAdmin } from "@/lib/access";
 import logoAsset from "@/assets/logo.png.asset.json";
 
 const nav = [
   { to: "/", label: "Início", icon: Home },
+  { to: "/loja", label: "Loja", icon: Store },
+  { to: "/minha-conta", label: "Minha Conta", icon: User },
   { to: "/iras", label: "IRAS", icon: HandHeart },
   { to: "/seguranca", label: "Segurança", icon: ShieldCheck },
   { to: "/procedimentos", label: "Exame Físico", icon: Stethoscope },
@@ -34,7 +40,16 @@ const nav = [
 
 export function AppShell({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
+  const [admin, setAdmin] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+
+  useEffect(() => {
+    isAdmin().then(setAdmin);
+  }, []);
+
+  const navItems = admin
+    ? [...nav, { to: "/admin" as const, label: "Admin", icon: Shield }]
+    : nav;
 
   return (
     <AuthGate>
@@ -73,7 +88,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             </button>
           </div>
           <nav className="hidden items-center gap-1 md:flex">
-            {nav.map((n) => {
+            {navItems.map((n) => {
               const active = pathname === n.to;
               return (
                 <Link
@@ -94,7 +109,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         {open && (
           <div className="border-t border-gold/20 bg-primary/95 px-4 py-3 md:hidden">
             <div className="grid grid-cols-2 gap-2">
-              {nav.map((n) => {
+              {navItems.map((n) => {
                 const Icon = n.icon;
                 const active = pathname === n.to;
                 return (
@@ -126,7 +141,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       {/* Mobile bottom tab nav */}
       <nav className="fixed bottom-3 left-1/2 z-40 -translate-x-1/2 md:hidden">
         <div className="flex items-center gap-1 rounded-2xl border border-gold/40 bg-primary/95 px-2 py-2 text-primary-foreground shadow-[var(--shadow-glass)] backdrop-blur">
-          {nav.slice(0, 5).map((n) => {
+          {navItems.slice(0, 5).map((n) => {
             const Icon = n.icon;
             const active = pathname === n.to;
             return (
