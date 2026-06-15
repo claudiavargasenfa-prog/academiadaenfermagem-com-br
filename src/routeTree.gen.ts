@@ -14,6 +14,7 @@ import { Route as SvGestanteRouteImport } from './routes/sv-gestante'
 import { Route as SinaisVitaisRouteImport } from './routes/sinais-vitais'
 import { Route as SegurancaRouteImport } from './routes/seguranca'
 import { Route as ProcedimentosRouteImport } from './routes/procedimentos'
+import { Route as PosturaEticaRouteImport } from './routes/postura-etica'
 import { Route as MinhaContaRouteImport } from './routes/minha-conta'
 import { Route as LojaRouteImport } from './routes/loja'
 import { Route as IrasRouteImport } from './routes/iras'
@@ -47,6 +48,11 @@ const SegurancaRoute = SegurancaRouteImport.update({
 const ProcedimentosRoute = ProcedimentosRouteImport.update({
   id: '/procedimentos',
   path: '/procedimentos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PosturaEticaRoute = PosturaEticaRouteImport.update({
+  id: '/postura-etica',
+  path: '/postura-etica',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MinhaContaRoute = MinhaContaRouteImport.update({
@@ -104,6 +110,7 @@ export interface FileRoutesByFullPath {
   '/iras': typeof IrasRoute
   '/loja': typeof LojaRoute
   '/minha-conta': typeof MinhaContaRoute
+  '/postura-etica': typeof PosturaEticaRoute
   '/procedimentos': typeof ProcedimentosRoute
   '/seguranca': typeof SegurancaRoute
   '/sinais-vitais': typeof SinaisVitaisRoute
@@ -120,6 +127,7 @@ export interface FileRoutesByTo {
   '/iras': typeof IrasRoute
   '/loja': typeof LojaRoute
   '/minha-conta': typeof MinhaContaRoute
+  '/postura-etica': typeof PosturaEticaRoute
   '/procedimentos': typeof ProcedimentosRoute
   '/seguranca': typeof SegurancaRoute
   '/sinais-vitais': typeof SinaisVitaisRoute
@@ -137,6 +145,7 @@ export interface FileRoutesById {
   '/iras': typeof IrasRoute
   '/loja': typeof LojaRoute
   '/minha-conta': typeof MinhaContaRoute
+  '/postura-etica': typeof PosturaEticaRoute
   '/procedimentos': typeof ProcedimentosRoute
   '/seguranca': typeof SegurancaRoute
   '/sinais-vitais': typeof SinaisVitaisRoute
@@ -155,6 +164,7 @@ export interface FileRouteTypes {
     | '/iras'
     | '/loja'
     | '/minha-conta'
+    | '/postura-etica'
     | '/procedimentos'
     | '/seguranca'
     | '/sinais-vitais'
@@ -171,6 +181,7 @@ export interface FileRouteTypes {
     | '/iras'
     | '/loja'
     | '/minha-conta'
+    | '/postura-etica'
     | '/procedimentos'
     | '/seguranca'
     | '/sinais-vitais'
@@ -187,6 +198,7 @@ export interface FileRouteTypes {
     | '/iras'
     | '/loja'
     | '/minha-conta'
+    | '/postura-etica'
     | '/procedimentos'
     | '/seguranca'
     | '/sinais-vitais'
@@ -204,6 +216,7 @@ export interface RootRouteChildren {
   IrasRoute: typeof IrasRoute
   LojaRoute: typeof LojaRoute
   MinhaContaRoute: typeof MinhaContaRoute
+  PosturaEticaRoute: typeof PosturaEticaRoute
   ProcedimentosRoute: typeof ProcedimentosRoute
   SegurancaRoute: typeof SegurancaRoute
   SinaisVitaisRoute: typeof SinaisVitaisRoute
@@ -247,6 +260,13 @@ declare module '@tanstack/react-router' {
       path: '/procedimentos'
       fullPath: '/procedimentos'
       preLoaderRoute: typeof ProcedimentosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/postura-etica': {
+      id: '/postura-etica'
+      path: '/postura-etica'
+      fullPath: '/postura-etica'
+      preLoaderRoute: typeof PosturaEticaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/minha-conta': {
@@ -324,6 +344,7 @@ const rootRouteChildren: RootRouteChildren = {
   IrasRoute: IrasRoute,
   LojaRoute: LojaRoute,
   MinhaContaRoute: MinhaContaRoute,
+  PosturaEticaRoute: PosturaEticaRoute,
   ProcedimentosRoute: ProcedimentosRoute,
   SegurancaRoute: SegurancaRoute,
   SinaisVitaisRoute: SinaisVitaisRoute,
