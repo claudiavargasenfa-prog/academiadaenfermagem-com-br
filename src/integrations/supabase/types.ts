@@ -14,16 +14,214 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      mini_apps: {
+        Row: {
+          audio_url: string | null
+          cakto_checkout_url: string | null
+          cakto_product_id: string | null
+          content_md: string | null
+          created_at: string
+          description: string | null
+          icon: string | null
+          id: string
+          is_active: boolean
+          kind: Database["public"]["Enums"]["mini_app_kind"]
+          name: string
+          price_cents: number
+          slug: string
+          sort_order: number
+          updated_at: string
+          video_url: string | null
+        }
+        Insert: {
+          audio_url?: string | null
+          cakto_checkout_url?: string | null
+          cakto_product_id?: string | null
+          content_md?: string | null
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          is_active?: boolean
+          kind?: Database["public"]["Enums"]["mini_app_kind"]
+          name: string
+          price_cents?: number
+          slug: string
+          sort_order?: number
+          updated_at?: string
+          video_url?: string | null
+        }
+        Update: {
+          audio_url?: string | null
+          cakto_checkout_url?: string | null
+          cakto_product_id?: string | null
+          content_md?: string | null
+          created_at?: string
+          description?: string | null
+          icon?: string | null
+          id?: string
+          is_active?: boolean
+          kind?: Database["public"]["Enums"]["mini_app_kind"]
+          name?: string
+          price_cents?: number
+          slug?: string
+          sort_order?: number
+          updated_at?: string
+          video_url?: string | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string | null
+          full_name: string | null
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      subscriptions: {
+        Row: {
+          cakto_subscription_id: string | null
+          cancelled_at: string | null
+          created_at: string
+          current_period_end: string | null
+          id: string
+          mini_app_id: string | null
+          status: Database["public"]["Enums"]["subscription_status"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          cakto_subscription_id?: string | null
+          cancelled_at?: string | null
+          created_at?: string
+          current_period_end?: string | null
+          id?: string
+          mini_app_id?: string | null
+          status?: Database["public"]["Enums"]["subscription_status"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          cakto_subscription_id?: string | null
+          cancelled_at?: string | null
+          created_at?: string
+          current_period_end?: string | null
+          id?: string
+          mini_app_id?: string | null
+          status?: Database["public"]["Enums"]["subscription_status"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subscriptions_mini_app_id_fkey"
+            columns: ["mini_app_id"]
+            isOneToOne: false
+            referencedRelation: "mini_apps"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_app_access: {
+        Row: {
+          cakto_order_id: string | null
+          created_at: string
+          expires_at: string
+          granted_at: string
+          id: string
+          mini_app_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          cakto_order_id?: string | null
+          created_at?: string
+          expires_at: string
+          granted_at?: string
+          id?: string
+          mini_app_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          cakto_order_id?: string | null
+          created_at?: string
+          expires_at?: string
+          granted_at?: string
+          id?: string
+          mini_app_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_app_access_mini_app_id_fkey"
+            columns: ["mini_app_id"]
+            isOneToOne: false
+            referencedRelation: "mini_apps"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_app_access: {
+        Args: { _mini_app_id: string; _user_id: string }
+        Returns: boolean
+      }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "aluno"
+      mini_app_kind: "basico" | "extra"
+      subscription_status: "active" | "cancelled" | "past_due" | "pending"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +348,10 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "aluno"],
+      mini_app_kind: ["basico", "extra"],
+      subscription_status: ["active", "cancelled", "past_due", "pending"],
+    },
   },
 } as const
