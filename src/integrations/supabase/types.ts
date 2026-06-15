@@ -95,6 +95,50 @@ export type Database = {
         }
         Relationships: []
       }
+      relatorio_uses: {
+        Row: {
+          cakto_order_id: string | null
+          created_at: string
+          generated_at: string | null
+          id: string
+          mini_app_id: string
+          opens_left: number
+          total_opens: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          cakto_order_id?: string | null
+          created_at?: string
+          generated_at?: string | null
+          id?: string
+          mini_app_id: string
+          opens_left?: number
+          total_opens?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          cakto_order_id?: string | null
+          created_at?: string
+          generated_at?: string | null
+          id?: string
+          mini_app_id?: string
+          opens_left?: number
+          total_opens?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "relatorio_uses_mini_app_id_fkey"
+            columns: ["mini_app_id"]
+            isOneToOne: false
+            referencedRelation: "mini_apps"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       subscriptions: {
         Row: {
           cakto_subscription_id: string | null
@@ -206,6 +250,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      consume_relatorio_open: {
+        Args: { _mini_app_id: string }
+        Returns: number
+      }
       has_app_access: {
         Args: { _mini_app_id: string; _user_id: string }
         Returns: boolean
