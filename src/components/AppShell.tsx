@@ -40,7 +40,16 @@ const nav = [
 
 export function AppShell({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
+  const [admin, setAdmin] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+
+  useEffect(() => {
+    isAdmin().then(setAdmin);
+  }, []);
+
+  const navItems = admin
+    ? [...nav, { to: "/admin" as const, label: "Admin", icon: Shield }]
+    : nav;
 
   return (
     <AuthGate>
