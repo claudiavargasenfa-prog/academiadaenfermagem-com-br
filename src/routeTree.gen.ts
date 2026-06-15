@@ -13,6 +13,7 @@ import { Route as SvPediatricoRouteImport } from './routes/sv-pediatrico'
 import { Route as SvGestanteRouteImport } from './routes/sv-gestante'
 import { Route as SinaisVitaisRouteImport } from './routes/sinais-vitais'
 import { Route as SegurancaRouteImport } from './routes/seguranca'
+import { Route as RelatorioAbntRouteImport } from './routes/relatorio-abnt'
 import { Route as PosturaEticaRouteImport } from './routes/postura-etica'
 import { Route as MinhaContaRouteImport } from './routes/minha-conta'
 import { Route as LojaRouteImport } from './routes/loja'
@@ -42,6 +43,11 @@ const SinaisVitaisRoute = SinaisVitaisRouteImport.update({
 const SegurancaRoute = SegurancaRouteImport.update({
   id: '/seguranca',
   path: '/seguranca',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RelatorioAbntRoute = RelatorioAbntRouteImport.update({
+  id: '/relatorio-abnt',
+  path: '/relatorio-abnt',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PosturaEticaRoute = PosturaEticaRouteImport.update({
@@ -105,6 +111,7 @@ export interface FileRoutesByFullPath {
   '/loja': typeof LojaRoute
   '/minha-conta': typeof MinhaContaRoute
   '/postura-etica': typeof PosturaEticaRoute
+  '/relatorio-abnt': typeof RelatorioAbntRoute
   '/seguranca': typeof SegurancaRoute
   '/sinais-vitais': typeof SinaisVitaisRoute
   '/sv-gestante': typeof SvGestanteRoute
@@ -121,6 +128,7 @@ export interface FileRoutesByTo {
   '/loja': typeof LojaRoute
   '/minha-conta': typeof MinhaContaRoute
   '/postura-etica': typeof PosturaEticaRoute
+  '/relatorio-abnt': typeof RelatorioAbntRoute
   '/seguranca': typeof SegurancaRoute
   '/sinais-vitais': typeof SinaisVitaisRoute
   '/sv-gestante': typeof SvGestanteRoute
@@ -138,6 +146,7 @@ export interface FileRoutesById {
   '/loja': typeof LojaRoute
   '/minha-conta': typeof MinhaContaRoute
   '/postura-etica': typeof PosturaEticaRoute
+  '/relatorio-abnt': typeof RelatorioAbntRoute
   '/seguranca': typeof SegurancaRoute
   '/sinais-vitais': typeof SinaisVitaisRoute
   '/sv-gestante': typeof SvGestanteRoute
@@ -156,6 +165,7 @@ export interface FileRouteTypes {
     | '/loja'
     | '/minha-conta'
     | '/postura-etica'
+    | '/relatorio-abnt'
     | '/seguranca'
     | '/sinais-vitais'
     | '/sv-gestante'
@@ -172,6 +182,7 @@ export interface FileRouteTypes {
     | '/loja'
     | '/minha-conta'
     | '/postura-etica'
+    | '/relatorio-abnt'
     | '/seguranca'
     | '/sinais-vitais'
     | '/sv-gestante'
@@ -188,6 +199,7 @@ export interface FileRouteTypes {
     | '/loja'
     | '/minha-conta'
     | '/postura-etica'
+    | '/relatorio-abnt'
     | '/seguranca'
     | '/sinais-vitais'
     | '/sv-gestante'
@@ -205,6 +217,7 @@ export interface RootRouteChildren {
   LojaRoute: typeof LojaRoute
   MinhaContaRoute: typeof MinhaContaRoute
   PosturaEticaRoute: typeof PosturaEticaRoute
+  RelatorioAbntRoute: typeof RelatorioAbntRoute
   SegurancaRoute: typeof SegurancaRoute
   SinaisVitaisRoute: typeof SinaisVitaisRoute
   SvGestanteRoute: typeof SvGestanteRoute
@@ -240,6 +253,13 @@ declare module '@tanstack/react-router' {
       path: '/seguranca'
       fullPath: '/seguranca'
       preLoaderRoute: typeof SegurancaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/relatorio-abnt': {
+      id: '/relatorio-abnt'
+      path: '/relatorio-abnt'
+      fullPath: '/relatorio-abnt'
+      preLoaderRoute: typeof RelatorioAbntRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/postura-etica': {
@@ -325,6 +345,7 @@ const rootRouteChildren: RootRouteChildren = {
   LojaRoute: LojaRoute,
   MinhaContaRoute: MinhaContaRoute,
   PosturaEticaRoute: PosturaEticaRoute,
+  RelatorioAbntRoute: RelatorioAbntRoute,
   SegurancaRoute: SegurancaRoute,
   SinaisVitaisRoute: SinaisVitaisRoute,
   SvGestanteRoute: SvGestanteRoute,
