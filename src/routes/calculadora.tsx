@@ -116,7 +116,9 @@ function Gotejamento() {
 function DosePorKg() {
   const [peso, setPeso] = useState("");
   const [dose, setDose] = useState("");
+  const [conc, setConc] = useState("");
   const total = num(peso) * num(dose);
+  const volume = total && num(conc) > 0 ? total / num(conc) : 0;
   return (
     <Card>
       <div className="flex items-center gap-2">
@@ -124,13 +126,43 @@ function DosePorKg() {
         <h3 className="font-display text-lg font-bold">Dose por peso</h3>
       </div>
       <p className="mt-1 text-sm text-muted-foreground">
-        Dose total a partir de mg/kg ou mcg/kg.
+        <strong>Dose Total</strong> = Peso × Dose recomendada. <strong>Volume</strong> = Dose total ÷ Concentração.
       </p>
-      <div className="mt-4 grid gap-3 sm:grid-cols-2">
+      <div className="mt-4 grid gap-3 sm:grid-cols-3">
         <Field label="Peso do paciente" value={peso} onChange={setPeso} unit="kg" />
-        <Field label="Dose prescrita" value={dose} onChange={setDose} unit="/kg" />
+        <Field label="Dose da droga" value={dose} onChange={setDose} unit="mg/kg" />
+        <Field label="Concentração do medicamento" value={conc} onChange={setConc} unit="mg/mL" />
       </div>
-      <Result label="Dose total" value={total ? total.toFixed(2) : "—"} />
+      <div className="mt-4 grid gap-3 sm:grid-cols-2">
+        <Result label="Dose total" value={total ? `${total.toFixed(2)} mg` : "—"} />
+        <Result label="Volume a administrar" value={volume ? `${volume.toFixed(2)} mL` : "—"} />
+      </div>
+    </Card>
+  );
+}
+
+function Seguranca() {
+  const itens = [
+    { titulo: "Verificação", texto: "Sempre confira a prescrição médica e a bula do medicamento." },
+    { titulo: "Atenção às Concentrações", texto: "Verifique a concentração do frasco (ex: 50 mg/mL) antes de calcular o volume." },
+    { titulo: "Ferramentas", texto: "Utilize calculadoras médicas confiáveis e manuais farmacêuticos para auxiliar nos cálculos e evitar erros de medicação." },
+    { titulo: "Profissional de Saúde", texto: "A orientação de um médico ou farmacêutico é indispensável para determinar a dose correta e segura para cada paciente." },
+    { titulo: "Nota", texto: "A precisão no cálculo é fundamental para a segurança do paciente, especialmente em pediatria." },
+  ];
+  return (
+    <Card className="md:col-span-2 border border-gold/40">
+      <div className="flex items-center gap-2">
+        <Calculator className="h-5 w-5 text-gold" />
+        <h3 className="font-display text-lg font-bold">Considerações de Segurança</h3>
+      </div>
+      <ul className="mt-3 grid gap-2 sm:grid-cols-2">
+        {itens.map((i) => (
+          <li key={i.titulo} className="rounded-xl border border-border/60 bg-card/60 p-3 text-sm">
+            <p className="font-display text-sm font-bold text-primary">{i.titulo}</p>
+            <p className="mt-1 text-muted-foreground">{i.texto}</p>
+          </li>
+        ))}
+      </ul>
     </Card>
   );
 }
@@ -140,7 +172,7 @@ function CalcPage() {
     <AppShell>
       <PageHeader
         eyebrow="Cálculos clínicos"
-        title="Cálculo de medicamentos"
+        title="Cálculos de medicamentos"
         description="Confirme sempre prescrição, rótulo e os cinco certos antes da administração."
       />
       <div className="grid gap-4 md:grid-cols-2">
@@ -163,7 +195,9 @@ function CalcPage() {
             />
           </div>
         </Card>
+        <Seguranca />
       </div>
     </AppShell>
   );
 }
+

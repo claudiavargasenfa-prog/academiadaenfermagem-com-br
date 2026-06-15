@@ -55,7 +55,7 @@ ${entries
 
 function Diario() {
   const [entries, setEntries] = useLocal<Entry[]>("diario-entries", []);
-  const [info] = useLocal("estagio-info", { campo: "", preceptor: "", periodo: "" });
+  const [info, setInfo] = useLocal("estagio-info", { campo: "", preceptor: "", periodo: "" });
   const [data, setData] = useState(todayISO());
   const [texto, setTexto] = useState("");
 
@@ -68,6 +68,9 @@ function Diario() {
 
   const remove = (id: string) => setEntries(entries.filter((e) => e.id !== id));
 
+  const updateInfo = (key: "campo" | "preceptor" | "periodo", value: string) =>
+    setInfo({ ...info, [key]: value });
+
   return (
     <AppShell>
       <PageHeader
@@ -75,6 +78,32 @@ function Diario() {
         title="Diário de bordo"
         description="Documente cada plantão. Tudo permanece no seu aparelho e pode ser exportado em PDF ABNT."
       />
+
+      <Card className="mb-5">
+        <h3 className="font-display text-lg font-bold">Identificação do estágio</h3>
+        <p className="mt-1 text-xs text-muted-foreground">Esses dados aparecem no relatório e na tela inicial.</p>
+        <div className="mt-3 grid gap-3 sm:grid-cols-3">
+          {([
+            ["campo", "Campo de estágio", "Ex: UTI Adulto — Hospital X"],
+            ["preceptor", "Preceptor(a)", "Nome do(a) preceptor(a)"],
+            ["periodo", "Período", "Ex: 03/02 a 28/02/2026"],
+          ] as const).map(([k, label, ph]) => (
+            <label key={k} className="block">
+              <span className="mb-1 block text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                {label}
+              </span>
+              <input
+                type="text"
+                value={info[k]}
+                onChange={(e) => updateInfo(k, e.target.value)}
+                placeholder={ph}
+                className="w-full rounded-xl border border-border/70 bg-card/70 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
+              />
+            </label>
+          ))}
+        </div>
+      </Card>
+
 
       <Card className="mb-5">
         <h3 className="font-display text-lg font-bold">Nova anotação</h3>
