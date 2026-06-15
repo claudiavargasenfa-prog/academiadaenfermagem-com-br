@@ -13,12 +13,11 @@ import { Route as SvPediatricoRouteImport } from './routes/sv-pediatrico'
 import { Route as SvGestanteRouteImport } from './routes/sv-gestante'
 import { Route as SinaisVitaisRouteImport } from './routes/sinais-vitais'
 import { Route as SegurancaRouteImport } from './routes/seguranca'
-import { Route as ProcedimentosRouteImport } from './routes/procedimentos'
 import { Route as PosturaEticaRouteImport } from './routes/postura-etica'
 import { Route as MinhaContaRouteImport } from './routes/minha-conta'
 import { Route as LojaRouteImport } from './routes/loja'
 import { Route as IrasRouteImport } from './routes/iras'
-import { Route as EscalasRouteImport } from './routes/escalas'
+import { Route as ExameFisicoEscalasRouteImport } from './routes/exame-fisico-escalas'
 import { Route as DiarioRouteImport } from './routes/diario'
 import { Route as CalculadoraRouteImport } from './routes/calculadora'
 import { Route as AdminRouteImport } from './routes/admin'
@@ -45,11 +44,6 @@ const SegurancaRoute = SegurancaRouteImport.update({
   path: '/seguranca',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ProcedimentosRoute = ProcedimentosRouteImport.update({
-  id: '/procedimentos',
-  path: '/procedimentos',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const PosturaEticaRoute = PosturaEticaRouteImport.update({
   id: '/postura-etica',
   path: '/postura-etica',
@@ -70,9 +64,9 @@ const IrasRoute = IrasRouteImport.update({
   path: '/iras',
   getParentRoute: () => rootRouteImport,
 } as any)
-const EscalasRoute = EscalasRouteImport.update({
-  id: '/escalas',
-  path: '/escalas',
+const ExameFisicoEscalasRoute = ExameFisicoEscalasRouteImport.update({
+  id: '/exame-fisico-escalas',
+  path: '/exame-fisico-escalas',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DiarioRoute = DiarioRouteImport.update({
@@ -106,12 +100,11 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRoute
   '/calculadora': typeof CalculadoraRoute
   '/diario': typeof DiarioRoute
-  '/escalas': typeof EscalasRoute
+  '/exame-fisico-escalas': typeof ExameFisicoEscalasRoute
   '/iras': typeof IrasRoute
   '/loja': typeof LojaRoute
   '/minha-conta': typeof MinhaContaRoute
   '/postura-etica': typeof PosturaEticaRoute
-  '/procedimentos': typeof ProcedimentosRoute
   '/seguranca': typeof SegurancaRoute
   '/sinais-vitais': typeof SinaisVitaisRoute
   '/sv-gestante': typeof SvGestanteRoute
@@ -123,12 +116,11 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminRoute
   '/calculadora': typeof CalculadoraRoute
   '/diario': typeof DiarioRoute
-  '/escalas': typeof EscalasRoute
+  '/exame-fisico-escalas': typeof ExameFisicoEscalasRoute
   '/iras': typeof IrasRoute
   '/loja': typeof LojaRoute
   '/minha-conta': typeof MinhaContaRoute
   '/postura-etica': typeof PosturaEticaRoute
-  '/procedimentos': typeof ProcedimentosRoute
   '/seguranca': typeof SegurancaRoute
   '/sinais-vitais': typeof SinaisVitaisRoute
   '/sv-gestante': typeof SvGestanteRoute
@@ -141,12 +133,11 @@ export interface FileRoutesById {
   '/admin': typeof AdminRoute
   '/calculadora': typeof CalculadoraRoute
   '/diario': typeof DiarioRoute
-  '/escalas': typeof EscalasRoute
+  '/exame-fisico-escalas': typeof ExameFisicoEscalasRoute
   '/iras': typeof IrasRoute
   '/loja': typeof LojaRoute
   '/minha-conta': typeof MinhaContaRoute
   '/postura-etica': typeof PosturaEticaRoute
-  '/procedimentos': typeof ProcedimentosRoute
   '/seguranca': typeof SegurancaRoute
   '/sinais-vitais': typeof SinaisVitaisRoute
   '/sv-gestante': typeof SvGestanteRoute
@@ -160,12 +151,11 @@ export interface FileRouteTypes {
     | '/admin'
     | '/calculadora'
     | '/diario'
-    | '/escalas'
+    | '/exame-fisico-escalas'
     | '/iras'
     | '/loja'
     | '/minha-conta'
     | '/postura-etica'
-    | '/procedimentos'
     | '/seguranca'
     | '/sinais-vitais'
     | '/sv-gestante'
@@ -177,12 +167,11 @@ export interface FileRouteTypes {
     | '/admin'
     | '/calculadora'
     | '/diario'
-    | '/escalas'
+    | '/exame-fisico-escalas'
     | '/iras'
     | '/loja'
     | '/minha-conta'
     | '/postura-etica'
-    | '/procedimentos'
     | '/seguranca'
     | '/sinais-vitais'
     | '/sv-gestante'
@@ -194,12 +183,11 @@ export interface FileRouteTypes {
     | '/admin'
     | '/calculadora'
     | '/diario'
-    | '/escalas'
+    | '/exame-fisico-escalas'
     | '/iras'
     | '/loja'
     | '/minha-conta'
     | '/postura-etica'
-    | '/procedimentos'
     | '/seguranca'
     | '/sinais-vitais'
     | '/sv-gestante'
@@ -212,12 +200,11 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRoute
   CalculadoraRoute: typeof CalculadoraRoute
   DiarioRoute: typeof DiarioRoute
-  EscalasRoute: typeof EscalasRoute
+  ExameFisicoEscalasRoute: typeof ExameFisicoEscalasRoute
   IrasRoute: typeof IrasRoute
   LojaRoute: typeof LojaRoute
   MinhaContaRoute: typeof MinhaContaRoute
   PosturaEticaRoute: typeof PosturaEticaRoute
-  ProcedimentosRoute: typeof ProcedimentosRoute
   SegurancaRoute: typeof SegurancaRoute
   SinaisVitaisRoute: typeof SinaisVitaisRoute
   SvGestanteRoute: typeof SvGestanteRoute
@@ -255,13 +242,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SegurancaRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/procedimentos': {
-      id: '/procedimentos'
-      path: '/procedimentos'
-      fullPath: '/procedimentos'
-      preLoaderRoute: typeof ProcedimentosRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/postura-etica': {
       id: '/postura-etica'
       path: '/postura-etica'
@@ -290,11 +270,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IrasRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/escalas': {
-      id: '/escalas'
-      path: '/escalas'
-      fullPath: '/escalas'
-      preLoaderRoute: typeof EscalasRouteImport
+    '/exame-fisico-escalas': {
+      id: '/exame-fisico-escalas'
+      path: '/exame-fisico-escalas'
+      fullPath: '/exame-fisico-escalas'
+      preLoaderRoute: typeof ExameFisicoEscalasRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/diario': {
@@ -340,12 +320,11 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRoute,
   CalculadoraRoute: CalculadoraRoute,
   DiarioRoute: DiarioRoute,
-  EscalasRoute: EscalasRoute,
+  ExameFisicoEscalasRoute: ExameFisicoEscalasRoute,
   IrasRoute: IrasRoute,
   LojaRoute: LojaRoute,
   MinhaContaRoute: MinhaContaRoute,
   PosturaEticaRoute: PosturaEticaRoute,
-  ProcedimentosRoute: ProcedimentosRoute,
   SegurancaRoute: SegurancaRoute,
   SinaisVitaisRoute: SinaisVitaisRoute,
   SvGestanteRoute: SvGestanteRoute,
