@@ -14,11 +14,15 @@ import { Route as SvGestanteRouteImport } from './routes/sv-gestante'
 import { Route as SinaisVitaisRouteImport } from './routes/sinais-vitais'
 import { Route as SegurancaRouteImport } from './routes/seguranca'
 import { Route as ProcedimentosRouteImport } from './routes/procedimentos'
+import { Route as MinhaContaRouteImport } from './routes/minha-conta'
+import { Route as LojaRouteImport } from './routes/loja'
 import { Route as IrasRouteImport } from './routes/iras'
 import { Route as EscalasRouteImport } from './routes/escalas'
 import { Route as DiarioRouteImport } from './routes/diario'
 import { Route as CalculadoraRouteImport } from './routes/calculadora'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiPublicCaktoWebhookRouteImport } from './routes/api/public/cakto-webhook'
 
 const SvPediatricoRoute = SvPediatricoRouteImport.update({
   id: '/sv-pediatrico',
@@ -45,6 +49,16 @@ const ProcedimentosRoute = ProcedimentosRouteImport.update({
   path: '/procedimentos',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MinhaContaRoute = MinhaContaRouteImport.update({
+  id: '/minha-conta',
+  path: '/minha-conta',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LojaRoute = LojaRouteImport.update({
+  id: '/loja',
+  path: '/loja',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IrasRoute = IrasRouteImport.update({
   id: '/iras',
   path: '/iras',
@@ -65,99 +79,137 @@ const CalculadoraRoute = CalculadoraRouteImport.update({
   path: '/calculadora',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicCaktoWebhookRoute = ApiPublicCaktoWebhookRouteImport.update({
+  id: '/api/public/cakto-webhook',
+  path: '/api/public/cakto-webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/calculadora': typeof CalculadoraRoute
   '/diario': typeof DiarioRoute
   '/escalas': typeof EscalasRoute
   '/iras': typeof IrasRoute
+  '/loja': typeof LojaRoute
+  '/minha-conta': typeof MinhaContaRoute
   '/procedimentos': typeof ProcedimentosRoute
   '/seguranca': typeof SegurancaRoute
   '/sinais-vitais': typeof SinaisVitaisRoute
   '/sv-gestante': typeof SvGestanteRoute
   '/sv-pediatrico': typeof SvPediatricoRoute
+  '/api/public/cakto-webhook': typeof ApiPublicCaktoWebhookRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/calculadora': typeof CalculadoraRoute
   '/diario': typeof DiarioRoute
   '/escalas': typeof EscalasRoute
   '/iras': typeof IrasRoute
+  '/loja': typeof LojaRoute
+  '/minha-conta': typeof MinhaContaRoute
   '/procedimentos': typeof ProcedimentosRoute
   '/seguranca': typeof SegurancaRoute
   '/sinais-vitais': typeof SinaisVitaisRoute
   '/sv-gestante': typeof SvGestanteRoute
   '/sv-pediatrico': typeof SvPediatricoRoute
+  '/api/public/cakto-webhook': typeof ApiPublicCaktoWebhookRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
   '/calculadora': typeof CalculadoraRoute
   '/diario': typeof DiarioRoute
   '/escalas': typeof EscalasRoute
   '/iras': typeof IrasRoute
+  '/loja': typeof LojaRoute
+  '/minha-conta': typeof MinhaContaRoute
   '/procedimentos': typeof ProcedimentosRoute
   '/seguranca': typeof SegurancaRoute
   '/sinais-vitais': typeof SinaisVitaisRoute
   '/sv-gestante': typeof SvGestanteRoute
   '/sv-pediatrico': typeof SvPediatricoRoute
+  '/api/public/cakto-webhook': typeof ApiPublicCaktoWebhookRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
     | '/calculadora'
     | '/diario'
     | '/escalas'
     | '/iras'
+    | '/loja'
+    | '/minha-conta'
     | '/procedimentos'
     | '/seguranca'
     | '/sinais-vitais'
     | '/sv-gestante'
     | '/sv-pediatrico'
+    | '/api/public/cakto-webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/admin'
     | '/calculadora'
     | '/diario'
     | '/escalas'
     | '/iras'
+    | '/loja'
+    | '/minha-conta'
     | '/procedimentos'
     | '/seguranca'
     | '/sinais-vitais'
     | '/sv-gestante'
     | '/sv-pediatrico'
+    | '/api/public/cakto-webhook'
   id:
     | '__root__'
     | '/'
+    | '/admin'
     | '/calculadora'
     | '/diario'
     | '/escalas'
     | '/iras'
+    | '/loja'
+    | '/minha-conta'
     | '/procedimentos'
     | '/seguranca'
     | '/sinais-vitais'
     | '/sv-gestante'
     | '/sv-pediatrico'
+    | '/api/public/cakto-webhook'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRoute
   CalculadoraRoute: typeof CalculadoraRoute
   DiarioRoute: typeof DiarioRoute
   EscalasRoute: typeof EscalasRoute
   IrasRoute: typeof IrasRoute
+  LojaRoute: typeof LojaRoute
+  MinhaContaRoute: typeof MinhaContaRoute
   ProcedimentosRoute: typeof ProcedimentosRoute
   SegurancaRoute: typeof SegurancaRoute
   SinaisVitaisRoute: typeof SinaisVitaisRoute
   SvGestanteRoute: typeof SvGestanteRoute
   SvPediatricoRoute: typeof SvPediatricoRoute
+  ApiPublicCaktoWebhookRoute: typeof ApiPublicCaktoWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -197,6 +249,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProcedimentosRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/minha-conta': {
+      id: '/minha-conta'
+      path: '/minha-conta'
+      fullPath: '/minha-conta'
+      preLoaderRoute: typeof MinhaContaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/loja': {
+      id: '/loja'
+      path: '/loja'
+      fullPath: '/loja'
+      preLoaderRoute: typeof LojaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/iras': {
       id: '/iras'
       path: '/iras'
@@ -225,6 +291,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CalculadoraRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -232,20 +305,31 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/cakto-webhook': {
+      id: '/api/public/cakto-webhook'
+      path: '/api/public/cakto-webhook'
+      fullPath: '/api/public/cakto-webhook'
+      preLoaderRoute: typeof ApiPublicCaktoWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRoute,
   CalculadoraRoute: CalculadoraRoute,
   DiarioRoute: DiarioRoute,
   EscalasRoute: EscalasRoute,
   IrasRoute: IrasRoute,
+  LojaRoute: LojaRoute,
+  MinhaContaRoute: MinhaContaRoute,
   ProcedimentosRoute: ProcedimentosRoute,
   SegurancaRoute: SegurancaRoute,
   SinaisVitaisRoute: SinaisVitaisRoute,
   SvGestanteRoute: SvGestanteRoute,
   SvPediatricoRoute: SvPediatricoRoute,
+  ApiPublicCaktoWebhookRoute: ApiPublicCaktoWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

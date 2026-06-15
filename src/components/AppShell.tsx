@@ -13,14 +13,20 @@ import {
   Menu,
   X,
   LogOut,
+  Store,
+  User,
+  Shield,
 } from "lucide-react";
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { ReferencesFooter } from "./References";
 import { AuthGate, signOut } from "./AuthGate";
+import { isAdmin } from "@/lib/access";
 import logoAsset from "@/assets/logo.png.asset.json";
 
 const nav = [
   { to: "/", label: "Início", icon: Home },
+  { to: "/loja", label: "Loja", icon: Store },
+  { to: "/minha-conta", label: "Minha Conta", icon: User },
   { to: "/iras", label: "IRAS", icon: HandHeart },
   { to: "/seguranca", label: "Segurança", icon: ShieldCheck },
   { to: "/procedimentos", label: "Exame Físico", icon: Stethoscope },
