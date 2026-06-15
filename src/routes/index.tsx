@@ -10,10 +10,19 @@ import {
   HandHeart,
   GraduationCap,
   FileText,
+  Lock,
+  ShoppingBag,
 } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
 import { useLocal } from "@/lib/storage";
 import logoAsset from "@/assets/logo.png.asset.json";
+import {
+  fetchMiniApps,
+  fetchMyBasicSubscription,
+  fetchMyExtraAccess,
+  summarizeAccess,
+} from "@/lib/access";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -28,23 +37,40 @@ export const Route = createFileRoute("/")({
   component: Dashboard,
 });
 
+// Cada atalho aponta para um slug em `mini_apps`. `tier` define como é
+// liberado: `basico` = incluído na assinatura mensal; `extra` = compra avulsa.
 const shortcuts = [
-  { to: "/postura-etica", label: "Postura e Ética Profissional", icon: GraduationCap, hint: "Manual de conduta no estágio" },
-  { to: "/iras", label: "Time Contra as IRAS", icon: HandHeart, hint: "5 Momentos da OMS" },
-  { to: "/seguranca", label: "Segurança do Paciente", icon: ShieldCheck, hint: "6 Metas Internacionais" },
-  { to: "/exame-fisico-escalas", label: "Exame Físico e Escalas de Avaliação", icon: Stethoscope, hint: "Cefalocaudal + Glasgow, Braden, Morse..." },
-  { to: "/calculadora", label: "Cálculos de Medicamentos", icon: Calculator, hint: "Regra de três, gotejamento, dose/peso" },
-  { to: "/sinais-vitais", label: "Sinais Vitais", icon: Activity, hint: "PA, FC, FR, SatO₂, T°" },
-  { to: "/sv-pediatrico", label: "Sinais Vitais Pediátricos", icon: Baby, hint: "Por faixa etária + PALS + dor" },
-  { to: "/sv-gestante", label: "Sinais Vitais Gestante", icon: HeartPulse, hint: "Pré-eclâmpsia, hemorragia" },
-  { to: "/diario", label: "Diário de Bordo", icon: NotebookPen, hint: "Anotações de plantão" },
-  { to: "/relatorio-abnt", label: "Relatório de Estágio (ABNT)", icon: FileText, hint: "Gerar relatório automático" },
+  { to: "/postura-etica",        slug: "basico",               tier: "basico" as const, label: "Postura e Ética Profissional", icon: GraduationCap, hint: "Manual de conduta no estágio" },
+  { to: "/diario",               slug: "basico",               tier: "basico" as const, label: "Diário de Bordo",                icon: NotebookPen,   hint: "Anotações de plantão" },
+  { to: "/sinais-vitais",        slug: "basico",               tier: "basico" as const, label: "Sinais Vitais",                  icon: Activity,      hint: "PA, FC, FR, SatO₂, T°" },
+  { to: "/iras",                 slug: "iras",                 tier: "extra"  as const, label: "Time Contra as IRAS",            icon: HandHeart,     hint: "5 Momentos da OMS" },
+  { to: "/seguranca",            slug: "seguranca",            tier: "extra"  as const, label: "Segurança do Paciente",          icon: ShieldCheck,   hint: "6 Metas Internacionais" },
+  { to: "/exame-fisico-escalas", slug: "exame-fisico-escalas", tier: "extra"  as const, label: "Exame Físico e Escalas de Avaliação", icon: Stethoscope, hint: "Cefalocaudal + Glasgow, Braden, Morse..." },
+  { to: "/calculadora",          slug: "calculadora",          tier: "extra"  as const, label: "Cálculos de Medicamentos",       icon: Calculator,    hint: "Regra de três, gotejamento, dose/peso" },
+  { to: "/sv-pediatrico",        slug: "sv-pediatrico",        tier: "extra"  as const, label: "Sinais Vitais Pediátricos",      icon: Baby,          hint: "Por faixa etária + PALS + dor" },
+  { to: "/sv-gestante",          slug: "sv-gestante",          tier: "extra"  as const, label: "Sinais Vitais Gestante",         icon: HeartPulse,    hint: "Pré-eclâmpsia, hemorragia" },
+  { to: "/relatorio-abnt",       slug: "relatorio-abnt",       tier: "extra"  as const, label: "Relatório de Estágio (ABNT)",    icon: FileText,      hint: "Gerar relatório automático" },
 ] as const;
 
 
 function Dashboard() {
   const [diario] = useLocal<{ id: string; data: string; texto: string }[]>("diario-entries", []);
   const [estagio] = useLocal("estagio-info", { campo: "", preceptor: "", periodo: "" });
+
+  const appsQ = useQuery({ queryKey: ["mini_apps"], queryFn: fetchMiniApps });
+  const subQ = useQuery({ queryKey: ["my_basic_sub"], queryFn: fetchMyBasicSubscription });
+  const extrasQ = useQuery({ queryKey: ["my_extras"], queryFn: fetchMyExtraAccess });
+
+  const apps = appsQ.data ?? [];
+  const access = summarizeAccess(subQ.data ?? null, extrasQ.data ?? []);
+  const slugToId = new Map(apps.map((a) => [a.slug, a.id]));
+
+  function isUnlocked(slug: string, tier: "basico" | "extra"): boolean {
+    if (tier === "basico") return access.basicActive;
+    const id = slugToId.get(slug);
+    if (!id) return false;
+    return access.basicActive && !!access.extraAccessByApp[id];
+  }
 
   return (
     <AppShell>
@@ -61,7 +87,6 @@ function Dashboard() {
               src={logoAsset.url}
               alt="Logotipo Acadêmico de Bolso"
               className="h-16 w-16 shrink-0 rounded-2xl bg-white/10 object-contain p-1 ring-1 ring-gold/40"
-
             />
             <div className="min-w-0">
               <p className="text-[11px] font-semibold uppercase tracking-widest text-gold">
@@ -73,7 +98,6 @@ function Dashboard() {
               <p className="mt-2 text-sm text-primary-foreground/80">
                 Faça login e tenha acesso a todo o conteúdo — tudo salvo no seu app, mesmo offline.
               </p>
-
             </div>
           </div>
         </div>
@@ -106,11 +130,63 @@ function Dashboard() {
         </Card>
       </section>
 
+      {!access.basicActive && (
+        <section className="mb-6">
+          <Link
+            to="/loja"
+            className="flex items-center justify-between gap-4 rounded-2xl border border-gold/40 bg-gradient-to-r from-amber-50 to-yellow-100 p-5 text-foreground shadow-[var(--shadow-glass)] transition-all hover:-translate-y-0.5"
+          >
+            <div className="flex items-start gap-3">
+              <div className="grid h-12 w-12 place-items-center rounded-2xl gold-gradient">
+                <ShoppingBag className="h-6 w-6" />
+              </div>
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-widest text-gold">
+                  Loja Premium
+                </p>
+                <h3 className="font-display text-lg font-bold">
+                  Assine o App Básico e libere seus módulos
+                </h3>
+                <p className="text-sm text-muted-foreground">
+                  Os módulos abaixo aparecem bloqueados até a sua assinatura ficar ativa.
+                </p>
+              </div>
+            </div>
+            <span className="hidden rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground sm:inline">
+              Ir para a Loja
+            </span>
+          </Link>
+        </section>
+      )}
+
       <section>
         <h2 className="mb-3 font-display text-xl font-bold">Atalhos rápidos</h2>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {shortcuts.map((s) => {
             const Icon = s.icon;
+            const unlocked = isUnlocked(s.slug, s.tier);
+
+            if (!unlocked) {
+              return (
+                <Link
+                  key={s.to}
+                  to="/loja"
+                  className="group relative glass rounded-2xl p-4 opacity-90 transition-all hover:-translate-y-0.5"
+                  aria-label={`${s.label} — bloqueado, abrir Loja`}
+                >
+                  <div className="grid h-11 w-11 place-items-center rounded-xl bg-foreground/10">
+                    <Icon className="h-5 w-5 text-foreground/60" />
+                  </div>
+                  <p className="mt-3 font-display text-base font-bold text-foreground/80">{s.label}</p>
+                  <p className="text-xs text-muted-foreground">{s.hint}</p>
+                  <span className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-full bg-foreground/10 px-2 py-0.5 text-[10px] font-semibold text-foreground/70">
+                    <Lock className="h-3 w-3" />
+                    {s.tier === "basico" ? "Assine" : "Comprar na Loja"}
+                  </span>
+                </Link>
+              );
+            }
+
             return (
               <Link
                 key={s.to}
@@ -143,10 +219,10 @@ function Dashboard() {
               </p>
             </div>
             <Link
-              to="/diario"
+              to={access.basicActive ? "/diario" : "/loja"}
               className="rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
             >
-              Abrir
+              {access.basicActive ? "Abrir" : "Assinar"}
             </Link>
           </div>
         </Card>
