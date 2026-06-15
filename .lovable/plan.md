@@ -1,91 +1,59 @@
-# Plano: Loja Premium de Mini Apps + Integração Cakto
+## Plano de Revisão do App
 
-## O que vamos construir
-
-Uma **loja premium** dentro do seu app (Acadêmico de Bolso), onde o aluno vê todos os mini apps. Os que ele não comprou ficam com cadeado 🔒. Assim que paga na Cakto, desbloqueia automaticamente.
-
-## Como vai funcionar pro aluno
-
-1. Aluno cria conta (email+senha ou Google)
-2. Vê a **Loja** com todos os mini apps
-3. Assina o **App Básico — R$19,90/mês** (recorrente) → checkout Cakto → desbloqueia
-4. Quer um extra? Paga **uma vez** (R$7,90 a R$14,99) → libera por **3 meses corridos** → depois bloqueia
-5. Pra continuar usando o extra, compra de novo (renova mais 3 meses)
-6. Se cancelar o básico → tudo bloqueia (extras também, mesmo dentro dos 3 meses — você confirma essa regra)
-
-## Regras de cobrança que você definiu
-
-- **App básico:** R$19,90/mês recorrente (Cakto cobra todo mês no cartão)
-- **Mini apps extras:** pagamento **único** entre R$7,90 e R$14,99, libera **3 meses** de acesso. Depois bloqueia até comprar de novo.
-- **Plano Lovable:** Free (R$0 fixo)
-
-## O que será criado no app
-
-### 1. Login e cadastro
-- Email+senha e Google
-- Tela "Minha conta" mostrando assinatura ativa e prazo de cada extra (ex: "Calculadora Avançada — expira em 47 dias")
-
-### 2. Loja Premium
-- Grid visual com todos os mini apps (estilo Igor Storm)
-- Cada card: ícone, nome, preço, botão "Assinar"/"Comprar"/"Acessar"
-- Apps bloqueados com cadeado → botão leva pro checkout Cakto
-- Apps com prazo expirando mostram aviso ("faltam 5 dias")
-
-### 3. Painel admin (só você)
-- Cadastra cada mini app: nome, descrição, preço, link checkout Cakto, conteúdo (texto/vídeo/áudio)
-- Adiciona apps novos sozinha, sem me chamar
-
-### 4. Sistema de desbloqueio automático (webhook Cakto)
-- Recebe avisos da Cakto (pagamento aprovado, cancelado, recusado)
-- **Básico:** libera enquanto assinatura ativa, bloqueia se cancelar
-- **Extra:** marca data de expiração = data do pagamento + 90 dias
-- Validação de segurança (só aceita aviso real da Cakto)
-
-### 5. Conteúdo dos mini apps
-- Suporta texto, vídeo (YouTube/Vimeo) e áudio
-- Você edita pelo painel admin
-
-## O que VOCÊ faz na Cakto (eu te oriento passo a passo)
-
-1. Cria conta Cakto (grátis)
-2. Cria 1 produto recorrente: "App Básico — R$19,90/mês"
-3. Cria 1 produto pagamento único pra cada mini app extra (vamos cadastrando aos poucos)
-4. Configura o webhook apontando pro endereço que vou te passar
-5. Copia o "segredo do webhook" e me manda
-
-## Custos pra você
-
-- **Lovable:** R$0/mês (Free)
-- **Cakto:** R$0 fixo, só taxa por venda (~3,99% + R$0,40 cartão; Pix mais barato)
-- **Lovable Cloud:** R$0 dentro do uso grátis
-- **Total fixo agora:** R$0. Só paga quando vender.
-
-## Limitação do plano Free
-
-- Endereço fica `seuapp.lovable.app` (sem domínio próprio)
-- Rodapé "Edit with Lovable" no canto
-- Quando vender bem, migra pro Pro (R$130/mês) e tira as duas coisas
-
-## Ordem de construção
-
-**Etapa 1 — Base do app (eu faço primeiro):**
-- Login/cadastro, estrutura do banco, loja vazia, painel admin
-
-**Etapa 2 — Você cria conta Cakto + 1º produto (eu oriento)**
-
-**Etapa 3 — Conexão Cakto (webhook + teste de compra)**
-
-**Etapa 4 — Cadastrar app básico real + 1 extra**
-
-**Etapa 5 — Publicar e começar a vender**
-
-## Detalhes técnicos (pode pular)
-
-- Stack atual: TanStack Start + React + Tailwind + Lovable Cloud (Supabase)
-- Tabelas novas: `profiles`, `mini_apps`, `subscriptions` (básico, status), `user_app_access` (extras com `expires_at`), `user_roles`
-- Webhook: rota pública `/api/public/cakto-webhook` com verificação HMAC
-- Admin protegido por role na tabela `user_roles`
+Vou aplicar todas as mudanças em blocos. Como são muitas alterações, divido em 4 blocos. Confirme para eu começar pelo Bloco 1.
 
 ---
 
-**Posso começar pela Etapa 1?**
+### Bloco 1 — Ajustes de texto e campos (rápido)
+
+1. **Início (`/`)**: trocar subtítulo por:
+  *"Faça login e tenha acesso a todo o conteúdo, tudo salvo no seu app. mesmo offline."*
+2. **Diário de Bordo → Identificação**: tornar editáveis os campos **Campo**, **Preceptor** e **Período** (hoje não digitam).
+3. **Segurança**:
+  - Renomear rota/título para **"Segurança do Paciente"**.
+  - Remover todas as abreviaturas no menu lateral e nos atalhos rápidos da Home (escrever por extenso: "Sinais Vitais", "Sinais Vitais Pediátricos", "Sinais Vitais Gestante", "Segurança do Paciente", "Cálculos de Medicamentos", "Procedimentos e Exame Físico" etc.).
+
+---
+
+### Bloco 2 — Calculadora de Medicamentos
+
+1. **Dose por Peso** passa a ter 3 campos:
+  - Peso do paciente (kg)
+  - Dose recomendada (mg/kg)
+  - Concentração do medicamento (mg/mL)
+  - Resultado: **Dose Total (mg) = Peso × Dose** e **Volume (mL) = Dose Total ÷ Concentração**.
+2. Adicionar bloco **"Considerações de Segurança"** logo após Equipos e Conversões, com os 5 itens enviados (Verificação, Atenção às Concentrações, Ferramentas, Profissional de Saúde, Nota de precisão pediátrica).
+
+---
+
+### Bloco 3 — Mini app único "Exame físico & Escalas de avaliações"
+
+1. Unificar **Escalas** + **Exame Físico** em um único mini app chamado **"**Exame físico & Escalas de avaliação**"** (rota `/exame fisico-escalas`); remover entradas duplicadas do menu.
+2. **Exame Físico Céfalo-Caudal**: cada item vira clicável → abre popover/modal com explicação curta do *que examinar* + **desenho/ícone ilustrativo** de cada região (cabeça, tórax, abdome, MMSS, MMII, etc.).
+3. **Escalas**: cada escala recebe:
+  - Linha verde divisória entre uma escala e outra quando abertas.
+  - Botões **Calcular / Como usar / Indicação / Limites** em verde mais escuro.
+  - **Score final destacado** no fim de cada escala (ex.: "Escala de Coma de Glasgow — Score: 13 → Trauma leve").
+4. **Sinais Vitais Pediátricos**: incluir a **Escala de Dor com carinhas** (0–10, Sem dor → Pior dor possível) usando o desenho enviado.
+
+---
+
+### Bloco 4 — Relatório de estágio - ABNT pago 
+
+1. **Novo mini app "Relatório de Estágio em ABNT"**: (fica dentro da minha lojinha bloqueado, liberado, quado comprado)
+  - Puxa **automaticamente** todos os dados do Diário de Bordo (identificação, atividades, reflexões) e monta o relatório na estrutura ABNT (capa, introdução, desenvolvimento por dia, considerações finais, referências).
+  - **Pago — R$ 60,00** (one-time, cadastrado na Cakto como os outros).
+  - **Trava de uso único por aluno**: cada compra dá direito a **1 relatório**, com **4 aberturas/correções/impressões** extras (total 5 acessos: gerar + 4 correções). Depois disso, bloqueia.
+  - Tela antes da compra mostra explicitamente: *"Uso único. Você poderá abrir, corrigir e imprimir até 2 vezes após gerar. Vinculado ao seu cadastro — não transferível."*
+  - Backend: nova tabela `relatorio_uses` (user_id, mini_app_id, opens_left INT default 4, generated_at) com RLS por `auth.uid()`. Cada abertura decrementa `opens_left`. Webhook Cakto cria o registro ao pagar.
+  - Cadastro inicial do mini app no admin com link Cakto (você me envia depois). não sei como faz
+
+---
+
+### Ordem de execução
+
+Bloco 1 → Bloco 2 → Bloco 3 → Bloco 4 (o mais pesado).
+
+**Posso começar pelo Bloco 1? sim**
+
+&nbsp;
