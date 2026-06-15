@@ -1,0 +1,1 @@
+ALTER TYPE public.mini_app_kind ADD VALUE IF NOT EXISTS 'relatorio';
