@@ -3,7 +3,6 @@ import {
   Home,
   Stethoscope,
   Calculator,
-  ClipboardList,
   Activity,
   NotebookPen,
   Baby,
@@ -16,6 +15,8 @@ import {
   Store,
   User,
   Shield,
+  GraduationCap,
+  FileText,
 } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import { ReferencesFooter } from "./References";
@@ -27,15 +28,16 @@ const nav = [
   { to: "/", label: "Início", icon: Home },
   { to: "/loja", label: "Loja", icon: Store },
   { to: "/minha-conta", label: "Minha Conta", icon: User },
-  { to: "/iras", label: "IRAS", icon: HandHeart },
-  { to: "/seguranca", label: "Segurança", icon: ShieldCheck },
-  { to: "/procedimentos", label: "Exame Físico", icon: Stethoscope },
-  { to: "/calculadora", label: "Cálculos", icon: Calculator },
-  { to: "/sinais-vitais", label: "SV Adulto", icon: Activity },
-  { to: "/sv-pediatrico", label: "SV em Pediatria", icon: Baby },
-  { to: "/sv-gestante", label: "SV na Gestante", icon: HeartPulse },
-  { to: "/escalas", label: "Escalas", icon: ClipboardList },
-  { to: "/diario", label: "Relatório de Estágio", icon: NotebookPen },
+  { to: "/postura-etica", label: "Postura e Ética Profissional", icon: GraduationCap },
+  { to: "/iras", label: "Time Contra as IRAS", icon: HandHeart },
+  { to: "/seguranca", label: "Segurança do Paciente", icon: ShieldCheck },
+  { to: "/exame-fisico-escalas", label: "Exame Físico e Escalas de Avaliação", icon: Stethoscope },
+  { to: "/calculadora", label: "Cálculos de Medicamentos", icon: Calculator },
+  { to: "/sinais-vitais", label: "Sinais Vitais", icon: Activity },
+  { to: "/sv-pediatrico", label: "Sinais Vitais Pediátricos", icon: Baby },
+  { to: "/sv-gestante", label: "Sinais Vitais Gestante", icon: HeartPulse },
+  { to: "/diario", label: "Diário de Bordo", icon: NotebookPen },
+  { to: "/relatorio-abnt", label: "Relatório de Estágio (ABNT)", icon: FileText },
 ] as const;
 
 export function AppShell({ children }: { children: ReactNode }) {
@@ -59,7 +61,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           <Link to="/" className="flex min-w-0 items-center gap-3">
             <img
               src={logoAsset.url}
-              alt="Logotipo Acadêmico de Bolsa"
+              alt="Logotipo Acadêmico de Bolso"
               className="h-11 w-11 shrink-0 rounded-xl object-contain bg-white/10 p-1 ring-1 ring-gold/40"
             />
             <div className="min-w-0 leading-tight">
@@ -154,7 +156,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                 aria-label={n.label}
               >
                 <Icon className="h-4 w-4" />
-                {n.label}
+                {n.label.split(" ")[0]}
               </Link>
             );
           })}

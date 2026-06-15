@@ -1,7 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
-import { AlertTriangle, Info, Thermometer, Wind } from "lucide-react";
+import { AlertTriangle, Info, Thermometer, Wind, Smile } from "lucide-react";
+import escalaDor from "@/assets/escala-dor.png.asset.json";
+
 
 export const Route = createFileRoute("/sv-pediatrico")({
   head: () => ({
@@ -187,10 +189,35 @@ function SVPed() {
         </Card>
       </div>
 
+      {/* Escala de Dor (carinhas) */}
+      <Card className="mt-4">
+        <div className="flex items-center gap-2">
+          <Smile className="h-5 w-5 text-primary" />
+          <h3 className="font-display text-base font-bold">Escala de Dor (carinhas) — 0 a 10</h3>
+        </div>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Peça à criança que aponte para a carinha que representa a dor que sente. Use a partir de 3 anos
+          (cooperativa) ou em qualquer paciente com dificuldade de verbalizar.
+        </p>
+        <div className="mt-3 overflow-hidden rounded-xl border border-border/60 bg-white">
+          <img
+            src={escalaDor.url}
+            alt="Escala de dor com carinhas de 0 (sem dor) a 10 (pior dor possível)"
+            className="w-full object-contain"
+          />
+        </div>
+        <div className="mt-3 grid gap-2 sm:grid-cols-3 text-xs text-foreground">
+          <p className="rounded-lg bg-[hsl(160_84%_39%/0.1)] p-2"><strong>0–2</strong> · Sem dor / dor leve</p>
+          <p className="rounded-lg bg-[hsl(45_95%_94%)] p-2 text-[hsl(35_85%_30%)]"><strong>3–6</strong> · Dor moderada a intensa</p>
+          <p className="rounded-lg bg-[hsl(0_85%_95%)] p-2 text-[hsl(0_70%_35%)]"><strong>7–10</strong> · Dor muito intensa / pior dor</p>
+        </div>
+      </Card>
+
       <p className="mt-6 text-center text-[11px] text-muted-foreground">
         Fontes: Diretrizes PALS/AHA, Sociedade Brasileira de Pediatria (SBP), OMS e FEBRASGO. Aplicativo
         educacional — não substitui o julgamento clínico do profissional de saúde.
       </p>
+
     </AppShell>
   );
 }

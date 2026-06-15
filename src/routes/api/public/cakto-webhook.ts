@@ -130,6 +130,29 @@ export const Route = createFileRoute("/api/public/cakto-webhook")({
               .eq("user_id", profile.id)
               .eq("mini_app_id", miniApp.id);
           }
+        } else if (miniApp.kind === "relatorio") {
+          // Relatório de Estágio (ABNT): 5 aberturas por compra (1 geração + 4 correções).
+          if (isApproval) {
+            await supabaseAdmin
+              .from("relatorio_uses")
+              .upsert(
+                {
+                  user_id: profile.id,
+                  mini_app_id: miniApp.id,
+                  opens_left: 5,
+                  total_opens: 5,
+                  generated_at: null,
+                  cakto_order_id: payload.data?.order_id ?? null,
+                },
+                { onConflict: "user_id,mini_app_id" },
+              );
+          } else if (isCancellation) {
+            await supabaseAdmin
+              .from("relatorio_uses")
+              .update({ opens_left: 0 })
+              .eq("user_id", profile.id)
+              .eq("mini_app_id", miniApp.id);
+          }
         } else {
           // Extra: pagamento único = 90 dias
           if (isApproval) {
@@ -150,6 +173,7 @@ export const Route = createFileRoute("/api/public/cakto-webhook")({
               .eq("cakto_order_id", payload.data.order_id);
           }
         }
+
 
         return new Response(JSON.stringify({ ok: true }), {
           status: 200,

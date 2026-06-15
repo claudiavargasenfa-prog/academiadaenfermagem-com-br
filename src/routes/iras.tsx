@@ -1,8 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
 import { HandHeart, ShieldAlert, Sparkles, Activity } from "lucide-react";
-import mascoteMenino from "@/assets/mascote-menino.png.asset.json";
+import mascoteMenino from "@/assets/mascote-menino-iras.png.asset.json";
 import mascoteMenina from "@/assets/mascote-menina.png.asset.json";
+
 
 export const Route = createFileRoute("/iras")({
   head: () => ({
