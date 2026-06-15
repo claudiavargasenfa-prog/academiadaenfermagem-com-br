@@ -88,7 +88,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             </button>
           </div>
           <nav className="hidden items-center gap-1 md:flex">
-            {nav.map((n) => {
+            {navItems.map((n) => {
               const active = pathname === n.to;
               return (
                 <Link
@@ -109,7 +109,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         {open && (
           <div className="border-t border-gold/20 bg-primary/95 px-4 py-3 md:hidden">
             <div className="grid grid-cols-2 gap-2">
-              {nav.map((n) => {
+              {navItems.map((n) => {
                 const Icon = n.icon;
                 const active = pathname === n.to;
                 return (
@@ -141,7 +141,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       {/* Mobile bottom tab nav */}
       <nav className="fixed bottom-3 left-1/2 z-40 -translate-x-1/2 md:hidden">
         <div className="flex items-center gap-1 rounded-2xl border border-gold/40 bg-primary/95 px-2 py-2 text-primary-foreground shadow-[var(--shadow-glass)] backdrop-blur">
-          {nav.slice(0, 5).map((n) => {
+          {navItems.slice(0, 5).map((n) => {
             const Icon = n.icon;
             const active = pathname === n.to;
             return (
