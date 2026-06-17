@@ -1,59 +1,54 @@
-## Plano de Revisão do App
+# Loja como tela inicial do app
 
-Vou aplicar todas as mudanças em blocos. Como são muitas alterações, divido em 4 blocos. Confirme para eu começar pelo Bloco 1.
+## Objetivo
 
----
+Quando o cliente abrir o app, ele cai direto na **Loja**. Todos os mini apps aparecem como cards de produto, o 1º é o gratis, o demos com preço e botão de compra/assinatura. Quem já tem acesso vê "Acessar". O antigo "dashboard com atalhos" deixa de ser a home.
 
-### Bloco 1 — Ajustes de texto e campos (rápido)
+## Mudanças  
+BANNER NO TOPO DA LOJA, TIPO CARROCEL COM 5 SLIDES FAZENDO PROMOÇÃO INCLUINDO O CONTEUDO GRATIS.  
+  
+alteranome do app para: ACADEMIA DE ENFERMAGEM
 
-1. **Início (`/`)**: trocar subtítulo por:
-  *"Faça login e tenha acesso a todo o conteúdo, tudo salvo no seu app. mesmo offline."*
-2. **Diário de Bordo → Identificação**: tornar editáveis os campos **Campo**, **Preceptor** e **Período** (hoje não digitam).
-3. **Segurança**:
-  - Renomear rota/título para **"Segurança do Paciente"**.
-  - Remover todas as abreviaturas no menu lateral e nos atalhos rápidos da Home (escrever por extenso: "Sinais Vitais", "Sinais Vitais Pediátricos", "Sinais Vitais Gestante", "Segurança do Paciente", "Cálculos de Medicamentos", "Procedimentos e Exame Físico" etc.).
+### 1. Nova home `/` = Loja
 
----
+- Reescrever `src/routes/index.tsx` para ser a vitrine.
+- Cabeçalho: logo + frase "Conhecimento que cabe no bolso do jaleco" + cartão de "Identificação do estágio" (campo, preceptor, período) preservado em destaque menor.
+- Banner do **App Básico (Assinatura mensal)** no topo:
+  - Mostra preço, o que está incluso (Postura e Ética, Diário de Bordo, Sinais Vitais).
+  - Botão **Assinar** (abre checkout Cakto) ou **Renovar** quando expirando, ou selo "Assinatura ativa até dd/mm" quando ativa.
+- Grade de **Mini apps extras** (IRAS, Segurança do Paciente, Exame Físico e Escalas, Cálculos, SSVV Pediátrico, SSVV Gestante, Relatório ABNT):
+  - Cada card mostra: ícone, nome, descrição curta, preço (R$ CORTADO E OUTRO R$ COM DESCONTO), status.
+  - **Bloqueado** → botão "Comprar" (abre Cakto). Cadeado visível.
+  - **Liberado** → botão "Acessar" (abre o mini app) + validade "Acesso até dd/mm".
+  - Se o App Básico TERÁ O NOME  (Manual de Sobrevivência: Postura, Ética e Segurança), não estiver ativo, mostrar nota: "Requer Assinatura Básica ativa".
+- Rodapé curto: link para "Minha conta" e "Admin" (quando admin).
 
-### Bloco 2 — Calculadora de Medicamentos
+### 2. Página `/loja` antiga
 
-1. **Dose por Peso** passa a ter 3 campos:
-  - Peso do paciente (kg)
-  - Dose recomendada (mg/kg)
-  - Concentração do medicamento (mg/mL)
-  - Resultado: **Dose Total (mg) = Peso × Dose** e **Volume (mL) = Dose Total ÷ Concentração**.
-2. Adicionar bloco **"Considerações de Segurança"** logo após Equipos e Conversões, com os 5 itens enviados (Verificação, Atenção às Concentrações, Ferramentas, Profissional de Saúde, Nota de precisão pediátrica).
+- Remover ou transformar em redirect para `/`, já que a home agora é a própria loja. Decisão: **redirect 301-ish via router** (`/loja` → `/`) para não quebrar links existentes.
 
----
+### 3. Cabeçalho/menu (`AppShell`)
 
-### Bloco 3 — Mini app único "Exame físico & Escalas de avaliações"
+- Substituir o link "Início" por "Loja" no menu, apontando para `/`.
+- Remover o link separado para "Loja" para não duplicar.
 
-1. Unificar **Escalas** + **Exame Físico** em um único mini app chamado **"**Exame físico & Escalas de avaliação**"** (rota `/exame fisico-escalas`); remover entradas duplicadas do menu.
-2. **Exame Físico Céfalo-Caudal**: cada item vira clicável → abre popover/modal com explicação curta do *que examinar* + **desenho/ícone ilustrativo** de cada região (cabeça, tórax, abdome, MMSS, MMII, etc.).
-3. **Escalas**: cada escala recebe:
-  - Linha verde divisória entre uma escala e outra quando abertas.
-  - Botões **Calcular / Como usar / Indicação / Limites** em verde mais escuro.
-  - **Score final destacado** no fim de cada escala (ex.: "Escala de Coma de Glasgow — Score: 13 → Trauma leve").
-4. **Sinais Vitais Pediátricos**: incluir a **Escala de Dor com carinhas** (0–10, Sem dor → Pior dor possível) usando o desenho enviado.
+### 4. Diário/identificação
 
----
+- Manter o cartão "Identificação do estágio" como bloco compacto no topo da Loja (somente leitura + link "Editar no Diário"), preservando o que já existia.
 
-### Bloco 4 — Relatório de estágio - ABNT pago 
+### 5. Sem mudanças em banco
 
-1. **Novo mini app "Relatório de Estágio em ABNT"**: (fica dentro da minha lojinha bloqueado, liberado, quado comprado)
-  - Puxa **automaticamente** todos os dados do Diário de Bordo (identificação, atividades, reflexões) e monta o relatório na estrutura ABNT (capa, introdução, desenvolvimento por dia, considerações finais, referências).
-  - **Pago — R$ 60,00** (one-time, cadastrado na Cakto como os outros).
-  - **Trava de uso único por aluno**: cada compra dá direito a **1 relatório**, com **4 aberturas/correções/impressões** extras (total 5 acessos: gerar + 4 correções). Depois disso, bloqueia.
-  - Tela antes da compra mostra explicitamente: *"Uso único. Você poderá abrir, corrigir e imprimir até 2 vezes após gerar. Vinculado ao seu cadastro — não transferível."*
-  - Backend: nova tabela `relatorio_uses` (user_id, mini_app_id, opens_left INT default 4, generated_at) com RLS por `auth.uid()`. Cada abertura decrementa `opens_left`. Webhook Cakto cria o registro ao pagar.
-  - Cadastro inicial do mini app no admin com link Cakto (você me envia depois). não sei como faz
+- Tabelas `mini_apps`, `subscriptions`, `user_app_access` já existem e suportam o modelo. O webhook Cakto e o painel `/admin` continuam iguais.
+- Lembrete pós-implementação: cadastrar as **URLs de checkout Cakto** de cada mini app em `/admin` para os botões "Comprar/Assinar" funcionarem.
 
----
+## Arquivos afetados
 
-### Ordem de execução
+- `src/routes/index.tsx` — reescrita completa (vira a Loja).
+- `src/routes/loja.tsx` — vira redirect para `/`.
+- `src/components/AppShell.tsx` — ajuste do menu (Início → Loja, remove duplicata).
 
-Bloco 1 → Bloco 2 → Bloco 3 → Bloco 4 (o mais pesado).
+## Fora de escopo
 
-**Posso começar pelo Bloco 1? sim**
-
-&nbsp;
+- Mudanças no conteúdo interno dos mini apps.
+- Mudanças no fluxo do webhook Cakto e no `/admin`.
+- Mudanças visuais de marca (cores, fontes) — segue o tema atual (dourado + primário).
