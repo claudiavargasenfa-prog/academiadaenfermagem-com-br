@@ -1,6 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import {
-  Home,
   Stethoscope,
   Calculator,
   Activity,
@@ -25,8 +24,7 @@ import { isAdmin } from "@/lib/access";
 import logoAsset from "@/assets/logo.png.asset.json";
 
 const nav = [
-  { to: "/", label: "Início", icon: Home },
-  { to: "/loja", label: "Loja", icon: Store },
+  { to: "/", label: "Loja", icon: Store },
   { to: "/minha-conta", label: "Minha Conta", icon: User },
   { to: "/postura-etica", label: "Postura e Ética Profissional", icon: GraduationCap },
   { to: "/iras", label: "Time Contra as IRAS", icon: HandHeart },
@@ -34,8 +32,8 @@ const nav = [
   { to: "/exame-fisico-escalas", label: "Exame Físico e Escalas de Avaliação", icon: Stethoscope },
   { to: "/calculadora", label: "Cálculos de Medicamentos", icon: Calculator },
   { to: "/sinais-vitais", label: "Sinais Vitais", icon: Activity },
-  { to: "/sv-pediatrico", label: "Sinais Vitais Pediátricos", icon: Baby },
-  { to: "/sv-gestante", label: "Sinais Vitais Gestante", icon: HeartPulse },
+  { to: "/sv-pediatrico", label: "SSVV Pediátricos", icon: Baby },
+  { to: "/sv-gestante", label: "SSVV Gestante", icon: HeartPulse },
   { to: "/diario", label: "Diário de Bordo", icon: NotebookPen },
   { to: "/relatorio-abnt", label: "Relatório de Estágio (ABNT)", icon: FileText },
 ] as const;
