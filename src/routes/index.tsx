@@ -1,5 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import {
+  Lock,
+  CheckCircle2,
+  Clock,
+  ExternalLink,
+  Sparkles,
+  ChevronLeft,
+  ChevronRight,
   Stethoscope,
   Calculator,
   Activity,
@@ -10,8 +18,7 @@ import {
   HandHeart,
   GraduationCap,
   FileText,
-  Lock,
-  ShoppingBag,
+  BookOpen,
 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
@@ -21,82 +28,170 @@ import {
   fetchMiniApps,
   fetchMyBasicSubscription,
   fetchMyExtraAccess,
+  formatPriceBRL,
+  daysUntil,
   summarizeAccess,
+  type MiniApp,
 } from "@/lib/access";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Início — Acadêmico de Bolso" },
+      { title: "Loja — Academia de Enfermagem" },
       {
         name: "description",
-        content: "Caderno de estágio interativo: IRAS, Segurança do Paciente, escalas e cálculos.",
+        content:
+          "Loja do app Academia de Enfermagem: assinatura básica e mini apps extras para o estágio.",
       },
     ],
   }),
-  component: Dashboard,
+  component: StoreHome,
 });
 
-// Cada atalho aponta para um slug em `mini_apps`. `tier` define como é
-// liberado: `basico` = incluído na assinatura mensal; `extra` = compra avulsa.
-const shortcuts = [
-  { to: "/postura-etica",        slug: "basico",               tier: "basico" as const, label: "Postura e Ética Profissional", icon: GraduationCap, hint: "Manual de conduta no estágio" },
-  { to: "/diario",               slug: "basico",               tier: "basico" as const, label: "Diário de Bordo",                icon: NotebookPen,   hint: "Anotações de plantão" },
-  { to: "/sinais-vitais",        slug: "basico",               tier: "basico" as const, label: "Sinais Vitais",                  icon: Activity,      hint: "PA, FC, FR, SatO₂, T°" },
-  { to: "/iras",                 slug: "iras",                 tier: "extra"  as const, label: "Time Contra as IRAS",            icon: HandHeart,     hint: "5 Momentos da OMS" },
-  { to: "/seguranca",            slug: "seguranca",            tier: "extra"  as const, label: "Segurança do Paciente",          icon: ShieldCheck,   hint: "6 Metas Internacionais" },
-  { to: "/exame-fisico-escalas", slug: "exame-fisico-escalas", tier: "extra"  as const, label: "Exame Físico e Escalas de Avaliação", icon: Stethoscope, hint: "Cefalocaudal + Glasgow, Braden, Morse..." },
-  { to: "/calculadora",          slug: "calculadora",          tier: "extra"  as const, label: "Cálculos de Medicamentos",       icon: Calculator,    hint: "Regra de três, gotejamento, dose/peso" },
-  { to: "/sv-pediatrico",        slug: "sv-pediatrico",        tier: "extra"  as const, label: "Sinais Vitais Pediátricos",      icon: Baby,          hint: "Por faixa etária + PALS + dor" },
-  { to: "/sv-gestante",          slug: "sv-gestante",          tier: "extra"  as const, label: "Sinais Vitais Gestante",         icon: HeartPulse,    hint: "Pré-eclâmpsia, hemorragia" },
-  { to: "/relatorio-abnt",       slug: "relatorio-abnt",       tier: "extra"  as const, label: "Relatório de Estágio (ABNT)",    icon: FileText,      hint: "Gerar relatório automático" },
+// Mapa de slug → ícone + rota interna do mini app (quando liberado)
+const SLUG_META: Record<string, { icon: typeof Stethoscope; to: string }> = {
+  basico:                 { icon: BookOpen,       to: "/postura-etica" },
+  "postura-etica":        { icon: GraduationCap,  to: "/postura-etica" },
+  diario:                 { icon: NotebookPen,    to: "/diario" },
+  "sinais-vitais":        { icon: Activity,       to: "/sinais-vitais" },
+  iras:                   { icon: HandHeart,      to: "/iras" },
+  seguranca:              { icon: ShieldCheck,    to: "/seguranca" },
+  "exame-fisico-escalas": { icon: Stethoscope,    to: "/exame-fisico-escalas" },
+  calculadora:            { icon: Calculator,     to: "/calculadora" },
+  "sv-pediatrico":        { icon: Baby,           to: "/sv-pediatrico" },
+  "sv-gestante":          { icon: HeartPulse,     to: "/sv-gestante" },
+  "relatorio-abnt":       { icon: FileText,       to: "/relatorio-abnt" },
+};
+
+const BASICO_DISPLAY_NAME = "Manual de Sobrevivência: Postura, Ética e Segurança";
+
+// Carrossel — 5 slides promocionais (inclui o conteúdo gratuito)
+const SLIDES = [
+  {
+    eyebrow: "Grátis para começar",
+    title: "Postura, Ética e Sinais Vitais",
+    desc: "Conteúdo essencial liberado já na assinatura básica.",
+    bg: "from-emerald-600 to-emerald-800",
+  },
+  {
+    eyebrow: "Mais vendido",
+    title: "Cálculos de Medicamentos",
+    desc: "Regra de três, gotejamento e dose/peso, com checagem de segurança.",
+    bg: "from-amber-500 to-amber-700",
+  },
+  {
+    eyebrow: "Lançamento",
+    title: "Relatório de Estágio (ABNT)",
+    desc: "Gera automaticamente a partir do seu Diário de Bordo.",
+    bg: "from-indigo-600 to-indigo-800",
+  },
+  {
+    eyebrow: "Combo clínico",
+    title: "Exame Físico + Escalas",
+    desc: "Cefalocaudal + Glasgow, Braden, Morse e mais — em um só lugar.",
+    bg: "from-rose-600 to-rose-800",
+  },
+  {
+    eyebrow: "Segurança do paciente",
+    title: "IRAS + 6 Metas Internacionais",
+    desc: "Higienização das mãos e protocolos visuais para o plantão.",
+    bg: "from-sky-600 to-sky-800",
+  },
 ] as const;
 
+function Carousel() {
+  const [i, setI] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => setI((x) => (x + 1) % SLIDES.length), 5000);
+    return () => clearInterval(id);
+  }, []);
+  const slide = SLIDES[i];
+  return (
+    <section className="mb-6">
+      <div
+        className={`relative overflow-hidden rounded-3xl border border-gold/40 bg-gradient-to-br ${slide.bg} p-6 text-white shadow-[var(--shadow-glass)] transition-all`}
+      >
+        <p className="text-[11px] font-bold uppercase tracking-widest text-gold">
+          {slide.eyebrow}
+        </p>
+        <h2 className="mt-1 font-display text-2xl font-extrabold leading-tight md:text-3xl">
+          {slide.title}
+        </h2>
+        <p className="mt-2 max-w-xl text-sm text-white/85">{slide.desc}</p>
 
-function Dashboard() {
-  const [diario] = useLocal<{ id: string; data: string; texto: string }[]>("diario-entries", []);
+        <div className="mt-4 flex items-center gap-3">
+          <button
+            aria-label="Slide anterior"
+            onClick={() => setI((x) => (x - 1 + SLIDES.length) % SLIDES.length)}
+            className="grid h-9 w-9 place-items-center rounded-full bg-white/15 hover:bg-white/25"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </button>
+          <div className="flex gap-1.5">
+            {SLIDES.map((_, n) => (
+              <button
+                key={n}
+                aria-label={`Ir ao slide ${n + 1}`}
+                onClick={() => setI(n)}
+                className={`h-2 rounded-full transition-all ${
+                  n === i ? "w-6 bg-gold" : "w-2 bg-white/40"
+                }`}
+              />
+            ))}
+          </div>
+          <button
+            aria-label="Próximo slide"
+            onClick={() => setI((x) => (x + 1) % SLIDES.length)}
+            className="grid h-9 w-9 place-items-center rounded-full bg-white/15 hover:bg-white/25"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function StoreHome() {
   const [estagio] = useLocal("estagio-info", { campo: "", preceptor: "", periodo: "" });
 
   const appsQ = useQuery({ queryKey: ["mini_apps"], queryFn: fetchMiniApps });
   const subQ = useQuery({ queryKey: ["my_basic_sub"], queryFn: fetchMyBasicSubscription });
   const extrasQ = useQuery({ queryKey: ["my_extras"], queryFn: fetchMyExtraAccess });
 
+  const loading = appsQ.isLoading || subQ.isLoading || extrasQ.isLoading;
   const apps = appsQ.data ?? [];
   const access = summarizeAccess(subQ.data ?? null, extrasQ.data ?? []);
-  const slugToId = new Map(apps.map((a) => [a.slug, a.id]));
-
-  function isUnlocked(slug: string, tier: "basico" | "extra"): boolean {
-    if (tier === "basico") return access.basicActive;
-    const id = slugToId.get(slug);
-    if (!id) return false;
-    return access.basicActive && !!access.extraAccessByApp[id];
-  }
+  const basico = apps.find((a) => a.kind === "basico");
+  const extras = apps.filter((a) => a.kind === "extra");
 
   return (
     <AppShell>
       <PageHeader
-        eyebrow="Bem-vindo(a)"
-        title="Seu estágio, em um só lugar."
-        description="Reúna referências clínicas, calcule doses com segurança e fortaleça sua prática como acadêmico(a) de enfermagem."
+        eyebrow="Loja"
+        title="Academia de Enfermagem"
+        description="Assine o Manual de Sobrevivência e adicione mini apps extras conforme precisar."
       />
+
+      <Carousel />
 
       <section className="mb-6 grid gap-4 md:grid-cols-3">
         <div className="overflow-hidden rounded-3xl border border-gold/40 bg-primary p-5 text-primary-foreground shadow-[var(--shadow-glass)] md:col-span-2">
           <div className="flex items-start gap-4">
             <img
               src={logoAsset.url}
-              alt="Logotipo Acadêmico de Bolso"
+              alt="Logotipo Academia de Enfermagem"
               className="h-16 w-16 shrink-0 rounded-2xl bg-white/10 object-contain p-1 ring-1 ring-gold/40"
             />
             <div className="min-w-0">
               <p className="text-[11px] font-semibold uppercase tracking-widest text-gold">
-                Acadêmico de Bolso
+                Academia de Enfermagem
               </p>
               <h2 className="font-display text-xl font-extrabold leading-tight">
                 Conhecimento que cabe no <span className="text-gold">bolso do jaleco</span>.
               </h2>
               <p className="mt-2 text-sm text-primary-foreground/80">
-                Faça login e tenha acesso a todo o conteúdo — tudo salvo no seu app, mesmo offline.
+                Compre uma vez e tenha o conteúdo offline no seu app.
               </p>
             </div>
           </div>
@@ -122,111 +217,157 @@ function Dashboard() {
             </div>
           </dl>
           <Link
-            to="/diario"
+            to={access.basicActive ? "/diario" : "/"}
             className="mt-3 inline-block text-sm font-semibold text-primary hover:underline"
           >
-            Editar no Diário
+            {access.basicActive ? "Editar no Diário" : "Assine para editar"}
           </Link>
         </Card>
       </section>
 
-      {!access.basicActive && (
-        <section className="mb-6">
-          <Link
-            to="/loja"
-            className="flex items-center justify-between gap-4 rounded-2xl border border-gold/40 bg-gradient-to-r from-amber-50 to-yellow-100 p-5 text-foreground shadow-[var(--shadow-glass)] transition-all hover:-translate-y-0.5"
-          >
-            <div className="flex items-start gap-3">
-              <div className="grid h-12 w-12 place-items-center rounded-2xl gold-gradient">
-                <ShoppingBag className="h-6 w-6" />
-              </div>
-              <div>
-                <p className="text-xs font-semibold uppercase tracking-widest text-gold">
-                  Loja Premium
-                </p>
-                <h3 className="font-display text-lg font-bold">
-                  Assine o App Básico e libere seus módulos
-                </h3>
-                <p className="text-sm text-muted-foreground">
-                  Os módulos abaixo aparecem bloqueados até a sua assinatura ficar ativa.
-                </p>
-              </div>
-            </div>
-            <span className="hidden rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground sm:inline">
-              Ir para a Loja
-            </span>
-          </Link>
+      {loading && (
+        <Card>
+          <p className="text-sm text-muted-foreground">Carregando catálogo…</p>
+        </Card>
+      )}
+
+      {!loading && apps.length === 0 && (
+        <Card>
+          <p className="text-sm text-muted-foreground">
+            Nenhum mini app cadastrado ainda. Cadastre os apps no painel admin para vê-los aqui.
+          </p>
+        </Card>
+      )}
+
+      {basico && (
+        <section className="mb-8">
+          <h2 className="mb-3 font-display text-lg font-bold">Assinatura básica</h2>
+          <ProductCard
+            app={basico}
+            basicActive={access.basicActive}
+            basicEndsAt={access.basicEndsAt}
+          />
         </section>
       )}
 
-      <section>
-        <h2 className="mb-3 font-display text-xl font-bold">Atalhos rápidos</h2>
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          {shortcuts.map((s) => {
-            const Icon = s.icon;
-            const unlocked = isUnlocked(s.slug, s.tier);
-
-            if (!unlocked) {
-              return (
-                <Link
-                  key={s.to}
-                  to="/loja"
-                  className="group relative glass rounded-2xl p-4 opacity-90 transition-all hover:-translate-y-0.5"
-                  aria-label={`${s.label} — bloqueado, abrir Loja`}
-                >
-                  <div className="grid h-11 w-11 place-items-center rounded-xl bg-foreground/10">
-                    <Icon className="h-5 w-5 text-foreground/60" />
-                  </div>
-                  <p className="mt-3 font-display text-base font-bold text-foreground/80">{s.label}</p>
-                  <p className="text-xs text-muted-foreground">{s.hint}</p>
-                  <span className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-full bg-foreground/10 px-2 py-0.5 text-[10px] font-semibold text-foreground/70">
-                    <Lock className="h-3 w-3" />
-                    {s.tier === "basico" ? "Assine" : "Comprar na Loja"}
-                  </span>
-                </Link>
-              );
-            }
-
-            return (
-              <Link
-                key={s.to}
-                to={s.to}
-                className="group glass rounded-2xl p-4 transition-all hover:-translate-y-0.5 hover:shadow-[var(--shadow-glow)]"
-              >
-                <div className="grid h-11 w-11 place-items-center rounded-xl gold-gradient">
-                  <Icon className="h-5 w-5" />
-                </div>
-                <p className="mt-3 font-display text-base font-bold text-foreground">{s.label}</p>
-                <p className="text-xs text-muted-foreground">{s.hint}</p>
-              </Link>
-            );
-          })}
-        </div>
-      </section>
-
-      <section className="mt-8">
-        <Card>
-          <div className="flex items-start justify-between gap-4">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-widest text-gold">
-                Diário de bordo
+      {extras.length > 0 && (
+        <section>
+          <h2 className="mb-3 font-display text-lg font-bold">Mini apps extras</h2>
+          {!access.basicActive && (
+            <Card className="mb-3 border-gold/40">
+              <p className="text-sm">
+                <Sparkles className="mr-1 inline h-4 w-4 text-gold" />
+                Para usar os extras você precisa do <strong>Manual de Sobrevivência</strong> ativo.
               </p>
-              <h3 className="mt-1 font-display text-lg font-bold">
-                {diario.length} {diario.length === 1 ? "registro" : "registros"}
-              </h3>
-              <p className="text-sm text-muted-foreground">
-                Documente cada plantão e exporte tudo em PDF formatado em ABNT.
-              </p>
-            </div>
-            <Link
-              to={access.basicActive ? "/diario" : "/loja"}
-              className="rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground"
-            >
-              {access.basicActive ? "Abrir" : "Assinar"}
-            </Link>
+            </Card>
+          )}
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {extras.map((app) => (
+              <ProductCard
+                key={app.id}
+                app={app}
+                basicActive={access.basicActive}
+                extraExpiresAt={access.extraAccessByApp[app.id] ?? null}
+              />
+            ))}
           </div>
-        </Card>
-      </section>
+        </section>
+      )}
     </AppShell>
+  );
+}
+
+function ProductCard({
+  app,
+  basicActive,
+  basicEndsAt,
+  extraExpiresAt,
+}: {
+  app: MiniApp;
+  basicActive: boolean;
+  basicEndsAt?: string | null;
+  extraExpiresAt?: string | null;
+}) {
+  const isBasico = app.kind === "basico";
+  const unlocked = isBasico ? basicActive : basicActive && !!extraExpiresAt;
+  const daysLeft = daysUntil(isBasico ? basicEndsAt ?? null : extraExpiresAt ?? null);
+  const meta = SLUG_META[app.slug] ?? { icon: BookOpen, to: "/" as const };
+  const Icon = meta.icon;
+  const displayName = isBasico ? BASICO_DISPLAY_NAME : app.name;
+
+  // Preço "de" (sugerido) = 40% acima do preço atual, para destacar desconto
+  const fromCents = Math.round(app.price_cents * 1.4);
+  const hasDiscount = fromCents > app.price_cents;
+
+  return (
+    <div className="glass flex flex-col rounded-2xl p-4">
+      <div className="mb-2 flex items-start justify-between gap-2">
+        <div className="grid h-11 w-11 place-items-center rounded-xl gold-gradient">
+          <Icon className="h-5 w-5" />
+        </div>
+        {unlocked ? (
+          <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-2 py-0.5 text-[10px] font-semibold text-emerald-700">
+            <CheckCircle2 className="h-3 w-3" /> Liberado
+          </span>
+        ) : (
+          <span className="inline-flex items-center gap-1 rounded-full bg-foreground/10 px-2 py-0.5 text-[10px] font-semibold text-foreground/70">
+            <Lock className="h-3 w-3" /> Bloqueado
+          </span>
+        )}
+      </div>
+
+      <h3 className="font-display text-base font-bold">{displayName}</h3>
+      {app.description && (
+        <p className="mt-1 text-xs text-muted-foreground">{app.description}</p>
+      )}
+
+      <div className="mt-3">
+        {hasDiscount && (
+          <p className="text-xs text-muted-foreground line-through">
+            de {formatPriceBRL(fromCents)}
+          </p>
+        )}
+        <p className="text-lg font-bold text-foreground">
+          {hasDiscount ? "por " : ""}
+          {formatPriceBRL(app.price_cents)}
+        </p>
+        <p className="text-[11px] text-muted-foreground">
+          {isBasico ? "por mês (recorrente)" : "pagamento único · 3 meses de acesso"}
+        </p>
+      </div>
+
+      {unlocked && daysLeft !== null && daysLeft <= 30 && (
+        <p className="mt-2 inline-flex items-center gap-1 text-[11px] font-semibold text-amber-700">
+          <Clock className="h-3 w-3" /> Expira em {daysLeft} {daysLeft === 1 ? "dia" : "dias"}
+        </p>
+      )}
+
+      <div className="mt-3">
+        {unlocked ? (
+          <Link
+            to={meta.to}
+            className="block w-full rounded-xl bg-primary py-2 text-center text-sm font-semibold text-primary-foreground"
+          >
+            Acessar
+          </Link>
+        ) : app.cakto_checkout_url ? (
+          <a
+            href={app.cakto_checkout_url}
+            target="_blank"
+            rel="noreferrer"
+            className="flex w-full items-center justify-center gap-1 rounded-xl gold-gradient py-2 text-sm font-bold text-foreground"
+          >
+            {isBasico ? "Assinar" : "Comprar"} <ExternalLink className="h-3.5 w-3.5" />
+          </a>
+        ) : (
+          <button
+            disabled
+            className="w-full cursor-not-allowed rounded-xl bg-foreground/10 py-2 text-sm font-semibold text-foreground/50"
+          >
+            Em breve
+          </button>
+        )}
+      </div>
+    </div>
   );
 }
