@@ -11,7 +11,7 @@ import { GraduationCap, Shirt, ScrollText, Users, AlertOctagon } from "lucide-re
 export const Route = createFileRoute("/postura-etica")({
   head: () => ({
     meta: [
-      { title: "Postura e Ética Profissional — Acadêmico de Bolso" },
+      { title: "Postura e Ética Profissional — Academia de Enfermagem" },
       {
         name: "description",
         content:

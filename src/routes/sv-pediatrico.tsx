@@ -8,7 +8,7 @@ import escalaDor from "@/assets/escala-dor.png.asset.json";
 export const Route = createFileRoute("/sv-pediatrico")({
   head: () => ({
     meta: [
-      { title: "Sinais Vitais Pediátricos — Acadêmico de Bolso" },
+      { title: "Sinais Vitais Pediátricos — Academia de Enfermagem" },
       { name: "description", content: "Valores de FC, FR e PA por faixa etária pediátrica e neonatal." },
     ],
   }),

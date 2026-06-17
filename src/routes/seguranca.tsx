@@ -11,7 +11,7 @@ import { ShieldCheck, AlertTriangle, Heart } from "lucide-react";
 export const Route = createFileRoute("/seguranca")({
   head: () => ({
     meta: [
-      { title: "Segurança do Paciente — Acadêmico de Bolsa" },
+      { title: "Segurança do Paciente — Academia de Enfermagem" },
       {
         name: "description",
         content:

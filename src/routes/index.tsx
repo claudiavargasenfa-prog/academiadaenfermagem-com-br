@@ -27,7 +27,7 @@ import {
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Início — Acadêmico de Bolso" },
+      { title: "Início — Academia de Enfermagem" },
       {
         name: "description",
         content: "Caderno de estágio interativo: IRAS, Segurança do Paciente, escalas e cálculos.",
@@ -85,12 +85,12 @@ function Dashboard() {
           <div className="flex items-start gap-4">
             <img
               src={logoAsset.url}
-              alt="Logotipo Acadêmico de Bolso"
+              alt="Logotipo Academia de Enfermagem"
               className="h-16 w-16 shrink-0 rounded-2xl bg-white/10 object-contain p-1 ring-1 ring-gold/40"
             />
             <div className="min-w-0">
               <p className="text-[11px] font-semibold uppercase tracking-widest text-gold">
-                Acadêmico de Bolso
+                Academia de Enfermagem
               </p>
               <h2 className="font-display text-xl font-extrabold leading-tight">
                 Conhecimento que cabe no <span className="text-gold">bolso do jaleco</span>.

@@ -61,12 +61,12 @@ export function AppShell({ children }: { children: ReactNode }) {
           <Link to="/" className="flex min-w-0 items-center gap-3">
             <img
               src={logoAsset.url}
-              alt="Logotipo Acadêmico de Bolso"
+              alt="Logotipo Academia de Enfermagem"
               className="h-11 w-11 shrink-0 rounded-xl object-contain bg-white/10 p-1 ring-1 ring-gold/40"
             />
             <div className="min-w-0 leading-tight">
               <p className="truncate font-display text-base font-extrabold tracking-tight text-gold">
-                Acadêmico de Bolso
+                Academia de Enfermagem
               </p>
               <p className="truncate text-[11px] text-primary-foreground/70">
                 Informação Atualizada em suas Mãos
