@@ -208,6 +208,7 @@ function MiniAppForm({ app, onClose }: { app: MiniApp | null; onClose: () => voi
       audio_url: form.audio_url || null,
       route_path: form.route_path || null,
       horas_certificado: Number(form.horas_certificado) || null,
+      price_original_cents: Number(form.price_original_cents) || null,
     };
     const res = app
       ? await supabase.from("mini_apps").update(payload as any).eq("id", app.id)
