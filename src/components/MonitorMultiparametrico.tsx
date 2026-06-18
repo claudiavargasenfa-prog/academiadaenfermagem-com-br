@@ -13,8 +13,23 @@ export function MonitorMultiparametrico({ vitais }: { vitais: SinaisVitais }) {
     return () => clearInterval(t);
   }, []);
 
-  // Duração do ciclo de ECG: mais lento (multiplicado por 2.2 para visualização tranquila)
-  const cycleSec = Math.max(1.2, (60 / Math.max(30, vitais.fc)) * 2.2);
+  // Duração do ciclo de ECG: bem lento e tranquilo
+  const cycleSec = Math.max(2.4, (60 / Math.max(30, vitais.fc)) * 4.4);
+
+  // Um "batimento" QRS compacto (largura 25 unidades) - linha base, P, QRS, T
+  const beat = (x: number) =>
+    `${x},30 ${x + 2},30 ${x + 4},29 ${x + 6},30 ${x + 8},30 ${x + 10},32 ${x + 11},14 ${x + 12},48 ${x + 13},30 ${x + 15},30 ${x + 18},27 ${x + 21},30 ${x + 25},30`;
+
+  // 8 batimentos por ciclo de 200 unidades (mais juntinhos)
+  const beatsPerHalf = 4;
+  const beatWidth = 25;
+  const buildLine = (offset: number) => {
+    const segments: string[] = [];
+    for (let i = 0; i < beatsPerHalf; i++) {
+      segments.push(beat(offset + i * beatWidth));
+    }
+    return segments.join(" ");
+  };
 
   return (
     <div className="rounded-2xl border border-emerald-900/60 bg-black p-4 shadow-inner">
@@ -43,13 +58,14 @@ export function MonitorMultiparametrico({ vitais }: { vitais: SinaisVitais }) {
                 fill="none"
                 stroke="#34d399"
                 strokeWidth="1.2"
-                points={`${offset},30 ${offset + 4},30 ${offset + 8},28 ${offset + 12},32 ${offset + 16},10 ${offset + 20},50 ${offset + 24},28 ${offset + 28},30 ${offset + 50},30 ${offset + 54},28 ${offset + 58},32 ${offset + 62},10 ${offset + 66},50 ${offset + 70},28 ${offset + 74},30 ${offset + 100},30`}
+                points={buildLine(offset)}
               />
             </g>
           ))}
         </svg>
         <style>{`@keyframes ecg-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }`}</style>
       </div>
+
 
       {/* Grid de leituras */}
       <div className="grid grid-cols-3 gap-2 font-mono">
