@@ -271,7 +271,7 @@ function MiniAppForm({ app, onClose }: { app: MiniApp | null; onClose: () => voi
               <option value="gratuito" />
             </datalist>
           </Field>
-          <Field label="Preço (centavos) — ex: 1990 = R$19,90">
+          <Field label='Preço "POR" (centavos) — ex: 1990 = R$19,90'>
             <input
               type="number"
               min={0}
@@ -279,6 +279,16 @@ function MiniAppForm({ app, onClose }: { app: MiniApp | null; onClose: () => voi
               value={form.price_cents}
               onChange={(e) => setForm({ ...form, price_cents: Number(e.target.value) })}
               className={input}
+            />
+          </Field>
+          <Field label='Preço "DE" (riscado, centavos) — opcional'>
+            <input
+              type="number"
+              min={0}
+              value={form.price_original_cents}
+              onChange={(e) => setForm({ ...form, price_original_cents: Number(e.target.value) })}
+              className={input}
+              placeholder="0 = sem promoção"
             />
           </Field>
           <Field label="Ícone (emoji)">
