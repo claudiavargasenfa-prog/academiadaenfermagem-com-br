@@ -28,7 +28,7 @@ export type Database = {
           icon: string | null
           id: string
           is_active: boolean
-          kind: Database["public"]["Enums"]["mini_app_kind"]
+          kind: string
           name: string
           price_cents: number
           route_path: string | null
@@ -50,7 +50,7 @@ export type Database = {
           icon?: string | null
           id?: string
           is_active?: boolean
-          kind?: Database["public"]["Enums"]["mini_app_kind"]
+          kind?: string
           name: string
           price_cents?: number
           route_path?: string | null
@@ -72,7 +72,7 @@ export type Database = {
           icon?: string | null
           id?: string
           is_active?: boolean
-          kind?: Database["public"]["Enums"]["mini_app_kind"]
+          kind?: string
           name?: string
           price_cents?: number
           route_path?: string | null
