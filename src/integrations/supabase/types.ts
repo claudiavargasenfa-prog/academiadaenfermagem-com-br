@@ -22,12 +22,16 @@ export type Database = {
           content_md: string | null
           created_at: string
           description: string | null
+          em_breve: boolean
+          gratuito: boolean
+          horas_certificado: number | null
           icon: string | null
           id: string
           is_active: boolean
           kind: Database["public"]["Enums"]["mini_app_kind"]
           name: string
           price_cents: number
+          route_path: string | null
           slug: string
           sort_order: number
           updated_at: string
@@ -40,12 +44,16 @@ export type Database = {
           content_md?: string | null
           created_at?: string
           description?: string | null
+          em_breve?: boolean
+          gratuito?: boolean
+          horas_certificado?: number | null
           icon?: string | null
           id?: string
           is_active?: boolean
           kind?: Database["public"]["Enums"]["mini_app_kind"]
           name: string
           price_cents?: number
+          route_path?: string | null
           slug: string
           sort_order?: number
           updated_at?: string
@@ -58,12 +66,16 @@ export type Database = {
           content_md?: string | null
           created_at?: string
           description?: string | null
+          em_breve?: boolean
+          gratuito?: boolean
+          horas_certificado?: number | null
           icon?: string | null
           id?: string
           is_active?: boolean
           kind?: Database["public"]["Enums"]["mini_app_kind"]
           name?: string
           price_cents?: number
+          route_path?: string | null
           slug?: string
           sort_order?: number
           updated_at?: string
