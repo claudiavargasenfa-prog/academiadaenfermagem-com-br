@@ -173,7 +173,7 @@ function MiniAppForm({ app, onClose }: { app: MiniApp | null; onClose: () => voi
     slug: app?.slug ?? "",
     name: app?.name ?? "",
     description: app?.description ?? "",
-    kind: app?.kind ?? ("extra" as "basico" | "extra"),
+    kind: (app?.kind as string) ?? "extra",
     price_cents: app?.price_cents ?? 0,
     cakto_product_id: app?.cakto_product_id ?? "",
     cakto_checkout_url: app?.cakto_checkout_url ?? "",
@@ -183,6 +183,10 @@ function MiniAppForm({ app, onClose }: { app: MiniApp | null; onClose: () => voi
     audio_url: app?.audio_url ?? "",
     is_active: app?.is_active ?? true,
     sort_order: app?.sort_order ?? 0,
+    gratuito: (app as any)?.gratuito ?? false,
+    em_breve: (app as any)?.em_breve ?? false,
+    route_path: (app as any)?.route_path ?? "",
+    horas_certificado: (app as any)?.horas_certificado ?? 0,
   });
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
@@ -193,6 +197,7 @@ function MiniAppForm({ app, onClose }: { app: MiniApp | null; onClose: () => voi
     setErr(null);
     const payload = {
       ...form,
+      kind: (form.kind || "extra").trim(),
       description: form.description || null,
       cakto_product_id: form.cakto_product_id || null,
       cakto_checkout_url: form.cakto_checkout_url || null,
@@ -200,10 +205,12 @@ function MiniAppForm({ app, onClose }: { app: MiniApp | null; onClose: () => voi
       content_md: form.content_md || null,
       video_url: form.video_url || null,
       audio_url: form.audio_url || null,
+      route_path: form.route_path || null,
+      horas_certificado: Number(form.horas_certificado) || null,
     };
     const res = app
-      ? await supabase.from("mini_apps").update(payload).eq("id", app.id)
-      : await supabase.from("mini_apps").insert(payload);
+      ? await supabase.from("mini_apps").update(payload as any).eq("id", app.id)
+      : await supabase.from("mini_apps").insert(payload as any);
     setBusy(false);
     if (res.error) {
       setErr(res.error.message);
@@ -246,15 +253,21 @@ function MiniAppForm({ app, onClose }: { app: MiniApp | null; onClose: () => voi
           />
         </Field>
         <div className="grid gap-3 sm:grid-cols-3">
-          <Field label="Tipo">
-            <select
+          <Field label="Tipo / categoria (livre)">
+            <input
+              list="kind-suggestions"
               value={form.kind}
-              onChange={(e) => setForm({ ...form, kind: e.target.value as "basico" | "extra" })}
+              onChange={(e) => setForm({ ...form, kind: e.target.value })}
               className={input}
-            >
-              <option value="basico">Básico (mensal)</option>
-              <option value="extra">Extra (3 meses)</option>
-            </select>
+              placeholder="ex: basico, extra, premium, anual..."
+            />
+            <datalist id="kind-suggestions">
+              <option value="basico" />
+              <option value="extra" />
+              <option value="premium" />
+              <option value="anual" />
+              <option value="gratuito" />
+            </datalist>
           </Field>
           <Field label="Preço (centavos) — ex: 1990 = R$19,90">
             <input
@@ -272,6 +285,26 @@ function MiniAppForm({ app, onClose }: { app: MiniApp | null; onClose: () => voi
               onChange={(e) => setForm({ ...form, icon: e.target.value })}
               className={input}
               placeholder="📘"
+            />
+          </Field>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-2">
+          <Field label="Rota interna (ex: /curativos)">
+            <input
+              value={form.route_path}
+              onChange={(e) => setForm({ ...form, route_path: e.target.value })}
+              className={input}
+              placeholder="/slug-da-tela"
+            />
+          </Field>
+          <Field label="Horas de certificado">
+            <input
+              type="number"
+              min={0}
+              step="0.5"
+              value={form.horas_certificado}
+              onChange={(e) => setForm({ ...form, horas_certificado: Number(e.target.value) })}
+              className={input}
             />
           </Field>
         </div>
@@ -316,7 +349,7 @@ function MiniAppForm({ app, onClose }: { app: MiniApp | null; onClose: () => voi
             />
           </Field>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex flex-wrap items-center gap-4">
           <label className="flex items-center gap-2">
             <input
               type="checkbox"
@@ -324,6 +357,22 @@ function MiniAppForm({ app, onClose }: { app: MiniApp | null; onClose: () => voi
               onChange={(e) => setForm({ ...form, is_active: e.target.checked })}
             />
             <span>Ativo (visível na loja)</span>
+          </label>
+          <label className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              checked={form.gratuito}
+              onChange={(e) => setForm({ ...form, gratuito: e.target.checked })}
+            />
+            <span>Grátis</span>
+          </label>
+          <label className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              checked={form.em_breve}
+              onChange={(e) => setForm({ ...form, em_breve: e.target.checked })}
+            />
+            <span>Em breve</span>
           </label>
           <Field label="Ordem">
             <input
