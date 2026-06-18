@@ -1,54 +1,42 @@
-# Loja como tela inicial do app
+## Escopo reduzido — Fase 1 enxuta
 
-## Objetivo
+**Mudança vs plano anterior:** em vez de criar telas vazias para os 13 apps faltantes, criar telas vazias só para **5 mini apps adicionais** (você escolhe quais). Os outros 8 ficam só no catálogo da Loja com cadeado + badge "Em breve" (sem rota, botão desabilitado).
 
-Quando o cliente abrir o app, ele cai direto na **Loja**. Todos os mini apps aparecem como cards de produto, o 1º é o gratis, o demos com preço e botão de compra/assinatura. Quem já tem acesso vê "Acessar". O antigo "dashboard com atalhos" deixa de ser a home.
+### O que entra nesta rodada
 
-## Mudanças  
-BANNER NO TOPO DA LOJA, TIPO CARROCEL COM 5 SLIDES FAZENDO PROMOÇÃO INCLUINDO O CONTEUDO GRATIS.  
-  
-alteranome do app para: ACADEMIA DE ENFERMAGEM
+1. **Banco de dados** (1 migration)
+   - Ajustar `mini_apps`: adicionar `cakto_checkout_url`, `route_path`, `horas_certificado`, `gratuito` (boolean), `em_breve` (boolean).
+   - `user_app_access` já existe — usar `data_compra + 150 dias` como `expires_at`.
+   - Atualizar `has_app_access`: app `gratuito=true` → sempre liberado; pago → exige `expires_at > now()`.
+   - Seed dos 21 apps (nome, preço, horas, slug, `gratuito` só no #1, `em_breve=true` nos 8 sem tela).
 
-### 1. Nova home `/` = Loja
+2. **Loja `/` (home)** — refatorar `src/routes/index.tsx`
+   - 21 cards com preço, badge "Grátis" no #1, badge "Em breve" nos 8 sem rota.
+   - Estados: Acessar / Comprar / Renovar / Em breve (desabilitado).
 
-- Reescrever `src/routes/index.tsx` para ser a vitrine.
-- Cabeçalho: logo + frase "Conhecimento que cabe no bolso do jaleco" + cartão de "Identificação do estágio" (campo, preceptor, período) preservado em destaque menor.
-- Banner do **App Básico (Assinatura mensal)** no topo:
-  - Mostra preço, o que está incluso (Postura e Ética, Diário de Bordo, Sinais Vitais).
-  - Botão **Assinar** (abre checkout Cakto) ou **Renovar** quando expirando, ou selo "Assinatura ativa até dd/mm" quando ativa.
-- Grade de **Mini apps extras** (IRAS, Segurança do Paciente, Exame Físico e Escalas, Cálculos, SSVV Pediátrico, SSVV Gestante, Relatório ABNT):
-  - Cada card mostra: ícone, nome, descrição curta, preço (R$ CORTADO E OUTRO R$ COM DESCONTO), status.
-  - **Bloqueado** → botão "Comprar" (abre Cakto). Cadeado visível.
-  - **Liberado** → botão "Acessar" (abre o mini app) + validade "Acesso até dd/mm".
-  - Se o App Básico TERÁ O NOME  (Manual de Sobrevivência: Postura, Ética e Segurança), não estiver ativo, mostrar nota: "Requer Assinatura Básica ativa".
-- Rodapé curto: link para "Minha conta" e "Admin" (quando admin).
+3. **5 novas telas placeholder** em `src/routes/<slug>.tsx`
+   - Layout padrão (header, título, descrição, breadcrumb) + gate `has_app_access`.
+   - Você indica quais 5 dos 13 sem conteúdo entram agora.
 
-### 2. Página `/loja` antiga
+4. **Apps já existentes** (Postura/Ética, Exame Físico, IRAS, Cálculos, SV Pediátrico, SV Gestante, Relatório ABNT, Segurança)
+   - Trocar gate antigo pelo novo (`has_app_access` com 150 dias).
 
-- Remover ou transformar em redirect para `/`, já que a home agora é a própria loja. Decisão: **redirect 301-ish via router** (`/loja` → `/`) para não quebrar links existentes.
+5. **Cakto** — atualizar `src/routes/api/public/cakto-webhook.ts`
+   - Webhook grava `user_app_access` com `expires_at = now() + 150 dias`. HMAC mantido.
 
-### 3. Cabeçalho/menu (`AppShell`)
+6. **Anti-cópia + marca d'água** — novo `src/components/ContentProtection.tsx`
+   - Bloqueia Ctrl+P, Ctrl+S, F12, botão direito, seleção, drag de imagem.
+   - Marca d'água diagonal com e-mail + CPF + timestamp (~12% opacidade).
+   - Exceção em `/relatorio-abnt`: Ctrl+P liberado quando relatório está completo.
+   - PrintScreen do SO **não pode** ser bloqueado pelo navegador — marca d'água serve de rastreamento.
 
-- Substituir o link "Início" por "Loja" no menu, apontando para `/`.
-- Remover o link separado para "Loja" para não duplicar.
+7. **Helper** novo `src/lib/access.ts` com `useAppAccess(slug)`.
 
-### 4. Diário/identificação
+### Fora desta rodada (Fase 2)
+Certificados PDF, geração/envio por e-mail, admin completo novo, exportação CSV, rate limiting avançado, telas dos 8 apps restantes.
 
-- Manter o cartão "Identificação do estágio" como bloco compacto no topo da Loja (somente leitura + link "Editar no Diário"), preservando o que já existia.
+### Pós-aprovação
+Você precisa colar as URLs de checkout Cakto dos 20 apps pagos em `/admin` — sem isso, "Comprar" não tem destino.
 
-### 5. Sem mudanças em banco
-
-- Tabelas `mini_apps`, `subscriptions`, `user_app_access` já existem e suportam o modelo. O webhook Cakto e o painel `/admin` continuam iguais.
-- Lembrete pós-implementação: cadastrar as **URLs de checkout Cakto** de cada mini app em `/admin` para os botões "Comprar/Assinar" funcionarem.
-
-## Arquivos afetados
-
-- `src/routes/index.tsx` — reescrita completa (vira a Loja).
-- `src/routes/loja.tsx` — vira redirect para `/`.
-- `src/components/AppShell.tsx` — ajuste do menu (Início → Loja, remove duplicata).
-
-## Fora de escopo
-
-- Mudanças no conteúdo interno dos mini apps.
-- Mudanças no fluxo do webhook Cakto e no `/admin`.
-- Mudanças visuais de marca (cores, fontes) — segue o tema atual (dourado + primário).
+### Pergunta antes de começar
+**Quais 5 dos 13 apps sem conteúdo terão tela placeholder agora?** Lista dos 13: Curativos, ACLS, UTI, Obstetrícia, Pediatria, Saúde Mental, Farmacologia, Anatomia, Fisiologia, Microbiologia, Bioquímica, Ética e Bioética, Gestão em Enfermagem. (Confirme a lista correta — usei os nomes que apareceram antes; me diga se algum nome está errado.)
