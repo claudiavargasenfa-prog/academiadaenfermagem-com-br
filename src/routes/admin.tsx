@@ -187,6 +187,7 @@ function MiniAppForm({ app, onClose }: { app: MiniApp | null; onClose: () => voi
     em_breve: (app as any)?.em_breve ?? false,
     route_path: (app as any)?.route_path ?? "",
     horas_certificado: (app as any)?.horas_certificado ?? 0,
+    price_original_cents: (app as any)?.price_original_cents ?? 0,
   });
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
