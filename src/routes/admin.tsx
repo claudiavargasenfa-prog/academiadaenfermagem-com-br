@@ -98,7 +98,19 @@ function AdminContent() {
 
       {(creating || editing) && (
         <MiniAppForm
+          key={editing?.id ?? "new"}
           app={editing}
+          onSaved={(saved) => {
+            qc.setQueryData<MiniApp[]>(["admin_mini_apps"], (old) => {
+              const list = old ?? [];
+              const exists = list.some((item) => item.id === saved.id);
+              return exists ? list.map((item) => (item.id === saved.id ? saved : item)) : [saved, ...list];
+            });
+            qc.setQueryData<MiniApp[]>(["mini_apps"], (old) => {
+              if (!old) return old;
+              return old.map((item) => (item.id === saved.id ? saved : item));
+            });
+          }}
           onClose={() => {
             setCreating(false);
             setEditing(null);
@@ -181,7 +193,15 @@ function reaisToCents(s: string): number {
   return Math.round(n * 100);
 }
 
-function MiniAppForm({ app, onClose }: { app: MiniApp | null; onClose: () => void }) {
+function MiniAppForm({
+  app,
+  onSaved,
+  onClose,
+}: {
+  app: MiniApp | null;
+  onSaved: (saved: MiniApp) => void;
+  onClose: () => void;
+}) {
   const [form, setForm] = useState({
     slug: app?.slug ?? "",
     name: app?.name ?? "",
@@ -227,13 +247,14 @@ function MiniAppForm({ app, onClose }: { app: MiniApp | null; onClose: () => voi
       price_original_cents: priceOriginalCents > 0 ? priceOriginalCents : null,
     };
     const res = app
-      ? await supabase.from("mini_apps").update(payload as any).eq("id", app.id)
-      : await supabase.from("mini_apps").insert(payload as any);
+      ? await supabase.from("mini_apps").update(payload as any).eq("id", app.id).select("*").single()
+      : await supabase.from("mini_apps").insert(payload as any).select("*").single();
     setBusy(false);
     if (res.error) {
       setErr(res.error.message);
       return;
     }
+    if (res.data) onSaved(res.data as MiniApp);
     onClose();
   }
 
