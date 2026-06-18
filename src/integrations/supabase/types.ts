@@ -31,6 +31,7 @@ export type Database = {
           kind: string
           name: string
           price_cents: number
+          price_original_cents: number | null
           route_path: string | null
           slug: string
           sort_order: number
@@ -53,6 +54,7 @@ export type Database = {
           kind?: string
           name: string
           price_cents?: number
+          price_original_cents?: number | null
           route_path?: string | null
           slug: string
           sort_order?: number
@@ -75,6 +77,7 @@ export type Database = {
           kind?: string
           name?: string
           price_cents?: number
+          price_original_cents?: number | null
           route_path?: string | null
           slug?: string
           sort_order?: number
