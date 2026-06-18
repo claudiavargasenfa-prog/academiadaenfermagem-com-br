@@ -205,9 +205,10 @@ function ProductCard({ app, extraExpiresAt }: { app: MiniApp; extraExpiresAt: st
   const unlocked = app.gratuito || !!extraExpiresAt;
   const daysLeft = daysUntil(extraExpiresAt);
   const expiringSoon = !app.gratuito && daysLeft !== null && daysLeft <= 30;
-  const fromCents = (app as any).price_original_cents ?? Math.round(app.price_cents * 1.4);
-  const hasDiscount = !app.gratuito && fromCents > app.price_cents;
+  const fromCents = (app as any).price_original_cents ?? null;
+  const hasDiscount = fromCents != null && fromCents > app.price_cents;
   const route = (app.route_path ?? "/") as string;
+  const showPrice = hasDiscount || !app.gratuito;
 
   return (
     <div className="glass flex flex-col rounded-2xl p-4">
@@ -237,7 +238,7 @@ function ProductCard({ app, extraExpiresAt }: { app: MiniApp; extraExpiresAt: st
       <h3 className="font-display text-base font-bold">{app.name}</h3>
       {app.description && <p className="mt-1 text-xs text-muted-foreground">{app.description}</p>}
 
-      {!app.gratuito && (
+      {showPrice && (
         <div className="mt-3">
           {hasDiscount && (
             <p className="text-xs text-muted-foreground line-through">de {formatPriceBRL(fromCents)}</p>
@@ -246,7 +247,9 @@ function ProductCard({ app, extraExpiresAt }: { app: MiniApp; extraExpiresAt: st
             {hasDiscount ? "por " : ""}
             {formatPriceBRL(app.price_cents)}
           </p>
-          <p className="text-[11px] text-muted-foreground">pagamento único · 150 dias de acesso</p>
+          {!app.gratuito && (
+            <p className="text-[11px] text-muted-foreground">pagamento único · 150 dias de acesso</p>
+          )}
         </div>
       )}
 

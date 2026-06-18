@@ -168,13 +168,27 @@ function AdminContent() {
   );
 }
 
+function centsToReais(c: number | null | undefined): string {
+  if (c == null) return "";
+  return (c / 100).toFixed(2).replace(".", ",");
+}
+
+function reaisToCents(s: string): number {
+  if (!s) return 0;
+  const cleaned = s.replace(/\s/g, "").replace(/\./g, "").replace(",", ".");
+  const n = Number(cleaned);
+  if (!isFinite(n) || n < 0) return 0;
+  return Math.round(n * 100);
+}
+
 function MiniAppForm({ app, onClose }: { app: MiniApp | null; onClose: () => void }) {
   const [form, setForm] = useState({
     slug: app?.slug ?? "",
     name: app?.name ?? "",
     description: app?.description ?? "",
     kind: (app?.kind as string) ?? "extra",
-    price_cents: app?.price_cents ?? 0,
+    price_reais: centsToReais(app?.price_cents ?? 0),
+    price_original_reais: centsToReais((app as any)?.price_original_cents ?? 0),
     cakto_product_id: app?.cakto_product_id ?? "",
     cakto_checkout_url: app?.cakto_checkout_url ?? "",
     icon: app?.icon ?? "",
@@ -187,7 +201,6 @@ function MiniAppForm({ app, onClose }: { app: MiniApp | null; onClose: () => voi
     em_breve: (app as any)?.em_breve ?? false,
     route_path: (app as any)?.route_path ?? "",
     horas_certificado: (app as any)?.horas_certificado ?? 0,
-    price_original_cents: (app as any)?.price_original_cents ?? 0,
   });
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
@@ -196,8 +209,10 @@ function MiniAppForm({ app, onClose }: { app: MiniApp | null; onClose: () => voi
     e.preventDefault();
     setBusy(true);
     setErr(null);
+    const { price_reais, price_original_reais, ...rest } = form;
+    const priceOriginalCents = reaisToCents(price_original_reais);
     const payload = {
-      ...form,
+      ...rest,
       kind: (form.kind || "extra").trim(),
       description: form.description || null,
       cakto_product_id: form.cakto_product_id || null,
@@ -208,7 +223,8 @@ function MiniAppForm({ app, onClose }: { app: MiniApp | null; onClose: () => voi
       audio_url: form.audio_url || null,
       route_path: form.route_path || null,
       horas_certificado: Number(form.horas_certificado) || null,
-      price_original_cents: Number(form.price_original_cents) || null,
+      price_cents: reaisToCents(price_reais),
+      price_original_cents: priceOriginalCents > 0 ? priceOriginalCents : null,
     };
     const res = app
       ? await supabase.from("mini_apps").update(payload as any).eq("id", app.id)
@@ -271,24 +287,25 @@ function MiniAppForm({ app, onClose }: { app: MiniApp | null; onClose: () => voi
               <option value="gratuito" />
             </datalist>
           </Field>
-          <Field label='Preço "POR" (centavos) — ex: 1990 = R$19,90'>
+          <Field label='Preço "POR" (R$) — ex: 19,90 ou 0,00'>
             <input
-              type="number"
-              min={0}
+              type="text"
+              inputMode="decimal"
               required
-              value={form.price_cents}
-              onChange={(e) => setForm({ ...form, price_cents: Number(e.target.value) })}
+              value={form.price_reais}
+              onChange={(e) => setForm({ ...form, price_reais: e.target.value })}
               className={input}
+              placeholder="0,00"
             />
           </Field>
-          <Field label='Preço "DE" (riscado, centavos) — opcional'>
+          <Field label='Preço "DE" (R$, riscado) — opcional'>
             <input
-              type="number"
-              min={0}
-              value={form.price_original_cents}
-              onChange={(e) => setForm({ ...form, price_original_cents: Number(e.target.value) })}
+              type="text"
+              inputMode="decimal"
+              value={form.price_original_reais}
+              onChange={(e) => setForm({ ...form, price_original_reais: e.target.value })}
               className={input}
-              placeholder="0 = sem promoção"
+              placeholder="vazio = sem promoção"
             />
           </Field>
           <Field label="Ícone (emoji)">
