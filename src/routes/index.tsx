@@ -205,7 +205,7 @@ function ProductCard({ app, extraExpiresAt }: { app: MiniApp; extraExpiresAt: st
   const unlocked = app.gratuito || !!extraExpiresAt;
   const daysLeft = daysUntil(extraExpiresAt);
   const expiringSoon = !app.gratuito && daysLeft !== null && daysLeft <= 30;
-  const fromCents = Math.round(app.price_cents * 1.4);
+  const fromCents = (app as any).price_original_cents ?? Math.round(app.price_cents * 1.4);
   const hasDiscount = !app.gratuito && fromCents > app.price_cents;
   const route = (app.route_path ?? "/") as string;
 
