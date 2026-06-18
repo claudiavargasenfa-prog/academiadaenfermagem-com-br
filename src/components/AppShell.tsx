@@ -1,21 +1,11 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import {
-  Stethoscope,
-  Calculator,
-  Activity,
-  NotebookPen,
-  Baby,
-  HeartPulse,
-  ShieldCheck,
-  HandHeart,
   Menu,
   X,
   LogOut,
   Store,
   User,
   Shield,
-  GraduationCap,
-  FileText,
 } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import { ReferencesFooter } from "./References";
@@ -26,16 +16,6 @@ import logoAsset from "@/assets/logo.png.asset.json";
 const nav = [
   { to: "/", label: "Loja", icon: Store },
   { to: "/minha-conta", label: "Minha Conta", icon: User },
-  { to: "/postura-etica", label: "Postura e Ética Profissional", icon: GraduationCap },
-  { to: "/iras", label: "Time Contra as IRAS", icon: HandHeart },
-  { to: "/seguranca", label: "Segurança do Paciente", icon: ShieldCheck },
-  { to: "/exame-fisico-escalas", label: "Exame Físico e Escalas de Avaliação", icon: Stethoscope },
-  { to: "/calculadora", label: "Cálculos de Medicamentos", icon: Calculator },
-  { to: "/sinais-vitais", label: "Sinais Vitais", icon: Activity },
-  { to: "/sv-pediatrico", label: "SSVV Pediátricos", icon: Baby },
-  { to: "/sv-gestante", label: "SSVV Gestante", icon: HeartPulse },
-  { to: "/diario", label: "Diário de Bordo", icon: NotebookPen },
-  { to: "/relatorio-abnt", label: "Relatório de Estágio (ABNT)", icon: FileText },
 ] as const;
 
 export function AppShell({ children }: { children: ReactNode }) {
