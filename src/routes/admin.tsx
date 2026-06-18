@@ -173,7 +173,7 @@ function MiniAppForm({ app, onClose }: { app: MiniApp | null; onClose: () => voi
     slug: app?.slug ?? "",
     name: app?.name ?? "",
     description: app?.description ?? "",
-    kind: app?.kind ?? ("extra" as "basico" | "extra"),
+    kind: (app?.kind as string) ?? "extra",
     price_cents: app?.price_cents ?? 0,
     cakto_product_id: app?.cakto_product_id ?? "",
     cakto_checkout_url: app?.cakto_checkout_url ?? "",
@@ -183,6 +183,10 @@ function MiniAppForm({ app, onClose }: { app: MiniApp | null; onClose: () => voi
     audio_url: app?.audio_url ?? "",
     is_active: app?.is_active ?? true,
     sort_order: app?.sort_order ?? 0,
+    gratuito: (app as any)?.gratuito ?? false,
+    em_breve: (app as any)?.em_breve ?? false,
+    route_path: (app as any)?.route_path ?? "",
+    horas_certificado: (app as any)?.horas_certificado ?? 0,
   });
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
@@ -193,6 +197,7 @@ function MiniAppForm({ app, onClose }: { app: MiniApp | null; onClose: () => voi
     setErr(null);
     const payload = {
       ...form,
+      kind: (form.kind || "extra").trim(),
       description: form.description || null,
       cakto_product_id: form.cakto_product_id || null,
       cakto_checkout_url: form.cakto_checkout_url || null,
@@ -200,10 +205,12 @@ function MiniAppForm({ app, onClose }: { app: MiniApp | null; onClose: () => voi
       content_md: form.content_md || null,
       video_url: form.video_url || null,
       audio_url: form.audio_url || null,
+      route_path: form.route_path || null,
+      horas_certificado: Number(form.horas_certificado) || null,
     };
     const res = app
-      ? await supabase.from("mini_apps").update(payload).eq("id", app.id)
-      : await supabase.from("mini_apps").insert(payload);
+      ? await supabase.from("mini_apps").update(payload as any).eq("id", app.id)
+      : await supabase.from("mini_apps").insert(payload as any);
     setBusy(false);
     if (res.error) {
       setErr(res.error.message);
