@@ -38,13 +38,14 @@ export function MonitorMultiparametrico({ vitais }: { vitais: SinaisVitais }) {
           }}
         >
           {[0, 100].map((offset) => (
-            <polyline
-              key={offset}
-              fill="none"
-              stroke="#34d399"
-              strokeWidth="1.2"
-              points={`${offset},30 ${offset + 10},30 ${offset + 18},30 ${offset + 22},28 ${offset + 26},32 ${offset + 30},10 ${offset + 34},50 ${offset + 38},28 ${offset + 42},30 ${offset + 60},30 ${offset + 70},30 ${offset + 100},30`}
-            />
+            <g key={offset}>
+              <polyline
+                fill="none"
+                stroke="#34d399"
+                strokeWidth="1.2"
+                points={`${offset},30 ${offset + 4},30 ${offset + 8},28 ${offset + 12},32 ${offset + 16},10 ${offset + 20},50 ${offset + 24},28 ${offset + 28},30 ${offset + 50},30 ${offset + 54},28 ${offset + 58},32 ${offset + 62},10 ${offset + 66},50 ${offset + 70},28 ${offset + 74},30 ${offset + 100},30`}
+              />
+            </g>
           ))}
         </svg>
         <style>{`@keyframes ecg-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }`}</style>
