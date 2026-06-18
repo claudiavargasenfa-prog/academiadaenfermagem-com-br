@@ -1,9 +1,13 @@
 import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
+import { useQuery } from "@tanstack/react-query";
 
 export type MiniApp = Database["public"]["Tables"]["mini_apps"]["Row"];
 export type Subscription = Database["public"]["Tables"]["subscriptions"]["Row"];
 export type UserAppAccess = Database["public"]["Tables"]["user_app_access"]["Row"];
+
+/** Dias de acesso após a compra (regra de negócio). */
+export const ACCESS_DAYS = 150;
 
 export function formatPriceBRL(cents: number): string {
   return new Intl.NumberFormat("pt-BR", {
@@ -29,16 +33,6 @@ export async function fetchMiniApps(): Promise<MiniApp[]> {
   return data ?? [];
 }
 
-export async function fetchMyBasicSubscription(): Promise<Subscription | null> {
-  const { data, error } = await supabase
-    .from("subscriptions")
-    .select("*, mini_apps!inner(kind)")
-    .eq("mini_apps.kind", "basico")
-    .maybeSingle();
-  if (error && error.code !== "PGRST116") throw error;
-  return (data as Subscription | null) ?? null;
-}
-
 export async function fetchMyExtraAccess(): Promise<UserAppAccess[]> {
   const { data, error } = await supabase
     .from("user_app_access")
@@ -47,6 +41,17 @@ export async function fetchMyExtraAccess(): Promise<UserAppAccess[]> {
     .order("expires_at", { ascending: true });
   if (error) throw error;
   return data ?? [];
+}
+
+/** Legado — mantido por compatibilidade com a tela /minha-conta. */
+export async function fetchMyBasicSubscription(): Promise<Subscription | null> {
+  const { data, error } = await supabase
+    .from("subscriptions")
+    .select("*, mini_apps!inner(kind)")
+    .eq("mini_apps.kind", "basico")
+    .maybeSingle();
+  if (error && error.code !== "PGRST116") throw error;
+  return (data as Subscription | null) ?? null;
 }
 
 export async function isAdmin(): Promise<boolean> {
@@ -62,19 +67,11 @@ export async function isAdmin(): Promise<boolean> {
 }
 
 export type AccessSummary = {
-  basicActive: boolean;
-  basicEndsAt: string | null;
-  extraAccessByApp: Record<string, string>; // mini_app_id -> expires_at
+  /** mini_app_id -> expires_at (apenas extras pagos vigentes) */
+  extraAccessByApp: Record<string, string>;
 };
 
-export function summarizeAccess(
-  sub: Subscription | null,
-  extras: UserAppAccess[],
-): AccessSummary {
-  const basicActive =
-    !!sub &&
-    sub.status === "active" &&
-    (!sub.current_period_end || new Date(sub.current_period_end) > new Date());
+export function summarizeExtras(extras: UserAppAccess[]): AccessSummary {
   const extraAccessByApp: Record<string, string> = {};
   for (const a of extras) {
     if (
@@ -84,9 +81,56 @@ export function summarizeAccess(
       extraAccessByApp[a.mini_app_id] = a.expires_at;
     }
   }
+  return { extraAccessByApp };
+}
+
+/** Compat: muitos componentes ainda importam `summarizeAccess`. */
+export function summarizeAccess(
+  sub: Subscription | null,
+  extras: UserAppAccess[],
+) {
+  const basicActive =
+    !!sub &&
+    sub.status === "active" &&
+    (!sub.current_period_end || new Date(sub.current_period_end) > new Date());
   return {
     basicActive,
     basicEndsAt: sub?.current_period_end ?? null,
-    extraAccessByApp,
+    extraAccessByApp: summarizeExtras(extras).extraAccessByApp,
   };
+}
+
+/** Hook: estado de acesso do usuário atual a um mini app (por slug). */
+export function useAppAccess(slug: string) {
+  return useQuery({
+    queryKey: ["app_access", slug],
+    queryFn: async () => {
+      const { data: app, error: e1 } = await supabase
+        .from("mini_apps")
+        .select("id, name, slug, gratuito, em_breve, route_path, cakto_checkout_url, price_cents")
+        .eq("slug", slug)
+        .maybeSingle();
+      if (e1) throw e1;
+      if (!app) return { app: null, granted: false, expiresAt: null as string | null };
+      if (app.gratuito) {
+        return { app, granted: true, expiresAt: null as string | null };
+      }
+      const { data: u } = await supabase.auth.getUser();
+      if (!u.user) return { app, granted: false, expiresAt: null as string | null };
+      const { data: acc } = await supabase
+        .from("user_app_access")
+        .select("expires_at")
+        .eq("user_id", u.user.id)
+        .eq("mini_app_id", app.id)
+        .gt("expires_at", new Date().toISOString())
+        .order("expires_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      return {
+        app,
+        granted: !!acc,
+        expiresAt: acc?.expires_at ?? null,
+      };
+    },
+  });
 }
