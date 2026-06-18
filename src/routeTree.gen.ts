@@ -13,6 +13,7 @@ import { Route as UtiRouteImport } from './routes/uti'
 import { Route as SvPediatricoRouteImport } from './routes/sv-pediatrico'
 import { Route as SvGestanteRouteImport } from './routes/sv-gestante'
 import { Route as SinaisVitaisRouteImport } from './routes/sinais-vitais'
+import { Route as SimulacoesReaisRouteImport } from './routes/simulacoes-reais'
 import { Route as SegurancaRouteImport } from './routes/seguranca'
 import { Route as SaudeMentalRouteImport } from './routes/saude-mental'
 import { Route as RelatorioAbntRouteImport } from './routes/relatorio-abnt'
@@ -49,6 +50,11 @@ const SvGestanteRoute = SvGestanteRouteImport.update({
 const SinaisVitaisRoute = SinaisVitaisRouteImport.update({
   id: '/sinais-vitais',
   path: '/sinais-vitais',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SimulacoesReaisRoute = SimulacoesReaisRouteImport.update({
+  id: '/simulacoes-reais',
+  path: '/simulacoes-reais',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SegurancaRoute = SegurancaRouteImport.update({
@@ -154,6 +160,7 @@ export interface FileRoutesByFullPath {
   '/relatorio-abnt': typeof RelatorioAbntRoute
   '/saude-mental': typeof SaudeMentalRoute
   '/seguranca': typeof SegurancaRoute
+  '/simulacoes-reais': typeof SimulacoesReaisRoute
   '/sinais-vitais': typeof SinaisVitaisRoute
   '/sv-gestante': typeof SvGestanteRoute
   '/sv-pediatrico': typeof SvPediatricoRoute
@@ -177,6 +184,7 @@ export interface FileRoutesByTo {
   '/relatorio-abnt': typeof RelatorioAbntRoute
   '/saude-mental': typeof SaudeMentalRoute
   '/seguranca': typeof SegurancaRoute
+  '/simulacoes-reais': typeof SimulacoesReaisRoute
   '/sinais-vitais': typeof SinaisVitaisRoute
   '/sv-gestante': typeof SvGestanteRoute
   '/sv-pediatrico': typeof SvPediatricoRoute
@@ -201,6 +209,7 @@ export interface FileRoutesById {
   '/relatorio-abnt': typeof RelatorioAbntRoute
   '/saude-mental': typeof SaudeMentalRoute
   '/seguranca': typeof SegurancaRoute
+  '/simulacoes-reais': typeof SimulacoesReaisRoute
   '/sinais-vitais': typeof SinaisVitaisRoute
   '/sv-gestante': typeof SvGestanteRoute
   '/sv-pediatrico': typeof SvPediatricoRoute
@@ -226,6 +235,7 @@ export interface FileRouteTypes {
     | '/relatorio-abnt'
     | '/saude-mental'
     | '/seguranca'
+    | '/simulacoes-reais'
     | '/sinais-vitais'
     | '/sv-gestante'
     | '/sv-pediatrico'
@@ -249,6 +259,7 @@ export interface FileRouteTypes {
     | '/relatorio-abnt'
     | '/saude-mental'
     | '/seguranca'
+    | '/simulacoes-reais'
     | '/sinais-vitais'
     | '/sv-gestante'
     | '/sv-pediatrico'
@@ -272,6 +283,7 @@ export interface FileRouteTypes {
     | '/relatorio-abnt'
     | '/saude-mental'
     | '/seguranca'
+    | '/simulacoes-reais'
     | '/sinais-vitais'
     | '/sv-gestante'
     | '/sv-pediatrico'
@@ -296,6 +308,7 @@ export interface RootRouteChildren {
   RelatorioAbntRoute: typeof RelatorioAbntRoute
   SaudeMentalRoute: typeof SaudeMentalRoute
   SegurancaRoute: typeof SegurancaRoute
+  SimulacoesReaisRoute: typeof SimulacoesReaisRoute
   SinaisVitaisRoute: typeof SinaisVitaisRoute
   SvGestanteRoute: typeof SvGestanteRoute
   SvPediatricoRoute: typeof SvPediatricoRoute
@@ -331,6 +344,13 @@ declare module '@tanstack/react-router' {
       path: '/sinais-vitais'
       fullPath: '/sinais-vitais'
       preLoaderRoute: typeof SinaisVitaisRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/simulacoes-reais': {
+      id: '/simulacoes-reais'
+      path: '/simulacoes-reais'
+      fullPath: '/simulacoes-reais'
+      preLoaderRoute: typeof SimulacoesReaisRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/seguranca': {
@@ -472,6 +492,7 @@ const rootRouteChildren: RootRouteChildren = {
   RelatorioAbntRoute: RelatorioAbntRoute,
   SaudeMentalRoute: SaudeMentalRoute,
   SegurancaRoute: SegurancaRoute,
+  SimulacoesReaisRoute: SimulacoesReaisRoute,
   SinaisVitaisRoute: SinaisVitaisRoute,
   SvGestanteRoute: SvGestanteRoute,
   SvPediatricoRoute: SvPediatricoRoute,
