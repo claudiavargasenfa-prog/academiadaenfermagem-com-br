@@ -2,7 +2,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
 import { AppAccessGate } from "@/components/ContentProtection";
-import { QUIZZES } from "@/data/quizzes";
+import { QUIZZES, type Quiz } from "@/data/quizzes";
 import { ArrowLeft, Check, X, RotateCcw } from "lucide-react";
 
 export const Route = createFileRoute("/quizzes/$slug")({
@@ -35,7 +35,7 @@ export const Route = createFileRoute("/quizzes/$slug")({
 });
 
 function QuizPage() {
-  const { quiz } = Route.useLoaderData();
+  const { quiz } = Route.useLoaderData() as { quiz: Quiz };
   const [answers, setAnswers] = useState<(number | null)[]>(() => quiz.questions.map(() => null));
   const [submitted, setSubmitted] = useState(false);
 
