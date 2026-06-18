@@ -11,7 +11,6 @@ import {
   Stethoscope,
   Calculator,
   Activity,
-  NotebookPen,
   Baby,
   HeartPulse,
   ShieldCheck,
@@ -19,6 +18,10 @@ import {
   GraduationCap,
   FileText,
   BookOpen,
+  Bandage,
+  FlaskConical,
+  Brain,
+  Hourglass,
 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
@@ -26,11 +29,10 @@ import { useLocal } from "@/lib/storage";
 import logoAsset from "@/assets/logo.png.asset.json";
 import {
   fetchMiniApps,
-  fetchMyBasicSubscription,
   fetchMyExtraAccess,
   formatPriceBRL,
   daysUntil,
-  summarizeAccess,
+  summarizeExtras,
   type MiniApp,
 } from "@/lib/access";
 
@@ -41,62 +43,37 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Loja do app Academia de Enfermagem: assinatura básica e mini apps extras para o estágio.",
+          "Loja Academia de Enfermagem: 1 mini app grátis + cursos práticos para o estágio. Acesso por 150 dias.",
       },
     ],
   }),
   component: StoreHome,
 });
 
-// Mapa de slug → ícone + rota interna do mini app (quando liberado)
-const SLUG_META: Record<string, { icon: typeof Stethoscope; to: string }> = {
-  basico:                 { icon: BookOpen,       to: "/postura-etica" },
-  "postura-etica":        { icon: GraduationCap,  to: "/postura-etica" },
-  diario:                 { icon: NotebookPen,    to: "/diario" },
-  "sinais-vitais":        { icon: Activity,       to: "/sinais-vitais" },
-  iras:                   { icon: HandHeart,      to: "/iras" },
-  seguranca:              { icon: ShieldCheck,    to: "/seguranca" },
-  "exame-fisico-escalas": { icon: Stethoscope,    to: "/exame-fisico-escalas" },
-  calculadora:            { icon: Calculator,     to: "/calculadora" },
-  "sv-pediatrico":        { icon: Baby,           to: "/sv-pediatrico" },
-  "sv-gestante":          { icon: HeartPulse,     to: "/sv-gestante" },
-  "relatorio-abnt":       { icon: FileText,       to: "/relatorio-abnt" },
+const SLUG_ICON: Record<string, typeof Stethoscope> = {
+  "manual-sobrevivencia": BookOpen,
+  "postura-etica": GraduationCap,
+  "sinais-vitais": Activity,
+  iras: HandHeart,
+  seguranca: ShieldCheck,
+  "exame-fisico-escalas": Stethoscope,
+  medicamentosecalculos: Calculator,
+  "sv-pediatrico": Baby,
+  "sv-gestante": HeartPulse,
+  curativos: Bandage,
+  acls: HeartPulse,
+  uti: Activity,
+  "farmacologia-avancada": FlaskConical,
+  "saude-mental": Brain,
+  "relatorio-abnt": FileText,
 };
 
-const BASICO_DISPLAY_NAME = "Manual de Sobrevivência: Postura, Ética e Segurança";
-
-// Carrossel — 5 slides promocionais (inclui o conteúdo gratuito)
 const SLIDES = [
-  {
-    eyebrow: "Grátis para começar",
-    title: "Postura, Ética e Sinais Vitais",
-    desc: "Conteúdo essencial liberado já na assinatura básica.",
-    bg: "from-emerald-600 to-emerald-800",
-  },
-  {
-    eyebrow: "Mais vendido",
-    title: "Cálculos de Medicamentos",
-    desc: "Regra de três, gotejamento e dose/peso, com checagem de segurança.",
-    bg: "from-amber-500 to-amber-700",
-  },
-  {
-    eyebrow: "Lançamento",
-    title: "Relatório de Estágio (ABNT)",
-    desc: "Gera automaticamente a partir do seu Diário de Bordo.",
-    bg: "from-indigo-600 to-indigo-800",
-  },
-  {
-    eyebrow: "Combo clínico",
-    title: "Exame Físico + Escalas",
-    desc: "Cefalocaudal + Glasgow, Braden, Morse e mais — em um só lugar.",
-    bg: "from-rose-600 to-rose-800",
-  },
-  {
-    eyebrow: "Segurança do paciente",
-    title: "IRAS + 6 Metas Internacionais",
-    desc: "Higienização das mãos e protocolos visuais para o plantão.",
-    bg: "from-sky-600 to-sky-800",
-  },
+  { eyebrow: "Grátis para começar", title: "Manual de Sobrevivência do Estágio", desc: "Checklist da mochila, postura no campo e comunicação com o preceptor.", bg: "from-emerald-600 to-emerald-800" },
+  { eyebrow: "Mais vendido", title: "Cálculos de Medicamentos", desc: "Regra de três, gotejamento e dose/peso com checagem de segurança.", bg: "from-amber-500 to-amber-700" },
+  { eyebrow: "Lançamento", title: "Relatório de Estágio (ABNT)", desc: "Gera automaticamente a partir do seu Diário de Bordo.", bg: "from-indigo-600 to-indigo-800" },
+  { eyebrow: "Combo clínico", title: "Exame Físico + Escalas", desc: "Cefalocaudal + Glasgow, Braden, Morse e mais.", bg: "from-rose-600 to-rose-800" },
+  { eyebrow: "Segurança do paciente", title: "IRAS + 6 Metas Internacionais", desc: "Higienização das mãos e protocolos visuais para o plantão.", bg: "from-sky-600 to-sky-800" },
 ] as const;
 
 function Carousel() {
@@ -108,42 +85,20 @@ function Carousel() {
   const slide = SLIDES[i];
   return (
     <section className="mb-6">
-      <div
-        className={`relative overflow-hidden rounded-3xl border border-gold/40 bg-gradient-to-br ${slide.bg} p-6 text-white shadow-[var(--shadow-glass)] transition-all`}
-      >
-        <p className="text-[11px] font-bold uppercase tracking-widest text-gold">
-          {slide.eyebrow}
-        </p>
-        <h2 className="mt-1 font-display text-2xl font-extrabold leading-tight md:text-3xl">
-          {slide.title}
-        </h2>
+      <div className={`relative overflow-hidden rounded-3xl border border-gold/40 bg-gradient-to-br ${slide.bg} p-6 text-white shadow-[var(--shadow-glass)] transition-all`}>
+        <p className="text-[11px] font-bold uppercase tracking-widest text-gold">{slide.eyebrow}</p>
+        <h2 className="mt-1 font-display text-2xl font-extrabold leading-tight md:text-3xl">{slide.title}</h2>
         <p className="mt-2 max-w-xl text-sm text-white/85">{slide.desc}</p>
-
         <div className="mt-4 flex items-center gap-3">
-          <button
-            aria-label="Slide anterior"
-            onClick={() => setI((x) => (x - 1 + SLIDES.length) % SLIDES.length)}
-            className="grid h-9 w-9 place-items-center rounded-full bg-white/15 hover:bg-white/25"
-          >
+          <button aria-label="Slide anterior" onClick={() => setI((x) => (x - 1 + SLIDES.length) % SLIDES.length)} className="grid h-9 w-9 place-items-center rounded-full bg-white/15 hover:bg-white/25">
             <ChevronLeft className="h-4 w-4" />
           </button>
           <div className="flex gap-1.5">
             {SLIDES.map((_, n) => (
-              <button
-                key={n}
-                aria-label={`Ir ao slide ${n + 1}`}
-                onClick={() => setI(n)}
-                className={`h-2 rounded-full transition-all ${
-                  n === i ? "w-6 bg-gold" : "w-2 bg-white/40"
-                }`}
-              />
+              <button key={n} aria-label={`Ir ao slide ${n + 1}`} onClick={() => setI(n)} className={`h-2 rounded-full transition-all ${n === i ? "w-6 bg-gold" : "w-2 bg-white/40"}`} />
             ))}
           </div>
-          <button
-            aria-label="Próximo slide"
-            onClick={() => setI((x) => (x + 1) % SLIDES.length)}
-            className="grid h-9 w-9 place-items-center rounded-full bg-white/15 hover:bg-white/25"
-          >
+          <button aria-label="Próximo slide" onClick={() => setI((x) => (x + 1) % SLIDES.length)} className="grid h-9 w-9 place-items-center rounded-full bg-white/15 hover:bg-white/25">
             <ChevronRight className="h-4 w-4" />
           </button>
         </div>
@@ -156,21 +111,21 @@ function StoreHome() {
   const [estagio] = useLocal("estagio-info", { campo: "", preceptor: "", periodo: "" });
 
   const appsQ = useQuery({ queryKey: ["mini_apps"], queryFn: fetchMiniApps });
-  const subQ = useQuery({ queryKey: ["my_basic_sub"], queryFn: fetchMyBasicSubscription });
   const extrasQ = useQuery({ queryKey: ["my_extras"], queryFn: fetchMyExtraAccess });
 
-  const loading = appsQ.isLoading || subQ.isLoading || extrasQ.isLoading;
+  const loading = appsQ.isLoading || extrasQ.isLoading;
   const apps = appsQ.data ?? [];
-  const access = summarizeAccess(subQ.data ?? null, extrasQ.data ?? []);
-  const basico = apps.find((a) => a.kind === "basico");
-  const extras = apps.filter((a) => a.kind === "extra");
+  const { extraAccessByApp } = summarizeExtras(extrasQ.data ?? []);
+  const gratis = apps.filter((a) => a.gratuito);
+  const pagosComTela = apps.filter((a) => !a.gratuito && !a.em_breve);
+  const emBreve = apps.filter((a) => a.em_breve);
 
   return (
     <AppShell>
       <PageHeader
         eyebrow="Loja"
         title="Academia de Enfermagem"
-        description="Assine o Manual de Sobrevivência e adicione mini apps extras conforme precisar."
+        description="A ciência da prática, do primeiro estágio à liderança profissional. Cada mini app comprado dá 150 dias de acesso."
       />
 
       <Carousel />
@@ -178,97 +133,65 @@ function StoreHome() {
       <section className="mb-6 grid gap-4 md:grid-cols-3">
         <div className="overflow-hidden rounded-3xl border border-gold/40 bg-primary p-5 text-primary-foreground shadow-[var(--shadow-glass)] md:col-span-2">
           <div className="flex items-start gap-4">
-            <img
-              src={logoAsset.url}
-              alt="Logotipo Academia de Enfermagem"
-              className="h-16 w-16 shrink-0 rounded-2xl bg-white/10 object-contain p-1 ring-1 ring-gold/40"
-            />
+            <img src={logoAsset.url} alt="Logotipo Academia de Enfermagem" className="h-16 w-16 shrink-0 rounded-2xl bg-white/10 object-contain p-1 ring-1 ring-gold/40" />
             <div className="min-w-0">
-              <p className="text-[11px] font-semibold uppercase tracking-widest text-gold">
-                Academia de Enfermagem
-              </p>
+              <p className="text-[11px] font-semibold uppercase tracking-widest text-gold">Academia de Enfermagem</p>
               <h2 className="font-display text-xl font-extrabold leading-tight">
-                Conhecimento que cabe no <span className="text-gold">bolso do jaleco</span>.
+                A ciência da prática, <span className="text-gold">no bolso do jaleco</span>.
               </h2>
               <p className="mt-2 text-sm text-primary-foreground/80">
-                Compre uma vez e tenha o conteúdo offline no seu app.
+                Compre o mini app que precisar. 150 dias de acesso por compra.
               </p>
             </div>
           </div>
         </div>
 
         <Card>
-          <p className="text-xs font-semibold uppercase tracking-widest text-gold">
-            Identificação
-          </p>
+          <p className="text-xs font-semibold uppercase tracking-widest text-gold">Identificação</p>
           <h3 className="mt-1 font-display text-lg font-bold">Meu estágio</h3>
           <dl className="mt-3 space-y-2 text-sm">
-            <div>
-              <dt className="text-muted-foreground">Campo</dt>
-              <dd className="font-medium">{estagio.campo || "—"}</dd>
-            </div>
-            <div>
-              <dt className="text-muted-foreground">Preceptor(a)</dt>
-              <dd className="font-medium">{estagio.preceptor || "—"}</dd>
-            </div>
-            <div>
-              <dt className="text-muted-foreground">Período</dt>
-              <dd className="font-medium">{estagio.periodo || "—"}</dd>
-            </div>
+            <div><dt className="text-muted-foreground">Campo</dt><dd className="font-medium">{estagio.campo || "—"}</dd></div>
+            <div><dt className="text-muted-foreground">Preceptor(a)</dt><dd className="font-medium">{estagio.preceptor || "—"}</dd></div>
+            <div><dt className="text-muted-foreground">Período</dt><dd className="font-medium">{estagio.periodo || "—"}</dd></div>
           </dl>
-          <Link
-            to={access.basicActive ? "/diario" : "/"}
-            className="mt-3 inline-block text-sm font-semibold text-primary hover:underline"
-          >
-            {access.basicActive ? "Editar no Diário" : "Assine para editar"}
+          <Link to="/diario" className="mt-3 inline-block text-sm font-semibold text-primary hover:underline">
+            Editar no Diário
           </Link>
         </Card>
       </section>
 
       {loading && (
-        <Card>
-          <p className="text-sm text-muted-foreground">Carregando catálogo…</p>
-        </Card>
+        <Card><p className="text-sm text-muted-foreground">Carregando catálogo…</p></Card>
       )}
 
-      {!loading && apps.length === 0 && (
-        <Card>
-          <p className="text-sm text-muted-foreground">
-            Nenhum mini app cadastrado ainda. Cadastre os apps no painel admin para vê-los aqui.
-          </p>
-        </Card>
-      )}
-
-      {basico && (
+      {!loading && gratis.length > 0 && (
         <section className="mb-8">
-          <h2 className="mb-3 font-display text-lg font-bold">Assinatura básica</h2>
-          <ProductCard
-            app={basico}
-            basicActive={access.basicActive}
-            basicEndsAt={access.basicEndsAt}
-          />
+          <h2 className="mb-3 font-display text-lg font-bold">Grátis para começar</h2>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {gratis.map((app) => (
+              <ProductCard key={app.id} app={app} extraExpiresAt={extraAccessByApp[app.id] ?? null} />
+            ))}
+          </div>
         </section>
       )}
 
-      {extras.length > 0 && (
-        <section>
-          <h2 className="mb-3 font-display text-lg font-bold">Mini apps extras</h2>
-          {!access.basicActive && (
-            <Card className="mb-3 border-gold/40">
-              <p className="text-sm">
-                <Sparkles className="mr-1 inline h-4 w-4 text-gold" />
-                Para usar os extras você precisa do <strong>Manual de Sobrevivência</strong> ativo.
-              </p>
-            </Card>
-          )}
+      {!loading && pagosComTela.length > 0 && (
+        <section className="mb-8">
+          <h2 className="mb-3 font-display text-lg font-bold">Mini apps disponíveis</h2>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {extras.map((app) => (
-              <ProductCard
-                key={app.id}
-                app={app}
-                basicActive={access.basicActive}
-                extraExpiresAt={access.extraAccessByApp[app.id] ?? null}
-              />
+            {pagosComTela.map((app) => (
+              <ProductCard key={app.id} app={app} extraExpiresAt={extraAccessByApp[app.id] ?? null} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {!loading && emBreve.length > 0 && (
+        <section className="mb-4">
+          <h2 className="mb-3 font-display text-lg font-bold">Em breve</h2>
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {emBreve.map((app) => (
+              <ProductCard key={app.id} app={app} extraExpiresAt={null} />
             ))}
           </div>
         </section>
@@ -277,27 +200,14 @@ function StoreHome() {
   );
 }
 
-function ProductCard({
-  app,
-  basicActive,
-  basicEndsAt,
-  extraExpiresAt,
-}: {
-  app: MiniApp;
-  basicActive: boolean;
-  basicEndsAt?: string | null;
-  extraExpiresAt?: string | null;
-}) {
-  const isBasico = app.kind === "basico";
-  const unlocked = isBasico ? basicActive : basicActive && !!extraExpiresAt;
-  const daysLeft = daysUntil(isBasico ? basicEndsAt ?? null : extraExpiresAt ?? null);
-  const meta = SLUG_META[app.slug] ?? { icon: BookOpen, to: "/" as const };
-  const Icon = meta.icon;
-  const displayName = isBasico ? BASICO_DISPLAY_NAME : app.name;
-
-  // Preço "de" (sugerido) = 40% acima do preço atual, para destacar desconto
+function ProductCard({ app, extraExpiresAt }: { app: MiniApp; extraExpiresAt: string | null }) {
+  const Icon = SLUG_ICON[app.slug] ?? BookOpen;
+  const unlocked = app.gratuito || !!extraExpiresAt;
+  const daysLeft = daysUntil(extraExpiresAt);
+  const expiringSoon = !app.gratuito && daysLeft !== null && daysLeft <= 30;
   const fromCents = Math.round(app.price_cents * 1.4);
-  const hasDiscount = fromCents > app.price_cents;
+  const hasDiscount = !app.gratuito && fromCents > app.price_cents;
+  const route = (app.route_path ?? "/") as string;
 
   return (
     <div className="glass flex flex-col rounded-2xl p-4">
@@ -305,7 +215,15 @@ function ProductCard({
         <div className="grid h-11 w-11 place-items-center rounded-xl gold-gradient">
           <Icon className="h-5 w-5" />
         </div>
-        {unlocked ? (
+        {app.em_breve ? (
+          <span className="inline-flex items-center gap-1 rounded-full bg-foreground/10 px-2 py-0.5 text-[10px] font-semibold text-foreground/70">
+            <Hourglass className="h-3 w-3" /> Em breve
+          </span>
+        ) : app.gratuito ? (
+          <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-2 py-0.5 text-[10px] font-semibold text-emerald-700">
+            <Sparkles className="h-3 w-3" /> Grátis
+          </span>
+        ) : unlocked ? (
           <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-2 py-0.5 text-[10px] font-semibold text-emerald-700">
             <CheckCircle2 className="h-3 w-3" /> Liberado
           </span>
@@ -316,38 +234,35 @@ function ProductCard({
         )}
       </div>
 
-      <h3 className="font-display text-base font-bold">{displayName}</h3>
-      {app.description && (
-        <p className="mt-1 text-xs text-muted-foreground">{app.description}</p>
+      <h3 className="font-display text-base font-bold">{app.name}</h3>
+      {app.description && <p className="mt-1 text-xs text-muted-foreground">{app.description}</p>}
+
+      {!app.gratuito && (
+        <div className="mt-3">
+          {hasDiscount && (
+            <p className="text-xs text-muted-foreground line-through">de {formatPriceBRL(fromCents)}</p>
+          )}
+          <p className="text-lg font-bold text-foreground">
+            {hasDiscount ? "por " : ""}
+            {formatPriceBRL(app.price_cents)}
+          </p>
+          <p className="text-[11px] text-muted-foreground">pagamento único · 150 dias de acesso</p>
+        </div>
       )}
 
-      <div className="mt-3">
-        {hasDiscount && (
-          <p className="text-xs text-muted-foreground line-through">
-            de {formatPriceBRL(fromCents)}
-          </p>
-        )}
-        <p className="text-lg font-bold text-foreground">
-          {hasDiscount ? "por " : ""}
-          {formatPriceBRL(app.price_cents)}
-        </p>
-        <p className="text-[11px] text-muted-foreground">
-          {isBasico ? "por mês (recorrente)" : "pagamento único · 3 meses de acesso"}
-        </p>
-      </div>
-
-      {unlocked && daysLeft !== null && daysLeft <= 30 && (
+      {expiringSoon && (
         <p className="mt-2 inline-flex items-center gap-1 text-[11px] font-semibold text-amber-700">
           <Clock className="h-3 w-3" /> Expira em {daysLeft} {daysLeft === 1 ? "dia" : "dias"}
         </p>
       )}
 
       <div className="mt-3">
-        {unlocked ? (
-          <Link
-            to={meta.to}
-            className="block w-full rounded-xl bg-primary py-2 text-center text-sm font-semibold text-primary-foreground"
-          >
+        {app.em_breve ? (
+          <button disabled className="w-full cursor-not-allowed rounded-xl bg-foreground/10 py-2 text-sm font-semibold text-foreground/50">
+            Em breve
+          </button>
+        ) : unlocked && app.route_path ? (
+          <Link to={route} className="block w-full rounded-xl bg-primary py-2 text-center text-sm font-semibold text-primary-foreground">
             Acessar
           </Link>
         ) : app.cakto_checkout_url ? (
@@ -357,14 +272,11 @@ function ProductCard({
             rel="noreferrer"
             className="flex w-full items-center justify-center gap-1 rounded-xl gold-gradient py-2 text-sm font-bold text-foreground"
           >
-            {isBasico ? "Assinar" : "Comprar"} <ExternalLink className="h-3.5 w-3.5" />
+            {extraExpiresAt ? "Renovar" : "Comprar"} <ExternalLink className="h-3.5 w-3.5" />
           </a>
         ) : (
-          <button
-            disabled
-            className="w-full cursor-not-allowed rounded-xl bg-foreground/10 py-2 text-sm font-semibold text-foreground/50"
-          >
-            Em breve
+          <button disabled className="w-full cursor-not-allowed rounded-xl bg-foreground/10 py-2 text-sm font-semibold text-foreground/50">
+            Checkout não configurado
           </button>
         )}
       </div>

@@ -154,10 +154,10 @@ export const Route = createFileRoute("/api/public/cakto-webhook")({
               .eq("mini_app_id", miniApp.id);
           }
         } else {
-          // Extra: pagamento único = 90 dias
+          // Extra: pagamento único = 150 dias de acesso
           if (isApproval) {
             const expiresAt = new Date();
-            expiresAt.setDate(expiresAt.getDate() + 90);
+            expiresAt.setDate(expiresAt.getDate() + 150);
             await supabaseAdmin.from("user_app_access").insert({
               user_id: profile.id,
               mini_app_id: miniApp.id,
@@ -173,6 +173,7 @@ export const Route = createFileRoute("/api/public/cakto-webhook")({
               .eq("cakto_order_id", payload.data.order_id);
           }
         }
+
 
 
         return new Response(JSON.stringify({ ok: true }), {
