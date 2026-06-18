@@ -241,10 +241,10 @@ function ProductCard({ app, extraExpiresAt }: { app: MiniApp; extraExpiresAt: st
       {showPrice && (
         <div className="mt-3">
           {hasDiscount && (
-            <p className="text-xs text-muted-foreground line-through">de {formatPriceBRL(fromCents)}</p>
+            <p className="text-sm font-semibold text-muted-foreground line-through">De {formatPriceBRL(fromCents)}</p>
           )}
-          <p className="text-lg font-bold text-foreground">
-            {hasDiscount ? "por " : ""}
+          <p className="text-2xl font-extrabold text-foreground">
+            {hasDiscount ? "Por " : ""}
             {formatPriceBRL(app.price_cents)}
           </p>
           {!app.gratuito && (

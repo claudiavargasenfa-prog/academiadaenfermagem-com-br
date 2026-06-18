@@ -137,6 +137,8 @@ export function AppAccessGate({
 
   if (!data.granted) {
     const app = data.app;
+    const fromCents = app.price_original_cents ?? null;
+    const hasDiscount = fromCents != null && fromCents > app.price_cents;
     return (
       <div className="glass mx-auto mt-6 max-w-lg rounded-2xl border border-gold/40 p-6 text-center">
         <div className="mx-auto mb-3 grid h-14 w-14 place-items-center rounded-2xl bg-foreground/10">
@@ -147,7 +149,16 @@ export function AppAccessGate({
           Este mini app é pago. Após a compra, você terá acesso por{" "}
           <strong>150 dias</strong>.
         </p>
-        <p className="mt-3 text-2xl font-extrabold">{formatPriceBRL(app.price_cents)}</p>
+        <div className="mt-3 space-y-1">
+          {hasDiscount && (
+            <p className="text-sm font-semibold text-muted-foreground line-through">
+              De {formatPriceBRL(fromCents)}
+            </p>
+          )}
+          <p className="text-3xl font-extrabold text-foreground">
+            {hasDiscount ? "Por " : ""}{formatPriceBRL(app.price_cents)}
+          </p>
+        </div>
         <div className="mt-4 flex flex-col gap-2">
           {app.cakto_checkout_url ? (
             <a

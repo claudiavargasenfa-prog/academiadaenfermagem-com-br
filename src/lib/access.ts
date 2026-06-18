@@ -116,7 +116,7 @@ export function useAppAccess(slug: string) {
     queryFn: async () => {
       const { data: app, error: e1 } = await supabase
         .from("mini_apps")
-        .select("id, name, slug, gratuito, em_breve, route_path, cakto_checkout_url, price_cents")
+        .select("id, name, slug, gratuito, em_breve, route_path, cakto_checkout_url, price_cents, price_original_cents")
         .eq("slug", slug)
         .maybeSingle();
       if (e1) throw e1;
