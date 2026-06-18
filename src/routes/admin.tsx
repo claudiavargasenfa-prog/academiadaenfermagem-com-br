@@ -349,7 +349,7 @@ function MiniAppForm({ app, onClose }: { app: MiniApp | null; onClose: () => voi
             />
           </Field>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex flex-wrap items-center gap-4">
           <label className="flex items-center gap-2">
             <input
               type="checkbox"
