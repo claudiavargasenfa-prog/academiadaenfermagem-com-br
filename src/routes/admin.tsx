@@ -253,15 +253,21 @@ function MiniAppForm({ app, onClose }: { app: MiniApp | null; onClose: () => voi
           />
         </Field>
         <div className="grid gap-3 sm:grid-cols-3">
-          <Field label="Tipo">
-            <select
+          <Field label="Tipo / categoria (livre)">
+            <input
+              list="kind-suggestions"
               value={form.kind}
-              onChange={(e) => setForm({ ...form, kind: e.target.value as "basico" | "extra" })}
+              onChange={(e) => setForm({ ...form, kind: e.target.value })}
               className={input}
-            >
-              <option value="basico">Básico (mensal)</option>
-              <option value="extra">Extra (3 meses)</option>
-            </select>
+              placeholder="ex: basico, extra, premium, anual..."
+            />
+            <datalist id="kind-suggestions">
+              <option value="basico" />
+              <option value="extra" />
+              <option value="premium" />
+              <option value="anual" />
+              <option value="gratuito" />
+            </datalist>
           </Field>
           <Field label="Preço (centavos) — ex: 1990 = R$19,90">
             <input
@@ -279,6 +285,26 @@ function MiniAppForm({ app, onClose }: { app: MiniApp | null; onClose: () => voi
               onChange={(e) => setForm({ ...form, icon: e.target.value })}
               className={input}
               placeholder="📘"
+            />
+          </Field>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-2">
+          <Field label="Rota interna (ex: /curativos)">
+            <input
+              value={form.route_path}
+              onChange={(e) => setForm({ ...form, route_path: e.target.value })}
+              className={input}
+              placeholder="/slug-da-tela"
+            />
+          </Field>
+          <Field label="Horas de certificado">
+            <input
+              type="number"
+              min={0}
+              step="0.5"
+              value={form.horas_certificado}
+              onChange={(e) => setForm({ ...form, horas_certificado: Number(e.target.value) })}
+              className={input}
             />
           </Field>
         </div>
