@@ -358,6 +358,22 @@ function MiniAppForm({ app, onClose }: { app: MiniApp | null; onClose: () => voi
             />
             <span>Ativo (visível na loja)</span>
           </label>
+          <label className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              checked={form.gratuito}
+              onChange={(e) => setForm({ ...form, gratuito: e.target.checked })}
+            />
+            <span>Grátis</span>
+          </label>
+          <label className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              checked={form.em_breve}
+              onChange={(e) => setForm({ ...form, em_breve: e.target.checked })}
+            />
+            <span>Em breve</span>
+          </label>
           <Field label="Ordem">
             <input
               type="number"
