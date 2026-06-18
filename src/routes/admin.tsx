@@ -187,6 +187,7 @@ function MiniAppForm({ app, onClose }: { app: MiniApp | null; onClose: () => voi
     em_breve: (app as any)?.em_breve ?? false,
     route_path: (app as any)?.route_path ?? "",
     horas_certificado: (app as any)?.horas_certificado ?? 0,
+    price_original_cents: (app as any)?.price_original_cents ?? 0,
   });
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
@@ -207,6 +208,7 @@ function MiniAppForm({ app, onClose }: { app: MiniApp | null; onClose: () => voi
       audio_url: form.audio_url || null,
       route_path: form.route_path || null,
       horas_certificado: Number(form.horas_certificado) || null,
+      price_original_cents: Number(form.price_original_cents) || null,
     };
     const res = app
       ? await supabase.from("mini_apps").update(payload as any).eq("id", app.id)
@@ -269,7 +271,7 @@ function MiniAppForm({ app, onClose }: { app: MiniApp | null; onClose: () => voi
               <option value="gratuito" />
             </datalist>
           </Field>
-          <Field label="Preço (centavos) — ex: 1990 = R$19,90">
+          <Field label='Preço "POR" (centavos) — ex: 1990 = R$19,90'>
             <input
               type="number"
               min={0}
@@ -277,6 +279,16 @@ function MiniAppForm({ app, onClose }: { app: MiniApp | null; onClose: () => voi
               value={form.price_cents}
               onChange={(e) => setForm({ ...form, price_cents: Number(e.target.value) })}
               className={input}
+            />
+          </Field>
+          <Field label='Preço "DE" (riscado, centavos) — opcional'>
+            <input
+              type="number"
+              min={0}
+              value={form.price_original_cents}
+              onChange={(e) => setForm({ ...form, price_original_cents: Number(e.target.value) })}
+              className={input}
+              placeholder="0 = sem promoção"
             />
           </Field>
           <Field label="Ícone (emoji)">
