@@ -9,22 +9,33 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as UtiRouteImport } from './routes/uti'
 import { Route as SvPediatricoRouteImport } from './routes/sv-pediatrico'
 import { Route as SvGestanteRouteImport } from './routes/sv-gestante'
 import { Route as SinaisVitaisRouteImport } from './routes/sinais-vitais'
 import { Route as SegurancaRouteImport } from './routes/seguranca'
+import { Route as SaudeMentalRouteImport } from './routes/saude-mental'
 import { Route as RelatorioAbntRouteImport } from './routes/relatorio-abnt'
 import { Route as PosturaEticaRouteImport } from './routes/postura-etica'
 import { Route as MinhaContaRouteImport } from './routes/minha-conta'
+import { Route as ManualSobrevivenciaRouteImport } from './routes/manual-sobrevivencia'
 import { Route as LojaRouteImport } from './routes/loja'
 import { Route as IrasRouteImport } from './routes/iras'
+import { Route as FarmacologiaAvancadaRouteImport } from './routes/farmacologia-avancada'
 import { Route as ExameFisicoEscalasRouteImport } from './routes/exame-fisico-escalas'
 import { Route as DiarioRouteImport } from './routes/diario'
+import { Route as CurativosRouteImport } from './routes/curativos'
 import { Route as CalculadoraRouteImport } from './routes/calculadora'
 import { Route as AdminRouteImport } from './routes/admin'
+import { Route as AclsRouteImport } from './routes/acls'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiPublicCaktoWebhookRouteImport } from './routes/api/public/cakto-webhook'
 
+const UtiRoute = UtiRouteImport.update({
+  id: '/uti',
+  path: '/uti',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SvPediatricoRoute = SvPediatricoRouteImport.update({
   id: '/sv-pediatrico',
   path: '/sv-pediatrico',
@@ -45,6 +56,11 @@ const SegurancaRoute = SegurancaRouteImport.update({
   path: '/seguranca',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SaudeMentalRoute = SaudeMentalRouteImport.update({
+  id: '/saude-mental',
+  path: '/saude-mental',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RelatorioAbntRoute = RelatorioAbntRouteImport.update({
   id: '/relatorio-abnt',
   path: '/relatorio-abnt',
@@ -60,6 +76,11 @@ const MinhaContaRoute = MinhaContaRouteImport.update({
   path: '/minha-conta',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ManualSobrevivenciaRoute = ManualSobrevivenciaRouteImport.update({
+  id: '/manual-sobrevivencia',
+  path: '/manual-sobrevivencia',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LojaRoute = LojaRouteImport.update({
   id: '/loja',
   path: '/loja',
@@ -68,6 +89,11 @@ const LojaRoute = LojaRouteImport.update({
 const IrasRoute = IrasRouteImport.update({
   id: '/iras',
   path: '/iras',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FarmacologiaAvancadaRoute = FarmacologiaAvancadaRouteImport.update({
+  id: '/farmacologia-avancada',
+  path: '/farmacologia-avancada',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ExameFisicoEscalasRoute = ExameFisicoEscalasRouteImport.update({
@@ -80,6 +106,11 @@ const DiarioRoute = DiarioRouteImport.update({
   path: '/diario',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CurativosRoute = CurativosRouteImport.update({
+  id: '/curativos',
+  path: '/curativos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CalculadoraRoute = CalculadoraRouteImport.update({
   id: '/calculadora',
   path: '/calculadora',
@@ -88,6 +119,11 @@ const CalculadoraRoute = CalculadoraRouteImport.update({
 const AdminRoute = AdminRouteImport.update({
   id: '/admin',
   path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AclsRoute = AclsRouteImport.update({
+  id: '/acls',
+  path: '/acls',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -103,130 +139,179 @@ const ApiPublicCaktoWebhookRoute = ApiPublicCaktoWebhookRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/acls': typeof AclsRoute
   '/admin': typeof AdminRoute
   '/calculadora': typeof CalculadoraRoute
+  '/curativos': typeof CurativosRoute
   '/diario': typeof DiarioRoute
   '/exame-fisico-escalas': typeof ExameFisicoEscalasRoute
+  '/farmacologia-avancada': typeof FarmacologiaAvancadaRoute
   '/iras': typeof IrasRoute
   '/loja': typeof LojaRoute
+  '/manual-sobrevivencia': typeof ManualSobrevivenciaRoute
   '/minha-conta': typeof MinhaContaRoute
   '/postura-etica': typeof PosturaEticaRoute
   '/relatorio-abnt': typeof RelatorioAbntRoute
+  '/saude-mental': typeof SaudeMentalRoute
   '/seguranca': typeof SegurancaRoute
   '/sinais-vitais': typeof SinaisVitaisRoute
   '/sv-gestante': typeof SvGestanteRoute
   '/sv-pediatrico': typeof SvPediatricoRoute
+  '/uti': typeof UtiRoute
   '/api/public/cakto-webhook': typeof ApiPublicCaktoWebhookRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/acls': typeof AclsRoute
   '/admin': typeof AdminRoute
   '/calculadora': typeof CalculadoraRoute
+  '/curativos': typeof CurativosRoute
   '/diario': typeof DiarioRoute
   '/exame-fisico-escalas': typeof ExameFisicoEscalasRoute
+  '/farmacologia-avancada': typeof FarmacologiaAvancadaRoute
   '/iras': typeof IrasRoute
   '/loja': typeof LojaRoute
+  '/manual-sobrevivencia': typeof ManualSobrevivenciaRoute
   '/minha-conta': typeof MinhaContaRoute
   '/postura-etica': typeof PosturaEticaRoute
   '/relatorio-abnt': typeof RelatorioAbntRoute
+  '/saude-mental': typeof SaudeMentalRoute
   '/seguranca': typeof SegurancaRoute
   '/sinais-vitais': typeof SinaisVitaisRoute
   '/sv-gestante': typeof SvGestanteRoute
   '/sv-pediatrico': typeof SvPediatricoRoute
+  '/uti': typeof UtiRoute
   '/api/public/cakto-webhook': typeof ApiPublicCaktoWebhookRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/acls': typeof AclsRoute
   '/admin': typeof AdminRoute
   '/calculadora': typeof CalculadoraRoute
+  '/curativos': typeof CurativosRoute
   '/diario': typeof DiarioRoute
   '/exame-fisico-escalas': typeof ExameFisicoEscalasRoute
+  '/farmacologia-avancada': typeof FarmacologiaAvancadaRoute
   '/iras': typeof IrasRoute
   '/loja': typeof LojaRoute
+  '/manual-sobrevivencia': typeof ManualSobrevivenciaRoute
   '/minha-conta': typeof MinhaContaRoute
   '/postura-etica': typeof PosturaEticaRoute
   '/relatorio-abnt': typeof RelatorioAbntRoute
+  '/saude-mental': typeof SaudeMentalRoute
   '/seguranca': typeof SegurancaRoute
   '/sinais-vitais': typeof SinaisVitaisRoute
   '/sv-gestante': typeof SvGestanteRoute
   '/sv-pediatrico': typeof SvPediatricoRoute
+  '/uti': typeof UtiRoute
   '/api/public/cakto-webhook': typeof ApiPublicCaktoWebhookRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/acls'
     | '/admin'
     | '/calculadora'
+    | '/curativos'
     | '/diario'
     | '/exame-fisico-escalas'
+    | '/farmacologia-avancada'
     | '/iras'
     | '/loja'
+    | '/manual-sobrevivencia'
     | '/minha-conta'
     | '/postura-etica'
     | '/relatorio-abnt'
+    | '/saude-mental'
     | '/seguranca'
     | '/sinais-vitais'
     | '/sv-gestante'
     | '/sv-pediatrico'
+    | '/uti'
     | '/api/public/cakto-webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/acls'
     | '/admin'
     | '/calculadora'
+    | '/curativos'
     | '/diario'
     | '/exame-fisico-escalas'
+    | '/farmacologia-avancada'
     | '/iras'
     | '/loja'
+    | '/manual-sobrevivencia'
     | '/minha-conta'
     | '/postura-etica'
     | '/relatorio-abnt'
+    | '/saude-mental'
     | '/seguranca'
     | '/sinais-vitais'
     | '/sv-gestante'
     | '/sv-pediatrico'
+    | '/uti'
     | '/api/public/cakto-webhook'
   id:
     | '__root__'
     | '/'
+    | '/acls'
     | '/admin'
     | '/calculadora'
+    | '/curativos'
     | '/diario'
     | '/exame-fisico-escalas'
+    | '/farmacologia-avancada'
     | '/iras'
     | '/loja'
+    | '/manual-sobrevivencia'
     | '/minha-conta'
     | '/postura-etica'
     | '/relatorio-abnt'
+    | '/saude-mental'
     | '/seguranca'
     | '/sinais-vitais'
     | '/sv-gestante'
     | '/sv-pediatrico'
+    | '/uti'
     | '/api/public/cakto-webhook'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AclsRoute: typeof AclsRoute
   AdminRoute: typeof AdminRoute
   CalculadoraRoute: typeof CalculadoraRoute
+  CurativosRoute: typeof CurativosRoute
   DiarioRoute: typeof DiarioRoute
   ExameFisicoEscalasRoute: typeof ExameFisicoEscalasRoute
+  FarmacologiaAvancadaRoute: typeof FarmacologiaAvancadaRoute
   IrasRoute: typeof IrasRoute
   LojaRoute: typeof LojaRoute
+  ManualSobrevivenciaRoute: typeof ManualSobrevivenciaRoute
   MinhaContaRoute: typeof MinhaContaRoute
   PosturaEticaRoute: typeof PosturaEticaRoute
   RelatorioAbntRoute: typeof RelatorioAbntRoute
+  SaudeMentalRoute: typeof SaudeMentalRoute
   SegurancaRoute: typeof SegurancaRoute
   SinaisVitaisRoute: typeof SinaisVitaisRoute
   SvGestanteRoute: typeof SvGestanteRoute
   SvPediatricoRoute: typeof SvPediatricoRoute
+  UtiRoute: typeof UtiRoute
   ApiPublicCaktoWebhookRoute: typeof ApiPublicCaktoWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/uti': {
+      id: '/uti'
+      path: '/uti'
+      fullPath: '/uti'
+      preLoaderRoute: typeof UtiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sv-pediatrico': {
       id: '/sv-pediatrico'
       path: '/sv-pediatrico'
@@ -255,6 +340,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SegurancaRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/saude-mental': {
+      id: '/saude-mental'
+      path: '/saude-mental'
+      fullPath: '/saude-mental'
+      preLoaderRoute: typeof SaudeMentalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/relatorio-abnt': {
       id: '/relatorio-abnt'
       path: '/relatorio-abnt'
@@ -276,6 +368,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MinhaContaRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/manual-sobrevivencia': {
+      id: '/manual-sobrevivencia'
+      path: '/manual-sobrevivencia'
+      fullPath: '/manual-sobrevivencia'
+      preLoaderRoute: typeof ManualSobrevivenciaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/loja': {
       id: '/loja'
       path: '/loja'
@@ -288,6 +387,13 @@ declare module '@tanstack/react-router' {
       path: '/iras'
       fullPath: '/iras'
       preLoaderRoute: typeof IrasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/farmacologia-avancada': {
+      id: '/farmacologia-avancada'
+      path: '/farmacologia-avancada'
+      fullPath: '/farmacologia-avancada'
+      preLoaderRoute: typeof FarmacologiaAvancadaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/exame-fisico-escalas': {
@@ -304,6 +410,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DiarioRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/curativos': {
+      id: '/curativos'
+      path: '/curativos'
+      fullPath: '/curativos'
+      preLoaderRoute: typeof CurativosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/calculadora': {
       id: '/calculadora'
       path: '/calculadora'
@@ -316,6 +429,13 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/acls': {
+      id: '/acls'
+      path: '/acls'
+      fullPath: '/acls'
+      preLoaderRoute: typeof AclsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -337,19 +457,25 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AclsRoute: AclsRoute,
   AdminRoute: AdminRoute,
   CalculadoraRoute: CalculadoraRoute,
+  CurativosRoute: CurativosRoute,
   DiarioRoute: DiarioRoute,
   ExameFisicoEscalasRoute: ExameFisicoEscalasRoute,
+  FarmacologiaAvancadaRoute: FarmacologiaAvancadaRoute,
   IrasRoute: IrasRoute,
   LojaRoute: LojaRoute,
+  ManualSobrevivenciaRoute: ManualSobrevivenciaRoute,
   MinhaContaRoute: MinhaContaRoute,
   PosturaEticaRoute: PosturaEticaRoute,
   RelatorioAbntRoute: RelatorioAbntRoute,
+  SaudeMentalRoute: SaudeMentalRoute,
   SegurancaRoute: SegurancaRoute,
   SinaisVitaisRoute: SinaisVitaisRoute,
   SvGestanteRoute: SvGestanteRoute,
   SvPediatricoRoute: SvPediatricoRoute,
+  UtiRoute: UtiRoute,
   ApiPublicCaktoWebhookRoute: ApiPublicCaktoWebhookRoute,
 }
 export const routeTree = rootRouteImport
