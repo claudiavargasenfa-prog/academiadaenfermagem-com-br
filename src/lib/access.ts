@@ -66,6 +66,15 @@ export async function isAdmin(): Promise<boolean> {
   return !!data;
 }
 
+/** Hook: o usuário atual é admin? Cacheado por sessão. */
+export function useIsAdmin() {
+  return useQuery({
+    queryKey: ["is_admin"],
+    queryFn: isAdmin,
+    staleTime: 5 * 60 * 1000,
+  });
+}
+
 export type AccessSummary = {
   /** mini_app_id -> expires_at (apenas extras pagos vigentes) */
   extraAccessByApp: Record<string, string>;
@@ -111,12 +120,24 @@ export function useAppAccess(slug: string) {
         .eq("slug", slug)
         .maybeSingle();
       if (e1) throw e1;
-      if (!app) return { app: null, granted: false, expiresAt: null as string | null };
+      if (!app) return { app: null, granted: false, expiresAt: null as string | null, viaAdmin: false };
       if (app.gratuito) {
-        return { app, granted: true, expiresAt: null as string | null };
+        return { app, granted: true, expiresAt: null as string | null, viaAdmin: false };
       }
       const { data: u } = await supabase.auth.getUser();
-      if (!u.user) return { app, granted: false, expiresAt: null as string | null };
+      if (!u.user) return { app, granted: false, expiresAt: null as string | null, viaAdmin: false };
+
+      // Admin bypass: vê todo conteúdo pago sem registro em user_app_access.
+      const { data: roleRow } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", u.user.id)
+        .eq("role", "admin")
+        .maybeSingle();
+      if (roleRow) {
+        return { app, granted: true, expiresAt: null as string | null, viaAdmin: true };
+      }
+
       const { data: acc } = await supabase
         .from("user_app_access")
         .select("expires_at")
@@ -130,6 +151,7 @@ export function useAppAccess(slug: string) {
         app,
         granted: !!acc,
         expiresAt: acc?.expires_at ?? null,
+        viaAdmin: false,
       };
     },
   });

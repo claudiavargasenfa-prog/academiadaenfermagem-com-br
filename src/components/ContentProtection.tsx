@@ -176,9 +176,15 @@ export function AppAccessGate({
   }
 
   const left = daysUntil(data.expiresAt);
+  const viaAdmin = (data as { viaAdmin?: boolean }).viaAdmin;
   return (
     <>
-      {left !== null && left <= 30 && (
+      {viaAdmin && (
+        <div className="mb-4 rounded-xl border border-primary/40 bg-primary/10 px-4 py-2 text-sm text-primary">
+          Modo admin — visualização completa. Este conteúdo é pago para alunos.
+        </div>
+      )}
+      {!viaAdmin && left !== null && left <= 30 && (
         <div className="mb-4 rounded-xl border border-amber-400/50 bg-amber-50 px-4 py-2 text-sm text-amber-800">
           Seu acesso expira em <strong>{left} {left === 1 ? "dia" : "dias"}</strong>. Renove para não perder.
         </div>
