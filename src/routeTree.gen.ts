@@ -17,6 +17,7 @@ import { Route as SimulacoesReaisRouteImport } from './routes/simulacoes-reais'
 import { Route as SegurancaRouteImport } from './routes/seguranca'
 import { Route as SaudeMentalRouteImport } from './routes/saude-mental'
 import { Route as RelatorioAbntRouteImport } from './routes/relatorio-abnt'
+import { Route as QuizzesRouteImport } from './routes/quizzes'
 import { Route as PosturaEticaRouteImport } from './routes/postura-etica'
 import { Route as MinhaContaRouteImport } from './routes/minha-conta'
 import { Route as ManualSobrevivenciaRouteImport } from './routes/manual-sobrevivencia'
@@ -30,6 +31,7 @@ import { Route as CalculadoraRouteImport } from './routes/calculadora'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AclsRouteImport } from './routes/acls'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as QuizzesSlugRouteImport } from './routes/quizzes.$slug'
 import { Route as ApiPublicCaktoWebhookRouteImport } from './routes/api/public/cakto-webhook'
 
 const UtiRoute = UtiRouteImport.update({
@@ -70,6 +72,11 @@ const SaudeMentalRoute = SaudeMentalRouteImport.update({
 const RelatorioAbntRoute = RelatorioAbntRouteImport.update({
   id: '/relatorio-abnt',
   path: '/relatorio-abnt',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuizzesRoute = QuizzesRouteImport.update({
+  id: '/quizzes',
+  path: '/quizzes',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PosturaEticaRoute = PosturaEticaRouteImport.update({
@@ -137,6 +144,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const QuizzesSlugRoute = QuizzesSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => QuizzesRoute,
+} as any)
 const ApiPublicCaktoWebhookRoute = ApiPublicCaktoWebhookRouteImport.update({
   id: '/api/public/cakto-webhook',
   path: '/api/public/cakto-webhook',
@@ -157,6 +169,7 @@ export interface FileRoutesByFullPath {
   '/manual-sobrevivencia': typeof ManualSobrevivenciaRoute
   '/minha-conta': typeof MinhaContaRoute
   '/postura-etica': typeof PosturaEticaRoute
+  '/quizzes': typeof QuizzesRouteWithChildren
   '/relatorio-abnt': typeof RelatorioAbntRoute
   '/saude-mental': typeof SaudeMentalRoute
   '/seguranca': typeof SegurancaRoute
@@ -165,6 +178,7 @@ export interface FileRoutesByFullPath {
   '/sv-gestante': typeof SvGestanteRoute
   '/sv-pediatrico': typeof SvPediatricoRoute
   '/uti': typeof UtiRoute
+  '/quizzes/$slug': typeof QuizzesSlugRoute
   '/api/public/cakto-webhook': typeof ApiPublicCaktoWebhookRoute
 }
 export interface FileRoutesByTo {
@@ -181,6 +195,7 @@ export interface FileRoutesByTo {
   '/manual-sobrevivencia': typeof ManualSobrevivenciaRoute
   '/minha-conta': typeof MinhaContaRoute
   '/postura-etica': typeof PosturaEticaRoute
+  '/quizzes': typeof QuizzesRouteWithChildren
   '/relatorio-abnt': typeof RelatorioAbntRoute
   '/saude-mental': typeof SaudeMentalRoute
   '/seguranca': typeof SegurancaRoute
@@ -189,6 +204,7 @@ export interface FileRoutesByTo {
   '/sv-gestante': typeof SvGestanteRoute
   '/sv-pediatrico': typeof SvPediatricoRoute
   '/uti': typeof UtiRoute
+  '/quizzes/$slug': typeof QuizzesSlugRoute
   '/api/public/cakto-webhook': typeof ApiPublicCaktoWebhookRoute
 }
 export interface FileRoutesById {
@@ -206,6 +222,7 @@ export interface FileRoutesById {
   '/manual-sobrevivencia': typeof ManualSobrevivenciaRoute
   '/minha-conta': typeof MinhaContaRoute
   '/postura-etica': typeof PosturaEticaRoute
+  '/quizzes': typeof QuizzesRouteWithChildren
   '/relatorio-abnt': typeof RelatorioAbntRoute
   '/saude-mental': typeof SaudeMentalRoute
   '/seguranca': typeof SegurancaRoute
@@ -214,6 +231,7 @@ export interface FileRoutesById {
   '/sv-gestante': typeof SvGestanteRoute
   '/sv-pediatrico': typeof SvPediatricoRoute
   '/uti': typeof UtiRoute
+  '/quizzes/$slug': typeof QuizzesSlugRoute
   '/api/public/cakto-webhook': typeof ApiPublicCaktoWebhookRoute
 }
 export interface FileRouteTypes {
@@ -232,6 +250,7 @@ export interface FileRouteTypes {
     | '/manual-sobrevivencia'
     | '/minha-conta'
     | '/postura-etica'
+    | '/quizzes'
     | '/relatorio-abnt'
     | '/saude-mental'
     | '/seguranca'
@@ -240,6 +259,7 @@ export interface FileRouteTypes {
     | '/sv-gestante'
     | '/sv-pediatrico'
     | '/uti'
+    | '/quizzes/$slug'
     | '/api/public/cakto-webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -256,6 +276,7 @@ export interface FileRouteTypes {
     | '/manual-sobrevivencia'
     | '/minha-conta'
     | '/postura-etica'
+    | '/quizzes'
     | '/relatorio-abnt'
     | '/saude-mental'
     | '/seguranca'
@@ -264,6 +285,7 @@ export interface FileRouteTypes {
     | '/sv-gestante'
     | '/sv-pediatrico'
     | '/uti'
+    | '/quizzes/$slug'
     | '/api/public/cakto-webhook'
   id:
     | '__root__'
@@ -280,6 +302,7 @@ export interface FileRouteTypes {
     | '/manual-sobrevivencia'
     | '/minha-conta'
     | '/postura-etica'
+    | '/quizzes'
     | '/relatorio-abnt'
     | '/saude-mental'
     | '/seguranca'
@@ -288,6 +311,7 @@ export interface FileRouteTypes {
     | '/sv-gestante'
     | '/sv-pediatrico'
     | '/uti'
+    | '/quizzes/$slug'
     | '/api/public/cakto-webhook'
   fileRoutesById: FileRoutesById
 }
@@ -305,6 +329,7 @@ export interface RootRouteChildren {
   ManualSobrevivenciaRoute: typeof ManualSobrevivenciaRoute
   MinhaContaRoute: typeof MinhaContaRoute
   PosturaEticaRoute: typeof PosturaEticaRoute
+  QuizzesRoute: typeof QuizzesRouteWithChildren
   RelatorioAbntRoute: typeof RelatorioAbntRoute
   SaudeMentalRoute: typeof SaudeMentalRoute
   SegurancaRoute: typeof SegurancaRoute
@@ -372,6 +397,13 @@ declare module '@tanstack/react-router' {
       path: '/relatorio-abnt'
       fullPath: '/relatorio-abnt'
       preLoaderRoute: typeof RelatorioAbntRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/quizzes': {
+      id: '/quizzes'
+      path: '/quizzes'
+      fullPath: '/quizzes'
+      preLoaderRoute: typeof QuizzesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/postura-etica': {
@@ -465,6 +497,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/quizzes/$slug': {
+      id: '/quizzes/$slug'
+      path: '/$slug'
+      fullPath: '/quizzes/$slug'
+      preLoaderRoute: typeof QuizzesSlugRouteImport
+      parentRoute: typeof QuizzesRoute
+    }
     '/api/public/cakto-webhook': {
       id: '/api/public/cakto-webhook'
       path: '/api/public/cakto-webhook'
@@ -474,6 +513,17 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface QuizzesRouteChildren {
+  QuizzesSlugRoute: typeof QuizzesSlugRoute
+}
+
+const QuizzesRouteChildren: QuizzesRouteChildren = {
+  QuizzesSlugRoute: QuizzesSlugRoute,
+}
+
+const QuizzesRouteWithChildren =
+  QuizzesRoute._addFileChildren(QuizzesRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -489,6 +539,7 @@ const rootRouteChildren: RootRouteChildren = {
   ManualSobrevivenciaRoute: ManualSobrevivenciaRoute,
   MinhaContaRoute: MinhaContaRoute,
   PosturaEticaRoute: PosturaEticaRoute,
+  QuizzesRoute: QuizzesRouteWithChildren,
   RelatorioAbntRoute: RelatorioAbntRoute,
   SaudeMentalRoute: SaudeMentalRoute,
   SegurancaRoute: SegurancaRoute,

@@ -39,8 +39,8 @@ function QuizPage() {
   const [answers, setAnswers] = useState<(number | null)[]>(() => quiz.questions.map(() => null));
   const [submitted, setSubmitted] = useState(false);
 
-  const score = useMemo(
-    () => answers.reduce((acc, a, i) => acc + (a === quiz.questions[i].a ? 1 : 0), 0),
+  const score = useMemo<number>(
+    () => answers.reduce<number>((acc, a, i) => acc + (a === quiz.questions[i].a ? 1 : 0), 0),
     [answers, quiz],
   );
 
