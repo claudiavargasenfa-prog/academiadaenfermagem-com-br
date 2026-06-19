@@ -203,7 +203,7 @@ function StoreHome() {
       )}
 
       {!loading && gratis.length > 0 && (
-        <section className="mb-8">
+        <section id="gratis" className="mb-8 scroll-mt-20">
           <h2 className="mb-3 font-display text-lg font-bold">Grátis para começar</h2>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {gratis.map((app) => (
@@ -214,7 +214,7 @@ function StoreHome() {
       )}
 
       {!loading && pagosComTela.length > 0 && (
-        <section className="mb-8">
+        <section id="pagos" className="mb-8 scroll-mt-20">
           <h2 className="mb-3 font-display text-lg font-bold">Mini apps disponíveis</h2>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {pagosComTela.map((app) => (
