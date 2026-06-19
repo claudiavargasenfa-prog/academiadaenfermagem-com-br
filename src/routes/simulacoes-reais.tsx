@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
 import { AppAccessGate } from "@/components/ContentProtection";
 import { MonitorMultiparametrico } from "@/components/MonitorMultiparametrico";
@@ -129,15 +129,14 @@ function CasosView({ categoria }: { categoria: CategoriaCaso }) {
   const [acertos, setAcertos] = useState(0);
 
   // Reset quando muda a categoria.
-  const catKey = categoria;
-  useMemo(() => {
+  useEffect(() => {
     setOrdem(shuffleIndices(casosFiltrados.length));
     setPos(0);
     setEscolhida(null);
     setPontos(0);
     setAcertos(0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [catKey]);
+  }, [categoria]);
 
   if (casosFiltrados.length === 0) {
     return (
