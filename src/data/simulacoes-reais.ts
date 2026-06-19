@@ -159,4 +159,64 @@ export const CASOS: CasoClinico[] = [
       "HERDMAN, T. H.; KAMITSURU, S. (Org.). Diagnósticos de Enfermagem da NANDA-I: Definições e Classificação 2021-2023. Porto Alegre: Artmed, 2021.",
     ],
   },
+  {
+    id: "03-avc-isquemico-trombolise",
+    titulo: "Suspeita de AVC Isquêmico na Janela de Trombólise",
+    setor: "Unidade de Emergência — Sala de AVC",
+    paciente: {
+      nome: "Sr. Benedito",
+      idade: 72,
+      leito: "EM-07",
+      avatar: "👴",
+      diagnostico: "Suspeita de AVC Isquêmico — janela 90 min",
+      queixa:
+        "Perda súbita de força em hemicorpo direito e disartria severa há 90 minutos. Cincinnati positivo nos 3 componentes (desvio de rima, queda de MSD, fala arrastada). HAS em uso irregular de medicação.",
+      status: "critico",
+    },
+    vitais: {
+      paSistolica: 170,
+      paDiastolica: 95,
+      fc: 82,
+      fr: 18,
+      temp: 36.5,
+      spo2: 97,
+    },
+    pergunta:
+      "Considerando que o Sr. Benedito apresenta sinais clínicos claros de AVC (Cincinnati positivo) e está dentro da janela terapêutica de 4,5 horas para trombólise química, qual é a conduta IMEDIATA e PRIORITÁRIA do enfermeiro na recepção deste paciente para garantir o melhor desfecho neurológico?",
+    opcoes: [
+      {
+        texto:
+          "Acionar imediatamente o Protocolo de AVC, garantir dois acessos venosos calibrosos, manter o paciente em jejum (NPO), realizar a Escala de NIHSS e encaminhar para Tomografia de Crânio em caráter de urgência.",
+        correta: true,
+        feedback:
+          "PARABÉNS! VOCÊ ESTÁ NO CAMINHO CERTO. No AVC, 'tempo é cérebro'. A ativação imediata do protocolo e a realização da Tomografia Computadorizada (TC) rápida são fundamentais para diferenciar o AVC isquêmico do hemorrágico. Sem a TC, é impossível iniciar a trombólise com segurança. Sua agilidade salvou a área de penumbra isquêmica do Sr. Benedito.",
+      },
+      {
+        texto:
+          "Administrar 200mg de Ácido Acetilsalicílico (AAS) via oral imediatamente para prevenir a progressão do coágulo enquanto aguarda a avaliação da equipe de neurologia.",
+        correta: false,
+        feedback:
+          "VOCÊ MATOU O PACIENTE! Nunca administre antiagregantes ou anticoagulantes antes da realização da Tomografia de Crânio. Se o AVC do Sr. Benedito for do tipo hemorrágico, o AAS impedirá a coagulação, expandindo o sangramento intracraniano rapidamente, levando ao óbito por herniação cerebral em poucos minutos.",
+      },
+      {
+        texto:
+          "Administrar anti-hipertensivo endovenoso imediatamente para baixar a PA de 170/95 mmHg para níveis normais (120/80 mmHg) e reduzir o risco de sangramento.",
+        correta: false,
+        feedback:
+          "O QUADRO SE AGRAVOU! No AVC isquêmico agudo, a pressão arterial elevada é um mecanismo de defesa do organismo para manter a perfusão na área de penumbra. Baixar a PA bruscamente para níveis normais sem que ela ultrapasse 185/110 mmHg causa isquemia extensa e morte neuronal irreversível por hipoperfusão cerebral.",
+      },
+      {
+        texto:
+          "Solicitar exames laboratoriais completos (hemograma, coagulograma e eletrólitos) e aguardar os resultados para confirmar o diagnóstico antes de acionar o protocolo de neurologia.",
+        correta: false,
+        feedback:
+          "VOCÊ COLOCOU O PACIENTE EM RISCO! O diagnóstico de AVC é clínico e a conduta é tempo-dependente. Aguardar resultados laboratoriais para 'confirmar' o que a clínica e a escala de Cincinnati já mostram faz com que o paciente perca a janela de tratamento. Cada minuto de atraso resulta em sequelas permanentes ou morte. Apenas a glicemia capilar deve preceder a trombólise, pois hipoglicemia pode mimetizar AVC.",
+      },
+    ],
+    referencias: [
+      "AMERICAN HEART ASSOCIATION (AHA). Guidelines for the Early Management of Patients with Acute Ischemic Stroke, 2019 (atualizações 2023).",
+      "REDE BRASIL AVC. Protocolo Clínico e Diretrizes Terapêuticas para o AVC Isquêmico, 2023.",
+      "COFEN. Resolução nº 736/2024. Dispõe sobre a implementação do Processo de Enfermagem.",
+    ],
+  },
 ];
