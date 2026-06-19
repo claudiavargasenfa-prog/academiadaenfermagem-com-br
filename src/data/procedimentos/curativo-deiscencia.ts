@@ -1,0 +1,56 @@
+import type { Procedimento } from "./index";
+
+export const PROC_CURATIVO_DEISCENCIA: Procedimento = {
+  slug: "curativo-deiscencia",
+  titulo: "Curativo de Alta Complexidade — Deiscência Cirúrgica",
+  subtitulo: "Avaliação TIME e prescrição de cobertura pelo enfermeiro",
+  icon: "🩹",
+  cor: "text-emerald-600",
+  publico: "Adulto",
+  emProducao: true,
+  materiais: [
+    "Pacote de curativo estéril (pinças anatômica, dente de rato e Kelly)",
+    "SF 0,9% morno (jato com agulha 40x12 para irrigação)",
+    "Gazes estéreis e compressas",
+    "Cobertura primária conforme avaliação (alginato de cálcio, hidrofibra com prata, hidrogel, etc.)",
+    "Cobertura secundária (gaze, espuma, filme transparente)",
+    "Película protetora da pele perilesional (no-sting / óxido de zinco)",
+    "Luvas estéreis e de procedimento, máscara, óculos",
+  ],
+  indicacoes: [
+    "Deiscência parcial ou total de ferida operatória",
+    "Feridas com cavitação ou tunelização",
+    "Lesões com exsudato moderado a abundante",
+    "Suspeita de biofilme ou infecção local",
+  ],
+  contraindicacoes: [
+    "Uso de prata em paciente com hipersensibilidade conhecida",
+    "Coberturas oclusivas em feridas com infecção sistêmica não controlada",
+    "Preenchimento excessivo de cavidades (impede contração das bordas)",
+  ],
+  complicacoes: [
+    "Maceração da pele perilesional",
+    "Progressão da infecção / sepse",
+    "Dor durante a troca (avaliar pré-medicação)",
+    "Sangramento ao remover coberturas aderidas",
+  ],
+  cenas: [],
+  checklist: [
+    "Avaliei o leito da ferida pela metodologia TIME (Tecido, Inflamação/Infecção, Umidade, Bordas)",
+    "Mensurei a lesão (comprimento, largura, profundidade, tunelizações)",
+    "Caracterizei o exsudato (quantidade, cor, odor)",
+    "Irriguei com SF 0,9% morno em jato (pressão adequada)",
+    "Removi tecido inviável conforme competência e protocolo",
+    "Selecionei cobertura primária baseada em evidência (ex.: alginato/hidrofibra com prata em alta exsudação)",
+    "Preenchi cavidades de forma FROUXA para permitir contração",
+    "Protegi a pele perilesional contra maceração",
+    "Registrei evolução, cobertura prescrita e data da próxima troca",
+  ],
+  referencias: [
+    "COFEN. Resolução nº 567/2018 — Atuação do enfermeiro no cuidado às pessoas com feridas.",
+    "COFEN. Resolução nº 736/2024 — Processo de Enfermagem.",
+    "ANVISA. RDC nº 36/2013 — Segurança do paciente.",
+    "EWMA. Wound Bed Preparation / TIME framework.",
+    "SOBEST/SOBENDE. Diretrizes para prevenção e tratamento de lesões cutâneas.",
+  ],
+};
