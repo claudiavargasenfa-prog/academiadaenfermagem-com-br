@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
 import { AppAccessGate } from "@/components/ContentProtection";
+import { MiniAppContent } from "@/components/MiniAppContent";
 import { HeartPulse, Zap, Baby, ShieldAlert, CheckCircle2, XCircle } from "lucide-react";
 
 export const Route = createFileRoute("/sbv")({
@@ -17,6 +18,7 @@ export const Route = createFileRoute("/sbv")({
   }),
   component: () => (
     <AppAccessGate slug="sbv">
+        <MiniAppContent slug="sbv" />
       <SBVPage />
     </AppAccessGate>
   ),

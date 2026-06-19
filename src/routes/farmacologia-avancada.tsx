@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
 import { AppAccessGate } from "@/components/ContentProtection";
+import { MiniAppContent } from "@/components/MiniAppContent";
 import { FlaskConical } from "lucide-react";
 
 export const Route = createFileRoute("/farmacologia-avancada")({
@@ -18,6 +19,7 @@ function Page() {
     <AppShell>
       <PageHeader eyebrow="Mini app" title="Farmacologia Avançada" description="Aminas vasoativas, antibióticos, sedativos e diluições críticas." />
       <AppAccessGate slug="farmacologia-avancada">
+        <MiniAppContent slug="farmacologia-avancada" />
         <Card>
           <div className="mb-3 flex items-center gap-2 text-gold">
             <FlaskConical className="h-5 w-5" />

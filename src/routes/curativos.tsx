@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
 import { AppAccessGate } from "@/components/ContentProtection";
+import { MiniAppContent } from "@/components/MiniAppContent";
 import { Bandage } from "lucide-react";
 
 export const Route = createFileRoute("/curativos")({
@@ -18,6 +19,7 @@ function Page() {
     <AppShell>
       <PageHeader eyebrow="Mini app" title="Curativos e Lesões de Pele" description="Tipos de feridas, coberturas, técnica asséptica e troca." />
       <AppAccessGate slug="curativos">
+        <MiniAppContent slug="curativos" />
         <Card>
           <div className="mb-3 flex items-center gap-2 text-gold">
             <Bandage className="h-5 w-5" />

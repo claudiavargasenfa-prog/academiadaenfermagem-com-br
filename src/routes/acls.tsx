@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
 import { AppAccessGate } from "@/components/ContentProtection";
+import { MiniAppContent } from "@/components/MiniAppContent";
 import { HeartPulse } from "lucide-react";
 
 export const Route = createFileRoute("/acls")({
@@ -18,6 +19,7 @@ function Page() {
     <AppShell>
       <PageHeader eyebrow="Mini app" title="ACLS — Suporte Avançado de Vida" description="Algoritmos de PCR adulto, ritmos chocáveis e não chocáveis, drogas." />
       <AppAccessGate slug="acls">
+        <MiniAppContent slug="acls" />
         <Card>
           <div className="mb-3 flex items-center gap-2 text-gold">
             <HeartPulse className="h-5 w-5" />

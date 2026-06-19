@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
 import { AppAccessGate } from "@/components/ContentProtection";
+import { MiniAppContent } from "@/components/MiniAppContent";
 import { MonitorMultiparametrico } from "@/components/MonitorMultiparametrico";
 import {
   CASOS,
@@ -32,6 +33,7 @@ export const Route = createFileRoute("/simulacoes-reais")({
   }),
   component: () => (
     <AppAccessGate slug="simulacoes-reais">
+        <MiniAppContent slug="simulacoes-reais" />
       <SimulacoesPage />
     </AppAccessGate>
   ),

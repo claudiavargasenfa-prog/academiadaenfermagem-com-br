@@ -1,6 +1,7 @@
 import { createFileRoute, Link, Outlet, useMatches } from "@tanstack/react-router";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
 import { AppAccessGate } from "@/components/ContentProtection";
+import { MiniAppContent } from "@/components/MiniAppContent";
 import { QUIZZES } from "@/data/quizzes";
 import { BrainCircuit } from "lucide-react";
 
@@ -27,6 +28,7 @@ function QuizzesLayout() {
         description="50 quizzes para revisar todos os principais temas. Escolha um e teste seus conhecimentos."
       />
       <AppAccessGate slug="quizzes">
+        <MiniAppContent slug="quizzes" />
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {QUIZZES.map((q) => (
             <Link key={q.slug} to="/quizzes/$slug" params={{ slug: q.slug }} className="block">
