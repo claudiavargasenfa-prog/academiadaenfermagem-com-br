@@ -99,4 +99,64 @@ export const CASOS: CasoClinico[] = [
       "Sociedade Brasileira de Cardiologia. Diretrizes Brasileiras de Hipertensão Arterial — 2020. Arq. Bras. Cardiol., v. 116, n. 3, p. 516-658, 2021.",
     ],
   },
+  {
+    id: "02-cetoacidose-diabetica",
+    titulo: "Manejo de Cetoacidose Diabética (CAD) na Emergência",
+    setor: "Sala Vermelha — Emergência",
+    paciente: {
+      nome: "Sr. Joaquim",
+      idade: 45,
+      leito: "SV-03",
+      avatar: "🧔",
+      diagnostico: "Diabetes Mellitus Tipo 1 — CAD",
+      queixa:
+        "Mal-estar geral, dor abdominal difusa, náuseas e poliúria há 24h. Hálito cetônico (frutado), mucosas secas, turgor cutâneo diminuído.",
+      status: "critico",
+    },
+    vitais: {
+      paSistolica: 90,
+      paDiastolica: 60,
+      fc: 112,
+      fr: 28,
+      temp: 37.2,
+      spo2: 94,
+    },
+    pergunta:
+      "Considerando o quadro de hipotensão (PA 90/60), taquicardia (FC 112) e padrão respiratório de Kussmaul (FR 28 — rápida e profunda, compensando acidose metabólica), além da glicemia capilar de 450 mg/dL, qual deve ser a prioridade ABSOLUTA da assistência de enfermagem para estabilizar o Sr. Joaquim neste momento?",
+    opcoes: [
+      {
+        texto:
+          "Iniciar hidratação venosa vigorosa com Soro Fisiológico 0,9% conforme prescrição, monitorar débito urinário e manter vigilância rigorosa do padrão respiratório e nível de consciência.",
+        correta: true,
+        feedback:
+          "PARABÉNS! VOCÊ ESTÁ NO CAMINHO CERTO. Na Cetoacidose Diabética, a prioridade inicial é a reposição volêmica para tratar a desidratação severa e o choque hipovolêmico. A insulina só deve ser iniciada APÓS o início da hidratação para evitar colapso vascular e edema cerebral.",
+      },
+      {
+        texto:
+          "Administrar imediatamente 10 UI de Insulina Regular em bólus por via endovenosa para baixar a glicemia de 450 mg/dL o mais rápido possível.",
+        correta: false,
+        feedback:
+          "VOCÊ MATOU O PACIENTE! Administrar insulina em bólus antes de iniciar a hidratação em um paciente já hipotenso provoca um deslocamento osmótico brusco de fluidos, levando ao colapso cardiovascular irreversível e risco iminente de edema cerebral. A glicemia não mata tão rápido quanto o choque.",
+      },
+      {
+        texto:
+          "Administrar um sedativo leve para acalmar o paciente e reduzir a frequência respiratória de 28 irpm, que está gerando cansaço.",
+        correta: false,
+        feedback:
+          "O QUADRO SE AGRAVOU! A respiração de Kussmaul é um mecanismo compensatório do corpo para expelir CO2 e tentar corrigir a acidose metabólica. Se você sedar o paciente e inibir esse reflexo, a acidose se tornará fatal em poucos minutos por falência respiratória.",
+      },
+      {
+        texto:
+          "Oferecer líquidos por via oral (suco de laranja com açúcar) para tratar a fraqueza e a sede intensa relatada pelo paciente.",
+        correta: false,
+        feedback:
+          "VOCÊ COLOCOU O PACIENTE EM RISCO! Oferecer glicose por via oral em um quadro de hiperglicemia severa e cetose agrava drasticamente a osmolaridade sanguínea e a desidratação. Além disso, o paciente com náuseas tem alto risco de broncoaspiração.",
+      },
+    ],
+    referencias: [
+      "COFEN. Resolução nº 736/2024. Dispõe sobre a implementação do Processo de Enfermagem.",
+      "SOCIEDADE BRASILEIRA DE DIABETES (SBD). Diretrizes da Sociedade Brasileira de Diabetes 2024. São Paulo: Clannad, 2024.",
+      "HERDMAN, T. H.; KAMITSURU, S. (Org.). Diagnósticos de Enfermagem da NANDA-I: Definições e Classificação 2021-2023. Porto Alegre: Artmed, 2021.",
+    ],
+  },
 ];
