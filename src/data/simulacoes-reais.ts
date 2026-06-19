@@ -399,4 +399,244 @@ export const CASOS: CasoClinico[] = [
       "ANVISA. RDC nº 36, de 25 de julho de 2013. Segurança do paciente em serviços de saúde.",
     ],
   },
+  {
+    id: "07-iam-com-supra",
+    titulo: "Infarto Agudo do Miocárdio com Supra de ST (IAMCSST)",
+    setor: "Emergência — Sala Vermelha",
+    paciente: {
+      nome: "Sr. Antônio",
+      idade: 62,
+      leito: "SV-04",
+      avatar: "👨‍🦳",
+      diagnostico: "IAMCSST de parede anterior — janela de reperfusão",
+      queixa:
+        "Dor precordial em aperto, irradiada para mandíbula e braço esquerdo, iniciada há 40 minutos. Sudorese fria, náusea e sensação de morte iminente. Tabagista, hipertenso.",
+      status: "critico",
+    },
+    vitais: {
+      paSistolica: 150,
+      paDiastolica: 95,
+      fc: 105,
+      fr: 22,
+      temp: 36.6,
+      spo2: 95,
+    },
+    pergunta:
+      "O Sr. Antônio chega com dor torácica típica e ECG de 12 derivações confirmando supra de ST em parede anterior. Qual a conduta de enfermagem IMEDIATA e prioritária?",
+    opcoes: [
+      {
+        texto:
+          "Monitorização contínua (ECG, PA, SpO2), puncionar dois acessos venosos calibrosos, manter repouso absoluto no leito e preparar o paciente para terapia de reperfusão (angioplastia primária ou trombólise) conforme protocolo MOV (Monitor, Oxigênio se SpO2<90%, Veia).",
+        correta: true,
+        feedback:
+          "PARABÉNS! VOCÊ ESTÁ NO CAMINHO CERTO! Tempo é músculo. O atendimento ao IAMCSST exige reperfusão em até 90 minutos (porta-balão) ou 30 minutos (porta-agulha). Sua conduta otimizou a sobrevida e reduziu a área de necrose miocárdica.",
+      },
+      {
+        texto:
+          "Solicitar que o paciente caminhe até a sala de hemodinâmica para acelerar a chegada ao cateterismo.",
+        correta: false,
+        feedback:
+          "VOCÊ MATOU O PACIENTE! Qualquer esforço físico no IAM aumenta o consumo de oxigênio pelo miocárdio isquêmico e pode desencadear fibrilação ventricular e parada cardiorrespiratória. O paciente deve permanecer em repouso absoluto, transportado em maca.",
+      },
+      {
+        texto:
+          "Oferecer oxigênio em máscara não-reinalante a 10 L/min de rotina, mesmo com SpO2 de 95%, para garantir oxigenação do miocárdio.",
+        correta: false,
+        feedback:
+          "VOCÊ COLOCOU O PACIENTE EM RISCO! Diretrizes atuais (AHA 2020, SBC 2021) contraindicam oxigenoterapia de rotina no IAM sem hipoxemia (SpO2 ≥ 90%). A hiperóxia causa vasoconstrição coronariana e aumenta a área de infarto.",
+      },
+      {
+        texto:
+          "Administrar AAS 300 mg VO imediatamente por conta própria, antes da avaliação médica, para acelerar a antiagregação plaquetária.",
+        correta: false,
+        feedback:
+          "INFRAÇÃO ÉTICA E TÉCNICA! O enfermeiro NÃO prescreve medicamentos. Embora o AAS seja parte do protocolo, sua administração depende de prescrição médica e checagem de contraindicações (alergia, sangramento ativo). Atuar fora do escopo viola a Lei 7.498/86 e o Código de Ética (COFEN 564/2017).",
+      },
+    ],
+    referencias: [
+      "SOCIEDADE BRASILEIRA DE CARDIOLOGIA. Diretriz de IAM com Supradesnivelamento do Segmento ST. Arquivos Brasileiros de Cardiologia, 2021.",
+      "AMERICAN HEART ASSOCIATION (AHA). Guidelines for CPR and ECC, 2020.",
+      "COFEN. Resolução nº 564/2017. Código de Ética dos Profissionais de Enfermagem.",
+    ],
+  },
+  {
+    id: "08-crise-convulsiva-pediatrica",
+    titulo: "Crise Convulsiva Febril em Pediatria",
+    setor: "Pronto-Socorro Infantil",
+    paciente: {
+      nome: "Pedro (criança)",
+      idade: 3,
+      leito: "PED-02",
+      avatar: "🧒",
+      diagnostico: "Crise convulsiva tônico-clônica generalizada associada a febre alta (39,8°C)",
+      queixa:
+        "Mãe relata que a criança apresentou tremores generalizados, perda de consciência e sialorreia há cerca de 2 minutos. Sem histórico prévio de epilepsia. Quadro de IVAS há 2 dias.",
+      status: "critico",
+    },
+    vitais: {
+      paSistolica: 100,
+      paDiastolica: 60,
+      fc: 150,
+      fr: 32,
+      temp: 39.8,
+      spo2: 92,
+    },
+    pergunta:
+      "Pedro está em crise convulsiva ativa na sua frente. Qual a conduta de enfermagem IMEDIATA e PRIORITÁRIA durante a crise?",
+    opcoes: [
+      {
+        texto:
+          "Posicionar a criança em decúbito lateral de segurança, proteger a cabeça com coxim, afrouxar roupas, manter vias aéreas pérvias (sem introduzir objetos na boca), administrar O2 sob máscara e cronometrar a duração da crise.",
+        correta: true,
+        feedback:
+          "PARABÉNS! VOCÊ ESTÁ NO CAMINHO CERTO! A prioridade é proteger contra trauma e broncoaspiração, garantir oxigenação e cronometrar a crise (>5 min = estado de mal epiléptico, exige benzodiazepínico). Sua conduta é tecnicamente impecável e segue o protocolo SBP.",
+      },
+      {
+        texto:
+          "Introduzir uma espátula, colher ou os próprios dedos na boca da criança para evitar que ela 'engula a língua'.",
+        correta: false,
+        feedback:
+          "VOCÊ COLOCOU A CRIANÇA EM RISCO GRAVE! Esse é um MITO perigoso. Introduzir objetos na boca durante a convulsão pode quebrar dentes, lesionar a mucosa, obstruir a via aérea e fraturar dedos do socorrista. A língua não é 'engolida' — ela apenas relaxa.",
+      },
+      {
+        texto:
+          "Conter fisicamente os movimentos da criança segurando braços e pernas firmemente para que ela pare de se debater.",
+        correta: false,
+        feedback:
+          "VOCÊ MACHUCOU A CRIANÇA! A contenção física durante a crise pode causar luxações, fraturas e lesões musculares. Os movimentos tônico-clônicos são involuntários e cessam espontaneamente. Apenas proteja contra trauma — não contenha.",
+      },
+      {
+        texto:
+          "Mergulhar a criança imediatamente em uma bacia de água gelada para baixar a febre o mais rápido possível.",
+        correta: false,
+        feedback:
+          "VOCÊ AGRAVOU O QUADRO! O resfriamento brusco causa vasoconstrição periférica, calafrios e aumento paradoxal da temperatura central, além de risco de broncoaspiração. A febre deve ser manejada com antitérmico prescrito e compressas mornas, NUNCA água gelada.",
+      },
+    ],
+    referencias: [
+      "SOCIEDADE BRASILEIRA DE PEDIATRIA (SBP). Crise Convulsiva Febril na Infância: Manejo. 2022.",
+      "LIGA BRASILEIRA DE EPILEPSIA. Diretrizes para Estado de Mal Epiléptico, 2023.",
+      "COFEN. Resolução nº 736/2024. Dispõe sobre a implementação do Processo de Enfermagem.",
+    ],
+  },
+  {
+    id: "09-pcr-rcp-adulto",
+    titulo: "Parada Cardiorrespiratória em Adulto — Ritmo Chocável",
+    setor: "Unidade de Terapia Intensiva (UTI)",
+    paciente: {
+      nome: "Sra. Helena",
+      idade: 58,
+      leito: "UTI-05",
+      avatar: "👩‍🦰",
+      diagnostico: "PCR em Fibrilação Ventricular (FV) — pós-operatório de revascularização miocárdica",
+      queixa:
+        "Paciente em pós-operatório imediato, monitorizada, subitamente apresenta perda de consciência, ausência de pulso central e traçado de FV no monitor cardíaco.",
+      status: "critico",
+    },
+    vitais: {
+      paSistolica: 0,
+      paDiastolica: 0,
+      fc: 0,
+      fr: 0,
+      temp: 36.0,
+      spo2: 0,
+    },
+    pergunta:
+      "A Sra. Helena está em PCR com ritmo de FV identificado no monitor. Qual a conduta de enfermagem IMEDIATA conforme protocolo ACLS 2020?",
+    opcoes: [
+      {
+        texto:
+          "Chamar ajuda (acionar Código Azul), iniciar compressões torácicas de alta qualidade (100-120/min, 5-6 cm de profundidade) e preparar o desfibrilador para choque imediato (200 J bifásico), minimizando interrupções.",
+        correta: true,
+        feedback:
+          "PARABÉNS! VOCÊ SALVOU A PACIENTE! FV é ritmo chocável — desfibrilação precoce é o ÚNICO tratamento eficaz. Compressões de qualidade mantêm perfusão coronariana e cerebral até o choque. Sua conduta segue rigorosamente o algoritmo ACLS 2020.",
+      },
+      {
+        texto:
+          "Administrar imediatamente 1 mg de Adrenalina IV em bolus, ANTES da primeira desfibrilação, para 'fortalecer' o ritmo cardíaco.",
+        correta: false,
+        feedback:
+          "VOCÊ MATOU A PACIENTE! Em ritmos chocáveis (FV/TV sem pulso), a PRIMEIRA conduta é o CHOQUE, não a adrenalina. A adrenalina entra apenas após o segundo choque, em intervalos de 3-5 min. Além disso, enfermeiro não prescreve medicação — administra sob prescrição médica.",
+      },
+      {
+        texto:
+          "Verificar pulso carotídeo por 60 segundos antes de iniciar qualquer manobra, para confirmar a ausência total de circulação.",
+        correta: false,
+        feedback:
+          "VOCÊ PERDEU TEMPO PRECIOSO! O ACLS 2020 recomenda checar pulso por NO MÁXIMO 10 segundos. Cada segundo sem RCP reduz drasticamente a chance de retorno da circulação espontânea (RCE). 60 segundos sem compressão = lesão cerebral irreversível.",
+      },
+      {
+        texto:
+          "Iniciar ventilação com bolsa-válvula-máscara em ciclos de 30:2 (compressão:ventilação) ANTES de chamar ajuda e antes do choque.",
+        correta: false,
+        feedback:
+          "VOCÊ ATRASOU A DESFIBRILAÇÃO! Em ambiente monitorizado (UTI) com FV identificada, a sequência é: chamar ajuda + iniciar compressões + CHOCAR o mais rápido possível. Ventilação 30:2 é técnica do BLS sem via aérea avançada — não substitui o choque imediato em ritmo chocável.",
+      },
+    ],
+    referencias: [
+      "AMERICAN HEART ASSOCIATION (AHA). Guidelines for CPR and ECC — ACLS, 2020.",
+      "SOCIEDADE BRASILEIRA DE CARDIOLOGIA. Diretriz de Ressuscitação Cardiopulmonar e Cuidados Cardiovasculares de Emergência, 2019.",
+      "COFEN. Resolução nº 736/2024. Dispõe sobre a implementação do Processo de Enfermagem.",
+    ],
+  },
+  {
+    id: "10-crise-anafilatica",
+    titulo: "Choque Anafilático Pós-Administração de Antibiótico",
+    setor: "Clínica Médica — Enfermaria",
+    paciente: {
+      nome: "Sra. Lúcia",
+      idade: 34,
+      leito: "ENF-12",
+      avatar: "👩",
+      diagnostico: "Choque anafilático após administração de Ceftriaxona EV",
+      queixa:
+        "Cerca de 3 minutos após início da infusão do antibiótico, paciente refere prurido intenso, sensação de 'bola na garganta' e dispneia súbita. Apresenta urticária generalizada, edema de face e sibilos audíveis.",
+      status: "critico",
+    },
+    vitais: {
+      paSistolica: 75,
+      paDiastolica: 40,
+      fc: 130,
+      fr: 30,
+      temp: 36.8,
+      spo2: 88,
+    },
+    pergunta:
+      "A Sra. Lúcia desenvolve quadro clássico de anafilaxia durante a infusão do antibiótico. Qual a conduta de enfermagem IMEDIATA e PRIORITÁRIA?",
+    opcoes: [
+      {
+        texto:
+          "INTERROMPER imediatamente a infusão do antibiótico, manter acesso venoso com SF 0,9%, posicionar a paciente em decúbito dorsal com MMII elevados, administrar O2 sob máscara, acionar o médico em CÓDIGO e preparar Adrenalina IM para administração imediata sob prescrição.",
+        correta: true,
+        feedback:
+          "PARABÉNS! VOCÊ SALVOU A PACIENTE! A interrupção da causa é a PRIMEIRA conduta. A adrenalina IM (vasto lateral da coxa) é o ÚNICO tratamento que reverte a anafilaxia — corticoide e anti-histamínico são adjuvantes. Sua agilidade preveniu a evolução para PCR.",
+      },
+      {
+        texto:
+          "Manter a infusão do antibiótico em velocidade reduzida para 'dessensibilizar' a paciente e administrar apenas Difenidramina (anti-histamínico) EV.",
+        correta: false,
+        feedback:
+          "VOCÊ MATOU A PACIENTE! Manter o alérgeno é fatal. A anti-histamínica isolada NÃO reverte anafilaxia — apenas alivia prurido. Sem adrenalina e sem interromper a causa, a paciente evoluiu para edema de glote, broncoespasmo refratário e PCR.",
+      },
+      {
+        texto:
+          "Sentar a paciente para 'facilitar a respiração', oferecer água gelada para aliviar o edema da garganta e aguardar a melhora espontânea.",
+        correta: false,
+        feedback:
+          "VOCÊ COLOCOU A PACIENTE EM RISCO GRAVE! Sentar paciente hipotensa causa colapso cardiovascular ('síndrome do ventrículo vazio'). Oferecer líquidos com edema de glote causa broncoaspiração. A anafilaxia NUNCA melhora espontaneamente sem adrenalina.",
+      },
+      {
+        texto:
+          "Administrar Hidrocortisona 500 mg EV como primeira medida e aguardar 30 minutos para avaliar resposta antes de chamar o médico.",
+        correta: false,
+        feedback:
+          "VOCÊ PERDEU TEMPO PRECIOSO! Corticoide tem início de ação em 4-6 horas — inútil na fase aguda. Na anafilaxia, cada minuto sem adrenalina aumenta a mortalidade. Além disso, enfermeiro não prescreve medicamentos; deve acionar o médico IMEDIATAMENTE.",
+      },
+    ],
+    referencias: [
+      "ASBAI — ASSOCIAÇÃO BRASILEIRA DE ALERGIA E IMUNOLOGIA. Guia Prático de Atualização em Anafilaxia, 2023.",
+      "WORLD ALLERGY ORGANIZATION (WAO). Anaphylaxis Guidance, 2020.",
+      "COFEN. Resolução nº 564/2017. Código de Ética dos Profissionais de Enfermagem.",
+    ],
+  },
 ];
