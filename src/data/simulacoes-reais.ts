@@ -33,6 +33,9 @@ const CATEGORIA_POR_ID: Record<string, CategoriaCaso> = {
   "15-rn-desconforto-respiratorio": "neonatal",
   "16-desidratacao-grave-pediatrica": "pediatria",
   "17-agitacao-psicomotora": "saude-mental",
+  "18-pneumotorax-hipertensivo": "trauma",
+  "19-trauma-abdominal-baco": "trauma",
+  "20-politrauma-hemorragia-exanguinante": "trauma",
 };
 
 export function categoriaDoCaso(id: string): CategoriaCaso {
