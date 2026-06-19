@@ -5,6 +5,7 @@ import { Pencil, Plus, Trash2 } from "lucide-react";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
 import { supabase } from "@/integrations/supabase/client";
 import { fetchMiniApps, formatPriceBRL, isAdmin, type MiniApp } from "@/lib/access";
+import { renderMarkdown } from "@/lib/markdown";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({ meta: [{ title: "Admin — Academia de Enfermagem" }] }),
@@ -375,14 +376,10 @@ function MiniAppForm({
             />
           </Field>
         </div>
-        <Field label="Conteúdo (texto / markdown)">
-          <textarea
-            rows={4}
-            value={form.content_md}
-            onChange={(e) => setForm({ ...form, content_md: e.target.value })}
-            className={input}
-          />
-        </Field>
+        <ContentMarkdownEditor
+          value={form.content_md}
+          onChange={(v) => setForm({ ...form, content_md: v })}
+        />
         <div className="grid gap-3 sm:grid-cols-2">
           <Field label="URL de vídeo (YouTube/Vimeo)">
             <input
