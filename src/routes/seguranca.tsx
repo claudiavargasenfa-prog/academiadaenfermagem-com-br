@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
+import { MiniAppContent } from "@/components/MiniAppContent";
 import {
   Accordion,
   AccordionContent,
@@ -100,6 +101,7 @@ function SegurancaPage() {
         title="Segurança do Paciente"
         description="O NSP atua diretamente na prevenção e controle de eventos adversos, incluindo as infecções relacionadas à assistência à saúde."
       />
+      <MiniAppContent slug="seguranca" />
 
       <section className="mb-6">
         <Card className="border border-gold/40">

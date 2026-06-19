@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
+import { MiniAppContent } from "@/components/MiniAppContent";
 import { AlertTriangle, HeartPulse, Wind } from "lucide-react";
 
 export const Route = createFileRoute("/sv-gestante")({
@@ -82,6 +83,7 @@ function SVGest() {
         title="Sinais vitais na gestação"
         description="Faixas de referência com destaque para sinais de pré-eclâmpsia, hemorragia e hipoxemia materna."
       />
+      <MiniAppContent slug="sv-gestante" />
 
       <Card className="mb-4 border-l-4 border-[hsl(0_72%_55%)]">
         <div className="flex gap-3">

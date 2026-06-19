@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AppShell, Card, DataTable, PageHeader } from "@/components/AppShell";
+import { MiniAppContent } from "@/components/MiniAppContent";
 
 export const Route = createFileRoute("/sinais-vitais")({
   head: () => ({
@@ -55,6 +56,7 @@ function SV() {
         title="Sinais vitais"
         description="Faixas para paciente adulto, em repouso. Sempre contextualize com a história clínica."
       />
+      <MiniAppContent slug="sinais-vitais" />
       <div className="grid gap-4 md:grid-cols-2">
         <Card>
           <h3 className="mb-3 font-display text-lg font-bold">Pressão arterial (mmHg)</h3>

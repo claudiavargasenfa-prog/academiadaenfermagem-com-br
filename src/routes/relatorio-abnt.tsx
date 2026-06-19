@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
+import { MiniAppContent } from "@/components/MiniAppContent";
 import { supabase } from "@/integrations/supabase/client";
 import { useLocal } from "@/lib/storage";
 import { FileText, Lock, AlertTriangle, Printer, ShoppingCart, Loader2 } from "lucide-react";
@@ -219,6 +220,7 @@ function RelatorioPage() {
         title="Relatório de Estágio em ABNT"
         description="Gera automaticamente o relatório com os dados do seu Diário de Bordo, na estrutura ABNT, pronto para imprimir."
       />
+      <MiniAppContent slug="relatorio-abnt" />
 
       {/* Termos */}
       <Card className="mb-5 border-2 border-gold/40">
