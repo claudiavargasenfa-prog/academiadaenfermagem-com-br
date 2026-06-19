@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
+import { MiniAppContent } from "@/components/MiniAppContent";
 import {
   Accordion,
   AccordionContent,
@@ -564,6 +565,7 @@ function Page() {
         title="Exame Físico e Escalas de Avaliação"
         description="Roteiro cefalocaudal interativo e as principais escalas de enfermagem em um único lugar."
       />
+      <MiniAppContent slug="exame-fisico-escalas" />
       <div className="space-y-6">
         <ExameFisico />
         <Escalas />

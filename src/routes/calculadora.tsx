@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { AppShell, Card, PageHeader, DataTable } from "@/components/AppShell";
+import { MiniAppContent } from "@/components/MiniAppContent";
 import { Calculator } from "lucide-react";
 
 export const Route = createFileRoute("/calculadora")({
@@ -175,6 +176,7 @@ function CalcPage() {
         title="Cálculos de medicamentos"
         description="Confirme sempre prescrição, rótulo e os cinco certos antes da administração."
       />
+      <MiniAppContent slug="medicamentosecalculos" />
       <div className="grid gap-4 md:grid-cols-2">
         <RegraDeTres />
         <DosePorKg />

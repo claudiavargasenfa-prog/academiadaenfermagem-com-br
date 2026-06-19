@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
+import { MiniAppContent } from "@/components/MiniAppContent";
 import {
   Accordion,
   AccordionContent,
@@ -113,6 +114,7 @@ function PosturaEticaPage() {
         title="Postura, Ética e Comportamento Profissional"
         description="O manual de conduta para o sucesso no seu estágio."
       />
+      <MiniAppContent slug="postura-etica" />
 
       <Card className="mb-6 border border-gold/40">
         <div className="flex items-start gap-3">

@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
+import { MiniAppContent } from "@/components/MiniAppContent";
 import { AlertTriangle, Info, Thermometer, Wind, Smile } from "lucide-react";
 import escalaDor from "@/assets/escala-dor.png.asset.json";
 
@@ -100,6 +101,7 @@ function SVPed() {
         title="Sinais vitais por faixa etária"
         description="Selecione a faixa para ver FC, FR e PA esperados. Sempre contextualize com a clínica."
       />
+      <MiniAppContent slug="sv-pediatrico" />
 
       {/* Segmented control */}
       <div className="mb-5 -mx-1 overflow-x-auto pb-1">

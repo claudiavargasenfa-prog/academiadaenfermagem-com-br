@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
+import { MiniAppContent } from "@/components/MiniAppContent";
 import { HandHeart, ShieldAlert, Sparkles, Activity } from "lucide-react";
 import mascoteMenino from "@/assets/mascote-menino-iras.png.asset.json";
 import mascoteMenina from "@/assets/mascote-menina.png.asset.json";
@@ -55,6 +56,7 @@ function IRASPage() {
         title="Time Contra as IRAS"
         description="Prevenção é a nossa missão. Conheça as Infecções Relacionadas à Assistência à Saúde e os 5 Momentos da OMS."
       />
+      <MiniAppContent slug="iras" />
 
       {/* Mascot banner */}
       <section className="mb-6 overflow-hidden rounded-3xl border border-gold/40 bg-primary text-primary-foreground shadow-[var(--shadow-glass)]">

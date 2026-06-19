@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
 import { AppAccessGate } from "@/components/ContentProtection";
+import { MiniAppContent } from "@/components/MiniAppContent";
 import { PROCEDIMENTOS, type Procedimento } from "@/data/procedimentos";
 import { ProcedimentoPlayer } from "@/components/procedimentos/ProcedimentoPlayer";
 import { ProcedimentoChecklist } from "@/components/procedimentos/ProcedimentoChecklist";
@@ -20,6 +21,7 @@ export const Route = createFileRoute("/procedimentos-enfermagem")({
   }),
   component: () => (
     <AppAccessGate slug="procedimentos-enfermagem">
+        <MiniAppContent slug="procedimentos-enfermagem" />
       <ProcedimentosPage />
     </AppAccessGate>
   ),

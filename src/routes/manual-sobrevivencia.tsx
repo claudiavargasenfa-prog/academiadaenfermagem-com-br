@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
+import { MiniAppContent } from "@/components/MiniAppContent";
 import { CheckCircle2, BookOpen, MessageCircle, Backpack } from "lucide-react";
 
 export const Route = createFileRoute("/manual-sobrevivencia")({
@@ -24,6 +25,7 @@ function Page() {
         title="Manual de Sobrevivência do Estágio"
         description="Tudo que você precisa saber no seu primeiro dia de campo — sem pagar nada."
       />
+      <MiniAppContent slug="manual-sobrevivencia" />
 
       <div className="grid gap-4 md:grid-cols-2">
         <Card>
