@@ -1,98 +1,56 @@
+## Diagnóstico
 
-## Sobre custo (importante ler antes)
+**Bug 1 — Admin desconectado do app:** o formulário salva `content_md`, `video_url`, `audio_url` na tabela `mini_apps`, mas nenhuma rota de mini app lê esses campos. Resultado: você edita e nada aparece, e não consegue reler o que salvou.
 
-Você pediu "animações 2D curtas geradas por IA". Existem dois caminhos com custos muito diferentes — preciso te avisar antes de gastar créditos:
+**Bug 2 — Mini apps vazios:** ~8 mini apps são apenas casca (título + 1 parágrafo). Sem conteúdo, o cliente que comprar não recebe valor — modelo de monetização inviável.
 
-- **Caminho A — Vídeos MP4 reais gerados por IA** (uma cena de 5s por etapa, com a ferramenta de geração de vídeo). Fica lindo, mas **cada clipe de 5s custa créditos significativos**. Estimei ~8 etapas × 6 procedimentos = ~48 clipes. Isso queima muito crédito e os modelos atuais de vídeo IA têm dificuldade em representar procedimentos clínicos com precisão anatômica (mãos, agulhas, anatomia — costuma sair errado).
-- **Caminho B (recomendado) — Animação 2D "frame-a-frame" sem vídeo**: para cada etapa eu gero **uma ilustração estática** (estilo desenho médico didático, mascote da Academia) e o app **anima a transição entre as ilustrações** com efeitos suaves (zoom no local da punção, fade, deslizar, destaque pulsante na veia/uretra/narina, seta animada de avanço da sonda). Cada procedimento vira uma "animação" navegável com 6–10 cenas. **Custa apenas a geração das ilustrações** (muito mais barato que vídeo) e fica anatomicamente correto porque eu reviso cada imagem. **Vou seguir por aqui** — me avise se preferir o A.
+**Bug 3 — Sem controle de acesso real no conteúdo:** mesmo onde há `has_app_access` no banco, o conteúdo do mini app está hardcoded e visível para qualquer um que abra a URL.
 
-## O que será construído
+---
 
-Nova aba **"Procedimentos animados"** dentro do mini-app **Simulações Reais** (não cria card novo na home). 6 procedimentos:
+## O que vai ser feito (uma execução, sem idas e voltas)
 
-1. **SNG/SNE** (sonda nasogástrica e enteral) — adulto
-2. **SVD** (sondagem vesical de demora) — adulto masculino e feminino
-3. **SVA** (sondagem vesical de alívio)
-4. **Punção venosa periférica — adulto**
-5. **Punção venosa periférica — pediatria/lactente/RN** (com particularidades de cada faixa)
-6. **Punção de jugular externa — adulto**
+### 1. Ligar o Admin ao app (corrige Bug 1)
+Crio um componente único `<MiniAppContent slug="..." />` que:
+- Busca do banco: `content_md`, `video_url`, `audio_url` do mini app.
+- Renderiza markdown (títulos, listas, negrito, links, alertas).
+- Mostra player do YouTube/Vimeo se houver vídeo.
+- Mostra player de áudio se houver áudio.
+- Bloqueia o conteúdo se for pago e o usuário não tiver `has_app_access` (mostra botão "Comprar na Cakto" com o link do checkout que você cadastra no Admin).
 
-Cada procedimento abre uma tela com:
-- **Player de animação**: cena atual ocupando ~60% da tela, com a ilustração animada (entrada por fade+scale, destaque pulsante no ponto de ação, seta indicando movimento). Controles ▶ play/pause, ⏮ ⏭ etapa anterior/próxima, barra de progresso por etapa.
-- **Legenda da etapa**: nome curto + descrição clínica (1–2 frases) + ponto de atenção (em destaque).
-- **Materiais necessários**: lista no topo, exibida na cena 1.
-- **Indicações / Contraindicações / Complicações**: tabs abaixo do player.
-- **Checklist de execução** ao final, marcável (estado salvo localmente).
-- **Referências**: COFEN, Ministério da Saúde, Potter & Perry — usando o componente `References` já existente.
+Insiro esse componente em **todas as 20+ rotas de mini app**. Onde já existe conteúdo fixo (SBV, postura-ética, diário), ele aparece **acima** do conteúdo fixo (não destrói nada do que já está bom).
 
-## Estrutura técnica
+### 2. Pré-visualização no Admin (você consegue reler o que salvou)
+No formulário "Editar mini app", adiciono uma aba/painel **"Pré-visualizar"** que renderiza o markdown ao vivo enquanto você digita. Assim você lê o que já cadastrou e vê como vai aparecer para o aluno.
 
-```text
-src/data/procedimentos/
-  index.ts                    # tipos + array PROCEDIMENTOS
-  sng.ts                      # cenas, materiais, indicações, etc
-  svd-masc.ts
-  svd-fem.ts
-  sva.ts
-  puncao-adulto.ts
-  puncao-pediatria.ts         # subseções: RN, lactente, pré-escolar
-  puncao-jugular-externa.ts
+### 3. Gate de acesso real (corrige Bug 3 — protege a venda)
+Para mini apps com `gratuito = false`:
+- Sem login → tela "Faça login para acessar".
+- Logado mas sem compra → tela "Conteúdo bloqueado" + botão direto para o checkout da Cakto (usando `checkout_url` que você cadastra no Admin).
+- Com compra ativa (registro em `user_app_access` válido) → libera conteúdo.
 
-src/components/procedimentos/
-  ProcedimentoPlayer.tsx      # player com controles e animações CSS/Framer
-  ProcedimentoCena.tsx        # uma cena (imagem + overlays animados)
-  ProcedimentoChecklist.tsx
+Sem isso, qualquer um copia a URL e acessa de graça — o que você descreveu.
 
-src/routes/
-  simulacoes-reais.tsx        # ganha tabs: "Casos clínicos" | "Procedimentos"
-  # ou rota filha: simulacoes-reais.procedimentos.tsx
-  #                simulacoes-reais.procedimentos.$slug.tsx
-```
+### 4. Suporte editorial mínimo no conteúdo
+Para o markdown ficar utilizável de verdade, suporto:
+- Títulos `#`, `##`, `###`
+- Listas `-` e numeradas `1.`
+- **Negrito**, *itálico*, `código`
+- Links `[texto](url)`
+- Blocos de destaque com sintaxe `> ⚠️ Atenção:` virando card amarelo, `> ✅ Dica:` virando card verde, `> 📌 Importante:` virando card azul (ajuda você a montar conteúdo bonito sem precisar de HTML).
 
-Cada cena tem este shape:
+### 5. O que NÃO vou fazer
+- **Não vou escrever o conteúdo dos mini apps por você.** Isso é decisão sua (didática, fonte, COFEN, sua experiência). O sistema fica pronto para receber; o conteúdo você cola no Admin.
+- **Não vou refatorar as páginas que já têm conteúdo bom** (SBV, postura-ética, diário, curativos). Elas continuam funcionando como estão, e o conteúdo do Admin entra acima.
+- **Não vou mexer no carrossel, hero, loja, checkout** — escopo é só destravar conteúdo + acesso.
 
-```ts
-type Cena = {
-  ordem: number;
-  titulo: string;               // "Higienização das mãos"
-  descricao: string;            // texto curto exibido sob a imagem
-  atencao?: string;             // ponto crítico em destaque
-  imagem: string;               // URL da ilustração gerada
-  overlays?: Array<{            // animações sobre a imagem
-    tipo: 'pulse' | 'arrow' | 'highlight';
-    x: number; y: number;       // posição relativa 0–1
-    direcao?: 'up'|'down'|'left'|'right';
-    cor?: string;
-  }>;
-  duracaoMs?: number;           // tempo padrão de autoplay (default 4500)
-};
-```
+---
 
-As animações são feitas com **CSS keyframes + Tailwind animate utilities** já existentes no projeto (`animate-fade-in`, `animate-scale-in`) mais um keyframe novo `pulse-ring` para o destaque circular pulsante no ponto de ação. **Sem nenhuma dependência nova**.
+## Resultado depois desta execução
 
-## Geração das ilustrações
+- Você abre Admin → escolhe um mini app vazio (ex: `uti`) → cola texto em markdown → salva → abre `/uti` e o conteúdo aparece.
+- Mini app pago: visitante sem compra vê paywall com botão para Cakto. Comprador autenticado vê conteúdo.
+- Você consegue reler/editar tudo que cadastrar.
+- Pronto para você cadastrar na Cakto e começar a vender.
 
-Para cada cena, eu gero uma ilustração com `imagegen--generate_image` (qualidade `fast`, 1024×1024 ou 1024×768), estilo: **ilustração médica didática chapada, traços limpos, paleta consistente com o app, fundo claro neutro, foco na região anatômica**. Cada procedimento tem ~7–9 cenas, então:
-
-- Total de imagens estimadas: **~55 ilustrações**.
-- Eu gero, valido visualmente, regero a que sair errada. Imagens são salvas em `src/assets/procedimentos/` e migradas para CDN com `lovable-assets` para não inchar o repo.
-
-Vou **começar gerando apenas 1 procedimento completo (SNG)** como prova, mostrar pra você, e só seguir com os outros 5 depois que você aprovar o visual e o ritmo da animação. Assim você não gasta créditos com 55 imagens de uma vez se não gostar do estilo.
-
-## Acesso
-
-Como está dentro de Simulações Reais, **herda o mesmo controle de acesso** (gratuito/pago/assinante) que já existe — não mexo em paywall.
-
-## Fora de escopo
-
-- Vídeo real com pessoas (não é IA generativa nem ético/legal sem cessão de imagem).
-- Vídeos MP4 de IA (caminho A) — só faço se você pedir explicitamente.
-- Áudio/narração — posso adicionar TTS depois se você quiser, em uma segunda iteração.
-
-## Entregáveis desta primeira rodada
-
-1. Estrutura de dados + tipos.
-2. Tabs em Simulações Reais e rotas filhas.
-3. Componentes do player + cena + checklist.
-4. **SNG completo** (7–9 cenas com ilustrações geradas).
-5. Esqueleto dos outros 5 procedimentos com placeholder "Em produção" para você liberar a geração das próximas ilustrações.
+**Confirma que sigo por aqui?** Se sim, faço numa execução só.
