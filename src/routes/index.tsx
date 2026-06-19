@@ -22,11 +22,20 @@ import {
   FlaskConical,
   Brain,
   Hourglass,
+  Check,
+  Zap,
+  TrendingUp,
 } from "lucide-react";
+
 import { useQuery } from "@tanstack/react-query";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
 import { useLocal } from "@/lib/storage";
 import logoAsset from "@/assets/logo.png.asset.json";
+import imgManual from "@/assets/carousel/manual.jpg";
+import imgCalculos from "@/assets/carousel/calculos.jpg";
+import imgRelatorio from "@/assets/carousel/relatorio.jpg";
+import imgExame from "@/assets/carousel/exame.jpg";
+import imgIras from "@/assets/carousel/iras.jpg";
 import {
   fetchMiniApps,
   fetchMyExtraAccess,
@@ -35,6 +44,7 @@ import {
   summarizeExtras,
   type MiniApp,
 } from "@/lib/access";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -69,11 +79,11 @@ const SLUG_ICON: Record<string, typeof Stethoscope> = {
 };
 
 const SLIDES = [
-  { eyebrow: "Grátis para começar", title: "Manual de Sobrevivência do Estágio", desc: "Checklist da mochila, postura no campo e comunicação com o preceptor.", bg: "from-emerald-600 to-emerald-800" },
-  { eyebrow: "Mais vendido", title: "Cálculos de Medicamentos", desc: "Regra de três, gotejamento e dose/peso com checagem de segurança.", bg: "from-amber-500 to-amber-700" },
-  { eyebrow: "Lançamento", title: "Relatório de Estágio (ABNT)", desc: "Gera automaticamente a partir do seu Diário de Bordo.", bg: "from-indigo-600 to-indigo-800" },
-  { eyebrow: "Combo clínico", title: "Exame Físico + Escalas", desc: "Cefalocaudal + Glasgow, Braden, Morse e mais.", bg: "from-rose-600 to-rose-800" },
-  { eyebrow: "Segurança do paciente", title: "IRAS + 6 Metas Internacionais", desc: "Higienização das mãos e protocolos visuais para o plantão.", bg: "from-sky-600 to-sky-800" },
+  { eyebrow: "Grátis para começar", title: "Manual de Sobrevivência do Estágio", desc: "Checklist da mochila, postura no campo e comunicação com o preceptor.", bg: "from-sky-100 to-cyan-100", accent: "text-sky-900", img: imgManual },
+  { eyebrow: "Mais vendido", title: "Cálculos de Medicamentos", desc: "Regra de três, gotejamento e dose/peso com checagem de segurança.", bg: "from-teal-100 to-emerald-50", accent: "text-teal-900", img: imgCalculos },
+  { eyebrow: "Lançamento", title: "Relatório de Estágio (ABNT)", desc: "Gera automaticamente a partir do seu Diário de Bordo.", bg: "from-blue-100 to-violet-100", accent: "text-indigo-900", img: imgRelatorio },
+  { eyebrow: "Combo clínico", title: "Exame Físico + Escalas", desc: "Cefalocaudal + Glasgow, Braden, Morse e mais.", bg: "from-emerald-50 to-cyan-100", accent: "text-emerald-900", img: imgExame },
+  { eyebrow: "Segurança do paciente", title: "IRAS + 6 Metas Internacionais", desc: "Higienização das mãos e protocolos visuais para o plantão.", bg: "from-cyan-50 to-sky-100", accent: "text-cyan-900", img: imgIras },
 ] as const;
 
 function Carousel() {
@@ -85,27 +95,33 @@ function Carousel() {
   const slide = SLIDES[i];
   return (
     <section className="mb-6">
-      <div className={`relative overflow-hidden rounded-3xl border border-gold/40 bg-gradient-to-br ${slide.bg} p-6 text-white shadow-[var(--shadow-glass)] transition-all`}>
-        <p className="text-[11px] font-bold uppercase tracking-widest text-gold">{slide.eyebrow}</p>
-        <h2 className="mt-1 font-display text-2xl font-extrabold leading-tight md:text-3xl">{slide.title}</h2>
-        <p className="mt-2 max-w-xl text-sm text-white/85">{slide.desc}</p>
-        <div className="mt-4 flex items-center gap-3">
-          <button aria-label="Slide anterior" onClick={() => setI((x) => (x - 1 + SLIDES.length) % SLIDES.length)} className="grid h-9 w-9 place-items-center rounded-full bg-white/15 hover:bg-white/25">
-            <ChevronLeft className="h-4 w-4" />
-          </button>
-          <div className="flex gap-1.5">
-            {SLIDES.map((_, n) => (
-              <button key={n} aria-label={`Ir ao slide ${n + 1}`} onClick={() => setI(n)} className={`h-2 rounded-full transition-all ${n === i ? "w-6 bg-gold" : "w-2 bg-white/40"}`} />
-            ))}
+      <div className={`relative overflow-hidden rounded-3xl border border-white/60 bg-gradient-to-br ${slide.bg} shadow-sm transition-all`}>
+        <div className="grid items-center gap-4 p-5 sm:grid-cols-[1fr_auto] sm:p-6">
+          <div className={`min-w-0 ${slide.accent}`}>
+            <p className="text-[11px] font-bold uppercase tracking-widest opacity-70">{slide.eyebrow}</p>
+            <h2 className="mt-1 font-display text-xl font-extrabold leading-tight md:text-2xl">{slide.title}</h2>
+            <p className="mt-2 max-w-xl text-sm opacity-80">{slide.desc}</p>
+            <div className="mt-4 flex items-center gap-3">
+              <button aria-label="Slide anterior" onClick={() => setI((x) => (x - 1 + SLIDES.length) % SLIDES.length)} className="grid h-8 w-8 place-items-center rounded-full bg-white/70 text-current hover:bg-white">
+                <ChevronLeft className="h-4 w-4" />
+              </button>
+              <div className="flex gap-1.5">
+                {SLIDES.map((_, n) => (
+                  <button key={n} aria-label={`Ir ao slide ${n + 1}`} onClick={() => setI(n)} className={`h-2 rounded-full transition-all ${n === i ? "w-6 bg-current opacity-80" : "w-2 bg-current opacity-30"}`} />
+                ))}
+              </div>
+              <button aria-label="Próximo slide" onClick={() => setI((x) => (x + 1) % SLIDES.length)} className="grid h-8 w-8 place-items-center rounded-full bg-white/70 text-current hover:bg-white">
+                <ChevronRight className="h-4 w-4" />
+              </button>
+            </div>
           </div>
-          <button aria-label="Próximo slide" onClick={() => setI((x) => (x + 1) % SLIDES.length)} className="grid h-9 w-9 place-items-center rounded-full bg-white/15 hover:bg-white/25">
-            <ChevronRight className="h-4 w-4" />
-          </button>
+          <img src={slide.img} alt="" loading="lazy" width={896} height={896} className="hidden h-32 w-32 shrink-0 rounded-2xl object-cover sm:block md:h-40 md:w-40" />
         </div>
       </div>
     </section>
   );
 }
+
 
 function StoreHome() {
   const [estagio] = useLocal("estagio-info", { campo: "", preceptor: "", periodo: "" });
@@ -132,19 +148,41 @@ function StoreHome() {
 
       <section className="mb-6 grid gap-4 md:grid-cols-3">
         <div className="overflow-hidden rounded-3xl border border-gold/40 bg-primary p-5 text-primary-foreground shadow-[var(--shadow-glass)] md:col-span-2">
-          <div className="flex items-start gap-4">
-            <img src={logoAsset.url} alt="Logotipo Academia de Enfermagem" className="h-16 w-16 shrink-0 rounded-2xl bg-white/10 object-contain p-1 ring-1 ring-gold/40" />
-            <div className="min-w-0">
-              <p className="text-[11px] font-semibold uppercase tracking-widest text-gold">Academia de Enfermagem</p>
-              <h2 className="font-display text-xl font-extrabold leading-tight">
-                A ciência da prática, <span className="text-gold">no bolso do jaleco</span>.
+          <div className="flex items-start gap-3">
+            <img src={logoAsset.url} alt="Logotipo Academia de Enfermagem" className="h-12 w-12 shrink-0 rounded-xl bg-white/10 object-contain p-1 ring-1 ring-gold/40" />
+            <div className="min-w-0 flex-1">
+              <span className="inline-flex items-center gap-1 rounded-full bg-gold/20 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-gold">
+                <Zap className="h-3 w-3" /> 1 mini app GRÁTIS para começar
+              </span>
+              <h2 className="mt-2 font-display text-xl font-extrabold leading-tight md:text-2xl">
+                Chegue no estágio sabendo <span className="text-gold">o que fazer</span> — antes do preceptor perguntar.
               </h2>
-              <p className="mt-2 text-sm text-primary-foreground/80">
-                Compre o mini app que precisar. 150 dias de acesso por compra.
+              <p className="mt-1.5 text-sm text-primary-foreground/85">
+                Mini apps de bolso criados por enfermeira com <strong className="text-gold">35 anos de UTI, ESF e APH</strong>. Conteúdo que cai na prova prática e no plantão.
               </p>
+
+              <ul className="mt-3 grid gap-1.5 text-sm sm:grid-cols-2">
+                <li className="flex items-start gap-1.5"><Check className="mt-0.5 h-4 w-4 shrink-0 text-gold" /> Cálculos, escalas e protocolos em segundos</li>
+                <li className="flex items-start gap-1.5"><Check className="mt-0.5 h-4 w-4 shrink-0 text-gold" /> Relatório ABNT gerado do seu diário</li>
+                <li className="flex items-start gap-1.5"><Check className="mt-0.5 h-4 w-4 shrink-0 text-gold" /> 150 dias de acesso · pagamento único</li>
+                <li className="flex items-start gap-1.5"><Check className="mt-0.5 h-4 w-4 shrink-0 text-gold" /> Sem mensalidade, sem pegadinha</li>
+              </ul>
+
+              <div className="mt-4 flex flex-wrap items-center gap-2">
+                <a href="#gratis" className="inline-flex items-center gap-1.5 rounded-full bg-gold px-4 py-2 text-sm font-bold text-primary shadow hover:brightness-110">
+                  <Zap className="h-4 w-4" /> Começar grátis agora
+                </a>
+                <a href="#pagos" className="inline-flex items-center gap-1.5 rounded-full border border-gold/60 px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-white/10">
+                  Ver mini apps
+                </a>
+                <span className="inline-flex items-center gap-1 text-[11px] text-primary-foreground/70">
+                  <TrendingUp className="h-3 w-3 text-gold" /> Combos com desconto por tempo limitado
+                </span>
+              </div>
             </div>
           </div>
         </div>
+
 
         <Card>
           <p className="text-xs font-semibold uppercase tracking-widest text-gold">Identificação</p>
