@@ -10,7 +10,9 @@ export type CategoriaCaso =
   | "pediatria"
   | "obstetricia"
   | "neonatal"
-  | "trauma";
+  | "trauma"
+  | "saude-mental"
+  | "gerenciamento";
 
 export const CATEGORIAS: { id: CategoriaCaso; label: string; emoji: string }[] = [
   { id: "clinica", label: "Clínica Médica", emoji: "🩺" },
@@ -18,6 +20,8 @@ export const CATEGORIAS: { id: CategoriaCaso; label: string; emoji: string }[] =
   { id: "obstetricia", label: "Gineco/Obstetrícia", emoji: "🤰" },
   { id: "neonatal", label: "Neonatologia", emoji: "👶" },
   { id: "trauma", label: "Trauma", emoji: "🚑" },
+  { id: "saude-mental", label: "Saúde Mental", emoji: "🧠" },
+  { id: "gerenciamento", label: "Gerenciamento", emoji: "📋" },
 ];
 
 /** Mapeia o id do caso para a categoria. Casos não listados ficam em "clinica". */
@@ -25,6 +29,10 @@ const CATEGORIA_POR_ID: Record<string, CategoriaCaso> = {
   "08-crise-convulsiva-pediatrica": "pediatria",
   "11-parto-iminente-emergencia": "obstetricia",
   "12-crise-asmatica-pediatrica": "pediatria",
+  "14-pre-eclampsia-grave": "obstetricia",
+  "15-rn-desconforto-respiratorio": "neonatal",
+  "16-desidratacao-grave-pediatrica": "pediatria",
+  "17-agitacao-psicomotora": "saude-mental",
 };
 
 export function categoriaDoCaso(id: string): CategoriaCaso {
@@ -844,6 +852,246 @@ export const CASOS: CasoClinico[] = [
       "MINISTÉRIO DA SAÚDE. Protocolos da Unidade de Emergência. Brasília, 2022.",
       "COFEN. Resolução nº 564/2017. Código de Ética dos Profissionais de Enfermagem.",
       "COFEN. Resolução nº 736/2024. Processo de Enfermagem.",
+    ],
+  },
+  {
+    id: "14-pre-eclampsia-grave",
+    titulo: "Pré-eclâmpsia Grave — Risco de Eclâmpsia",
+    setor: "Centro Obstétrico",
+    paciente: {
+      nome: "Sra. Glória",
+      idade: 28,
+      leito: "OBS-04",
+      avatar: "🤰",
+      diagnostico: "Gestação 32 semanas, pré-eclâmpsia grave com sinais de iminência de eclâmpsia",
+      queixa:
+        "Cefaleia persistente, visão turva (escotomas) e dor em epigástrio. Edema MMII ++/4+ e proteinúria em fita reagente.",
+      status: "critico",
+    },
+    vitais: {
+      paSistolica: 170,
+      paDiastolica: 110,
+      fc: 88,
+      fr: 18,
+      temp: 36.6,
+      spo2: 97,
+    },
+    pergunta:
+      "Diante do risco iminente de eclâmpsia, qual a conduta prioritária para prevenir a crise convulsiva e garantir a neuroproteção materna?",
+    opcoes: [
+      {
+        texto:
+          "Administrar Sulfato de Magnésio conforme protocolo institucional (dose de ataque e manutenção), monitorar rigorosamente o reflexo patelar, a frequência respiratória e o débito urinário.",
+        correta: true,
+        feedback:
+          "PARABÉNS! VOCÊ ESTÁ NO CAMINHO CERTO. O Sulfato de Magnésio é o padrão-ouro para prevenção e controle de crises convulsivas na pré-eclâmpsia grave. A vigilância dos sinais de toxicidade (hiporreflexia e bradipneia) é intervenção crítica de enfermagem (NIC: Controle da Eclâmpsia).",
+      },
+      {
+        texto:
+          "Administrar Diazepam para acalmar a paciente e reduzir a pressão arterial sistêmica.",
+        correta: false,
+        feedback:
+          "VOCÊ MATOU O PACIENTE! O Diazepam não previne eclâmpsia e pode causar depressão respiratória grave materna e fetal, além de mascarar o nível de consciência e dificultar a avaliação neurológica.",
+      },
+      {
+        texto:
+          "Realizar apenas restrição hídrica rigorosa e aguardar o início do parto espontâneo.",
+        correta: false,
+        feedback:
+          "O QUADRO SE AGRAVOU! Pré-eclâmpsia grave é emergência obstétrica. A omissão do tratamento medicamentoso evolui para eclâmpsia, DPP e Síndrome HELLP.",
+      },
+      {
+        texto:
+          "Manter a paciente em ambiente com iluminação intensa para avaliar a reatividade pupilar de forma constante.",
+        correta: false,
+        feedback:
+          "VOCÊ COLOCOU O PACIENTE EM RISCO! Estímulos luminosos e sonoros são gatilhos de convulsão em pacientes com irritabilidade cortical. O ambiente deve ser calmo e com luz reduzida.",
+      },
+    ],
+    referencias: [
+      "FEBRASGO. Protocolo de Pré-eclâmpsia e Eclâmpsia, 2023.",
+      "MINISTÉRIO DA SAÚDE. Gestação de Alto Risco — Manual Técnico, 2022.",
+      "COFEN. Resolução nº 736/2024. Processo de Enfermagem.",
+    ],
+  },
+  {
+    id: "15-rn-desconforto-respiratorio",
+    titulo: "RN Prematuro com Desconforto Respiratório (DMH)",
+    setor: "UTI Neonatal",
+    paciente: {
+      nome: "RN de Glória",
+      idade: 0,
+      leito: "UTIN-02",
+      avatar: "👶",
+      diagnostico: "Prematuro 32 semanas, 1.500 g, Doença da Membrana Hialina",
+      queixa:
+        "Gemência expiratória audível, batimento de asa de nariz e retração esternal importante.",
+      status: "critico",
+    },
+    vitais: {
+      paSistolica: 60,
+      paDiastolica: 35,
+      fc: 165,
+      fr: 72,
+      temp: 36.4,
+      spo2: 84,
+    },
+    pergunta:
+      "Qual a intervenção imediata para melhorar a expansão alveolar e reduzir o esforço respiratório deste neonato?",
+    opcoes: [
+      {
+        texto:
+          "Instalar CPAP nasal precocemente para manter a pressão positiva, garantir ambiente térmico neutro e preparar materiais para administração de Surfactante se indicado.",
+        correta: true,
+        feedback:
+          "PARABÉNS! VOCÊ ESTÁ NO CAMINHO CERTO. O CPAP evita o colapso alveolar ao final da expiração, fundamental na deficiência de surfactante. A manutenção da temperatura evita o aumento do consumo de oxigênio pelo estresse térmico.",
+      },
+      {
+        texto:
+          "Realizar aspiração orofaríngea e traqueal profunda a cada 15 minutos para garantir a patência das vias aéreas.",
+        correta: false,
+        feedback:
+          "O QUADRO SE AGRAVOU! A aspiração profunda e frequente em prematuros causa dor, hipóxia, bradicardia reflexa e aumenta o risco de hemorragia peri-intraventricular pela instabilidade hemodinâmica.",
+      },
+      {
+        texto:
+          "Ofertar oxigênio em fluxo livre (inalação) a 10 L/min posicionado próximo à face do recém-nascido.",
+        correta: false,
+        feedback:
+          "VOCÊ COLOCOU O PACIENTE EM RISCO! O O2 livre não fornece pressão para abrir alvéolos colapsados. Hiperóxia sem controle de FiO2 é tóxica e aumenta risco de retinopatia da prematuridade e displasia broncopulmonar.",
+      },
+      {
+        texto:
+          "Estimular o choro vigoroso do RN para que a expansão pulmonar ocorra de forma fisiológica e natural.",
+        correta: false,
+        feedback:
+          "VOCÊ MATOU O PACIENTE! O prematuro não possui surfactante suficiente para vencer a tensão superficial. O esforço para chorar leva à exaustão muscular, acidose respiratória e PCR.",
+      },
+    ],
+    referencias: [
+      "SOCIEDADE BRASILEIRA DE PEDIATRIA. Reanimação do Recém-Nascido ≥34 semanas e <34 semanas, 2022.",
+      "MINISTÉRIO DA SAÚDE. Atenção Humanizada ao Recém-Nascido — Método Canguru, 2017.",
+      "COFEN. Resolução nº 564/2017. Código de Ética dos Profissionais de Enfermagem.",
+    ],
+  },
+  {
+    id: "16-desidratacao-grave-pediatrica",
+    titulo: "Desidratação Grave por Gastroenterite em Pediatria",
+    setor: "Pronto-Socorro Infantil",
+    paciente: {
+      nome: "Júlia",
+      idade: 8,
+      leito: "PED-07",
+      avatar: "👧",
+      diagnostico: "Gastroenterite aguda com desidratação grave e choque hipovolêmico",
+      queixa:
+        "Múltiplos episódios de vômitos e diarreia há 48 h. Letárgica, olhos encovados, ausência de lágrimas, prega cutânea > 2 s, pulso radial fino e rápido.",
+      status: "critico",
+    },
+    vitais: {
+      paSistolica: 80,
+      paDiastolica: 45,
+      fc: 160,
+      fr: 38,
+      temp: 37.8,
+      spo2: 94,
+    },
+    pergunta:
+      "Qual a conduta de enfermagem prioritária para a reversão do choque hipovolêmico nesta criança?",
+    opcoes: [
+      {
+        texto:
+          "Iniciar expansão volêmica imediata com Cristaloides (Soro Fisiológico 0,9%) na dose de 20 ml/kg em bólus, monitorando continuamente sinais vitais e nível de consciência.",
+        correta: true,
+        feedback:
+          "PARABÉNS! VOCÊ ESTÁ NO CAMINHO CERTO. Na desidratação grave com sinais de choque, a via parenteral é mandatória. A expansão rápida restaura o volume intravascular e a perfusão de órgãos vitais (NIC: Redução do Choque: Volume).",
+      },
+      {
+        texto:
+          "Tentar a administração forçada de Soro de Reidratação Oral (SRO) em pequenas colheres, apesar da letargia da criança.",
+        correta: false,
+        feedback:
+          "VOCÊ MATOU O PACIENTE! Crianças letárgicas possuem rebaixamento do nível de consciência e perda dos reflexos protetores. A hidratação oral forçada resulta em broncoaspiração e pneumonia aspirativa.",
+      },
+      {
+        texto:
+          "Administrar antiemético intramuscular e aguardar 60 minutos para observar se a criança aceita dieta leve.",
+        correta: false,
+        feedback:
+          "O QUADRO SE AGRAVOU! O tempo é crítico no choque hipovolêmico. Aguardar sem repor volume leva à falência renal aguda e choque irreversível.",
+      },
+      {
+        texto:
+          "Realizar banho de imersão prolongado para hidratar a pele por osmose e reduzir a temperatura corporal.",
+        correta: false,
+        feedback:
+          "VOCÊ COLOCOU O PACIENTE EM RISCO! A hidratação cutânea não corrige o déficit volêmico interno. O banho causa hipotermia e estresse metabólico em criança hemodinamicamente instável.",
+      },
+    ],
+    referencias: [
+      "SOCIEDADE BRASILEIRA DE PEDIATRIA. Tratamento da Diarreia Aguda na Criança, 2022.",
+      "OMS/UNICEF. Manejo Integrado das Doenças Prevalentes na Infância (AIDPI), 2014.",
+      "COFEN. Resolução nº 736/2024. Processo de Enfermagem.",
+    ],
+  },
+  {
+    id: "17-agitacao-psicomotora",
+    titulo: "Manejo de Agitação Psicomotora em Surto Psicótico",
+    setor: "Emergência Psiquiátrica",
+    paciente: {
+      nome: "Sr. Cláudio",
+      idade: 35,
+      leito: "PSI-01",
+      avatar: "🧑",
+      diagnostico: "Surto psicótico agudo com agitação psicomotora e risco de auto/heteroagressão",
+      queixa:
+        "Extremamente agitado, proferindo ameaças à equipe e tentando golpear a própria cabeça contra a parede.",
+      status: "critico",
+    },
+    vitais: {
+      paSistolica: 150,
+      paDiastolica: 95,
+      fc: 128,
+      fr: 26,
+      temp: 36.9,
+      spo2: 97,
+    },
+    pergunta:
+      "Qual a prioridade da equipe de enfermagem para garantir a integridade física do paciente e a segurança do ambiente?",
+    opcoes: [
+      {
+        texto:
+          "Implementar contenção mecânica terapêutica conforme protocolo ético e técnico, manter vigilância 1:1, retirar objetos de risco do entorno e administrar medicação de urgência conforme prescrição.",
+        correta: true,
+        feedback:
+          "PARABÉNS! VOCÊ ESTÁ NO CAMINHO CERTO. Em situações de risco iminente de auto ou heteroagressão, a contenção mecânica é medida de proteção, não punição. Deve ser realizada por equipe treinada, com monitorização constante de perfusão e nível de consciência (NIC: Controle do Comportamento: Autolesão).",
+      },
+      {
+        texto:
+          "Utilizar força física punitiva e confrontação verbal para demonstrar autoridade e conter o comportamento do paciente.",
+        correta: false,
+        feedback:
+          "O QUADRO SE AGRAVOU! A confrontação em surto psicótico aumenta paranoia e agressividade. O uso de força desmedida viola direitos humanos e o Código de Ética, resultando em lesões para paciente e equipe.",
+      },
+      {
+        texto:
+          "Isolar o paciente em um quarto trancado e sem janelas para que ele se acalme sem interferência externa.",
+        correta: false,
+        feedback:
+          "VOCÊ MATOU O PACIENTE! O isolamento sem vigilância em pacientes agitados é extremamente perigoso. O paciente pode sofrer evento cardiovascular pelo estresse extremo ou conseguir se autoagredir fatalmente sem que a equipe perceba a tempo.",
+      },
+      {
+        texto:
+          "Tentar convencer o paciente, através de argumentos lógicos e racionais, de que suas alucinações não são reais.",
+        correta: false,
+        feedback:
+          "VOCÊ COLOCOU O PACIENTE EM RISCO! Durante o surto agudo, a crítica está suspensa. Tentar 'desmentir' o delírio gera frustração e aumenta a agitação. A abordagem deve ser empática, focada na segurança e na redução de estímulos.",
+      },
+    ],
+    referencias: [
+      "COFEN. Resolução nº 427/2012. Normatiza os procedimentos de contenção mecânica de pacientes.",
+      "COFEN. Resolução nº 564/2017. Código de Ética dos Profissionais de Enfermagem.",
+      "MINISTÉRIO DA SAÚDE. Política Nacional de Saúde Mental — Lei nº 10.216/2001.",
     ],
   },
 ];
