@@ -1,22 +1,22 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
 import { AppAccessGate } from "@/components/ContentProtection";
 import { MonitorMultiparametrico } from "@/components/MonitorMultiparametrico";
-import { CASOS, type CasoClinico, type StatusPaciente } from "@/data/simulacoes-reais";
-import { PROCEDIMENTOS, type Procedimento } from "@/data/procedimentos";
-import { ProcedimentoPlayer } from "@/components/procedimentos/ProcedimentoPlayer";
-import { ProcedimentoChecklist } from "@/components/procedimentos/ProcedimentoChecklist";
+import {
+  CASOS,
+  CATEGORIAS,
+  categoriaDoCaso,
+  type CasoClinico,
+  type CategoriaCaso,
+  type StatusPaciente,
+} from "@/data/simulacoes-reais";
 import {
   CheckCircle2,
   XCircle,
   Star,
   ArrowRight,
   Stethoscope,
-  Film,
-  ChevronRight,
-  ArrowLeft,
-  Hourglass,
 } from "lucide-react";
 
 export const Route = createFileRoute("/simulacoes-reais")({
@@ -26,7 +26,7 @@ export const Route = createFileRoute("/simulacoes-reais")({
       {
         name: "description",
         content:
-          "Casos clínicos hospitalares com monitor multiparamétrico e procedimentos de enfermagem animados passo a passo (SNG, SVD, punção venosa, jugular externa).",
+          "Casos clínicos hospitalares com monitor multiparamétrico: Clínica Médica, Pediatria, Gineco/Obstetrícia, Neonatologia e Trauma.",
       },
     ],
   }),
@@ -36,55 +36,6 @@ export const Route = createFileRoute("/simulacoes-reais")({
     </AppAccessGate>
   ),
 });
-
-type Tab = "casos" | "procedimentos";
-
-function SimulacoesPage() {
-  const [tab, setTab] = useState<Tab>("casos");
-
-  return (
-    <AppShell>
-      <PageHeader
-        eyebrow="Plantão simulado"
-        title="Simulações Reais"
-        description="Casos clínicos com monitor em tempo real e procedimentos de enfermagem animados passo a passo."
-      />
-
-      <div className="mb-4 grid grid-cols-2 gap-1 rounded-2xl border border-gold/30 bg-card p-1">
-        <button
-          onClick={() => setTab("casos")}
-          className={`flex items-center justify-center gap-1.5 rounded-xl px-3 py-2 text-xs font-bold uppercase tracking-wider transition ${
-            tab === "casos"
-              ? "bg-primary text-primary-foreground"
-              : "text-foreground/60 hover:text-foreground"
-          }`}
-        >
-          <Stethoscope className="h-3.5 w-3.5" /> Casos clínicos
-        </button>
-        <button
-          onClick={() => setTab("procedimentos")}
-          className={`flex items-center justify-center gap-1.5 rounded-xl px-3 py-2 text-xs font-bold uppercase tracking-wider transition ${
-            tab === "procedimentos"
-              ? "bg-primary text-primary-foreground"
-              : "text-foreground/60 hover:text-foreground"
-          }`}
-        >
-          <Film className="h-3.5 w-3.5" /> Procedimentos
-        </button>
-      </div>
-
-      {tab === "casos" ? <CasosView /> : <ProcedimentosView />}
-
-      <p className="mt-4 text-center text-[11px] text-muted-foreground">
-        Conteúdo educacional. Sempre siga os protocolos da sua instituição.
-      </p>
-    </AppShell>
-  );
-}
-
-// =============================================================
-// CASOS CLÍNICOS
-// =============================================================
 
 const STATUS_LABEL: Record<StatusPaciente, { label: string; cls: string }> = {
   estavel: { label: "estável", cls: "bg-emerald-100 text-emerald-700" },
@@ -101,14 +52,103 @@ function shuffleIndices(n: number): number[] {
   return arr;
 }
 
-function CasosView() {
-  const [ordem, setOrdem] = useState<number[]>(() => shuffleIndices(CASOS.length));
+function SimulacoesPage() {
+  const [categoria, setCategoria] = useState<CategoriaCaso>("clinica");
+
+  // Contagem por categoria para mostrar no chip.
+  const contagem = useMemo(() => {
+    const m: Record<string, number> = {};
+    for (const c of CASOS) {
+      const k = categoriaDoCaso(c.id);
+      m[k] = (m[k] ?? 0) + 1;
+    }
+    return m;
+  }, []);
+
+  return (
+    <AppShell>
+      <PageHeader
+        eyebrow="Plantão simulado"
+        title="Simulações Reais"
+        description="Casos clínicos com monitor em tempo real. Escolha a área para iniciar o plantão."
+      />
+
+      <div className="mb-4 -mx-1 flex gap-1.5 overflow-x-auto px-1 pb-1">
+        {CATEGORIAS.map((cat) => {
+          const ativo = cat.id === categoria;
+          const total = contagem[cat.id] ?? 0;
+          const disponivel = total > 0;
+          return (
+            <button
+              key={cat.id}
+              onClick={() => disponivel && setCategoria(cat.id)}
+              disabled={!disponivel}
+              className={`flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-bold uppercase tracking-wider transition ${
+                ativo
+                  ? "border-primary bg-primary text-primary-foreground"
+                  : disponivel
+                    ? "border-gold/30 bg-card text-foreground/70 hover:border-primary hover:text-foreground"
+                    : "border-foreground/10 bg-foreground/5 text-foreground/30"
+              }`}
+            >
+              <span>{cat.emoji}</span>
+              <span>{cat.label}</span>
+              <span
+                className={`rounded-full px-1.5 text-[10px] ${
+                  ativo ? "bg-white/20" : "bg-foreground/10"
+                }`}
+              >
+                {total}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
+      <CasosView categoria={categoria} />
+
+      <p className="mt-4 text-center text-[11px] text-muted-foreground">
+        Conteúdo educacional. Sempre siga os protocolos da sua instituição.
+      </p>
+    </AppShell>
+  );
+}
+
+function CasosView({ categoria }: { categoria: CategoriaCaso }) {
+  const casosFiltrados = useMemo(
+    () => CASOS.filter((c) => categoriaDoCaso(c.id) === categoria),
+    [categoria],
+  );
+
+  const [ordem, setOrdem] = useState<number[]>(() =>
+    shuffleIndices(casosFiltrados.length),
+  );
   const [pos, setPos] = useState(0);
   const [escolhida, setEscolhida] = useState<number | null>(null);
   const [pontos, setPontos] = useState(0);
   const [acertos, setAcertos] = useState(0);
 
-  const caso: CasoClinico = CASOS[ordem[pos]];
+  // Reset quando muda a categoria.
+  useEffect(() => {
+    setOrdem(shuffleIndices(casosFiltrados.length));
+    setPos(0);
+    setEscolhida(null);
+    setPontos(0);
+    setAcertos(0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [categoria]);
+
+  if (casosFiltrados.length === 0) {
+    return (
+      <Card className="p-6 text-center">
+        <p className="text-sm text-muted-foreground">
+          Em breve novos casos nesta área. Enquanto isso, escolha outra categoria acima.
+        </p>
+      </Card>
+    );
+  }
+
+  const caso: CasoClinico = casosFiltrados[ordem[pos] ?? 0];
   const finalizado = escolhida !== null;
   const opcaoEscolhida = finalizado ? caso.opcoes[escolhida!] : null;
   const fimDoCiclo = pos >= ordem.length - 1 && finalizado;
@@ -130,7 +170,7 @@ function CasosView() {
 
   function proximo() {
     if (fimDoCiclo) {
-      setOrdem(shuffleIndices(CASOS.length));
+      setOrdem(shuffleIndices(casosFiltrados.length));
       setPos(0);
     } else {
       setPos((p) => p + 1);
@@ -147,7 +187,9 @@ function CasosView() {
           <div className="text-[11px] uppercase tracking-widest opacity-80">Plantão</div>
           <div className="text-sm font-bold">
             Caso {pos + 1} / {ordem.length}
-            <span className="ml-2 opacity-70">· {acertos} acerto{acertos === 1 ? "" : "s"}</span>
+            <span className="ml-2 opacity-70">
+              · {acertos} acerto{acertos === 1 ? "" : "s"}
+            </span>
           </div>
         </div>
         <div className="text-right">
@@ -167,7 +209,9 @@ function CasosView() {
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-2">
               <h3 className="font-display text-base font-bold">{caso.paciente.nome}</h3>
-              <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${status.cls}`}>
+              <span
+                className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${status.cls}`}
+              >
                 ● {status.label}
               </span>
             </div>
@@ -177,7 +221,9 @@ function CasosView() {
             <div className="mt-1.5 text-sm">
               <span className="font-semibold">Dx:</span> {caso.paciente.diagnostico}
             </div>
-            <div className="mt-0.5 text-xs italic text-muted-foreground">"{caso.paciente.queixa}"</div>
+            <div className="mt-0.5 text-xs italic text-muted-foreground">
+              "{caso.paciente.queixa}"
+            </div>
           </div>
         </div>
       </Card>
@@ -260,7 +306,9 @@ function CasosView() {
               <summary className="cursor-pointer font-semibold">Referências</summary>
               <ul className="mt-1.5 space-y-1 pl-4">
                 {caso.referencias.map((r, i) => (
-                  <li key={i} className="list-disc">{r}</li>
+                  <li key={i} className="list-disc">
+                    {r}
+                  </li>
                 ))}
               </ul>
             </details>
@@ -270,156 +318,11 @@ function CasosView() {
             onClick={proximo}
             className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl gold-gradient py-2.5 text-sm font-bold text-foreground"
           >
-            {fimDoCiclo ? "Reiniciar plantão" : "Próximo caso"} <ArrowRight className="h-4 w-4" />
+            {fimDoCiclo ? "Reiniciar plantão" : "Próximo caso"}{" "}
+            <ArrowRight className="h-4 w-4" />
           </button>
         </Card>
       )}
     </>
-  );
-}
-
-// =============================================================
-// PROCEDIMENTOS ANIMADOS
-// =============================================================
-
-function ProcedimentosView() {
-  const [slug, setSlug] = useState<string | null>(null);
-  const proc = slug ? PROCEDIMENTOS.find((p) => p.slug === slug) : null;
-
-  if (proc) {
-    return <ProcedimentoDetalhe proc={proc} onVoltar={() => setSlug(null)} />;
-  }
-
-  return (
-    <div className="space-y-2">
-      <p className="mb-2 text-sm text-foreground/70">
-        Escolha o procedimento. Cada um abre uma animação 2D passo a passo, com checklist e referências.
-      </p>
-      {PROCEDIMENTOS.map((p) => (
-        <button
-          key={p.slug}
-          onClick={() => setSlug(p.slug)}
-          className="flex w-full items-center gap-3 rounded-2xl border border-gold/30 bg-card p-3 text-left shadow-sm transition hover:border-primary hover:shadow-md"
-        >
-          <div className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-foreground/5 text-2xl">
-            {p.icon}
-          </div>
-          <div className="min-w-0 flex-1">
-            <div className="flex items-center gap-2">
-              <h4 className="truncate font-display text-sm font-bold">{p.titulo}</h4>
-              {p.emProducao && (
-                <span className="rounded-full bg-amber-100 px-1.5 py-0.5 text-[9px] font-bold uppercase text-amber-700">
-                  Em breve
-                </span>
-              )}
-            </div>
-            <p className="truncate text-xs text-muted-foreground">{p.subtitulo}</p>
-            <p className="mt-0.5 text-[11px] text-foreground/50">{p.publico}</p>
-          </div>
-          <ChevronRight className="h-4 w-4 shrink-0 text-foreground/40" />
-        </button>
-      ))}
-    </div>
-  );
-}
-
-function ProcedimentoDetalhe({ proc, onVoltar }: { proc: Procedimento; onVoltar: () => void }) {
-  return (
-    <div>
-      <button
-        onClick={onVoltar}
-        className="mb-3 inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline"
-      >
-        <ArrowLeft className="h-3.5 w-3.5" /> Voltar aos procedimentos
-      </button>
-
-      <div className="mb-3">
-        <h2 className="font-display text-lg font-extrabold leading-tight">{proc.titulo}</h2>
-        <p className="text-xs text-muted-foreground">
-          {proc.subtitulo} · {proc.publico}
-        </p>
-      </div>
-
-      {proc.cenas.length > 0 ? (
-        <div className="mb-4">
-          <ProcedimentoPlayer cenas={proc.cenas} />
-        </div>
-      ) : (
-        <Card className="mb-4 border-amber-300/60 bg-amber-50 p-4">
-          <div className="flex items-start gap-2">
-            <Hourglass className="mt-0.5 h-4 w-4 shrink-0 text-amber-700" />
-            <div className="text-sm text-amber-900">
-              <strong>Animação em produção.</strong> As ilustrações deste procedimento ainda
-              estão sendo geradas. Por enquanto, consulte abaixo materiais, indicações,
-              contraindicações, complicações e o checklist completo.
-            </div>
-          </div>
-        </Card>
-      )}
-
-      <Card className="mb-3 p-4">
-        <h3 className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
-          Materiais necessários
-        </h3>
-        <ul className="space-y-1 text-sm">
-          {proc.materiais.map((m, i) => (
-            <li key={i} className="flex items-start gap-2">
-              <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-gold" />
-              <span>{m}</span>
-            </li>
-          ))}
-        </ul>
-      </Card>
-
-      <div className="mb-3 grid gap-3 md:grid-cols-3">
-        <Card className="p-4">
-          <h3 className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-emerald-700">
-            Indicações
-          </h3>
-          <ul className="space-y-1 text-xs leading-relaxed">
-            {proc.indicacoes.map((x, i) => (
-              <li key={i}>• {x}</li>
-            ))}
-          </ul>
-        </Card>
-        <Card className="p-4">
-          <h3 className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-red-700">
-            Contraindicações
-          </h3>
-          <ul className="space-y-1 text-xs leading-relaxed">
-            {proc.contraindicacoes.map((x, i) => (
-              <li key={i}>• {x}</li>
-            ))}
-          </ul>
-        </Card>
-        <Card className="p-4">
-          <h3 className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-amber-700">
-            Complicações
-          </h3>
-          <ul className="space-y-1 text-xs leading-relaxed">
-            {proc.complicacoes.map((x, i) => (
-              <li key={i}>• {x}</li>
-            ))}
-          </ul>
-        </Card>
-      </div>
-
-      <Card className="mb-3 p-4">
-        <ProcedimentoChecklist slug={proc.slug} itens={proc.checklist} />
-      </Card>
-
-      <Card className="p-4">
-        <h3 className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
-          Referências
-        </h3>
-        <ol className="space-y-1 pl-4 text-[11px] leading-relaxed text-foreground/70">
-          {proc.referencias.map((r, i) => (
-            <li key={i} className="list-decimal">
-              {r}
-            </li>
-          ))}
-        </ol>
-      </Card>
-    </div>
   );
 }

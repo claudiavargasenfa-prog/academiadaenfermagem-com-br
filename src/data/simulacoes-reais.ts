@@ -5,6 +5,32 @@
 
 export type StatusPaciente = "estavel" | "atencao" | "critico";
 
+export type CategoriaCaso =
+  | "clinica"
+  | "pediatria"
+  | "obstetricia"
+  | "neonatal"
+  | "trauma";
+
+export const CATEGORIAS: { id: CategoriaCaso; label: string; emoji: string }[] = [
+  { id: "clinica", label: "Clínica Médica", emoji: "🩺" },
+  { id: "pediatria", label: "Pediatria", emoji: "🧒" },
+  { id: "obstetricia", label: "Gineco/Obstetrícia", emoji: "🤰" },
+  { id: "neonatal", label: "Neonatologia", emoji: "👶" },
+  { id: "trauma", label: "Trauma", emoji: "🚑" },
+];
+
+/** Mapeia o id do caso para a categoria. Casos não listados ficam em "clinica". */
+const CATEGORIA_POR_ID: Record<string, CategoriaCaso> = {
+  "08-crise-convulsiva-pediatrica": "pediatria",
+  "11-parto-iminente-emergencia": "obstetricia",
+  "12-crise-asmatica-pediatrica": "pediatria",
+};
+
+export function categoriaDoCaso(id: string): CategoriaCaso {
+  return CATEGORIA_POR_ID[id] ?? "clinica";
+}
+
 export type SinaisVitais = {
   paSistolica: number;
   paDiastolica: number;
@@ -637,6 +663,187 @@ export const CASOS: CasoClinico[] = [
       "ASBAI — ASSOCIAÇÃO BRASILEIRA DE ALERGIA E IMUNOLOGIA. Guia Prático de Atualização em Anafilaxia, 2023.",
       "WORLD ALLERGY ORGANIZATION (WAO). Anaphylaxis Guidance, 2020.",
       "COFEN. Resolução nº 564/2017. Código de Ética dos Profissionais de Enfermagem.",
+    ],
+  },
+  {
+    id: "11-parto-iminente-emergencia",
+    titulo: "Assistência ao Parto Iminente na Emergência",
+    setor: "Pronto-Socorro Obstétrico",
+    paciente: {
+      nome: "Sra. Aline",
+      idade: 28,
+      leito: "OBS-01",
+      avatar: "🤰",
+      diagnostico: "Gestação a termo (39 sem), G3P2A0, período expulsivo iminente",
+      queixa:
+        "Contrações rítmicas intensas e sensação de puxo. Ao exame: abaulamento perineal e visualização do polo cefálico.",
+      status: "critico",
+    },
+    vitais: {
+      paSistolica: 130,
+      paDiastolica: 80,
+      fc: 102,
+      fr: 22,
+      temp: 36.8,
+      spo2: 98,
+    },
+    pergunta:
+      "Diante de um parto iminente no pronto-socorro, qual a conduta prioritária do enfermeiro para garantir a segurança materno-fetal?",
+    opcoes: [
+      {
+        texto:
+          "Preparar o kit de parto, realizar a manobra de proteção do períneo (Ritgen modificada) para evitar lacerações, recepcionar o recém-nascido em campo aquecido e avaliar o índice de Apgar no 1º e 5º minuto.",
+        correta: true,
+        feedback:
+          "PARABÉNS! VOCÊ ESTÁ NO CAMINHO CERTO. A condução técnica do parto iminente exige calma e proteção do períneo para evitar danos maternos, além do aquecimento imediato do RN para prevenir hipotermia.",
+      },
+      {
+        texto:
+          "Solicitar que a paciente feche as pernas e segure o bebê enquanto é transportada às pressas para o Centro Obstétrico em outro andar.",
+        correta: false,
+        feedback:
+          "VOCÊ MATOU O PACIENTE! Tentar impedir a saída do bebê em fase de expulsivo causa sofrimento fetal agudo, hipóxia e risco de rotura uterina. O parto deve ser realizado onde a paciente está se for iminente.",
+      },
+      {
+        texto:
+          "Realizar a manobra de Kristeller (pressão no fundo do útero) para acelerar a saída do bebê e liberar o leito da emergência.",
+        correta: false,
+        feedback:
+          "O QUADRO SE AGRAVOU! A manobra de Kristeller é proscrita pela OMS e pelo Ministério da Saúde, pois causa trauma abdominal, rotura uterina e descolamento prematuro de placenta.",
+      },
+      {
+        texto:
+          "Administrar Ocitocina endovenosa em bólus imediatamente para aumentar a força das contrações e finalizar o parto rápido.",
+        correta: false,
+        feedback:
+          "VOCÊ COLOCOU O PACIENTE EM RISCO! A ocitocina em bólus causa hipotensão severa e hiperestimulação uterina, podendo levar à asfixia fetal. O uso deve ser criterioso e diluído.",
+      },
+    ],
+    referencias: [
+      "ORGANIZAÇÃO MUNDIAL DA SAÚDE. Recomendações da OMS para o Cuidado no Parto: Para uma experiência de parto positiva. Genebra: OMS, 2018.",
+      "MINISTÉRIO DA SAÚDE. Protocolos da Unidade de Emergência. Brasília, 2022.",
+      "COFEN. Resolução nº 736/2024. Implementação do Processo de Enfermagem.",
+    ],
+  },
+  {
+    id: "12-crise-asmatica-pediatrica",
+    titulo: "Crise Asmática Grave em Pediatria",
+    setor: "Pronto-Socorro Infantil",
+    paciente: {
+      nome: "Pedrinho",
+      idade: 5,
+      leito: "PED-04",
+      avatar: "🧒",
+      diagnostico: "Crise asmática grave com sinais de exaustão respiratória",
+      queixa:
+        "Cansaço extremo, fala entrecortada, uso de musculatura acessória. Ausculta: sibilos expiratórios e inspiratórios, tórax silencioso em bases.",
+      status: "critico",
+    },
+    vitais: {
+      paSistolica: 100,
+      paDiastolica: 60,
+      fc: 140,
+      fr: 45,
+      temp: 37.2,
+      spo2: 88,
+    },
+    pergunta:
+      "Qual a intervenção imediata para reverter o broncoespasmo grave de Pedrinho?",
+    opcoes: [
+      {
+        texto:
+          "Iniciar oxigenoterapia para manter SatO2 > 92%, administrar broncodilatador (Salbutamol) via nebulização ou spray com espaçador e corticosteroide sistêmico conforme prescrição.",
+        correta: true,
+        feedback:
+          "PARABÉNS! VOCÊ ESTÁ NO CAMINHO CERTO. A combinação de O2, broncodilatador e corticoide é o padrão-ouro para reverter a inflamação e a obstrução das vias aéreas na crise asmática.",
+      },
+      {
+        texto:
+          "Realizar fisioterapia respiratória com manobras de tapotagem para ajudar a criança a expectorar a secreção que está obstruindo os pulmões.",
+        correta: false,
+        feedback:
+          "O QUADRO SE AGRAVOU! Na crise asmática, o problema é o broncoespasmo (fechamento dos brônquios), não secreção. A tapotagem aumenta o estresse, o consumo de O2 e pode piorar o fechamento das vias aéreas.",
+      },
+      {
+        texto:
+          "Administrar um sedativo para que a criança pare de chorar e consiga respirar com mais calma, reduzindo a frequência cardíaca de 140 bpm.",
+        correta: false,
+        feedback:
+          "VOCÊ MATOU O PACIENTE! A agitação na crise asmática é sinal de hipóxia (falta de oxigênio no cérebro). Sedar a criança inibe o drive respiratório e leva à parada respiratória imediata.",
+      },
+      {
+        texto:
+          "Aguardar o resultado do Raio-X de tórax para confirmar se não há pneumonia antes de iniciar qualquer medicação inalatória.",
+        correta: false,
+        feedback:
+          "VOCÊ COLOCOU O PACIENTE EM RISCO! O diagnóstico de crise asmática é clínico. O atraso no tratamento para esperar exames de imagem pode levar à exaustão respiratória e necessidade de intubação.",
+      },
+    ],
+    referencias: [
+      "SOCIEDADE BRASILEIRA DE PEDIATRIA. Diretrizes de Manejo da Asma na Criança e no Adolescente. São Paulo: SBP, 2021.",
+      "AMERICAN HEART ASSOCIATION. Diretrizes de PALS 2020. Dallas: AHA, 2020.",
+      "COFEN. Resolução nº 564/2017. Código de Ética dos Profissionais de Enfermagem.",
+    ],
+  },
+  {
+    id: "13-extubacao-acidental-uti",
+    titulo: "Extubação Acidental em Paciente Crítico (UTI)",
+    setor: "Unidade de Terapia Intensiva (UTI)",
+    paciente: {
+      nome: "Sr. Antônio",
+      idade: 60,
+      leito: "UTI-03",
+      avatar: "👨",
+      diagnostico: "Ventilação mecânica invasiva — extubação acidental durante higiene no leito",
+      queixa:
+        "Tosse súbita durante o banho com saída do tubo orotraqueal. Esforço respiratório evidente e agitação psicomotora.",
+      status: "critico",
+    },
+    vitais: {
+      paSistolica: 150,
+      paDiastolica: 95,
+      fc: 130,
+      fr: 36,
+      temp: 37.0,
+      spo2: 80,
+    },
+    pergunta:
+      "Qual a conduta imediata do enfermeiro diante da extubação acidental do Sr. Antônio?",
+    opcoes: [
+      {
+        texto:
+          "Manter a calma, ofertar oxigênio sob máscara com reservatório (100%), monitorar sinais vitais, preparar material para nova intubação e comunicar a equipe médica imediatamente.",
+        correta: true,
+        feedback:
+          "PARABÉNS! VOCÊ ESTÁ NO CAMINHO CERTO. A prioridade é garantir a oxigenação imediata e estar pronto para a reintubação, caso o paciente não sustente a respiração espontânea.",
+      },
+      {
+        texto:
+          "Tentar reintroduzir o tubo orotraqueal rapidamente pela boca sem laringoscopia para não perder o acesso à via aérea.",
+        correta: false,
+        feedback:
+          "VOCÊ MATOU O PACIENTE! Tentar reintroduzir o tubo às cegas causa trauma de orofaringe, laringoespasmo e pode enviar o tubo para o esôfago, agravando a hipóxia fatalmente. Reintubação é ato médico.",
+      },
+      {
+        texto:
+          "Insuflar o cuff do tubo que saiu e tentar empurrá-lo de volta para a traqueia enquanto o paciente inspira.",
+        correta: false,
+        feedback:
+          "O QUADRO SE AGRAVOU! Uma vez que o tubo saiu, ele está contaminado e a posição é incerta. Empurrá-lo pode causar lesões graves na traqueia e cordas vocais.",
+      },
+      {
+        texto:
+          "Administrar uma dose extra de sedativo para que o paciente não sinta o desconforto da falta de ar enquanto o médico é chamado.",
+        correta: false,
+        feedback:
+          "VOCÊ MATOU O PACIENTE! Sem uma via aérea artificial segura, a sedação causará apneia central e o paciente não terá força para respirar sozinho, levando ao óbito por hipóxia.",
+      },
+    ],
+    referencias: [
+      "AMERICAN HEART ASSOCIATION. Diretrizes de ACLS 2020. Dallas: AHA, 2020.",
+      "MINISTÉRIO DA SAÚDE. Protocolos da Unidade de Emergência. Brasília, 2022.",
+      "COFEN. Resolução nº 564/2017. Código de Ética dos Profissionais de Enfermagem.",
+      "COFEN. Resolução nº 736/2024. Processo de Enfermagem.",
     ],
   },
 ];
