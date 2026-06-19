@@ -1,0 +1,58 @@
+import type { Procedimento } from "./index";
+
+export const PROC_SVD_ESTERIL: Procedimento = {
+  slug: "svd-esteril",
+  titulo: "Sondagem Vesical de Demora (SVD) — Técnica Estéril",
+  subtitulo: "Prevenção de ITU relacionada ao cateter (RDC 36/2013)",
+  icon: "🧪",
+  cor: "text-amber-600",
+  publico: "Adulto",
+  emProducao: true,
+  materiais: [
+    "Bandeja de cateterismo vesical estéril",
+    "Cateter de Foley (calibre conforme paciente)",
+    "Sistema fechado de drenagem (coletor)",
+    "Água destilada (5–10 mL) para insuflação do balonete",
+    "Clorexidina degermante e aquosa",
+    "Xilocaína gel 2% estéril",
+    "Luvas estéreis, campo fenestrado, gazes estéreis",
+    "Seringa de 10 mL",
+  ],
+  indicacoes: [
+    "Retenção urinária aguda",
+    "Monitorização rigorosa de diurese em paciente crítico",
+    "Pré e pós-operatório de cirurgias urológicas/pélvicas",
+    "Lesões por pressão sacrais em paciente com incontinência",
+  ],
+  contraindicacoes: [
+    "Trauma uretral suspeito (sangue no meato, hematoma perineal)",
+    "Prostatite aguda",
+    "Estenose uretral conhecida sem avaliação urológica",
+  ],
+  complicacoes: [
+    "Infecção do trato urinário (ITU-RC)",
+    "Trauma uretral, falso trajeto",
+    "Hematúria",
+    "Lesão por tração",
+    "Retenção por obstrução do cateter",
+  ],
+  cenas: [],
+  checklist: [
+    "Avaliei a real necessidade do cateter (retirada precoce sempre que possível)",
+    "Higienizei as mãos e posicionei o paciente adequadamente",
+    "Realizei higiene íntima prévia com água e sabão",
+    "Abri o campo estéril com técnica cirúrgica",
+    "Antissepsia rigorosa com clorexidina degermante e aquosa",
+    "Lubrifiquei a uretra com xilocaína gel 2% (aguardei 2–3 min)",
+    "Inseri o cateter até refluxo de urina",
+    "Insuflei o balonete com ÁGUA DESTILADA (nunca SF)",
+    "Conectei sistema fechado de drenagem",
+    "Fixei o cateter sem tração; registrei volume, aspecto e intercorrências",
+  ],
+  referencias: [
+    "ANVISA. RDC nº 36/2013 — Segurança do paciente em serviços de saúde.",
+    "ANVISA. Medidas de Prevenção de Infecção Relacionada à Assistência à Saúde, 2017.",
+    "COFEN. Resolução nº 736/2024 — Processo de Enfermagem.",
+    "CDC. Guideline for Prevention of Catheter-Associated Urinary Tract Infections, 2009 (atualizada).",
+  ],
+};

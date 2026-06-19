@@ -50,15 +50,21 @@ import { PROC_SVA } from "./sva";
 import { PROC_PUNCAO_ADULTO } from "./puncao-adulto";
 import { PROC_PUNCAO_PEDIATRIA } from "./puncao-pediatria";
 import { PROC_PUNCAO_JUGULAR } from "./puncao-jugular-externa";
+import { PROC_PUNCAO_SEGURANCA } from "./puncao-seguranca";
+import { PROC_SVD_ESTERIL } from "./svd-esteril";
+import { PROC_CURATIVO_DEISCENCIA } from "./curativo-deiscencia";
 
 export const PROCEDIMENTOS: Procedimento[] = [
   PROC_SNG,
   PROC_SVD_MASC,
   PROC_SVD_FEM,
+  PROC_SVD_ESTERIL,
   PROC_SVA,
   PROC_PUNCAO_ADULTO,
+  PROC_PUNCAO_SEGURANCA,
   PROC_PUNCAO_PEDIATRIA,
   PROC_PUNCAO_JUGULAR,
+  PROC_CURATIVO_DEISCENCIA,
 ];
 
 export function getProcedimento(slug: string): Procedimento | undefined {
