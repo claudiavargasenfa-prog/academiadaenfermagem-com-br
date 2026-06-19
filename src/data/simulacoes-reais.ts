@@ -1097,4 +1097,184 @@ export const CASOS: CasoClinico[] = [
       "MINISTÉRIO DA SAÚDE. Política Nacional de Saúde Mental — Lei nº 10.216/2001.",
     ],
   },
+  {
+    id: "18-pneumotorax-hipertensivo",
+    titulo: "Trauma Multissistêmico — Pneumotórax Hipertensivo",
+    setor: "Sala de Trauma",
+    paciente: {
+      nome: "Sr. Roberto",
+      idade: 35,
+      leito: "TR-01",
+      avatar: "🧑",
+      diagnostico: "Pneumotórax hipertensivo e choque obstrutivo pós-colisão frontal de alta energia",
+      queixa:
+        "Murmúrio vesicular abolido à direita, expansibilidade reduzida, desvio de traqueia para a esquerda e turgência jugular.",
+      status: "critico",
+    },
+    vitais: {
+      paSistolica: 80,
+      paDiastolica: 40,
+      fc: 130,
+      fr: 32,
+      temp: 36.2,
+      spo2: 84,
+    },
+    pergunta:
+      "Diante da suspeita de Pneumotórax Hipertensivo e Choque Obstrutivo, qual a conduta imediata do enfermeiro na equipe de trauma?",
+    opcoes: [
+      {
+        texto:
+          "Auxiliar imediatamente na descompressão torácica por agulha (toracocentese) no 5º espaço intercostal, linha axilar média, seguida de drenagem torácica em selo d'água, mantendo ressuscitação volêmica controlada.",
+        correta: true,
+        feedback:
+          "PARABÉNS! VOCÊ ESTÁ NO CAMINHO CERTO. O pneumotórax hipertensivo é uma ameaça imediata à vida (Letra B do ABCDE). A descompressão rápida reverte o choque obstrutivo e permite a reexpansão pulmonar, salvando o paciente do óbito iminente.",
+      },
+      {
+        texto:
+          "Encaminhar o paciente imediatamente para Raio-X de tórax e Tomografia de corpo inteiro para confirmar a lesão antes de qualquer procedimento invasivo.",
+        correta: false,
+        feedback:
+          "VOCÊ MATOU O PACIENTE! O diagnóstico de pneumotórax hipertensivo é CLÍNICO. Aguardar exames de imagem em um paciente com PA 80/40 e desvio de traqueia é falha fatal. O paciente entrará em PCR antes de chegar ao raio-x.",
+      },
+      {
+        texto:
+          "Administrar 2000ml de Soro Fisiológico 0,9% em fluxo livre para elevar a PA antes de avaliar a respiração.",
+        correta: false,
+        feedback:
+          "O QUADRO SE AGRAVOU! No choque obstrutivo por pneumotórax, o problema não é falta de volume, mas a incapacidade do coração de bombear pelo aumento da pressão intratorácica. O excesso de volume causa edema agudo e não resolve a causa base.",
+      },
+      {
+        texto:
+          "Retirar o colar cervical e a prancha rígida para facilitar a ausculta pulmonar e a palpação abdominal.",
+        correta: false,
+        feedback:
+          "VOCÊ COLOCOU O PACIENTE EM RISCO! A manipulação sem proteção da coluna em vítimas de colisão de alta energia pode causar lesão medular irreversível. O exame deve ser feito mantendo a imobilização conforme o protocolo PHTLS.",
+      },
+    ],
+    referencias: [
+      "NAEMT. PHTLS: Prehospital Trauma Life Support. 10th ed. Jones & Bartlett, 2023.",
+      "AMERICAN COLLEGE OF SURGEONS. ATLS: Advanced Trauma Life Support. 10th ed. Chicago, 2018.",
+      "COFEN. Resolução nº 564/2017. Código de Ética dos Profissionais de Enfermagem.",
+    ],
+  },
+  {
+    id: "19-trauma-abdominal-baco",
+    titulo: "Trauma Abdominal Fechado — Lesão de Baço",
+    setor: "Sala de Trauma",
+    paciente: {
+      nome: "Paciente Jovem",
+      idade: 22,
+      leito: "TR-02",
+      avatar: "🧑",
+      diagnostico: "Choque hipovolêmico grau IV por provável hemoperitônio (lesão esplênica)",
+      queixa:
+        "Dor intensa em hipocôndrio esquerdo, sinal de Kehr positivo, abdome distendido e rígido, palidez extrema pós-queda de moto.",
+      status: "critico",
+    },
+    vitais: {
+      paSistolica: 70,
+      paDiastolica: 40,
+      fc: 145,
+      fr: 30,
+      temp: 35.4,
+      spo2: 90,
+    },
+    pergunta:
+      "Qual a prioridade de enfermagem no manejo do Choque Hipovolêmico Grau IV por provável hemoperitônio?",
+    opcoes: [
+      {
+        texto:
+          "Garantir dois acessos venosos calibrosos (14G ou 16G), iniciar protocolo de transfusão maciça (sangue total ou componentes), aquecer o paciente para prevenir a tríade da morte e preparar para laparotomia de urgência.",
+        correta: true,
+        feedback:
+          "PARABÉNS! VOCÊ ESTÁ NO CAMINHO CERTO. No choque hemorrágico grave por lesão de baço, a reposição com cristaloides deve ser mínima, priorizando hemoderivados. O controle da temperatura é vital para evitar a coagulopatia.",
+      },
+      {
+        texto:
+          "Realizar lavagem gástrica com soro gelado para verificar se há sangue no estômago e acalmar a dor abdominal com compressas frias.",
+        correta: false,
+        feedback:
+          "O QUADRO SE AGRAVOU! A lavagem gástrica não tem indicação no trauma abdominal fechado e as compressas frias aceleram a hipotermia, que faz parte da tríade da morte no trauma, piorando a hemorragia.",
+      },
+      {
+        texto:
+          "Aguardar a estabilização da PA (mínimo 120/80 mmHg) apenas com Soro Glicosado 5% antes de levar ao Centro Cirúrgico.",
+        correta: false,
+        feedback:
+          "VOCÊ MATOU O PACIENTE! O soro glicosado não repõe volume intravascular efetivamente. Tentar normalizar a PA em sangramentos ativos não controlados (ressuscitação agressiva) 'expulsa' os coágulos formados e aumenta a hemorragia.",
+      },
+      {
+        texto:
+          "Administrar morfina endovenosa em bólus para aliviar a dor abdominal intensa e facilitar o exame físico.",
+        correta: false,
+        feedback:
+          "VOCÊ MATOU O PACIENTE! Administrar opioides em bólus em paciente com PA 70/40 causa colapso cardiovascular e depressão respiratória imediata. A dor é sinal clínico importante que não deve ser mascarado antes da decisão cirúrgica.",
+      },
+    ],
+    referencias: [
+      "AMERICAN COLLEGE OF SURGEONS. ATLS: Advanced Trauma Life Support. 10th ed. Chicago, 2018.",
+      "NAEMT. PHTLS: Prehospital Trauma Life Support. 10th ed. Jones & Bartlett, 2023.",
+      "MINISTÉRIO DA SAÚDE. Protocolos de Suporte Básico e Avançado de Vida. Brasília, 2022.",
+    ],
+  },
+  {
+    id: "20-politrauma-hemorragia-exanguinante",
+    titulo: "Politrauma — Hemorragia Exanguinante (XABCDE)",
+    setor: "Sala de Trauma",
+    paciente: {
+      nome: "Sr. Carlos",
+      idade: 50,
+      leito: "TR-03",
+      avatar: "🧑",
+      diagnostico: "Politrauma com fraturas expostas bilaterais e sangramento arterial ativo em jato",
+      queixa:
+        "Atropelamento por caminhão. Sangramento arterial em jato volumoso em ambos os membros inferiores.",
+      status: "critico",
+    },
+    vitais: {
+      paSistolica: 85,
+      paDiastolica: 50,
+      fc: 140,
+      fr: 28,
+      temp: 35.8,
+      spo2: 92,
+    },
+    pergunta:
+      "Qual a primeira ação do enfermeiro ao receber o paciente na sala de trauma, seguindo a atualização do protocolo XABCDE?",
+    opcoes: [
+      {
+        texto:
+          "Aplicar torniquete comercial ou curativo compressivo efetivo imediatamente nos sítios de hemorragia exanguinante nos membros inferiores, antes mesmo de avaliar a via aérea.",
+        correta: true,
+        feedback:
+          "PARABÉNS! VOCÊ ESTÁ NO CAMINHO CERTO. O 'X' (Hemorragia Exanguinante) precede o 'A'. Um sangramento arterial de fêmur pode levar ao óbito por choque hipovolêmico em menos de 3 minutos, antes que a hipóxia por via aérea o faça.",
+      },
+      {
+        texto:
+          "Iniciar imediatamente a intubação orotraqueal, pois a proteção da via aérea é sempre a prioridade número 1 em qualquer protocolo de trauma.",
+        correta: false,
+        feedback:
+          "VOCÊ MATOU O PACIENTE! Se você focar na via aérea enquanto o paciente perde litros de sangue por uma fratura exposta, ele entrará em PCR por hipovolemia exanguinante antes de você terminar a intubação.",
+      },
+      {
+        texto:
+          "Lavar as feridas expostas com SF 0,9% abundante e tentar alinhar os ossos fraturados para reduzir a dor e o sangramento.",
+        correta: false,
+        feedback:
+          "O QUADRO SE AGRAVOU! A limpeza e o alinhamento são etapas secundárias. No trauma agudo, o foco é a HEMOSTASIA. Manipular fraturas sem controle do sangramento e sem estabilização pode aumentar a lesão vascular e nervosa.",
+      },
+      {
+        texto:
+          "Solicitar que o paciente assine o termo de consentimento para cirurgia antes de realizar qualquer manobra invasiva.",
+        correta: false,
+        feedback:
+          "VOCÊ COLOCOU O PACIENTE EM RISCO! Em emergências com risco de morte, o dever de socorro precede formalidades burocráticas. O tempo perdido com papelada é tempo retirado da sobrevivência do paciente.",
+      },
+    ],
+    referencias: [
+      "NAEMT. PHTLS: Prehospital Trauma Life Support. 10th ed. Jones & Bartlett, 2023.",
+      "AMERICAN COLLEGE OF SURGEONS. ATLS: Advanced Trauma Life Support. 10th ed. Chicago, 2018.",
+      "COFEN. Resolução nº 736/2024. Processo de Enfermagem.",
+    ],
+  },
 ];
