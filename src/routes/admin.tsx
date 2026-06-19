@@ -467,3 +467,64 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
     </label>
   );
 }
+
+function ContentMarkdownEditor({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+}) {
+  const [mode, setMode] = useState<"edit" | "preview">("edit");
+  return (
+    <div className="block">
+      <div className="mb-1 flex items-center justify-between">
+        <span className="block text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+          Conteúdo (texto / markdown)
+        </span>
+        <div className="flex gap-1 rounded-lg bg-foreground/5 p-0.5 text-[11px] font-semibold">
+          <button
+            type="button"
+            onClick={() => setMode("edit")}
+            className={`rounded-md px-2 py-1 ${mode === "edit" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
+          >
+            Editar
+          </button>
+          <button
+            type="button"
+            onClick={() => setMode("preview")}
+            className={`rounded-md px-2 py-1 ${mode === "preview" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
+          >
+            Pré-visualizar
+          </button>
+        </div>
+      </div>
+      {mode === "edit" ? (
+        <>
+          <textarea
+            rows={10}
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            className={`${input} font-mono text-xs`}
+            placeholder={`# Título\n\nParágrafo com **negrito** e *itálico*.\n\n- Item 1\n- Item 2\n\n> ⚠️ Atenção: nunca administre sem checar os cinco certos.\n> ✅ Dica: confira sempre a prescrição.\n> 📌 Importante: registre no prontuário.\n\n[Link externo](https://exemplo.com)`}
+          />
+          <p className="mt-1 text-[11px] text-muted-foreground">
+            Suporta <code>#</code> títulos, <code>**negrito**</code>, <code>*itálico*</code>,
+            listas <code>-</code> e <code>1.</code>, links <code>[txt](url)</code> e blocos de destaque iniciados com{" "}
+            <code>&gt; ⚠️</code>, <code>&gt; ✅</code> ou <code>&gt; 📌</code>.
+          </p>
+        </>
+      ) : (
+        <div className="min-h-[200px] rounded-lg border border-border bg-background px-3 py-2">
+          {value.trim() ? (
+            renderMarkdown(value)
+          ) : (
+            <p className="text-xs text-muted-foreground">
+              Nada digitado ainda. Vá em "Editar" e comece a escrever.
+            </p>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
