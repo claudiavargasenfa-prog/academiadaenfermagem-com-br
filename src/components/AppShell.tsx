@@ -35,6 +35,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   return (
     <AuthGate>
     <div className="min-h-dvh">
+      <TrialCountdownBanner />
       <header className="sticky top-0 z-40 border-b border-gold/30 bg-primary text-primary-foreground shadow-[var(--shadow-soft)]">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3">
           <Link to="/" className="flex min-w-0 items-center gap-3">
