@@ -57,10 +57,18 @@ export function SubscriptionsAdmin() {
                   </p>
                   <h4 className="font-display text-base font-bold">{p.name}</h4>
                   <p className="mt-1 text-xs text-muted-foreground">{p.description}</p>
-                  <p className="mt-2 text-lg font-extrabold">{formatPriceBRL(p.price_cents)}<span className="text-xs font-normal text-muted-foreground">/mês</span></p>
+                  <p className="mt-2 text-lg font-extrabold">{formatPriceBRL((p as any).price_novo_cents ?? p.price_cents)}<span className="text-xs font-normal text-muted-foreground">/mês</span></p>
+                  {(p as any).price_promo_migracao_cents && (
+                    <p className="mt-0.5 text-[11px] font-semibold text-amber-700">
+                      Migração: <span className="line-through">{formatPriceBRL((p as any).price_original_migracao_cents)}</span> {formatPriceBRL((p as any).price_promo_migracao_cents)}
+                    </p>
+                  )}
                   <p className="mt-1 break-all text-[11px] text-muted-foreground">
-                    Cakto: {p.cakto_checkout_url || "—"}
+                    Cakto novo: {(p as any).cakto_link_novo || p.cakto_checkout_url || "— (vazio)"}
                   </p>
+                  {(p as any).cakto_link_migracao && (
+                    <p className="break-all text-[11px] text-muted-foreground">Cakto migração: {(p as any).cakto_link_migracao}</p>
+                  )}
                   {!p.is_active && (
                     <span className="mt-1 inline-block rounded-full bg-foreground/10 px-2 py-0.5 text-[10px] font-bold">inativo</span>
                   )}
