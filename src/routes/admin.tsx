@@ -91,7 +91,7 @@ function AdminContent() {
         description="Gerencie mini apps, trilhas e assinaturas mensais da loja."
       />
 
-      <div className="mb-4 flex gap-2 rounded-xl bg-foreground/5 p-1 text-sm font-semibold">
+      <div className="mb-4 flex flex-wrap gap-2 rounded-xl bg-foreground/5 p-1 text-sm font-semibold">
         <button
           onClick={() => setTab("apps")}
           className={`flex-1 rounded-lg px-3 py-2 ${tab === "apps" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
@@ -104,9 +104,17 @@ function AdminContent() {
         >
           Assinaturas (trilhas)
         </button>
+        <button
+          onClick={() => setTab("users")}
+          className={`flex-1 rounded-lg px-3 py-2 ${tab === "users" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
+        >
+          Usuários
+        </button>
       </div>
 
-      {tab === "subs" ? (
+      {tab === "users" ? (
+        <UsersAdmin />
+      ) : tab === "subs" ? (
         <SubscriptionsAdmin />
       ) : (
         <>
