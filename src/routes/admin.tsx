@@ -198,6 +198,8 @@ function AdminContent() {
           </Card>
         )}
       </div>
+        </>
+      )}
     </AppShell>
   );
 }
