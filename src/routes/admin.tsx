@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { fetchMiniApps, formatPriceBRL, isAdmin, type MiniApp } from "@/lib/access";
 import { renderMarkdown } from "@/lib/markdown";
 import { SubscriptionsAdmin } from "@/components/admin/SubscriptionsAdmin";
+import { UsersAdmin } from "@/components/admin/UsersAdmin";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({ meta: [{ title: "Admin — Academia de Enfermagem" }] }),
