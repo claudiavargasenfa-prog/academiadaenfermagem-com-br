@@ -10,6 +10,7 @@ import {
 import { useEffect, useState, type ReactNode } from "react";
 import { ReferencesFooter } from "./References";
 import { AuthGate, signOut } from "./AuthGate";
+import { TrialCountdownBanner } from "./TrialCountdownBanner";
 import { isAdmin } from "@/lib/access";
 import logoAsset from "@/assets/logo.png.asset.json";
 
