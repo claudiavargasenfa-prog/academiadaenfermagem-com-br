@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_actions: {
+        Row: {
+          action: string
+          admin_id: string | null
+          created_at: string
+          details: Json | null
+          id: string
+          target_user_id: string | null
+        }
+        Insert: {
+          action: string
+          admin_id?: string | null
+          created_at?: string
+          details?: Json | null
+          id?: string
+          target_user_id?: string | null
+        }
+        Update: {
+          action?: string
+          admin_id?: string | null
+          created_at?: string
+          details?: Json | null
+          id?: string
+          target_user_id?: string | null
+        }
+        Relationships: []
+      }
       mini_apps: {
         Row: {
           audio_url: string | null
@@ -97,24 +124,30 @@ export type Database = {
       }
       profiles: {
         Row: {
+          categoria: string | null
           created_at: string
           email: string | null
           full_name: string | null
           id: string
+          phone: string | null
           updated_at: string
         }
         Insert: {
+          categoria?: string | null
           created_at?: string
           email?: string | null
           full_name?: string | null
           id: string
+          phone?: string | null
           updated_at?: string
         }
         Update: {
+          categoria?: string | null
           created_at?: string
           email?: string | null
           full_name?: string | null
           id?: string
+          phone?: string | null
           updated_at?: string
         }
         Relationships: []
@@ -166,36 +199,51 @@ export type Database = {
       subscription_plans: {
         Row: {
           cakto_checkout_url: string | null
+          cakto_link_migracao: string | null
+          cakto_link_novo: string | null
           created_at: string
           description: string | null
           id: string
           is_active: boolean
           name: string
           price_cents: number
+          price_novo_cents: number | null
+          price_original_migracao_cents: number | null
+          price_promo_migracao_cents: number | null
           slug: string
           sort_order: number
           updated_at: string
         }
         Insert: {
           cakto_checkout_url?: string | null
+          cakto_link_migracao?: string | null
+          cakto_link_novo?: string | null
           created_at?: string
           description?: string | null
           id?: string
           is_active?: boolean
           name: string
           price_cents?: number
+          price_novo_cents?: number | null
+          price_original_migracao_cents?: number | null
+          price_promo_migracao_cents?: number | null
           slug: string
           sort_order?: number
           updated_at?: string
         }
         Update: {
           cakto_checkout_url?: string | null
+          cakto_link_migracao?: string | null
+          cakto_link_novo?: string | null
           created_at?: string
           description?: string | null
           id?: string
           is_active?: boolean
           name?: string
           price_cents?: number
+          price_novo_cents?: number | null
+          price_original_migracao_cents?: number | null
+          price_promo_migracao_cents?: number | null
           slug?: string
           sort_order?: number
           updated_at?: string
