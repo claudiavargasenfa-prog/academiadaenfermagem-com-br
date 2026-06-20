@@ -40,10 +40,21 @@ export async function fetchMyActiveSubscriptions(): Promise<UserSubscription[]> 
     .from("user_subscriptions")
     .select("*")
     .eq("user_id", u.user.id)
-    .eq("status", "active")
+    .in("status", ["active", "trial"])
     .gt("expires_at", new Date().toISOString());
   if (error) throw error;
   return data ?? [];
+}
+
+export async function fetchMyProfile() {
+  const { data: u } = await supabase.auth.getUser();
+  if (!u.user) return null;
+  const { data } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("id", u.user.id)
+    .maybeSingle();
+  return data;
 }
 
 /** Dias de acesso após a compra (regra de negócio). */
