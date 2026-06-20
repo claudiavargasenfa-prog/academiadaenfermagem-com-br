@@ -1,75 +1,145 @@
 
-# Academia de Enfermagem — 3 trilhas na mesma loja
+# Reorganização das Trilhas + Trial + Avisos + Gestão de Usuários
 
-A loja continua sendo UMA só (mesmo domínio, login e admin), chamada **Academia de Enfermagem**, dividida em três trilhas:
+Plano final (1B, 2A, 3A + email no cadastro + **admin gerencia usuários**).
 
-- **Academia do Acadêmico** — estudantes de graduação
-- **Academia do Técnico** — técnicos de enfermagem
-- **Academia do Enfermeiro** — enfermeiros formados
+## 1. Reposicionar trilhas + cores novas
 
-Cada mini app pode pertencer a uma, duas ou às três trilhas (ex.: SBV serve nas três). O aluno assina **mensalmente** a trilha que quiser e libera **tudo** dela. Pode assinar mais de uma. A venda avulsa por mini app que já existe continua funcionando em paralelo.
+Nova ordem da home:
+```
+[Header] → [Banner verde escuro] → [3 cards das trilhas] → [Conteúdo grátis] → [Demais mini apps]
+```
 
-## O que muda na loja (home)
+Cores (tokens em `src/styles.css`):
+- **Acadêmico:** amarelo ouro claro (fundo `#FDE68A`, texto `#92400E`)
+- **Enfermeiro:** verde claro (fundo `#BBF7D0`, texto `#14532D`)
+- **Técnico:** azul bebê (fundo `#BFDBFE`, texto `#1E3A8A`)
 
-- Hero passa a mostrar o nome "Academia de Enfermagem" com 3 cartões grandes de trilha (Acadêmico / Técnico / Enfermeiro), cada um com preço mensal e botão "Assinar na Cakto"
-- Abaixo, abas/filtro: **Todos | Acadêmico | Técnico | Enfermeiro**
-- Cada card de mini app exibe selinho(s) da(s) trilha(s) a que pertence (🎓 / 🩺 / 👩‍⚕️)
-- Grade filtra pela trilha selecionada
+Badges dos mini apps usam os mesmos tokens.
 
-## O que muda no acesso
+## 2. Conserto do DE/POR
 
-Hoje o acesso é por mini app (`user_app_access`). Adiciono acesso por **trilha**:
+Inverter exibição: riscado é o maior (DE), em destaque o menor (POR). Novos campos `price_original` e `price_promo` em `subscription_plans`.
 
-- Assinatura ativa de uma trilha → libera todos os mini apps marcados naquela trilha
-- Assinatura vencida → bloqueia automaticamente
-- Compra avulsa de mini app continua valendo em paralelo
-- Admin enxerga tudo (já é assim)
+## 3. Preços reais (admin)
 
-## O que muda no Admin
+| Trilha | Novo | Migrando |
+|---|---|---|
+| Acadêmico | R$ 24,99/mês | DE R$ 39,99 POR R$ 33,99 |
+| Enfermeiro | R$ 39,99/mês | — |
+| Técnico | R$ 16,99/mês | R$ 19,99 (técnico→Acadêmico) |
 
-No formulário de cada mini app, três checkboxes:
-- [ ] Disponível na trilha Acadêmico
-- [ ] Disponível na trilha Técnico
-- [ ] Disponível na trilha Enfermeiro
+Novos campos: `price_novo`, `price_original_migracao`, `price_promo_migracao`, `cakto_link_novo`, `cakto_link_migracao`.
 
-Nova aba **"Assinaturas"** no admin:
-- CRUD dos 3 planos (nome, descrição, preço mensal, link Cakto, ativo)
-- Liberar/revogar assinatura manualmente para um aluno (igual já existe para mini app avulso), com data de expiração
+**Migração automática (2A):** se o usuário logado já tem assinatura ativa em outra trilha, o card da nova trilha mostra preço promocional + link Cakto de migração.
 
-## Defaults iniciais (você ajusta no admin antes de publicar)
+## 4. Cadastro com mais campos
 
-- **Preços placeholder**: Acadêmico R$ 29/mês · Técnico R$ 39/mês · Enfermeiro R$ 49/mês
-- **Classificação inicial dos mini apps** (1 clique para reclassificar):
-  - **Acadêmico**: SBV, sinais vitais, SV gestante, SV pediátrico, cálculo, exame físico e escalas, quizzes, postura ética, manual de sobrevivência, relatório ABNT, segurança, saúde mental
-  - **Técnico**: SBV, sinais vitais, SV gestante, SV pediátrico, cálculo, procedimentos de enfermagem, curativos, segurança, IRAS, postura ética, manual de sobrevivência
-  - **Enfermeiro**: UTI, IRAS, farmacologia avançada, procedimentos de enfermagem, ACLS, simulações reais, curativos, SBV, exame físico e escalas, saúde mental
+Tela `/auth` (sign-up):
+- Nome completo *
+- Email * (para certificado)
+- Celular com máscara BR *
+- Categoria: Acadêmico / Técnico / Enfermeiro *
+- Senha
 
-## Detalhes técnicos
+Validação Zod (cliente + servidor). Salva em `profiles` (novos `phone TEXT`, `categoria TEXT`).
 
-1. **Migração no banco** (uma única migração, com GRANTs):
-   - `mini_apps`: adicionar `track_academico bool default false`, `track_tecnico bool default false`, `track_enfermeiro bool default false`
-   - Nova tabela `subscription_plans` (slug `academico`/`tecnico`/`enfermeiro`, nome, descrição, preço, link Cakto, ativo)
-   - Nova tabela `user_subscriptions` (user_id, plan_slug, started_at, expires_at, status) — RLS por `auth.uid()` + admin via `has_role`
-   - Atualizar `has_app_access(_user_id, _mini_app_id)`: retorna true se gratuito OR já tinha acesso avulso OR existe assinatura ativa cuja trilha corresponde a alguma trilha marcada no mini app
-   - Seed dos 3 planos com os preços placeholder
-2. **Frontend (loja)**:
-   - 3 cards de trilha no topo do `index.tsx` com botão Cakto
-   - Filtro de trilha na grade + selinhos nos cards
-3. **Admin**:
-   - 3 checkboxes de trilha no editor de mini app
-   - Nova aba "Assinaturas" para CRUD de planos e liberação manual
-4. **Paywall**: `AppAccessGate` não muda — a função SQL já cobre o novo caso.
+## 5. Trial de 30 dias só na trilha da categoria (1B)
 
-## O que NÃO vou mexer
+Trigger `handle_new_user` insere 1 linha em `user_subscriptions` com `plan_slug = categoria`, `status = 'trial'`, `expires_at = now() + 30 days`. Função `has_app_access` aceita `status IN ('active','trial')`. Sem cartão.
 
-- Conteúdo markdown, layouts dos mini apps individuais, hero atual além dos cards de trilha
-- Venda avulsa por mini app (segue em paralelo)
-- Login, perfis, papéis admin/aluno
+## 6. Avisos pulsantes (3A)
 
-## Como testar depois
+`<TrialCountdownBanner />` no topo de `_authenticated/`:
+- **D-5/D-4:** banner azul — "⏳ Sua gratuidade está terminando"
+- **D-3/D-2:** banner laranja — "⚠️ ÚLTIMOS DIAS — Vagas limitadas"
+- **D-1:** banner vermelho o dia todo — "🚨 HOJE é o último dia!"
+- **Expirou:** acesso bloqueado, redireciona pra card de assinatura
 
-1. Admin → marca trilhas em cada mini app
-2. Admin → Assinaturas → ajusta preços e cola os 3 links Cakto
-3. Loja → alterna entre Todos/Acadêmico/Técnico/Enfermeiro
-4. Aluno sem assinatura → mini apps pagos bloqueados
-5. Admin libera assinatura "Técnico" manualmente → todos os mini apps da trilha Técnico abrem para o aluno
+Textos exatos passados, interpola `[NOME]`. Botão fechar some até refresh, volta depois. Botão abre `cakto_link_novo` da trilha da categoria.
+
+## 7. **NOVO** — Admin gerencia usuários
+
+Nova aba no admin: **"Usuários"**.
+
+**Listagem:**
+- Tabela com nome, email, celular, categoria, status do trial/assinatura, data de cadastro, expira em
+- Busca por nome/email
+- Filtros: por categoria, por status (trial / ativo / expirado)
+
+**Ações do admin:**
+- **Criar usuário** (formulário com mesmos campos do cadastro público, senha temporária definida pelo admin; usuário recebe email/credenciais; já entra com trial ativo)
+- **Editar perfil** (nome, email, celular, categoria)
+- **Conceder/revogar assinatura** manualmente (escolhe trilha + dias de validade) — já tem na aba Assinaturas, fica linkado aqui também
+- **Estender trial** (botão "+30 dias", "+60 dias", custom)
+- **Resetar senha** (envia link)
+- **Excluir usuário** (modal de confirmação digitando o email; remove de `auth.users` em cascata → some profile, subscriptions, etc.)
+
+**Como funciona tecnicamente:**
+- Server functions `createServerFn` + `requireSupabaseAuth` + verifica `has_role(uid, 'admin')`
+- Usa `supabaseAdmin.auth.admin.createUser()`, `.updateUserById()`, `.deleteUser()`, `.generateLink()`
+- Tudo carregado dentro do handler (nunca top-level) por segurança
+
+**Proteções:**
+- Admin não consegue excluir a si mesmo
+- Confirmação dupla na exclusão (digita email pra confirmar)
+- Auditoria mínima: log em `admin_actions` (quem fez o quê, quando)
+
+## 8. Banco de dados (1 migração)
+
+```sql
+-- profiles
+ALTER TABLE profiles 
+  ADD COLUMN phone TEXT,
+  ADD COLUMN categoria TEXT CHECK (categoria IN ('academico','tecnico','enfermeiro'));
+
+-- subscription_plans
+ALTER TABLE subscription_plans 
+  ADD COLUMN price_novo NUMERIC,
+  ADD COLUMN price_original_migracao NUMERIC,
+  ADD COLUMN price_promo_migracao NUMERIC,
+  ADD COLUMN cakto_link_novo TEXT,
+  ADD COLUMN cakto_link_migracao TEXT;
+
+-- user_subscriptions: aceitar status 'trial'
+-- has_app_access: ampliar pra trial
+-- handle_new_user: criar trial de 30 dias na trilha da categoria
+
+-- nova tabela admin_actions (auditoria)
+CREATE TABLE admin_actions (
+  id UUID PK,
+  admin_id UUID REF auth.users,
+  action TEXT, -- 'create_user'|'delete_user'|'edit_profile'|'grant_subscription'|...
+  target_user_id UUID,
+  details JSONB,
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+-- RLS: só admin lê/escreve
+
+-- seed dos preços reais
+```
+
+## 9. Classificação dos mini apps por trilha
+
+| Mini app | Acad | Téc | Enf |
+|---|:-:|:-:|:-:|
+| SBV / Sinais vitais / SV gestante / SV pediátrico / Cálculo / Exame físico / Quizzes / Postura ética / Segurança / Saúde mental | ✅ | ✅ | ✅ |
+| Manual sobrevivência | ✅ | ✅ | — |
+| Relatório ABNT | ✅ | — | — |
+| UTI / Farmacologia avançada / ACLS | — | — | ✅ |
+| IRAS / Procedimentos / Simulações reais / Curativos | — | ✅ | ✅ |
+
+Mini apps GRÁTIS ficam fora das trilhas até serem desmarcados.
+
+## O que NÃO muda
+
+Markdown dos mini apps, banner verde escuro, login social, paywall individual, conteúdo dos mini apps.
+
+## Avisos
+
+- **Links Cakto:** começam vazios; cole no admin → Assinaturas
+- **"100 vagas":** texto fixo no aviso D-3 (sem contador real)
+- **Pós-expiração:** vê a loja com paywall; conta e dados preservados
+- **Excluir usuário:** apaga em cascata (subscriptions, perfil, histórico)
+
+Pode aprovar que eu implemento tudo numa entrega só.

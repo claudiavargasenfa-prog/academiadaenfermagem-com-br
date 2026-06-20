@@ -57,10 +57,18 @@ export function SubscriptionsAdmin() {
                   </p>
                   <h4 className="font-display text-base font-bold">{p.name}</h4>
                   <p className="mt-1 text-xs text-muted-foreground">{p.description}</p>
-                  <p className="mt-2 text-lg font-extrabold">{formatPriceBRL(p.price_cents)}<span className="text-xs font-normal text-muted-foreground">/mês</span></p>
+                  <p className="mt-2 text-lg font-extrabold">{formatPriceBRL((p as any).price_novo_cents ?? p.price_cents)}<span className="text-xs font-normal text-muted-foreground">/mês</span></p>
+                  {(p as any).price_promo_migracao_cents && (
+                    <p className="mt-0.5 text-[11px] font-semibold text-amber-700">
+                      Migração: <span className="line-through">{formatPriceBRL((p as any).price_original_migracao_cents)}</span> {formatPriceBRL((p as any).price_promo_migracao_cents)}
+                    </p>
+                  )}
                   <p className="mt-1 break-all text-[11px] text-muted-foreground">
-                    Cakto: {p.cakto_checkout_url || "—"}
+                    Cakto novo: {(p as any).cakto_link_novo || p.cakto_checkout_url || "— (vazio)"}
                   </p>
+                  {(p as any).cakto_link_migracao && (
+                    <p className="break-all text-[11px] text-muted-foreground">Cakto migração: {(p as any).cakto_link_migracao}</p>
+                  )}
                   {!p.is_active && (
                     <span className="mt-1 inline-block rounded-full bg-foreground/10 px-2 py-0.5 text-[10px] font-bold">inativo</span>
                   )}
@@ -149,8 +157,11 @@ function PlanForm({ plan, onClose }: { plan: SubscriptionPlan; onClose: () => vo
   const [form, setForm] = useState({
     name: plan.name,
     description: plan.description ?? "",
-    price_reais: centsToReais(plan.price_cents),
-    cakto_checkout_url: plan.cakto_checkout_url ?? "",
+    price_novo: centsToReais((plan as any).price_novo_cents ?? plan.price_cents),
+    price_original_migracao: centsToReais((plan as any).price_original_migracao_cents),
+    price_promo_migracao: centsToReais((plan as any).price_promo_migracao_cents),
+    cakto_link_novo: (plan as any).cakto_link_novo ?? plan.cakto_checkout_url ?? "",
+    cakto_link_migracao: (plan as any).cakto_link_migracao ?? "",
     is_active: plan.is_active,
   });
   const [busy, setBusy] = useState(false);
@@ -159,15 +170,23 @@ function PlanForm({ plan, onClose }: { plan: SubscriptionPlan; onClose: () => vo
   async function save(e: React.FormEvent) {
     e.preventDefault();
     setBusy(true); setErr(null);
+    const novoCents = reaisToCents(form.price_novo);
+    const origMig = reaisToCents(form.price_original_migracao);
+    const promoMig = reaisToCents(form.price_promo_migracao);
     const { error } = await supabase
       .from("subscription_plans")
       .update({
         name: form.name,
         description: form.description || null,
-        price_cents: reaisToCents(form.price_reais),
-        cakto_checkout_url: form.cakto_checkout_url || null,
+        price_cents: novoCents,
+        price_novo_cents: novoCents,
+        price_original_migracao_cents: origMig > 0 ? origMig : null,
+        price_promo_migracao_cents: promoMig > 0 ? promoMig : null,
+        cakto_checkout_url: form.cakto_link_novo || null,
+        cakto_link_novo: form.cakto_link_novo || null,
+        cakto_link_migracao: form.cakto_link_migracao || null,
         is_active: form.is_active,
-      })
+      } as any)
       .eq("id", plan.id);
     setBusy(false);
     if (error) { setErr(error.message); return; }
@@ -182,12 +201,30 @@ function PlanForm({ plan, onClose }: { plan: SubscriptionPlan; onClose: () => vo
           <input className={input} value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required /></label>
         <label className="block"><span className="mb-1 block text-xs font-semibold uppercase text-muted-foreground">Descrição</span>
           <textarea className={input} rows={2} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} /></label>
-        <div className="grid gap-3 sm:grid-cols-2">
-          <label className="block"><span className="mb-1 block text-xs font-semibold uppercase text-muted-foreground">Preço mensal (R$)</span>
-            <input className={input} value={form.price_reais} onChange={(e) => setForm({ ...form, price_reais: e.target.value })} placeholder="29,00" /></label>
-          <label className="block"><span className="mb-1 block text-xs font-semibold uppercase text-muted-foreground">Link checkout Cakto</span>
-            <input className={input} value={form.cakto_checkout_url} onChange={(e) => setForm({ ...form, cakto_checkout_url: e.target.value })} placeholder="https://pay.cakto.com.br/..." /></label>
-        </div>
+
+        <fieldset className="rounded-xl border border-border/60 p-3">
+          <legend className="px-1 text-[10px] font-bold uppercase text-muted-foreground">Cadastro novo</legend>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <label className="block"><span className="mb-1 block text-xs font-semibold uppercase text-muted-foreground">Preço mensal (R$)</span>
+              <input className={input} value={form.price_novo} onChange={(e) => setForm({ ...form, price_novo: e.target.value })} placeholder="24,99" /></label>
+            <label className="block"><span className="mb-1 block text-xs font-semibold uppercase text-muted-foreground">Link Cakto (novo)</span>
+              <input className={input} value={form.cakto_link_novo} onChange={(e) => setForm({ ...form, cakto_link_novo: e.target.value })} placeholder="https://pay.cakto.com.br/..." /></label>
+          </div>
+        </fieldset>
+
+        <fieldset className="rounded-xl border border-amber-400/40 bg-amber-50/40 p-3">
+          <legend className="px-1 text-[10px] font-bold uppercase text-amber-700">Migração (DE/POR)</legend>
+          <p className="mb-2 text-[10px] text-muted-foreground">Mostrado automaticamente quando o aluno logado já tem outra trilha ativa.</p>
+          <div className="grid gap-3 sm:grid-cols-3">
+            <label className="block"><span className="mb-1 block text-xs font-semibold uppercase text-muted-foreground">DE (R$)</span>
+              <input className={input} value={form.price_original_migracao} onChange={(e) => setForm({ ...form, price_original_migracao: e.target.value })} placeholder="39,99" /></label>
+            <label className="block"><span className="mb-1 block text-xs font-semibold uppercase text-muted-foreground">POR (R$)</span>
+              <input className={input} value={form.price_promo_migracao} onChange={(e) => setForm({ ...form, price_promo_migracao: e.target.value })} placeholder="33,99" /></label>
+            <label className="block"><span className="mb-1 block text-xs font-semibold uppercase text-muted-foreground">Link Cakto (migração)</span>
+              <input className={input} value={form.cakto_link_migracao} onChange={(e) => setForm({ ...form, cakto_link_migracao: e.target.value })} placeholder="https://pay.cakto.com.br/..." /></label>
+          </div>
+        </fieldset>
+
         <label className="flex items-center gap-2">
           <input type="checkbox" checked={form.is_active} onChange={(e) => setForm({ ...form, is_active: e.target.checked })} />
           <span>Ativo (visível na loja)</span>

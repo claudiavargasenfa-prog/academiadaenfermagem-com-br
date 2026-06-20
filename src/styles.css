@@ -104,6 +104,23 @@
   --sidebar-accent-foreground: var(--accent-foreground);
   --sidebar-border: var(--border);
   --sidebar-ring: var(--ring);
+
+  /* Track colors (cores originais das classes) */
+  --track-academico-bg: #FDE68A;       /* amarelo ouro claro */
+  --track-academico-fg: #92400E;
+  --track-tecnico-bg: #BFDBFE;         /* azul bebê */
+  --track-tecnico-fg: #1E3A8A;
+  --track-enfermeiro-bg: #BBF7D0;      /* verde claro */
+  --track-enfermeiro-fg: #14532D;
+}
+
+@keyframes trial-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+
+@utility trial-pulse {
+  animation: trial-pulse 1.4s ease-in-out infinite;
 }
 
 @layer base {
