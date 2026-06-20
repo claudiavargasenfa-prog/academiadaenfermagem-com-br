@@ -152,6 +152,10 @@ function StoreHome() {
 
   const activePlans = (plansQ.data ?? []).filter((p) => p.is_active);
 
+  const mySubs = mySubsQ.data ?? [];
+  const hasAnyOtherTrack = (slug: string) =>
+    mySubs.some((s) => s.plan_slug !== slug && s.status !== "trial");
+
   return (
     <AppShell>
       <PageHeader
@@ -162,43 +166,146 @@ function StoreHome() {
 
       <Carousel />
 
-      {/* Subscription plans */}
+      {/* 1) Banner verde escuro + Meu estagio */}
+      <section className="mb-6 grid gap-4 md:grid-cols-3">
+        <div className="overflow-hidden rounded-3xl border border-gold/40 bg-primary p-5 text-primary-foreground shadow-[var(--shadow-glass)] md:col-span-2">
+          <div className="flex items-start gap-3">
+            <img src={logoAsset.url} alt="Logotipo Academia de Enfermagem" className="h-12 w-12 shrink-0 rounded-xl bg-white/10 object-contain p-1 ring-1 ring-gold/40" />
+            <div className="min-w-0 flex-1">
+              <span className="inline-flex items-center gap-1 rounded-full bg-gold/20 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-gold">
+                <Zap className="h-3 w-3" /> 30 dias grátis para começar
+              </span>
+              <h2 className="mt-2 font-display text-xl font-extrabold leading-tight md:text-2xl">
+                Chegue no estágio sabendo <span className="text-gold">o que fazer</span> — antes do preceptor perguntar.
+              </h2>
+              <p className="mt-1.5 text-sm text-primary-foreground/85">
+                Mini apps de bolso criados por enfermeira com <strong className="text-gold">35 anos de UTI, ESF e APH</strong>. Conteúdo que cai na prova prática e no plantão.
+              </p>
+
+              <ul className="mt-3 grid gap-1.5 text-sm sm:grid-cols-2">
+                <li className="flex items-start gap-1.5"><Check className="mt-0.5 h-4 w-4 shrink-0 text-gold" /> Cálculos, escalas e protocolos em segundos</li>
+                <li className="flex items-start gap-1.5"><Check className="mt-0.5 h-4 w-4 shrink-0 text-gold" /> Relatório ABNT gerado do seu diário</li>
+                <li className="flex items-start gap-1.5"><Check className="mt-0.5 h-4 w-4 shrink-0 text-gold" /> 3 trilhas: Acadêmico, Técnico e Enfermeiro</li>
+                <li className="flex items-start gap-1.5"><Check className="mt-0.5 h-4 w-4 shrink-0 text-gold" /> Sem cartão para começar</li>
+              </ul>
+
+              <div className="mt-4 flex flex-wrap items-center gap-2">
+                <a href="#trilhas" className="inline-flex items-center gap-1.5 rounded-full bg-gold px-4 py-2 text-sm font-bold text-primary shadow hover:brightness-110">
+                  <Zap className="h-4 w-4" /> Ver trilhas
+                </a>
+                <a href="#gratis" className="inline-flex items-center gap-1.5 rounded-full border border-gold/60 px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-white/10">
+                  Conteúdo grátis
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <Card>
+          <p className="text-xs font-semibold uppercase tracking-widest text-gold">Identificação</p>
+          <h3 className="mt-1 font-display text-lg font-bold">Meu estágio</h3>
+          <dl className="mt-3 space-y-2 text-sm">
+            <div><dt className="text-muted-foreground">Campo</dt><dd className="font-medium">{estagio.campo || "—"}</dd></div>
+            <div><dt className="text-muted-foreground">Preceptor(a)</dt><dd className="font-medium">{estagio.preceptor || "—"}</dd></div>
+            <div><dt className="text-muted-foreground">Período</dt><dd className="font-medium">{estagio.periodo || "—"}</dd></div>
+          </dl>
+          <Link to="/diario" className="mt-3 inline-block text-sm font-semibold text-primary hover:underline">
+            Editar no Diário
+          </Link>
+        </Card>
+      </section>
+
+      {/* 2) 3 trilhas (cores próprias) */}
       {activePlans.length > 0 && (
-        <section className="mb-6">
+        <section id="trilhas" className="mb-8 scroll-mt-20">
           <h2 className="mb-3 font-display text-lg font-bold">Assine uma trilha · acesso ilimitado</h2>
           <div className="grid gap-3 sm:grid-cols-3">
             {activePlans.map((plan) => {
               const track = TRACKS.find((t) => t.slug === plan.slug);
-              const subscribed = mySubSlugs.has(plan.slug);
+              const sub = mySubs.find((s) => s.plan_slug === plan.slug);
+              const subscribed = !!sub && sub.status === "active";
+              const inTrial = !!sub && sub.status === "trial";
+              const isMigracao = hasAnyOtherTrack(plan.slug)
+                && !subscribed
+                && !!(plan as any).price_promo_migracao_cents
+                && !!(plan as any).cakto_link_migracao;
+
+              const priceFrom = (plan as any).price_original_migracao_cents as number | null;
+              const pricePromo = (plan as any).price_promo_migracao_cents as number | null;
+              const priceNovo = (plan as any).price_novo_cents ?? plan.price_cents;
+              const ckLink = isMigracao
+                ? (plan as any).cakto_link_migracao
+                : ((plan as any).cakto_link_novo || plan.cakto_checkout_url);
+
+              const slug = plan.slug as TrackSlug;
+              const cardStyle: React.CSSProperties = {
+                backgroundColor:
+                  slug === "academico" ? "var(--track-academico-bg)" :
+                  slug === "tecnico" ? "var(--track-tecnico-bg)" :
+                  slug === "enfermeiro" ? "var(--track-enfermeiro-bg)" : undefined,
+                color:
+                  slug === "academico" ? "var(--track-academico-fg)" :
+                  slug === "tecnico" ? "var(--track-tecnico-fg)" :
+                  slug === "enfermeiro" ? "var(--track-enfermeiro-fg)" : undefined,
+              };
+
               return (
-                <div key={plan.id} className="glass flex flex-col rounded-2xl p-4">
+                <div
+                  key={plan.id}
+                  className="flex flex-col rounded-2xl border border-white/40 p-4 shadow-sm"
+                  style={cardStyle}
+                >
                   <div className="mb-2 flex items-center gap-2">
                     <span className="text-2xl">{track?.emoji}</span>
-                    <h3 className="font-display text-base font-bold">{plan.name}</h3>
+                    <h3 className="font-display text-base font-extrabold">{plan.name}</h3>
                   </div>
                   {plan.description && (
-                    <p className="text-xs text-muted-foreground">{plan.description}</p>
+                    <p className="text-xs opacity-80">{plan.description}</p>
                   )}
-                  <p className="mt-3 text-2xl font-extrabold">
-                    {formatPriceBRL(plan.price_cents)}
-                    <span className="text-xs font-normal text-muted-foreground">/mês</span>
-                  </p>
+
+                  <div className="mt-3">
+                    {isMigracao && priceFrom ? (
+                      <>
+                        <p className="text-xs font-bold uppercase opacity-70">Oferta de migração</p>
+                        <p className="text-sm font-semibold opacity-70 line-through">De {formatPriceBRL(priceFrom)}</p>
+                        <p className="text-2xl font-extrabold">
+                          Por {formatPriceBRL(pricePromo!)}<span className="text-xs font-normal opacity-70">/mês</span>
+                        </p>
+                      </>
+                    ) : (
+                      <p className="text-2xl font-extrabold">
+                        {formatPriceBRL(priceNovo)}<span className="text-xs font-normal opacity-70">/mês</span>
+                      </p>
+                    )}
+                  </div>
+
                   <div className="mt-3">
                     {subscribed ? (
-                      <span className="block w-full rounded-xl bg-emerald-500/15 py-2 text-center text-sm font-bold text-emerald-700">
+                      <span className="block w-full rounded-xl bg-white/70 py-2 text-center text-sm font-bold">
                         ✓ Assinatura ativa
                       </span>
-                    ) : plan.cakto_checkout_url ? (
+                    ) : inTrial ? (
+                      <div className="space-y-2">
+                        <span className="block w-full rounded-xl bg-white/70 py-2 text-center text-xs font-bold">
+                          🎁 Trial ativo · até {new Date(sub!.expires_at).toLocaleDateString("pt-BR")}
+                        </span>
+                        {ckLink && (
+                          <a href={ckLink} target="_blank" rel="noreferrer" className="flex w-full items-center justify-center gap-1 rounded-xl bg-foreground py-2 text-sm font-bold text-background">
+                            Assinar agora <ExternalLink className="h-3.5 w-3.5" />
+                          </a>
+                        )}
+                      </div>
+                    ) : ckLink ? (
                       <a
-                        href={plan.cakto_checkout_url}
+                        href={ckLink}
                         target="_blank"
                         rel="noreferrer"
-                        className="flex w-full items-center justify-center gap-1 rounded-xl gold-gradient py-2 text-sm font-bold text-foreground"
+                        className="flex w-full items-center justify-center gap-1 rounded-xl bg-foreground py-2 text-sm font-bold text-background"
                       >
                         Assinar <ExternalLink className="h-3.5 w-3.5" />
                       </a>
                     ) : (
-                      <button disabled className="w-full cursor-not-allowed rounded-xl bg-foreground/10 py-2 text-sm font-semibold text-foreground/50">
+                      <button disabled className="w-full cursor-not-allowed rounded-xl bg-white/40 py-2 text-sm font-semibold opacity-60">
                         Em breve
                       </button>
                     )}
@@ -210,7 +317,7 @@ function StoreHome() {
         </section>
       )}
 
-      {/* Track filter */}
+      {/* 3) Filtro por trilha (ajuda a navegar) */}
       <section className="mb-4">
         <div className="flex flex-wrap gap-2 rounded-xl bg-foreground/5 p-1 text-xs font-semibold">
           <button
@@ -231,57 +338,6 @@ function StoreHome() {
         </div>
       </section>
 
-      <section className="mb-6 grid gap-4 md:grid-cols-3">
-        <div className="overflow-hidden rounded-3xl border border-gold/40 bg-primary p-5 text-primary-foreground shadow-[var(--shadow-glass)] md:col-span-2">
-          <div className="flex items-start gap-3">
-            <img src={logoAsset.url} alt="Logotipo Academia de Enfermagem" className="h-12 w-12 shrink-0 rounded-xl bg-white/10 object-contain p-1 ring-1 ring-gold/40" />
-            <div className="min-w-0 flex-1">
-              <span className="inline-flex items-center gap-1 rounded-full bg-gold/20 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-gold">
-                <Zap className="h-3 w-3" /> 1 mini app GRÁTIS para começar
-              </span>
-              <h2 className="mt-2 font-display text-xl font-extrabold leading-tight md:text-2xl">
-                Chegue no estágio sabendo <span className="text-gold">o que fazer</span> — antes do preceptor perguntar.
-              </h2>
-              <p className="mt-1.5 text-sm text-primary-foreground/85">
-                Mini apps de bolso criados por enfermeira com <strong className="text-gold">35 anos de UTI, ESF e APH</strong>. Conteúdo que cai na prova prática e no plantão.
-              </p>
-
-              <ul className="mt-3 grid gap-1.5 text-sm sm:grid-cols-2">
-                <li className="flex items-start gap-1.5"><Check className="mt-0.5 h-4 w-4 shrink-0 text-gold" /> Cálculos, escalas e protocolos em segundos</li>
-                <li className="flex items-start gap-1.5"><Check className="mt-0.5 h-4 w-4 shrink-0 text-gold" /> Relatório ABNT gerado do seu diário</li>
-                <li className="flex items-start gap-1.5"><Check className="mt-0.5 h-4 w-4 shrink-0 text-gold" /> 150 dias de acesso · pagamento único</li>
-                <li className="flex items-start gap-1.5"><Check className="mt-0.5 h-4 w-4 shrink-0 text-gold" /> Sem mensalidade, sem pegadinha</li>
-              </ul>
-
-              <div className="mt-4 flex flex-wrap items-center gap-2">
-                <a href="#gratis" className="inline-flex items-center gap-1.5 rounded-full bg-gold px-4 py-2 text-sm font-bold text-primary shadow hover:brightness-110">
-                  <Zap className="h-4 w-4" /> Começar grátis agora
-                </a>
-                <a href="#pagos" className="inline-flex items-center gap-1.5 rounded-full border border-gold/60 px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-white/10">
-                  Ver mini apps
-                </a>
-                <span className="inline-flex items-center gap-1 text-[11px] text-primary-foreground/70">
-                  <TrendingUp className="h-3 w-3 text-gold" /> Combos com desconto por tempo limitado
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-
-        <Card>
-          <p className="text-xs font-semibold uppercase tracking-widest text-gold">Identificação</p>
-          <h3 className="mt-1 font-display text-lg font-bold">Meu estágio</h3>
-          <dl className="mt-3 space-y-2 text-sm">
-            <div><dt className="text-muted-foreground">Campo</dt><dd className="font-medium">{estagio.campo || "—"}</dd></div>
-            <div><dt className="text-muted-foreground">Preceptor(a)</dt><dd className="font-medium">{estagio.preceptor || "—"}</dd></div>
-            <div><dt className="text-muted-foreground">Período</dt><dd className="font-medium">{estagio.periodo || "—"}</dd></div>
-          </dl>
-          <Link to="/diario" className="mt-3 inline-block text-sm font-semibold text-primary hover:underline">
-            Editar no Diário
-          </Link>
-        </Card>
-      </section>
 
       {loading && (
         <Card><p className="text-sm text-muted-foreground">Carregando catálogo…</p></Card>
