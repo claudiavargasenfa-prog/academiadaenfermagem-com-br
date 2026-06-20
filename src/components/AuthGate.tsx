@@ -33,11 +33,22 @@ export function AuthGate({ children }: { children: ReactNode }) {
   return <>{children}</>;
 }
 
+function formatPhoneBR(v: string): string {
+  const digits = v.replace(/\D/g, "").slice(0, 11);
+  if (digits.length <= 2) return digits.length ? `(${digits}` : "";
+  if (digits.length <= 6) return `(${digits.slice(0, 2)}) ${digits.slice(2)}`;
+  if (digits.length <= 10)
+    return `(${digits.slice(0, 2)}) ${digits.slice(2, 6)}-${digits.slice(6)}`;
+  return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`;
+}
+
 function AuthScreen() {
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [nome, setNome] = useState("");
+  const [phone, setPhone] = useState("");
+  const [categoria, setCategoria] = useState<"academico" | "tecnico" | "enfermeiro" | "">("");
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<{ type: "error" | "info"; text: string } | null>(null);
 
@@ -47,12 +58,26 @@ function AuthScreen() {
     setMsg(null);
     try {
       if (mode === "signup") {
+        if (!nome.trim() || nome.trim().length < 3) {
+          throw new Error("Informe seu nome completo.");
+        }
+        const phoneDigits = phone.replace(/\D/g, "");
+        if (phoneDigits.length < 10 || phoneDigits.length > 11) {
+          throw new Error("Celular inválido. Use o formato (DDD) 9XXXX-XXXX.");
+        }
+        if (!categoria) {
+          throw new Error("Selecione sua categoria (Acadêmico, Técnico ou Enfermeiro).");
+        }
         const { data, error } = await supabase.auth.signUp({
           email,
           password,
           options: {
             emailRedirectTo: window.location.origin,
-            data: { full_name: nome },
+            data: {
+              full_name: nome.trim(),
+              phone: phoneDigits,
+              categoria,
+            },
           },
         });
         if (error) throw error;
@@ -95,6 +120,10 @@ function AuthScreen() {
     }
   }
 
+  const input =
+    "mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary/40";
+  const label = "text-xs font-semibold uppercase tracking-wide text-muted-foreground";
+
   return (
     <div className="min-h-dvh bg-primary px-4 py-10 text-primary-foreground">
       <div className="mx-auto max-w-md">
@@ -134,40 +163,87 @@ function AuthScreen() {
             </button>
           </div>
 
+          {mode === "signup" && (
+            <div className="mb-3 rounded-lg bg-emerald-500/10 px-3 py-2 text-xs font-semibold text-emerald-800">
+              🎁 Cadastro novo ganha <strong>30 dias grátis</strong> da sua trilha — sem cartão.
+            </div>
+          )}
+
           <form onSubmit={handleSubmit} className="space-y-3">
             {mode === "signup" && (
-              <div>
-                <label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                  Nome
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={nome}
-                  onChange={(e) => setNome(e.target.value)}
-                  className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary/40"
-                  placeholder="Seu nome"
-                />
-              </div>
+              <>
+                <div>
+                  <label className={label}>Nome completo *</label>
+                  <input
+                    type="text"
+                    required
+                    value={nome}
+                    onChange={(e) => setNome(e.target.value)}
+                    className={input}
+                    placeholder="Maria da Silva"
+                    maxLength={120}
+                  />
+                </div>
+                <div>
+                  <label className={label}>Celular (WhatsApp) *</label>
+                  <input
+                    type="tel"
+                    required
+                    value={phone}
+                    onChange={(e) => setPhone(formatPhoneBR(e.target.value))}
+                    className={input}
+                    placeholder="(11) 99999-0000"
+                    inputMode="tel"
+                  />
+                </div>
+                <div>
+                  <label className={label}>Categoria *</label>
+                  <div className="mt-1 grid grid-cols-3 gap-1.5">
+                    {(
+                      [
+                        { v: "academico", label: "Acadêmico", emoji: "🎓" },
+                        { v: "tecnico", label: "Técnico", emoji: "🩺" },
+                        { v: "enfermeiro", label: "Enfermeiro", emoji: "👩‍⚕️" },
+                      ] as const
+                    ).map((opt) => (
+                      <button
+                        type="button"
+                        key={opt.v}
+                        onClick={() => setCategoria(opt.v)}
+                        className={`rounded-lg border px-2 py-2 text-xs font-semibold transition-colors ${
+                          categoria === opt.v
+                            ? "border-primary bg-primary text-primary-foreground"
+                            : "border-border bg-background text-foreground/70 hover:bg-secondary/60"
+                        }`}
+                      >
+                        <div>{opt.emoji}</div>
+                        <div>{opt.label}</div>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </>
             )}
             <div>
-              <label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                E-mail
-              </label>
+              <label className={label}>E-mail *</label>
               <input
                 type="email"
                 required
                 autoComplete="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary/40"
+                className={input}
                 placeholder="voce@email.com"
+                maxLength={255}
               />
+              {mode === "signup" && (
+                <p className="mt-1 text-[10px] text-muted-foreground">
+                  Usado para emitir seu certificado.
+                </p>
+              )}
             </div>
             <div>
-              <label className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                Senha
-              </label>
+              <label className={label}>Senha *</label>
               <input
                 type="password"
                 required
@@ -175,7 +251,7 @@ function AuthScreen() {
                 autoComplete={mode === "signup" ? "new-password" : "current-password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary/40"
+                className={input}
                 placeholder="Mínimo 6 caracteres"
               />
             </div>
@@ -197,7 +273,7 @@ function AuthScreen() {
               disabled={busy}
               className="w-full rounded-xl bg-primary py-2.5 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
             >
-              {busy ? "Aguarde..." : mode === "signup" ? "Criar conta" : "Entrar"}
+              {busy ? "Aguarde..." : mode === "signup" ? "Criar conta com 30 dias grátis" : "Entrar"}
             </button>
           </form>
 
@@ -221,6 +297,12 @@ function AuthScreen() {
             </svg>
             Continuar com Google
           </button>
+
+          {mode === "signup" && (
+            <p className="mt-3 text-center text-[10px] text-muted-foreground">
+              Login com Google entra direto na trilha <strong>Acadêmico</strong>. Para escolher outra categoria, use o cadastro por e-mail.
+            </p>
+          )}
 
           <p className="mt-4 text-center text-[11px] text-muted-foreground">
             Ao continuar, você concorda que este app é um apoio educacional e não substitui o julgamento clínico do profissional de saúde.
