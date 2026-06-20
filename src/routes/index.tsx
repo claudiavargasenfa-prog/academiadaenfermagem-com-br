@@ -24,7 +24,6 @@ import {
   Hourglass,
   Check,
   Zap,
-  TrendingUp,
 } from "lucide-react";
 
 import { useQuery } from "@tanstack/react-query";
