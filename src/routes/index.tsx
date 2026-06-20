@@ -39,10 +39,15 @@ import imgIras from "@/assets/carousel/iras.jpg";
 import {
   fetchMiniApps,
   fetchMyExtraAccess,
+  fetchSubscriptionPlans,
+  fetchMyActiveSubscriptions,
   formatPriceBRL,
   daysUntil,
   summarizeExtras,
+  appTracks,
+  TRACKS,
   type MiniApp,
+  type TrackSlug,
 } from "@/lib/access";
 
 
@@ -125,26 +130,106 @@ function Carousel() {
 
 function StoreHome() {
   const [estagio] = useLocal("estagio-info", { campo: "", preceptor: "", periodo: "" });
+  const [trackFilter, setTrackFilter] = useState<TrackSlug | "todos">("todos");
 
   const appsQ = useQuery({ queryKey: ["mini_apps"], queryFn: fetchMiniApps });
   const extrasQ = useQuery({ queryKey: ["my_extras"], queryFn: fetchMyExtraAccess });
+  const plansQ = useQuery({ queryKey: ["subscription_plans"], queryFn: fetchSubscriptionPlans });
+  const mySubsQ = useQuery({ queryKey: ["my_subs"], queryFn: fetchMyActiveSubscriptions });
 
   const loading = appsQ.isLoading || extrasQ.isLoading;
-  const apps = appsQ.data ?? [];
+  const allApps = appsQ.data ?? [];
   const { extraAccessByApp } = summarizeExtras(extrasQ.data ?? []);
+  const mySubSlugs = new Set((mySubsQ.data ?? []).map((s) => s.plan_slug));
+
+  const apps = trackFilter === "todos"
+    ? allApps
+    : allApps.filter((a) => appTracks(a).includes(trackFilter));
+
   const gratis = apps.filter((a) => a.gratuito);
   const pagosComTela = apps.filter((a) => !a.gratuito && !a.em_breve);
   const emBreve = apps.filter((a) => a.em_breve);
+
+  const activePlans = (plansQ.data ?? []).filter((p) => p.is_active);
 
   return (
     <AppShell>
       <PageHeader
         eyebrow="Loja"
         title="Academia de Enfermagem"
-        description="A ciência da prática, do primeiro estágio à liderança profissional. Cada mini app comprado dá 150 dias de acesso."
+        description="Três trilhas, uma só academia. Assine a sua e libere todos os mini apps da trilha; ou compre mini apps avulsos com 150 dias de acesso."
       />
 
       <Carousel />
+
+      {/* Subscription plans */}
+      {activePlans.length > 0 && (
+        <section className="mb-6">
+          <h2 className="mb-3 font-display text-lg font-bold">Assine uma trilha · acesso ilimitado</h2>
+          <div className="grid gap-3 sm:grid-cols-3">
+            {activePlans.map((plan) => {
+              const track = TRACKS.find((t) => t.slug === plan.slug);
+              const subscribed = mySubSlugs.has(plan.slug);
+              return (
+                <div key={plan.id} className="glass flex flex-col rounded-2xl p-4">
+                  <div className="mb-2 flex items-center gap-2">
+                    <span className="text-2xl">{track?.emoji}</span>
+                    <h3 className="font-display text-base font-bold">{plan.name}</h3>
+                  </div>
+                  {plan.description && (
+                    <p className="text-xs text-muted-foreground">{plan.description}</p>
+                  )}
+                  <p className="mt-3 text-2xl font-extrabold">
+                    {formatPriceBRL(plan.price_cents)}
+                    <span className="text-xs font-normal text-muted-foreground">/mês</span>
+                  </p>
+                  <div className="mt-3">
+                    {subscribed ? (
+                      <span className="block w-full rounded-xl bg-emerald-500/15 py-2 text-center text-sm font-bold text-emerald-700">
+                        ✓ Assinatura ativa
+                      </span>
+                    ) : plan.cakto_checkout_url ? (
+                      <a
+                        href={plan.cakto_checkout_url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="flex w-full items-center justify-center gap-1 rounded-xl gold-gradient py-2 text-sm font-bold text-foreground"
+                      >
+                        Assinar <ExternalLink className="h-3.5 w-3.5" />
+                      </a>
+                    ) : (
+                      <button disabled className="w-full cursor-not-allowed rounded-xl bg-foreground/10 py-2 text-sm font-semibold text-foreground/50">
+                        Em breve
+                      </button>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+      )}
+
+      {/* Track filter */}
+      <section className="mb-4">
+        <div className="flex flex-wrap gap-2 rounded-xl bg-foreground/5 p-1 text-xs font-semibold">
+          <button
+            onClick={() => setTrackFilter("todos")}
+            className={`rounded-lg px-3 py-1.5 ${trackFilter === "todos" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
+          >
+            Todos
+          </button>
+          {TRACKS.map((t) => (
+            <button
+              key={t.slug}
+              onClick={() => setTrackFilter(t.slug)}
+              className={`rounded-lg px-3 py-1.5 ${trackFilter === t.slug ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
+            >
+              {t.emoji} {t.short}
+            </button>
+          ))}
+        </div>
+      </section>
 
       <section className="mb-6 grid gap-4 md:grid-cols-3">
         <div className="overflow-hidden rounded-3xl border border-gold/40 bg-primary p-5 text-primary-foreground shadow-[var(--shadow-glass)] md:col-span-2">
@@ -274,6 +359,18 @@ function ProductCard({ app, extraExpiresAt }: { app: MiniApp; extraExpiresAt: st
       </div>
 
       <h3 className="font-display text-base font-bold">{app.name}</h3>
+      {appTracks(app).length > 0 && (
+        <div className="mt-1 flex flex-wrap gap-1">
+          {appTracks(app).map((slug) => {
+            const t = TRACKS.find((x) => x.slug === slug)!;
+            return (
+              <span key={slug} className="inline-flex items-center gap-0.5 rounded-full bg-primary/10 px-1.5 py-0.5 text-[10px] font-semibold text-primary">
+                {t.emoji} {t.short}
+              </span>
+            );
+          })}
+        </div>
+      )}
       {app.description && <p className="mt-1 text-xs text-muted-foreground">{app.description}</p>}
 
       {showPrice && (

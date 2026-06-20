@@ -1,56 +1,75 @@
-## Diagnóstico
 
-**Bug 1 — Admin desconectado do app:** o formulário salva `content_md`, `video_url`, `audio_url` na tabela `mini_apps`, mas nenhuma rota de mini app lê esses campos. Resultado: você edita e nada aparece, e não consegue reler o que salvou.
+# Academia de Enfermagem — 3 trilhas na mesma loja
 
-**Bug 2 — Mini apps vazios:** ~8 mini apps são apenas casca (título + 1 parágrafo). Sem conteúdo, o cliente que comprar não recebe valor — modelo de monetização inviável.
+A loja continua sendo UMA só (mesmo domínio, login e admin), chamada **Academia de Enfermagem**, dividida em três trilhas:
 
-**Bug 3 — Sem controle de acesso real no conteúdo:** mesmo onde há `has_app_access` no banco, o conteúdo do mini app está hardcoded e visível para qualquer um que abra a URL.
+- **Academia do Acadêmico** — estudantes de graduação
+- **Academia do Técnico** — técnicos de enfermagem
+- **Academia do Enfermeiro** — enfermeiros formados
 
----
+Cada mini app pode pertencer a uma, duas ou às três trilhas (ex.: SBV serve nas três). O aluno assina **mensalmente** a trilha que quiser e libera **tudo** dela. Pode assinar mais de uma. A venda avulsa por mini app que já existe continua funcionando em paralelo.
 
-## O que vai ser feito (uma execução, sem idas e voltas)
+## O que muda na loja (home)
 
-### 1. Ligar o Admin ao app (corrige Bug 1)
-Crio um componente único `<MiniAppContent slug="..." />` que:
-- Busca do banco: `content_md`, `video_url`, `audio_url` do mini app.
-- Renderiza markdown (títulos, listas, negrito, links, alertas).
-- Mostra player do YouTube/Vimeo se houver vídeo.
-- Mostra player de áudio se houver áudio.
-- Bloqueia o conteúdo se for pago e o usuário não tiver `has_app_access` (mostra botão "Comprar na Cakto" com o link do checkout que você cadastra no Admin).
+- Hero passa a mostrar o nome "Academia de Enfermagem" com 3 cartões grandes de trilha (Acadêmico / Técnico / Enfermeiro), cada um com preço mensal e botão "Assinar na Cakto"
+- Abaixo, abas/filtro: **Todos | Acadêmico | Técnico | Enfermeiro**
+- Cada card de mini app exibe selinho(s) da(s) trilha(s) a que pertence (🎓 / 🩺 / 👩‍⚕️)
+- Grade filtra pela trilha selecionada
 
-Insiro esse componente em **todas as 20+ rotas de mini app**. Onde já existe conteúdo fixo (SBV, postura-ética, diário), ele aparece **acima** do conteúdo fixo (não destrói nada do que já está bom).
+## O que muda no acesso
 
-### 2. Pré-visualização no Admin (você consegue reler o que salvou)
-No formulário "Editar mini app", adiciono uma aba/painel **"Pré-visualizar"** que renderiza o markdown ao vivo enquanto você digita. Assim você lê o que já cadastrou e vê como vai aparecer para o aluno.
+Hoje o acesso é por mini app (`user_app_access`). Adiciono acesso por **trilha**:
 
-### 3. Gate de acesso real (corrige Bug 3 — protege a venda)
-Para mini apps com `gratuito = false`:
-- Sem login → tela "Faça login para acessar".
-- Logado mas sem compra → tela "Conteúdo bloqueado" + botão direto para o checkout da Cakto (usando `checkout_url` que você cadastra no Admin).
-- Com compra ativa (registro em `user_app_access` válido) → libera conteúdo.
+- Assinatura ativa de uma trilha → libera todos os mini apps marcados naquela trilha
+- Assinatura vencida → bloqueia automaticamente
+- Compra avulsa de mini app continua valendo em paralelo
+- Admin enxerga tudo (já é assim)
 
-Sem isso, qualquer um copia a URL e acessa de graça — o que você descreveu.
+## O que muda no Admin
 
-### 4. Suporte editorial mínimo no conteúdo
-Para o markdown ficar utilizável de verdade, suporto:
-- Títulos `#`, `##`, `###`
-- Listas `-` e numeradas `1.`
-- **Negrito**, *itálico*, `código`
-- Links `[texto](url)`
-- Blocos de destaque com sintaxe `> ⚠️ Atenção:` virando card amarelo, `> ✅ Dica:` virando card verde, `> 📌 Importante:` virando card azul (ajuda você a montar conteúdo bonito sem precisar de HTML).
+No formulário de cada mini app, três checkboxes:
+- [ ] Disponível na trilha Acadêmico
+- [ ] Disponível na trilha Técnico
+- [ ] Disponível na trilha Enfermeiro
 
-### 5. O que NÃO vou fazer
-- **Não vou escrever o conteúdo dos mini apps por você.** Isso é decisão sua (didática, fonte, COFEN, sua experiência). O sistema fica pronto para receber; o conteúdo você cola no Admin.
-- **Não vou refatorar as páginas que já têm conteúdo bom** (SBV, postura-ética, diário, curativos). Elas continuam funcionando como estão, e o conteúdo do Admin entra acima.
-- **Não vou mexer no carrossel, hero, loja, checkout** — escopo é só destravar conteúdo + acesso.
+Nova aba **"Assinaturas"** no admin:
+- CRUD dos 3 planos (nome, descrição, preço mensal, link Cakto, ativo)
+- Liberar/revogar assinatura manualmente para um aluno (igual já existe para mini app avulso), com data de expiração
 
----
+## Defaults iniciais (você ajusta no admin antes de publicar)
 
-## Resultado depois desta execução
+- **Preços placeholder**: Acadêmico R$ 29/mês · Técnico R$ 39/mês · Enfermeiro R$ 49/mês
+- **Classificação inicial dos mini apps** (1 clique para reclassificar):
+  - **Acadêmico**: SBV, sinais vitais, SV gestante, SV pediátrico, cálculo, exame físico e escalas, quizzes, postura ética, manual de sobrevivência, relatório ABNT, segurança, saúde mental
+  - **Técnico**: SBV, sinais vitais, SV gestante, SV pediátrico, cálculo, procedimentos de enfermagem, curativos, segurança, IRAS, postura ética, manual de sobrevivência
+  - **Enfermeiro**: UTI, IRAS, farmacologia avançada, procedimentos de enfermagem, ACLS, simulações reais, curativos, SBV, exame físico e escalas, saúde mental
 
-- Você abre Admin → escolhe um mini app vazio (ex: `uti`) → cola texto em markdown → salva → abre `/uti` e o conteúdo aparece.
-- Mini app pago: visitante sem compra vê paywall com botão para Cakto. Comprador autenticado vê conteúdo.
-- Você consegue reler/editar tudo que cadastrar.
-- Pronto para você cadastrar na Cakto e começar a vender.
+## Detalhes técnicos
 
-**Confirma que sigo por aqui?** Se sim, faço numa execução só.
+1. **Migração no banco** (uma única migração, com GRANTs):
+   - `mini_apps`: adicionar `track_academico bool default false`, `track_tecnico bool default false`, `track_enfermeiro bool default false`
+   - Nova tabela `subscription_plans` (slug `academico`/`tecnico`/`enfermeiro`, nome, descrição, preço, link Cakto, ativo)
+   - Nova tabela `user_subscriptions` (user_id, plan_slug, started_at, expires_at, status) — RLS por `auth.uid()` + admin via `has_role`
+   - Atualizar `has_app_access(_user_id, _mini_app_id)`: retorna true se gratuito OR já tinha acesso avulso OR existe assinatura ativa cuja trilha corresponde a alguma trilha marcada no mini app
+   - Seed dos 3 planos com os preços placeholder
+2. **Frontend (loja)**:
+   - 3 cards de trilha no topo do `index.tsx` com botão Cakto
+   - Filtro de trilha na grade + selinhos nos cards
+3. **Admin**:
+   - 3 checkboxes de trilha no editor de mini app
+   - Nova aba "Assinaturas" para CRUD de planos e liberação manual
+4. **Paywall**: `AppAccessGate` não muda — a função SQL já cobre o novo caso.
+
+## O que NÃO vou mexer
+
+- Conteúdo markdown, layouts dos mini apps individuais, hero atual além dos cards de trilha
+- Venda avulsa por mini app (segue em paralelo)
+- Login, perfis, papéis admin/aluno
+
+## Como testar depois
+
+1. Admin → marca trilhas em cada mini app
+2. Admin → Assinaturas → ajusta preços e cola os 3 links Cakto
+3. Loja → alterna entre Todos/Acadêmico/Técnico/Enfermeiro
+4. Aluno sem assinatura → mini apps pagos bloqueados
+5. Admin libera assinatura "Técnico" manualmente → todos os mini apps da trilha Técnico abrem para o aluno
