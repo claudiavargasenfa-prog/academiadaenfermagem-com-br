@@ -128,7 +128,7 @@ export const updateUserAdmin = createServerFn({ method: "POST" })
     if (data.categoria !== undefined) patch.categoria = data.categoria || null;
     if (data.email !== undefined) patch.email = data.email;
     if (Object.keys(patch).length) {
-      const { error } = await supabaseAdmin.from("profiles").update(patch).eq("id", data.user_id);
+      const { error } = await supabaseAdmin.from("profiles").update(patch as any).eq("id", data.user_id);
       if (error) throw new Error(error.message);
     }
     await logAction(context.userId, "update_user", data.user_id, patch);
