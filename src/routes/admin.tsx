@@ -6,6 +6,7 @@ import { AppShell, Card, PageHeader } from "@/components/AppShell";
 import { supabase } from "@/integrations/supabase/client";
 import { fetchMiniApps, formatPriceBRL, isAdmin, type MiniApp } from "@/lib/access";
 import { renderMarkdown } from "@/lib/markdown";
+import { SubscriptionsAdmin } from "@/components/admin/SubscriptionsAdmin";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({ meta: [{ title: "Admin — Academia de Enfermagem" }] }),
@@ -53,6 +54,7 @@ function AdminPage() {
 
 function AdminContent() {
   const qc = useQueryClient();
+  const [tab, setTab] = useState<"apps" | "subs">("apps");
   const [editing, setEditing] = useState<MiniApp | null>(null);
   const [creating, setCreating] = useState(false);
 
@@ -84,10 +86,29 @@ function AdminContent() {
     <AppShell>
       <PageHeader
         eyebrow="Admin"
-        title="Catálogo de mini apps"
-        description="Cadastre, edite e remova os mini apps da sua loja premium."
+        title="Academia de Enfermagem"
+        description="Gerencie mini apps, trilhas e assinaturas mensais da loja."
       />
 
+      <div className="mb-4 flex gap-2 rounded-xl bg-foreground/5 p-1 text-sm font-semibold">
+        <button
+          onClick={() => setTab("apps")}
+          className={`flex-1 rounded-lg px-3 py-2 ${tab === "apps" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
+        >
+          Mini apps
+        </button>
+        <button
+          onClick={() => setTab("subs")}
+          className={`flex-1 rounded-lg px-3 py-2 ${tab === "subs" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
+        >
+          Assinaturas (trilhas)
+        </button>
+      </div>
+
+      {tab === "subs" ? (
+        <SubscriptionsAdmin />
+      ) : (
+        <>
       <div className="mb-4 flex justify-end">
         <button
           onClick={() => setCreating(true)}
