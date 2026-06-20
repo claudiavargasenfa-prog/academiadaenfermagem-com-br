@@ -418,8 +418,18 @@ function ProductCard({ app, extraExpiresAt }: { app: MiniApp; extraExpiresAt: st
         <div className="mt-1 flex flex-wrap gap-1">
           {appTracks(app).map((slug) => {
             const t = TRACKS.find((x) => x.slug === slug)!;
+            const style: React.CSSProperties = {
+              backgroundColor:
+                slug === "academico" ? "var(--track-academico-bg)" :
+                slug === "tecnico" ? "var(--track-tecnico-bg)" :
+                "var(--track-enfermeiro-bg)",
+              color:
+                slug === "academico" ? "var(--track-academico-fg)" :
+                slug === "tecnico" ? "var(--track-tecnico-fg)" :
+                "var(--track-enfermeiro-fg)",
+            };
             return (
-              <span key={slug} className="inline-flex items-center gap-0.5 rounded-full bg-primary/10 px-1.5 py-0.5 text-[10px] font-semibold text-primary">
+              <span key={slug} style={style} className="inline-flex items-center gap-0.5 rounded-full px-1.5 py-0.5 text-[10px] font-semibold">
                 {t.emoji} {t.short}
               </span>
             );
