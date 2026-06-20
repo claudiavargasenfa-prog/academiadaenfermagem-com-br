@@ -222,6 +222,9 @@ function MiniAppForm({
     em_breve: (app as any)?.em_breve ?? false,
     route_path: (app as any)?.route_path ?? "",
     horas_certificado: (app as any)?.horas_certificado ?? 0,
+    track_academico: (app as any)?.track_academico ?? false,
+    track_tecnico: (app as any)?.track_tecnico ?? false,
+    track_enfermeiro: (app as any)?.track_enfermeiro ?? false,
   });
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
@@ -395,6 +398,40 @@ function MiniAppForm({
               className={input}
             />
           </Field>
+        </div>
+        <div className="rounded-xl border border-border p-3">
+          <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+            Disponível nas trilhas
+          </p>
+          <div className="flex flex-wrap gap-4">
+            <label className="flex items-center gap-2 text-sm">
+              <input
+                type="checkbox"
+                checked={form.track_academico}
+                onChange={(e) => setForm({ ...form, track_academico: e.target.checked })}
+              />
+              <span>🎓 Acadêmico</span>
+            </label>
+            <label className="flex items-center gap-2 text-sm">
+              <input
+                type="checkbox"
+                checked={form.track_tecnico}
+                onChange={(e) => setForm({ ...form, track_tecnico: e.target.checked })}
+              />
+              <span>🩺 Técnico</span>
+            </label>
+            <label className="flex items-center gap-2 text-sm">
+              <input
+                type="checkbox"
+                checked={form.track_enfermeiro}
+                onChange={(e) => setForm({ ...form, track_enfermeiro: e.target.checked })}
+              />
+              <span>👩‍⚕️ Enfermeiro</span>
+            </label>
+          </div>
+          <p className="mt-2 text-[11px] text-muted-foreground">
+            Quem assinar uma trilha libera todos os mini apps marcados nela.
+          </p>
         </div>
         <div className="flex flex-wrap items-center gap-4">
           <label className="flex items-center gap-2">
