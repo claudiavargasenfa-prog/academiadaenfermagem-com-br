@@ -5,6 +5,46 @@ import { useQuery } from "@tanstack/react-query";
 export type MiniApp = Database["public"]["Tables"]["mini_apps"]["Row"];
 export type Subscription = Database["public"]["Tables"]["subscriptions"]["Row"];
 export type UserAppAccess = Database["public"]["Tables"]["user_app_access"]["Row"];
+export type SubscriptionPlan = Database["public"]["Tables"]["subscription_plans"]["Row"];
+export type UserSubscription = Database["public"]["Tables"]["user_subscriptions"]["Row"];
+
+export type TrackSlug = "academico" | "tecnico" | "enfermeiro";
+
+export const TRACKS: { slug: TrackSlug; label: string; short: string; emoji: string }[] = [
+  { slug: "academico", label: "Academia do Acadêmico", short: "Acadêmico", emoji: "🎓" },
+  { slug: "tecnico", label: "Academia do Técnico", short: "Técnico", emoji: "🩺" },
+  { slug: "enfermeiro", label: "Academia do Enfermeiro", short: "Enfermeiro", emoji: "👩‍⚕️" },
+];
+
+export function appTracks(app: MiniApp): TrackSlug[] {
+  const out: TrackSlug[] = [];
+  if ((app as any).track_academico) out.push("academico");
+  if ((app as any).track_tecnico) out.push("tecnico");
+  if ((app as any).track_enfermeiro) out.push("enfermeiro");
+  return out;
+}
+
+export async function fetchSubscriptionPlans(): Promise<SubscriptionPlan[]> {
+  const { data, error } = await supabase
+    .from("subscription_plans")
+    .select("*")
+    .order("sort_order", { ascending: true });
+  if (error) throw error;
+  return data ?? [];
+}
+
+export async function fetchMyActiveSubscriptions(): Promise<UserSubscription[]> {
+  const { data: u } = await supabase.auth.getUser();
+  if (!u.user) return [];
+  const { data, error } = await supabase
+    .from("user_subscriptions")
+    .select("*")
+    .eq("user_id", u.user.id)
+    .eq("status", "active")
+    .gt("expires_at", new Date().toISOString());
+  if (error) throw error;
+  return data ?? [];
+}
 
 /** Dias de acesso após a compra (regra de negócio). */
 export const ACCESS_DAYS = 150;
@@ -147,12 +187,37 @@ export function useAppAccess(slug: string) {
         .order("expires_at", { ascending: false })
         .limit(1)
         .maybeSingle();
-      return {
-        app,
-        granted: !!acc,
-        expiresAt: acc?.expires_at ?? null,
-        viaAdmin: false,
-      };
+
+      if (acc) {
+        return { app, granted: true, expiresAt: acc.expires_at, viaAdmin: false };
+      }
+
+      // Track subscription access
+      const { data: appRow } = await supabase
+        .from("mini_apps")
+        .select("track_academico, track_tecnico, track_enfermeiro")
+        .eq("id", app.id)
+        .maybeSingle();
+      const trackSlugs: string[] = [];
+      if (appRow?.track_academico) trackSlugs.push("academico");
+      if (appRow?.track_tecnico) trackSlugs.push("tecnico");
+      if (appRow?.track_enfermeiro) trackSlugs.push("enfermeiro");
+      if (trackSlugs.length > 0) {
+        const { data: sub } = await supabase
+          .from("user_subscriptions")
+          .select("expires_at")
+          .eq("user_id", u.user.id)
+          .eq("status", "active")
+          .in("plan_slug", trackSlugs)
+          .gt("expires_at", new Date().toISOString())
+          .order("expires_at", { ascending: false })
+          .limit(1)
+          .maybeSingle();
+        if (sub) {
+          return { app, granted: true, expiresAt: sub.expires_at, viaAdmin: false };
+        }
+      }
+      return { app, granted: false, expiresAt: null as string | null, viaAdmin: false };
     },
   });
 }
