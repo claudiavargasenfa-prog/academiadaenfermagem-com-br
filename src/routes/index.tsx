@@ -139,7 +139,7 @@ function StoreHome() {
   const loading = appsQ.isLoading || extrasQ.isLoading;
   const allApps = appsQ.data ?? [];
   const { extraAccessByApp } = summarizeExtras(extrasQ.data ?? []);
-  const mySubSlugs = new Set((mySubsQ.data ?? []).map((s) => s.plan_slug));
+  void mySubsQ;
 
   const apps = trackFilter === "todos"
     ? allApps
