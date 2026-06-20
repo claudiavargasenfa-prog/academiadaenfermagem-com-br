@@ -35,6 +35,9 @@ export type Database = {
           route_path: string | null
           slug: string
           sort_order: number
+          track_academico: boolean
+          track_enfermeiro: boolean
+          track_tecnico: boolean
           updated_at: string
           video_url: string | null
         }
@@ -58,6 +61,9 @@ export type Database = {
           route_path?: string | null
           slug: string
           sort_order?: number
+          track_academico?: boolean
+          track_enfermeiro?: boolean
+          track_tecnico?: boolean
           updated_at?: string
           video_url?: string | null
         }
@@ -81,6 +87,9 @@ export type Database = {
           route_path?: string | null
           slug?: string
           sort_order?: number
+          track_academico?: boolean
+          track_enfermeiro?: boolean
+          track_tecnico?: boolean
           updated_at?: string
           video_url?: string | null
         }
@@ -153,6 +162,45 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      subscription_plans: {
+        Row: {
+          cakto_checkout_url: string | null
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean
+          name: string
+          price_cents: number
+          slug: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          cakto_checkout_url?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          name: string
+          price_cents?: number
+          slug: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          cakto_checkout_url?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          name?: string
+          price_cents?: number
+          slug?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
       }
       subscriptions: {
         Row: {
@@ -256,6 +304,42 @@ export type Database = {
           created_at?: string
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_subscriptions: {
+        Row: {
+          created_at: string
+          expires_at: string
+          id: string
+          notes: string | null
+          plan_slug: string
+          started_at: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          expires_at: string
+          id?: string
+          notes?: string | null
+          plan_slug: string
+          started_at?: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string
+          id?: string
+          notes?: string | null
+          plan_slug?: string
+          started_at?: string
+          status?: string
+          updated_at?: string
           user_id?: string
         }
         Relationships: []
