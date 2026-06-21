@@ -284,3 +284,14 @@ function StoreHome() {
   );
 }
 
+function PlanSlogan({ slug }: { slug: TrackSlug }) {
+  const txt = useText(`aplicativo.${slug}.slogan`, "");
+  if (!txt.trim()) return null;
+  return (
+    <p className="mb-2 text-xs font-extrabold uppercase tracking-wide">
+      <RichText>{txt}</RichText>
+    </p>
+  );
+}
+
+
