@@ -129,10 +129,17 @@ function AdminContent() {
         <SubscriptionsAdmin />
       ) : (
         <>
-      <div className="mb-4 flex justify-end">
+      <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <input
+          type="search"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="🔍 Buscar mini app por nome, slug ou descrição..."
+          className="w-full rounded-xl border border-foreground/15 bg-background px-3 py-2 text-sm sm:max-w-sm"
+        />
         <button
           onClick={() => setCreating(true)}
-          className="inline-flex items-center gap-1.5 rounded-xl gold-gradient px-4 py-2 text-sm font-bold"
+          className="inline-flex items-center justify-center gap-1.5 rounded-xl gold-gradient px-4 py-2 text-sm font-bold"
         >
           <Plus className="h-4 w-4" /> Novo mini app
         </button>
