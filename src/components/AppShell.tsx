@@ -19,6 +19,7 @@ const nav = [
   { to: "/", labelKey: "menu.loja", labelDefault: "Loja", icon: Store },
   { to: "/minha-conta", labelKey: "menu.minha_conta", labelDefault: "Minha Conta", icon: User },
 ] as const;
+void nav;
 
 export function AppShell({ children, trackSlug }: { children: ReactNode; trackSlug?: "academico" | "tecnico" | "enfermeiro" }) {
   const [open, setOpen] = useState(false);
