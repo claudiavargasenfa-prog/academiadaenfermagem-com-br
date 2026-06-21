@@ -17,6 +17,7 @@ import { Route as SimulacoesReaisRouteImport } from './routes/simulacoes-reais'
 import { Route as SegurancaRouteImport } from './routes/seguranca'
 import { Route as SbvRouteImport } from './routes/sbv'
 import { Route as SaudeMentalRouteImport } from './routes/saude-mental'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as RelatorioAbntRouteImport } from './routes/relatorio-abnt'
 import { Route as QuizzesRouteImport } from './routes/quizzes'
 import { Route as ProcedimentosEnfermagemRouteImport } from './routes/procedimentos-enfermagem'
@@ -76,6 +77,11 @@ const SbvRoute = SbvRouteImport.update({
 const SaudeMentalRoute = SaudeMentalRouteImport.update({
   id: '/saude-mental',
   path: '/saude-mental',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RelatorioAbntRoute = RelatorioAbntRouteImport.update({
@@ -197,6 +203,7 @@ export interface FileRoutesByFullPath {
   '/procedimentos-enfermagem': typeof ProcedimentosEnfermagemRoute
   '/quizzes': typeof QuizzesRouteWithChildren
   '/relatorio-abnt': typeof RelatorioAbntRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/saude-mental': typeof SaudeMentalRoute
   '/sbv': typeof SbvRoute
   '/seguranca': typeof SegurancaRoute
@@ -227,6 +234,7 @@ export interface FileRoutesByTo {
   '/procedimentos-enfermagem': typeof ProcedimentosEnfermagemRoute
   '/quizzes': typeof QuizzesRouteWithChildren
   '/relatorio-abnt': typeof RelatorioAbntRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/saude-mental': typeof SaudeMentalRoute
   '/sbv': typeof SbvRoute
   '/seguranca': typeof SegurancaRoute
@@ -258,6 +266,7 @@ export interface FileRoutesById {
   '/procedimentos-enfermagem': typeof ProcedimentosEnfermagemRoute
   '/quizzes': typeof QuizzesRouteWithChildren
   '/relatorio-abnt': typeof RelatorioAbntRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/saude-mental': typeof SaudeMentalRoute
   '/sbv': typeof SbvRoute
   '/seguranca': typeof SegurancaRoute
@@ -290,6 +299,7 @@ export interface FileRouteTypes {
     | '/procedimentos-enfermagem'
     | '/quizzes'
     | '/relatorio-abnt'
+    | '/reset-password'
     | '/saude-mental'
     | '/sbv'
     | '/seguranca'
@@ -320,6 +330,7 @@ export interface FileRouteTypes {
     | '/procedimentos-enfermagem'
     | '/quizzes'
     | '/relatorio-abnt'
+    | '/reset-password'
     | '/saude-mental'
     | '/sbv'
     | '/seguranca'
@@ -350,6 +361,7 @@ export interface FileRouteTypes {
     | '/procedimentos-enfermagem'
     | '/quizzes'
     | '/relatorio-abnt'
+    | '/reset-password'
     | '/saude-mental'
     | '/sbv'
     | '/seguranca'
@@ -381,6 +393,7 @@ export interface RootRouteChildren {
   ProcedimentosEnfermagemRoute: typeof ProcedimentosEnfermagemRoute
   QuizzesRoute: typeof QuizzesRouteWithChildren
   RelatorioAbntRoute: typeof RelatorioAbntRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   SaudeMentalRoute: typeof SaudeMentalRoute
   SbvRoute: typeof SbvRoute
   SegurancaRoute: typeof SegurancaRoute
@@ -449,6 +462,13 @@ declare module '@tanstack/react-router' {
       path: '/saude-mental'
       fullPath: '/saude-mental'
       preLoaderRoute: typeof SaudeMentalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/relatorio-abnt': {
@@ -623,6 +643,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProcedimentosEnfermagemRoute: ProcedimentosEnfermagemRoute,
   QuizzesRoute: QuizzesRouteWithChildren,
   RelatorioAbntRoute: RelatorioAbntRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   SaudeMentalRoute: SaudeMentalRoute,
   SbvRoute: SbvRoute,
   SegurancaRoute: SegurancaRoute,

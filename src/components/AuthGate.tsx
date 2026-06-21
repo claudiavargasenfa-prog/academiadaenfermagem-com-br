@@ -43,7 +43,7 @@ function formatPhoneBR(v: string): string {
 }
 
 function AuthScreen() {
-  const [mode, setMode] = useState<"signin" | "signup">("signin");
+  const [mode, setMode] = useState<"signin" | "signup" | "forgot">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [nome, setNome] = useState("");
@@ -57,7 +57,17 @@ function AuthScreen() {
     setBusy(true);
     setMsg(null);
     try {
-      if (mode === "signup") {
+      if (mode === "forgot") {
+        if (!email) throw new Error("Informe seu e-mail.");
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: `${window.location.origin}/reset-password`,
+        });
+        if (error) throw error;
+        setMsg({
+          type: "info",
+          text: "Enviamos um link de redefinição para o seu e-mail. Verifique sua caixa de entrada (e o spam).",
+        });
+      } else if (mode === "signup") {
         if (!nome.trim() || nome.trim().length < 3) {
           throw new Error("Informe seu nome completo.");
         }
@@ -242,19 +252,33 @@ function AuthScreen() {
                 </p>
               )}
             </div>
-            <div>
-              <label className={label}>Senha *</label>
-              <input
-                type="password"
-                required
-                minLength={6}
-                autoComplete={mode === "signup" ? "new-password" : "current-password"}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className={input}
-                placeholder="Mínimo 6 caracteres"
-              />
-            </div>
+            {mode !== "forgot" && (
+              <div>
+                <label className={label}>Senha *</label>
+                <input
+                  type="password"
+                  required
+                  minLength={6}
+                  autoComplete={mode === "signup" ? "new-password" : "current-password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className={input}
+                  placeholder="Mínimo 6 caracteres"
+                />
+                {mode === "signin" && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMode("forgot");
+                      setMsg(null);
+                    }}
+                    className="mt-1 text-xs font-semibold text-primary hover:underline"
+                  >
+                    Esqueci minha senha
+                  </button>
+                )}
+              </div>
+            )}
 
             {msg && (
               <div
@@ -273,8 +297,27 @@ function AuthScreen() {
               disabled={busy}
               className="w-full rounded-xl bg-primary py-2.5 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
             >
-              {busy ? "Aguarde..." : mode === "signup" ? "Criar conta com 30 dias grátis" : "Entrar"}
+              {busy
+                ? "Aguarde..."
+                : mode === "signup"
+                ? "Criar conta com 30 dias grátis"
+                : mode === "forgot"
+                ? "Enviar link de redefinição"
+                : "Entrar"}
             </button>
+
+            {mode === "forgot" && (
+              <button
+                type="button"
+                onClick={() => {
+                  setMode("signin");
+                  setMsg(null);
+                }}
+                className="w-full text-center text-xs font-semibold text-muted-foreground hover:text-foreground"
+              >
+                ← Voltar para o login
+              </button>
+            )}
           </form>
 
           <div className="my-4 flex items-center gap-3">
