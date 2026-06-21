@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 
 import { useQuery } from "@tanstack/react-query";
-import { AppShell, Card, PageHeader } from "@/components/AppShell";
+import { AppShell, Card } from "@/components/AppShell";
 import { useLocal } from "@/lib/storage";
 import logoAsset from "@/assets/logo.png.asset.json";
 import imgManual from "@/assets/carousel/manual.jpg";
