@@ -60,6 +60,7 @@ function AdminContent() {
   const [tab, setTab] = useState<"apps" | "subs" | "users" | "texts">("apps");
   const [editing, setEditing] = useState<MiniApp | null>(null);
   const [creating, setCreating] = useState(false);
+  const [search, setSearch] = useState("");
 
   const appsQ = useQuery({
     queryKey: ["admin_mini_apps"],
@@ -128,10 +129,17 @@ function AdminContent() {
         <SubscriptionsAdmin />
       ) : (
         <>
-      <div className="mb-4 flex justify-end">
+      <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <input
+          type="search"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="🔍 Buscar mini app por nome, slug ou descrição..."
+          className="w-full rounded-xl border border-foreground/15 bg-background px-3 py-2 text-sm sm:max-w-sm"
+        />
         <button
           onClick={() => setCreating(true)}
-          className="inline-flex items-center gap-1.5 rounded-xl gold-gradient px-4 py-2 text-sm font-bold"
+          className="inline-flex items-center justify-center gap-1.5 rounded-xl gold-gradient px-4 py-2 text-sm font-bold"
         >
           <Plus className="h-4 w-4" /> Novo mini app
         </button>
@@ -162,7 +170,15 @@ function AdminContent() {
       )}
 
       {(() => {
-        const all = appsQ.data ?? [];
+        const allRaw = appsQ.data ?? [];
+        const q = search.trim().toLowerCase();
+        const all = q
+          ? allRaw.filter((a: any) =>
+              [a.name, a.slug, a.description, a.kind]
+                .filter(Boolean)
+                .some((v: string) => v.toLowerCase().includes(q)),
+            )
+          : allRaw;
         const renderCard = (app: MiniApp) => (
           <Card key={app.id}>
             <div className="flex items-start justify-between gap-3">
