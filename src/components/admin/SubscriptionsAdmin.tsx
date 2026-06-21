@@ -239,49 +239,135 @@ function PlanForm({ plan, onClose }: { plan: SubscriptionPlan; onClose: () => vo
   );
 }
 
+const ALL_PLANS = [
+  { slug: "academico", label: "Acadêmico" },
+  { slug: "tecnico", label: "Técnico" },
+  { slug: "enfermeiro", label: "Enfermeiro" },
+] as const;
+
 function GrantForm({ onClose }: { onClose: () => void }) {
-  const [form, setForm] = useState({ user_id: "", plan_slug: "academico", days: 30, notes: "" });
+  const [form, setForm] = useState({
+    email: "",
+    plans: { academico: true, tecnico: false, enfermeiro: false } as Record<string, boolean>,
+    days: 30,
+    notes: "",
+  });
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
+  const [ok, setOk] = useState<string | null>(null);
+
+  function togglePlan(slug: string) {
+    setForm((f) => ({ ...f, plans: { ...f.plans, [slug]: !f.plans[slug] } }));
+  }
 
   async function save(e: React.FormEvent) {
     e.preventDefault();
-    setBusy(true); setErr(null);
+    setBusy(true); setErr(null); setOk(null);
+    const selected = ALL_PLANS.filter((p) => form.plans[p.slug]).map((p) => p.slug);
+    if (selected.length === 0) {
+      setBusy(false);
+      setErr("Selecione pelo menos 1 aplicativo.");
+      return;
+    }
+    const email = form.email.trim().toLowerCase();
+    if (!email) {
+      setBusy(false);
+      setErr("Informe o e-mail do aluno.");
+      return;
+    }
+    // Lookup user by email in profiles
+    const { data: prof, error: pErr } = await supabase
+      .from("profiles")
+      .select("id, email, full_name")
+      .ilike("email", email)
+      .maybeSingle();
+    if (pErr) { setBusy(false); setErr("Erro buscando aluno: " + pErr.message); return; }
+    if (!prof) {
+      setBusy(false);
+      setErr("Nenhum aluno encontrado com esse e-mail. O aluno precisa ter feito cadastro antes.");
+      return;
+    }
     const expires = new Date(Date.now() + form.days * 24 * 60 * 60 * 1000).toISOString();
-    const { error } = await supabase.from("user_subscriptions").insert({
-      user_id: form.user_id.trim(),
-      plan_slug: form.plan_slug,
+    const rows = selected.map((plan_slug) => ({
+      user_id: (prof as any).id,
+      plan_slug,
       status: "active",
+      started_at: new Date().toISOString(),
       expires_at: expires,
       notes: form.notes || null,
-    } as any);
+    }));
+    const { error } = await supabase.from("user_subscriptions").insert(rows as any);
     setBusy(false);
     if (error) { setErr(error.message); return; }
-    onClose();
+    setOk(`✅ Liberado ${selected.length} aplicativo(s) para ${(prof as any).full_name || email}.`);
+    setTimeout(onClose, 1200);
   }
 
   return (
     <Card className="border-primary/40">
       <form onSubmit={save} className="space-y-3 text-sm">
         <h4 className="font-display text-base font-bold">Liberar acesso manualmente</h4>
-        <label className="block"><span className="mb-1 block text-xs font-semibold uppercase text-muted-foreground">User ID (uuid)</span>
-          <input className={input} value={form.user_id} onChange={(e) => setForm({ ...form, user_id: e.target.value })} required placeholder="ex: 11111111-2222-3333-4444-555555555555" /></label>
+        <label className="block">
+          <span className="mb-1 block text-xs font-semibold uppercase text-muted-foreground">E-mail do aluno</span>
+          <input
+            type="email"
+            className={input}
+            value={form.email}
+            onChange={(e) => setForm({ ...form, email: e.target.value })}
+            required
+            placeholder="aluno@exemplo.com"
+          />
+        </label>
+        <fieldset className="rounded-xl border border-border/60 p-3">
+          <legend className="px-1 text-[10px] font-bold uppercase text-muted-foreground">
+            Aplicativos (marque 1, 2 ou 3)
+          </legend>
+          <div className="grid gap-2 sm:grid-cols-3">
+            {ALL_PLANS.map((p) => (
+              <label
+                key={p.slug}
+                className={`flex cursor-pointer items-center gap-2 rounded-lg border px-3 py-2 ${
+                  form.plans[p.slug]
+                    ? "border-primary bg-primary/10 font-bold text-primary"
+                    : "border-border bg-background"
+                }`}
+              >
+                <input
+                  type="checkbox"
+                  checked={!!form.plans[p.slug]}
+                  onChange={() => togglePlan(p.slug)}
+                />
+                <span>{p.label}</span>
+              </label>
+            ))}
+          </div>
+        </fieldset>
         <div className="grid gap-3 sm:grid-cols-2">
-          <label className="block"><span className="mb-1 block text-xs font-semibold uppercase text-muted-foreground">Aplicativo</span>
-            <select className={input} value={form.plan_slug} onChange={(e) => setForm({ ...form, plan_slug: e.target.value })}>
-              <option value="academico">Acadêmico</option>
-              <option value="tecnico">Técnico</option>
-              <option value="enfermeiro">Enfermeiro</option>
-            </select></label>
-          <label className="block"><span className="mb-1 block text-xs font-semibold uppercase text-muted-foreground">Dias de acesso</span>
-            <input type="number" min={1} className={input} value={form.days} onChange={(e) => setForm({ ...form, days: Number(e.target.value) })} /></label>
+          <label className="block">
+            <span className="mb-1 block text-xs font-semibold uppercase text-muted-foreground">Dias de acesso</span>
+            <input
+              type="number"
+              min={1}
+              className={input}
+              value={form.days}
+              onChange={(e) => setForm({ ...form, days: Number(e.target.value) })}
+            />
+          </label>
+          <label className="block">
+            <span className="mb-1 block text-xs font-semibold uppercase text-muted-foreground">Observação</span>
+            <input
+              className={input}
+              value={form.notes}
+              onChange={(e) => setForm({ ...form, notes: e.target.value })}
+              placeholder="ex: cortesia, parceria…"
+            />
+          </label>
         </div>
-        <label className="block"><span className="mb-1 block text-xs font-semibold uppercase text-muted-foreground">Observação</span>
-          <input className={input} value={form.notes} onChange={(e) => setForm({ ...form, notes: e.target.value })} /></label>
         {err && <p className="text-xs text-destructive">{err}</p>}
+        {ok && <p className="text-xs font-semibold text-emerald-700">{ok}</p>}
         <div className="flex justify-end gap-2 pt-2">
           <button type="button" onClick={onClose} className="rounded-xl bg-foreground/10 px-4 py-2 text-sm font-semibold">Cancelar</button>
-          <button type="submit" disabled={busy} className="rounded-xl bg-primary px-4 py-2 text-sm font-bold text-primary-foreground disabled:opacity-60">{busy ? "Salvando…" : "Liberar"}</button>
+          <button type="submit" disabled={busy} className="rounded-xl bg-primary px-4 py-2 text-sm font-bold text-primary-foreground disabled:opacity-60">{busy ? "Salvando…" : "Liberar acesso"}</button>
         </div>
       </form>
     </Card>
