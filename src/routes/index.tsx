@@ -12,6 +12,7 @@ import { useQuery } from "@tanstack/react-query";
 import { AppShell, Card } from "@/components/AppShell";
 import { useLocal } from "@/lib/storage";
 import logoAsset from "@/assets/logo.png.asset.json";
+import mascotesAsset from "@/assets/mascotes-iras.png.asset.json";
 import imgManual from "@/assets/carousel/manual.jpg";
 import imgCalculos from "@/assets/carousel/calculos.jpg";
 import imgRelatorio from "@/assets/carousel/relatorio.jpg";
