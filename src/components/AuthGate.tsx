@@ -155,16 +155,16 @@ function AuthScreen() {
           <div className="mb-4 grid grid-cols-2 gap-2 rounded-xl bg-secondary/60 p-1">
             <button
               type="button"
-              onClick={() => setMode("signin")}
+              onClick={() => { setMode("signin"); setMsg(null); }}
               className={`rounded-lg px-3 py-2 text-sm font-semibold transition-colors ${
-                mode === "signin" ? "bg-primary text-primary-foreground" : "text-foreground/70"
+                mode === "signin" || mode === "forgot" ? "bg-primary text-primary-foreground" : "text-foreground/70"
               }`}
             >
               Entrar
             </button>
             <button
               type="button"
-              onClick={() => setMode("signup")}
+              onClick={() => { setMode("signup"); setMsg(null); }}
               className={`rounded-lg px-3 py-2 text-sm font-semibold transition-colors ${
                 mode === "signup" ? "bg-primary text-primary-foreground" : "text-foreground/70"
               }`}
