@@ -46,7 +46,7 @@ export function SubscriptionsAdmin() {
   return (
     <div className="space-y-6">
       <section>
-        <h3 className="mb-3 font-display text-base font-bold">Planos das trilhas</h3>
+        <h3 className="mb-3 font-display text-base font-bold">Aplicativos (Planos)</h3>
         <div className="grid gap-3 sm:grid-cols-3">
           {plansQ.data?.map((p) => (
             <Card key={p.id}>
@@ -60,14 +60,14 @@ export function SubscriptionsAdmin() {
                   <p className="mt-2 text-lg font-extrabold">{formatPriceBRL((p as any).price_novo_cents ?? p.price_cents)}<span className="text-xs font-normal text-muted-foreground">/mês</span></p>
                   {(p as any).price_promo_migracao_cents && (
                     <p className="mt-0.5 text-[11px] font-semibold text-amber-700">
-                      Migração: <span className="line-through">{formatPriceBRL((p as any).price_original_migracao_cents)}</span> {formatPriceBRL((p as any).price_promo_migracao_cents)}
+                      Migre para outro app e ganhe 15%: <span className="line-through">{formatPriceBRL((p as any).price_original_migracao_cents)}</span> {formatPriceBRL((p as any).price_promo_migracao_cents)}
                     </p>
                   )}
                   <p className="mt-1 break-all text-[11px] text-muted-foreground">
-                    Cakto novo: {(p as any).cakto_link_novo || p.cakto_checkout_url || "— (vazio)"}
+                    Link Cakto: {(p as any).cakto_link_novo || p.cakto_checkout_url || <span className="font-bold text-destructive">— falta preencher!</span>}
                   </p>
                   {(p as any).cakto_link_migracao && (
-                    <p className="break-all text-[11px] text-muted-foreground">Cakto migração: {(p as any).cakto_link_migracao}</p>
+                    <p className="break-all text-[11px] text-muted-foreground">Link migração: {(p as any).cakto_link_migracao}</p>
                   )}
                   {!p.is_active && (
                     <span className="mt-1 inline-block rounded-full bg-foreground/10 px-2 py-0.5 text-[10px] font-bold">inativo</span>
