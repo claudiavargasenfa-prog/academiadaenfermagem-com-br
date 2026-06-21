@@ -456,7 +456,7 @@ function MiniAppForm({
         </div>
         <div className="rounded-xl border border-border p-3">
           <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-            Disponível nas trilhas
+            Disponível nos aplicativos
           </p>
           <div className="flex flex-wrap gap-4">
             <label className="flex items-center gap-2 text-sm">
@@ -485,7 +485,7 @@ function MiniAppForm({
             </label>
           </div>
           <p className="mt-2 text-[11px] text-muted-foreground">
-            Quem assinar uma trilha libera todos os mini apps marcados nela.
+            Quem assinar um aplicativo libera todos os mini apps marcados nele.
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-4">

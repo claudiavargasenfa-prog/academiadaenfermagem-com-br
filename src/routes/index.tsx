@@ -34,7 +34,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Academia de Enfermagem: 3 trilhas de mini apps para acadêmicos, técnicos e enfermeiros. 30 dias grátis.",
+          "Academia de Enfermagem: 3 aplicativos de mini apps para acadêmicos, técnicos e enfermeiros. 30 dias grátis.",
       },
     ],
   }),
@@ -163,7 +163,7 @@ function StoreHome() {
         </Card>
       </section>
 
-      {/* 2) 3 trilhas (cores próprias) */}
+      {/* 2) 3 aplicativos (cores próprias) */}
       {activePlans.length > 0 && (
         <section id="aplicativos" className="mb-8 scroll-mt-20">
           <h2 className="mb-3 font-display text-lg font-bold"><RichText>{ctaSection}</RichText></h2>
