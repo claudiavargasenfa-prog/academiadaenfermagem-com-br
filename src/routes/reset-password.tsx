@@ -25,11 +25,23 @@ function ResetPasswordPage() {
 
   useEffect(() => {
     let settled = false;
-    const finish = (ok: boolean) => {
+    const finish = (ok: boolean, errorText?: string) => {
       if (settled) return;
       settled = true;
       setStatus(ok ? "ready" : "invalid");
+      if (!ok && errorText) {
+        setMsg({ type: "error", text: errorText });
+      }
     };
+
+    // Check for error in URL hash (Supabase puts errors there)
+    const hash = window.location.hash.replace(/^#/, "");
+    const hashParams = new URLSearchParams(hash);
+    const hashError = hashParams.get("error_description") || hashParams.get("error");
+    if (hashError) {
+      finish(false, decodeURIComponent(hashError).replace(/\+/g, " "));
+      return;
+    }
 
     const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === "PASSWORD_RECOVERY" || (event === "SIGNED_IN" && session)) finish(true);
@@ -41,6 +53,7 @@ function ResetPasswordPage() {
     if (code) {
       supabase.auth.exchangeCodeForSession(code).then(({ data, error }) => {
         if (!error && data.session) finish(true);
+        else if (error) finish(false, error.message);
       });
     }
 
@@ -49,14 +62,15 @@ function ResetPasswordPage() {
       if (data.session) finish(true);
     });
 
-    // Fallback timeout: if nothing resolved in 2.5s, mark invalid
-    const timer = window.setTimeout(() => finish(false), 2500);
+    // Fallback timeout: if nothing resolved in 5s, mark invalid
+    const timer = window.setTimeout(() => finish(false), 5000);
 
     return () => {
       sub.subscription.unsubscribe();
       window.clearTimeout(timer);
     };
   }, []);
+
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
