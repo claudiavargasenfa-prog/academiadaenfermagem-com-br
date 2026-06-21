@@ -108,7 +108,7 @@ function StoreHome() {
   const migracaoBanner = useText("migracao.banner", "**MIGRE PARA OUTRO APP E GANHE 15% DE DESCONTO POR 3 MESES**");
 
   return (
-    <AppShell>
+    <AppShell hideReferences>
       <div className="mb-6">
         <p className="mb-1 text-xs font-semibold uppercase tracking-widest text-gold">Loja</p>
         <h1 className="font-display text-3xl font-bold text-foreground md:text-4xl"><RichText>{homeTitle}</RichText></h1>
