@@ -46,7 +46,7 @@ export function SubscriptionsAdmin() {
   return (
     <div className="space-y-6">
       <section>
-        <h3 className="mb-3 font-display text-base font-bold">Planos das trilhas</h3>
+        <h3 className="mb-3 font-display text-base font-bold">Aplicativos (Planos)</h3>
         <div className="grid gap-3 sm:grid-cols-3">
           {plansQ.data?.map((p) => (
             <Card key={p.id}>
@@ -60,14 +60,14 @@ export function SubscriptionsAdmin() {
                   <p className="mt-2 text-lg font-extrabold">{formatPriceBRL((p as any).price_novo_cents ?? p.price_cents)}<span className="text-xs font-normal text-muted-foreground">/mês</span></p>
                   {(p as any).price_promo_migracao_cents && (
                     <p className="mt-0.5 text-[11px] font-semibold text-amber-700">
-                      Migração: <span className="line-through">{formatPriceBRL((p as any).price_original_migracao_cents)}</span> {formatPriceBRL((p as any).price_promo_migracao_cents)}
+                      Migre para outro app e ganhe 15%: <span className="line-through">{formatPriceBRL((p as any).price_original_migracao_cents)}</span> {formatPriceBRL((p as any).price_promo_migracao_cents)}
                     </p>
                   )}
                   <p className="mt-1 break-all text-[11px] text-muted-foreground">
-                    Cakto novo: {(p as any).cakto_link_novo || p.cakto_checkout_url || "— (vazio)"}
+                    Link Cakto: {(p as any).cakto_link_novo || p.cakto_checkout_url || <span className="font-bold text-destructive">— falta preencher!</span>}
                   </p>
                   {(p as any).cakto_link_migracao && (
-                    <p className="break-all text-[11px] text-muted-foreground">Cakto migração: {(p as any).cakto_link_migracao}</p>
+                    <p className="break-all text-[11px] text-muted-foreground">Link migração: {(p as any).cakto_link_migracao}</p>
                   )}
                   {!p.is_active && (
                     <span className="mt-1 inline-block rounded-full bg-foreground/10 px-2 py-0.5 text-[10px] font-bold">inativo</span>
@@ -213,8 +213,8 @@ function PlanForm({ plan, onClose }: { plan: SubscriptionPlan; onClose: () => vo
         </fieldset>
 
         <fieldset className="rounded-xl border border-amber-400/40 bg-amber-50/40 p-3">
-          <legend className="px-1 text-[10px] font-bold uppercase text-amber-700">Migração (DE/POR)</legend>
-          <p className="mb-2 text-[10px] text-muted-foreground">Mostrado automaticamente quando o aluno logado já tem outra trilha ativa.</p>
+          <legend className="px-1 text-[10px] font-bold uppercase text-amber-700">Migre p/ outro app (15% por 3 meses)</legend>
+          <p className="mb-2 text-[10px] text-muted-foreground">Mostrado automaticamente quando o aluno logado já tem outro aplicativo ativo.</p>
           <div className="grid gap-3 sm:grid-cols-3">
             <label className="block"><span className="mb-1 block text-xs font-semibold uppercase text-muted-foreground">DE (R$)</span>
               <input className={input} value={form.price_original_migracao} onChange={(e) => setForm({ ...form, price_original_migracao: e.target.value })} placeholder="39,99" /></label>
@@ -263,11 +263,11 @@ function GrantForm({ onClose }: { onClose: () => void }) {
   return (
     <Card className="border-primary/40">
       <form onSubmit={save} className="space-y-3 text-sm">
-        <h4 className="font-display text-base font-bold">Liberar assinatura manualmente</h4>
+        <h4 className="font-display text-base font-bold">Liberar acesso manualmente</h4>
         <label className="block"><span className="mb-1 block text-xs font-semibold uppercase text-muted-foreground">User ID (uuid)</span>
           <input className={input} value={form.user_id} onChange={(e) => setForm({ ...form, user_id: e.target.value })} required placeholder="ex: 11111111-2222-3333-4444-555555555555" /></label>
         <div className="grid gap-3 sm:grid-cols-2">
-          <label className="block"><span className="mb-1 block text-xs font-semibold uppercase text-muted-foreground">Trilha</span>
+          <label className="block"><span className="mb-1 block text-xs font-semibold uppercase text-muted-foreground">Aplicativo</span>
             <select className={input} value={form.plan_slug} onChange={(e) => setForm({ ...form, plan_slug: e.target.value })}>
               <option value="academico">Acadêmico</option>
               <option value="tecnico">Técnico</option>

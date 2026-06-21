@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 
 import { useQuery } from "@tanstack/react-query";
-import { AppShell, Card, PageHeader } from "@/components/AppShell";
+import { AppShell, Card } from "@/components/AppShell";
 import { useLocal } from "@/lib/storage";
 import logoAsset from "@/assets/logo.png.asset.json";
 import imgManual from "@/assets/carousel/manual.jpg";
@@ -24,6 +24,7 @@ import {
   TRACKS,
   type TrackSlug,
 } from "@/lib/access";
+import { RichText, useText } from "@/lib/app-texts";
 
 
 export const Route = createFileRoute("/")({
@@ -33,7 +34,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Academia de Enfermagem: 3 trilhas de mini apps para acadêmicos, técnicos e enfermeiros. 30 dias grátis.",
+          "Academia de Enfermagem: 3 aplicativos de mini apps para acadêmicos, técnicos e enfermeiros. 30 dias grátis.",
       },
     ],
   }),
@@ -99,13 +100,19 @@ function StoreHome() {
     mySubs.some((s) => s.plan_slug !== slug && s.status !== "trial");
 
 
+  const homeTitle = useText("home.title", "Academia de Enfermagem");
+  const homeDesc = useText("home.description", "Três aplicativos, uma só academia.");
+  const ctaSection = useText("home.cta_section", "Assine um aplicativo · acesso ilimitado");
+  const compraSegura = useText("compra.segura", "🔒 COMPRA SEGURA");
+  const migracaoBanner = useText("migracao.banner", "**MIGRE PARA OUTRO APP E GANHE 15% DE DESCONTO POR 3 MESES**");
+
   return (
     <AppShell>
-      <PageHeader
-        eyebrow="Loja"
-        title="Academia de Enfermagem"
-        description="Três trilhas, uma só academia. Assine a sua e libere todos os mini apps da trilha; ou compre mini apps avulsos com 150 dias de acesso."
-      />
+      <div className="mb-6">
+        <p className="mb-1 text-xs font-semibold uppercase tracking-widest text-gold">Loja</p>
+        <h1 className="font-display text-3xl font-bold text-foreground md:text-4xl"><RichText>{homeTitle}</RichText></h1>
+        <p className="mt-2 max-w-2xl text-sm text-muted-foreground md:text-base"><RichText>{homeDesc}</RichText></p>
+      </div>
 
       <Carousel />
 
@@ -128,13 +135,13 @@ function StoreHome() {
               <ul className="mt-3 grid gap-1.5 text-sm sm:grid-cols-2">
                 <li className="flex items-start gap-1.5"><Check className="mt-0.5 h-4 w-4 shrink-0 text-gold" /> Cálculos, escalas e protocolos em segundos</li>
                 <li className="flex items-start gap-1.5"><Check className="mt-0.5 h-4 w-4 shrink-0 text-gold" /> Relatório ABNT gerado do seu diário</li>
-                <li className="flex items-start gap-1.5"><Check className="mt-0.5 h-4 w-4 shrink-0 text-gold" /> 3 trilhas: Acadêmico, Técnico e Enfermeiro</li>
+                <li className="flex items-start gap-1.5"><Check className="mt-0.5 h-4 w-4 shrink-0 text-gold" /> 3 aplicativos: Acadêmico, Técnico e Enfermeiro</li>
                 <li className="flex items-start gap-1.5"><Check className="mt-0.5 h-4 w-4 shrink-0 text-gold" /> Sem cartão para começar</li>
               </ul>
 
               <div className="mt-4 flex flex-wrap items-center gap-2">
-                <a href="#trilhas" className="inline-flex items-center gap-1.5 rounded-full bg-gold px-4 py-2 text-sm font-bold text-primary shadow hover:brightness-110">
-                  <Zap className="h-4 w-4" /> Ver trilhas
+                <a href="#aplicativos" className="inline-flex items-center gap-1.5 rounded-full bg-gold px-4 py-2 text-sm font-bold text-primary shadow hover:brightness-110">
+                  <Zap className="h-4 w-4" /> Ver aplicativos
                 </a>
               </div>
 
@@ -156,10 +163,10 @@ function StoreHome() {
         </Card>
       </section>
 
-      {/* 2) 3 trilhas (cores próprias) */}
+      {/* 2) 3 aplicativos (cores próprias) */}
       {activePlans.length > 0 && (
-        <section id="trilhas" className="mb-8 scroll-mt-20">
-          <h2 className="mb-3 font-display text-lg font-bold">Assine uma trilha · acesso ilimitado</h2>
+        <section id="aplicativos" className="mb-8 scroll-mt-20">
+          <h2 className="mb-3 font-display text-lg font-bold"><RichText>{ctaSection}</RichText></h2>
           <div className="grid gap-3 sm:grid-cols-3">
             {activePlans.map((plan) => {
               const track = TRACKS.find((t) => t.slug === plan.slug);
@@ -179,6 +186,8 @@ function StoreHome() {
                 : ((plan as any).cakto_link_novo || plan.cakto_checkout_url);
 
               const slug = plan.slug as TrackSlug;
+              const slogan = (plansQ.data && (plansQ as any)) ? "" : "";
+              void slogan;
               const cardStyle: React.CSSProperties = {
                 backgroundColor:
                   slug === "academico" ? "var(--track-academico-bg)" :
@@ -195,11 +204,13 @@ function StoreHome() {
                   key={plan.id}
                   className="flex flex-col rounded-2xl border border-white/40 p-4 shadow-sm"
                   style={cardStyle}
+                  data-app={slug}
                 >
                   <div className="mb-2 flex items-center gap-2">
                     <span className="text-2xl">{track?.emoji}</span>
                     <h3 className="font-display text-base font-extrabold">{plan.name}</h3>
                   </div>
+                  <PlanSlogan slug={slug} />
                   {plan.description && (
                     <p className="text-xs opacity-80">{plan.description}</p>
                   )}
@@ -207,8 +218,8 @@ function StoreHome() {
                   <div className="mt-3">
                     {isMigracao && priceFrom ? (
                       <>
-                        <p className="text-xs font-bold uppercase opacity-70">Oferta de migração</p>
-                        <p className="text-sm font-semibold opacity-70 line-through">De {formatPriceBRL(priceFrom)}</p>
+                        <p className="text-xs font-bold uppercase opacity-80"><RichText>{migracaoBanner}</RichText></p>
+                        <p className="mt-1 text-sm font-semibold opacity-70 line-through">De {formatPriceBRL(priceFrom)}</p>
                         <p className="text-2xl font-extrabold">
                           Por {formatPriceBRL(pricePromo!)}<span className="text-xs font-normal opacity-70">/mês</span>
                         </p>
@@ -226,7 +237,7 @@ function StoreHome() {
                       params={{ slug }}
                       className="block w-full rounded-xl bg-white/70 py-2 text-center text-sm font-bold hover:bg-white"
                     >
-                      Ver mini apps da trilha →
+                      Ver mini apps →
                     </Link>
                     {subscribed ? (
                       <span className="block w-full rounded-xl bg-white/40 py-2 text-center text-xs font-bold">
@@ -257,6 +268,9 @@ function StoreHome() {
                         Em breve
                       </button>
                     )}
+                    <p className="text-center text-[11px] font-extrabold tracking-wide text-emerald-700">
+                      <RichText>{compraSegura}</RichText>
+                    </p>
                   </div>
                 </div>
               );
@@ -269,4 +283,15 @@ function StoreHome() {
     </AppShell>
   );
 }
+
+function PlanSlogan({ slug }: { slug: TrackSlug }) {
+  const txt = useText(`aplicativo.${slug}.slogan`, "");
+  if (!txt.trim()) return null;
+  return (
+    <p className="mb-2 text-xs font-extrabold uppercase tracking-wide">
+      <RichText>{txt}</RichText>
+    </p>
+  );
+}
+
 

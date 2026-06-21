@@ -19,7 +19,7 @@ const nav = [
   { to: "/minha-conta", label: "Minha Conta", icon: User },
 ] as const;
 
-export function AppShell({ children }: { children: ReactNode }) {
+export function AppShell({ children, trackSlug }: { children: ReactNode; trackSlug?: "academico" | "tecnico" | "enfermeiro" }) {
   const [open, setOpen] = useState(false);
   const [admin, setAdmin] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
@@ -32,9 +32,13 @@ export function AppShell({ children }: { children: ReactNode }) {
     ? [...nav, { to: "/admin" as const, label: "Admin", icon: Shield }]
     : nav;
 
+  const bgStyle: React.CSSProperties | undefined = trackSlug
+    ? { backgroundColor: `color-mix(in oklab, var(--track-${trackSlug}-bg) 35%, transparent)` }
+    : undefined;
+
   return (
     <AuthGate>
-    <div className="min-h-dvh">
+    <div className="min-h-dvh" style={bgStyle} data-app={trackSlug}>
       <TrialCountdownBanner />
       <header className="sticky top-0 z-40 border-b border-gold/30 bg-primary text-primary-foreground shadow-[var(--shadow-soft)]">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3">

@@ -165,7 +165,7 @@ function AuthScreen() {
 
           {mode === "signup" && (
             <div className="mb-3 rounded-lg bg-emerald-500/10 px-3 py-2 text-xs font-semibold text-emerald-800">
-              🎁 Cadastro novo ganha <strong>30 dias grátis</strong> da sua trilha — sem cartão.
+              🎁 Cadastro novo ganha <strong>30 dias grátis</strong> do seu aplicativo — sem cartão.
             </div>
           )}
 
@@ -300,7 +300,7 @@ function AuthScreen() {
 
           {mode === "signup" && (
             <p className="mt-3 text-center text-[10px] text-muted-foreground">
-              Login com Google entra direto na trilha <strong>Acadêmico</strong>. Para escolher outra categoria, use o cadastro por e-mail.
+              Login com Google entra direto no aplicativo <strong>Acadêmico</strong>. Para escolher outra categoria, use o cadastro por e-mail.
             </p>
           )}
 

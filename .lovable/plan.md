@@ -1,131 +1,95 @@
+# Renomeação geral + Autonomia total de textos/destaques
 
-# Reorganização: todos os mini apps dentro das trilhas + admin total de usuários
+Mudanças amplas em todo o app. Lista do que vou fazer:
 
-Baseado no DOCX que você anexou. Nenhum app fica solto na loja — nem os grátis. Cada trilha vira a única porta de entrada dos seus apps.
+## 1. "Trilha" → "Aplicativo" (em todo o app)
 
-## 1. Home: nova organização
+Trocar em todos os lugares visíveis ao usuário:
 
-Tira da home as seções "Conteúdo grátis" e "Demais mini apps". A home passa a ter:
+- **Home:** "Conheça nossos aplicativos" no lugar de "trilhas"
+- **Rotas:** mantém URL `/trilha/:slug` por compatibilidade dos links já enviados, mas o **título visível** vira "Aplicativo Acadêmico / Técnico / Enfermeiro"
+- **Admin → aba "Assinaturas":** renomear para **"Aplicativos (Planos)"**
+- **Cards, banners, breadcrumbs, botões** ("Voltar para aplicativo", "Acessar aplicativo", "Assinar aplicativo")
+- **Mini apps:** continuam se chamando "mini apps" (são os conteúdos internos)
 
-```text
-Header → Banner verde → 3 cards de trilha → Footer
+## 2. Cores das trilhas = padrão em TODAS as páginas
+
+Hoje a cor só aparece no card e no header. Vou aplicar a cor de fundo do aplicativo em:
+
+- Página `/trilha/:slug` (fundo suave da cor)
+- Páginas dos mini apps DENTRO daquele aplicativo (faixa lateral/topo da cor)
+- Banner de "trial ativo" mostra a cor do aplicativo do usuário
+
+Padrão fixo:
+- **Acadêmico:** amarelo ouro claro
+- **Técnico:** azul bebê
+- **Enfermeiro:** verde claro
+
+## 3. Cakto vazio → "COMPRA SEGURA"
+
+No card de cada aplicativo (loja), onde hoje aparece o aviso vermelho "Cakto novo: vazio", remover esse texto e mostrar em **destaque verde**: **🔒 COMPRA SEGURA**. O aviso vermelho de link faltando fica só visível no Admin.
+
+## 4. Texto de "Migração" reescrito
+
+Onde aparece "Migração / preço de migração", trocar por:
+
+> **MIGRE PARA OUTRO APP E GANHE 15% DE DESCONTO POR 3 MESES**
+
+Tanto no card da loja quanto no admin.
+
+## 5. Editor de textos com destaques (autonomia total)
+
+Adicionar no Admin uma nova aba **"Textos do App"** onde você edita TODOS os textos visíveis sem mexer no código:
+
+- Título e subtítulo da Home
+- Nome de cada aplicativo (ex: "Acadêmico" → você pode trocar para o que quiser)
+- Slogan/destaque de cada aplicativo (ex: "ATUALIZAÇÕES AUTOMÁTICAS")
+- Textos dos banners de trial (D-5, D-3, D-1)
+- Texto do rodapé
+- Aviso "compra segura"
+- Texto de migração
+
+Cada campo aceita **marcação simples de destaque**:
+- `**texto**` → **negrito**
+- `__texto__` → cor de destaque (amarelo/vermelho dependendo do contexto)
+- `^^texto^^` → CAIXA ALTA com badge colorido
+
+Tudo salvo numa nova tabela `app_texts` (chave/valor) → você edita pelo admin e aparece na hora no app.
+
+## 6. Badges/Destaques nos mini apps (admin)
+
+Hoje só tem "Ativo na loja" (tick azul). Vou adicionar ao lado de cada mini app no admin um seletor de **destaque**, com opções pré-prontas + custom:
+
+- 🆕 **NOVO**
+- 🔄 **ATUALIZADO**
+- 🔥 **PROMOÇÃO**
+- 🎁 **COMBO**
+- ⭐ **DESTAQUE**
+- ➕ **Custom** (você escreve o texto e escolhe a cor)
+
+O badge aparece no card do mini app dentro do aplicativo, em cima/canto, bem visível. Múltiplos badges por mini app permitidos.
+
+## 7. Lista de mini apps no admin: 1 por linha
+
+A lista de mini apps no admin vira lista vertical (1 por linha) com:
+
+```
+[ícone] Nome do mini app           [badges atuais] [Ativo ✓] [Editar] [Destaques ▾]
+        slug · aplicativo: Acadêmico
 ```
 
-Os mini apps só aparecem clicando numa trilha (`/trilha/academico`, `/trilha/enfermeiro`, `/trilha/tecnico`). Apps grátis continuam grátis (qualquer pessoa logada abre), mas a vitrine deles fica dentro da trilha correspondente.
+Fica fácil ver tudo e dar destaque rápido sem abrir o modal.
 
-## 2. Mapeamento de apps por trilha (vindo do DOCX)
+---
 
-Marca quem já existe (✅) e quem precisa ser criado vazio para você preencher depois (🆕).
+## Resumo técnico (para você ter ideia, não precisa entender)
 
-### Trilha 1 — Academia de Enfermagem (R$ 24,99/mês)
+- **Banco:** nova tabela `app_texts` (chave, valor, atualizado_em) + novas colunas em `mini_apps`: `badges jsonb` (lista de `{label, color, icon}`).
+- **Frontend:** novo hook `useAppText(chave)` que lê textos do banco com fallback pro texto padrão; renderiza com parser de destaques.
+- **Admin:** nova aba "Textos do App"; lista de mini apps vira vertical com seletor de badges inline.
+- **Cores:** classe utility por aplicativo aplicada via `data-app="academico|tecnico|enfermeiro"` no root das páginas filhas.
+- **Compatibilidade:** URLs `/trilha/:slug` continuam funcionando, só os textos visíveis mudam.
 
-```text
-01 Manual de Sobrevivência do Estágio ........ ✅ FREE
-02 Sinais Vitais (RN/Ped/Adulto/Gestante/Idoso) ✅ FREE (agrupar Adulto+Ped+Gestante+🆕RN+🆕Idoso)
-03 Postura e Ética Profissional .............. ✅ FREE
-04 Saúde Mental do Aluno e Profissional ...... ✅ FREE (renomear saude-mental)
-05 IRAS ...................................... ✅
-06 Exame Físico e Escalas Clínicas ........... ✅
-07 Prescrição NANDA-I / NOC / NIC ............ 🆕
-08 Calculadoras de Medicamentos .............. ✅
-09 Curativos e Lesões de Pele ................ ✅
-10 SBV — Suporte Básico de Vida .............. ✅
-11 Enfermagem em Clínica Médica .............. 🆕
-12 Segurança do Paciente ..................... ✅
-13 Anatomia Clínica Aplicada ................. ✅
-14 Fisiologia para Enfermagem ................ ✅
-15 Microbiologia para a Prática .............. ✅
-16 Simulações Reais (Casos Clínicos) ......... ✅
-17 Relatório de Estágio (ABNT) ............... ✅
-18 Quizzes de Enfermagem ..................... ✅
-```
+---
 
-### Trilha 2 — Enfermagem Avançada (R$ 39,99/mês)
-
-```text
-01 Saúde Mental do Profissional .............. ✅ (reusa saude-mental)
-02 Sinais Vitais (todas as faixas) ........... ✅
-03 Calculadoras .............................. ✅
-04 SAE Completo + Processos .................. 🆕
-05 Prescrição NANDA-I/NOC/NIC 2026 ........... 🆕 (mesmo do acadêmico se preferir)
-06 Enfermagem em UTI ......................... ✅
-07 Farmacologia Avançada ..................... ✅
-08 Enfermagem em Clínica Médica .............. 🆕
-09 Enfermagem em Clínica Cirúrgica ........... 🆕
-10 Enfermagem em Centro Cirúrgico ............ 🆕
-11 Enfermagem em CME ......................... 🆕
-12 Enfermagem Obstétrica ..................... ✅
-13 Enfermagem Pediátrica ..................... ✅
-14 Enfermagem em Saúde do Homem .............. 🆕
-15 Enfermagem em Saúde do Idoso .............. 🆕
-16 Saúde Mental e Cuidado Psiquiátrico ....... ✅
-17 Gestão em Enfermagem ...................... ✅
-18 Simulações Reais .......................... ✅
-19 Procedimentos de Enfermagem ............... ✅
-20 Enfermagem em Nefrologia .................. 🆕
-21 Enfermagem em Urologia .................... 🆕
-22 Enfermagem em Neurologia .................. 🆕
-23 Enfermagem em Hepatologia ................. 🆕
-24 Enfermagem em Hematologia ................. 🆕
-25 Enfermagem em Ginecologia ................. 🆕
-26 Curativos (versão profissional) ........... 🆕
-27 Quizzes de Enfermagem ..................... ✅
-28 Enfermagem Offshore ....................... 🆕
-29 Enfermagem de Bordo ....................... 🆕
-```
-
-### Trilha 3 — Academia de Técnicos (R$ 16,99/mês)
-
-```text
-01 Manual de Sobrevivência do Estágio ........ ✅ FREE  *(assumindo o padrão — confirma depois)*
-02 Postura e Ética Profissional .............. ✅ FREE
-03 Sinais Vitais (todas as faixas) ........... ✅ FREE
-04 Saúde Mental do Profissional .............. ✅ FREE
-05 Sinais Vitais (premium completo) .......... ✅
-06 Calculadoras .............................. ✅
-07 SAE Completo + Processos .................. 🆕 (mesmo do enfermeiro)
-08 Protocolos de IRAS ........................ ✅
-09 Saúde Digital: PEP/Prontuário/Registro .... 🆕
-10 Tele-enfermagem, LGPD e Segurança ......... 🆕
-11 Equipamentos Hospitalares e Tecnologias ... 🆕
-12 SUS: Programas e Indicadores .............. 🆕
-13 Vigilância Epidemiológica ................. 🆕
-14 Cadernetas de Vacinação e Imunização ...... 🆕
-15 Hipertensão e Diabetes na Prática ......... 🆕
-16 Código de Ética do Técnico ................ 🆕
-17 Semana da Enfermagem ...................... 🆕
-18 Simulações Reais .......................... ✅
-19 Quizzes de Enfermagem ..................... ✅
-```
-
-Total a criar: **~28 mini apps novos** (placeholders com `markdown_pt = '*(em breve)*'`, ícone padrão, status `gratuito = false`, marcados na trilha correta). Você abre depois no admin e cola o conteúdo.
-
-## 3. Limpeza
-
-- Removo o registro duplicado do app `IRAS` (existe `iras` e `IRAS` com mesmo nome).
-- Cada app passa a ter pelo menos uma trilha marcada `true`. Nenhum app fica com as 3 trilhas falsas (isso é o que estava "soltando" da loja).
-- Apps grátis continuam grátis, mas só renderizam dentro da página da trilha.
-
-## 4. Admin: cadastrar e excluir qualquer pessoa
-
-Reforço no painel **Admin → Usuários** (já existe a aba):
-
-- **Criar usuário** (novo botão): modal pedindo nome, email, telefone, categoria, senha inicial e opção "marcar como admin". Usa `supabaseAdmin.auth.admin.createUser` com `email_confirm: true` (não precisa de confirmação por e-mail).
-- **Excluir usuário** (já existe — vou validar): confirma duas vezes, bloqueia o admin de excluir a si mesmo, faz `auth.admin.deleteUser` e o cascade já apaga `profiles`, `user_subscriptions`, `user_roles`, `user_app_access`, `relatorio_uses`. Registra em `admin_actions`.
-- **Conceder/revogar trilha manualmente** e **prorrogar trial** (já existem, mantenho).
-
-## 5. Detalhes técnicos
-
-- Migration única: insere os ~28 mini apps novos (idempotente com `ON CONFLICT (slug) DO NOTHING`), atualiza flags `track_*` dos existentes conforme tabela acima, remove o `IRAS` duplicado.
-- `src/routes/index.tsx`: remove blocos "Conteúdo grátis" e "Demais mini apps".
-- Server fn `createUserAsAdmin` em `src/lib/users-admin.functions.ts` + botão na UI `UsersAdmin.tsx`.
-- Nenhum mexer em paywall, preço, trial ou cobrança.
-
-## 6. Não incluído nesta entrega
-
-- Conteúdo (markdown) dos apps novos — você preenche depois pelo admin.
-- Apps "extras" que apareceram no DOCX mas não estão em nenhuma das 3 listas finais (Diagnóstico Laboratorial, Liderança/Gestão Unidades, Mentor Científico TCC, Cuidados Críticos VM, Auditoria/Glosas, Bloco Operatório, Oncologia/Paliativo, Imunização Coletiva, Atenção Básica ESF). Posso adicionar numa próxima rodada se quiser — me diz em qual trilha entram.
-
-## Confirmação rápida antes de implementar
-
-Os 4 primeiros itens da trilha **Técnico** estavam cortados no DOCX. Assumi o padrão (Manual + Postura + Sinais Vitais + Saúde Mental, todos grátis). Se for diferente, me corrige antes que eu rodo.
+Posso aprovar e seguir?

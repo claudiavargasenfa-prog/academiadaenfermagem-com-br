@@ -350,7 +350,7 @@ function ExtendTrialForm({ user, onClose }: { user: UserRow; onClose: () => void
   return (
     <FormShell title={`Estender acesso: ${user.full_name || user.email}`} onClose={onClose} submitting={busy} error={err} onSubmit={save} submitLabel="Adicionar dias">
       <div className="grid gap-3 sm:grid-cols-2">
-        <label className="block"><span className="mb-1 block text-xs font-semibold uppercase text-muted-foreground">Trilha</span>
+        <label className="block"><span className="mb-1 block text-xs font-semibold uppercase text-muted-foreground">Aplicativo</span>
           <select className={input} value={form.plan_slug} onChange={(e) => setForm({ ...form, plan_slug: e.target.value as Categoria })}>
             <option value="academico">🎓 Acadêmico</option>
             <option value="tecnico">🩺 Técnico</option>

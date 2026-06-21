@@ -8,6 +8,8 @@ import { fetchMiniApps, formatPriceBRL, isAdmin, type MiniApp } from "@/lib/acce
 import { renderMarkdown } from "@/lib/markdown";
 import { SubscriptionsAdmin } from "@/components/admin/SubscriptionsAdmin";
 import { UsersAdmin } from "@/components/admin/UsersAdmin";
+import { TextsAdmin } from "@/components/admin/TextsAdmin";
+import { BadgesEditor } from "@/components/admin/BadgesEditor";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({ meta: [{ title: "Admin — Academia de Enfermagem" }] }),
@@ -55,7 +57,7 @@ function AdminPage() {
 
 function AdminContent() {
   const qc = useQueryClient();
-  const [tab, setTab] = useState<"apps" | "subs" | "users">("apps");
+  const [tab, setTab] = useState<"apps" | "subs" | "users" | "texts">("apps");
   const [editing, setEditing] = useState<MiniApp | null>(null);
   const [creating, setCreating] = useState(false);
 
@@ -88,7 +90,7 @@ function AdminContent() {
       <PageHeader
         eyebrow="Admin"
         title="Academia de Enfermagem"
-        description="Gerencie mini apps, trilhas e assinaturas mensais da loja."
+        description="Gerencie mini apps, aplicativos (planos), usuários e os textos do app."
       />
 
       <div className="mb-4 flex flex-wrap gap-2 rounded-xl bg-foreground/5 p-1 text-sm font-semibold">
@@ -102,7 +104,7 @@ function AdminContent() {
           onClick={() => setTab("subs")}
           className={`flex-1 rounded-lg px-3 py-2 ${tab === "subs" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
         >
-          Assinaturas (trilhas)
+          Aplicativos (Planos)
         </button>
         <button
           onClick={() => setTab("users")}
@@ -110,9 +112,17 @@ function AdminContent() {
         >
           Usuários
         </button>
+        <button
+          onClick={() => setTab("texts")}
+          className={`flex-1 rounded-lg px-3 py-2 ${tab === "texts" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
+        >
+          Textos do App
+        </button>
       </div>
 
-      {tab === "users" ? (
+      {tab === "texts" ? (
+        <TextsAdmin />
+      ) : tab === "users" ? (
         <UsersAdmin />
       ) : tab === "subs" ? (
         <SubscriptionsAdmin />
@@ -176,9 +186,22 @@ function AdminContent() {
                 </div>
                 <p className="mt-1 text-xs text-muted-foreground">{app.description}</p>
                 <p className="mt-1 text-xs">
-                  <strong>{formatPriceBRL(app.price_cents)}</strong> · slug: {app.slug} · Cakto:{" "}
-                  {app.cakto_product_id || "—"}
+                  <strong>{formatPriceBRL(app.price_cents)}</strong> · slug: {app.slug} · aplicativos: {[
+                    (app as any).track_academico && "Acadêmico",
+                    (app as any).track_tecnico && "Técnico",
+                    (app as any).track_enfermeiro && "Enfermeiro",
+                  ].filter(Boolean).join(", ") || "—"}
                 </p>
+                <div className="mt-2">
+                  <BadgesEditor
+                    miniAppId={app.id}
+                    value={(app as any).badges}
+                    onChanged={(next) => {
+                      // optimistic update of cache
+                      (app as any).badges = next;
+                    }}
+                  />
+                </div>
               </div>
               <div className="flex shrink-0 gap-1">
                 <button
@@ -433,7 +456,7 @@ function MiniAppForm({
         </div>
         <div className="rounded-xl border border-border p-3">
           <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-            Disponível nas trilhas
+            Disponível nos aplicativos
           </p>
           <div className="flex flex-wrap gap-4">
             <label className="flex items-center gap-2 text-sm">
@@ -462,7 +485,7 @@ function MiniAppForm({
             </label>
           </div>
           <p className="mt-2 text-[11px] text-muted-foreground">
-            Quem assinar uma trilha libera todos os mini apps marcados nela.
+            Quem assinar um aplicativo libera todos os mini apps marcados nele.
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-4">
