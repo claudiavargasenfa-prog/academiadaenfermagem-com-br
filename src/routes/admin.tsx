@@ -161,8 +161,9 @@ function AdminContent() {
         />
       )}
 
-      <div className="mt-4 space-y-3">
-        {appsQ.data?.map((app) => (
+      {(() => {
+        const all = appsQ.data ?? [];
+        const renderCard = (app: MiniApp) => (
           <Card key={app.id}>
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
@@ -197,7 +198,6 @@ function AdminContent() {
                     miniAppId={app.id}
                     value={(app as any).badges}
                     onChanged={(next) => {
-                      // optimistic update of cache
                       (app as any).badges = next;
                     }}
                   />
@@ -205,7 +205,12 @@ function AdminContent() {
               </div>
               <div className="flex shrink-0 gap-1">
                 <button
-                  onClick={() => setEditing(app)}
+                  onClick={() => {
+                    setEditing(app);
+                    if (typeof window !== "undefined") {
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                    }
+                  }}
                   className="rounded-lg bg-primary/10 p-2 text-primary hover:bg-primary/20"
                   aria-label="Editar"
                 >
@@ -221,15 +226,54 @@ function AdminContent() {
               </div>
             </div>
           </Card>
-        ))}
-        {appsQ.data?.length === 0 && (
-          <Card>
-            <p className="text-sm text-muted-foreground">
-              Nenhum mini app cadastrado. Clique em "Novo mini app" pra começar.
-            </p>
-          </Card>
-        )}
-      </div>
+        );
+
+        const sections: { title: string; emoji: string; filter: (a: any) => boolean }[] = [
+          { title: "Acadêmicos", emoji: "🎓", filter: (a) => !!a.track_academico },
+          { title: "Técnicos", emoji: "🩺", filter: (a) => !!a.track_tecnico },
+          { title: "Enfermeiros", emoji: "👩‍⚕️", filter: (a) => !!a.track_enfermeiro },
+        ];
+        const semApp = all.filter(
+          (a: any) => !a.track_academico && !a.track_tecnico && !a.track_enfermeiro,
+        );
+
+        return (
+          <div className="mt-4 space-y-6">
+            {sections.map((sec) => {
+              const items = all.filter(sec.filter);
+              return (
+                <section key={sec.title}>
+                  <h2 className="mb-2 flex items-center gap-2 border-b border-foreground/10 pb-1 font-display text-lg font-bold">
+                    <span>{sec.emoji}</span> {sec.title}
+                    <span className="text-xs font-normal text-muted-foreground">({items.length})</span>
+                  </h2>
+                  {items.length === 0 ? (
+                    <p className="text-xs text-muted-foreground">Nenhum mini app neste aplicativo.</p>
+                  ) : (
+                    <div className="space-y-3">{items.map(renderCard)}</div>
+                  )}
+                </section>
+              );
+            })}
+            {semApp.length > 0 && (
+              <section>
+                <h2 className="mb-2 flex items-center gap-2 border-b border-foreground/10 pb-1 font-display text-lg font-bold">
+                  <span>⚠️</span> Sem aplicativo
+                  <span className="text-xs font-normal text-muted-foreground">({semApp.length})</span>
+                </h2>
+                <div className="space-y-3">{semApp.map(renderCard)}</div>
+              </section>
+            )}
+            {all.length === 0 && (
+              <Card>
+                <p className="text-sm text-muted-foreground">
+                  Nenhum mini app cadastrado. Clique em "Novo mini app" pra começar.
+                </p>
+              </Card>
+            )}
+          </div>
+        );
+      })()}
         </>
       )}
     </AppShell>
