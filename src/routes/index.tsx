@@ -129,31 +129,15 @@ function Carousel() {
 
 function StoreHome() {
   const [estagio] = useLocal("estagio-info", { campo: "", preceptor: "", periodo: "" });
-  const [trackFilter, setTrackFilter] = useState<TrackSlug | "todos">("todos");
 
-  const appsQ = useQuery({ queryKey: ["mini_apps"], queryFn: fetchMiniApps });
-  const extrasQ = useQuery({ queryKey: ["my_extras"], queryFn: fetchMyExtraAccess });
   const plansQ = useQuery({ queryKey: ["subscription_plans"], queryFn: fetchSubscriptionPlans });
   const mySubsQ = useQuery({ queryKey: ["my_subs"], queryFn: fetchMyActiveSubscriptions });
 
-  const loading = appsQ.isLoading || extrasQ.isLoading;
-  const allApps = appsQ.data ?? [];
-  const { extraAccessByApp } = summarizeExtras(extrasQ.data ?? []);
-  
-
-  const apps = trackFilter === "todos"
-    ? allApps
-    : allApps.filter((a) => appTracks(a).includes(trackFilter));
-
-  const gratis = apps.filter((a) => a.gratuito);
-  const pagosComTela = apps.filter((a) => !a.gratuito && !a.em_breve);
-  const emBreve = apps.filter((a) => a.em_breve);
-
   const activePlans = (plansQ.data ?? []).filter((p) => p.is_active);
-
   const mySubs = mySubsQ.data ?? [];
   const hasAnyOtherTrack = (slug: string) =>
     mySubs.some((s) => s.plan_slug !== slug && s.status !== "trial");
+
 
   return (
     <AppShell>
