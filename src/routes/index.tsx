@@ -115,10 +115,17 @@ function StoreHome() {
         <p className="mt-2 max-w-2xl text-sm text-muted-foreground md:text-base"><RichText>{homeDesc}</RichText></p>
       </div>
 
-      <Carousel />
+      <div className="mb-6 grid items-center gap-4 md:grid-cols-[1fr_auto]">
+        <div className="min-w-0">
+          <Carousel />
+        </div>
+        <img
+          src={mascotesAsset.url}
+          alt="Mascotes Academia da Enfermagem — Time contra as IRAS"
+          className="mx-auto h-40 w-auto shrink-0 object-contain md:h-56 lg:h-64 [animation:pulse_3s_ease-in-out_infinite]"
+        />
+      </div>
 
-      {/* 1) Banner verde escuro + Meu estagio */}
-      <Carousel />
 
       {/* 1) Banner verde escuro + Meu estagio */}
       <section className="mb-6 grid gap-4 md:grid-cols-3">
