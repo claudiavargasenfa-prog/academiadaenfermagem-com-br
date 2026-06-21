@@ -125,7 +125,7 @@ export function AppShell({ children, trackSlug, hideReferences }: { children: Re
 
       <main className="mx-auto max-w-5xl px-4 pb-28 pt-6 page-enter md:pb-10">
         {children}
-        <ReferencesFooter compact />
+        {!hideReferences && <ReferencesFooter compact />}
       </main>
 
       {/* Mobile bottom tab nav */}
