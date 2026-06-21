@@ -18,11 +18,11 @@ import {
 export const Route = createFileRoute("/trilha/$slug")({
   head: ({ params }) => {
     const t = TRACKS.find((x) => x.slug === params.slug);
-    const title = t ? `${t.label} — Academia de Enfermagem` : "Trilha";
+    const title = t ? `${t.label} — Academia de Enfermagem` : "Aplicativo";
     return {
       meta: [
         { title },
-        { name: "description", content: `Mini apps da trilha ${t?.label ?? ""} da Academia de Enfermagem.` },
+        { name: "description", content: `Mini apps do aplicativo ${t?.label ?? ""} da Academia de Enfermagem.` },
       ],
     };
   },
@@ -56,7 +56,7 @@ function TrilhaPage() {
   const premium = apps.filter((a) => !a.gratuito);
 
   return (
-    <AppShell>
+    <AppShell trackSlug={trackSlug}>
       <Link to="/" className="mb-3 inline-flex items-center gap-1 text-sm font-semibold text-muted-foreground hover:text-foreground">
         <ArrowLeft className="h-4 w-4" /> Voltar para a loja
       </Link>
@@ -65,7 +65,7 @@ function TrilhaPage() {
         <div className="flex items-center gap-3">
           <span className="text-3xl">{track.emoji}</span>
           <div>
-            <p className="text-xs font-bold uppercase tracking-widest opacity-70">Trilha</p>
+            <p className="text-xs font-bold uppercase tracking-widest opacity-70">Aplicativo</p>
             <h1 className="font-display text-2xl font-extrabold">{track.label}</h1>
           </div>
         </div>
@@ -76,20 +76,25 @@ function TrilhaPage() {
               {mySub!.status === "trial" ? "🎁 Trial ativo" : "✓ Assinatura ativa"} · até {new Date(mySub!.expires_at).toLocaleDateString("pt-BR")}
             </span>
           ) : plan ? (
-            <a
-              href={(plan as any).cakto_link_novo || plan.cakto_checkout_url || "#"}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-1 rounded-full bg-foreground px-4 py-2 text-sm font-bold text-background"
-            >
-              Assinar {formatPriceBRL((plan as any).price_novo_cents ?? plan.price_cents)}/mês
-              <ExternalLink className="h-3.5 w-3.5" />
-            </a>
+            <>
+              <a
+                href={(plan as any).cakto_link_novo || plan.cakto_checkout_url || "#"}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1 rounded-full bg-foreground px-4 py-2 text-sm font-bold text-background"
+              >
+                Assinar {formatPriceBRL((plan as any).price_novo_cents ?? plan.price_cents)}/mês
+                <ExternalLink className="h-3.5 w-3.5" />
+              </a>
+              <span className="rounded-full bg-emerald-500/20 px-3 py-1 text-xs font-extrabold uppercase tracking-wide text-emerald-800">
+                🔒 Compra Segura
+              </span>
+            </>
           ) : null}
         </div>
       </div>
 
-      <PageHeader title={`${apps.length} mini apps nesta trilha`} description="Apps grátis liberam para qualquer pessoa. Os demais exigem assinatura desta trilha." />
+      <PageHeader title={`${apps.length} mini apps neste aplicativo`} description="Apps grátis liberam para qualquer pessoa. Os demais exigem assinatura deste aplicativo." />
 
       {gratis.length > 0 && (
         <section className="mb-8">
