@@ -118,33 +118,41 @@ function StoreHome() {
       <Carousel />
 
       {/* 1) Banner verde escuro + Meu estagio */}
+      <Carousel />
+
+      {/* 1) Banner verde escuro + Meu estagio */}
       <section className="mb-6 grid gap-4 md:grid-cols-3">
-        <div className="overflow-hidden rounded-3xl border border-gold/40 bg-primary p-4 text-primary-foreground shadow-[var(--shadow-glass)] md:col-span-2">
-          <div className="grid items-center gap-3 sm:grid-cols-[1fr_auto]">
-            <div className="min-w-0">
-              <div className="flex items-center gap-2">
-                <img src={logoAsset.url} alt="Logotipo Academia de Enfermagem" className="h-9 w-9 shrink-0 rounded-lg bg-white/10 object-contain p-1 ring-1 ring-gold/40" />
-                <span className="inline-flex items-center gap-1 rounded-full bg-gold/20 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-gold">
-                  <Zap className="h-3 w-3" /> 30 dias grátis
-                </span>
-              </div>
-              <h2 className="mt-2 font-display text-lg font-extrabold leading-tight md:text-xl">
-                Chegue no estágio sabendo <span className="text-gold">o que fazer</span>.
+        <div className="overflow-hidden rounded-3xl border border-gold/40 bg-primary p-5 text-primary-foreground shadow-[var(--shadow-glass)] md:col-span-2">
+          <div className="flex items-start gap-3">
+            <img src={logoAsset.url} alt="Logotipo Academia de Enfermagem" className="h-12 w-12 shrink-0 rounded-xl bg-white/10 object-contain p-1 ring-1 ring-gold/40" />
+            <div className="min-w-0 flex-1">
+              <span className="inline-flex items-center gap-1 rounded-full bg-gold/20 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-gold">
+                <Zap className="h-3 w-3" /> 30 dias grátis para começar
+              </span>
+              <h2 className="mt-2 font-display text-xl font-extrabold leading-tight md:text-2xl">
+                Chegue no estágio sabendo <span className="text-gold">o que fazer</span> — antes do preceptor perguntar.
               </h2>
-              <p className="mt-1 text-xs text-primary-foreground/85 md:text-sm">
-                Mini apps criados por enfermeira com <strong className="text-gold">35 anos de UTI, ESF e APH</strong>.
+              <p className="mt-1.5 text-sm text-primary-foreground/85">
+                Mini apps de bolso criados por enfermeira com <strong className="text-gold">35 anos de UTI, ESF e APH</strong>. Conteúdo que cai na prova prática e no plantão.
               </p>
-              <a href="#aplicativos" className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-gold px-3 py-1.5 text-xs font-bold text-primary shadow hover:brightness-110">
-                <Zap className="h-3.5 w-3.5" /> Ver aplicativos
-              </a>
+
+              <ul className="mt-3 grid gap-1.5 text-sm sm:grid-cols-2">
+                <li className="flex items-start gap-1.5"><Check className="mt-0.5 h-4 w-4 shrink-0 text-gold" /> Cálculos, escalas e protocolos em segundos</li>
+                <li className="flex items-start gap-1.5"><Check className="mt-0.5 h-4 w-4 shrink-0 text-gold" /> Relatório ABNT gerado do seu diário</li>
+                <li className="flex items-start gap-1.5"><Check className="mt-0.5 h-4 w-4 shrink-0 text-gold" /> 3 aplicativos: Acadêmico, Técnico e Enfermeiro</li>
+                <li className="flex items-start gap-1.5"><Check className="mt-0.5 h-4 w-4 shrink-0 text-gold" /> Sem cartão para começar</li>
+              </ul>
+
+              <div className="mt-4 flex flex-wrap items-center gap-2">
+                <a href="#aplicativos" className="inline-flex items-center gap-1.5 rounded-full bg-gold px-4 py-2 text-sm font-bold text-primary shadow hover:brightness-110">
+                  <Zap className="h-4 w-4" /> Ver aplicativos
+                </a>
+              </div>
+
             </div>
-            <img
-              src={mascotesAsset.url}
-              alt="Mascotes Academia da Enfermagem — Time contra as IRAS"
-              className="mx-auto h-32 w-auto shrink-0 object-contain sm:h-40 md:h-44 [animation:pulse_3s_ease-in-out_infinite]"
-            />
           </div>
         </div>
+
 
 
         <Card>
