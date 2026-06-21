@@ -41,9 +41,34 @@ export type Database = {
         }
         Relationships: []
       }
+      app_texts: {
+        Row: {
+          description: string | null
+          key: string
+          updated_at: string
+          updated_by: string | null
+          value: string
+        }
+        Insert: {
+          description?: string | null
+          key: string
+          updated_at?: string
+          updated_by?: string | null
+          value?: string
+        }
+        Update: {
+          description?: string | null
+          key?: string
+          updated_at?: string
+          updated_by?: string | null
+          value?: string
+        }
+        Relationships: []
+      }
       mini_apps: {
         Row: {
           audio_url: string | null
+          badges: Json
           cakto_checkout_url: string | null
           cakto_product_id: string | null
           content_md: string | null
@@ -70,6 +95,7 @@ export type Database = {
         }
         Insert: {
           audio_url?: string | null
+          badges?: Json
           cakto_checkout_url?: string | null
           cakto_product_id?: string | null
           content_md?: string | null
@@ -96,6 +122,7 @@ export type Database = {
         }
         Update: {
           audio_url?: string | null
+          badges?: Json
           cakto_checkout_url?: string | null
           cakto_product_id?: string | null
           content_md?: string | null
