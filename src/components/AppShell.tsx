@@ -15,7 +15,7 @@ import { isAdmin } from "@/lib/access";
 import { useText } from "@/lib/app-texts";
 import logoAsset from "@/assets/logo.png.asset.json";
 
-export function AppShell({ children, trackSlug }: { children: ReactNode; trackSlug?: "academico" | "tecnico" | "enfermeiro" }) {
+export function AppShell({ children, trackSlug, hideReferences }: { children: ReactNode; trackSlug?: "academico" | "tecnico" | "enfermeiro"; hideReferences?: boolean }) {
   const [open, setOpen] = useState(false);
   const [admin, setAdmin] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
