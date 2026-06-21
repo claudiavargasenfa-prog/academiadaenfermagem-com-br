@@ -1,13 +1,36 @@
 import type { ReactNode } from "react";
+import DOMPurify from "dompurify";
+
+/** Detecta se o conteúdo é HTML (tem ao menos uma tag). */
+function looksLikeHtml(src: string): boolean {
+  return /<([a-z][a-z0-9]*)\b[^>]*>/i.test(src);
+}
+
+/**
+ * Renderiza conteúdo do mini app: aceita HTML colado (Word, Docs, sites)
+ * OU markdown simples. Se for HTML, sanitiza com DOMPurify antes de renderizar.
+ */
+export function renderContent(src: string): ReactNode {
+  if (!src?.trim()) return null;
+  if (looksLikeHtml(src)) {
+    const clean = DOMPurify.sanitize(src, {
+      USE_PROFILES: { html: true },
+      ADD_ATTR: ["target", "rel"],
+    });
+    return (
+      <div
+        className="mini-app-html text-sm leading-relaxed text-foreground [&_h1]:mt-4 [&_h1]:mb-2 [&_h1]:font-display [&_h1]:text-2xl [&_h1]:font-bold [&_h2]:mt-4 [&_h2]:mb-2 [&_h2]:font-display [&_h2]:text-xl [&_h2]:font-bold [&_h3]:mt-3 [&_h3]:mb-1 [&_h3]:font-display [&_h3]:text-base [&_h3]:font-bold [&_p]:my-2 [&_ul]:my-2 [&_ul]:ml-5 [&_ul]:list-disc [&_ol]:my-2 [&_ol]:ml-5 [&_ol]:list-decimal [&_li]:my-1 [&_strong]:font-bold [&_em]:italic [&_a]:font-semibold [&_a]:text-primary [&_a]:underline [&_table]:my-3 [&_table]:w-full [&_table]:border-collapse [&_th]:border [&_th]:border-border [&_th]:bg-foreground/5 [&_th]:px-2 [&_th]:py-1 [&_th]:text-left [&_td]:border [&_td]:border-border [&_td]:px-2 [&_td]:py-1 [&_blockquote]:my-3 [&_blockquote]:rounded-xl [&_blockquote]:border-l-4 [&_blockquote]:border-foreground/20 [&_blockquote]:bg-foreground/5 [&_blockquote]:px-4 [&_blockquote]:py-3 [&_img]:my-3 [&_img]:max-w-full [&_img]:rounded-lg [&_hr]:my-4 [&_hr]:border-border"
+        dangerouslySetInnerHTML={{ __html: clean }}
+      />
+    );
+  }
+  return renderMarkdown(src);
+}
 
 /**
  * Renderizador de markdown minimalista (sem dependência externa).
  * Suporta: # ## ### títulos, **negrito**, *itálico*, `código`,
- * links [texto](url), listas - e 1., parágrafos, e blocos de destaque:
- *   > ⚠️ Atenção: ...   → card amarelo
- *   > ✅ Dica: ...      → card verde
- *   > 📌 Importante: ... → card azul
- *   > (qualquer outro)   → blockquote padrão
+ * links [texto](url), listas - e 1., parágrafos, e blocos de destaque.
  */
 export function renderMarkdown(src: string): ReactNode {
   const lines = src.replace(/\r\n/g, "\n").split("\n");
