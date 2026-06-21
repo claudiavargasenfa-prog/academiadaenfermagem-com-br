@@ -16,21 +16,46 @@ export const Route = createFileRoute("/reset-password")({
 
 function ResetPasswordPage() {
   const navigate = useNavigate();
-  const [ready, setReady] = useState(false);
+  const [status, setStatus] = useState<"checking" | "ready" | "invalid">("checking");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<{ type: "error" | "info"; text: string } | null>(null);
+  const [resendEmail, setResendEmail] = useState("");
 
   useEffect(() => {
-    // Supabase processes the recovery hash and emits PASSWORD_RECOVERY
-    const { data: sub } = supabase.auth.onAuthStateChange((event) => {
-      if (event === "PASSWORD_RECOVERY" || event === "SIGNED_IN") setReady(true);
+    let settled = false;
+    const finish = (ok: boolean) => {
+      if (settled) return;
+      settled = true;
+      setStatus(ok ? "ready" : "invalid");
+    };
+
+    const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "PASSWORD_RECOVERY" || (event === "SIGNED_IN" && session)) finish(true);
     });
+
+    // Try PKCE code from query string
+    const url = new URL(window.location.href);
+    const code = url.searchParams.get("code");
+    if (code) {
+      supabase.auth.exchangeCodeForSession(code).then(({ data, error }) => {
+        if (!error && data.session) finish(true);
+      });
+    }
+
+    // Existing session (hash already processed by detectSessionInUrl)
     supabase.auth.getSession().then(({ data }) => {
-      if (data.session) setReady(true);
+      if (data.session) finish(true);
     });
-    return () => sub.subscription.unsubscribe();
+
+    // Fallback timeout: if nothing resolved in 2.5s, mark invalid
+    const timer = window.setTimeout(() => finish(false), 2500);
+
+    return () => {
+      sub.subscription.unsubscribe();
+      window.clearTimeout(timer);
+    };
   }, []);
 
   async function handleSubmit(e: React.FormEvent) {
@@ -55,6 +80,25 @@ function ResetPasswordPage() {
     setTimeout(() => navigate({ to: "/" }), 1200);
   }
 
+  async function handleResend(e: React.FormEvent) {
+    e.preventDefault();
+    if (!resendEmail) return;
+    setBusy(true);
+    setMsg(null);
+    const { error } = await supabase.auth.resetPasswordForEmail(resendEmail, {
+      redirectTo: `${window.location.origin}/reset-password`,
+    });
+    setBusy(false);
+    if (error) {
+      setMsg({ type: "error", text: error.message });
+    } else {
+      setMsg({
+        type: "info",
+        text: "Novo link enviado! Verifique seu e-mail (e a pasta de spam).",
+      });
+    }
+  }
+
   const input =
     "mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary/40";
   const label = "text-xs font-semibold uppercase tracking-wide text-muted-foreground";
@@ -74,15 +118,49 @@ function ResetPasswordPage() {
         </div>
 
         <div className="rounded-3xl border border-gold/40 bg-card/95 p-6 text-foreground shadow-[var(--shadow-glass)]">
-          {!ready ? (
-            <div className="text-sm text-foreground/80">
-              <p>Este link parece inválido ou expirou.</p>
-              <p className="mt-2">
-                Volte para o{" "}
+          {status === "checking" ? (
+            <p className="text-sm text-foreground/70">Validando link...</p>
+          ) : status === "invalid" ? (
+            <div className="space-y-3 text-sm text-foreground/80">
+              <p>
+                Este link parece <strong>inválido ou expirou</strong> (cada link só pode ser
+                usado uma vez).
+              </p>
+              <p>Digite seu e-mail abaixo para receber um novo link:</p>
+              <form onSubmit={handleResend} className="space-y-2">
+                <input
+                  type="email"
+                  required
+                  value={resendEmail}
+                  onChange={(e) => setResendEmail(e.target.value)}
+                  className={input}
+                  placeholder="voce@email.com"
+                />
+                {msg && (
+                  <div
+                    className={`rounded-lg px-3 py-2 text-xs ${
+                      msg.type === "error"
+                        ? "bg-destructive/10 text-destructive"
+                        : "bg-primary/10 text-primary"
+                    }`}
+                  >
+                    {msg.text}
+                  </div>
+                )}
+                <button
+                  type="submit"
+                  disabled={busy}
+                  className="w-full rounded-xl bg-primary py-2.5 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
+                >
+                  {busy ? "Enviando..." : "Enviar novo link"}
+                </button>
+              </form>
+              <p className="pt-2 text-center text-xs">
+                Ou volte para o{" "}
                 <Link to="/" className="font-semibold text-primary hover:underline">
-                  login
-                </Link>{" "}
-                e clique em <strong>Esqueci minha senha</strong> novamente.
+                  login / cadastro
+                </Link>
+                .
               </p>
             </div>
           ) : (
