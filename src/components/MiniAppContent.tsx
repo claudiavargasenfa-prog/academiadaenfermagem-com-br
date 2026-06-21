@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Video, Headphones } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/AppShell";
-import { renderMarkdown } from "@/lib/markdown";
+import { renderContent } from "@/lib/markdown";
 
 /**
  * Renderiza o conteúdo editável do mini app (vindo do Admin):
@@ -50,7 +50,7 @@ export function MiniAppContent({ slug }: { slug: string }) {
 
       {content_md?.trim() && (
         <Card>
-          <div className="prose-sm max-w-none">{renderMarkdown(content_md)}</div>
+          <div className="prose-sm max-w-none">{renderContent(content_md)}</div>
         </Card>
       )}
     </div>
