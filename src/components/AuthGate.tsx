@@ -57,7 +57,17 @@ function AuthScreen() {
     setBusy(true);
     setMsg(null);
     try {
-      if (mode === "signup") {
+      if (mode === "forgot") {
+        if (!email) throw new Error("Informe seu e-mail.");
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: `${window.location.origin}/reset-password`,
+        });
+        if (error) throw error;
+        setMsg({
+          type: "info",
+          text: "Enviamos um link de redefinição para o seu e-mail. Verifique sua caixa de entrada (e o spam).",
+        });
+      } else if (mode === "signup") {
         if (!nome.trim() || nome.trim().length < 3) {
           throw new Error("Informe seu nome completo.");
         }
