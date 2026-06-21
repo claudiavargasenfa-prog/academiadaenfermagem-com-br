@@ -278,14 +278,21 @@ function StoreHome() {
                     )}
                   </div>
 
-                  <div className="mt-3">
+                  <div className="mt-3 space-y-2">
+                    <Link
+                      to="/trilha/$slug"
+                      params={{ slug }}
+                      className="block w-full rounded-xl bg-white/70 py-2 text-center text-sm font-bold hover:bg-white"
+                    >
+                      Ver mini apps da trilha →
+                    </Link>
                     {subscribed ? (
-                      <span className="block w-full rounded-xl bg-white/70 py-2 text-center text-sm font-bold">
+                      <span className="block w-full rounded-xl bg-white/40 py-2 text-center text-xs font-bold">
                         ✓ Assinatura ativa
                       </span>
                     ) : inTrial ? (
-                      <div className="space-y-2">
-                        <span className="block w-full rounded-xl bg-white/70 py-2 text-center text-xs font-bold">
+                      <>
+                        <span className="block w-full rounded-xl bg-white/40 py-2 text-center text-xs font-bold">
                           🎁 Trial ativo · até {new Date(sub!.expires_at).toLocaleDateString("pt-BR")}
                         </span>
                         {ckLink && (
@@ -293,7 +300,7 @@ function StoreHome() {
                             Assinar agora <ExternalLink className="h-3.5 w-3.5" />
                           </a>
                         )}
-                      </div>
+                      </>
                     ) : ckLink ? (
                       <a
                         href={ckLink}
@@ -315,6 +322,7 @@ function StoreHome() {
           </div>
         </section>
       )}
+
 
       {/* 3) Filtro por trilha (ajuda a navegar) */}
       <section className="mb-4">
