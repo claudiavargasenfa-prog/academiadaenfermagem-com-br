@@ -214,7 +214,7 @@ function PlanForm({ plan, onClose }: { plan: SubscriptionPlan; onClose: () => vo
 
         <fieldset className="rounded-xl border border-amber-400/40 bg-amber-50/40 p-3">
           <legend className="px-1 text-[10px] font-bold uppercase text-amber-700">Migração (DE/POR)</legend>
-          <p className="mb-2 text-[10px] text-muted-foreground">Mostrado automaticamente quando o aluno logado já tem outra trilha ativa.</p>
+          <p className="mb-2 text-[10px] text-muted-foreground">Mostrado automaticamente quando o aluno logado já tem outro aplicativo ativo.</p>
           <div className="grid gap-3 sm:grid-cols-3">
             <label className="block"><span className="mb-1 block text-xs font-semibold uppercase text-muted-foreground">DE (R$)</span>
               <input className={input} value={form.price_original_migracao} onChange={(e) => setForm({ ...form, price_original_migracao: e.target.value })} placeholder="39,99" /></label>
@@ -263,7 +263,7 @@ function GrantForm({ onClose }: { onClose: () => void }) {
   return (
     <Card className="border-primary/40">
       <form onSubmit={save} className="space-y-3 text-sm">
-        <h4 className="font-display text-base font-bold">Liberar assinatura manualmente</h4>
+        <h4 className="font-display text-base font-bold">Liberar acesso manualmente</h4>
         <label className="block"><span className="mb-1 block text-xs font-semibold uppercase text-muted-foreground">User ID (uuid)</span>
           <input className={input} value={form.user_id} onChange={(e) => setForm({ ...form, user_id: e.target.value })} required placeholder="ex: 11111111-2222-3333-4444-555555555555" /></label>
         <div className="grid gap-3 sm:grid-cols-2">
