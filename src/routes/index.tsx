@@ -4,6 +4,7 @@ import {
   ExternalLink,
   ChevronLeft,
   ChevronRight,
+  Check,
   Zap,
 } from "lucide-react";
 
