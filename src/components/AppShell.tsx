@@ -12,11 +12,12 @@ import { ReferencesFooter } from "./References";
 import { AuthGate, signOut } from "./AuthGate";
 import { TrialCountdownBanner } from "./TrialCountdownBanner";
 import { isAdmin } from "@/lib/access";
+import { useText } from "@/lib/app-texts";
 import logoAsset from "@/assets/logo.png.asset.json";
 
 const nav = [
-  { to: "/", label: "Loja", icon: Store },
-  { to: "/minha-conta", label: "Minha Conta", icon: User },
+  { to: "/", labelKey: "menu.loja", labelDefault: "Loja", icon: Store },
+  { to: "/minha-conta", labelKey: "menu.minha_conta", labelDefault: "Minha Conta", icon: User },
 ] as const;
 
 export function AppShell({ children, trackSlug }: { children: ReactNode; trackSlug?: "academico" | "tecnico" | "enfermeiro" }) {
