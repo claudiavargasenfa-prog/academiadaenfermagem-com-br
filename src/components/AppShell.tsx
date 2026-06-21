@@ -29,9 +29,17 @@ export function AppShell({ children, trackSlug }: { children: ReactNode; trackSl
     isAdmin().then(setAdmin);
   }, []);
 
+  const lojaLabel = useText("menu.loja", "Loja");
+  const minhaContaLabel = useText("menu.minha_conta", "Minha Conta");
+  const adminLabel = useText("menu.admin", "Admin");
+
+  const baseNav = [
+    { to: "/" as const, label: lojaLabel, icon: Store },
+    { to: "/minha-conta" as const, label: minhaContaLabel, icon: User },
+  ];
   const navItems = admin
-    ? [...nav, { to: "/admin" as const, label: "Admin", icon: Shield }]
-    : nav;
+    ? [...baseNav, { to: "/admin" as const, label: adminLabel, icon: Shield }]
+    : baseNav;
 
   const bgStyle: React.CSSProperties | undefined = trackSlug
     ? { backgroundColor: `color-mix(in oklab, var(--track-${trackSlug}-bg) 35%, transparent)` }
