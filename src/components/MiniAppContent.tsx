@@ -50,7 +50,7 @@ export function MiniAppContent({ slug }: { slug: string }) {
 
       {content_md?.trim() && (
         <Card>
-          <div className="prose-sm max-w-none">{renderMarkdown(content_md)}</div>
+          <div className="prose-sm max-w-none">{renderContent(content_md)}</div>
         </Card>
       )}
     </div>
