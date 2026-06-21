@@ -29,6 +29,7 @@ import { Route as FarmacologiaAvancadaRouteImport } from './routes/farmacologia-
 import { Route as ExameFisicoEscalasRouteImport } from './routes/exame-fisico-escalas'
 import { Route as DiarioRouteImport } from './routes/diario'
 import { Route as CurativosRouteImport } from './routes/curativos'
+import { Route as ConfiancaRouteImport } from './routes/confianca'
 import { Route as CalculadoraRouteImport } from './routes/calculadora'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AclsRouteImport } from './routes/acls'
@@ -137,6 +138,11 @@ const CurativosRoute = CurativosRouteImport.update({
   path: '/curativos',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ConfiancaRoute = ConfiancaRouteImport.update({
+  id: '/confianca',
+  path: '/confianca',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CalculadoraRoute = CalculadoraRouteImport.update({
   id: '/calculadora',
   path: '/calculadora',
@@ -178,6 +184,7 @@ export interface FileRoutesByFullPath {
   '/acls': typeof AclsRoute
   '/admin': typeof AdminRoute
   '/calculadora': typeof CalculadoraRoute
+  '/confianca': typeof ConfiancaRoute
   '/curativos': typeof CurativosRoute
   '/diario': typeof DiarioRoute
   '/exame-fisico-escalas': typeof ExameFisicoEscalasRoute
@@ -207,6 +214,7 @@ export interface FileRoutesByTo {
   '/acls': typeof AclsRoute
   '/admin': typeof AdminRoute
   '/calculadora': typeof CalculadoraRoute
+  '/confianca': typeof ConfiancaRoute
   '/curativos': typeof CurativosRoute
   '/diario': typeof DiarioRoute
   '/exame-fisico-escalas': typeof ExameFisicoEscalasRoute
@@ -237,6 +245,7 @@ export interface FileRoutesById {
   '/acls': typeof AclsRoute
   '/admin': typeof AdminRoute
   '/calculadora': typeof CalculadoraRoute
+  '/confianca': typeof ConfiancaRoute
   '/curativos': typeof CurativosRoute
   '/diario': typeof DiarioRoute
   '/exame-fisico-escalas': typeof ExameFisicoEscalasRoute
@@ -268,6 +277,7 @@ export interface FileRouteTypes {
     | '/acls'
     | '/admin'
     | '/calculadora'
+    | '/confianca'
     | '/curativos'
     | '/diario'
     | '/exame-fisico-escalas'
@@ -297,6 +307,7 @@ export interface FileRouteTypes {
     | '/acls'
     | '/admin'
     | '/calculadora'
+    | '/confianca'
     | '/curativos'
     | '/diario'
     | '/exame-fisico-escalas'
@@ -326,6 +337,7 @@ export interface FileRouteTypes {
     | '/acls'
     | '/admin'
     | '/calculadora'
+    | '/confianca'
     | '/curativos'
     | '/diario'
     | '/exame-fisico-escalas'
@@ -356,6 +368,7 @@ export interface RootRouteChildren {
   AclsRoute: typeof AclsRoute
   AdminRoute: typeof AdminRoute
   CalculadoraRoute: typeof CalculadoraRoute
+  ConfiancaRoute: typeof ConfiancaRoute
   CurativosRoute: typeof CurativosRoute
   DiarioRoute: typeof DiarioRoute
   ExameFisicoEscalasRoute: typeof ExameFisicoEscalasRoute
@@ -522,6 +535,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CurativosRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/confianca': {
+      id: '/confianca'
+      path: '/confianca'
+      fullPath: '/confianca'
+      preLoaderRoute: typeof ConfiancaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/calculadora': {
       id: '/calculadora'
       path: '/calculadora'
@@ -590,6 +610,7 @@ const rootRouteChildren: RootRouteChildren = {
   AclsRoute: AclsRoute,
   AdminRoute: AdminRoute,
   CalculadoraRoute: CalculadoraRoute,
+  ConfiancaRoute: ConfiancaRoute,
   CurativosRoute: CurativosRoute,
   DiarioRoute: DiarioRoute,
   ExameFisicoEscalasRoute: ExameFisicoEscalasRoute,
