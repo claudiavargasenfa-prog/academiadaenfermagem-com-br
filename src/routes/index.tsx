@@ -324,67 +324,10 @@ function StoreHome() {
       )}
 
 
-      {/* 3) Filtro por trilha (ajuda a navegar) */}
-      <section className="mb-4">
-        <div className="flex flex-wrap gap-2 rounded-xl bg-foreground/5 p-1 text-xs font-semibold">
-          <button
-            onClick={() => setTrackFilter("todos")}
-            className={`rounded-lg px-3 py-1.5 ${trackFilter === "todos" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
-          >
-            Todos
-          </button>
-          {TRACKS.map((t) => (
-            <button
-              key={t.slug}
-              onClick={() => setTrackFilter(t.slug)}
-              className={`rounded-lg px-3 py-1.5 ${trackFilter === t.slug ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
-            >
-              {t.emoji} {t.short}
-            </button>
-          ))}
-        </div>
-      </section>
-
-
-      {loading && (
-        <Card><p className="text-sm text-muted-foreground">Carregando catálogo…</p></Card>
-      )}
-
-      {!loading && gratis.length > 0 && (
-        <section id="gratis" className="mb-8 scroll-mt-20">
-          <h2 className="mb-3 font-display text-lg font-bold">Grátis para começar</h2>
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {gratis.map((app) => (
-              <ProductCard key={app.id} app={app} extraExpiresAt={extraAccessByApp[app.id] ?? null} />
-            ))}
-          </div>
-        </section>
-      )}
-
-      {!loading && pagosComTela.length > 0 && (
-        <section id="pagos" className="mb-8 scroll-mt-20">
-          <h2 className="mb-3 font-display text-lg font-bold">Mini apps disponíveis</h2>
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {pagosComTela.map((app) => (
-              <ProductCard key={app.id} app={app} extraExpiresAt={extraAccessByApp[app.id] ?? null} />
-            ))}
-          </div>
-        </section>
-      )}
-
-      {!loading && emBreve.length > 0 && (
-        <section className="mb-4">
-          <h2 className="mb-3 font-display text-lg font-bold">Em breve</h2>
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {emBreve.map((app) => (
-              <ProductCard key={app.id} app={app} extraExpiresAt={null} />
-            ))}
-          </div>
-        </section>
-      )}
     </AppShell>
   );
 }
+
 
 function ProductCard({ app, extraExpiresAt }: { app: MiniApp; extraExpiresAt: string | null }) {
   const Icon = SLUG_ICON[app.slug] ?? BookOpen;
