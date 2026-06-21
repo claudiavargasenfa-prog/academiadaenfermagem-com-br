@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Video, Headphones } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/AppShell";
-import { renderMarkdown } from "@/lib/markdown";
+import { renderContent } from "@/lib/markdown";
 
 /**
  * Renderiza o conteúdo editável do mini app (vindo do Admin):
