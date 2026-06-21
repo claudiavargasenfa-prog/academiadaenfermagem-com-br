@@ -594,22 +594,23 @@ function ContentMarkdownEditor({
       {mode === "edit" ? (
         <>
           <textarea
-            rows={10}
+            rows={12}
             value={value}
             onChange={(e) => onChange(e.target.value)}
             className={`${input} font-mono text-xs`}
-            placeholder={`# Título\n\nParágrafo com **negrito** e *itálico*.\n\n- Item 1\n- Item 2\n\n> ⚠️ Atenção: nunca administre sem checar os cinco certos.\n> ✅ Dica: confira sempre a prescrição.\n> 📌 Importante: registre no prontuário.\n\n[Link externo](https://exemplo.com)`}
+            placeholder={`Você pode colar HTML (do Word, Google Docs ou site) OU escrever em markdown.\n\nExemplo markdown:\n\n# Título\n\nParágrafo com **negrito** e *itálico*.\n\n- Item 1\n- Item 2\n\n> ⚠️ Atenção: nunca administre sem checar os cinco certos.`}
           />
           <p className="mt-1 text-[11px] text-muted-foreground">
-            Suporta <code>#</code> títulos, <code>**negrito**</code>, <code>*itálico*</code>,
-            listas <code>-</code> e <code>1.</code>, links <code>[txt](url)</code> e blocos de destaque iniciados com{" "}
-            <code>&gt; ⚠️</code>, <code>&gt; ✅</code> ou <code>&gt; 📌</code>.
+            <strong>Aceita HTML colado</strong> (do Word, Google Docs, sites) — as tags são sanitizadas e renderizadas.
+            Ou use markdown: <code>#</code> títulos, <code>**negrito**</code>, <code>*itálico*</code>,
+            listas <code>-</code> e <code>1.</code>, links <code>[txt](url)</code> e destaques{" "}
+            <code>&gt; ⚠️</code>, <code>&gt; ✅</code>, <code>&gt; 📌</code>.
           </p>
         </>
       ) : (
         <div className="min-h-[200px] rounded-lg border border-border bg-background px-3 py-2">
           {value.trim() ? (
-            renderMarkdown(value)
+            renderContent(value)
           ) : (
             <p className="text-xs text-muted-foreground">
               Nada digitado ainda. Vá em "Editar" e comece a escrever.
