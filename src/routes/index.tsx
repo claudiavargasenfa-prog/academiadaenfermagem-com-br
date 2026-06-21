@@ -1,27 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import {
-  Lock,
-  CheckCircle2,
-  Clock,
   ExternalLink,
-  Sparkles,
   ChevronLeft,
   ChevronRight,
-  Stethoscope,
-  Calculator,
-  Activity,
-  Baby,
-  HeartPulse,
-  ShieldCheck,
-  HandHeart,
-  GraduationCap,
-  FileText,
-  BookOpen,
-  Bandage,
-  FlaskConical,
-  Brain,
-  Hourglass,
   Check,
   Zap,
 } from "lucide-react";
@@ -36,16 +18,10 @@ import imgRelatorio from "@/assets/carousel/relatorio.jpg";
 import imgExame from "@/assets/carousel/exame.jpg";
 import imgIras from "@/assets/carousel/iras.jpg";
 import {
-  fetchMiniApps,
-  fetchMyExtraAccess,
   fetchSubscriptionPlans,
   fetchMyActiveSubscriptions,
   formatPriceBRL,
-  daysUntil,
-  summarizeExtras,
-  appTracks,
   TRACKS,
-  type MiniApp,
   type TrackSlug,
 } from "@/lib/access";
 
@@ -57,30 +33,14 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Loja Academia de Enfermagem: 1 mini app grátis + cursos práticos para o estágio. Acesso por 150 dias.",
+          "Academia de Enfermagem: 3 trilhas de mini apps para acadêmicos, técnicos e enfermeiros. 30 dias grátis.",
       },
     ],
   }),
   component: StoreHome,
 });
 
-const SLUG_ICON: Record<string, typeof Stethoscope> = {
-  "manual-sobrevivencia": BookOpen,
-  "postura-etica": GraduationCap,
-  "sinais-vitais": Activity,
-  iras: HandHeart,
-  seguranca: ShieldCheck,
-  "exame-fisico-escalas": Stethoscope,
-  medicamentosecalculos: Calculator,
-  "sv-pediatrico": Baby,
-  "sv-gestante": HeartPulse,
-  curativos: Bandage,
-  acls: HeartPulse,
-  uti: Activity,
-  "farmacologia-avancada": FlaskConical,
-  "saude-mental": Brain,
-  "relatorio-abnt": FileText,
-};
+
 
 const SLIDES = [
   { eyebrow: "Grátis para começar", title: "Manual de Sobrevivência do Estágio", desc: "Checklist da mochila, postura no campo e comunicação com o preceptor.", bg: "from-sky-100 to-cyan-100", accent: "text-sky-900", img: imgManual },
@@ -129,31 +89,15 @@ function Carousel() {
 
 function StoreHome() {
   const [estagio] = useLocal("estagio-info", { campo: "", preceptor: "", periodo: "" });
-  const [trackFilter, setTrackFilter] = useState<TrackSlug | "todos">("todos");
 
-  const appsQ = useQuery({ queryKey: ["mini_apps"], queryFn: fetchMiniApps });
-  const extrasQ = useQuery({ queryKey: ["my_extras"], queryFn: fetchMyExtraAccess });
   const plansQ = useQuery({ queryKey: ["subscription_plans"], queryFn: fetchSubscriptionPlans });
   const mySubsQ = useQuery({ queryKey: ["my_subs"], queryFn: fetchMyActiveSubscriptions });
 
-  const loading = appsQ.isLoading || extrasQ.isLoading;
-  const allApps = appsQ.data ?? [];
-  const { extraAccessByApp } = summarizeExtras(extrasQ.data ?? []);
-  
-
-  const apps = trackFilter === "todos"
-    ? allApps
-    : allApps.filter((a) => appTracks(a).includes(trackFilter));
-
-  const gratis = apps.filter((a) => a.gratuito);
-  const pagosComTela = apps.filter((a) => !a.gratuito && !a.em_breve);
-  const emBreve = apps.filter((a) => a.em_breve);
-
   const activePlans = (plansQ.data ?? []).filter((p) => p.is_active);
-
   const mySubs = mySubsQ.data ?? [];
   const hasAnyOtherTrack = (slug: string) =>
     mySubs.some((s) => s.plan_slug !== slug && s.status !== "trial");
+
 
   return (
     <AppShell>
@@ -192,10 +136,8 @@ function StoreHome() {
                 <a href="#trilhas" className="inline-flex items-center gap-1.5 rounded-full bg-gold px-4 py-2 text-sm font-bold text-primary shadow hover:brightness-110">
                   <Zap className="h-4 w-4" /> Ver trilhas
                 </a>
-                <a href="#gratis" className="inline-flex items-center gap-1.5 rounded-full border border-gold/60 px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-white/10">
-                  Conteúdo grátis
-                </a>
               </div>
+
             </div>
           </div>
         </div>
@@ -278,14 +220,21 @@ function StoreHome() {
                     )}
                   </div>
 
-                  <div className="mt-3">
+                  <div className="mt-3 space-y-2">
+                    <Link
+                      to="/trilha/$slug"
+                      params={{ slug }}
+                      className="block w-full rounded-xl bg-white/70 py-2 text-center text-sm font-bold hover:bg-white"
+                    >
+                      Ver mini apps da trilha →
+                    </Link>
                     {subscribed ? (
-                      <span className="block w-full rounded-xl bg-white/70 py-2 text-center text-sm font-bold">
+                      <span className="block w-full rounded-xl bg-white/40 py-2 text-center text-xs font-bold">
                         ✓ Assinatura ativa
                       </span>
                     ) : inTrial ? (
-                      <div className="space-y-2">
-                        <span className="block w-full rounded-xl bg-white/70 py-2 text-center text-xs font-bold">
+                      <>
+                        <span className="block w-full rounded-xl bg-white/40 py-2 text-center text-xs font-bold">
                           🎁 Trial ativo · até {new Date(sub!.expires_at).toLocaleDateString("pt-BR")}
                         </span>
                         {ckLink && (
@@ -293,7 +242,7 @@ function StoreHome() {
                             Assinar agora <ExternalLink className="h-3.5 w-3.5" />
                           </a>
                         )}
-                      </div>
+                      </>
                     ) : ckLink ? (
                       <a
                         href={ckLink}
@@ -316,173 +265,8 @@ function StoreHome() {
         </section>
       )}
 
-      {/* 3) Filtro por trilha (ajuda a navegar) */}
-      <section className="mb-4">
-        <div className="flex flex-wrap gap-2 rounded-xl bg-foreground/5 p-1 text-xs font-semibold">
-          <button
-            onClick={() => setTrackFilter("todos")}
-            className={`rounded-lg px-3 py-1.5 ${trackFilter === "todos" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
-          >
-            Todos
-          </button>
-          {TRACKS.map((t) => (
-            <button
-              key={t.slug}
-              onClick={() => setTrackFilter(t.slug)}
-              className={`rounded-lg px-3 py-1.5 ${trackFilter === t.slug ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
-            >
-              {t.emoji} {t.short}
-            </button>
-          ))}
-        </div>
-      </section>
 
-
-      {loading && (
-        <Card><p className="text-sm text-muted-foreground">Carregando catálogo…</p></Card>
-      )}
-
-      {!loading && gratis.length > 0 && (
-        <section id="gratis" className="mb-8 scroll-mt-20">
-          <h2 className="mb-3 font-display text-lg font-bold">Grátis para começar</h2>
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {gratis.map((app) => (
-              <ProductCard key={app.id} app={app} extraExpiresAt={extraAccessByApp[app.id] ?? null} />
-            ))}
-          </div>
-        </section>
-      )}
-
-      {!loading && pagosComTela.length > 0 && (
-        <section id="pagos" className="mb-8 scroll-mt-20">
-          <h2 className="mb-3 font-display text-lg font-bold">Mini apps disponíveis</h2>
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {pagosComTela.map((app) => (
-              <ProductCard key={app.id} app={app} extraExpiresAt={extraAccessByApp[app.id] ?? null} />
-            ))}
-          </div>
-        </section>
-      )}
-
-      {!loading && emBreve.length > 0 && (
-        <section className="mb-4">
-          <h2 className="mb-3 font-display text-lg font-bold">Em breve</h2>
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {emBreve.map((app) => (
-              <ProductCard key={app.id} app={app} extraExpiresAt={null} />
-            ))}
-          </div>
-        </section>
-      )}
     </AppShell>
   );
 }
 
-function ProductCard({ app, extraExpiresAt }: { app: MiniApp; extraExpiresAt: string | null }) {
-  const Icon = SLUG_ICON[app.slug] ?? BookOpen;
-  const unlocked = app.gratuito || !!extraExpiresAt;
-  const daysLeft = daysUntil(extraExpiresAt);
-  const expiringSoon = !app.gratuito && daysLeft !== null && daysLeft <= 30;
-  const fromCents = (app as any).price_original_cents ?? null;
-  const hasDiscount = fromCents != null && fromCents > app.price_cents;
-  const route = (app.route_path ?? "/") as string;
-  const showPrice = hasDiscount || !app.gratuito;
-
-  return (
-    <div className="glass flex flex-col rounded-2xl p-4">
-      <div className="mb-2 flex items-start justify-between gap-2">
-        <div className="grid h-11 w-11 place-items-center rounded-xl gold-gradient">
-          <Icon className="h-5 w-5" />
-        </div>
-        {app.em_breve ? (
-          <span className="inline-flex items-center gap-1 rounded-full bg-foreground/10 px-2 py-0.5 text-[10px] font-semibold text-foreground/70">
-            <Hourglass className="h-3 w-3" /> Em breve
-          </span>
-        ) : app.gratuito ? (
-          <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-2 py-0.5 text-[10px] font-semibold text-emerald-700">
-            <Sparkles className="h-3 w-3" /> Grátis
-          </span>
-        ) : unlocked ? (
-          <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-2 py-0.5 text-[10px] font-semibold text-emerald-700">
-            <CheckCircle2 className="h-3 w-3" /> Liberado
-          </span>
-        ) : (
-          <span className="inline-flex items-center gap-1 rounded-full bg-foreground/10 px-2 py-0.5 text-[10px] font-semibold text-foreground/70">
-            <Lock className="h-3 w-3" /> Bloqueado
-          </span>
-        )}
-      </div>
-
-      <h3 className="font-display text-base font-bold">{app.name}</h3>
-      {appTracks(app).length > 0 && (
-        <div className="mt-1 flex flex-wrap gap-1">
-          {appTracks(app).map((slug) => {
-            const t = TRACKS.find((x) => x.slug === slug)!;
-            const style: React.CSSProperties = {
-              backgroundColor:
-                slug === "academico" ? "var(--track-academico-bg)" :
-                slug === "tecnico" ? "var(--track-tecnico-bg)" :
-                "var(--track-enfermeiro-bg)",
-              color:
-                slug === "academico" ? "var(--track-academico-fg)" :
-                slug === "tecnico" ? "var(--track-tecnico-fg)" :
-                "var(--track-enfermeiro-fg)",
-            };
-            return (
-              <span key={slug} style={style} className="inline-flex items-center gap-0.5 rounded-full px-1.5 py-0.5 text-[10px] font-semibold">
-                {t.emoji} {t.short}
-              </span>
-            );
-          })}
-        </div>
-      )}
-      {app.description && <p className="mt-1 text-xs text-muted-foreground">{app.description}</p>}
-
-      {showPrice && (
-        <div className="mt-3">
-          {hasDiscount && (
-            <p className="text-sm font-semibold text-muted-foreground line-through">De {formatPriceBRL(fromCents)}</p>
-          )}
-          <p className="text-2xl font-extrabold text-foreground">
-            {hasDiscount ? "Por " : ""}
-            {formatPriceBRL(app.price_cents)}
-          </p>
-          {!app.gratuito && (
-            <p className="text-[11px] text-muted-foreground">pagamento único · 150 dias de acesso</p>
-          )}
-        </div>
-      )}
-
-      {expiringSoon && (
-        <p className="mt-2 inline-flex items-center gap-1 text-[11px] font-semibold text-amber-700">
-          <Clock className="h-3 w-3" /> Expira em {daysLeft} {daysLeft === 1 ? "dia" : "dias"}
-        </p>
-      )}
-
-      <div className="mt-3">
-        {app.em_breve ? (
-          <button disabled className="w-full cursor-not-allowed rounded-xl bg-foreground/10 py-2 text-sm font-semibold text-foreground/50">
-            Em breve
-          </button>
-        ) : unlocked && app.route_path ? (
-          <Link to={route} className="block w-full rounded-xl bg-primary py-2 text-center text-sm font-semibold text-primary-foreground">
-            Acessar
-          </Link>
-        ) : app.cakto_checkout_url ? (
-          <a
-            href={app.cakto_checkout_url}
-            target="_blank"
-            rel="noreferrer"
-            className="flex w-full items-center justify-center gap-1 rounded-xl gold-gradient py-2 text-sm font-bold text-foreground"
-          >
-            {extraExpiresAt ? "Renovar" : "Comprar"} <ExternalLink className="h-3.5 w-3.5" />
-          </a>
-        ) : (
-          <button disabled className="w-full cursor-not-allowed rounded-xl bg-foreground/10 py-2 text-sm font-semibold text-foreground/50">
-            Checkout não configurado
-          </button>
-        )}
-      </div>
-    </div>
-  );
-}
