@@ -5,7 +5,7 @@ import { Pencil, Plus, Trash2 } from "lucide-react";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
 import { supabase } from "@/integrations/supabase/client";
 import { fetchMiniApps, formatPriceBRL, isAdmin, type MiniApp } from "@/lib/access";
-import { renderMarkdown } from "@/lib/markdown";
+import { renderContent } from "@/lib/markdown";
 import { SubscriptionsAdmin } from "@/components/admin/SubscriptionsAdmin";
 import { UsersAdmin } from "@/components/admin/UsersAdmin";
 import { TextsAdmin } from "@/components/admin/TextsAdmin";
