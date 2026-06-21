@@ -60,6 +60,7 @@ function AdminContent() {
   const [tab, setTab] = useState<"apps" | "subs" | "users" | "texts">("apps");
   const [editing, setEditing] = useState<MiniApp | null>(null);
   const [creating, setCreating] = useState(false);
+  const [search, setSearch] = useState("");
 
   const appsQ = useQuery({
     queryKey: ["admin_mini_apps"],
