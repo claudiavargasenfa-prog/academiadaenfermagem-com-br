@@ -12,12 +12,8 @@ import { ReferencesFooter } from "./References";
 import { AuthGate, signOut } from "./AuthGate";
 import { TrialCountdownBanner } from "./TrialCountdownBanner";
 import { isAdmin } from "@/lib/access";
+import { useText } from "@/lib/app-texts";
 import logoAsset from "@/assets/logo.png.asset.json";
-
-const nav = [
-  { to: "/", label: "Loja", icon: Store },
-  { to: "/minha-conta", label: "Minha Conta", icon: User },
-] as const;
 
 export function AppShell({ children, trackSlug }: { children: ReactNode; trackSlug?: "academico" | "tecnico" | "enfermeiro" }) {
   const [open, setOpen] = useState(false);
@@ -28,9 +24,17 @@ export function AppShell({ children, trackSlug }: { children: ReactNode; trackSl
     isAdmin().then(setAdmin);
   }, []);
 
+  const lojaLabel = useText("menu.loja", "Loja");
+  const minhaContaLabel = useText("menu.minha_conta", "Minha Conta");
+  const adminLabel = useText("menu.admin", "Admin");
+
+  const baseNav = [
+    { to: "/" as const, label: lojaLabel, icon: Store },
+    { to: "/minha-conta" as const, label: minhaContaLabel, icon: User },
+  ];
   const navItems = admin
-    ? [...nav, { to: "/admin" as const, label: "Admin", icon: Shield }]
-    : nav;
+    ? [...baseNav, { to: "/admin" as const, label: adminLabel, icon: Shield }]
+    : baseNav;
 
   const bgStyle: React.CSSProperties | undefined = trackSlug
     ? { backgroundColor: `color-mix(in oklab, var(--track-${trackSlug}-bg) 35%, transparent)` }
