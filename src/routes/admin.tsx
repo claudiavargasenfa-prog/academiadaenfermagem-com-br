@@ -170,7 +170,15 @@ function AdminContent() {
       )}
 
       {(() => {
-        const all = appsQ.data ?? [];
+        const allRaw = appsQ.data ?? [];
+        const q = search.trim().toLowerCase();
+        const all = q
+          ? allRaw.filter((a: any) =>
+              [a.name, a.slug, a.description, a.kind]
+                .filter(Boolean)
+                .some((v: string) => v.toLowerCase().includes(q)),
+            )
+          : allRaw;
         const renderCard = (app: MiniApp) => (
           <Card key={app.id}>
             <div className="flex items-start justify-between gap-3">
