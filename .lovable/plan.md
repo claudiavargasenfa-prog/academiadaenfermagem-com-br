@@ -1,145 +1,131 @@
 
-# Reorganização das Trilhas + Trial + Avisos + Gestão de Usuários
+# Reorganização: todos os mini apps dentro das trilhas + admin total de usuários
 
-Plano final (1B, 2A, 3A + email no cadastro + **admin gerencia usuários**).
+Baseado no DOCX que você anexou. Nenhum app fica solto na loja — nem os grátis. Cada trilha vira a única porta de entrada dos seus apps.
 
-## 1. Reposicionar trilhas + cores novas
+## 1. Home: nova organização
 
-Nova ordem da home:
-```
-[Header] → [Banner verde escuro] → [3 cards das trilhas] → [Conteúdo grátis] → [Demais mini apps]
-```
+Tira da home as seções "Conteúdo grátis" e "Demais mini apps". A home passa a ter:
 
-Cores (tokens em `src/styles.css`):
-- **Acadêmico:** amarelo ouro claro (fundo `#FDE68A`, texto `#92400E`)
-- **Enfermeiro:** verde claro (fundo `#BBF7D0`, texto `#14532D`)
-- **Técnico:** azul bebê (fundo `#BFDBFE`, texto `#1E3A8A`)
-
-Badges dos mini apps usam os mesmos tokens.
-
-## 2. Conserto do DE/POR
-
-Inverter exibição: riscado é o maior (DE), em destaque o menor (POR). Novos campos `price_original` e `price_promo` em `subscription_plans`.
-
-## 3. Preços reais (admin)
-
-| Trilha | Novo | Migrando |
-|---|---|---|
-| Acadêmico | R$ 24,99/mês | DE R$ 39,99 POR R$ 33,99 |
-| Enfermeiro | R$ 39,99/mês | — |
-| Técnico | R$ 16,99/mês | R$ 19,99 (técnico→Acadêmico) |
-
-Novos campos: `price_novo`, `price_original_migracao`, `price_promo_migracao`, `cakto_link_novo`, `cakto_link_migracao`.
-
-**Migração automática (2A):** se o usuário logado já tem assinatura ativa em outra trilha, o card da nova trilha mostra preço promocional + link Cakto de migração.
-
-## 4. Cadastro com mais campos
-
-Tela `/auth` (sign-up):
-- Nome completo *
-- Email * (para certificado)
-- Celular com máscara BR *
-- Categoria: Acadêmico / Técnico / Enfermeiro *
-- Senha
-
-Validação Zod (cliente + servidor). Salva em `profiles` (novos `phone TEXT`, `categoria TEXT`).
-
-## 5. Trial de 30 dias só na trilha da categoria (1B)
-
-Trigger `handle_new_user` insere 1 linha em `user_subscriptions` com `plan_slug = categoria`, `status = 'trial'`, `expires_at = now() + 30 days`. Função `has_app_access` aceita `status IN ('active','trial')`. Sem cartão.
-
-## 6. Avisos pulsantes (3A)
-
-`<TrialCountdownBanner />` no topo de `_authenticated/`:
-- **D-5/D-4:** banner azul — "⏳ Sua gratuidade está terminando"
-- **D-3/D-2:** banner laranja — "⚠️ ÚLTIMOS DIAS — Vagas limitadas"
-- **D-1:** banner vermelho o dia todo — "🚨 HOJE é o último dia!"
-- **Expirou:** acesso bloqueado, redireciona pra card de assinatura
-
-Textos exatos passados, interpola `[NOME]`. Botão fechar some até refresh, volta depois. Botão abre `cakto_link_novo` da trilha da categoria.
-
-## 7. **NOVO** — Admin gerencia usuários
-
-Nova aba no admin: **"Usuários"**.
-
-**Listagem:**
-- Tabela com nome, email, celular, categoria, status do trial/assinatura, data de cadastro, expira em
-- Busca por nome/email
-- Filtros: por categoria, por status (trial / ativo / expirado)
-
-**Ações do admin:**
-- **Criar usuário** (formulário com mesmos campos do cadastro público, senha temporária definida pelo admin; usuário recebe email/credenciais; já entra com trial ativo)
-- **Editar perfil** (nome, email, celular, categoria)
-- **Conceder/revogar assinatura** manualmente (escolhe trilha + dias de validade) — já tem na aba Assinaturas, fica linkado aqui também
-- **Estender trial** (botão "+30 dias", "+60 dias", custom)
-- **Resetar senha** (envia link)
-- **Excluir usuário** (modal de confirmação digitando o email; remove de `auth.users` em cascata → some profile, subscriptions, etc.)
-
-**Como funciona tecnicamente:**
-- Server functions `createServerFn` + `requireSupabaseAuth` + verifica `has_role(uid, 'admin')`
-- Usa `supabaseAdmin.auth.admin.createUser()`, `.updateUserById()`, `.deleteUser()`, `.generateLink()`
-- Tudo carregado dentro do handler (nunca top-level) por segurança
-
-**Proteções:**
-- Admin não consegue excluir a si mesmo
-- Confirmação dupla na exclusão (digita email pra confirmar)
-- Auditoria mínima: log em `admin_actions` (quem fez o quê, quando)
-
-## 8. Banco de dados (1 migração)
-
-```sql
--- profiles
-ALTER TABLE profiles 
-  ADD COLUMN phone TEXT,
-  ADD COLUMN categoria TEXT CHECK (categoria IN ('academico','tecnico','enfermeiro'));
-
--- subscription_plans
-ALTER TABLE subscription_plans 
-  ADD COLUMN price_novo NUMERIC,
-  ADD COLUMN price_original_migracao NUMERIC,
-  ADD COLUMN price_promo_migracao NUMERIC,
-  ADD COLUMN cakto_link_novo TEXT,
-  ADD COLUMN cakto_link_migracao TEXT;
-
--- user_subscriptions: aceitar status 'trial'
--- has_app_access: ampliar pra trial
--- handle_new_user: criar trial de 30 dias na trilha da categoria
-
--- nova tabela admin_actions (auditoria)
-CREATE TABLE admin_actions (
-  id UUID PK,
-  admin_id UUID REF auth.users,
-  action TEXT, -- 'create_user'|'delete_user'|'edit_profile'|'grant_subscription'|...
-  target_user_id UUID,
-  details JSONB,
-  created_at TIMESTAMPTZ DEFAULT now()
-);
--- RLS: só admin lê/escreve
-
--- seed dos preços reais
+```text
+Header → Banner verde → 3 cards de trilha → Footer
 ```
 
-## 9. Classificação dos mini apps por trilha
+Os mini apps só aparecem clicando numa trilha (`/trilha/academico`, `/trilha/enfermeiro`, `/trilha/tecnico`). Apps grátis continuam grátis (qualquer pessoa logada abre), mas a vitrine deles fica dentro da trilha correspondente.
 
-| Mini app | Acad | Téc | Enf |
-|---|:-:|:-:|:-:|
-| SBV / Sinais vitais / SV gestante / SV pediátrico / Cálculo / Exame físico / Quizzes / Postura ética / Segurança / Saúde mental | ✅ | ✅ | ✅ |
-| Manual sobrevivência | ✅ | ✅ | — |
-| Relatório ABNT | ✅ | — | — |
-| UTI / Farmacologia avançada / ACLS | — | — | ✅ |
-| IRAS / Procedimentos / Simulações reais / Curativos | — | ✅ | ✅ |
+## 2. Mapeamento de apps por trilha (vindo do DOCX)
 
-Mini apps GRÁTIS ficam fora das trilhas até serem desmarcados.
+Marca quem já existe (✅) e quem precisa ser criado vazio para você preencher depois (🆕).
 
-## O que NÃO muda
+### Trilha 1 — Academia de Enfermagem (R$ 24,99/mês)
 
-Markdown dos mini apps, banner verde escuro, login social, paywall individual, conteúdo dos mini apps.
+```text
+01 Manual de Sobrevivência do Estágio ........ ✅ FREE
+02 Sinais Vitais (RN/Ped/Adulto/Gestante/Idoso) ✅ FREE (agrupar Adulto+Ped+Gestante+🆕RN+🆕Idoso)
+03 Postura e Ética Profissional .............. ✅ FREE
+04 Saúde Mental do Aluno e Profissional ...... ✅ FREE (renomear saude-mental)
+05 IRAS ...................................... ✅
+06 Exame Físico e Escalas Clínicas ........... ✅
+07 Prescrição NANDA-I / NOC / NIC ............ 🆕
+08 Calculadoras de Medicamentos .............. ✅
+09 Curativos e Lesões de Pele ................ ✅
+10 SBV — Suporte Básico de Vida .............. ✅
+11 Enfermagem em Clínica Médica .............. 🆕
+12 Segurança do Paciente ..................... ✅
+13 Anatomia Clínica Aplicada ................. ✅
+14 Fisiologia para Enfermagem ................ ✅
+15 Microbiologia para a Prática .............. ✅
+16 Simulações Reais (Casos Clínicos) ......... ✅
+17 Relatório de Estágio (ABNT) ............... ✅
+18 Quizzes de Enfermagem ..................... ✅
+```
 
-## Avisos
+### Trilha 2 — Enfermagem Avançada (R$ 39,99/mês)
 
-- **Links Cakto:** começam vazios; cole no admin → Assinaturas
-- **"100 vagas":** texto fixo no aviso D-3 (sem contador real)
-- **Pós-expiração:** vê a loja com paywall; conta e dados preservados
-- **Excluir usuário:** apaga em cascata (subscriptions, perfil, histórico)
+```text
+01 Saúde Mental do Profissional .............. ✅ (reusa saude-mental)
+02 Sinais Vitais (todas as faixas) ........... ✅
+03 Calculadoras .............................. ✅
+04 SAE Completo + Processos .................. 🆕
+05 Prescrição NANDA-I/NOC/NIC 2026 ........... 🆕 (mesmo do acadêmico se preferir)
+06 Enfermagem em UTI ......................... ✅
+07 Farmacologia Avançada ..................... ✅
+08 Enfermagem em Clínica Médica .............. 🆕
+09 Enfermagem em Clínica Cirúrgica ........... 🆕
+10 Enfermagem em Centro Cirúrgico ............ 🆕
+11 Enfermagem em CME ......................... 🆕
+12 Enfermagem Obstétrica ..................... ✅
+13 Enfermagem Pediátrica ..................... ✅
+14 Enfermagem em Saúde do Homem .............. 🆕
+15 Enfermagem em Saúde do Idoso .............. 🆕
+16 Saúde Mental e Cuidado Psiquiátrico ....... ✅
+17 Gestão em Enfermagem ...................... ✅
+18 Simulações Reais .......................... ✅
+19 Procedimentos de Enfermagem ............... ✅
+20 Enfermagem em Nefrologia .................. 🆕
+21 Enfermagem em Urologia .................... 🆕
+22 Enfermagem em Neurologia .................. 🆕
+23 Enfermagem em Hepatologia ................. 🆕
+24 Enfermagem em Hematologia ................. 🆕
+25 Enfermagem em Ginecologia ................. 🆕
+26 Curativos (versão profissional) ........... 🆕
+27 Quizzes de Enfermagem ..................... ✅
+28 Enfermagem Offshore ....................... 🆕
+29 Enfermagem de Bordo ....................... 🆕
+```
 
-Pode aprovar que eu implemento tudo numa entrega só.
+### Trilha 3 — Academia de Técnicos (R$ 16,99/mês)
+
+```text
+01 Manual de Sobrevivência do Estágio ........ ✅ FREE  *(assumindo o padrão — confirma depois)*
+02 Postura e Ética Profissional .............. ✅ FREE
+03 Sinais Vitais (todas as faixas) ........... ✅ FREE
+04 Saúde Mental do Profissional .............. ✅ FREE
+05 Sinais Vitais (premium completo) .......... ✅
+06 Calculadoras .............................. ✅
+07 SAE Completo + Processos .................. 🆕 (mesmo do enfermeiro)
+08 Protocolos de IRAS ........................ ✅
+09 Saúde Digital: PEP/Prontuário/Registro .... 🆕
+10 Tele-enfermagem, LGPD e Segurança ......... 🆕
+11 Equipamentos Hospitalares e Tecnologias ... 🆕
+12 SUS: Programas e Indicadores .............. 🆕
+13 Vigilância Epidemiológica ................. 🆕
+14 Cadernetas de Vacinação e Imunização ...... 🆕
+15 Hipertensão e Diabetes na Prática ......... 🆕
+16 Código de Ética do Técnico ................ 🆕
+17 Semana da Enfermagem ...................... 🆕
+18 Simulações Reais .......................... ✅
+19 Quizzes de Enfermagem ..................... ✅
+```
+
+Total a criar: **~28 mini apps novos** (placeholders com `markdown_pt = '*(em breve)*'`, ícone padrão, status `gratuito = false`, marcados na trilha correta). Você abre depois no admin e cola o conteúdo.
+
+## 3. Limpeza
+
+- Removo o registro duplicado do app `IRAS` (existe `iras` e `IRAS` com mesmo nome).
+- Cada app passa a ter pelo menos uma trilha marcada `true`. Nenhum app fica com as 3 trilhas falsas (isso é o que estava "soltando" da loja).
+- Apps grátis continuam grátis, mas só renderizam dentro da página da trilha.
+
+## 4. Admin: cadastrar e excluir qualquer pessoa
+
+Reforço no painel **Admin → Usuários** (já existe a aba):
+
+- **Criar usuário** (novo botão): modal pedindo nome, email, telefone, categoria, senha inicial e opção "marcar como admin". Usa `supabaseAdmin.auth.admin.createUser` com `email_confirm: true` (não precisa de confirmação por e-mail).
+- **Excluir usuário** (já existe — vou validar): confirma duas vezes, bloqueia o admin de excluir a si mesmo, faz `auth.admin.deleteUser` e o cascade já apaga `profiles`, `user_subscriptions`, `user_roles`, `user_app_access`, `relatorio_uses`. Registra em `admin_actions`.
+- **Conceder/revogar trilha manualmente** e **prorrogar trial** (já existem, mantenho).
+
+## 5. Detalhes técnicos
+
+- Migration única: insere os ~28 mini apps novos (idempotente com `ON CONFLICT (slug) DO NOTHING`), atualiza flags `track_*` dos existentes conforme tabela acima, remove o `IRAS` duplicado.
+- `src/routes/index.tsx`: remove blocos "Conteúdo grátis" e "Demais mini apps".
+- Server fn `createUserAsAdmin` em `src/lib/users-admin.functions.ts` + botão na UI `UsersAdmin.tsx`.
+- Nenhum mexer em paywall, preço, trial ou cobrança.
+
+## 6. Não incluído nesta entrega
+
+- Conteúdo (markdown) dos apps novos — você preenche depois pelo admin.
+- Apps "extras" que apareceram no DOCX mas não estão em nenhuma das 3 listas finais (Diagnóstico Laboratorial, Liderança/Gestão Unidades, Mentor Científico TCC, Cuidados Críticos VM, Auditoria/Glosas, Bloco Operatório, Oncologia/Paliativo, Imunização Coletiva, Atenção Básica ESF). Posso adicionar numa próxima rodada se quiser — me diz em qual trilha entram.
+
+## Confirmação rápida antes de implementar
+
+Os 4 primeiros itens da trilha **Técnico** estavam cortados no DOCX. Assumi o padrão (Manual + Postura + Sinais Vitais + Saúde Mental, todos grátis). Se for diferente, me corrige antes que eu rodo.
