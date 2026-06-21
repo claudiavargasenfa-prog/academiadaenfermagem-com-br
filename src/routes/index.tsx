@@ -176,10 +176,8 @@ function StoreHome() {
                 <a href="#trilhas" className="inline-flex items-center gap-1.5 rounded-full bg-gold px-4 py-2 text-sm font-bold text-primary shadow hover:brightness-110">
                   <Zap className="h-4 w-4" /> Ver trilhas
                 </a>
-                <a href="#gratis" className="inline-flex items-center gap-1.5 rounded-full border border-gold/60 px-4 py-2 text-sm font-semibold text-primary-foreground hover:bg-white/10">
-                  Conteúdo grátis
-                </a>
               </div>
+
             </div>
           </div>
         </div>
