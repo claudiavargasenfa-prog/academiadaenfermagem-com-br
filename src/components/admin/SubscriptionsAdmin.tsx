@@ -213,7 +213,7 @@ function PlanForm({ plan, onClose }: { plan: SubscriptionPlan; onClose: () => vo
         </fieldset>
 
         <fieldset className="rounded-xl border border-amber-400/40 bg-amber-50/40 p-3">
-          <legend className="px-1 text-[10px] font-bold uppercase text-amber-700">Migração (DE/POR)</legend>
+          <legend className="px-1 text-[10px] font-bold uppercase text-amber-700">Migre p/ outro app (15% por 3 meses)</legend>
           <p className="mb-2 text-[10px] text-muted-foreground">Mostrado automaticamente quando o aluno logado já tem outro aplicativo ativo.</p>
           <div className="grid gap-3 sm:grid-cols-3">
             <label className="block"><span className="mb-1 block text-xs font-semibold uppercase text-muted-foreground">DE (R$)</span>
@@ -267,7 +267,7 @@ function GrantForm({ onClose }: { onClose: () => void }) {
         <label className="block"><span className="mb-1 block text-xs font-semibold uppercase text-muted-foreground">User ID (uuid)</span>
           <input className={input} value={form.user_id} onChange={(e) => setForm({ ...form, user_id: e.target.value })} required placeholder="ex: 11111111-2222-3333-4444-555555555555" /></label>
         <div className="grid gap-3 sm:grid-cols-2">
-          <label className="block"><span className="mb-1 block text-xs font-semibold uppercase text-muted-foreground">Trilha</span>
+          <label className="block"><span className="mb-1 block text-xs font-semibold uppercase text-muted-foreground">Aplicativo</span>
             <select className={input} value={form.plan_slug} onChange={(e) => setForm({ ...form, plan_slug: e.target.value })}>
               <option value="academico">Acadêmico</option>
               <option value="tecnico">Técnico</option>
