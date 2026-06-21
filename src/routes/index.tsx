@@ -1,27 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import {
-  Lock,
-  CheckCircle2,
-  Clock,
   ExternalLink,
-  Sparkles,
   ChevronLeft,
   ChevronRight,
-  Stethoscope,
-  Calculator,
-  Activity,
-  Baby,
-  HeartPulse,
-  ShieldCheck,
-  HandHeart,
-  GraduationCap,
-  FileText,
-  BookOpen,
-  Bandage,
-  FlaskConical,
-  Brain,
-  Hourglass,
   Check,
   Zap,
 } from "lucide-react";
@@ -36,16 +18,10 @@ import imgRelatorio from "@/assets/carousel/relatorio.jpg";
 import imgExame from "@/assets/carousel/exame.jpg";
 import imgIras from "@/assets/carousel/iras.jpg";
 import {
-  fetchMiniApps,
-  fetchMyExtraAccess,
   fetchSubscriptionPlans,
   fetchMyActiveSubscriptions,
   formatPriceBRL,
-  daysUntil,
-  summarizeExtras,
-  appTracks,
   TRACKS,
-  type MiniApp,
   type TrackSlug,
 } from "@/lib/access";
 
@@ -57,30 +33,14 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Loja Academia de Enfermagem: 1 mini app grátis + cursos práticos para o estágio. Acesso por 150 dias.",
+          "Academia de Enfermagem: 3 trilhas de mini apps para acadêmicos, técnicos e enfermeiros. 30 dias grátis.",
       },
     ],
   }),
   component: StoreHome,
 });
 
-const SLUG_ICON: Record<string, typeof Stethoscope> = {
-  "manual-sobrevivencia": BookOpen,
-  "postura-etica": GraduationCap,
-  "sinais-vitais": Activity,
-  iras: HandHeart,
-  seguranca: ShieldCheck,
-  "exame-fisico-escalas": Stethoscope,
-  medicamentosecalculos: Calculator,
-  "sv-pediatrico": Baby,
-  "sv-gestante": HeartPulse,
-  curativos: Bandage,
-  acls: HeartPulse,
-  uti: Activity,
-  "farmacologia-avancada": FlaskConical,
-  "saude-mental": Brain,
-  "relatorio-abnt": FileText,
-};
+
 
 const SLIDES = [
   { eyebrow: "Grátis para começar", title: "Manual de Sobrevivência do Estágio", desc: "Checklist da mochila, postura no campo e comunicação com o preceptor.", bg: "from-sky-100 to-cyan-100", accent: "text-sky-900", img: imgManual },
