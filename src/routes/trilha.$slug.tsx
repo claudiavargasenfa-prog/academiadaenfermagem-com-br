@@ -2,6 +2,7 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { ExternalLink, Lock, CheckCircle2, Sparkles, ArrowLeft, BookOpen } from "lucide-react";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
+import { BadgeList } from "@/components/Badges";
 import {
   fetchMiniApps,
   fetchMyExtraAccess,
@@ -155,7 +156,8 @@ function TrackAppCard({ app, unlocked, extraExpiresAt }: { app: MiniApp; unlocke
           </span>
         )}
       </div>
-      <h3 className="font-display text-base font-bold">{app.name}</h3>
+      <BadgeList value={(app as any).badges} />
+      <h3 className="mt-1 font-display text-base font-bold">{app.name}</h3>
       {app.description && <p className="mt-1 text-xs text-muted-foreground">{app.description}</p>}
 
       <div className="mt-3">
