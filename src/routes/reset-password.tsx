@@ -8,7 +8,7 @@ export const Route = createFileRoute("/reset-password")({
   component: ResetPasswordPage,
   head: () => ({
     meta: [
-      { title: "Redefinir senha — Academia de Enfermagem" },
+      { title: "Redefinir senha — Academia da Enfermagem" },
       { name: "description", content: "Defina uma nova senha para sua conta." },
     ],
   }),
@@ -123,7 +123,7 @@ function ResetPasswordPage() {
         <div className="mb-6 flex flex-col items-center text-center">
           <img
             src={logoAsset.url}
-            alt="Academia de Enfermagem"
+            alt="Academia da Enfermagem"
             className="h-20 w-20 rounded-2xl bg-white/10 object-contain p-1 ring-1 ring-gold/40"
           />
           <h1 className="mt-3 font-display text-2xl font-extrabold text-gold">

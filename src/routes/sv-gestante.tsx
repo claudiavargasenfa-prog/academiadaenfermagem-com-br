@@ -6,7 +6,7 @@ import { AlertTriangle, HeartPulse, Wind } from "lucide-react";
 export const Route = createFileRoute("/sv-gestante")({
   head: () => ({
     meta: [
-      { title: "Sinais Vitais — Gestante — Academia de Enfermagem" },
+      { title: "Sinais Vitais — Gestante — Academia da Enfermagem" },
       { name: "description", content: "Valores de referência de PA, FC, FR e SpO₂ na gestação." },
     ],
   }),

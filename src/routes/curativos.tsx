@@ -7,7 +7,7 @@ import { Bandage } from "lucide-react";
 export const Route = createFileRoute("/curativos")({
   head: () => ({
     meta: [
-      { title: "Curativos e Lesões de Pele — Academia de Enfermagem" },
+      { title: "Curativos e Lesões de Pele — Academia da Enfermagem" },
       { name: "description", content: "Tipos de feridas, coberturas e técnica asséptica." },
     ],
   }),

@@ -19,11 +19,11 @@ import {
 export const Route = createFileRoute("/trilha/$slug")({
   head: ({ params }) => {
     const t = TRACKS.find((x) => x.slug === params.slug);
-    const title = t ? `${t.label} — Academia de Enfermagem` : "Aplicativo";
+    const title = t ? `${t.label} — Academia da Enfermagem` : "Aplicativo";
     return {
       meta: [
         { title },
-        { name: "description", content: `Mini apps do aplicativo ${t?.label ?? ""} da Academia de Enfermagem.` },
+        { name: "description", content: `Mini apps do aplicativo ${t?.label ?? ""} da Academia da Enfermagem.` },
       ],
     };
   },

@@ -11,7 +11,7 @@ import { ChevronRight, ArrowLeft, Hourglass } from "lucide-react";
 export const Route = createFileRoute("/procedimentos-enfermagem")({
   head: () => ({
     meta: [
-      { title: "Procedimentos de Enfermagem — Academia de Enfermagem" },
+      { title: "Procedimentos de Enfermagem — Academia da Enfermagem" },
       {
         name: "description",
         content:

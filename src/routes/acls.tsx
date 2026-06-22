@@ -7,7 +7,7 @@ import { HeartPulse } from "lucide-react";
 export const Route = createFileRoute("/acls")({
   head: () => ({
     meta: [
-      { title: "ACLS — Suporte Avançado de Vida — Academia de Enfermagem" },
+      { title: "ACLS — Suporte Avançado de Vida — Academia da Enfermagem" },
       { name: "description", content: "Algoritmos de PCR, ritmos chocáveis e não chocáveis, drogas." },
     ],
   }),

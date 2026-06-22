@@ -9,7 +9,7 @@ import mascoteMenina from "@/assets/mascote-menina.png.asset.json";
 export const Route = createFileRoute("/iras")({
   head: () => ({
     meta: [
-      { title: "Time Contra as IRAS — Academia de Enfermagem" },
+      { title: "Time Contra as IRAS — Academia da Enfermagem" },
       {
         name: "description",
         content:

@@ -6,7 +6,7 @@ import { CheckCircle2, BookOpen, MessageCircle, Backpack } from "lucide-react";
 export const Route = createFileRoute("/manual-sobrevivencia")({
   head: () => ({
     meta: [
-      { title: "Manual de Sobrevivência do Estágio — Academia de Enfermagem" },
+      { title: "Manual de Sobrevivência do Estágio — Academia da Enfermagem" },
       {
         name: "description",
         content:

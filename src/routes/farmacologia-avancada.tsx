@@ -7,7 +7,7 @@ import { FlaskConical } from "lucide-react";
 export const Route = createFileRoute("/farmacologia-avancada")({
   head: () => ({
     meta: [
-      { title: "Farmacologia Avançada — Academia de Enfermagem" },
+      { title: "Farmacologia Avançada — Academia da Enfermagem" },
       { name: "description", content: "Aminas vasoativas, antibióticos, sedativos e diluições críticas." },
     ],
   }),

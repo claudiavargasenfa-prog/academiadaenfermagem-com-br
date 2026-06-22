@@ -92,7 +92,7 @@ export function ContentProtection({
               key={i}
               className="whitespace-nowrap font-display text-xs font-bold tracking-wider"
             >
-              {stamp || "Academia de Enfermagem"}
+              {stamp || "Academia da Enfermagem"}
             </span>
           ))}
         </div>
