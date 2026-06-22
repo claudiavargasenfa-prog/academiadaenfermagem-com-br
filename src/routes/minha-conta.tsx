@@ -13,7 +13,7 @@ import {
 
 export const Route = createFileRoute("/minha-conta")({
   head: () => ({
-    meta: [{ title: "Minha Conta — Academia de Enfermagem" }],
+    meta: [{ title: "Minha Conta — Academia da Enfermagem" }],
   }),
   component: MinhaContaPage,
 });

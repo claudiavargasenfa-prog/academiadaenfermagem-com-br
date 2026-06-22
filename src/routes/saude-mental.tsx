@@ -7,7 +7,7 @@ import { Brain } from "lucide-react";
 export const Route = createFileRoute("/saude-mental")({
   head: () => ({
     meta: [
-      { title: "Saúde Mental e Cuidado Psiquiátrico — Academia de Enfermagem" },
+      { title: "Saúde Mental e Cuidado Psiquiátrico — Academia da Enfermagem" },
       { name: "description", content: "Manejo da crise, comunicação terapêutica, contenção e medicações." },
     ],
   }),

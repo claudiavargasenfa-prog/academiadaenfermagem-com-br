@@ -4,17 +4,17 @@ import { AppShell, Card, PageHeader } from "@/components/AppShell";
 export const Route = createFileRoute("/confianca")({
   head: () => ({
     meta: [
-      { title: "Confiança, Segurança e Privacidade — Academia de Enfermagem" },
+      { title: "Confiança, Segurança e Privacidade — Academia da Enfermagem" },
       {
         name: "description",
         content:
-          "Como a Academia de Enfermagem cuida dos seus dados, do seu acesso e da sua privacidade.",
+          "Como a Academia da Enfermagem cuida dos seus dados, do seu acesso e da sua privacidade.",
       },
-      { property: "og:title", content: "Confiança, Segurança e Privacidade — Academia de Enfermagem" },
+      { property: "og:title", content: "Confiança, Segurança e Privacidade — Academia da Enfermagem" },
       {
         property: "og:description",
         content:
-          "Como a Academia de Enfermagem cuida dos seus dados, do seu acesso e da sua privacidade.",
+          "Como a Academia da Enfermagem cuida dos seus dados, do seu acesso e da sua privacidade.",
       },
     ],
   }),
@@ -27,12 +27,12 @@ function TrustPage() {
       <PageHeader
         eyebrow="Confiança"
         title="Segurança e Privacidade"
-        description="Esta página é mantida pela Academia de Enfermagem para responder dúvidas comuns sobre segurança, privacidade e uso dos seus dados no app."
+        description="Esta página é mantida pela Academia da Enfermagem para responder dúvidas comuns sobre segurança, privacidade e uso dos seus dados no app."
       />
 
       <Card className="mb-4 border-amber-400/40 bg-amber-50/40">
         <p className="text-xs text-amber-900">
-          <strong>Importante:</strong> este conteúdo é informativo e editado pela equipe da Academia de Enfermagem.
+          <strong>Importante:</strong> este conteúdo é informativo e editado pela equipe da Academia da Enfermagem.
           Não é uma certificação independente nem uma auditoria externa. As práticas técnicas descritas dependem
           tanto da nossa configuração quanto da plataforma onde o app é hospedado, em um modelo de responsabilidade compartilhada.
         </p>
@@ -102,14 +102,14 @@ function TrustPage() {
 
       <Section title="Solicitações de privacidade">
         <p>
-          Para acesso, correção, exportação ou exclusão dos seus dados, entre em contato com a equipe da Academia de Enfermagem
+          Para acesso, correção, exportação ou exclusão dos seus dados, entre em contato com a equipe da Academia da Enfermagem
           pelo canal informado abaixo. Vamos responder no menor prazo possível.
         </p>
       </Section>
 
       <Section title="Incidentes e contato de segurança">
         <p>
-          Encontrou uma falha de segurança ou comportamento suspeito? Avise a equipe da Academia de Enfermagem pelo canal de suporte
+          Encontrou uma falha de segurança ou comportamento suspeito? Avise a equipe da Academia da Enfermagem pelo canal de suporte
           informado pela administradora do app. Pedimos que você não divulgue publicamente a falha antes de termos a chance de corrigi-la.
         </p>
       </Section>

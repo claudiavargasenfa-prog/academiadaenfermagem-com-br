@@ -8,7 +8,7 @@ import { BrainCircuit } from "lucide-react";
 export const Route = createFileRoute("/quizzes")({
   head: () => ({
     meta: [
-      { title: "Quizzes de Enfermagem — Academia de Enfermagem" },
+      { title: "Quizzes de Enfermagem — Academia da Enfermagem" },
       { name: "description", content: "50 quizzes de enfermagem para acadêmicos e enfermeiros: UTI, ACLS, farmacologia, sinais vitais e mais." },
     ],
   }),

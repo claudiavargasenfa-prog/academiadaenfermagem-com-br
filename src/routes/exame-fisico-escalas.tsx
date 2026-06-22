@@ -28,7 +28,7 @@ import { useLocal } from "@/lib/storage";
 export const Route = createFileRoute("/exame-fisico-escalas")({
   head: () => ({
     meta: [
-      { title: "Exame Físico e Escalas de Avaliação — Academia de Enfermagem" },
+      { title: "Exame Físico e Escalas de Avaliação — Academia da Enfermagem" },
       {
         name: "description",
         content:

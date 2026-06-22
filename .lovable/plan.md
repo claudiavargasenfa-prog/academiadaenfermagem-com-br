@@ -1,20 +1,27 @@
-## O que vou fazer
+## Objetivo
 
-Na aba **Mini apps** do admin, duas melhorias pequenas:
+Trocar **"Academia de Enfermagem"** → **"Academia da Enfermagem"** em todos os lugares do app (títulos de página, cabeçalho, telas de login, rodapés, textos do banco e marca d'água).
 
-### 1. Agrupar os mini apps por aplicativo
-Os mini apps vão aparecer dentro de seções com título:
+## O que será alterado
 
-- **🎓 Acadêmicos** (N) — mini apps marcados pra esse aplicativo
-- **🩺 Técnicos** (N)
-- **👩‍⚕️ Enfermeiros** (N)
-- **⚠️ Sem aplicativo** (só aparece se houver) — pra você ver rapidamente quais ainda não foram atribuídos a nenhum aplicativo
+**Cabeçalho / Login / Splash**
+- `src/components/AppShell.tsx` (logo alt + nome no topo)
+- `src/components/AuthGate.tsx` (tela de login)
+- `src/routes/reset-password.tsx` (tela de redefinir senha)
+- `src/components/ContentProtection.tsx` (marca d'água de proteção)
 
-Como um mini app pode pertencer a mais de um aplicativo (ex: "Sinais Vitais do Adulto" pode estar em Acadêmico + Técnico), ele vai aparecer em cada seção em que está marcado. Os contadores no título mostram quantos itens tem cada aplicativo.
+**Loja / Admin / Minha Conta**
+- `src/routes/index.tsx` (título da Loja, meta description, texto `home.title`, alt da logo)
+- `src/routes/admin.tsx` (título da página Admin)
+- `src/routes/minha-conta.tsx`
+- `src/routes/confianca.tsx` (todas as menções no corpo do texto e metadados)
 
-### 2. Rolar pro topo ao clicar no lápis
-Quando você clica no ✏️ pra editar um mini app, a página vai rolar suavemente pro topo automaticamente, onde o editor abre. Sem precisar mais arrastar pra cima.
+**Títulos (meta) dos mini apps**
+Todos os arquivos abaixo terão o sufixo do `<title>` corrigido:
+- `iras.tsx`, `acls.tsx`, `sbv.tsx`, `uti.tsx`, `sv-pediatrico.tsx`, `sv-gestante.tsx`, `simulacoes-reais.tsx`, `seguranca.tsx`, `farmacologia-avancada.tsx`, `exame-fisico-escalas.tsx`, `curativos.tsx`, `quizzes.tsx`, `quizzes.$slug.tsx`, `relatorio-abnt.tsx`, `postura-etica.tsx`, `procedimentos-enfermagem.tsx`, `manual-sobrevivencia.tsx`, `saude-mental.tsx`, `trilha.$slug.tsx`
 
-## Arquivo alterado
+**Banco de dados (texto editável)**
+- Nova migração que atualiza o valor da chave `home.title` em `app_texts` de "Academia de Enfermagem" para "Academia da Enfermagem" (sem perder o que estiver salvo se já estiver diferente — só substitui se ainda for o valor antigo).
 
-- `src/routes/admin.tsx` — apenas a seção da lista de mini apps. Sem mudança no banco, sem mudança no editor, sem mudança em nenhuma outra aba.
+## Observação
+Após isso, qualquer texto que use `useText("home.title", ...)` vai mostrar "Academia da Enfermagem" automaticamente, e a aba **Textos** do Admin continua permitindo editar livremente.

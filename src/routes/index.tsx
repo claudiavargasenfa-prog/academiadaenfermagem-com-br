@@ -31,11 +31,11 @@ import { RichText, useText } from "@/lib/app-texts";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Loja — Academia de Enfermagem" },
+      { title: "Loja — Academia da Enfermagem" },
       {
         name: "description",
         content:
-          "Academia de Enfermagem: 3 aplicativos de mini apps para acadêmicos, técnicos e enfermeiros. 30 dias grátis.",
+          "Academia da Enfermagem: 3 aplicativos de mini apps para acadêmicos, técnicos e enfermeiros. 30 dias grátis.",
       },
     ],
   }),
@@ -101,7 +101,7 @@ function StoreHome() {
     mySubs.some((s) => s.plan_slug !== slug && s.status !== "trial");
 
 
-  const homeTitle = useText("home.title", "Academia de Enfermagem");
+  const homeTitle = useText("home.title", "Academia da Enfermagem");
   const homeDesc = useText("home.description", "Três aplicativos, uma só academia.");
   const ctaSection = useText("home.cta_section", "Assine um aplicativo · acesso ilimitado");
   const compraSegura = useText("compra.segura", "🔒 COMPRA SEGURA");
@@ -131,7 +131,7 @@ function StoreHome() {
       <section className="mb-6 grid gap-4 md:grid-cols-3">
         <div className="overflow-hidden rounded-3xl border border-gold/40 bg-primary p-5 text-primary-foreground shadow-[var(--shadow-glass)] md:col-span-2">
           <div className="flex items-start gap-3">
-            <img src={logoAsset.url} alt="Logotipo Academia de Enfermagem" className="h-12 w-12 shrink-0 rounded-xl bg-white/10 object-contain p-1 ring-1 ring-gold/40" />
+            <img src={logoAsset.url} alt="Logotipo Academia da Enfermagem" className="h-12 w-12 shrink-0 rounded-xl bg-white/10 object-contain p-1 ring-1 ring-gold/40" />
             <div className="min-w-0 flex-1">
               <span className="inline-flex items-center gap-1 rounded-full bg-gold/20 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-gold">
                 <Zap className="h-3 w-3" /> 30 dias grátis para começar

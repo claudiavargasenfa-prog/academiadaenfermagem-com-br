@@ -12,7 +12,7 @@ import { TextsAdmin } from "@/components/admin/TextsAdmin";
 import { BadgesEditor } from "@/components/admin/BadgesEditor";
 
 export const Route = createFileRoute("/admin")({
-  head: () => ({ meta: [{ title: "Admin — Academia de Enfermagem" }] }),
+  head: () => ({ meta: [{ title: "Admin — Academia da Enfermagem" }] }),
   component: AdminPage,
 });
 
@@ -90,7 +90,7 @@ function AdminContent() {
     <AppShell>
       <PageHeader
         eyebrow="Admin"
-        title="Academia de Enfermagem"
+        title="Academia da Enfermagem"
         description="Gerencie mini apps, aplicativos (planos), usuários e os textos do app."
       />
 

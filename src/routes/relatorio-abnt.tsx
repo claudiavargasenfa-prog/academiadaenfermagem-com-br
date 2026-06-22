@@ -9,7 +9,7 @@ import { FileText, Lock, AlertTriangle, Printer, ShoppingCart, Loader2 } from "l
 export const Route = createFileRoute("/relatorio-abnt")({
   head: () => ({
     meta: [
-      { title: "Relatório de Estágio (ABNT) — Academia de Enfermagem" },
+      { title: "Relatório de Estágio (ABNT) — Academia da Enfermagem" },
       {
         name: "description",
         content:

@@ -8,7 +8,7 @@ import { HeartPulse, Zap, Baby, ShieldAlert, CheckCircle2, XCircle } from "lucid
 export const Route = createFileRoute("/sbv")({
   head: () => ({
     meta: [
-      { title: "Suporte Básico de Vida (SBV) — Academia de Enfermagem" },
+      { title: "Suporte Básico de Vida (SBV) — Academia da Enfermagem" },
       {
         name: "description",
         content:

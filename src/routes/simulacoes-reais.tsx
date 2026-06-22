@@ -23,7 +23,7 @@ import {
 export const Route = createFileRoute("/simulacoes-reais")({
   head: () => ({
     meta: [
-      { title: "Simulações Reais — Academia de Enfermagem" },
+      { title: "Simulações Reais — Academia da Enfermagem" },
       {
         name: "description",
         content:

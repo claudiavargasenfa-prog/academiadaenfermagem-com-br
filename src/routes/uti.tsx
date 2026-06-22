@@ -7,7 +7,7 @@ import { Activity } from "lucide-react";
 export const Route = createFileRoute("/uti")({
   head: () => ({
     meta: [
-      { title: "Enfermagem em UTI — Academia de Enfermagem" },
+      { title: "Enfermagem em UTI — Academia da Enfermagem" },
       { name: "description", content: "Monitorização, VM, sedoanalgesia e prevenção de eventos." },
     ],
   }),
