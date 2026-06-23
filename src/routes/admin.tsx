@@ -87,7 +87,7 @@ function AdminContent() {
   }
 
   return (
-    <AppShell>
+    <AppShell hideReferences>
       <PageHeader
         eyebrow="Admin"
         title="Academia da Enfermagem"
