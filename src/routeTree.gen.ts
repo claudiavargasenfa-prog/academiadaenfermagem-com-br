@@ -21,6 +21,7 @@ import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as RelatorioAbntRouteImport } from './routes/relatorio-abnt'
 import { Route as QuizzesRouteImport } from './routes/quizzes'
 import { Route as ProcedimentosEnfermagemRouteImport } from './routes/procedimentos-enfermagem'
+import { Route as PrescricaoRouteImport } from './routes/prescricao'
 import { Route as PosturaEticaRouteImport } from './routes/postura-etica'
 import { Route as MinhaContaRouteImport } from './routes/minha-conta'
 import { Route as ManualSobrevivenciaRouteImport } from './routes/manual-sobrevivencia'
@@ -97,6 +98,11 @@ const QuizzesRoute = QuizzesRouteImport.update({
 const ProcedimentosEnfermagemRoute = ProcedimentosEnfermagemRouteImport.update({
   id: '/procedimentos-enfermagem',
   path: '/procedimentos-enfermagem',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrescricaoRoute = PrescricaoRouteImport.update({
+  id: '/prescricao',
+  path: '/prescricao',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PosturaEticaRoute = PosturaEticaRouteImport.update({
@@ -200,6 +206,7 @@ export interface FileRoutesByFullPath {
   '/manual-sobrevivencia': typeof ManualSobrevivenciaRoute
   '/minha-conta': typeof MinhaContaRoute
   '/postura-etica': typeof PosturaEticaRoute
+  '/prescricao': typeof PrescricaoRoute
   '/procedimentos-enfermagem': typeof ProcedimentosEnfermagemRoute
   '/quizzes': typeof QuizzesRouteWithChildren
   '/relatorio-abnt': typeof RelatorioAbntRoute
@@ -231,6 +238,7 @@ export interface FileRoutesByTo {
   '/manual-sobrevivencia': typeof ManualSobrevivenciaRoute
   '/minha-conta': typeof MinhaContaRoute
   '/postura-etica': typeof PosturaEticaRoute
+  '/prescricao': typeof PrescricaoRoute
   '/procedimentos-enfermagem': typeof ProcedimentosEnfermagemRoute
   '/quizzes': typeof QuizzesRouteWithChildren
   '/relatorio-abnt': typeof RelatorioAbntRoute
@@ -263,6 +271,7 @@ export interface FileRoutesById {
   '/manual-sobrevivencia': typeof ManualSobrevivenciaRoute
   '/minha-conta': typeof MinhaContaRoute
   '/postura-etica': typeof PosturaEticaRoute
+  '/prescricao': typeof PrescricaoRoute
   '/procedimentos-enfermagem': typeof ProcedimentosEnfermagemRoute
   '/quizzes': typeof QuizzesRouteWithChildren
   '/relatorio-abnt': typeof RelatorioAbntRoute
@@ -296,6 +305,7 @@ export interface FileRouteTypes {
     | '/manual-sobrevivencia'
     | '/minha-conta'
     | '/postura-etica'
+    | '/prescricao'
     | '/procedimentos-enfermagem'
     | '/quizzes'
     | '/relatorio-abnt'
@@ -327,6 +337,7 @@ export interface FileRouteTypes {
     | '/manual-sobrevivencia'
     | '/minha-conta'
     | '/postura-etica'
+    | '/prescricao'
     | '/procedimentos-enfermagem'
     | '/quizzes'
     | '/relatorio-abnt'
@@ -358,6 +369,7 @@ export interface FileRouteTypes {
     | '/manual-sobrevivencia'
     | '/minha-conta'
     | '/postura-etica'
+    | '/prescricao'
     | '/procedimentos-enfermagem'
     | '/quizzes'
     | '/relatorio-abnt'
@@ -390,6 +402,7 @@ export interface RootRouteChildren {
   ManualSobrevivenciaRoute: typeof ManualSobrevivenciaRoute
   MinhaContaRoute: typeof MinhaContaRoute
   PosturaEticaRoute: typeof PosturaEticaRoute
+  PrescricaoRoute: typeof PrescricaoRoute
   ProcedimentosEnfermagemRoute: typeof ProcedimentosEnfermagemRoute
   QuizzesRoute: typeof QuizzesRouteWithChildren
   RelatorioAbntRoute: typeof RelatorioAbntRoute
@@ -490,6 +503,13 @@ declare module '@tanstack/react-router' {
       path: '/procedimentos-enfermagem'
       fullPath: '/procedimentos-enfermagem'
       preLoaderRoute: typeof ProcedimentosEnfermagemRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/prescricao': {
+      id: '/prescricao'
+      path: '/prescricao'
+      fullPath: '/prescricao'
+      preLoaderRoute: typeof PrescricaoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/postura-etica': {
@@ -640,6 +660,7 @@ const rootRouteChildren: RootRouteChildren = {
   ManualSobrevivenciaRoute: ManualSobrevivenciaRoute,
   MinhaContaRoute: MinhaContaRoute,
   PosturaEticaRoute: PosturaEticaRoute,
+  PrescricaoRoute: PrescricaoRoute,
   ProcedimentosEnfermagemRoute: ProcedimentosEnfermagemRoute,
   QuizzesRoute: QuizzesRouteWithChildren,
   RelatorioAbntRoute: RelatorioAbntRoute,
