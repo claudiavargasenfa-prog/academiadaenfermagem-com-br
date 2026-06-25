@@ -11,6 +11,7 @@ import {
   appTracks,
   formatPriceBRL,
   summarizeExtras,
+  useIsAdmin,
   TRACKS,
   type TrackSlug,
   type MiniApp,
@@ -40,6 +41,8 @@ function TrilhaPage() {
   const extrasQ = useQuery({ queryKey: ["my_extras"], queryFn: fetchMyExtraAccess });
   const subsQ = useQuery({ queryKey: ["my_subs"], queryFn: fetchMyActiveSubscriptions });
   const plansQ = useQuery({ queryKey: ["subscription_plans"], queryFn: fetchSubscriptionPlans });
+  const adminQ = useIsAdmin();
+  const isAdminUser = !!adminQ.data;
 
   const apps = (appsQ.data ?? []).filter((a) => appTracks(a).includes(trackSlug));
   const { extraAccessByApp } = summarizeExtras(extrasQ.data ?? []);
@@ -102,7 +105,7 @@ function TrilhaPage() {
           <h2 className="mb-3 font-display text-lg font-bold">Grátis</h2>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {gratis.map((app) => (
-              <TrackAppCard key={app.id} app={app} unlocked extraExpiresAt={extraAccessByApp[app.id] ?? null} />
+              <TrackAppCard key={app.id} app={app} unlocked extraExpiresAt={extraAccessByApp[app.id] ?? null} isAdmin={isAdminUser} />
             ))}
           </div>
         </section>
@@ -116,8 +119,9 @@ function TrilhaPage() {
               <TrackAppCard
                 key={app.id}
                 app={app}
-                unlocked={trackActive || !!extraAccessByApp[app.id]}
+                unlocked={isAdminUser || trackActive || !!extraAccessByApp[app.id]}
                 extraExpiresAt={extraAccessByApp[app.id] ?? null}
+                isAdmin={isAdminUser}
               />
             ))}
           </div>
@@ -133,9 +137,9 @@ function TrilhaPage() {
   );
 }
 
-function TrackAppCard({ app, unlocked, extraExpiresAt }: { app: MiniApp; unlocked: boolean; extraExpiresAt: string | null }) {
-  const route = (app.route_path ?? "") as string;
-  const hasRoute = !!app.route_path;
+function TrackAppCard({ app, unlocked, extraExpiresAt, isAdmin }: { app: MiniApp; unlocked: boolean; extraExpiresAt: string | null; isAdmin?: boolean }) {
+  const route = (app.route_path && app.route_path.trim()) || `/app/${app.slug}`;
+  const hasRoute = true; // Always have a fallback page now
   return (
     <div className="glass flex flex-col rounded-2xl p-4">
       <div className="mb-2 flex items-start justify-between gap-2">
@@ -148,7 +152,7 @@ function TrackAppCard({ app, unlocked, extraExpiresAt }: { app: MiniApp; unlocke
           </span>
         ) : unlocked ? (
           <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-2 py-0.5 text-[10px] font-semibold text-emerald-700">
-            <CheckCircle2 className="h-3 w-3" /> Liberado
+            <CheckCircle2 className="h-3 w-3" /> {isAdmin ? "Admin" : "Liberado"}
           </span>
         ) : (
           <span className="inline-flex items-center gap-1 rounded-full bg-foreground/10 px-2 py-0.5 text-[10px] font-semibold text-foreground/70">
@@ -165,10 +169,6 @@ function TrackAppCard({ app, unlocked, extraExpiresAt }: { app: MiniApp; unlocke
           <Link to={route} className="block w-full rounded-xl bg-primary py-2 text-center text-sm font-semibold text-primary-foreground">
             Acessar
           </Link>
-        ) : !hasRoute ? (
-          <button disabled className="w-full cursor-not-allowed rounded-xl bg-foreground/10 py-2 text-sm font-semibold text-foreground/50">
-            Em preparação
-          </button>
         ) : app.cakto_checkout_url ? (
           <a href={app.cakto_checkout_url} target="_blank" rel="noreferrer" className="flex w-full items-center justify-center gap-1 rounded-xl gold-gradient py-2 text-sm font-bold text-foreground">
             {extraExpiresAt ? "Renovar" : "Comprar avulso"} <ExternalLink className="h-3.5 w-3.5" />
