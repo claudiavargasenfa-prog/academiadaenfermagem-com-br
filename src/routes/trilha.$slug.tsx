@@ -105,7 +105,7 @@ function TrilhaPage() {
           <h2 className="mb-3 font-display text-lg font-bold">Grátis</h2>
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {gratis.map((app) => (
-              <TrackAppCard key={app.id} app={app} unlocked extraExpiresAt={extraAccessByApp[app.id] ?? null} />
+              <TrackAppCard key={app.id} app={app} unlocked extraExpiresAt={extraAccessByApp[app.id] ?? null} isAdmin={isAdminUser} />
             ))}
           </div>
         </section>
