@@ -11,6 +11,7 @@ import {
   appTracks,
   formatPriceBRL,
   summarizeExtras,
+  useIsAdmin,
   TRACKS,
   type TrackSlug,
   type MiniApp,
