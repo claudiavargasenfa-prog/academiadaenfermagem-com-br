@@ -41,6 +41,8 @@ function TrilhaPage() {
   const extrasQ = useQuery({ queryKey: ["my_extras"], queryFn: fetchMyExtraAccess });
   const subsQ = useQuery({ queryKey: ["my_subs"], queryFn: fetchMyActiveSubscriptions });
   const plansQ = useQuery({ queryKey: ["subscription_plans"], queryFn: fetchSubscriptionPlans });
+  const adminQ = useIsAdmin();
+  const isAdminUser = !!adminQ.data;
 
   const apps = (appsQ.data ?? []).filter((a) => appTracks(a).includes(trackSlug));
   const { extraAccessByApp } = summarizeExtras(extrasQ.data ?? []);
