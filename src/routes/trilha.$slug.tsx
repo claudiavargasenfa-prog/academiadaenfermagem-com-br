@@ -119,8 +119,9 @@ function TrilhaPage() {
               <TrackAppCard
                 key={app.id}
                 app={app}
-                unlocked={trackActive || !!extraAccessByApp[app.id]}
+                unlocked={isAdminUser || trackActive || !!extraAccessByApp[app.id]}
                 extraExpiresAt={extraAccessByApp[app.id] ?? null}
+                isAdmin={isAdminUser}
               />
             ))}
           </div>
