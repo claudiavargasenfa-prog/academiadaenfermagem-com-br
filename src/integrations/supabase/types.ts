@@ -65,6 +65,59 @@ export type Database = {
         }
         Relationships: []
       }
+      mini_app_subtopics: {
+        Row: {
+          audio_url: string | null
+          content_md: string | null
+          created_at: string
+          icon: string | null
+          id: string
+          is_draft: boolean
+          mini_app_id: string
+          ordem: number
+          slug: string
+          title: string
+          updated_at: string
+          video_url: string | null
+        }
+        Insert: {
+          audio_url?: string | null
+          content_md?: string | null
+          created_at?: string
+          icon?: string | null
+          id?: string
+          is_draft?: boolean
+          mini_app_id: string
+          ordem?: number
+          slug: string
+          title: string
+          updated_at?: string
+          video_url?: string | null
+        }
+        Update: {
+          audio_url?: string | null
+          content_md?: string | null
+          created_at?: string
+          icon?: string | null
+          id?: string
+          is_draft?: boolean
+          mini_app_id?: string
+          ordem?: number
+          slug?: string
+          title?: string
+          updated_at?: string
+          video_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mini_app_subtopics_mini_app_id_fkey"
+            columns: ["mini_app_id"]
+            isOneToOne: false
+            referencedRelation: "mini_apps"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mini_apps: {
         Row: {
           audio_url: string | null

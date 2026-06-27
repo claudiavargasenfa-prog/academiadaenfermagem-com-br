@@ -10,6 +10,7 @@ import { SubscriptionsAdmin } from "@/components/admin/SubscriptionsAdmin";
 import { UsersAdmin } from "@/components/admin/UsersAdmin";
 import { TextsAdmin } from "@/components/admin/TextsAdmin";
 import { BadgesEditor } from "@/components/admin/BadgesEditor";
+import { SubtopicsAdmin } from "@/components/admin/SubtopicsAdmin";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({ meta: [{ title: "Admin — Academia da Enfermagem" }] }),
@@ -514,6 +515,7 @@ function MiniAppForm({
             />
           </Field>
         </div>
+        {app && <SubtopicsAdmin miniAppId={app.id} />}
         <div className="rounded-xl border border-border p-3">
           <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
             Disponível nos aplicativos
