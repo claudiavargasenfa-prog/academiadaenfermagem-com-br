@@ -10,6 +10,7 @@ import { SubscriptionsAdmin } from "@/components/admin/SubscriptionsAdmin";
 import { UsersAdmin } from "@/components/admin/UsersAdmin";
 import { TextsAdmin } from "@/components/admin/TextsAdmin";
 import { BadgesEditor } from "@/components/admin/BadgesEditor";
+import { SubtopicsAdmin } from "@/components/admin/SubtopicsAdmin";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({ meta: [{ title: "Admin — Academia da Enfermagem" }] }),
