@@ -1,0 +1,1 @@
+UPDATE public.mini_apps SET slug = 'processo-enfermagem', route_path = '/app/processo-enfermagem' WHERE slug = 'pe descomplicado';
