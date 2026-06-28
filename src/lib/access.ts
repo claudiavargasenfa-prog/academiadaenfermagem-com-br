@@ -203,23 +203,21 @@ export function useAppAccess(slug: string) {
         return { app, granted: true, expiresAt: acc.expires_at, viaAdmin: false };
       }
 
-      // Track subscription access
-      const { data: appRow } = await supabase
-        .from("mini_apps")
-        .select("track_academico, track_tecnico, track_enfermeiro")
-        .eq("id", app.id)
-        .maybeSingle();
-      const trackSlugs: string[] = [];
-      if (appRow?.track_academico) trackSlugs.push("academico");
-      if (appRow?.track_tecnico) trackSlugs.push("tecnico");
-      if (appRow?.track_enfermeiro) trackSlugs.push("enfermeiro");
-      if (trackSlugs.length > 0) {
+      // Acesso via assinatura de qualquer app que contenha este mini app
+      const { data: placements } = await supabase
+        .from("mini_app_placements")
+        .select("app_id, apps:app_id (slug)")
+        .eq("mini_app_id", app.id);
+      const planSlugs: string[] = (placements ?? [])
+        .map((p: any) => p.apps?.slug)
+        .filter(Boolean);
+      if (planSlugs.length > 0) {
         const { data: sub } = await supabase
           .from("user_subscriptions")
           .select("expires_at")
           .eq("user_id", u.user.id)
-          .eq("status", "active")
-          .in("plan_slug", trackSlugs)
+          .in("status", ["active", "trial"])
+          .in("plan_slug", planSlugs)
           .gt("expires_at", new Date().toISOString())
           .order("expires_at", { ascending: false })
           .limit(1)
