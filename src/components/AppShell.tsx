@@ -37,6 +37,10 @@ export function AppShell({
   const lojaLabel = useText("menu.loja", "Loja");
   const minhaContaLabel = useText("menu.minha_conta", "Minha Conta");
   const adminLabel = useText("menu.admin", "Admin");
+  const headerTitle = useText("header.title", "Academia da Enfermagem");
+  const headerSubtitle = useText("header.subtitle", "Informação Atualizada em suas Mãos");
+  const headerTitleSize = useText("header.title.size", "16");
+  const headerSubtitleSize = useText("header.subtitle.size", "11");
 
   const baseNav = [
     { to: "/" as const, label: lojaLabel, icon: Store },
