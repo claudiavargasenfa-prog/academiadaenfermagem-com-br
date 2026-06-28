@@ -103,10 +103,16 @@ function AdminContent() {
           Mini apps
         </button>
         <button
+          onClick={() => setTab("organize")}
+          className={`flex-1 rounded-lg px-3 py-2 ${tab === "organize" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
+        >
+          Apps & Organização
+        </button>
+        <button
           onClick={() => setTab("subs")}
           className={`flex-1 rounded-lg px-3 py-2 ${tab === "subs" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
         >
-          Aplicativos (Planos)
+          Planos / Cakto
         </button>
         <button
           onClick={() => setTab("users")}
