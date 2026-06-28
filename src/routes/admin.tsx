@@ -134,6 +134,8 @@ function AdminContent() {
         <UsersAdmin />
       ) : tab === "subs" ? (
         <SubscriptionsAdmin />
+      ) : tab === "organize" ? (
+        <AppsAdmin />
       ) : (
         <>
       <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
