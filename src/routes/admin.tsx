@@ -266,7 +266,10 @@ function AdminContent() {
         return (
           <div className="mt-4 space-y-6">
             {sections.map((sec) => {
-              const items = all.filter(sec.filter);
+              const items = all
+                .filter(sec.filter)
+                .slice()
+                .sort((a: any, b: any) => (a.name ?? "").localeCompare(b.name ?? "", "pt-BR"));
               return (
                 <section key={sec.title}>
                   <h2 className="mb-2 flex items-center gap-2 border-b border-foreground/10 pb-1 font-display text-lg font-bold">
@@ -287,9 +290,15 @@ function AdminContent() {
                   <span>⚠️</span> Sem aplicativo
                   <span className="text-xs font-normal text-muted-foreground">({semApp.length})</span>
                 </h2>
-                <div className="space-y-3">{semApp.map(renderCard)}</div>
+                <div className="space-y-3">
+                  {semApp
+                    .slice()
+                    .sort((a: any, b: any) => (a.name ?? "").localeCompare(b.name ?? "", "pt-BR"))
+                    .map(renderCard)}
+                </div>
               </section>
             )}
+
             {all.length === 0 && (
               <Card>
                 <p className="text-sm text-muted-foreground">
