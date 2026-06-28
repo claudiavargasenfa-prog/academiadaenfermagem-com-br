@@ -93,6 +93,8 @@ function StoreHome() {
 
   const plansQ = useQuery({ queryKey: ["subscription_plans"], queryFn: fetchSubscriptionPlans });
   const mySubsQ = useQuery({ queryKey: ["my_subs"], queryFn: fetchMyActiveSubscriptions });
+  const appsQ = useApps();
+  const appBySlug = new Map((appsQ.data ?? []).map((a) => [a.slug, a]));
 
   const activePlans = (plansQ.data ?? []).filter((p) => p.is_active);
   const mySubs = mySubsQ.data ?? [];
