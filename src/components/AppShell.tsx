@@ -15,7 +15,17 @@ import { isAdmin } from "@/lib/access";
 import { useText } from "@/lib/app-texts";
 import logoAsset from "@/assets/logo.png.asset.json";
 
-export function AppShell({ children, trackSlug, hideReferences }: { children: ReactNode; trackSlug?: "academico" | "tecnico" | "enfermeiro"; hideReferences?: boolean }) {
+export function AppShell({
+  children,
+  trackSlug,
+  tint,
+  hideReferences,
+}: {
+  children: ReactNode;
+  trackSlug?: "academico" | "tecnico" | "enfermeiro";
+  tint?: string | null;
+  hideReferences?: boolean;
+}) {
   const [open, setOpen] = useState(false);
   const [admin, setAdmin] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
@@ -36,7 +46,9 @@ export function AppShell({ children, trackSlug, hideReferences }: { children: Re
     ? [...baseNav, { to: "/admin" as const, label: adminLabel, icon: Shield }]
     : baseNav;
 
-  const bgStyle: React.CSSProperties | undefined = trackSlug
+  const bgStyle: React.CSSProperties | undefined = tint
+    ? { backgroundColor: `color-mix(in oklab, ${tint} 35%, transparent)` }
+    : trackSlug
     ? { backgroundColor: `color-mix(in oklab, var(--track-${trackSlug}-bg) 35%, transparent)` }
     : undefined;
 
