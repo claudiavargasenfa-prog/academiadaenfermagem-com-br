@@ -183,7 +183,7 @@ function StoreHome() {
           <h2 className="mb-3 font-display text-lg font-bold"><RichText>{ctaSection}</RichText></h2>
           <div className="grid gap-3 sm:grid-cols-3">
             {activePlans.map((plan) => {
-              const track = TRACKS.find((t) => t.slug === plan.slug);
+              const appRow = appBySlug.get(plan.slug);
               const sub = mySubs.find((s) => s.plan_slug === plan.slug);
               const subscribed = !!sub && sub.status === "active";
               const inTrial = !!sub && sub.status === "trial";
@@ -199,18 +199,10 @@ function StoreHome() {
                 ? (plan as any).cakto_link_migracao
                 : ((plan as any).cakto_link_novo || plan.cakto_checkout_url);
 
-              const slug = plan.slug as TrackSlug;
-              const slogan = (plansQ.data && (plansQ as any)) ? "" : "";
-              void slogan;
+              const slug = plan.slug;
               const cardStyle: React.CSSProperties = {
-                backgroundColor:
-                  slug === "academico" ? "var(--track-academico-bg)" :
-                  slug === "tecnico" ? "var(--track-tecnico-bg)" :
-                  slug === "enfermeiro" ? "var(--track-enfermeiro-bg)" : undefined,
-                color:
-                  slug === "academico" ? "var(--track-academico-fg)" :
-                  slug === "tecnico" ? "var(--track-tecnico-fg)" :
-                  slug === "enfermeiro" ? "var(--track-enfermeiro-fg)" : undefined,
+                backgroundColor: appRow?.bg_color ?? "#F3F4F6",
+                color: appRow?.fg_color ?? "#111827",
               };
 
               return (
@@ -221,7 +213,7 @@ function StoreHome() {
                   data-app={slug}
                 >
                   <div className="mb-2 flex items-center gap-2">
-                    <span className="text-2xl">{track?.emoji}</span>
+                    <span className="text-2xl">{appRow?.emoji ?? "📱"}</span>
                     <h3 className="font-display text-base font-extrabold">{plan.name}</h3>
                   </div>
                   <PlanSlogan slug={slug} />
