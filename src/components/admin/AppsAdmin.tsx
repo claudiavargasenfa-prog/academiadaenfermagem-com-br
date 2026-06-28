@@ -243,7 +243,18 @@ function AppContent({ app }: { app: AppRow }) {
   const miniApps = miniAppsQ.data ?? [];
   const miniById = useMemo(() => new Map(miniApps.map((m) => [m.id, m])), [miniApps]);
   const placedIds = new Set(placements.map((p) => p.mini_app_id));
-  const available = miniApps.filter((m) => !placedIds.has(m.id));
+  const available = miniApps
+    .filter((m) => !placedIds.has(m.id))
+    .slice()
+    .sort((a, b) => (a.name ?? "").localeCompare(b.name ?? "", "pt-BR"));
+
+  // Ordenação alfabética dos mini apps dentro de cada container
+  const sortAlpha = (items: MiniAppPlacement[]) =>
+    items.slice().sort((a, b) => {
+      const na = miniById.get(a.mini_app_id)?.name ?? "";
+      const nb = miniById.get(b.mini_app_id)?.name ?? "";
+      return na.localeCompare(nb, "pt-BR");
+    });
 
   // Containers: "unsec" + each section.id
   const containers = useMemo(() => {
@@ -253,7 +264,7 @@ function AppContent({ app }: { app: AppRow }) {
       title: "Sem seção (geral)",
       emoji: "📦",
       sectionId: null,
-      items: placements.filter((p) => !p.section_id).sort((a, b) => a.ordem - b.ordem),
+      items: sortAlpha(placements.filter((p) => !p.section_id)),
     });
     for (const s of sections) {
       out.push({
@@ -261,11 +272,11 @@ function AppContent({ app }: { app: AppRow }) {
         title: s.title,
         emoji: s.emoji,
         sectionId: s.id,
-        items: placements.filter((p) => p.section_id === s.id).sort((a, b) => a.ordem - b.ordem),
+        items: sortAlpha(placements.filter((p) => p.section_id === s.id)),
       });
     }
     return out;
-  }, [sections, placements]);
+  }, [sections, placements, miniById]);
 
   function findContainerOf(placementId: string) {
     return containers.find((c) => c.items.some((p) => p.id === placementId));
