@@ -69,11 +69,17 @@ export function AppShell({
               className="h-11 w-11 shrink-0 rounded-xl object-contain bg-white/10 p-1 ring-1 ring-gold/40"
             />
             <div className="min-w-0 leading-tight">
-              <p className="truncate font-display text-base font-extrabold tracking-tight text-gold">
-                Academia da Enfermagem
+              <p
+                className="truncate font-display font-extrabold tracking-tight text-gold"
+                style={{ fontSize: `${parseFloat(headerTitleSize) || 16}px` }}
+              >
+                {headerTitle}
               </p>
-              <p className="truncate text-[11px] text-primary-foreground/70">
-                Informação Atualizada em suas Mãos
+              <p
+                className="truncate text-primary-foreground/70"
+                style={{ fontSize: `${parseFloat(headerSubtitleSize) || 11}px` }}
+              >
+                {headerSubtitle}
               </p>
             </div>
           </Link>
