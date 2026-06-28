@@ -290,7 +290,7 @@ function StoreHome() {
   );
 }
 
-function PlanSlogan({ slug }: { slug: TrackSlug }) {
+function PlanSlogan({ slug }: { slug: string }) {
   const txt = useText(`aplicativo.${slug}.slogan`, "");
   if (!txt.trim()) return null;
   return (
