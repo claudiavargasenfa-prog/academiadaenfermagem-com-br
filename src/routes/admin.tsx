@@ -58,7 +58,7 @@ function AdminPage() {
 
 function AdminContent() {
   const qc = useQueryClient();
-  const [tab, setTab] = useState<"apps" | "subs" | "users" | "texts">("apps");
+  const [tab, setTab] = useState<"apps" | "organize" | "subs" | "users" | "texts">("apps");
   const [editing, setEditing] = useState<MiniApp | null>(null);
   const [creating, setCreating] = useState(false);
   const [search, setSearch] = useState("");
