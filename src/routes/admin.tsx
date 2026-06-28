@@ -11,6 +11,7 @@ import { UsersAdmin } from "@/components/admin/UsersAdmin";
 import { TextsAdmin } from "@/components/admin/TextsAdmin";
 import { BadgesEditor } from "@/components/admin/BadgesEditor";
 import { SubtopicsAdmin } from "@/components/admin/SubtopicsAdmin";
+import { AppsAdmin } from "@/components/admin/AppsAdmin";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({ meta: [{ title: "Admin — Academia da Enfermagem" }] }),
@@ -58,7 +59,7 @@ function AdminPage() {
 
 function AdminContent() {
   const qc = useQueryClient();
-  const [tab, setTab] = useState<"apps" | "subs" | "users" | "texts">("apps");
+  const [tab, setTab] = useState<"apps" | "organize" | "subs" | "users" | "texts">("apps");
   const [editing, setEditing] = useState<MiniApp | null>(null);
   const [creating, setCreating] = useState(false);
   const [search, setSearch] = useState("");
@@ -103,10 +104,16 @@ function AdminContent() {
           Mini apps
         </button>
         <button
+          onClick={() => setTab("organize")}
+          className={`flex-1 rounded-lg px-3 py-2 ${tab === "organize" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
+        >
+          Apps & Organização
+        </button>
+        <button
           onClick={() => setTab("subs")}
           className={`flex-1 rounded-lg px-3 py-2 ${tab === "subs" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
         >
-          Aplicativos (Planos)
+          Planos / Cakto
         </button>
         <button
           onClick={() => setTab("users")}
@@ -128,6 +135,8 @@ function AdminContent() {
         <UsersAdmin />
       ) : tab === "subs" ? (
         <SubscriptionsAdmin />
+      ) : tab === "organize" ? (
+        <AppsAdmin />
       ) : (
         <>
       <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">

@@ -41,6 +41,47 @@ export type Database = {
         }
         Relationships: []
       }
+      app_sections: {
+        Row: {
+          app_id: string
+          created_at: string
+          emoji: string | null
+          id: string
+          is_active: boolean
+          ordem: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          app_id: string
+          created_at?: string
+          emoji?: string | null
+          id?: string
+          is_active?: boolean
+          ordem?: number
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          app_id?: string
+          created_at?: string
+          emoji?: string | null
+          id?: string
+          is_active?: boolean
+          ordem?: number
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "app_sections_app_id_fkey"
+            columns: ["app_id"]
+            isOneToOne: false
+            referencedRelation: "apps"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       app_texts: {
         Row: {
           description: string | null
@@ -64,6 +105,103 @@ export type Database = {
           value?: string
         }
         Relationships: []
+      }
+      apps: {
+        Row: {
+          bg_color: string | null
+          created_at: string
+          description: string | null
+          emoji: string | null
+          fg_color: string | null
+          id: string
+          is_active: boolean
+          name: string
+          ordem: number
+          short_name: string | null
+          slug: string
+          updated_at: string
+        }
+        Insert: {
+          bg_color?: string | null
+          created_at?: string
+          description?: string | null
+          emoji?: string | null
+          fg_color?: string | null
+          id?: string
+          is_active?: boolean
+          name: string
+          ordem?: number
+          short_name?: string | null
+          slug: string
+          updated_at?: string
+        }
+        Update: {
+          bg_color?: string | null
+          created_at?: string
+          description?: string | null
+          emoji?: string | null
+          fg_color?: string | null
+          id?: string
+          is_active?: boolean
+          name?: string
+          ordem?: number
+          short_name?: string | null
+          slug?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      mini_app_placements: {
+        Row: {
+          app_id: string
+          created_at: string
+          id: string
+          mini_app_id: string
+          ordem: number
+          section_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          app_id: string
+          created_at?: string
+          id?: string
+          mini_app_id: string
+          ordem?: number
+          section_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          app_id?: string
+          created_at?: string
+          id?: string
+          mini_app_id?: string
+          ordem?: number
+          section_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mini_app_placements_app_id_fkey"
+            columns: ["app_id"]
+            isOneToOne: false
+            referencedRelation: "apps"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mini_app_placements_mini_app_id_fkey"
+            columns: ["mini_app_id"]
+            isOneToOne: false
+            referencedRelation: "mini_apps"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mini_app_placements_section_id_fkey"
+            columns: ["section_id"]
+            isOneToOne: false
+            referencedRelation: "app_sections"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       mini_app_subtopics: {
         Row: {
