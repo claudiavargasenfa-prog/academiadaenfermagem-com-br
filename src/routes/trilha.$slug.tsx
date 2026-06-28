@@ -8,72 +8,101 @@ import {
   fetchMyExtraAccess,
   fetchMyActiveSubscriptions,
   fetchSubscriptionPlans,
-  appTracks,
   formatPriceBRL,
   summarizeExtras,
   useIsAdmin,
-  TRACKS,
-  type TrackSlug,
   type MiniApp,
 } from "@/lib/access";
+import { fetchAppBySlug, fetchAppSections, fetchPlacementsForApp } from "@/lib/apps";
 
 export const Route = createFileRoute("/trilha/$slug")({
-  head: ({ params }) => {
-    const t = TRACKS.find((x) => x.slug === params.slug);
-    const title = t ? `${t.label} — Academia da Enfermagem` : "Aplicativo";
-    return {
-      meta: [
-        { title },
-        { name: "description", content: `Mini apps do aplicativo ${t?.label ?? ""} da Academia da Enfermagem.` },
-      ],
-    };
-  },
+  head: ({ params }) => ({
+    meta: [
+      { title: `${params.slug} — Academia da Enfermagem` },
+      { name: "description", content: `Mini apps do aplicativo ${params.slug} da Academia da Enfermagem.` },
+    ],
+  }),
   component: TrilhaPage,
 });
 
 function TrilhaPage() {
   const { slug } = Route.useParams();
-  const trackSlug = slug as TrackSlug;
-  const track = TRACKS.find((t) => t.slug === trackSlug);
-  if (!track) throw notFound();
 
-  const appsQ = useQuery({ queryKey: ["mini_apps"], queryFn: fetchMiniApps });
+  const appQ = useQuery({ queryKey: ["app", slug], queryFn: () => fetchAppBySlug(slug) });
+  const sectionsQ = useQuery({
+    queryKey: ["app_sections", appQ.data?.id],
+    enabled: !!appQ.data?.id,
+    queryFn: () => fetchAppSections(appQ.data!.id),
+  });
+  const placementsQ = useQuery({
+    queryKey: ["app_placements", appQ.data?.id],
+    enabled: !!appQ.data?.id,
+    queryFn: () => fetchPlacementsForApp(appQ.data!.id),
+  });
+  const miniAppsQ = useQuery({ queryKey: ["mini_apps"], queryFn: fetchMiniApps });
   const extrasQ = useQuery({ queryKey: ["my_extras"], queryFn: fetchMyExtraAccess });
   const subsQ = useQuery({ queryKey: ["my_subs"], queryFn: fetchMyActiveSubscriptions });
   const plansQ = useQuery({ queryKey: ["subscription_plans"], queryFn: fetchSubscriptionPlans });
   const adminQ = useIsAdmin();
   const isAdminUser = !!adminQ.data;
 
-  const apps = (appsQ.data ?? []).filter((a) => appTracks(a).includes(trackSlug));
+  if (appQ.isLoading) {
+    return (
+      <AppShell>
+        <Card>Carregando…</Card>
+      </AppShell>
+    );
+  }
+  const app = appQ.data;
+  if (!app) throw notFound();
+
+  const placements = placementsQ.data ?? [];
+  const sections = sectionsQ.data ?? [];
+  const allApps = miniAppsQ.data ?? [];
+  const byId = new Map(allApps.map((a) => [a.id, a]));
+  const items = placements
+    .map((p) => ({ placement: p, app: byId.get(p.mini_app_id) }))
+    .filter((x): x is { placement: typeof placements[number]; app: MiniApp } => !!x.app && !!x.app.is_active);
+
+  const grouped: { section: { id: string; title: string; emoji: string | null } | null; items: MiniApp[] }[] = [];
+  const general = items.filter((x) => !x.placement.section_id);
+  if (general.length) {
+    grouped.push({ section: null, items: general.map((x) => x.app) });
+  }
+  for (const sec of sections) {
+    if (!sec.is_active) continue;
+    const list = items.filter((x) => x.placement.section_id === sec.id).map((x) => x.app);
+    if (list.length) grouped.push({ section: { id: sec.id, title: sec.title, emoji: sec.emoji }, items: list });
+  }
+
   const { extraAccessByApp } = summarizeExtras(extrasQ.data ?? []);
   const subs = subsQ.data ?? [];
-  const mySub = subs.find((s) => s.plan_slug === trackSlug);
+  const mySub = subs.find((s) => s.plan_slug === app.slug);
   const trackActive = !!mySub;
-  const plan = (plansQ.data ?? []).find((p) => p.slug === trackSlug);
+  const plan = (plansQ.data ?? []).find((p) => p.slug === app.slug);
 
   const cardStyle: React.CSSProperties = {
-    backgroundColor: `var(--track-${trackSlug}-bg)`,
-    color: `var(--track-${trackSlug}-fg)`,
+    backgroundColor: app.bg_color ?? "#F3F4F6",
+    color: app.fg_color ?? "#111827",
   };
 
-  const gratis = apps.filter((a) => a.gratuito);
-  const premium = apps.filter((a) => !a.gratuito);
-
   return (
-    <AppShell trackSlug={trackSlug}>
+    <AppShell tint={app.bg_color}>
       <Link to="/" className="mb-3 inline-flex items-center gap-1 text-sm font-semibold text-muted-foreground hover:text-foreground">
         <ArrowLeft className="h-4 w-4" /> Voltar para a loja
       </Link>
 
       <div className="mb-6 rounded-3xl border border-white/40 p-5 shadow-sm" style={cardStyle}>
         <div className="flex items-center gap-3">
-          <span className="text-3xl">{track.emoji}</span>
+          <span className="text-3xl">{app.emoji}</span>
           <div>
             <p className="text-xs font-bold uppercase tracking-widest opacity-70">Aplicativo</p>
-            <h1 className="font-display text-2xl font-extrabold">{track.label}</h1>
+            <h1 className="font-display text-2xl font-extrabold">{app.name}</h1>
           </div>
         </div>
-        {plan?.description && <p className="mt-2 text-sm opacity-80">{plan.description}</p>}
+        {(plan?.description || app.description) && (
+          <p className="mt-2 text-sm opacity-80">{plan?.description ?? app.description}</p>
+        )}
         <div className="mt-3 flex flex-wrap items-center gap-2">
           {trackActive ? (
             <span className="rounded-full bg-white/70 px-3 py-1 text-xs font-bold">
@@ -98,40 +127,40 @@ function TrilhaPage() {
         </div>
       </div>
 
-      <PageHeader title={`${apps.length} mini apps neste aplicativo`} description="Apps grátis liberam para qualquer pessoa. Os demais exigem assinatura deste aplicativo." />
+      <PageHeader title={`${items.length} mini apps neste aplicativo`} description="Apps grátis liberam para qualquer pessoa. Os demais exigem assinatura deste aplicativo." />
 
-      {gratis.length > 0 && (
-        <section className="mb-8">
-          <h2 className="mb-3 font-display text-lg font-bold">Grátis</h2>
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {gratis.map((app) => (
-              <TrackAppCard key={app.id} app={app} unlocked extraExpiresAt={extraAccessByApp[app.id] ?? null} isAdmin={isAdminUser} />
-            ))}
-          </div>
-        </section>
-      )}
-
-      {premium.length > 0 && (
-        <section className="mb-4">
-          <h2 className="mb-3 font-display text-lg font-bold">Premium da trilha</h2>
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {premium.map((app) => (
-              <TrackAppCard
-                key={app.id}
-                app={app}
-                unlocked={isAdminUser || trackActive || !!extraAccessByApp[app.id]}
-                extraExpiresAt={extraAccessByApp[app.id] ?? null}
-                isAdmin={isAdminUser}
-              />
-            ))}
-          </div>
-        </section>
-      )}
-
-      {apps.length === 0 && (
+      {grouped.length === 0 ? (
         <Card>
-          <p className="text-sm text-muted-foreground">Nenhum mini app cadastrado nesta trilha ainda.</p>
+          <p className="text-sm text-muted-foreground">Nenhum mini app neste aplicativo ainda. Use o Admin → Apps para arrastar mini apps para dentro.</p>
         </Card>
+      ) : (
+        grouped.map((g, idx) => (
+          <section key={g.section?.id ?? `geral-${idx}`} className="mb-8">
+            <h2 className="mb-3 font-display text-lg font-bold">
+              {g.section ? (
+                <>
+                  <span className="mr-1">{g.section.emoji ?? "📚"}</span>
+                  {g.section.title}
+                </>
+              ) : (
+                "Geral"
+              )}
+            </h2>
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {g.items
+                .sort((a, b) => Number(b.gratuito) - Number(a.gratuito))
+                .map((mini) => (
+                  <TrackAppCard
+                    key={mini.id}
+                    app={mini}
+                    unlocked={isAdminUser || mini.gratuito || trackActive || !!extraAccessByApp[mini.id]}
+                    extraExpiresAt={extraAccessByApp[mini.id] ?? null}
+                    isAdmin={isAdminUser}
+                  />
+                ))}
+            </div>
+          </section>
+        ))
       )}
     </AppShell>
   );
@@ -139,7 +168,6 @@ function TrilhaPage() {
 
 function TrackAppCard({ app, unlocked, extraExpiresAt, isAdmin }: { app: MiniApp; unlocked: boolean; extraExpiresAt: string | null; isAdmin?: boolean }) {
   const route = (app.route_path && app.route_path.trim()) || `/app/${app.slug}`;
-  const hasRoute = true; // Always have a fallback page now
   return (
     <div className="glass flex flex-col rounded-2xl p-4">
       <div className="mb-2 flex items-start justify-between gap-2">
@@ -165,7 +193,7 @@ function TrackAppCard({ app, unlocked, extraExpiresAt, isAdmin }: { app: MiniApp
       {app.description && <p className="mt-1 text-xs text-muted-foreground">{app.description}</p>}
 
       <div className="mt-3">
-        {unlocked && hasRoute ? (
+        {unlocked ? (
           <Link to={route} className="block w-full rounded-xl bg-primary py-2 text-center text-sm font-semibold text-primary-foreground">
             Acessar
           </Link>
