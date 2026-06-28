@@ -22,9 +22,8 @@ import {
   fetchSubscriptionPlans,
   fetchMyActiveSubscriptions,
   formatPriceBRL,
-  TRACKS,
-  type TrackSlug,
 } from "@/lib/access";
+import { useApps } from "@/lib/apps";
 import { RichText, useText } from "@/lib/app-texts";
 
 
