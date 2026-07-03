@@ -1,0 +1,1 @@
+ALTER TABLE public.apps ADD COLUMN IF NOT EXISTS sort_mode text NOT NULL DEFAULT 'numeric' CHECK (sort_mode IN ('numeric','alpha'));
