@@ -233,8 +233,10 @@ function PlanForm({ plan, onClose }: { plan: SubscriptionPlan; onClose: () => vo
         cakto_link_novo: form.cakto_link_novo || null,
         cakto_link_migracao: form.cakto_link_migracao || null,
         is_active: form.is_active,
+        sort_order: Number(form.sort_order) || 0,
       } as any)
       .eq("id", plan.id);
+
     setBusy(false);
     if (error) { setErr(error.message); return; }
     onClose();
