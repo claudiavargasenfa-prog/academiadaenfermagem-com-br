@@ -154,17 +154,16 @@ function TrilhaPage() {
               )}
             </h2>
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {g.items
-                .sort((a, b) => Number(b.gratuito) - Number(a.gratuito))
-                .map((mini) => (
-                  <TrackAppCard
-                    key={mini.id}
-                    app={mini}
-                    unlocked={isAdminUser || mini.gratuito || trackActive || !!extraAccessByApp[mini.id]}
-                    extraExpiresAt={extraAccessByApp[mini.id] ?? null}
-                    isAdmin={isAdminUser}
-                  />
-                ))}
+              {g.items.map((mini) => (
+                <TrackAppCard
+                  key={mini.id}
+                  app={mini}
+                  unlocked={isAdminUser || mini.gratuito || trackActive || !!extraAccessByApp[mini.id]}
+                  extraExpiresAt={extraAccessByApp[mini.id] ?? null}
+                  isAdmin={isAdminUser}
+                />
+              ))}
+
             </div>
           </section>
         ))
