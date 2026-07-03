@@ -274,10 +274,17 @@ function PlanForm({ plan, onClose }: { plan: SubscriptionPlan; onClose: () => vo
           </div>
         </fieldset>
 
-        <label className="flex items-center gap-2">
-          <input type="checkbox" checked={form.is_active} onChange={(e) => setForm({ ...form, is_active: e.target.checked })} />
-          <span>Ativo (visível na loja)</span>
-        </label>
+        <div className="flex flex-wrap items-center gap-4">
+          <label className="flex items-center gap-2">
+            <input type="checkbox" checked={form.is_active} onChange={(e) => setForm({ ...form, is_active: e.target.checked })} />
+            <span>Ativo (visível na loja)</span>
+          </label>
+          <label className="block">
+            <span className="mb-1 block text-xs font-semibold uppercase text-muted-foreground">Ordem (numérica)</span>
+            <input type="number" className={`${input} w-24`} value={form.sort_order} onChange={(e) => setForm({ ...form, sort_order: Number(e.target.value) })} />
+          </label>
+        </div>
+
         {err && <p className="text-xs text-destructive">{err}</p>}
         <div className="flex justify-end gap-2 pt-2">
           <button type="button" onClick={onClose} className="rounded-xl bg-foreground/10 px-4 py-2 text-sm font-semibold">Cancelar</button>
