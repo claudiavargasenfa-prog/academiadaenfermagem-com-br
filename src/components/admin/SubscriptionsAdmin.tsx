@@ -45,10 +45,12 @@ export function SubscriptionsAdmin() {
 
   return (
     <div className="space-y-6">
+      <LojaSortModeToggle />
       <section>
         <h3 className="mb-3 font-display text-base font-bold">Aplicativos (Planos)</h3>
         <div className="grid gap-3 sm:grid-cols-3">
           {plansQ.data?.map((p) => (
+
             <Card key={p.id}>
               <div className="flex items-start justify-between gap-2">
                 <div className="min-w-0">
