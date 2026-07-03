@@ -345,7 +345,7 @@ function AppContent({ app }: { app: AppRow }) {
     qc.invalidateQueries({ queryKey: ["app_placements", app.id] });
   }
 
-  const sortMode = ((app as any).sort_mode ?? "numeric") as "numeric" | "alpha";
+  const sortMode = currentSortMode;
 
   async function setSortMode(mode: "numeric" | "alpha") {
     await supabase.from("apps").update({ sort_mode: mode } as any).eq("id", app.id);
