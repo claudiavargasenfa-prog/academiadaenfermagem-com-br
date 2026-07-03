@@ -63,6 +63,82 @@ function AdminContent() {
   const [editing, setEditing] = useState<MiniApp | null>(null);
   const [creating, setCreating] = useState(false);
   const [search, setSearch] = useState("");
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [archiving, setArchiving] = useState(false);
+
+  function toggleSel(id: string) {
+    setSelected((s) => {
+      const n = new Set(s);
+      if (n.has(id)) n.delete(id);
+      else n.add(id);
+      return n;
+    });
+  }
+
+  async function ensureArchiveApp(): Promise<string> {
+    const { data: existing } = await supabase
+      .from("apps")
+      .select("id")
+      .eq("slug", "arquivo-2-projeto")
+      .maybeSingle();
+    if (existing?.id) return existing.id;
+    const { data: created, error } = await supabase
+      .from("apps")
+      .insert({
+        slug: "arquivo-2-projeto",
+        name: "🗄️ Arquivo — 2º Projeto",
+        short_name: "Arquivo",
+        emoji: "🗄️",
+        bg_color: "#E5E7EB",
+        fg_color: "#374151",
+        description: "Reserva de mini apps para um 2º projeto. Oculto dos alunos.",
+        ordem: 999,
+        is_active: false,
+      })
+      .select("id")
+      .single();
+    if (error || !created) throw new Error(error?.message ?? "Falha criando app Arquivo");
+    return created.id;
+  }
+
+  async function handleBulkArchive() {
+    if (selected.size === 0) return;
+    if (
+      !confirm(
+        `Arquivar ${selected.size} mini app(s)?\n\n` +
+          `• Vão pro app "🗄️ Arquivo — 2º Projeto" (oculto dos alunos)\n` +
+          `• Ficam desativados na loja\n` +
+          `• Todo o conteúdo é preservado\n` +
+          `• Pra restaurar, arraste em Apps & Organização`,
+      )
+    )
+      return;
+    setArchiving(true);
+    try {
+      const archiveId = await ensureArchiveApp();
+      const ids = Array.from(selected);
+      await supabase.from("mini_app_placements").delete().in("mini_app_id", ids);
+      await supabase.from("mini_apps").update({ is_active: false }).in("id", ids);
+      const rows = ids.map((mid, i) => ({
+        mini_app_id: mid,
+        app_id: archiveId,
+        section_id: null,
+        ordem: i,
+      }));
+      const { error } = await supabase.from("mini_app_placements").insert(rows);
+      if (error) throw error;
+      setSelected(new Set());
+      qc.invalidateQueries({ queryKey: ["admin_mini_apps"] });
+      qc.invalidateQueries({ queryKey: ["mini_apps"] });
+      qc.invalidateQueries({ queryKey: ["apps"] });
+      qc.invalidateQueries({ queryKey: ["app_placements"] });
+      alert("Pronto! Veja em 'Apps & Organização' → app 🗄️ Arquivo.");
+    } catch (e: any) {
+      alert("Erro ao arquivar: " + (e?.message ?? String(e)));
+    } finally {
+      setArchiving(false);
+    }
+  }
 
   const appsQ = useQuery({
     queryKey: ["admin_mini_apps"],
@@ -155,6 +231,28 @@ function AdminContent() {
         </button>
       </div>
 
+      {selected.size > 0 && (
+        <div className="sticky top-2 z-20 mb-3 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-primary/40 bg-primary/10 px-3 py-2 text-sm">
+          <span className="font-semibold">📋 {selected.size} selecionado(s)</span>
+          <div className="flex gap-2">
+            <button
+              onClick={() => setSelected(new Set())}
+              className="rounded-lg bg-foreground/10 px-3 py-1.5 text-xs font-semibold"
+            >
+              Limpar
+            </button>
+            <button
+              onClick={handleBulkArchive}
+              disabled={archiving}
+              className="rounded-lg bg-foreground px-3 py-1.5 text-xs font-bold text-background disabled:opacity-60"
+            >
+              🗄️ {archiving ? "Arquivando..." : "Arquivar selecionados"}
+            </button>
+          </div>
+        </div>
+      )}
+
+
       {(creating || editing) && (
         <MiniAppForm
           key={editing?.id ?? "new"}
@@ -192,7 +290,15 @@ function AdminContent() {
         const renderCard = (app: MiniApp) => (
           <Card key={app.id}>
             <div className="flex items-start justify-between gap-3">
-              <div className="min-w-0">
+              <input
+                type="checkbox"
+                checked={selected.has(app.id)}
+                onChange={() => toggleSel(app.id)}
+                className="mt-1.5 h-4 w-4 shrink-0 cursor-pointer accent-primary"
+                aria-label="Selecionar para arquivar"
+              />
+              <div className="min-w-0 flex-1">
+
                 <div className="flex items-center gap-2">
                   <span className="text-xl">{app.icon ?? "📘"}</span>
                   <h3 className="font-display text-base font-bold">{app.name}</h3>
