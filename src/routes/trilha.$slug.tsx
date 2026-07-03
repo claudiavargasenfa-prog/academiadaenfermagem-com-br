@@ -64,16 +64,23 @@ function TrilhaPage() {
     .map((p) => ({ placement: p, app: byId.get(p.mini_app_id) }))
     .filter((x): x is { placement: typeof placements[number]; app: MiniApp } => !!x.app && !!x.app.is_active);
 
+  const sortMode = ((app as any).sort_mode ?? "numeric") as "numeric" | "alpha";
+  const sortItems = (list: MiniApp[]) =>
+    sortMode === "alpha"
+      ? list.slice().sort((a, b) => (a.name ?? "").localeCompare(b.name ?? "", "pt-BR"))
+      : list;
+
   const grouped: { section: { id: string; title: string; emoji: string | null } | null; items: MiniApp[] }[] = [];
   const general = items.filter((x) => !x.placement.section_id);
   if (general.length) {
-    grouped.push({ section: null, items: general.map((x) => x.app) });
+    grouped.push({ section: null, items: sortItems(general.map((x) => x.app)) });
   }
   for (const sec of sections) {
     if (!sec.is_active) continue;
     const list = items.filter((x) => x.placement.section_id === sec.id).map((x) => x.app);
-    if (list.length) grouped.push({ section: { id: sec.id, title: sec.title, emoji: sec.emoji }, items: list });
+    if (list.length) grouped.push({ section: { id: sec.id, title: sec.title, emoji: sec.emoji }, items: sortItems(list) });
   }
+
 
   const { extraAccessByApp } = summarizeExtras(extrasQ.data ?? []);
   const subs = subsQ.data ?? [];
@@ -147,17 +154,16 @@ function TrilhaPage() {
               )}
             </h2>
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {g.items
-                .sort((a, b) => Number(b.gratuito) - Number(a.gratuito))
-                .map((mini) => (
-                  <TrackAppCard
-                    key={mini.id}
-                    app={mini}
-                    unlocked={isAdminUser || mini.gratuito || trackActive || !!extraAccessByApp[mini.id]}
-                    extraExpiresAt={extraAccessByApp[mini.id] ?? null}
-                    isAdmin={isAdminUser}
-                  />
-                ))}
+              {g.items.map((mini) => (
+                <TrackAppCard
+                  key={mini.id}
+                  app={mini}
+                  unlocked={isAdminUser || mini.gratuito || trackActive || !!extraAccessByApp[mini.id]}
+                  extraExpiresAt={extraAccessByApp[mini.id] ?? null}
+                  isAdmin={isAdminUser}
+                />
+              ))}
+
             </div>
           </section>
         ))

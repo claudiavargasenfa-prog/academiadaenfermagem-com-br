@@ -45,10 +45,12 @@ export function SubscriptionsAdmin() {
 
   return (
     <div className="space-y-6">
+      <LojaSortModeToggle />
       <section>
         <h3 className="mb-3 font-display text-base font-bold">Aplicativos (Planos)</h3>
         <div className="grid gap-3 sm:grid-cols-3">
           {plansQ.data?.map((p) => (
+
             <Card key={p.id}>
               <div className="flex items-start justify-between gap-2">
                 <div className="min-w-0">
@@ -153,6 +155,49 @@ export function SubscriptionsAdmin() {
   );
 }
 
+function LojaSortModeToggle() {
+  const qc = useQueryClient();
+  const { data: texts } = useQuery({
+    queryKey: ["app_texts"],
+    queryFn: async () => {
+      const { data } = await supabase.from("app_texts").select("key,value");
+      const out: Record<string, string> = {};
+      for (const r of (data ?? []) as any[]) out[r.key] = r.value;
+      return out;
+    },
+  });
+  const current = (texts?.["ordenacao.loja"] ?? "numeric") as "numeric" | "alpha";
+  async function setMode(mode: "numeric" | "alpha") {
+    await supabase.from("app_texts").upsert(
+      { key: "ordenacao.loja", value: mode, description: "Modo de ordenação dos aplicativos na loja" },
+      { onConflict: "key" },
+    );
+    qc.invalidateQueries({ queryKey: ["app_texts"] });
+  }
+  return (
+    <div className="flex flex-wrap items-center gap-2 rounded-xl border border-primary/30 bg-primary/5 px-3 py-2 text-sm">
+      <span className="font-semibold">Ordem dos aplicativos na loja:</span>
+      <button
+        type="button"
+        onClick={() => setMode("numeric")}
+        className={`rounded-lg px-3 py-1 text-xs font-bold ${current === "numeric" ? "bg-primary text-primary-foreground" : "bg-background"}`}
+      >
+        🔢 Numérica
+      </button>
+      <button
+        type="button"
+        onClick={() => setMode("alpha")}
+        className={`rounded-lg px-3 py-1 text-xs font-bold ${current === "alpha" ? "bg-primary text-primary-foreground" : "bg-background"}`}
+      >
+        🔤 Alfabética (A→Z)
+      </button>
+      <span className="text-[11px] text-muted-foreground">
+        {current === "numeric" ? "Menor número aparece primeiro (edite no lápis)." : "Ignora números; ordena pelo nome."}
+      </span>
+    </div>
+  );
+}
+
 function PlanForm({ plan, onClose }: { plan: SubscriptionPlan; onClose: () => void }) {
   const [form, setForm] = useState({
     name: plan.name,
@@ -163,7 +208,9 @@ function PlanForm({ plan, onClose }: { plan: SubscriptionPlan; onClose: () => vo
     cakto_link_novo: (plan as any).cakto_link_novo ?? plan.cakto_checkout_url ?? "",
     cakto_link_migracao: (plan as any).cakto_link_migracao ?? "",
     is_active: plan.is_active,
+    sort_order: (plan as any).sort_order ?? 0,
   });
+
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
 
@@ -186,8 +233,10 @@ function PlanForm({ plan, onClose }: { plan: SubscriptionPlan; onClose: () => vo
         cakto_link_novo: form.cakto_link_novo || null,
         cakto_link_migracao: form.cakto_link_migracao || null,
         is_active: form.is_active,
+        sort_order: Number(form.sort_order) || 0,
       } as any)
       .eq("id", plan.id);
+
     setBusy(false);
     if (error) { setErr(error.message); return; }
     onClose();
@@ -225,10 +274,17 @@ function PlanForm({ plan, onClose }: { plan: SubscriptionPlan; onClose: () => vo
           </div>
         </fieldset>
 
-        <label className="flex items-center gap-2">
-          <input type="checkbox" checked={form.is_active} onChange={(e) => setForm({ ...form, is_active: e.target.checked })} />
-          <span>Ativo (visível na loja)</span>
-        </label>
+        <div className="flex flex-wrap items-center gap-4">
+          <label className="flex items-center gap-2">
+            <input type="checkbox" checked={form.is_active} onChange={(e) => setForm({ ...form, is_active: e.target.checked })} />
+            <span>Ativo (visível na loja)</span>
+          </label>
+          <label className="block">
+            <span className="mb-1 block text-xs font-semibold uppercase text-muted-foreground">Ordem (numérica)</span>
+            <input type="number" className={`${input} w-24`} value={form.sort_order} onChange={(e) => setForm({ ...form, sort_order: Number(e.target.value) })} />
+          </label>
+        </div>
+
         {err && <p className="text-xs text-destructive">{err}</p>}
         <div className="flex justify-end gap-2 pt-2">
           <button type="button" onClick={onClose} className="rounded-xl bg-foreground/10 px-4 py-2 text-sm font-semibold">Cancelar</button>

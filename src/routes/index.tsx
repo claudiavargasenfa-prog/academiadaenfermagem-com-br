@@ -96,7 +96,14 @@ function StoreHome() {
   const appsQ = useApps();
   const appBySlug = new Map((appsQ.data ?? []).map((a) => [a.slug, a]));
 
-  const activePlans = (plansQ.data ?? []).filter((p) => p.is_active);
+  const lojaSortMode = useText("ordenacao.loja", "numeric");
+  const activePlans = (plansQ.data ?? [])
+    .filter((p) => p.is_active)
+    .slice()
+    .sort((a, b) => {
+      if (lojaSortMode === "alpha") return a.name.localeCompare(b.name, "pt-BR");
+      return ((a as any).sort_order ?? 0) - ((b as any).sort_order ?? 0);
+    });
   const mySubs = mySubsQ.data ?? [];
   const hasAnyOtherTrack = (slug: string) =>
     mySubs.some((s) => s.plan_slug !== slug && s.status !== "trial");
@@ -107,6 +114,7 @@ function StoreHome() {
   const ctaSection = useText("home.cta_section", "Assine um aplicativo · acesso ilimitado");
   const compraSegura = useText("compra.segura", "🔒 COMPRA SEGURA");
   const migracaoBanner = useText("migracao.banner", "**MIGRE PARA OUTRO APP E GANHE 15% DE DESCONTO POR 3 MESES**");
+
 
   return (
     <AppShell hideReferences>

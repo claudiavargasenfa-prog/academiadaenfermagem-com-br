@@ -119,6 +119,7 @@ export type Database = {
           ordem: number
           short_name: string | null
           slug: string
+          sort_mode: string
           updated_at: string
         }
         Insert: {
@@ -133,6 +134,7 @@ export type Database = {
           ordem?: number
           short_name?: string | null
           slug: string
+          sort_mode?: string
           updated_at?: string
         }
         Update: {
@@ -147,6 +149,7 @@ export type Database = {
           ordem?: number
           short_name?: string | null
           slug?: string
+          sort_mode?: string
           updated_at?: string
         }
         Relationships: []
