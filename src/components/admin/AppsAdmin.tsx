@@ -338,9 +338,68 @@ function AppContent({ app }: { app: AppRow }) {
     qc.invalidateQueries({ queryKey: ["app_placements", app.id] });
   }
 
+  const sortMode = ((app as any).sort_mode ?? "numeric") as "numeric" | "alpha";
+
+  async function setSortMode(mode: "numeric" | "alpha") {
+    await supabase.from("apps").update({ sort_mode: mode } as any).eq("id", app.id);
+    qc.invalidateQueries({ queryKey: ["apps"] });
+  }
+
+  async function renumberBy10() {
+    // Renumera todos os placements deste app em incrementos de 10, respeitando seções.
+    const grouped = new Map<string | null, MiniAppPlacement[]>();
+    for (const p of placements) {
+      const k = p.section_id ?? null;
+      const arr = grouped.get(k) ?? [];
+      arr.push(p);
+      grouped.set(k, arr);
+    }
+    for (const [, arr] of grouped) {
+      arr.sort((a, b) => a.ordem - b.ordem);
+      for (let i = 0; i < arr.length; i++) {
+        await supabase.from("mini_app_placements").update({ ordem: (i + 1) * 10 }).eq("id", arr[i].id);
+      }
+    }
+    qc.invalidateQueries({ queryKey: ["app_placements", app.id] });
+    alert("Renumerado! Agora insira novos entre os números (ex.: 15, 25).");
+  }
+
   return (
     <div className="space-y-5">
+      <div className="flex flex-wrap items-center gap-2 rounded-xl border border-primary/30 bg-primary/5 px-3 py-2 text-sm">
+        <span className="font-semibold">Ordem dos mini apps neste app:</span>
+        <button
+          type="button"
+          onClick={() => setSortMode("numeric")}
+          className={`rounded-lg px-3 py-1 text-xs font-bold ${sortMode === "numeric" ? "bg-primary text-primary-foreground" : "bg-background"}`}
+        >
+          🔢 Numérica
+        </button>
+        <button
+          type="button"
+          onClick={() => setSortMode("alpha")}
+          className={`rounded-lg px-3 py-1 text-xs font-bold ${sortMode === "alpha" ? "bg-primary text-primary-foreground" : "bg-background"}`}
+        >
+          🔤 Alfabética (A→Z)
+        </button>
+        <button
+          type="button"
+          onClick={renumberBy10}
+          className="ml-auto rounded-lg bg-foreground/10 px-3 py-1 text-xs font-bold hover:bg-foreground/20"
+          title="Reescreve as ordens em 10, 20, 30… para você inserir novos no meio"
+        >
+          ↻ Renumerar de 10 em 10
+        </button>
+        <span className="w-full text-[11px] text-muted-foreground">
+          {sortMode === "numeric"
+            ? "Arraste os cards abaixo (grava número automaticamente) ou renumere."
+            : "Ignora os números; a tela do aluno mostra em ordem alfabética."}
+        </span>
+      </div>
+
       <SectionsManager appId={app.id} sections={sections} />
+
+
 
       <div className="grid gap-4 lg:grid-cols-[1fr_280px]">
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
