@@ -248,12 +248,17 @@ function AppContent({ app }: { app: AppRow }) {
     .slice()
     .sort((a, b) => (a.name ?? "").localeCompare(b.name ?? "", "pt-BR"));
 
-  // Ordenação alfabética dos mini apps dentro de cada container
-  const sortAlpha = (items: MiniAppPlacement[]) =>
+  const currentSortMode = ((app as any).sort_mode ?? "numeric") as "numeric" | "alpha";
+
+  // No modo alfabético mostramos por nome; no numérico, por ordem gravada (drag)
+  const sortItems = (items: MiniAppPlacement[]) =>
     items.slice().sort((a, b) => {
-      const na = miniById.get(a.mini_app_id)?.name ?? "";
-      const nb = miniById.get(b.mini_app_id)?.name ?? "";
-      return na.localeCompare(nb, "pt-BR");
+      if (currentSortMode === "alpha") {
+        const na = miniById.get(a.mini_app_id)?.name ?? "";
+        const nb = miniById.get(b.mini_app_id)?.name ?? "";
+        return na.localeCompare(nb, "pt-BR");
+      }
+      return a.ordem - b.ordem;
     });
 
   // Containers: "unsec" + each section.id
@@ -264,7 +269,7 @@ function AppContent({ app }: { app: AppRow }) {
       title: "Sem seção (geral)",
       emoji: "📦",
       sectionId: null,
-      items: sortAlpha(placements.filter((p) => !p.section_id)),
+      items: sortItems(placements.filter((p) => !p.section_id)),
     });
     for (const s of sections) {
       out.push({
@@ -272,11 +277,13 @@ function AppContent({ app }: { app: AppRow }) {
         title: s.title,
         emoji: s.emoji,
         sectionId: s.id,
-        items: sortAlpha(placements.filter((p) => p.section_id === s.id)),
+        items: sortItems(placements.filter((p) => p.section_id === s.id)),
       });
     }
     return out;
-  }, [sections, placements, miniById]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sections, placements, miniById, currentSortMode]);
+
 
   function findContainerOf(placementId: string) {
     return containers.find((c) => c.items.some((p) => p.id === placementId));
