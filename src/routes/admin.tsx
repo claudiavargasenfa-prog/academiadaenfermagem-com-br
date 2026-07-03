@@ -63,6 +63,82 @@ function AdminContent() {
   const [editing, setEditing] = useState<MiniApp | null>(null);
   const [creating, setCreating] = useState(false);
   const [search, setSearch] = useState("");
+  const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [archiving, setArchiving] = useState(false);
+
+  function toggleSel(id: string) {
+    setSelected((s) => {
+      const n = new Set(s);
+      if (n.has(id)) n.delete(id);
+      else n.add(id);
+      return n;
+    });
+  }
+
+  async function ensureArchiveApp(): Promise<string> {
+    const { data: existing } = await supabase
+      .from("apps")
+      .select("id")
+      .eq("slug", "arquivo-2-projeto")
+      .maybeSingle();
+    if (existing?.id) return existing.id;
+    const { data: created, error } = await supabase
+      .from("apps")
+      .insert({
+        slug: "arquivo-2-projeto",
+        name: "🗄️ Arquivo — 2º Projeto",
+        short_name: "Arquivo",
+        emoji: "🗄️",
+        bg_color: "#E5E7EB",
+        fg_color: "#374151",
+        description: "Reserva de mini apps para um 2º projeto. Oculto dos alunos.",
+        ordem: 999,
+        is_active: false,
+      })
+      .select("id")
+      .single();
+    if (error || !created) throw new Error(error?.message ?? "Falha criando app Arquivo");
+    return created.id;
+  }
+
+  async function handleBulkArchive() {
+    if (selected.size === 0) return;
+    if (
+      !confirm(
+        `Arquivar ${selected.size} mini app(s)?\n\n` +
+          `• Vão pro app "🗄️ Arquivo — 2º Projeto" (oculto dos alunos)\n` +
+          `• Ficam desativados na loja\n` +
+          `• Todo o conteúdo é preservado\n` +
+          `• Pra restaurar, arraste em Apps & Organização`,
+      )
+    )
+      return;
+    setArchiving(true);
+    try {
+      const archiveId = await ensureArchiveApp();
+      const ids = Array.from(selected);
+      await supabase.from("mini_app_placements").delete().in("mini_app_id", ids);
+      await supabase.from("mini_apps").update({ is_active: false }).in("id", ids);
+      const rows = ids.map((mid, i) => ({
+        mini_app_id: mid,
+        app_id: archiveId,
+        section_id: null,
+        ordem: i,
+      }));
+      const { error } = await supabase.from("mini_app_placements").insert(rows);
+      if (error) throw error;
+      setSelected(new Set());
+      qc.invalidateQueries({ queryKey: ["admin_mini_apps"] });
+      qc.invalidateQueries({ queryKey: ["mini_apps"] });
+      qc.invalidateQueries({ queryKey: ["apps"] });
+      qc.invalidateQueries({ queryKey: ["app_placements"] });
+      alert("Pronto! Veja em 'Apps & Organização' → app 🗄️ Arquivo.");
+    } catch (e: any) {
+      alert("Erro ao arquivar: " + (e?.message ?? String(e)));
+    } finally {
+      setArchiving(false);
+    }
+  }
 
   const appsQ = useQuery({
     queryKey: ["admin_mini_apps"],
