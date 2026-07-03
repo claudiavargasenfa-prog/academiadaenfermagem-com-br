@@ -231,6 +231,28 @@ function AdminContent() {
         </button>
       </div>
 
+      {selected.size > 0 && (
+        <div className="sticky top-2 z-20 mb-3 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-primary/40 bg-primary/10 px-3 py-2 text-sm">
+          <span className="font-semibold">📋 {selected.size} selecionado(s)</span>
+          <div className="flex gap-2">
+            <button
+              onClick={() => setSelected(new Set())}
+              className="rounded-lg bg-foreground/10 px-3 py-1.5 text-xs font-semibold"
+            >
+              Limpar
+            </button>
+            <button
+              onClick={handleBulkArchive}
+              disabled={archiving}
+              className="rounded-lg bg-foreground px-3 py-1.5 text-xs font-bold text-background disabled:opacity-60"
+            >
+              🗄️ {archiving ? "Arquivando..." : "Arquivar selecionados"}
+            </button>
+          </div>
+        </div>
+      )}
+
+
       {(creating || editing) && (
         <MiniAppForm
           key={editing?.id ?? "new"}
