@@ -470,6 +470,44 @@ function MiniAppForm({
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
 
+  // Apps disponíveis (dinâmico, vem da tabela `apps`) + placements atuais deste mini app.
+  const appsQ = useQuery({ queryKey: ["apps"], queryFn: fetchApps });
+  const allApps = appsQ.data ?? [];
+  const placementsQ = useQuery({
+    queryKey: ["mini_app_placements_for", app?.id],
+    enabled: !!app?.id,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("mini_app_placements")
+        .select("id, app_id")
+        .eq("mini_app_id", app!.id);
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+  const [placementAppIds, setPlacementAppIds] = useState<Set<string>>(new Set());
+  const [placementsLoaded, setPlacementsLoaded] = useState(false);
+  useEffect(() => {
+    if (!app?.id) { setPlacementsLoaded(true); return; }
+    if (placementsQ.data && !placementsLoaded) {
+      setPlacementAppIds(new Set(placementsQ.data.map((p) => p.app_id)));
+      setPlacementsLoaded(true);
+    }
+  }, [app?.id, placementsQ.data, placementsLoaded]);
+
+  const toggleAppPlacement = (appId: string, checked: boolean) => {
+    setPlacementAppIds((prev) => {
+      const next = new Set(prev);
+      if (checked) next.add(appId); else next.delete(appId);
+      return next;
+    });
+    // Sincroniza flags legados (usados em filtros da lista de admin)
+    const slug = allApps.find((a) => a.id === appId)?.slug;
+    if (slug === "academico") setForm((f) => ({ ...f, track_academico: checked }));
+    else if (slug === "tecnico") setForm((f) => ({ ...f, track_tecnico: checked }));
+    else if (slug === "enfermeiro") setForm((f) => ({ ...f, track_enfermeiro: checked }));
+  };
+
   async function handleSave(e: React.FormEvent) {
     e.preventDefault();
     setBusy(true);
