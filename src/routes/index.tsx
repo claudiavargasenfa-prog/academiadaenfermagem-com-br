@@ -4,14 +4,10 @@ import {
   ExternalLink,
   ChevronLeft,
   ChevronRight,
-  Check,
-  Zap,
 } from "lucide-react";
 
 import { useQuery } from "@tanstack/react-query";
-import { AppShell, Card } from "@/components/AppShell";
-import { useLocal } from "@/lib/storage";
-import logoAsset from "@/assets/logo.png.asset.json";
+import { AppShell } from "@/components/AppShell";
 import mascotesAsset from "@/assets/mascotes-iras.png.asset.json";
 import imgManual from "@/assets/carousel/manual.jpg";
 import imgCalculos from "@/assets/carousel/calculos.jpg";
@@ -25,6 +21,7 @@ import {
 } from "@/lib/access";
 import { useApps } from "@/lib/apps";
 import { RichText, useText } from "@/lib/app-texts";
+
 
 
 export const Route = createFileRoute("/")({
