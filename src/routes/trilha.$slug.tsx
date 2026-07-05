@@ -219,3 +219,21 @@ function TrackAppCard({ app, unlocked, extraExpiresAt, isAdmin }: { app: MiniApp
     </div>
   );
 }
+
+function MeuEstagioCard() {
+  const [estagio] = useLocal("estagio-info", { campo: "", preceptor: "", periodo: "" });
+  return (
+    <Card className="mb-6">
+      <p className="text-xs font-semibold uppercase tracking-widest text-gold">Identificação</p>
+      <h3 className="mt-1 font-display text-lg font-bold">Meu estágio</h3>
+      <dl className="mt-3 grid gap-2 text-sm sm:grid-cols-3">
+        <div><dt className="text-muted-foreground">Campo</dt><dd className="font-medium">{estagio.campo || "—"}</dd></div>
+        <div><dt className="text-muted-foreground">Preceptor(a)</dt><dd className="font-medium">{estagio.preceptor || "—"}</dd></div>
+        <div><dt className="text-muted-foreground">Período</dt><dd className="font-medium">{estagio.periodo || "—"}</dd></div>
+      </dl>
+      <Link to="/diario" className="mt-3 inline-block text-sm font-semibold text-primary hover:underline">
+        Editar no Diário
+      </Link>
+    </Card>
+  );
+}
