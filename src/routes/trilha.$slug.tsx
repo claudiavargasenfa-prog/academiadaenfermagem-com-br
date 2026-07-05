@@ -14,6 +14,7 @@ import {
   type MiniApp,
 } from "@/lib/access";
 import { fetchAppBySlug, fetchAppSections, fetchPlacementsForApp } from "@/lib/apps";
+import { useLocal } from "@/lib/storage";
 
 export const Route = createFileRoute("/trilha/$slug")({
   head: ({ params }) => ({
