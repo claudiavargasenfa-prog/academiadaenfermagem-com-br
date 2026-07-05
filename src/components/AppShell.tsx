@@ -6,6 +6,7 @@ import {
   Store,
   User,
   Shield,
+  BookOpen,
 } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import { ReferencesFooter } from "./References";
@@ -20,11 +21,13 @@ export function AppShell({
   trackSlug,
   tint,
   hideReferences,
+  publicRoute,
 }: {
   children: ReactNode;
   trackSlug?: "academico" | "tecnico" | "enfermeiro";
   tint?: string | null;
   hideReferences?: boolean;
+  publicRoute?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const [admin, setAdmin] = useState(false);
@@ -42,9 +45,11 @@ export function AppShell({
   const headerTitleSize = useText("header.title.size", "16");
   const headerSubtitleSize = useText("header.subtitle.size", "11");
 
+  const historiaLabel = useText("menu.minha_historia", "Minha História");
   const baseNav = [
     { to: "/" as const, label: lojaLabel, icon: Store },
     { to: "/minha-conta" as const, label: minhaContaLabel, icon: User },
+    { to: "/minha-historia" as const, label: historiaLabel, icon: BookOpen },
   ];
   const navItems = admin
     ? [...baseNav, { to: "/admin" as const, label: adminLabel, icon: Shield }]
@@ -56,8 +61,7 @@ export function AppShell({
     ? { backgroundColor: `color-mix(in oklab, var(--track-${trackSlug}-bg) 35%, transparent)` }
     : undefined;
 
-  return (
-    <AuthGate>
+  const shell = (
     <div className="min-h-dvh" style={bgStyle} data-app={trackSlug}>
       <TrialCountdownBanner />
       <header className="sticky top-0 z-40 border-b border-gold/30 bg-primary text-primary-foreground shadow-[var(--shadow-soft)]">
@@ -173,8 +177,10 @@ export function AppShell({
         </div>
       </nav>
     </div>
-    </AuthGate>
   );
+
+  if (publicRoute) return shell;
+  return <AuthGate>{shell}</AuthGate>;
 }
 
 export function PageHeader({

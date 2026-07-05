@@ -23,6 +23,7 @@ import { Route as QuizzesRouteImport } from './routes/quizzes'
 import { Route as ProcedimentosEnfermagemRouteImport } from './routes/procedimentos-enfermagem'
 import { Route as PrescricaoRouteImport } from './routes/prescricao'
 import { Route as PosturaEticaRouteImport } from './routes/postura-etica'
+import { Route as MinhaHistoriaRouteImport } from './routes/minha-historia'
 import { Route as MinhaContaRouteImport } from './routes/minha-conta'
 import { Route as ManualSobrevivenciaRouteImport } from './routes/manual-sobrevivencia'
 import { Route as LojaRouteImport } from './routes/loja'
@@ -111,6 +112,11 @@ const PrescricaoRoute = PrescricaoRouteImport.update({
 const PosturaEticaRoute = PosturaEticaRouteImport.update({
   id: '/postura-etica',
   path: '/postura-etica',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MinhaHistoriaRoute = MinhaHistoriaRouteImport.update({
+  id: '/minha-historia',
+  path: '/minha-historia',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MinhaContaRoute = MinhaContaRouteImport.update({
@@ -223,6 +229,7 @@ export interface FileRoutesByFullPath {
   '/loja': typeof LojaRoute
   '/manual-sobrevivencia': typeof ManualSobrevivenciaRoute
   '/minha-conta': typeof MinhaContaRoute
+  '/minha-historia': typeof MinhaHistoriaRoute
   '/postura-etica': typeof PosturaEticaRoute
   '/prescricao': typeof PrescricaoRoute
   '/procedimentos-enfermagem': typeof ProcedimentosEnfermagemRoute
@@ -258,6 +265,7 @@ export interface FileRoutesByTo {
   '/loja': typeof LojaRoute
   '/manual-sobrevivencia': typeof ManualSobrevivenciaRoute
   '/minha-conta': typeof MinhaContaRoute
+  '/minha-historia': typeof MinhaHistoriaRoute
   '/postura-etica': typeof PosturaEticaRoute
   '/prescricao': typeof PrescricaoRoute
   '/procedimentos-enfermagem': typeof ProcedimentosEnfermagemRoute
@@ -293,6 +301,7 @@ export interface FileRoutesById {
   '/loja': typeof LojaRoute
   '/manual-sobrevivencia': typeof ManualSobrevivenciaRoute
   '/minha-conta': typeof MinhaContaRoute
+  '/minha-historia': typeof MinhaHistoriaRoute
   '/postura-etica': typeof PosturaEticaRoute
   '/prescricao': typeof PrescricaoRoute
   '/procedimentos-enfermagem': typeof ProcedimentosEnfermagemRoute
@@ -330,6 +339,7 @@ export interface FileRouteTypes {
     | '/loja'
     | '/manual-sobrevivencia'
     | '/minha-conta'
+    | '/minha-historia'
     | '/postura-etica'
     | '/prescricao'
     | '/procedimentos-enfermagem'
@@ -365,6 +375,7 @@ export interface FileRouteTypes {
     | '/loja'
     | '/manual-sobrevivencia'
     | '/minha-conta'
+    | '/minha-historia'
     | '/postura-etica'
     | '/prescricao'
     | '/procedimentos-enfermagem'
@@ -399,6 +410,7 @@ export interface FileRouteTypes {
     | '/loja'
     | '/manual-sobrevivencia'
     | '/minha-conta'
+    | '/minha-historia'
     | '/postura-etica'
     | '/prescricao'
     | '/procedimentos-enfermagem'
@@ -435,6 +447,7 @@ export interface RootRouteChildren {
   LojaRoute: typeof LojaRoute
   ManualSobrevivenciaRoute: typeof ManualSobrevivenciaRoute
   MinhaContaRoute: typeof MinhaContaRoute
+  MinhaHistoriaRoute: typeof MinhaHistoriaRoute
   PosturaEticaRoute: typeof PosturaEticaRoute
   PrescricaoRoute: typeof PrescricaoRoute
   ProcedimentosEnfermagemRoute: typeof ProcedimentosEnfermagemRoute
@@ -552,6 +565,13 @@ declare module '@tanstack/react-router' {
       path: '/postura-etica'
       fullPath: '/postura-etica'
       preLoaderRoute: typeof PosturaEticaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/minha-historia': {
+      id: '/minha-historia'
+      path: '/minha-historia'
+      fullPath: '/minha-historia'
+      preLoaderRoute: typeof MinhaHistoriaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/minha-conta': {
@@ -728,6 +748,7 @@ const rootRouteChildren: RootRouteChildren = {
   LojaRoute: LojaRoute,
   ManualSobrevivenciaRoute: ManualSobrevivenciaRoute,
   MinhaContaRoute: MinhaContaRoute,
+  MinhaHistoriaRoute: MinhaHistoriaRoute,
   PosturaEticaRoute: PosturaEticaRoute,
   PrescricaoRoute: PrescricaoRoute,
   ProcedimentosEnfermagemRoute: ProcedimentosEnfermagemRoute,
