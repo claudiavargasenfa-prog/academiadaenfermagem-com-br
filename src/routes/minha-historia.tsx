@@ -26,7 +26,7 @@ export const Route = createFileRoute("/minha-historia")({
 
 function MinhaHistoriaPage() {
   return (
-    <AppShell hideReferences>
+    <AppShell hideReferences publicRoute>
       {/* Voltar */}
       <div className="mb-4">
         <Link
