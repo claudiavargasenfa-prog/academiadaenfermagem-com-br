@@ -56,8 +56,7 @@ function MinhaHistoriaPage() {
             <img
               src={mascotesAsset.url}
               alt="Mascotes da Prevenção contra IRAS acenando"
-              className="h-28 w-auto object-contain md:h-32"
-              style={{ animation: "wave 2s ease-in-out infinite" }}
+              className="h-28 w-auto object-contain md:h-32 wave-animation"
             />
             <span className="mt-1 text-[10px] font-bold uppercase tracking-widest text-primary/70">
               Prevenção contra IRAS
