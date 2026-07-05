@@ -4,14 +4,10 @@ import {
   ExternalLink,
   ChevronLeft,
   ChevronRight,
-  Check,
-  Zap,
 } from "lucide-react";
 
 import { useQuery } from "@tanstack/react-query";
-import { AppShell, Card } from "@/components/AppShell";
-import { useLocal } from "@/lib/storage";
-import logoAsset from "@/assets/logo.png.asset.json";
+import { AppShell } from "@/components/AppShell";
 import mascotesAsset from "@/assets/mascotes-iras.png.asset.json";
 import imgManual from "@/assets/carousel/manual.jpg";
 import imgCalculos from "@/assets/carousel/calculos.jpg";
@@ -25,6 +21,7 @@ import {
 } from "@/lib/access";
 import { useApps } from "@/lib/apps";
 import { RichText, useText } from "@/lib/app-texts";
+
 
 
 export const Route = createFileRoute("/")({
@@ -89,8 +86,6 @@ function Carousel() {
 
 
 function StoreHome() {
-  const [estagio] = useLocal("estagio-info", { campo: "", preceptor: "", periodo: "" });
-
   const plansQ = useQuery({ queryKey: ["subscription_plans"], queryFn: fetchSubscriptionPlans });
   const mySubsQ = useQuery({ queryKey: ["my_subs"], queryFn: fetchMyActiveSubscriptions });
   const appsQ = useApps();
@@ -124,66 +119,16 @@ function StoreHome() {
         <p className="mt-2 max-w-2xl text-sm text-muted-foreground md:text-base"><RichText>{homeDesc}</RichText></p>
       </div>
 
-      <div className="mb-6 grid items-center gap-4 md:grid-cols-[1fr_auto]">
-        <div className="min-w-0">
-          <Carousel />
-        </div>
+      <Carousel />
+
+      <div className="mb-8 flex justify-center">
         <img
           src={mascotesAsset.url}
           alt="Mascotes Academia da Enfermagem — Time contra as IRAS"
-          className="mx-auto h-40 w-auto shrink-0 object-contain md:h-56 lg:h-64 [animation:pulse_3s_ease-in-out_infinite]"
+          className="h-56 w-auto object-contain sm:h-72 md:h-96 [animation:pulse_3s_ease-in-out_infinite]"
         />
       </div>
 
-
-      {/* 1) Banner verde escuro + Meu estagio */}
-      <section className="mb-6 grid gap-4 md:grid-cols-3">
-        <div className="overflow-hidden rounded-3xl border border-gold/40 bg-primary p-5 text-primary-foreground shadow-[var(--shadow-glass)] md:col-span-2">
-          <div className="flex items-start gap-3">
-            <img src={logoAsset.url} alt="Logotipo Academia da Enfermagem" className="h-12 w-12 shrink-0 rounded-xl bg-white/10 object-contain p-1 ring-1 ring-gold/40" />
-            <div className="min-w-0 flex-1">
-              <span className="inline-flex items-center gap-1 rounded-full bg-gold/20 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-gold">
-                <Zap className="h-3 w-3" /> 30 dias grátis para começar
-              </span>
-              <h2 className="mt-2 font-display text-xl font-extrabold leading-tight md:text-2xl">
-                Chegue no estágio sabendo <span className="text-gold">o que fazer</span> — antes do preceptor perguntar.
-              </h2>
-              <p className="mt-1.5 text-sm text-primary-foreground/85">
-                Mini apps de bolso criados por enfermeira com <strong className="text-gold">35 anos de UTI, ESF e APH</strong>. Conteúdo que cai na prova prática e no plantão.
-              </p>
-
-              <ul className="mt-3 grid gap-1.5 text-sm sm:grid-cols-2">
-                <li className="flex items-start gap-1.5"><Check className="mt-0.5 h-4 w-4 shrink-0 text-gold" /> Cálculos, escalas e protocolos em segundos</li>
-                <li className="flex items-start gap-1.5"><Check className="mt-0.5 h-4 w-4 shrink-0 text-gold" /> Relatório ABNT gerado do seu diário</li>
-                <li className="flex items-start gap-1.5"><Check className="mt-0.5 h-4 w-4 shrink-0 text-gold" /> 3 aplicativos: Acadêmico, Técnico e Enfermeiro</li>
-                <li className="flex items-start gap-1.5"><Check className="mt-0.5 h-4 w-4 shrink-0 text-gold" /> Sem cartão para começar</li>
-              </ul>
-
-              <div className="mt-4 flex flex-wrap items-center gap-2">
-                <a href="#aplicativos" className="inline-flex items-center gap-1.5 rounded-full bg-gold px-4 py-2 text-sm font-bold text-primary shadow hover:brightness-110">
-                  <Zap className="h-4 w-4" /> Ver aplicativos
-                </a>
-              </div>
-
-            </div>
-          </div>
-        </div>
-
-
-
-        <Card>
-          <p className="text-xs font-semibold uppercase tracking-widest text-gold">Identificação</p>
-          <h3 className="mt-1 font-display text-lg font-bold">Meu estágio</h3>
-          <dl className="mt-3 space-y-2 text-sm">
-            <div><dt className="text-muted-foreground">Campo</dt><dd className="font-medium">{estagio.campo || "—"}</dd></div>
-            <div><dt className="text-muted-foreground">Preceptor(a)</dt><dd className="font-medium">{estagio.preceptor || "—"}</dd></div>
-            <div><dt className="text-muted-foreground">Período</dt><dd className="font-medium">{estagio.periodo || "—"}</dd></div>
-          </dl>
-          <Link to="/diario" className="mt-3 inline-block text-sm font-semibold text-primary hover:underline">
-            Editar no Diário
-          </Link>
-        </Card>
-      </section>
 
       {/* 2) 3 aplicativos (cores próprias) */}
       {activePlans.length > 0 && (
