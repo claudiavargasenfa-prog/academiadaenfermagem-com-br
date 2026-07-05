@@ -708,34 +708,24 @@ function MiniAppForm({
           <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
             Disponível nos aplicativos
           </p>
-          <div className="flex flex-wrap gap-4">
-            <label className="flex items-center gap-2 text-sm">
-              <input
-                type="checkbox"
-                checked={form.track_academico}
-                onChange={(e) => setForm({ ...form, track_academico: e.target.checked })}
-              />
-              <span>🎓 Acadêmico</span>
-            </label>
-            <label className="flex items-center gap-2 text-sm">
-              <input
-                type="checkbox"
-                checked={form.track_tecnico}
-                onChange={(e) => setForm({ ...form, track_tecnico: e.target.checked })}
-              />
-              <span>🩺 Técnico</span>
-            </label>
-            <label className="flex items-center gap-2 text-sm">
-              <input
-                type="checkbox"
-                checked={form.track_enfermeiro}
-                onChange={(e) => setForm({ ...form, track_enfermeiro: e.target.checked })}
-              />
-              <span>👩‍⚕️ Enfermeiro</span>
-            </label>
-          </div>
+          {allApps.length === 0 ? (
+            <p className="text-xs text-muted-foreground">Nenhum aplicativo cadastrado ainda. Crie em Admin → Aplicativos.</p>
+          ) : (
+            <div className="flex flex-wrap gap-4">
+              {allApps.map((a) => (
+                <label key={a.id} className="flex items-center gap-2 text-sm">
+                  <input
+                    type="checkbox"
+                    checked={placementAppIds.has(a.id)}
+                    onChange={(e) => toggleAppPlacement(a.id, e.target.checked)}
+                  />
+                  <span>{a.emoji ?? "📚"} {a.name}</span>
+                </label>
+              ))}
+            </div>
+          )}
           <p className="mt-2 text-[11px] text-muted-foreground">
-            Quem assinar um aplicativo libera todos os mini apps marcados nele.
+            Marque em quais aplicativos este mini app deve aparecer. Novos aplicativos criados no Admin → Aplicativos aparecerão aqui automaticamente.
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-4">
