@@ -21,11 +21,13 @@ export function AppShell({
   trackSlug,
   tint,
   hideReferences,
+  publicRoute,
 }: {
   children: ReactNode;
   trackSlug?: "academico" | "tecnico" | "enfermeiro";
   tint?: string | null;
   hideReferences?: boolean;
+  publicRoute?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const [admin, setAdmin] = useState(false);
