@@ -1,44 +1,66 @@
-## Refatoração da Página 2 (Loja / `src/routes/index.tsx`)
+## Objetivo
+Refatorar `src/routes/index.tsx` (loja pós-login) para:
+1. Adicionar 4 novos banners de impacto ao carrossel.
+2. Nos cards dos 4 subaplicativos, apresentar dois botões destacados — **Experimentar Grátis** e **Ativar Assinatura Mensal** — mantendo o fallback **Em breve** quando o app não tem link de checkout (permite tirar do ar).
 
-### O que muda visualmente
+Sem mudança de esquema no banco. Só front-end.
 
-Ordem nova da página, de cima para baixo:
+---
 
-1. Título "Loja / Academia da Enfermagem" + descrição (sem mudança)
-2. **Carrossel de banners em largura total** (mobile, tablet e desktop)
-3. **Mascotes maiores**, centralizados, no lugar onde estava o banner verde
-4. **3 cards de aplicativos** (Acadêmico / Técnico / Enfermeiro) — sem mudança
+## 1) Carrossel — 4 banners novos
 
-Sai da página principal:
-- Bloco verde escuro "Chegue no estágio sabendo o que fazer…" (banner primary)
-- Card lateral "Identificação / Meu estágio"
+Estender o array `SLIDES` em `src/routes/index.tsx` com 4 novos slides. Cada um usa apenas gradiente + texto (sem imagem de fundo gerada), seguindo o mesmo formato dos atuais (`eyebrow`, `title`, `desc`, `bg`, `accent`).
 
-### Onde vai o "Meu estágio"
+- **Banner A — Prontuário 1‑click** (para enfermeiros): tom clínico/emerald.
+  - Título: *"Menos burocracia, mais paciente"*
+  - Texto: *"Cansado de perder o plantão preenchendo prontuário? Com 1 clique, a Academia da Enfermagem transforma sua anamnese e exame físico em evolução cefalocaudal em segundos."*
 
-Movido para **dentro das trilhas** (`src/routes/trilha.$slug.tsx`), aparecendo **apenas** quando `slug === "academico"` ou `slug === "tecnico"` (não aparece na trilha do Enfermeiro, que não faz estágio supervisionado).
+- **Banner B — Relatório de estágio pelo celular** (para estudantes):
+  - Título: *"Chega de nervoso com o relatório de estágio"*
+  - Texto: *"Anote suas atividades pelo celular durante o dia e baixe as anotações prontas para o relatório acadêmico."*
 
-Posição na trilha: logo abaixo do `PageHeader` do app, antes das seções de mini apps, como um Card compacto com os mesmos campos atuais (Campo, Preceptor, Período) e o link "Editar no Diário".
+- **Banner C — Preço de um lanche**:
+  - Título: *"Um ecossistema completo pelo preço de um lanche"*
+  - Texto: *"Segurança, calculadoras de medicamentos e raciocínio clínico. Invista na sua educação e profissionalização. Todo o app é baseado nas legislações vigentes do COFEN/CORENs."*
 
-### Detalhes técnicos
+- **Banner D — Segurança jurídica e científica** (verde-escuro + dourado):
+  - Eyebrow: *"100% Atualizado"*
+  - Título: *"Segurança Jurídica e Científica para o seu Carimbo"*
+  - Texto: *"Construído e revisado com base em COFEN, CORENs, ANVISA, MS e OMS. Base atualizada automaticamente a cada mudança de legislação ou PCDT — estude e plantie amparado pela ciência e pelas leis."*
+  - Este slide usa classes específicas (`bg-emerald-950`, `text-amber-100`) e mostra o `mascotesAsset` reduzido à direita segurando o "selo" (texto sobreposto "100% Atualizado"). Adaptação mínima do layout do slide para suportar uma imagem quando o slide define um campo `mascot: true`.
 
-**`src/routes/index.tsx`**
-- Remover o `<section>` inteiro que hoje contém o banner verde + Card "Meu estágio" (linhas ~139–186).
-- Remover o wrapper `grid md:grid-cols-[1fr_auto]` que hoje coloca mascotes ao lado do carrossel (linhas ~127–136). Substituir por:
-  - `<Carousel />` sozinho, ocupando 100% da largura do container (`max-w-5xl` do `AppShell` já é o limite; nada de coluna auto ao lado).
-  - Abaixo do carrossel, um bloco centralizado com `<img src={mascotesAsset.url} />` em tamanho maior: `h-56 sm:h-72 md:h-96` (mantendo `w-auto object-contain` e a animação `pulse` atual).
-- Remover imports não usados após a limpeza: `Card`, `useLocal`, `logoAsset`, `Check`, `Zap`, `estagio`, `migracaoBanner` (verificar antes de remover). `RichText`/`useText` continuam sendo usados.
-- O botão "Ver aplicativos" some junto com o banner; a seção `#aplicativos` continua acessível via scroll natural.
+Todos os slides continuam entrando na rotação automática de 5 s.
 
-**`src/routes/trilha.$slug.tsx`**
-- Adicionar `import { useLocal } from "@/lib/storage"`.
-- Renderizar, apenas para `slug === "academico" || slug === "tecnico"`, um novo componente `MeuEstagioCard` logo após o `PageHeader`, com o mesmo conteúdo hoje presente no index (Campo / Preceptor(a) / Período + link "Editar no Diário").
+---
 
-### Carrossel largura total
+## 2) Cards dos 4 subaplicativos — botões
 
-O componente `Carousel` já é fluido (`w-full` via `<section>` e `rounded-3xl` interno). A "largura da página" é herdada do `AppShell` (`max-w-5xl`). Basta removê-lo da grid de 2 colunas para que ocupe 100% em todos os breakpoints.
+Contexto atual: cada card já mostra "Ver mini apps →" e um único botão de ação (Assinar / Assinatura ativa / Trial ativo / Em breve).
 
-### Fora de escopo
+Nova regra por card:
 
-- Não mexer no banner de trial (`TrialCountdownBanner`) nem no header.
-- Não alterar textos editáveis do `app_texts` (as chaves `home.cta_section`, `compra.segura`, `migracao.banner` seguem iguais).
-- Nenhuma migração de banco.
+- **Se `ckLink` existe** (plano tem checkout CAKTO configurado):
+  - Botão primário destacado: **Ativar Assinatura Mensal** (fundo escuro, texto claro) → abre `ckLink` em nova aba (mesmo comportamento atual do "Assinar").
+  - Botão secundário destacado: **Experimentar Grátis** (fundo branco/70, borda) → `Link` para `/trilha/$slug`. A intenção do usuário é: dentro da trilha o cliente vê os mini apps marcados `gratuito=true` desbloqueados (regra já implementada em `has_app_access`), e os demais permanecem bloqueados até o pagamento. Não cria subscription trial — o acesso free "por tempo indeterminado" já é servido pelo flag `gratuito` no `mini_apps`.
+  - Se o usuário já é `subscribed`: manter o selo "✓ Assinatura ativa" (sem os dois botões).
+  - Se está em `trial`: manter o selo de trial + botão **Ativar Assinatura Mensal**.
+
+- **Se `ckLink` NÃO existe** (plano sem checkout configurado / desativado):
+  - Renderiza apenas **Em breve** (desabilitado), preservando o mecanismo para tirar o app do ar apagando/limpando o `cakto_link_novo` no banco.
+
+O link "Ver mini apps →" existente será substituído pelo botão **Experimentar Grátis** (mesmo destino `/trilha/$slug`) para evitar dois CTAs redundantes.
+
+---
+
+## Detalhes técnicos
+
+- Arquivo único alterado: `src/routes/index.tsx`.
+- Extensão do tipo do array `SLIDES` (adicionar campos opcionais `mascot?: boolean`, `img?: string` já é opcional) — todos os campos são estáticos, sem i18n via `app_texts` para não gastar setup.
+- Reaproveitar `mascotesAsset` já importado para o banner D.
+- Nenhum backend, migration, edge function ou secret.
+- Nenhuma dependência nova.
+
+## Fora de escopo
+- Não criar tabela/coluna para trial "por tempo indeterminado". A gratuidade já é servida pelo flag `mini_apps.gratuito` + `has_app_access`. Se você quiser marcar mini apps específicos como grátis por app, isso é um segundo passo (posso listar quais marcar depois).
+- Não alterar textos em `app_texts`.
+- Não gerar imagens novas para banners.

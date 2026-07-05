@@ -40,13 +40,28 @@ export const Route = createFileRoute("/")({
 
 
 
-const SLIDES = [
+type Slide = {
+  eyebrow: string;
+  title: string;
+  desc: string;
+  bg: string;
+  accent: string;
+  img?: string;
+  mascot?: boolean;
+};
+
+const SLIDES: Slide[] = [
   { eyebrow: "Grátis para começar", title: "Manual de Sobrevivência do Estágio", desc: "Checklist da mochila, postura no campo e comunicação com o preceptor.", bg: "from-sky-100 to-cyan-100", accent: "text-sky-900", img: imgManual },
   { eyebrow: "Mais vendido", title: "Cálculos de Medicamentos", desc: "Regra de três, gotejamento e dose/peso com checagem de segurança.", bg: "from-teal-100 to-emerald-50", accent: "text-teal-900", img: imgCalculos },
   { eyebrow: "Lançamento", title: "Relatório de Estágio (ABNT)", desc: "Gera automaticamente a partir do seu Diário de Bordo.", bg: "from-blue-100 to-violet-100", accent: "text-indigo-900", img: imgRelatorio },
   { eyebrow: "Combo clínico", title: "Exame Físico + Escalas", desc: "Cefalocaudal + Glasgow, Braden, Morse e mais.", bg: "from-emerald-50 to-cyan-100", accent: "text-emerald-900", img: imgExame },
   { eyebrow: "Segurança do paciente", title: "IRAS + 6 Metas Internacionais", desc: "Higienização das mãos e protocolos visuais para o plantão.", bg: "from-cyan-50 to-sky-100", accent: "text-cyan-900", img: imgIras },
-] as const;
+  { eyebrow: "Para enfermeiros", title: "Menos burocracia, mais paciente", desc: "Cansado de perder o plantão preenchendo prontuário? Com 1 clique, a Academia da Enfermagem transforma sua anamnese e exame físico em evolução cefalocaudal em segundos.", bg: "from-emerald-100 to-teal-100", accent: "text-emerald-900" },
+  { eyebrow: "Para estudantes", title: "Chega de nervoso com o relatório de estágio", desc: "Anote suas atividades pelo celular durante o dia e baixe as anotações prontas para incluir no relatório acadêmico.", bg: "from-indigo-100 to-sky-100", accent: "text-indigo-900" },
+  { eyebrow: "Preço de um lanche", title: "Um ecossistema completo pelo preço de um lanche", desc: "Segurança, calculadoras de medicamentos e raciocínio clínico. Invista na sua educação e profissionalização — todo o app é baseado nas legislações vigentes do COFEN/CORENs.", bg: "from-amber-100 to-orange-100", accent: "text-orange-900" },
+  { eyebrow: "100% Atualizado", title: "Segurança Jurídica e Científica para o seu Carimbo", desc: "Construído e revisado com base em COFEN, CORENs, ANVISA, MS e OMS. Base atualizada automaticamente a cada mudança de legislação ou PCDT — estude e plantie amparado pela ciência e pelas leis.", bg: "from-emerald-950 to-emerald-900", accent: "text-amber-100", mascot: true },
+];
+
 
 function Carousel() {
   const [i, setI] = useState(0);
