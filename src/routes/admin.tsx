@@ -1,10 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Pencil, Plus, Trash2 } from "lucide-react";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
 import { supabase } from "@/integrations/supabase/client";
-import { fetchMiniApps, formatPriceBRL, isAdmin, type MiniApp } from "@/lib/access";
+import { fetchMiniApps, formatPriceBRL, useIsAdmin, type MiniApp } from "@/lib/access";
 import { renderContent } from "@/lib/markdown";
 import { SubscriptionsAdmin } from "@/components/admin/SubscriptionsAdmin";
 import { UsersAdmin } from "@/components/admin/UsersAdmin";
@@ -20,17 +20,9 @@ export const Route = createFileRoute("/admin")({
 });
 
 function AdminPage() {
-  const [checking, setChecking] = useState(true);
-  const [allowed, setAllowed] = useState(false);
+  const adminQ = useIsAdmin();
 
-  useEffect(() => {
-    isAdmin().then((ok) => {
-      setAllowed(ok);
-      setChecking(false);
-    });
-  }, []);
-
-  if (checking) {
+  if (adminQ.isLoading || adminQ.isFetching) {
     return (
       <AppShell>
         <p className="text-sm text-muted-foreground">Verificando permissão...</p>
@@ -38,7 +30,7 @@ function AdminPage() {
     );
   }
 
-  if (!allowed) {
+  if (!adminQ.data) {
     return (
       <AppShell>
         <PageHeader title="Acesso restrito" />

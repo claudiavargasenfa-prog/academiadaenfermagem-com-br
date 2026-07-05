@@ -12,7 +12,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import { ReferencesFooter } from "./References";
 import { AuthGate, signOut } from "./AuthGate";
 import { TrialCountdownBanner } from "./TrialCountdownBanner";
-import { isAdmin } from "@/lib/access";
+import { useIsAdmin } from "@/lib/access";
 import { useText } from "@/lib/app-texts";
 import logoAsset from "@/assets/logo.png.asset.json";
 
@@ -30,12 +30,9 @@ export function AppShell({
   publicRoute?: boolean;
 }) {
   const [open, setOpen] = useState(false);
-  const [admin, setAdmin] = useState(false);
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-
-  useEffect(() => {
-    isAdmin().then(setAdmin);
-  }, []);
+  const adminQ = useIsAdmin();
+  const admin = !!adminQ.data;
 
   const lojaLabel = useText("menu.loja", "Loja");
   const minhaContaLabel = useText("menu.minha_conta", "Minha Conta");
