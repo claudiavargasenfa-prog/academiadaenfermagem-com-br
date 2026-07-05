@@ -92,7 +92,14 @@ function Carousel() {
               </button>
             </div>
           </div>
-          <img src={slide.img} alt="" loading="lazy" width={896} height={896} className="hidden h-32 w-32 shrink-0 rounded-2xl object-cover sm:block md:h-40 md:w-40" />
+          {slide.mascot ? (
+            <div className="relative hidden shrink-0 sm:block">
+              <img src={mascotesAsset.url} alt="Mascotes" className="h-32 w-32 object-contain md:h-40 md:w-40" />
+              <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 rounded-full bg-amber-300 px-2 py-0.5 text-[10px] font-extrabold text-emerald-950 shadow">100% Atualizado</span>
+            </div>
+          ) : slide.img ? (
+            <img src={slide.img} alt="" loading="lazy" width={896} height={896} className="hidden h-32 w-32 shrink-0 rounded-2xl object-cover sm:block md:h-40 md:w-40" />
+          ) : null}
         </div>
       </div>
     </section>
