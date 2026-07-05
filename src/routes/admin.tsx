@@ -513,12 +513,18 @@ function MiniAppForm({
   const [placementAppIds, setPlacementAppIds] = useState<Set<string>>(new Set());
   const [placementsLoaded, setPlacementsLoaded] = useState(false);
   useEffect(() => {
-    if (!app?.id) { setPlacementsLoaded(true); return; }
+    if (!app?.id) {
+      if (allApps.length && !placementsLoaded) {
+        setPlacementAppIds(new Set(allApps.filter((a) => a.is_active).map((a) => a.id)));
+        setPlacementsLoaded(true);
+      }
+      return;
+    }
     if (placementsQ.data && !placementsLoaded) {
       setPlacementAppIds(new Set(placementsQ.data.map((p) => p.app_id)));
       setPlacementsLoaded(true);
     }
-  }, [app?.id, placementsQ.data, placementsLoaded]);
+  }, [app?.id, allApps, placementsQ.data, placementsLoaded]);
 
   const toggleAppPlacement = (appId: string, checked: boolean) => {
     setPlacementAppIds((prev) => {
