@@ -12,6 +12,7 @@ import { TextsAdmin } from "@/components/admin/TextsAdmin";
 import { BadgesEditor } from "@/components/admin/BadgesEditor";
 import { SubtopicsAdmin } from "@/components/admin/SubtopicsAdmin";
 import { AppsAdmin } from "@/components/admin/AppsAdmin";
+import { fetchApps } from "@/lib/apps";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({ meta: [{ title: "Admin — Academia da Enfermagem" }] }),
