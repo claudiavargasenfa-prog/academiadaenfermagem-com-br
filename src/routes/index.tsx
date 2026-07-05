@@ -213,42 +213,48 @@ function StoreHome() {
                   </div>
 
                   <div className="mt-3 space-y-2">
-                    <Link
-                      to="/trilha/$slug"
-                      params={{ slug }}
-                      className="block w-full rounded-xl bg-white/70 py-2 text-center text-sm font-bold hover:bg-white"
-                    >
-                      Ver mini apps →
-                    </Link>
                     {subscribed ? (
-                      <span className="block w-full rounded-xl bg-white/40 py-2 text-center text-xs font-bold">
-                        ✓ Assinatura ativa
-                      </span>
-                    ) : inTrial ? (
                       <>
+                        <Link
+                          to="/trilha/$slug"
+                          params={{ slug }}
+                          className="block w-full rounded-xl bg-white/70 py-2 text-center text-sm font-bold hover:bg-white"
+                        >
+                          Ver mini apps →
+                        </Link>
                         <span className="block w-full rounded-xl bg-white/40 py-2 text-center text-xs font-bold">
-                          🎁 Trial ativo · até {new Date(sub!.expires_at).toLocaleDateString("pt-BR")}
+                          ✓ Assinatura ativa
                         </span>
-                        {ckLink && (
-                          <a href={ckLink} target="_blank" rel="noreferrer" className="flex w-full items-center justify-center gap-1 rounded-xl bg-foreground py-2 text-sm font-bold text-background">
-                            Assinar agora <ExternalLink className="h-3.5 w-3.5" />
-                          </a>
-                        )}
                       </>
                     ) : ckLink ? (
-                      <a
-                        href={ckLink}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="flex w-full items-center justify-center gap-1 rounded-xl bg-foreground py-2 text-sm font-bold text-background"
-                      >
-                        Assinar <ExternalLink className="h-3.5 w-3.5" />
-                      </a>
+                      <>
+                        <a
+                          href={ckLink}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="flex w-full items-center justify-center gap-1 rounded-xl bg-foreground py-2.5 text-sm font-extrabold text-background shadow hover:opacity-90"
+                        >
+                          Ativar Assinatura Mensal <ExternalLink className="h-3.5 w-3.5" />
+                        </a>
+                        <Link
+                          to="/trilha/$slug"
+                          params={{ slug }}
+                          className="block w-full rounded-xl border-2 border-white/60 bg-white/80 py-2 text-center text-sm font-extrabold hover:bg-white"
+                        >
+                          Experimentar Grátis
+                        </Link>
+                        {inTrial && (
+                          <span className="block w-full rounded-xl bg-white/40 py-2 text-center text-xs font-bold">
+                            🎁 Trial ativo · até {new Date(sub!.expires_at).toLocaleDateString("pt-BR")}
+                          </span>
+                        )}
+                      </>
                     ) : (
                       <button disabled className="w-full cursor-not-allowed rounded-xl bg-white/40 py-2 text-sm font-semibold opacity-60">
                         Em breve
                       </button>
                     )}
+
                     <p className="text-center text-[11px] font-extrabold tracking-wide text-emerald-700">
                       <RichText>{compraSegura}</RichText>
                     </p>
