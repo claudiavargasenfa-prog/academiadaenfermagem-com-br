@@ -145,6 +145,17 @@ function AdminContent() {
       return data ?? [];
     },
   });
+  const availableAppsQ = useQuery({ queryKey: ["apps"], queryFn: fetchApps });
+  const placementsAllQ = useQuery({
+    queryKey: ["admin_mini_app_placements"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("mini_app_placements")
+        .select("mini_app_id, app_id");
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
 
   async function handleDelete(id: string) {
     if (!confirm("Apagar este mini app? Esta ação não pode ser desfeita.")) return;
@@ -266,6 +277,8 @@ function AdminContent() {
             setEditing(null);
             qc.invalidateQueries({ queryKey: ["admin_mini_apps"] });
             qc.invalidateQueries({ queryKey: ["mini_apps"] });
+            qc.invalidateQueries({ queryKey: ["admin_mini_app_placements"] });
+            qc.invalidateQueries({ queryKey: ["app_placements"] });
           }}
         />
       )}
@@ -280,6 +293,29 @@ function AdminContent() {
                 .some((v: string) => v.toLowerCase().includes(q)),
             )
           : allRaw;
+        const availableApps = (availableAppsQ.data ?? [])
+          .filter((a) => a.is_active)
+          .slice()
+          .sort((a, b) => a.ordem - b.ordem || (a.name ?? "").localeCompare(b.name ?? "", "pt-BR"));
+        const appBySlug = new Map(availableApps.map((a) => [a.slug, a]));
+        const placementsByMiniApp = new Map<string, Set<string>>();
+        for (const p of placementsAllQ.data ?? []) {
+          const set = placementsByMiniApp.get(p.mini_app_id) ?? new Set<string>();
+          set.add(p.app_id);
+          placementsByMiniApp.set(p.mini_app_id, set);
+        }
+        const appIdsForMiniApp = (miniApp: MiniApp) => {
+          const ids = new Set(placementsByMiniApp.get(miniApp.id) ?? []);
+          const legacy = miniApp as any;
+          if (legacy.track_academico && appBySlug.get("academico")) ids.add(appBySlug.get("academico")!.id);
+          if (legacy.track_tecnico && appBySlug.get("tecnico")) ids.add(appBySlug.get("tecnico")!.id);
+          if (legacy.track_enfermeiro && appBySlug.get("enfermeiro")) ids.add(appBySlug.get("enfermeiro")!.id);
+          return ids;
+        };
+        const appLabelsForMiniApp = (miniApp: MiniApp) => {
+          const ids = appIdsForMiniApp(miniApp);
+          return availableApps.filter((app) => ids.has(app.id)).map((app) => app.short_name ?? app.name);
+        };
         const renderCard = (app: MiniApp) => (
           <Card key={app.id}>
             <div className="flex items-start justify-between gap-3">
@@ -312,11 +348,7 @@ function AdminContent() {
                 </div>
                 <p className="mt-1 text-xs text-muted-foreground">{app.description}</p>
                 <p className="mt-1 text-xs">
-                  <strong>{formatPriceBRL(app.price_cents)}</strong> · slug: {app.slug} · aplicativos: {[
-                    (app as any).track_academico && "Acadêmico",
-                    (app as any).track_tecnico && "Técnico",
-                    (app as any).track_enfermeiro && "Enfermeiro",
-                  ].filter(Boolean).join(", ") || "—"}
+                  <strong>{formatPriceBRL(app.price_cents)}</strong> · slug: {app.slug} · aplicativos: {appLabelsForMiniApp(app).join(", ") || "—"}
                 </p>
                 <div className="mt-2">
                   <BadgesEditor
@@ -353,13 +385,14 @@ function AdminContent() {
           </Card>
         );
 
-        const sections: { title: string; emoji: string; filter: (a: any) => boolean }[] = [
-          { title: "Acadêmicos", emoji: "🎓", filter: (a) => !!a.track_academico },
-          { title: "Técnicos", emoji: "🩺", filter: (a) => !!a.track_tecnico },
-          { title: "Enfermeiros", emoji: "👩‍⚕️", filter: (a) => !!a.track_enfermeiro },
-        ];
+        const sections = availableApps.map((app) => ({
+          id: app.id,
+          title: app.short_name ?? app.name.replace(/^Academia d[oa] /i, ""),
+          emoji: app.emoji ?? "📚",
+          filter: (miniApp: MiniApp) => appIdsForMiniApp(miniApp).has(app.id),
+        }));
         const semApp = all.filter(
-          (a: any) => !a.track_academico && !a.track_tecnico && !a.track_enfermeiro,
+          (a: MiniApp) => appIdsForMiniApp(a).size === 0,
         );
 
         return (
