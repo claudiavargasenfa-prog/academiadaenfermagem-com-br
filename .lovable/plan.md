@@ -1,66 +1,59 @@
-## Objetivo
-Refatorar `src/routes/index.tsx` (loja pós-login) para:
-1. Adicionar 4 novos banners de impacto ao carrossel.
-2. Nos cards dos 4 subaplicativos, apresentar dois botões destacados — **Experimentar Grátis** e **Ativar Assinatura Mensal** — mantendo o fallback **Em breve** quando o app não tem link de checkout (permite tirar do ar).
+## Tela "Minha História" — Fundadora da Academia da Enfermagem
 
-Sem mudança de esquema no banco. Só front-end.
+### Objetivo
+Criar uma nova rota `/minha-historia` com layout limpo e humanizado, apresentando a história da fundadora, sua foto profissional, os mascotes da Prevenção contra IRAS e um botão para o grupo do WhatsApp.
 
 ---
 
-## 1) Carrossel — 4 banners novos
+### Arquivos alterados / criados
 
-Estender o array `SLIDES` em `src/routes/index.tsx` com 4 novos slides. Cada um usa apenas gradiente + texto (sem imagem de fundo gerada), seguindo o mesmo formato dos atuais (`eyebrow`, `title`, `desc`, `bg`, `accent`).
+1. **`src/routes/minha-historia.tsx`** — Nova rota da página.
+   - Rota: `/minha-historia`
+   - `head()` com title, description, og:title, og:description
+   - Layout responsivo:
+     - **Desktop**: grid 2 colunas (esquerda = foto + mascotes, direita = texto narrativo)
+     - **Mobile**: coluna única empilhada (foto → mascotes → texto)
+   - Componentes visuais:
+     - Foto da fundadora em círculo com contorno verde (border-4 border-emerald-600/80 ou branco/60)
+     - Abaixo da foto: mascotes `mascotes-iras.png.asset.json` acenando de forma simpática (animação leve de onda/wave)
+     - Título principal com fonte display (Manrope) em tom verde escuro
+     - Texto da história estruturado em seções: "A História", "O Propósito", "Minha Promessa"
+     - Botão verde destacado do WhatsApp no final (ícone WhatsApp + texto "Entrar no grupo do WhatsApp")
 
-- **Banner A — Prontuário 1‑click** (para enfermeiros): tom clínico/emerald.
-  - Título: *"Menos burocracia, mais paciente"*
-  - Texto: *"Cansado de perder o plantão preenchendo prontuário? Com 1 clique, a Academia da Enfermagem transforma sua anamnese e exame físico em evolução cefalocaudal em segundos."*
+2. **`src/components/AppShell.tsx`** — Adicionar link "Minha História" na navegação:
+   - Adicionar ao `baseNav` (após "Minha Conta")
+   - Ícone: `BookOpen` do lucide-react
+   - Mobile bottom tab: incluir nos primeiros 5 itens
 
-- **Banner B — Relatório de estágio pelo celular** (para estudantes):
-  - Título: *"Chega de nervoso com o relatório de estágio"*
-  - Texto: *"Anote suas atividades pelo celular durante o dia e baixe as anotações prontas para o relatório acadêmico."*
-
-- **Banner C — Preço de um lanche**:
-  - Título: *"Um ecossistema completo pelo preço de um lanche"*
-  - Texto: *"Segurança, calculadoras de medicamentos e raciocínio clínico. Invista na sua educação e profissionalização. Todo o app é baseado nas legislações vigentes do COFEN/CORENs."*
-
-- **Banner D — Segurança jurídica e científica** (verde-escuro + dourado):
-  - Eyebrow: *"100% Atualizado"*
-  - Título: *"Segurança Jurídica e Científica para o seu Carimbo"*
-  - Texto: *"Construído e revisado com base em COFEN, CORENs, ANVISA, MS e OMS. Base atualizada automaticamente a cada mudança de legislação ou PCDT — estude e plantie amparado pela ciência e pelas leis."*
-  - Este slide usa classes específicas (`bg-emerald-950`, `text-amber-100`) e mostra o `mascotesAsset` reduzido à direita segurando o "selo" (texto sobreposto "100% Atualizado"). Adaptação mínima do layout do slide para suportar uma imagem quando o slide define um campo `mascot: true`.
-
-Todos os slides continuam entrando na rotação automática de 5 s.
+3. **Asset da foto** — Upload da imagem `CAMISA_AZUL_NA_SALA.jpeg` via `lovable-assets` para CDN, gerando o `.asset.json` pointer em `src/assets/foto-fundadora.jpeg.asset.json`.
 
 ---
 
-## 2) Cards dos 4 subaplicativos — botões
+### Design & Estilo
 
-Contexto atual: cada card já mostra "Ver mini apps →" e um único botão de ação (Assinar / Assinatura ativa / Trial ativo / Em breve).
-
-Nova regra por card:
-
-- **Se `ckLink` existe** (plano tem checkout CAKTO configurado):
-  - Botão primário destacado: **Ativar Assinatura Mensal** (fundo escuro, texto claro) → abre `ckLink` em nova aba (mesmo comportamento atual do "Assinar").
-  - Botão secundário destacado: **Experimentar Grátis** (fundo branco/70, borda) → `Link` para `/trilha/$slug`. A intenção do usuário é: dentro da trilha o cliente vê os mini apps marcados `gratuito=true` desbloqueados (regra já implementada em `has_app_access`), e os demais permanecem bloqueados até o pagamento. Não cria subscription trial — o acesso free "por tempo indeterminado" já é servido pelo flag `gratuito` no `mini_apps`.
-  - Se o usuário já é `subscribed`: manter o selo "✓ Assinatura ativa" (sem os dois botões).
-  - Se está em `trial`: manter o selo de trial + botão **Ativar Assinatura Mensal**.
-
-- **Se `ckLink` NÃO existe** (plano sem checkout configurado / desativado):
-  - Renderiza apenas **Em breve** (desabilitado), preservando o mecanismo para tirar o app do ar apagando/limpando o `cakto_link_novo` no banco.
-
-O link "Ver mini apps →" existente será substituído pelo botão **Experimentar Grátis** (mesmo destino `/trilha/$slug`) para evitar dois CTAs redundantes.
+- Paleta: tons de verde da marca (primary emerald, gold accent) via tokens do `styles.css`
+- Fundo: leve gradiente sutil verde/claro ou branco puro — o que fique mais limpo e elegante
+- Tipografia: `font-display` (Manrope) para títulos, `font-sans` (Inter) para corpo
+- Foto: `rounded-full`, `border-4 border-primary/80`, sombra suave (`shadow-soft`)
+- Mascotes: tamanho médio (~120px), animação de `animate-bounce` leve ou CSS custom de "aceno"
+- Botão WhatsApp: `bg-green-600` ou similar verde intenso, texto branco, ícone WhatsApp, `rounded-xl`, sombra, hover escurecer
 
 ---
 
-## Detalhes técnicos
+### Texto (conteúdo exato a ser inserido)
 
-- Arquivo único alterado: `src/routes/index.tsx`.
-- Extensão do tipo do array `SLIDES` (adicionar campos opcionais `mascot?: boolean`, `img?: string` já é opcional) — todos os campos são estáticos, sem i18n via `app_texts` para não gastar setup.
-- Reaproveitar `mascotesAsset` já importado para o banner D.
-- Nenhum backend, migration, edge function ou secret.
-- Nenhuma dependência nova.
+**Título Principal**: "Da Beira do Leito para a Tecnologia: Conheça um pouco da minha História."
 
-## Fora de escopo
-- Não criar tabela/coluna para trial "por tempo indeterminado". A gratuidade já é servida pelo flag `mini_apps.gratuito` + `has_app_access`. Se você quiser marcar mini apps específicos como grátis por app, isso é um segundo passo (posso listar quais marcar depois).
-- Não alterar textos em `app_texts`.
-- Não gerar imagens novas para banners.
+**A História**: "A Academia da Enfermagem não nasceu em um escritório de tecnologia de computadores. Ela nasceu nos corredores de hospitais, nas noites em claro de plantão e na vivência real de quem dedicou 35 anos da vida à arte de cuidar. Sou auxiliar de enfermagem e enfermeira e, assim como você, passei décadas sentindo a dor de usar horas preciosas do plantão preenchendo as burocracias necessárias em papéis e tentando decifrar manuais complexos, em vez de focar no que realmente importa: o nosso paciente."
+
+**O Propósito**: "Após me aposentar, a apenas 4 anos, decidi que a minha missão ainda não estava cumprida. Eu precisava usar toda a minha bagagem prática para criar a ferramenta que eu sempre sonhei em ter na beira do leito. Um ecossistema simples, ágil e seguro, feito de enfermeira para a enfermagem, de enfermeira para estudante, a final, também passei por esse caminho."
+
+**Minha Promessa**: "A Academia da Enfermagem é o resultado de uma vida inteira de dedicação. Ela foi feita para mitigar o seu tempo, descomplicar o seu estágio, garantir a precisão dos seus cálculos e te levar uma certa segurança jurídica, desde que bem empregada, tudo baseado rigorosamente nas leis do nosso COFEN. Seja muito bem-vindo à evolução da nossa categoria. Aqui, nós cuidamos de quem cuida!"
+
+**Botão WhatsApp**: Link `https://chat.whatsapp.com/HUv5XdngfQYGR3pxWuG3J3` com texto "Entrar no grupo do WhatsApp"
+
+---
+
+### Dependências
+- Nenhuma nova dependência npm necessária.
+- Ícone WhatsApp: usar SVG inline ou `MessageCircle` do lucide-react (sem instalar nada novo).
