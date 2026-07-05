@@ -1,6 +1,7 @@
 import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
 import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 
 export type MiniApp = Database["public"]["Tables"]["mini_apps"]["Row"];
 export type Subscription = Database["public"]["Tables"]["subscriptions"]["Row"];
@@ -119,9 +120,29 @@ export async function isAdmin(): Promise<boolean> {
 
 /** Hook: o usuário atual é admin? Cacheado por sessão. */
 export function useIsAdmin() {
+  const [userId, setUserId] = useState<string | null | undefined>(undefined);
+
+  useEffect(() => {
+    let alive = true;
+
+    supabase.auth.getUser().then(({ data }) => {
+      if (alive) setUserId(data.user?.id ?? null);
+    });
+
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUserId(session?.user?.id ?? null);
+    });
+
+    return () => {
+      alive = false;
+      sub.subscription.unsubscribe();
+    };
+  }, []);
+
   return useQuery({
-    queryKey: ["is_admin"],
+    queryKey: ["is_admin", userId],
     queryFn: isAdmin,
+    enabled: userId !== undefined,
     staleTime: 5 * 60 * 1000,
   });
 }
