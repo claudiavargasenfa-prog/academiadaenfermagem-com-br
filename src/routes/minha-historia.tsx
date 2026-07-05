@@ -134,15 +134,6 @@ function MinhaHistoriaPage() {
         </article>
       </div>
 
-      <style>{`
-        @keyframes wave {
-          0%, 100% { transform: rotate(0deg); }
-          20% { transform: rotate(-6deg); }
-          40% { transform: rotate(6deg); }
-          60% { transform: rotate(-4deg); }
-          80% { transform: rotate(4deg); }
-        }
-      `}</style>
     </AppShell>
   );
 }
