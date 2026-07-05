@@ -43,9 +43,11 @@ export function AppShell({
   const headerTitleSize = useText("header.title.size", "16");
   const headerSubtitleSize = useText("header.subtitle.size", "11");
 
+  const historiaLabel = useText("menu.minha_historia", "Minha História");
   const baseNav = [
     { to: "/" as const, label: lojaLabel, icon: Store },
     { to: "/minha-conta" as const, label: minhaContaLabel, icon: User },
+    { to: "/minha-historia" as const, label: historiaLabel, icon: BookOpen },
   ];
   const navItems = admin
     ? [...baseNav, { to: "/admin" as const, label: adminLabel, icon: Shield }]
