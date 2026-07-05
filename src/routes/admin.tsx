@@ -532,12 +532,37 @@ function MiniAppForm({
     const res = app
       ? await supabase.from("mini_apps").update(payload as any).eq("id", app.id).select("*").single()
       : await supabase.from("mini_apps").insert(payload as any).select("*").single();
-    setBusy(false);
     if (res.error) {
+      setBusy(false);
       setErr(res.error.message);
       return;
     }
-    if (res.data) onSaved(res.data as MiniApp);
+    const savedApp = res.data as MiniApp;
+
+    // Sincroniza vínculos com aplicativos (mini_app_placements)
+    if (savedApp?.id) {
+      const { data: existing } = await supabase
+        .from("mini_app_placements")
+        .select("id, app_id")
+        .eq("mini_app_id", savedApp.id);
+      const existingIds = new Set((existing ?? []).map((p) => p.app_id));
+      const toAdd = [...placementAppIds].filter((id) => !existingIds.has(id));
+      const toRemove = (existing ?? []).filter((p) => !placementAppIds.has(p.app_id));
+      if (toAdd.length) {
+        await supabase.from("mini_app_placements").insert(
+          toAdd.map((app_id) => ({ app_id, mini_app_id: savedApp.id, ordem: 999 })) as any,
+        );
+      }
+      if (toRemove.length) {
+        await supabase
+          .from("mini_app_placements")
+          .delete()
+          .in("id", toRemove.map((p) => p.id));
+      }
+    }
+
+    setBusy(false);
+    if (savedApp) onSaved(savedApp);
     onClose();
   }
 
