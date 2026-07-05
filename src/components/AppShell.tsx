@@ -61,8 +61,7 @@ export function AppShell({
     ? { backgroundColor: `color-mix(in oklab, var(--track-${trackSlug}-bg) 35%, transparent)` }
     : undefined;
 
-  return (
-    <AuthGate>
+  const shell = (
     <div className="min-h-dvh" style={bgStyle} data-app={trackSlug}>
       <TrialCountdownBanner />
       <header className="sticky top-0 z-40 border-b border-gold/30 bg-primary text-primary-foreground shadow-[var(--shadow-soft)]">
@@ -178,8 +177,10 @@ export function AppShell({
         </div>
       </nav>
     </div>
-    </AuthGate>
   );
+
+  if (publicRoute) return shell;
+  return <AuthGate>{shell}</AuthGate>;
 }
 
 export function PageHeader({
