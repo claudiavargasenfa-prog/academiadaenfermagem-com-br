@@ -12,6 +12,7 @@ import { TextsAdmin } from "@/components/admin/TextsAdmin";
 import { BadgesEditor } from "@/components/admin/BadgesEditor";
 import { SubtopicsAdmin } from "@/components/admin/SubtopicsAdmin";
 import { AppsAdmin } from "@/components/admin/AppsAdmin";
+import { fetchApps } from "@/lib/apps";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({ meta: [{ title: "Admin — Academia da Enfermagem" }] }),
@@ -469,6 +470,44 @@ function MiniAppForm({
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
 
+  // Apps disponíveis (dinâmico, vem da tabela `apps`) + placements atuais deste mini app.
+  const appsQ = useQuery({ queryKey: ["apps"], queryFn: fetchApps });
+  const allApps = appsQ.data ?? [];
+  const placementsQ = useQuery({
+    queryKey: ["mini_app_placements_for", app?.id],
+    enabled: !!app?.id,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("mini_app_placements")
+        .select("id, app_id")
+        .eq("mini_app_id", app!.id);
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+  const [placementAppIds, setPlacementAppIds] = useState<Set<string>>(new Set());
+  const [placementsLoaded, setPlacementsLoaded] = useState(false);
+  useEffect(() => {
+    if (!app?.id) { setPlacementsLoaded(true); return; }
+    if (placementsQ.data && !placementsLoaded) {
+      setPlacementAppIds(new Set(placementsQ.data.map((p) => p.app_id)));
+      setPlacementsLoaded(true);
+    }
+  }, [app?.id, placementsQ.data, placementsLoaded]);
+
+  const toggleAppPlacement = (appId: string, checked: boolean) => {
+    setPlacementAppIds((prev) => {
+      const next = new Set(prev);
+      if (checked) next.add(appId); else next.delete(appId);
+      return next;
+    });
+    // Sincroniza flags legados (usados em filtros da lista de admin)
+    const slug = allApps.find((a) => a.id === appId)?.slug;
+    if (slug === "academico") setForm((f) => ({ ...f, track_academico: checked }));
+    else if (slug === "tecnico") setForm((f) => ({ ...f, track_tecnico: checked }));
+    else if (slug === "enfermeiro") setForm((f) => ({ ...f, track_enfermeiro: checked }));
+  };
+
   async function handleSave(e: React.FormEvent) {
     e.preventDefault();
     setBusy(true);
@@ -493,12 +532,37 @@ function MiniAppForm({
     const res = app
       ? await supabase.from("mini_apps").update(payload as any).eq("id", app.id).select("*").single()
       : await supabase.from("mini_apps").insert(payload as any).select("*").single();
-    setBusy(false);
     if (res.error) {
+      setBusy(false);
       setErr(res.error.message);
       return;
     }
-    if (res.data) onSaved(res.data as MiniApp);
+    const savedApp = res.data as MiniApp;
+
+    // Sincroniza vínculos com aplicativos (mini_app_placements)
+    if (savedApp?.id) {
+      const { data: existing } = await supabase
+        .from("mini_app_placements")
+        .select("id, app_id")
+        .eq("mini_app_id", savedApp.id);
+      const existingIds = new Set((existing ?? []).map((p) => p.app_id));
+      const toAdd = [...placementAppIds].filter((id) => !existingIds.has(id));
+      const toRemove = (existing ?? []).filter((p) => !placementAppIds.has(p.app_id));
+      if (toAdd.length) {
+        await supabase.from("mini_app_placements").insert(
+          toAdd.map((app_id) => ({ app_id, mini_app_id: savedApp.id, ordem: 999 })) as any,
+        );
+      }
+      if (toRemove.length) {
+        await supabase
+          .from("mini_app_placements")
+          .delete()
+          .in("id", toRemove.map((p) => p.id));
+      }
+    }
+
+    setBusy(false);
+    if (savedApp) onSaved(savedApp);
     onClose();
   }
 
@@ -644,34 +708,24 @@ function MiniAppForm({
           <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
             Disponível nos aplicativos
           </p>
-          <div className="flex flex-wrap gap-4">
-            <label className="flex items-center gap-2 text-sm">
-              <input
-                type="checkbox"
-                checked={form.track_academico}
-                onChange={(e) => setForm({ ...form, track_academico: e.target.checked })}
-              />
-              <span>🎓 Acadêmico</span>
-            </label>
-            <label className="flex items-center gap-2 text-sm">
-              <input
-                type="checkbox"
-                checked={form.track_tecnico}
-                onChange={(e) => setForm({ ...form, track_tecnico: e.target.checked })}
-              />
-              <span>🩺 Técnico</span>
-            </label>
-            <label className="flex items-center gap-2 text-sm">
-              <input
-                type="checkbox"
-                checked={form.track_enfermeiro}
-                onChange={(e) => setForm({ ...form, track_enfermeiro: e.target.checked })}
-              />
-              <span>👩‍⚕️ Enfermeiro</span>
-            </label>
-          </div>
+          {allApps.length === 0 ? (
+            <p className="text-xs text-muted-foreground">Nenhum aplicativo cadastrado ainda. Crie em Admin → Aplicativos.</p>
+          ) : (
+            <div className="flex flex-wrap gap-4">
+              {allApps.map((a) => (
+                <label key={a.id} className="flex items-center gap-2 text-sm">
+                  <input
+                    type="checkbox"
+                    checked={placementAppIds.has(a.id)}
+                    onChange={(e) => toggleAppPlacement(a.id, e.target.checked)}
+                  />
+                  <span>{a.emoji ?? "📚"} {a.name}</span>
+                </label>
+              ))}
+            </div>
+          )}
           <p className="mt-2 text-[11px] text-muted-foreground">
-            Quem assinar um aplicativo libera todos os mini apps marcados nele.
+            Marque em quais aplicativos este mini app deve aparecer. Novos aplicativos criados no Admin → Aplicativos aparecerão aqui automaticamente.
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-4">
