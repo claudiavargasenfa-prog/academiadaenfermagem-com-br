@@ -6,6 +6,7 @@ import {
   Store,
   User,
   Shield,
+  BookOpen,
 } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import { ReferencesFooter } from "./References";
