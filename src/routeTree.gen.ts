@@ -23,6 +23,7 @@ import { Route as QuizzesRouteImport } from './routes/quizzes'
 import { Route as ProcedimentosEnfermagemRouteImport } from './routes/procedimentos-enfermagem'
 import { Route as PrescricaoRouteImport } from './routes/prescricao'
 import { Route as PosturaEticaRouteImport } from './routes/postura-etica'
+import { Route as NovoAppRouteImport } from './routes/novo-app'
 import { Route as MinhaHistoriaRouteImport } from './routes/minha-historia'
 import { Route as MinhaContaRouteImport } from './routes/minha-conta'
 import { Route as ManualSobrevivenciaRouteImport } from './routes/manual-sobrevivencia'
@@ -113,6 +114,11 @@ const PrescricaoRoute = PrescricaoRouteImport.update({
 const PosturaEticaRoute = PosturaEticaRouteImport.update({
   id: '/postura-etica',
   path: '/postura-etica',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NovoAppRoute = NovoAppRouteImport.update({
+  id: '/novo-app',
+  path: '/novo-app',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MinhaHistoriaRoute = MinhaHistoriaRouteImport.update({
@@ -237,6 +243,7 @@ export interface FileRoutesByFullPath {
   '/manual-sobrevivencia': typeof ManualSobrevivenciaRoute
   '/minha-conta': typeof MinhaContaRoute
   '/minha-historia': typeof MinhaHistoriaRoute
+  '/novo-app': typeof NovoAppRoute
   '/postura-etica': typeof PosturaEticaRoute
   '/prescricao': typeof PrescricaoRoute
   '/procedimentos-enfermagem': typeof ProcedimentosEnfermagemRoute
@@ -274,6 +281,7 @@ export interface FileRoutesByTo {
   '/manual-sobrevivencia': typeof ManualSobrevivenciaRoute
   '/minha-conta': typeof MinhaContaRoute
   '/minha-historia': typeof MinhaHistoriaRoute
+  '/novo-app': typeof NovoAppRoute
   '/postura-etica': typeof PosturaEticaRoute
   '/prescricao': typeof PrescricaoRoute
   '/procedimentos-enfermagem': typeof ProcedimentosEnfermagemRoute
@@ -311,6 +319,7 @@ export interface FileRoutesById {
   '/manual-sobrevivencia': typeof ManualSobrevivenciaRoute
   '/minha-conta': typeof MinhaContaRoute
   '/minha-historia': typeof MinhaHistoriaRoute
+  '/novo-app': typeof NovoAppRoute
   '/postura-etica': typeof PosturaEticaRoute
   '/prescricao': typeof PrescricaoRoute
   '/procedimentos-enfermagem': typeof ProcedimentosEnfermagemRoute
@@ -350,6 +359,7 @@ export interface FileRouteTypes {
     | '/manual-sobrevivencia'
     | '/minha-conta'
     | '/minha-historia'
+    | '/novo-app'
     | '/postura-etica'
     | '/prescricao'
     | '/procedimentos-enfermagem'
@@ -387,6 +397,7 @@ export interface FileRouteTypes {
     | '/manual-sobrevivencia'
     | '/minha-conta'
     | '/minha-historia'
+    | '/novo-app'
     | '/postura-etica'
     | '/prescricao'
     | '/procedimentos-enfermagem'
@@ -423,6 +434,7 @@ export interface FileRouteTypes {
     | '/manual-sobrevivencia'
     | '/minha-conta'
     | '/minha-historia'
+    | '/novo-app'
     | '/postura-etica'
     | '/prescricao'
     | '/procedimentos-enfermagem'
@@ -461,6 +473,7 @@ export interface RootRouteChildren {
   ManualSobrevivenciaRoute: typeof ManualSobrevivenciaRoute
   MinhaContaRoute: typeof MinhaContaRoute
   MinhaHistoriaRoute: typeof MinhaHistoriaRoute
+  NovoAppRoute: typeof NovoAppRoute
   PosturaEticaRoute: typeof PosturaEticaRoute
   PrescricaoRoute: typeof PrescricaoRoute
   ProcedimentosEnfermagemRoute: typeof ProcedimentosEnfermagemRoute
@@ -578,6 +591,13 @@ declare module '@tanstack/react-router' {
       path: '/postura-etica'
       fullPath: '/postura-etica'
       preLoaderRoute: typeof PosturaEticaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/novo-app': {
+      id: '/novo-app'
+      path: '/novo-app'
+      fullPath: '/novo-app'
+      preLoaderRoute: typeof NovoAppRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/minha-historia': {
@@ -770,6 +790,7 @@ const rootRouteChildren: RootRouteChildren = {
   ManualSobrevivenciaRoute: ManualSobrevivenciaRoute,
   MinhaContaRoute: MinhaContaRoute,
   MinhaHistoriaRoute: MinhaHistoriaRoute,
+  NovoAppRoute: NovoAppRoute,
   PosturaEticaRoute: PosturaEticaRoute,
   PrescricaoRoute: PrescricaoRoute,
   ProcedimentosEnfermagemRoute: ProcedimentosEnfermagemRoute,
@@ -791,13 +812,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
