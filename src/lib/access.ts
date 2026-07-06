@@ -159,7 +159,6 @@ export function useIsAdmin() {
     queryFn: isAdmin,
     enabled: isReady && !!userId,
     staleTime: 5 * 60 * 1000,
-    initialData: false,
   });
 }
 
