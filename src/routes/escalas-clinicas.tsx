@@ -201,7 +201,7 @@ function GrupoTitulo({ children }: { children: React.ReactNode }) {
 // Página
 // ————————————————————————————————————————————————
 
-function EscalasPage() {
+export function EscalasPage() {
   return (
     <AppShell>
       <PageHeader
