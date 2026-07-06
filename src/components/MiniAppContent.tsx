@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Video, Headphones } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/AppShell";
+import { useAuthReady } from "@/lib/access";
 import { renderContent } from "@/lib/markdown";
 
 /**
@@ -14,6 +15,7 @@ import { renderContent } from "@/lib/markdown";
  * Sempre aparece ACIMA do conteúdo fixo (hardcoded) da página.
  */
 export function MiniAppContent({ slug }: { slug: string }) {
+  const { isReady } = useAuthReady();
   const q = useQuery({
     queryKey: ["mini_app_content", slug],
     queryFn: async () => {
@@ -25,10 +27,27 @@ export function MiniAppContent({ slug }: { slug: string }) {
       if (error) throw error;
       return data;
     },
+    enabled: isReady,
     staleTime: 60_000,
   });
 
-  if (q.isLoading || !q.data) return null;
+  if (!isReady || q.isLoading) {
+    return (
+      <Card className="mb-6 border-primary/30 bg-primary/5 text-sm text-muted-foreground">
+        Carregando conteúdo do mini app…
+      </Card>
+    );
+  }
+
+  if (q.isError) {
+    return (
+      <Card className="mb-6 border-destructive/30 bg-destructive/5 text-sm text-destructive">
+        Erro ao carregar conteúdo editável: {q.error.message}
+      </Card>
+    );
+  }
+
+  if (!q.data) return null;
   const { content_md, video_url, audio_url } = q.data;
   if (!content_md?.trim() && !video_url?.trim() && !audio_url?.trim()) return null;
 

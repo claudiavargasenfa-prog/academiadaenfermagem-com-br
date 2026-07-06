@@ -1,5 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
+import type { User } from "@supabase/supabase-js";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 
@@ -25,6 +26,33 @@ export function appTracks(app: MiniApp): TrackSlug[] {
   return out;
 }
 
+export function useAuthReady() {
+  const [state, setState] = useState<{
+    isReady: boolean;
+    user: User | null;
+  }>({ isReady: false, user: null });
+
+  useEffect(() => {
+    let alive = true;
+
+    supabase.auth.getSession().then(({ data }) => {
+      if (!alive) return;
+      setState({ isReady: true, user: data.session?.user ?? null });
+    });
+
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
+      setState({ isReady: true, user: session?.user ?? null });
+    });
+
+    return () => {
+      alive = false;
+      sub.subscription.unsubscribe();
+    };
+  }, []);
+
+  return state;
+}
+
 export async function fetchSubscriptionPlans(): Promise<SubscriptionPlan[]> {
   const { data, error } = await supabase
     .from("subscription_plans")
@@ -35,12 +63,13 @@ export async function fetchSubscriptionPlans(): Promise<SubscriptionPlan[]> {
 }
 
 export async function fetchMyActiveSubscriptions(): Promise<UserSubscription[]> {
-  const { data: u } = await supabase.auth.getUser();
-  if (!u.user) return [];
+  const { data: sessionData } = await supabase.auth.getSession();
+  const user = sessionData.session?.user;
+  if (!user) return [];
   const { data, error } = await supabase
     .from("user_subscriptions")
     .select("*")
-    .eq("user_id", u.user.id)
+    .eq("user_id", user.id)
     .in("status", ["active", "trial"])
     .gt("expires_at", new Date().toISOString());
   if (error) throw error;
@@ -48,12 +77,13 @@ export async function fetchMyActiveSubscriptions(): Promise<UserSubscription[]> 
 }
 
 export async function fetchMyProfile() {
-  const { data: u } = await supabase.auth.getUser();
-  if (!u.user) return null;
+  const { data: sessionData } = await supabase.auth.getSession();
+  const user = sessionData.session?.user;
+  if (!user) return null;
   const { data } = await supabase
     .from("profiles")
     .select("*")
-    .eq("id", u.user.id)
+    .eq("id", user.id)
     .maybeSingle();
   return data;
 }
@@ -107,12 +137,13 @@ export async function fetchMyBasicSubscription(): Promise<Subscription | null> {
 }
 
 export async function isAdmin(): Promise<boolean> {
-  const { data: u } = await supabase.auth.getUser();
-  if (!u.user) return false;
+  const { data: sessionData } = await supabase.auth.getSession();
+  const user = sessionData.session?.user;
+  if (!user) return false;
   const { data } = await supabase
     .from("user_roles")
     .select("role")
-    .eq("user_id", u.user.id)
+    .eq("user_id", user.id)
     .eq("role", "admin")
     .maybeSingle();
   return !!data;
@@ -120,30 +151,15 @@ export async function isAdmin(): Promise<boolean> {
 
 /** Hook: o usuário atual é admin? Cacheado por sessão. */
 export function useIsAdmin() {
-  const [userId, setUserId] = useState<string | null | undefined>(undefined);
-
-  useEffect(() => {
-    let alive = true;
-
-    supabase.auth.getUser().then(({ data }) => {
-      if (alive) setUserId(data.user?.id ?? null);
-    });
-
-    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUserId(session?.user?.id ?? null);
-    });
-
-    return () => {
-      alive = false;
-      sub.subscription.unsubscribe();
-    };
-  }, []);
+  const { isReady, user } = useAuthReady();
+  const userId = user?.id ?? null;
 
   return useQuery({
     queryKey: ["is_admin", userId],
     queryFn: isAdmin,
-    enabled: userId !== undefined,
+    enabled: isReady && !!userId,
     staleTime: 5 * 60 * 1000,
+    initialData: false,
   });
 }
 
@@ -183,8 +199,10 @@ export function summarizeAccess(
 
 /** Hook: estado de acesso do usuário atual a um mini app (por slug). */
 export function useAppAccess(slug: string) {
+  const { isReady, user } = useAuthReady();
+
   return useQuery({
-    queryKey: ["app_access", slug],
+    queryKey: ["app_access", slug, user?.id ?? "anon"],
     queryFn: async () => {
       const { data: app, error: e1 } = await supabase
         .from("mini_apps")
@@ -196,14 +214,13 @@ export function useAppAccess(slug: string) {
       if (app.gratuito) {
         return { app, granted: true, expiresAt: null as string | null, viaAdmin: false };
       }
-      const { data: u } = await supabase.auth.getUser();
-      if (!u.user) return { app, granted: false, expiresAt: null as string | null, viaAdmin: false };
+      if (!user) return { app, granted: false, expiresAt: null as string | null, viaAdmin: false };
 
       // Admin bypass: vê todo conteúdo pago sem registro em user_app_access.
       const { data: roleRow } = await supabase
         .from("user_roles")
         .select("role")
-        .eq("user_id", u.user.id)
+        .eq("user_id", user.id)
         .eq("role", "admin")
         .maybeSingle();
       if (roleRow) {
@@ -213,7 +230,7 @@ export function useAppAccess(slug: string) {
       const { data: acc } = await supabase
         .from("user_app_access")
         .select("expires_at")
-        .eq("user_id", u.user.id)
+        .eq("user_id", user.id)
         .eq("mini_app_id", app.id)
         .gt("expires_at", new Date().toISOString())
         .order("expires_at", { ascending: false })
@@ -236,7 +253,7 @@ export function useAppAccess(slug: string) {
         const { data: sub } = await supabase
           .from("user_subscriptions")
           .select("expires_at")
-          .eq("user_id", u.user.id)
+          .eq("user_id", user.id)
           .in("status", ["active", "trial"])
           .in("plan_slug", planSlugs)
           .gt("expires_at", new Date().toISOString())
@@ -249,5 +266,6 @@ export function useAppAccess(slug: string) {
       }
       return { app, granted: false, expiresAt: null as string | null, viaAdmin: false };
     },
+    enabled: isReady,
   });
 }
