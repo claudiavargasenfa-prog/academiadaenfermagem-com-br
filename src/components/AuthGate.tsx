@@ -43,6 +43,13 @@ function formatPhoneBR(v: string): string {
 }
 
 function AuthScreen() {
+  const currentPath = typeof window !== "undefined" ? window.location.pathname : "/";
+  const requestedPage =
+    currentPath === "/escalas-clinicas" || currentPath === "/novo-app"
+      ? "Escalas Clínicas na Prática"
+      : currentPath !== "/"
+        ? "a página solicitada"
+        : null;
   const [mode, setMode] = useState<"signin" | "signup" | "forgot">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -152,6 +159,12 @@ function AuthScreen() {
         </div>
 
         <div className="rounded-3xl border border-gold/40 bg-card/95 p-6 text-foreground shadow-[var(--shadow-glass)]">
+          {requestedPage && (
+            <div className="mb-4 rounded-xl border border-primary/30 bg-primary/10 px-3 py-2 text-center text-xs font-semibold text-primary">
+              Entre na sua conta para abrir {requestedPage}.
+            </div>
+          )}
+
           <div className="mb-4 grid grid-cols-2 gap-2 rounded-xl bg-secondary/60 p-1">
             <button
               type="button"
