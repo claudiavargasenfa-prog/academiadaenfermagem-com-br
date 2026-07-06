@@ -30,6 +30,7 @@ import { Route as LojaRouteImport } from './routes/loja'
 import { Route as IrasRouteImport } from './routes/iras'
 import { Route as FarmacologiaAvancadaRouteImport } from './routes/farmacologia-avancada'
 import { Route as ExameFisicoEscalasRouteImport } from './routes/exame-fisico-escalas'
+import { Route as EscalasClinicasRouteImport } from './routes/escalas-clinicas'
 import { Route as DiarioRouteImport } from './routes/diario'
 import { Route as CurativosRouteImport } from './routes/curativos'
 import { Route as ConfiancaRouteImport } from './routes/confianca'
@@ -149,6 +150,11 @@ const ExameFisicoEscalasRoute = ExameFisicoEscalasRouteImport.update({
   path: '/exame-fisico-escalas',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EscalasClinicasRoute = EscalasClinicasRouteImport.update({
+  id: '/escalas-clinicas',
+  path: '/escalas-clinicas',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DiarioRoute = DiarioRouteImport.update({
   id: '/diario',
   path: '/diario',
@@ -223,6 +229,7 @@ export interface FileRoutesByFullPath {
   '/confianca': typeof ConfiancaRoute
   '/curativos': typeof CurativosRoute
   '/diario': typeof DiarioRoute
+  '/escalas-clinicas': typeof EscalasClinicasRoute
   '/exame-fisico-escalas': typeof ExameFisicoEscalasRoute
   '/farmacologia-avancada': typeof FarmacologiaAvancadaRoute
   '/iras': typeof IrasRoute
@@ -259,6 +266,7 @@ export interface FileRoutesByTo {
   '/confianca': typeof ConfiancaRoute
   '/curativos': typeof CurativosRoute
   '/diario': typeof DiarioRoute
+  '/escalas-clinicas': typeof EscalasClinicasRoute
   '/exame-fisico-escalas': typeof ExameFisicoEscalasRoute
   '/farmacologia-avancada': typeof FarmacologiaAvancadaRoute
   '/iras': typeof IrasRoute
@@ -295,6 +303,7 @@ export interface FileRoutesById {
   '/confianca': typeof ConfiancaRoute
   '/curativos': typeof CurativosRoute
   '/diario': typeof DiarioRoute
+  '/escalas-clinicas': typeof EscalasClinicasRoute
   '/exame-fisico-escalas': typeof ExameFisicoEscalasRoute
   '/farmacologia-avancada': typeof FarmacologiaAvancadaRoute
   '/iras': typeof IrasRoute
@@ -333,6 +342,7 @@ export interface FileRouteTypes {
     | '/confianca'
     | '/curativos'
     | '/diario'
+    | '/escalas-clinicas'
     | '/exame-fisico-escalas'
     | '/farmacologia-avancada'
     | '/iras'
@@ -369,6 +379,7 @@ export interface FileRouteTypes {
     | '/confianca'
     | '/curativos'
     | '/diario'
+    | '/escalas-clinicas'
     | '/exame-fisico-escalas'
     | '/farmacologia-avancada'
     | '/iras'
@@ -404,6 +415,7 @@ export interface FileRouteTypes {
     | '/confianca'
     | '/curativos'
     | '/diario'
+    | '/escalas-clinicas'
     | '/exame-fisico-escalas'
     | '/farmacologia-avancada'
     | '/iras'
@@ -441,6 +453,7 @@ export interface RootRouteChildren {
   ConfiancaRoute: typeof ConfiancaRoute
   CurativosRoute: typeof CurativosRoute
   DiarioRoute: typeof DiarioRoute
+  EscalasClinicasRoute: typeof EscalasClinicasRoute
   ExameFisicoEscalasRoute: typeof ExameFisicoEscalasRoute
   FarmacologiaAvancadaRoute: typeof FarmacologiaAvancadaRoute
   IrasRoute: typeof IrasRoute
@@ -616,6 +629,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ExameFisicoEscalasRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/escalas-clinicas': {
+      id: '/escalas-clinicas'
+      path: '/escalas-clinicas'
+      fullPath: '/escalas-clinicas'
+      preLoaderRoute: typeof EscalasClinicasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/diario': {
       id: '/diario'
       path: '/diario'
@@ -742,6 +762,7 @@ const rootRouteChildren: RootRouteChildren = {
   ConfiancaRoute: ConfiancaRoute,
   CurativosRoute: CurativosRoute,
   DiarioRoute: DiarioRoute,
+  EscalasClinicasRoute: EscalasClinicasRoute,
   ExameFisicoEscalasRoute: ExameFisicoEscalasRoute,
   FarmacologiaAvancadaRoute: FarmacologiaAvancadaRoute,
   IrasRoute: IrasRoute,
@@ -770,3 +791,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
