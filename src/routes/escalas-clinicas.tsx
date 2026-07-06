@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
-import { MiniAppContent } from "@/components/MiniAppContent";
 import {
   Accordion,
   AccordionContent,
@@ -209,34 +208,33 @@ export function EscalasPage() {
         title="Escalas Clínicas na Prática"
         description="8 escalas essenciais que todo estudante de enfermagem precisa dominar. Clique em cada título para abrir."
       />
-      <MiniAppContent slug="escalas-clinicas" />
 
-      {/* Banner com mascotes (padrão IRAS) */}
-      <section className="mb-6 overflow-hidden rounded-3xl border border-gold/40 bg-primary text-primary-foreground shadow-[var(--shadow-glass)]">
+      {/* Banner com mascotes — versão clarinha */}
+      <section className="mb-6 overflow-hidden rounded-3xl border border-gold/40 bg-gradient-to-br from-accent/30 via-background to-primary/10 shadow-[var(--shadow-soft)]">
         <div className="grid grid-cols-[1fr_auto_1fr] items-end gap-2 px-4 pt-4 sm:px-6">
           <img
             src={mascoteMenino.url}
             alt="Mascote menino"
-            className="h-40 w-auto justify-self-end object-contain drop-shadow-[0_8px_18px_rgba(0,0,0,0.35)] sm:h-56"
+            className="h-40 w-auto justify-self-end object-contain drop-shadow-[0_6px_14px_rgba(0,0,0,0.12)] sm:h-56"
           />
           <div className="pb-2 text-center">
-            <p className="text-[11px] font-semibold uppercase tracking-widest text-gold">
+            <p className="text-[11px] font-semibold uppercase tracking-widest text-primary">
               Avaliar é cuidar
             </p>
-            <p className="font-display text-lg font-extrabold leading-tight text-gold sm:text-2xl">
+            <p className="font-display text-lg font-extrabold leading-tight text-primary sm:text-2xl">
               ESCALAS QUE<br />SALVAM VIDAS
             </p>
           </div>
           <img
             src={mascoteMenina.url}
             alt="Mascote menina"
-            className="h-40 w-auto justify-self-start object-contain drop-shadow-[0_8px_18px_rgba(0,0,0,0.35)] sm:h-56"
+            className="h-40 w-auto justify-self-start object-contain drop-shadow-[0_6px_14px_rgba(0,0,0,0.12)] sm:h-56"
           />
         </div>
-        <div className="border-t border-gold/30 bg-primary-glow/20 px-5 py-4 text-center">
-          <p className="font-display text-base font-bold leading-snug text-primary-foreground sm:text-xl">
-            "Uma boa <span className="text-gold">avaliação</span> transforma dados em{" "}
-            <span className="text-gold">decisões</span> clínicas seguras."
+        <div className="border-t border-gold/30 bg-background/60 px-5 py-4 text-center">
+          <p className="font-display text-base font-bold leading-snug text-foreground sm:text-xl">
+            "Uma boa <span className="text-primary">avaliação</span> transforma dados em{" "}
+            <span className="text-primary">decisões</span> clínicas seguras."
           </p>
         </div>
       </section>
