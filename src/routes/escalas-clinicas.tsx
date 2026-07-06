@@ -256,7 +256,7 @@ function EscalasPage() {
         </p>
       </Card>
 
-      <Accordion type="multiple" className="w-full">
+      <Accordion type="multiple" defaultValue={["braden"]} className="w-full">
         <GrupoTitulo>Risco Assistencial</GrupoTitulo>
 
         {/* 1. BRADEN */}
