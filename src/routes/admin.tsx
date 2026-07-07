@@ -111,7 +111,15 @@ function AdminContent() {
       const archiveId = await ensureArchiveApp();
       const ids = Array.from(selected);
       await supabase.from("mini_app_placements").delete().in("mini_app_id", ids);
-      await supabase.from("mini_apps").update({ is_active: false }).in("id", ids);
+      await supabase
+        .from("mini_apps")
+        .update({
+          is_active: false,
+          track_academico: false,
+          track_tecnico: false,
+          track_enfermeiro: false,
+        } as any)
+        .in("id", ids);
       const rows = ids.map((mid, i) => ({
         mini_app_id: mid,
         app_id: archiveId,
