@@ -353,6 +353,21 @@ function AppContent({ app }: { app: AppRow }) {
       .from("mini_app_placements")
       .insert({ mini_app_id: miniAppId, app_id: app.id, section_id: sectionId, ordem });
     if (error) alert(error.message);
+    if (!isArchiveApp) {
+      const { data: archiveApp } = await supabase
+        .from("apps")
+        .select("id")
+        .eq("slug", "arquivo-2-projeto")
+        .maybeSingle();
+      if (archiveApp?.id) {
+        await supabase
+          .from("mini_app_placements")
+          .delete()
+          .eq("mini_app_id", miniAppId)
+          .eq("app_id", archiveApp.id);
+        qc.invalidateQueries({ queryKey: ["app_placements", archiveApp.id] });
+      }
+    }
     qc.invalidateQueries({ queryKey: ["admin_mini_apps"] });
     qc.invalidateQueries({ queryKey: ["admin_mini_apps_all"] });
     qc.invalidateQueries({ queryKey: ["mini_apps"] });
