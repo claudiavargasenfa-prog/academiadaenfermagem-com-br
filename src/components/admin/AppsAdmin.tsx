@@ -20,7 +20,6 @@ import {
 import { CSS } from "@dnd-kit/utilities";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/AppShell";
-import { fetchMiniApps } from "@/lib/access";
 import {
   fetchApps,
   fetchAppSections,
@@ -232,7 +231,18 @@ function AppContent({ app }: { app: AppRow }) {
     queryKey: ["app_placements", app.id],
     queryFn: () => fetchPlacementsForApp(app.id),
   });
-  const miniAppsQ = useQuery({ queryKey: ["admin_mini_apps_all"], queryFn: fetchMiniApps });
+  const miniAppsQ = useQuery({
+    queryKey: ["admin_mini_apps_all"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("mini_apps")
+        .select("*")
+        .order("sort_order", { ascending: true })
+        .order("name", { ascending: true });
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
@@ -331,10 +341,21 @@ function AppContent({ app }: { app: AppRow }) {
 
   async function addPlacement(miniAppId: string, sectionId: string | null) {
     const ordem = (placements.filter((p) => p.section_id === sectionId).reduce((m, p) => Math.max(m, p.ordem), -1)) + 1;
+    const isArchiveApp = app.slug === "arquivo-2-projeto";
+    if (!isArchiveApp) {
+      const { error: activateError } = await supabase
+        .from("mini_apps")
+        .update({ is_active: true } as any)
+        .eq("id", miniAppId);
+      if (activateError) return alert(activateError.message);
+    }
     const { error } = await supabase
       .from("mini_app_placements")
       .insert({ mini_app_id: miniAppId, app_id: app.id, section_id: sectionId, ordem });
     if (error) alert(error.message);
+    qc.invalidateQueries({ queryKey: ["admin_mini_apps"] });
+    qc.invalidateQueries({ queryKey: ["admin_mini_apps_all"] });
+    qc.invalidateQueries({ queryKey: ["mini_apps"] });
     qc.invalidateQueries({ queryKey: ["app_placements", app.id] });
   }
 
