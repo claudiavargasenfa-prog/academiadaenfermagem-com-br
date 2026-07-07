@@ -1,52 +1,29 @@
-## Reformular o mini app "Enfermagem Obstétrica"
+## O problema
 
-Atualizar o conteúdo do mini app `obstetricia` (aparece dentro do app Acadêmico) mantendo o mesmo padrão visual das Escalas Clínicas: cores clarinhas (rosa/pêssego/mint pastéis), seções em cards e blocos expansíveis (`<details>`) que abrem ao clicar no título.
+Na aba **Mini apps** do admin, quando você marca os quadradinhos e clica em **"🗄️ Arquivar selecionados"**, o sistema hoje:
 
-### O que muda no banner (topo)
-- Mantém a arte/estrutura do banner atual — só troca 2 textos:
-  - Onde está "Sinais Vitais" → **"ENFERMAGEM OBSTÉTRICA"**
-  - Onde está "Gestante" (subtítulo/tagline) → frase curta descrevendo o que o aluno vai encontrar, ex.: *"Avaliação da gestante, sinais de trabalho de parto, alertas de emergência e escuta ativa para orientar a mãe do pré-natal ao parto."*
+1. Apaga os vínculos da tabela de posicionamentos (`mini_app_placements`).
+2. Marca o mini app como inativo.
+3. Cria um novo vínculo no app "🗄️ Arquivo — 2º Projeto".
 
-### O que sai do conteúdo
-- Todo bloco "Diagnósticos de Enfermagem"
-- Qualquer citação a NANDA, NIC, NOC (e CIPE)
-- Bloco final "Resumo dos pontos-chave"
+**Só que os cards continuam aparecendo em Acadêmico / Técnico / Enfermeiro.**
 
-### O que entra (nesta ordem, logo após o banner)
+O motivo é uma marcação antiga (legado) em cada mini app: três colunas `track_academico`, `track_tecnico`, `track_enfermeiro` que valem `true/false`. A tela lista os cards em cada academia usando **duas fontes** ao mesmo tempo: os vínculos novos **e** essas marcações antigas. Como o botão de arquivar só limpa os vínculos novos e nunca desliga as marcações antigas, o card volta a aparecer nas academias.
 
-**1. Avaliação específica da gestante** (card intro claro)
-- O que o acadêmico avalia em cada consulta e por que a escuta ativa importa.
+## O que vou mudar
 
-**2. Sinais de trabalho de parto** (card destacado, cor mint)
-- Contrações rítmicas, perda do tampão, rompimento da bolsa, dilatação — quando ir para a maternidade.
+Alteração pontual, apenas no fluxo de arquivamento em massa (nenhum mini app é apagado, nada é movido automaticamente):
 
-**3. Sinais de alerta / emergência** (card destacado, cor pêssego/vermelho suave)
-- Pré-eclâmpsia (cefaleia intensa, visão turva, edema súbito, epigastralgia), sangramento, redução dos movimentos fetais, perda de líquido amniótico.
+- No mesmo passo em que hoje desativo o mini app, também vou **desligar as três marcações antigas** (`track_academico`, `track_tecnico`, `track_enfermeiro` → `false`) para os mini apps selecionados.
+- Resultado: ao clicar em "Arquivar selecionados", os cards **saem de verdade** de Acadêmico, Técnico e Enfermeiro e passam a aparecer apenas na seção "Sem app" (ou no app "🗄️ Arquivo — 2º Projeto" em *Apps & Organização*), prontos para você reconstruir um a um.
 
-**4. Pré-natal por trimestre — 3 acordeões `<details>`**
-- **1º Trimestre (até 12 sem)** — adaptação, confirmação (TIG/Beta-HCG), cálculo da IG, exames de rotina (hemograma, tipagem, sorologias HIV/Sífilis/Hepatites), ácido fólico, cessar tabagismo/álcool.
-- **2º Trimestre (13–28 sem)** — PA/peso/edema, Altura Uterina, BCF, USG morfológica, rastreio de diabetes gestacional.
-- **3º Trimestre (29–40 sem)** — sinais de perigo, consultas quinzenais → semanais, preparação das mamas, Plano de Parto.
+## O que **não** muda
 
-**5. Papel humanizado e educativo** (card claro)
-- Vínculo, educação em saúde, aleitamento, fases do trabalho de parto.
+- Nenhum mini app é apagado.
+- Nenhum conteúdo (texto, escalas, badges) é alterado.
+- O botão do lixinho continua igual.
+- Para restaurar, você continua arrastando de volta em *Apps & Organização* — e agora eu também garanto que, ao arrastar de volta para Acadêmico/Técnico/Enfermeiro pelo AppsAdmin, o card apareça (o vínculo novo já é suficiente; a marcação antiga fica desligada permanentemente para os arquivados).
 
-**6. Métodos não farmacológicos para alívio da dor** (grid de mini-cards pastéis)
-- Banhos quentes, massagens sacrais, bola de pilates, deambulação, respiração, ambiente acolhedor.
+## Arquivo afetado
 
-**7. Manobras de Leopold** (acordeão com as 4 manobras)
-- 1ª Situação, 2ª Posição, 3ª Apresentação, 4ª Insinuação — passo a passo curto por manobra.
-
-**8. Ausculta dos BCF** (card final)
-- Momento (antes/durante/após contração), localização (2ª manobra), instrumento (sonar Doppler / Pinard), contagem por 1 min.
-
-### Estilo
-Mesma paleta pastel usada em Escalas Clínicas: fundos suaves (rosa claro, pêssego, mint, lavanda), títulos em destaque, `<details>` nativo para expandir/recolher, sem cores hardcoded fora do tema. Linguagem didática de estudante, sem jargão gratuito.
-
-### Como será aplicado (técnico)
-- Um único `UPDATE` na tabela `mini_apps` (slug `obstetricia`) substituindo `content_md` pelo novo HTML rico.
-- **Nenhum arquivo de código alterado** — a rota já renderiza `content_md` via `MiniAppContent`.
-- Banner atual preservado; só os 2 textos citados são reescritos.
-
-### Verificação
-Abrir o mini app "Enfermagem Obstétrica" no app Acadêmico e conferir: banner com os novos textos, seções na ordem acima, acordeões abrindo/fechando, ausência de NANDA/NIC/NOC e do "resumo dos pontos-chave".
+- `src/routes/admin.tsx` — função `handleBulkArchive`: adicionar `track_academico: false, track_tecnico: false, track_enfermeiro: false` ao `update` que já faz `is_active: false`.
