@@ -110,8 +110,9 @@ function AdminContent() {
     try {
       const archiveId = await ensureArchiveApp();
       const ids = Array.from(selected);
-      await supabase.from("mini_app_placements").delete().in("mini_app_id", ids);
-      await supabase
+      const deleteRes = await supabase.from("mini_app_placements").delete().in("mini_app_id", ids);
+      if (deleteRes.error) throw deleteRes.error;
+      const updateRes = await supabase
         .from("mini_apps")
         .update({
           is_active: false,
@@ -120,6 +121,7 @@ function AdminContent() {
           track_enfermeiro: false,
         } as any)
         .in("id", ids);
+      if (updateRes.error) throw updateRes.error;
       const rows = ids.map((mid, i) => ({
         mini_app_id: mid,
         app_id: archiveId,
@@ -130,6 +132,7 @@ function AdminContent() {
       if (error) throw error;
       setSelected(new Set());
       qc.invalidateQueries({ queryKey: ["admin_mini_apps"] });
+      qc.invalidateQueries({ queryKey: ["admin_mini_app_placements"] });
       qc.invalidateQueries({ queryKey: ["mini_apps"] });
       qc.invalidateQueries({ queryKey: ["apps"] });
       qc.invalidateQueries({ queryKey: ["app_placements"] });
