@@ -352,7 +352,7 @@ function AppContent({ app }: { app: AppRow }) {
     const { error } = await supabase
       .from("mini_app_placements")
       .insert({ mini_app_id: miniAppId, app_id: app.id, section_id: sectionId, ordem });
-    if (error) alert(error.message);
+    if (error) return alert(error.message);
     if (!isArchiveApp) {
       const { data: archiveApp } = await supabase
         .from("apps")
@@ -376,8 +376,29 @@ function AppContent({ app }: { app: AppRow }) {
 
   async function removePlacement(id: string) {
     if (!confirm("Remover este mini app deste app? Ele continua existindo, só sai daqui.")) return;
+    const placement = placements.find((p) => p.id === id);
+    if (placement) {
+      const legacyOff =
+        app.slug === "academico"
+          ? { track_academico: false }
+          : app.slug === "tecnico"
+            ? { track_tecnico: false }
+            : app.slug === "enfermeiro"
+              ? { track_enfermeiro: false }
+              : null;
+      if (legacyOff) {
+        const { error: legacyError } = await supabase
+          .from("mini_apps")
+          .update(legacyOff as any)
+          .eq("id", placement.mini_app_id);
+        if (legacyError) return alert(legacyError.message);
+      }
+    }
     const { error } = await supabase.from("mini_app_placements").delete().eq("id", id);
     if (error) alert(error.message);
+    qc.invalidateQueries({ queryKey: ["admin_mini_apps"] });
+    qc.invalidateQueries({ queryKey: ["admin_mini_apps_all"] });
+    qc.invalidateQueries({ queryKey: ["mini_apps"] });
     qc.invalidateQueries({ queryKey: ["app_placements", app.id] });
   }
 
