@@ -1,62 +1,52 @@
-## Mini app: 8 Escalas Clínicas (Acadêmico)
+## Reformular o mini app "Enfermagem Obstétrica"
 
-Criar novo mini app didático com 8 escalas clínicas, usando o mesmo padrão visual do "Time Contra as IRAS" (banner com mascotes + cores clarinhas), acordeões (clicar no título abre o conteúdo), cards e tabelas.
+Atualizar o conteúdo do mini app `obstetricia` (aparece dentro do app Acadêmico) mantendo o mesmo padrão visual das Escalas Clínicas: cores clarinhas (rosa/pêssego/mint pastéis), seções em cards e blocos expansíveis (`<details>`) que abrem ao clicar no título.
 
-### Rota e navegação
-- Nova rota: `src/routes/escalas-clinicas.tsx` → URL `/escalas-clinicas`.
-- Slug do mini app: `escalas-clinicas`, título "Escalas Clínicas na Prática", ícone 📊.
-- Cadastrar no Admin como placement no app **Acadêmico** (e disponível para inclusão manual em Estudante Técnico, Técnico, Enfermeiro conforme desejo da fundadora — sem forçar).
-- Registro no `AppShell` (menu lateral / grid de mini apps do Acadêmico).
+### O que muda no banner (topo)
+- Mantém a arte/estrutura do banner atual — só troca 2 textos:
+  - Onde está "Sinais Vitais" → **"ENFERMAGEM OBSTÉTRICA"**
+  - Onde está "Gestante" (subtítulo/tagline) → frase curta descrevendo o que o aluno vai encontrar, ex.: *"Avaliação da gestante, sinais de trabalho de parto, alertas de emergência e escuta ativa para orientar a mãe do pré-natal ao parto."*
 
-### Estrutura da página (padrão IRAS)
-1. `PageHeader` — eyebrow "Avaliação Clínica", título "Escalas Clínicas na Prática", descrição curta e didática.
-2. `MiniAppContent slug="escalas-clinicas"` (permite edição no Admin).
-3. **Banner inicial** com mascotes (mesmo layout do IRAS: dois mascotes + faixa dourada central "ESCALAS QUE SALVAM VIDAS").
-4. Bloco introdutório curto: "O que é uma escala clínica e por que usar?" em card claro.
-5. **8 acordeões (Accordion)** — um por escala. Clicar no título abre:
-   - **Finalidade** (parágrafo curto, linguagem de estudante).
-   - **Como aplicar** (passo a passo numerado).
-   - **Tabela de pontuação/critérios** (usar `Table` do shadcn) com cores clarinhas por faixa de risco (verde/amarelo/laranja/vermelho suave via tokens `success/warning/destructive` com opacidade).
-   - **Interpretação do resultado** (cards coloridos por faixa).
-   - **Dica da Enfa** (caixinha destacada com emoji 💡).
+### O que sai do conteúdo
+- Todo bloco "Diagnósticos de Enfermagem"
+- Qualquer citação a NANDA, NIC, NOC (e CIPE)
+- Bloco final "Resumo dos pontos-chave"
 
-### As 8 escalas (agrupadas visualmente com sub-headers)
+### O que entra (nesta ordem, logo após o banner)
 
-**Risco assistencial**
-1. **Braden** — risco de Lesão por Pressão (percepção sensorial, umidade, atividade, mobilidade, nutrição, fricção/cisalhamento). Tabela 1–4 pts por item, total 6–23, faixas de risco.
-2. **Morse** — risco de quedas (histórico, dx secundário, auxílio marcha, terapia EV, marcha, estado mental). Faixas: baixo/moderado/alto.
+**1. Avaliação específica da gestante** (card intro claro)
+- O que o acadêmico avalia em cada consulta e por que a escuta ativa importa.
 
-**Neurológicas**
-3. **Glasgow (ECG)** — abertura ocular (1–4), verbal (1–5), motora (1–6). Total 3–15. Incluir observação de reatividade pupilar (versão atualizada ECG-P) de forma simples.
-4. **RASS** — sedação/agitação em UTI, escala de +4 a −5 com descrição de cada nível.
+**2. Sinais de trabalho de parto** (card destacado, cor mint)
+- Contrações rítmicas, perda do tampão, rompimento da bolsa, dilatação — quando ir para a maternidade.
 
-**Dor**
-5. **EVA e Escala de Faces** — juntas em um só acordeão: régua 0–10 + faces (leve/moderada/intensa). Como aplicar em adulto vs criança/idoso.
+**3. Sinais de alerta / emergência** (card destacado, cor pêssego/vermelho suave)
+- Pré-eclâmpsia (cefaleia intensa, visão turva, edema súbito, epigastralgia), sangramento, redução dos movimentos fetais, perda de líquido amniótico.
 
-**Deterioração clínica**
-6. **NEWS** — FR, SpO₂, uso de O₂, PAS, FC, nível de consciência, temperatura. Tabela de pontuação por parâmetro + faixas de ação (baixo/médio/alto risco).
-7. **PEWS** — versão pediátrica: comportamento, cardiovascular, respiratório. Tabela + condutas.
+**4. Pré-natal por trimestre — 3 acordeões `<details>`**
+- **1º Trimestre (até 12 sem)** — adaptação, confirmação (TIG/Beta-HCG), cálculo da IG, exames de rotina (hemograma, tipagem, sorologias HIV/Sífilis/Hepatites), ácido fólico, cessar tabagismo/álcool.
+- **2º Trimestre (13–28 sem)** — PA/peso/edema, Altura Uterina, BCF, USG morfológica, rastreio de diabetes gestacional.
+- **3º Trimestre (29–40 sem)** — sinais de perigo, consultas quinzenais → semanais, preparação das mamas, Plano de Parto.
 
-**Gerencial**
-8. **Fugulin** — grau de dependência (cuidados mínimos → intensivos) para dimensionamento de equipe. Tabela com os 9 indicadores + faixas de classificação.
+**5. Papel humanizado e educativo** (card claro)
+- Vínculo, educação em saúde, aleitamento, fases do trabalho de parto.
 
-### Regras de conteúdo (pedidos explícitos da usuária)
-- **NÃO** incluir "Resumo dos pontos-chave" no final.
-- **NÃO** citar NANDA, NIC, NOC nem CIPE em lugar nenhum.
-- Toda tabela deve ter obrigatoriamente **Finalidade** e **Como aplicar**.
-- Linguagem para estudante: técnica, curta, didática, sem jargão gratuito.
+**6. Métodos não farmacológicos para alívio da dor** (grid de mini-cards pastéis)
+- Banhos quentes, massagens sacrais, bola de pilates, deambulação, respiração, ambiente acolhedor.
 
-### Estilo visual
-- Reaproveitar tokens já existentes (`primary`, `gold`, `success`, `warning`, `destructive`, `muted`) — sem cores hardcoded.
-- Cards com `glass` / `bg-card`, bordas suaves `border-gold/30`.
-- Acordeões com `Accordion` (shadcn) — clicar no título abre.
-- Faixas de risco em badges/cards com fundo suave (opacidade baixa dos tokens semânticos).
+**7. Manobras de Leopold** (acordeão com as 4 manobras)
+- 1ª Situação, 2ª Posição, 3ª Apresentação, 4ª Insinuação — passo a passo curto por manobra.
 
-### Arquivos a criar/editar
-- **Criar** `src/routes/escalas-clinicas.tsx` (página completa com as 8 escalas).
-- **Editar** `src/components/AppShell.tsx` — adicionar entrada no menu do app Acadêmico.
-- **Migration** — inserir linha em `mini_apps` (slug `escalas-clinicas`) + `mini_app_placements` para o app Acadêmico (para aparecer no Admin e permitir edição de vídeo/áudio/texto).
+**8. Ausculta dos BCF** (card final)
+- Momento (antes/durante/após contração), localização (2ª manobra), instrumento (sonar Doppler / Pinard), contagem por 1 min.
+
+### Estilo
+Mesma paleta pastel usada em Escalas Clínicas: fundos suaves (rosa claro, pêssego, mint, lavanda), títulos em destaque, `<details>` nativo para expandir/recolher, sem cores hardcoded fora do tema. Linguagem didática de estudante, sem jargão gratuito.
+
+### Como será aplicado (técnico)
+- Um único `UPDATE` na tabela `mini_apps` (slug `obstetricia`) substituindo `content_md` pelo novo HTML rico.
+- **Nenhum arquivo de código alterado** — a rota já renderiza `content_md` via `MiniAppContent`.
+- Banner atual preservado; só os 2 textos citados são reescritos.
 
 ### Verificação
-- Abrir `/escalas-clinicas` no preview e conferir: banner com mascotes, 8 acordeões abrem/fecham, tabelas legíveis, cores claras, ausência de menção a NANDA/NIC/NOC/CIPE, ausência de bloco "resumo".
-- Confirmar no Admin (Mini apps) que a escala aparece dentro do app Acadêmico.
+Abrir o mini app "Enfermagem Obstétrica" no app Acadêmico e conferir: banner com os novos textos, seções na ordem acima, acordeões abrindo/fechando, ausência de NANDA/NIC/NOC e do "resumo dos pontos-chave".
