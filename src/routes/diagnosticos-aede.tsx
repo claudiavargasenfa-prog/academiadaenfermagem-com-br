@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
 import { MiniAppContent } from "@/components/MiniAppContent";
@@ -120,6 +120,31 @@ const QUICK_CASES: QuickCase[] = [
   },
 ];
 
+const DEFAULT_ANAMNESE: Anamnese = {
+  paciente: "Paciente exemplo",
+  idade: "68",
+  sexo: "Feminino",
+  leito: "204-B",
+  clinica: "Clínica médica",
+  queixa: "Falta de ar e desconforto respiratório",
+  hda: "Início há 2 horas, evoluindo com dispneia, taquipneia e queda de saturação.",
+  antecedentes: "HAS e DM. Alergias negadas. Em uso de medicação anti-hipertensiva.",
+};
+
+const DEFAULT_EXAME: Exame = {
+  glasgow: "15",
+  pupilas: "isocóricas",
+  pa: "140x90",
+  fc: "104",
+  fr: "28",
+  sato2: "89",
+  temp: "36.6",
+  observacoes: "Paciente ansiosa, com uso de musculatura acessória e cianose discreta.",
+  chips: ["Dispneia", "Taquipneia", "Baixa SatO₂", "Cianose"],
+};
+
+const DEFAULT_SINTOMAS = ["Dispneia", "Taquipneia", "Baixa SatO₂", "Cianose"];
+
 function normalize(s: string) {
   return s
     .toLowerCase()
@@ -132,17 +157,12 @@ function normalize(s: string) {
 
 function DiagnosticosAedePage() {
   const [step, setStep] = useState(1);
-  const [anamnese, setAnamnese] = useState<Anamnese>({
-    paciente: "", idade: "", sexo: "", leito: "", clinica: "",
-    queixa: "", hda: "", antecedentes: "",
-  });
-  const [exame, setExame] = useState<Exame>({
-    glasgow: "", pupilas: "", pa: "", fc: "", fr: "", sato2: "", temp: "",
-    observacoes: "", chips: [],
-  });
-  const [sintomas, setSintomas] = useState<string[]>([]);
+  const [anamnese, setAnamnese] = useState<Anamnese>(DEFAULT_ANAMNESE);
+  const [exame, setExame] = useState<Exame>(DEFAULT_EXAME);
+  const [sintomas, setSintomas] = useState<string[]>(DEFAULT_SINTOMAS);
   const [outroSintoma, setOutroSintoma] = useState("");
   const [selecionados, setSelecionados] = useState<string[]>([]);
+  const [autoSeededDiag, setAutoSeededDiag] = useState(false);
   const [filtroBloco, setFiltroBloco] = useState<string>("");
 
   const { isReady } = useAuthReady();
@@ -232,12 +252,21 @@ function DiagnosticosAedePage() {
     setAnamnese({ ...anamnese, ...quick.anamnese });
     setExame({ ...exame, ...quick.exame, chips: quick.exame.chips ?? quick.sintomas });
     setSintomas(quick.sintomas);
+    setSelecionados([]);
+    setAutoSeededDiag(false);
     setStep(4);
     setTimeout(() => window.scrollTo({ top: 0, behavior: "smooth" }), 0);
   };
 
   const condutasDe = (id: string) =>
     (diagsQ.data?.condutas ?? []).filter((c) => c.diagnostico_id === id);
+
+  useEffect(() => {
+    if (!autoSeededDiag && ranked.length > 0) {
+      setSelecionados([ranked[0].d.id]);
+      setAutoSeededDiag(true);
+    }
+  }, [autoSeededDiag, ranked]);
 
   return (
     <AppShell>
@@ -267,6 +296,16 @@ function DiagnosticosAedePage() {
           </div>
         </div>
       </Card>
+
+      <ClinicalOverview
+        step={step}
+        onStep={go}
+        anamnese={anamnese}
+        exame={exame}
+        sintomas={sintomas}
+        diagnosticosCount={ranked.length}
+        prescricoesCount={selecionados.length}
+      />
 
       {/* Stepper */}
       <div className="mb-5 flex flex-wrap items-center gap-2">
@@ -639,7 +678,7 @@ function StepDiagnosticos({
                         {d.id_gatilho}
                       </span>
                       <span className="text-[10px] text-muted-foreground">
-                        {score} sinal{score === 1 ? "" : "is"} em comum
+                        {score === 1 ? "1 sinal" : `${score} sinais`} em comum
                       </span>
                     </div>
                     <h3 className="mt-1 font-display text-base font-bold text-foreground">{d.titulo}</h3>
@@ -845,6 +884,85 @@ ${header}
         >
           <ArrowLeft className="h-4 w-4" /> Voltar aos diagnósticos
         </button>
+      </div>
+    </Card>
+  );
+}
+
+function ClinicalOverview({
+  step,
+  onStep,
+  anamnese,
+  exame,
+  sintomas,
+  diagnosticosCount,
+  prescricoesCount,
+}: {
+  step: number;
+  onStep: (n: number) => void;
+  anamnese: Anamnese;
+  exame: Exame;
+  sintomas: string[];
+  diagnosticosCount: number;
+  prescricoesCount: number;
+}) {
+  const items = [
+    {
+      step: 1,
+      title: "Anamnese",
+      icon: ClipboardList,
+      body: `${anamnese.queixa || "Queixa não informada"} · ${anamnese.clinica || "setor em branco"}`,
+    },
+    {
+      step: 2,
+      title: "Exame físico",
+      icon: Stethoscope,
+      body: `PA ${exame.pa || "—"} · FC ${exame.fc || "—"} · FR ${exame.fr || "—"} · SatO₂ ${exame.sato2 || "—"}`,
+    },
+    {
+      step: 4,
+      title: "Diagnósticos",
+      icon: ListChecks,
+      body: `${diagnosticosCount} ${diagnosticosCount === 1 ? "sugestão" : "sugestões"} com base em: ${sintomas.slice(0, 3).join(", ") || "—"}`,
+    },
+    {
+      step: 5,
+      title: "Prescrição",
+      icon: FileText,
+      body: `${prescricoesCount} diagnóstico${prescricoesCount === 1 ? "" : "s"} selecionado${prescricoesCount === 1 ? "" : "s"} para gerar tabela`,
+    },
+  ];
+
+  return (
+    <Card className="mb-5 border-primary/30 bg-primary/5">
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+        <div>
+          <p className="text-xs font-bold uppercase tracking-wide text-primary">Caso clínico pronto para editar</p>
+          <h2 className="font-display text-lg font-bold text-foreground">Anamnese, exame físico, diagnóstico e prescrição</h2>
+        </div>
+        <button
+          onClick={() => onStep(5)}
+          disabled={prescricoesCount === 0}
+          className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-bold text-primary-foreground hover:opacity-90 disabled:opacity-40"
+        >
+          Ver prescrição <ArrowRight className="h-4 w-4" />
+        </button>
+      </div>
+      <div className="grid gap-2 md:grid-cols-4">
+        {items.map(({ step: n, title, icon: Icon, body }) => (
+          <button
+            key={title}
+            onClick={() => onStep(n)}
+            className={`rounded-xl border p-3 text-left transition-colors ${
+              step === n ? "border-gold bg-gold/15" : "border-border bg-background/70 hover:border-gold/60"
+            }`}
+          >
+            <span className="mb-2 flex items-center gap-2 text-sm font-bold text-foreground">
+              <Icon className="h-4 w-4 text-primary" /> {title}
+            </span>
+            <span className="block text-xs leading-relaxed text-muted-foreground">{body}</span>
+          </button>
+        ))}
       </div>
     </Card>
   );
