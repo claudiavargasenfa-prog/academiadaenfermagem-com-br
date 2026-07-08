@@ -276,7 +276,8 @@ function DiagnosticosAedePage() {
         description="Wizard de 5 passos: em 2 minutos você monta anamnese, exame físico, sinais/sintomas, escolhe diagnósticos e imprime a prescrição."
       />
 
-      <MiniAppContent slug="diagnosticos-aede" />
+
+
 
       {/* Instruções */}
       <Card className="mb-5 border-gold/40 bg-gradient-to-br from-primary/5 to-gold/10">
