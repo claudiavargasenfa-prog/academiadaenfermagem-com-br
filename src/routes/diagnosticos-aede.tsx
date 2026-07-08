@@ -678,7 +678,7 @@ function StepDiagnosticos({
                         {d.id_gatilho}
                       </span>
                       <span className="text-[10px] text-muted-foreground">
-                        {score} sinal{score === 1 ? "" : "is"} em comum
+                        {score === 1 ? "1 sinal" : `${score} sinais`} em comum
                       </span>
                     </div>
                     <h3 className="mt-1 font-display text-base font-bold text-foreground">{d.titulo}</h3>
@@ -884,6 +884,85 @@ ${header}
         >
           <ArrowLeft className="h-4 w-4" /> Voltar aos diagnósticos
         </button>
+      </div>
+    </Card>
+  );
+}
+
+function ClinicalOverview({
+  step,
+  onStep,
+  anamnese,
+  exame,
+  sintomas,
+  diagnosticosCount,
+  prescricoesCount,
+}: {
+  step: number;
+  onStep: (n: number) => void;
+  anamnese: Anamnese;
+  exame: Exame;
+  sintomas: string[];
+  diagnosticosCount: number;
+  prescricoesCount: number;
+}) {
+  const items = [
+    {
+      step: 1,
+      title: "Anamnese",
+      icon: ClipboardList,
+      body: `${anamnese.queixa || "Queixa não informada"} · ${anamnese.clinica || "setor em branco"}`,
+    },
+    {
+      step: 2,
+      title: "Exame físico",
+      icon: Stethoscope,
+      body: `PA ${exame.pa || "—"} · FC ${exame.fc || "—"} · FR ${exame.fr || "—"} · SatO₂ ${exame.sato2 || "—"}`,
+    },
+    {
+      step: 4,
+      title: "Diagnósticos",
+      icon: ListChecks,
+      body: `${diagnosticosCount} sugestão${diagnosticosCount === 1 ? "" : "ões"} com base em: ${sintomas.slice(0, 3).join(", ") || "—"}`,
+    },
+    {
+      step: 5,
+      title: "Prescrição",
+      icon: FileText,
+      body: `${prescricoesCount} diagnóstico${prescricoesCount === 1 ? "" : "s"} selecionado${prescricoesCount === 1 ? "" : "s"} para gerar tabela`,
+    },
+  ];
+
+  return (
+    <Card className="mb-5 border-primary/30 bg-primary/5">
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+        <div>
+          <p className="text-xs font-bold uppercase tracking-wide text-primary">Caso clínico pronto para editar</p>
+          <h2 className="font-display text-lg font-bold text-foreground">Anamnese, exame físico, diagnóstico e prescrição</h2>
+        </div>
+        <button
+          onClick={() => onStep(5)}
+          disabled={prescricoesCount === 0}
+          className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-bold text-primary-foreground hover:opacity-90 disabled:opacity-40"
+        >
+          Ver prescrição <ArrowRight className="h-4 w-4" />
+        </button>
+      </div>
+      <div className="grid gap-2 md:grid-cols-4">
+        {items.map(({ step: n, title, icon: Icon, body }) => (
+          <button
+            key={title}
+            onClick={() => onStep(n)}
+            className={`rounded-xl border p-3 text-left transition-colors ${
+              step === n ? "border-gold bg-gold/15" : "border-border bg-background/70 hover:border-gold/60"
+            }`}
+          >
+            <span className="mb-2 flex items-center gap-2 text-sm font-bold text-foreground">
+              <Icon className="h-4 w-4 text-primary" /> {title}
+            </span>
+            <span className="block text-xs leading-relaxed text-muted-foreground">{body}</span>
+          </button>
+        ))}
       </div>
     </Card>
   );
