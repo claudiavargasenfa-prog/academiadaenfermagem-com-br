@@ -58,6 +58,40 @@ function AdminContent() {
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [archiving, setArchiving] = useState(false);
+  const [reactivating, setReactivating] = useState<string | null>(null);
+
+  async function handleReactivate(app: MiniApp) {
+    setReactivating(app.id);
+    try {
+      // remove do app "Arquivo" (se estiver lá)
+      const { data: archiveApp } = await supabase
+        .from("apps")
+        .select("id")
+        .eq("slug", "arquivo-2-projeto")
+        .maybeSingle();
+      if (archiveApp?.id) {
+        await supabase
+          .from("mini_app_placements")
+          .delete()
+          .eq("mini_app_id", app.id)
+          .eq("app_id", archiveApp.id);
+      }
+      // reativa
+      const { error } = await supabase
+        .from("mini_apps")
+        .update({ is_active: true } as any)
+        .eq("id", app.id);
+      if (error) throw error;
+      qc.invalidateQueries({ queryKey: ["admin_mini_apps"] });
+      qc.invalidateQueries({ queryKey: ["mini_apps"] });
+      qc.invalidateQueries({ queryKey: ["admin_mini_app_placements"] });
+      qc.invalidateQueries({ queryKey: ["app_placements"] });
+    } catch (e: any) {
+      alert("Erro ao reativar: " + (e?.message ?? String(e)));
+    } finally {
+      setReactivating(null);
+    }
+  }
 
   function toggleSel(id: string) {
     setSelected((s) => {
