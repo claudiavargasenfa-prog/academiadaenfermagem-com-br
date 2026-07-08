@@ -528,7 +528,18 @@ function AppContent({ app }: { app: AppRow }) {
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
           <div className="space-y-4">
             {containers.map((c) => (
-              <Container key={c.id} container={c} miniById={miniById} onRemove={removePlacement} onAddTo={(mid) => addPlacement(mid, c.sectionId)} available={available} />
+              <Container
+                key={c.id}
+                container={c}
+                miniById={miniById}
+                onRemove={removePlacement}
+                onAddTo={(mid) => addPlacement(mid, c.sectionId)}
+                available={available}
+                targetApps={targetApps}
+                onMoveTo={(miniAppId, targetAppId, placementId) =>
+                  moveMiniAppToApp(miniAppId, targetAppId, { removeFromCurrent: true, currentPlacementId: placementId })
+                }
+              />
             ))}
           </div>
         </DndContext>
@@ -536,30 +547,57 @@ function AppContent({ app }: { app: AppRow }) {
           <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
             Mini apps fora deste app ({available.length})
           </h4>
+          <p className="text-[10px] text-muted-foreground">
+            Inativos e arquivados aparecem aqui. Use <strong>Reativar em ▾</strong> para colocar em qualquer app (Acadêmico, Estudante Técnico, Técnico ou Enfermeiro) — o mini app é reativado automaticamente.
+          </p>
           <div className="max-h-[480px] overflow-y-auto rounded-xl border border-foreground/10 p-2 text-xs">
             {available.length === 0 ? (
               <p className="text-muted-foreground">Todos já estão neste app.</p>
             ) : (
               <ul className="space-y-1">
                 {available.map((m) => (
-                  <li key={m.id} className="flex items-center justify-between gap-2 rounded-lg border border-foreground/10 bg-background px-2 py-1.5">
-                    <span className="truncate">
-                      <span className="mr-1">{m.icon ?? "📘"}</span>
-                      {m.name}
-                    </span>
-                    <button
-                      onClick={() => addPlacement(m.id, null)}
-                      className="rounded-md bg-primary/10 px-2 py-0.5 text-[10px] font-bold text-primary hover:bg-primary/20"
-                      title="Adicionar em 'Sem seção'"
-                    >
-                      + add
-                    </button>
+                  <li key={m.id} className="flex flex-col gap-1 rounded-lg border border-foreground/10 bg-background px-2 py-1.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="truncate">
+                        <span className="mr-1">{m.icon ?? "📘"}</span>
+                        {m.name}
+                        {!m.is_active && (
+                          <span className="ml-1 rounded-full bg-foreground/10 px-1.5 py-0.5 text-[9px] font-bold uppercase">inativo</span>
+                        )}
+                      </span>
+                      <button
+                        onClick={() => addPlacement(m.id, null)}
+                        className="shrink-0 rounded-md bg-primary/10 px-2 py-0.5 text-[10px] font-bold text-primary hover:bg-primary/20"
+                        title="Adicionar aqui em 'Sem seção' (reativa se estiver inativo)"
+                      >
+                        + add aqui
+                      </button>
+                    </div>
+                    {targetApps.length > 0 && (
+                      <select
+                        className="rounded-md border border-foreground/15 bg-background px-2 py-1 text-[11px]"
+                        defaultValue=""
+                        onChange={(e) => {
+                          const v = e.target.value;
+                          if (v) {
+                            moveMiniAppToApp(m.id, v);
+                            e.currentTarget.value = "";
+                          }
+                        }}
+                      >
+                        <option value="">↩ Reativar em… (outro app)</option>
+                        {targetApps.map((a) => (
+                          <option key={a.id} value={a.id}>{a.emoji} {a.short_name ?? a.name}</option>
+                        ))}
+                      </select>
+                    )}
                   </li>
                 ))}
               </ul>
             )}
           </div>
         </aside>
+
       </div>
     </div>
   );
