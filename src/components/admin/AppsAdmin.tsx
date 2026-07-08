@@ -398,16 +398,25 @@ function AppContent({ app }: { app: AppRow }) {
           .eq("id", placement.mini_app_id);
         if (legacyError) return alert(legacyError.message);
       }
+    }
+    const { error } = await supabase.from("mini_app_placements").delete().eq("id", id);
+    if (error) alert(error.message);
+    qc.invalidateQueries({ queryKey: ["admin_mini_apps"] });
+    qc.invalidateQueries({ queryKey: ["admin_mini_apps_all"] });
+    qc.invalidateQueries({ queryKey: ["mini_apps"] });
+    qc.invalidateQueries({ queryKey: ["app_placements", app.id] });
   }
 
-  async function moveMiniAppToApp(miniAppId: string, targetAppId: string, opts?: { removeFromCurrent?: boolean; currentPlacementId?: string }) {
-    // Ativa o mini app
+  async function moveMiniAppToApp(
+    miniAppId: string,
+    targetAppId: string,
+    opts?: { removeFromCurrent?: boolean; currentPlacementId?: string },
+  ) {
     const { error: actErr } = await supabase
       .from("mini_apps")
       .update({ is_active: true } as any)
       .eq("id", miniAppId);
     if (actErr) return alert(actErr.message);
-    // Checa se já existe placement no destino
     const { data: existing } = await supabase
       .from("mini_app_placements")
       .select("id")
@@ -415,7 +424,6 @@ function AppContent({ app }: { app: AppRow }) {
       .eq("app_id", targetAppId)
       .maybeSingle();
     if (!existing) {
-      // ordem = último+1 no destino (sem seção)
       const { data: dst } = await supabase
         .from("mini_app_placements")
         .select("ordem")
@@ -432,7 +440,6 @@ function AppContent({ app }: { app: AppRow }) {
     if (opts?.removeFromCurrent && opts.currentPlacementId) {
       await supabase.from("mini_app_placements").delete().eq("id", opts.currentPlacementId);
     }
-    // Remove do Arquivo (se estiver lá) quando o destino não for o Arquivo
     const { data: archiveApp } = await supabase
       .from("apps")
       .select("id, slug")
@@ -453,13 +460,6 @@ function AppContent({ app }: { app: AppRow }) {
     qc.invalidateQueries({ queryKey: ["app_placements", targetAppId] });
   }
 
-    const { error } = await supabase.from("mini_app_placements").delete().eq("id", id);
-    if (error) alert(error.message);
-    qc.invalidateQueries({ queryKey: ["admin_mini_apps"] });
-    qc.invalidateQueries({ queryKey: ["admin_mini_apps_all"] });
-    qc.invalidateQueries({ queryKey: ["mini_apps"] });
-    qc.invalidateQueries({ queryKey: ["app_placements", app.id] });
-  }
 
   const sortMode = currentSortMode;
 
