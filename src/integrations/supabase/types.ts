@@ -154,6 +154,89 @@ export type Database = {
         }
         Relationships: []
       }
+      diagnosticos_aede: {
+        Row: {
+          bloco: string
+          bloco_label: string
+          created_at: string
+          id: string
+          id_gatilho: string
+          meta_mm: string | null
+          ordem: number
+          raciocinio_rc: string | null
+          sinais_sintomas: string[]
+          titulo: string
+          updated_at: string
+        }
+        Insert: {
+          bloco: string
+          bloco_label: string
+          created_at?: string
+          id?: string
+          id_gatilho: string
+          meta_mm?: string | null
+          ordem?: number
+          raciocinio_rc?: string | null
+          sinais_sintomas?: string[]
+          titulo: string
+          updated_at?: string
+        }
+        Update: {
+          bloco?: string
+          bloco_label?: string
+          created_at?: string
+          id?: string
+          id_gatilho?: string
+          meta_mm?: string | null
+          ordem?: number
+          raciocinio_rc?: string | null
+          sinais_sintomas?: string[]
+          titulo?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      diagnosticos_condutas: {
+        Row: {
+          aprazamento: string | null
+          conduta_cde: string
+          created_at: string
+          diagnostico_id: string
+          horario_padrao: string | null
+          id: string
+          ordem: number
+          updated_at: string
+        }
+        Insert: {
+          aprazamento?: string | null
+          conduta_cde: string
+          created_at?: string
+          diagnostico_id: string
+          horario_padrao?: string | null
+          id?: string
+          ordem?: number
+          updated_at?: string
+        }
+        Update: {
+          aprazamento?: string | null
+          conduta_cde?: string
+          created_at?: string
+          diagnostico_id?: string
+          horario_padrao?: string | null
+          id?: string
+          ordem?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "diagnosticos_condutas_diagnostico_id_fkey"
+            columns: ["diagnostico_id"]
+            isOneToOne: false
+            referencedRelation: "diagnosticos_aede"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       mini_app_placements: {
         Row: {
           app_id: string
