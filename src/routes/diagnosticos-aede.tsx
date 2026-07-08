@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
 import { MiniAppContent } from "@/components/MiniAppContent";
@@ -120,6 +120,31 @@ const QUICK_CASES: QuickCase[] = [
   },
 ];
 
+const DEFAULT_ANAMNESE: Anamnese = {
+  paciente: "Paciente exemplo",
+  idade: "68",
+  sexo: "Feminino",
+  leito: "204-B",
+  clinica: "Clínica médica",
+  queixa: "Falta de ar e desconforto respiratório",
+  hda: "Início há 2 horas, evoluindo com dispneia, taquipneia e queda de saturação.",
+  antecedentes: "HAS e DM. Alergias negadas. Em uso de medicação anti-hipertensiva.",
+};
+
+const DEFAULT_EXAME: Exame = {
+  glasgow: "15",
+  pupilas: "isocóricas",
+  pa: "140x90",
+  fc: "104",
+  fr: "28",
+  sato2: "89",
+  temp: "36.6",
+  observacoes: "Paciente ansiosa, com uso de musculatura acessória e cianose discreta.",
+  chips: ["Dispneia", "Taquipneia", "Baixa SatO₂", "Cianose"],
+};
+
+const DEFAULT_SINTOMAS = ["Dispneia", "Taquipneia", "Baixa SatO₂", "Cianose"];
+
 function normalize(s: string) {
   return s
     .toLowerCase()
@@ -132,17 +157,12 @@ function normalize(s: string) {
 
 function DiagnosticosAedePage() {
   const [step, setStep] = useState(1);
-  const [anamnese, setAnamnese] = useState<Anamnese>({
-    paciente: "", idade: "", sexo: "", leito: "", clinica: "",
-    queixa: "", hda: "", antecedentes: "",
-  });
-  const [exame, setExame] = useState<Exame>({
-    glasgow: "", pupilas: "", pa: "", fc: "", fr: "", sato2: "", temp: "",
-    observacoes: "", chips: [],
-  });
-  const [sintomas, setSintomas] = useState<string[]>([]);
+  const [anamnese, setAnamnese] = useState<Anamnese>(DEFAULT_ANAMNESE);
+  const [exame, setExame] = useState<Exame>(DEFAULT_EXAME);
+  const [sintomas, setSintomas] = useState<string[]>(DEFAULT_SINTOMAS);
   const [outroSintoma, setOutroSintoma] = useState("");
   const [selecionados, setSelecionados] = useState<string[]>([]);
+  const [autoSeededDiag, setAutoSeededDiag] = useState(false);
   const [filtroBloco, setFiltroBloco] = useState<string>("");
 
   const { isReady } = useAuthReady();
