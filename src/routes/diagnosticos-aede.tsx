@@ -252,12 +252,21 @@ function DiagnosticosAedePage() {
     setAnamnese({ ...anamnese, ...quick.anamnese });
     setExame({ ...exame, ...quick.exame, chips: quick.exame.chips ?? quick.sintomas });
     setSintomas(quick.sintomas);
+    setSelecionados([]);
+    setAutoSeededDiag(false);
     setStep(4);
     setTimeout(() => window.scrollTo({ top: 0, behavior: "smooth" }), 0);
   };
 
   const condutasDe = (id: string) =>
     (diagsQ.data?.condutas ?? []).filter((c) => c.diagnostico_id === id);
+
+  useEffect(() => {
+    if (!autoSeededDiag && ranked.length > 0) {
+      setSelecionados([ranked[0].d.id]);
+      setAutoSeededDiag(true);
+    }
+  }, [autoSeededDiag, ranked]);
 
   return (
     <AppShell>
@@ -287,6 +296,16 @@ function DiagnosticosAedePage() {
           </div>
         </div>
       </Card>
+
+      <ClinicalOverview
+        step={step}
+        onStep={go}
+        anamnese={anamnese}
+        exame={exame}
+        sintomas={sintomas}
+        diagnosticosCount={ranked.length}
+        prescricoesCount={selecionados.length}
+      />
 
       {/* Stepper */}
       <div className="mb-5 flex flex-wrap items-center gap-2">
