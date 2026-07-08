@@ -243,6 +243,10 @@ function AppContent({ app }: { app: AppRow }) {
       return data ?? [];
     },
   });
+  const allAppsQ = useQuery({ queryKey: ["apps"], queryFn: fetchApps });
+  const targetApps = (allAppsQ.data ?? []).filter(
+    (a) => a.is_active && a.slug !== "arquivo-2-projeto" && a.id !== app.id,
+  );
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
@@ -257,6 +261,7 @@ function AppContent({ app }: { app: AppRow }) {
     .filter((m) => !placedIds.has(m.id))
     .slice()
     .sort((a, b) => (a.name ?? "").localeCompare(b.name ?? "", "pt-BR"));
+
 
   const currentSortMode = ((app as any).sort_mode ?? "numeric") as "numeric" | "alpha";
 
@@ -402,6 +407,60 @@ function AppContent({ app }: { app: AppRow }) {
     qc.invalidateQueries({ queryKey: ["app_placements", app.id] });
   }
 
+  async function moveMiniAppToApp(
+    miniAppId: string,
+    targetAppId: string,
+    opts?: { removeFromCurrent?: boolean; currentPlacementId?: string },
+  ) {
+    const { error: actErr } = await supabase
+      .from("mini_apps")
+      .update({ is_active: true } as any)
+      .eq("id", miniAppId);
+    if (actErr) return alert(actErr.message);
+    const { data: existing } = await supabase
+      .from("mini_app_placements")
+      .select("id")
+      .eq("mini_app_id", miniAppId)
+      .eq("app_id", targetAppId)
+      .maybeSingle();
+    if (!existing) {
+      const { data: dst } = await supabase
+        .from("mini_app_placements")
+        .select("ordem")
+        .eq("app_id", targetAppId)
+        .is("section_id", null)
+        .order("ordem", { ascending: false })
+        .limit(1);
+      const nextOrdem = (dst?.[0]?.ordem ?? -1) + 1;
+      const { error: insErr } = await supabase
+        .from("mini_app_placements")
+        .insert({ mini_app_id: miniAppId, app_id: targetAppId, section_id: null, ordem: nextOrdem });
+      if (insErr) return alert(insErr.message);
+    }
+    if (opts?.removeFromCurrent && opts.currentPlacementId) {
+      await supabase.from("mini_app_placements").delete().eq("id", opts.currentPlacementId);
+    }
+    const { data: archiveApp } = await supabase
+      .from("apps")
+      .select("id, slug")
+      .eq("slug", "arquivo-2-projeto")
+      .maybeSingle();
+    if (archiveApp?.id && archiveApp.id !== targetAppId) {
+      await supabase
+        .from("mini_app_placements")
+        .delete()
+        .eq("mini_app_id", miniAppId)
+        .eq("app_id", archiveApp.id);
+      qc.invalidateQueries({ queryKey: ["app_placements", archiveApp.id] });
+    }
+    qc.invalidateQueries({ queryKey: ["admin_mini_apps"] });
+    qc.invalidateQueries({ queryKey: ["admin_mini_apps_all"] });
+    qc.invalidateQueries({ queryKey: ["mini_apps"] });
+    qc.invalidateQueries({ queryKey: ["app_placements", app.id] });
+    qc.invalidateQueries({ queryKey: ["app_placements", targetAppId] });
+  }
+
+
   const sortMode = currentSortMode;
 
   async function setSortMode(mode: "numeric" | "alpha") {
@@ -469,7 +528,18 @@ function AppContent({ app }: { app: AppRow }) {
         <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
           <div className="space-y-4">
             {containers.map((c) => (
-              <Container key={c.id} container={c} miniById={miniById} onRemove={removePlacement} onAddTo={(mid) => addPlacement(mid, c.sectionId)} available={available} />
+              <Container
+                key={c.id}
+                container={c}
+                miniById={miniById}
+                onRemove={removePlacement}
+                onAddTo={(mid) => addPlacement(mid, c.sectionId)}
+                available={available}
+                targetApps={targetApps}
+                onMoveTo={(miniAppId, targetAppId, placementId) =>
+                  moveMiniAppToApp(miniAppId, targetAppId, { removeFromCurrent: true, currentPlacementId: placementId })
+                }
+              />
             ))}
           </div>
         </DndContext>
@@ -477,30 +547,57 @@ function AppContent({ app }: { app: AppRow }) {
           <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
             Mini apps fora deste app ({available.length})
           </h4>
+          <p className="text-[10px] text-muted-foreground">
+            Inativos e arquivados aparecem aqui. Use <strong>Reativar em ▾</strong> para colocar em qualquer app (Acadêmico, Estudante Técnico, Técnico ou Enfermeiro) — o mini app é reativado automaticamente.
+          </p>
           <div className="max-h-[480px] overflow-y-auto rounded-xl border border-foreground/10 p-2 text-xs">
             {available.length === 0 ? (
               <p className="text-muted-foreground">Todos já estão neste app.</p>
             ) : (
               <ul className="space-y-1">
                 {available.map((m) => (
-                  <li key={m.id} className="flex items-center justify-between gap-2 rounded-lg border border-foreground/10 bg-background px-2 py-1.5">
-                    <span className="truncate">
-                      <span className="mr-1">{m.icon ?? "📘"}</span>
-                      {m.name}
-                    </span>
-                    <button
-                      onClick={() => addPlacement(m.id, null)}
-                      className="rounded-md bg-primary/10 px-2 py-0.5 text-[10px] font-bold text-primary hover:bg-primary/20"
-                      title="Adicionar em 'Sem seção'"
-                    >
-                      + add
-                    </button>
+                  <li key={m.id} className="flex flex-col gap-1 rounded-lg border border-foreground/10 bg-background px-2 py-1.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="truncate">
+                        <span className="mr-1">{m.icon ?? "📘"}</span>
+                        {m.name}
+                        {!m.is_active && (
+                          <span className="ml-1 rounded-full bg-foreground/10 px-1.5 py-0.5 text-[9px] font-bold uppercase">inativo</span>
+                        )}
+                      </span>
+                      <button
+                        onClick={() => addPlacement(m.id, null)}
+                        className="shrink-0 rounded-md bg-primary/10 px-2 py-0.5 text-[10px] font-bold text-primary hover:bg-primary/20"
+                        title="Adicionar aqui em 'Sem seção' (reativa se estiver inativo)"
+                      >
+                        + add aqui
+                      </button>
+                    </div>
+                    {targetApps.length > 0 && (
+                      <select
+                        className="rounded-md border border-foreground/15 bg-background px-2 py-1 text-[11px]"
+                        defaultValue=""
+                        onChange={(e) => {
+                          const v = e.target.value;
+                          if (v) {
+                            moveMiniAppToApp(m.id, v);
+                            e.currentTarget.value = "";
+                          }
+                        }}
+                      >
+                        <option value="">↩ Reativar em… (outro app)</option>
+                        {targetApps.map((a) => (
+                          <option key={a.id} value={a.id}>{a.emoji} {a.short_name ?? a.name}</option>
+                        ))}
+                      </select>
+                    )}
                   </li>
                 ))}
               </ul>
             )}
           </div>
         </aside>
+
       </div>
     </div>
   );
@@ -591,12 +688,16 @@ function Container({
   onRemove,
   onAddTo,
   available,
+  targetApps,
+  onMoveTo,
 }: {
   container: { id: string; title: string; emoji: string | null; sectionId: string | null; items: MiniAppPlacement[] };
   miniById: Map<string, any>;
   onRemove: (id: string) => void;
   onAddTo: (miniAppId: string) => void;
   available: any[];
+  targetApps: AppRow[];
+  onMoveTo: (miniAppId: string, targetAppId: string, placementId: string) => void;
 }) {
   const ids = container.items.map((i) => i.id);
   return (
@@ -619,7 +720,9 @@ function Container({
         >
           <option value="">+ adicionar aqui…</option>
           {available.map((m) => (
-            <option key={m.id} value={m.id}>{m.name}</option>
+            <option key={m.id} value={m.id}>
+              {m.name}{!m.is_active ? " (inativo)" : ""}
+            </option>
           ))}
         </select>
       </div>
@@ -633,7 +736,18 @@ function Container({
           {container.items.map((p) => {
             const m = miniById.get(p.mini_app_id);
             if (!m) return null;
-            return <SortableItem key={p.id} id={p.id} title={m.name} icon={m.icon ?? "📘"} onRemove={() => onRemove(p.id)} />;
+            return (
+              <SortableItem
+                key={p.id}
+                id={p.id}
+                title={m.name}
+                icon={m.icon ?? "📘"}
+                inactive={!m.is_active}
+                onRemove={() => onRemove(p.id)}
+                targetApps={targetApps}
+                onMoveTo={(targetAppId) => onMoveTo(m.id, targetAppId, p.id)}
+              />
+            );
           })}
         </ul>
       </SortableContext>
@@ -641,7 +755,23 @@ function Container({
   );
 }
 
-function SortableItem({ id, title, icon, onRemove }: { id: string; title: string; icon: string; onRemove: () => void }) {
+function SortableItem({
+  id,
+  title,
+  icon,
+  inactive,
+  onRemove,
+  targetApps,
+  onMoveTo,
+}: {
+  id: string;
+  title: string;
+  icon: string;
+  inactive?: boolean;
+  onRemove: () => void;
+  targetApps: AppRow[];
+  onMoveTo: (targetAppId: string) => void;
+}) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id });
   const style: React.CSSProperties = {
     transform: CSS.Transform.toString(transform),
@@ -653,13 +783,39 @@ function SortableItem({ id, title, icon, onRemove }: { id: string; title: string
       <button {...attributes} {...listeners} className="cursor-grab touch-none rounded p-1 text-muted-foreground hover:bg-foreground/10" aria-label="Arrastar">
         <GripVertical className="h-3.5 w-3.5" />
       </button>
-      <span className="flex-1 truncate"><span className="mr-1">{icon}</span>{title}</span>
+      <span className="flex-1 truncate">
+        <span className="mr-1">{icon}</span>
+        {title}
+        {inactive && (
+          <span className="ml-1 rounded-full bg-foreground/10 px-1.5 py-0.5 text-[9px] font-bold uppercase">inativo</span>
+        )}
+      </span>
+      {targetApps.length > 0 && (
+        <select
+          className="rounded-md border border-foreground/15 bg-background px-1.5 py-0.5 text-[10px]"
+          defaultValue=""
+          title="Mover (e reativar) para outro app"
+          onChange={(e) => {
+            const v = e.target.value;
+            if (v) {
+              onMoveTo(v);
+              e.currentTarget.value = "";
+            }
+          }}
+        >
+          <option value="">↪ mover para…</option>
+          {targetApps.map((a) => (
+            <option key={a.id} value={a.id}>{a.emoji} {a.short_name ?? a.name}</option>
+          ))}
+        </select>
+      )}
       <button onClick={onRemove} className="rounded p-1 text-destructive hover:bg-destructive/10" aria-label="Remover deste app">
         <X className="h-3.5 w-3.5" />
       </button>
     </li>
   );
 }
+
 
 const input =
   "rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary/40";
