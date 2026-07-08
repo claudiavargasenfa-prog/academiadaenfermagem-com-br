@@ -243,6 +243,10 @@ function AppContent({ app }: { app: AppRow }) {
       return data ?? [];
     },
   });
+  const allAppsQ = useQuery({ queryKey: ["apps"], queryFn: fetchApps });
+  const targetApps = (allAppsQ.data ?? []).filter(
+    (a) => a.is_active && a.slug !== "arquivo-2-projeto" && a.id !== app.id,
+  );
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
@@ -257,6 +261,7 @@ function AppContent({ app }: { app: AppRow }) {
     .filter((m) => !placedIds.has(m.id))
     .slice()
     .sort((a, b) => (a.name ?? "").localeCompare(b.name ?? "", "pt-BR"));
+
 
   const currentSortMode = ((app as any).sort_mode ?? "numeric") as "numeric" | "alpha";
 
