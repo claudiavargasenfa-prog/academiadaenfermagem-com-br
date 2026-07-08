@@ -398,7 +398,61 @@ function AppContent({ app }: { app: AppRow }) {
           .eq("id", placement.mini_app_id);
         if (legacyError) return alert(legacyError.message);
       }
+  }
+
+  async function moveMiniAppToApp(miniAppId: string, targetAppId: string, opts?: { removeFromCurrent?: boolean; currentPlacementId?: string }) {
+    // Ativa o mini app
+    const { error: actErr } = await supabase
+      .from("mini_apps")
+      .update({ is_active: true } as any)
+      .eq("id", miniAppId);
+    if (actErr) return alert(actErr.message);
+    // Checa se já existe placement no destino
+    const { data: existing } = await supabase
+      .from("mini_app_placements")
+      .select("id")
+      .eq("mini_app_id", miniAppId)
+      .eq("app_id", targetAppId)
+      .maybeSingle();
+    if (!existing) {
+      // ordem = último+1 no destino (sem seção)
+      const { data: dst } = await supabase
+        .from("mini_app_placements")
+        .select("ordem")
+        .eq("app_id", targetAppId)
+        .is("section_id", null)
+        .order("ordem", { ascending: false })
+        .limit(1);
+      const nextOrdem = (dst?.[0]?.ordem ?? -1) + 1;
+      const { error: insErr } = await supabase
+        .from("mini_app_placements")
+        .insert({ mini_app_id: miniAppId, app_id: targetAppId, section_id: null, ordem: nextOrdem });
+      if (insErr) return alert(insErr.message);
     }
+    if (opts?.removeFromCurrent && opts.currentPlacementId) {
+      await supabase.from("mini_app_placements").delete().eq("id", opts.currentPlacementId);
+    }
+    // Remove do Arquivo (se estiver lá) quando o destino não for o Arquivo
+    const { data: archiveApp } = await supabase
+      .from("apps")
+      .select("id, slug")
+      .eq("slug", "arquivo-2-projeto")
+      .maybeSingle();
+    if (archiveApp?.id && archiveApp.id !== targetAppId) {
+      await supabase
+        .from("mini_app_placements")
+        .delete()
+        .eq("mini_app_id", miniAppId)
+        .eq("app_id", archiveApp.id);
+      qc.invalidateQueries({ queryKey: ["app_placements", archiveApp.id] });
+    }
+    qc.invalidateQueries({ queryKey: ["admin_mini_apps"] });
+    qc.invalidateQueries({ queryKey: ["admin_mini_apps_all"] });
+    qc.invalidateQueries({ queryKey: ["mini_apps"] });
+    qc.invalidateQueries({ queryKey: ["app_placements", app.id] });
+    qc.invalidateQueries({ queryKey: ["app_placements", targetAppId] });
+  }
+
     const { error } = await supabase.from("mini_app_placements").delete().eq("id", id);
     if (error) alert(error.message);
     qc.invalidateQueries({ queryKey: ["admin_mini_apps"] });
