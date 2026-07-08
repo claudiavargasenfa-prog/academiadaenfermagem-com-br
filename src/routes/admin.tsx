@@ -406,6 +406,17 @@ function AdminContent() {
                 </div>
               </div>
               <div className="flex shrink-0 gap-1">
+                {!app.is_active && (
+                  <button
+                    onClick={() => handleReactivate(app)}
+                    disabled={reactivating === app.id}
+                    className="rounded-lg bg-emerald-500/10 p-2 text-emerald-600 hover:bg-emerald-500/20 disabled:opacity-50"
+                    aria-label="Reativar"
+                    title="Reativar mini app"
+                  >
+                    <span className="text-xs font-bold">↩</span>
+                  </button>
+                )}
                 <button
                   onClick={() => {
                     setEditing(app);
