@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
+import { MiniAppContent } from "@/components/MiniAppContent";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuthReady } from "@/lib/access";
 import {
@@ -75,6 +76,14 @@ type Exame = {
   chips: string[];
 };
 
+type QuickCase = {
+  title: string;
+  subtitle: string;
+  anamnese: Partial<Anamnese>;
+  exame: Partial<Exame>;
+  sintomas: string[];
+};
+
 // chips do exame físico (por sistema) → também alimentam os sinais/sintomas do passo 3
 const EXAME_CHIPS: Record<string, string[]> = {
   "Neurológico": ["Sonolência", "Rebaixamento do nível de consciência", "Agitação psicomotora", "Desorientação", "Pupilas anisocóricas"],
@@ -86,6 +95,30 @@ const EXAME_CHIPS: Record<string, string[]> = {
   "Segurança / Mobilidade": ["Risco de queda", "Restrição no leito", "Dispositivos invasivos", "Dor à movimentação"],
   "Sinais gerais": ["Febre", "Hipotermia", "Sudorese", "Dor referida", "Ansiedade", "Sangramento"],
 };
+
+const QUICK_CASES: QuickCase[] = [
+  {
+    title: "Respiratório agudo",
+    subtitle: "Dispneia, taquipneia, baixa SatO₂ e cianose",
+    anamnese: { queixa: "Falta de ar e desconforto respiratório", clinica: "Clínica médica" },
+    exame: { fr: "28", sato2: "89", chips: ["Dispneia", "Taquipneia", "Baixa SatO₂", "Cianose"] },
+    sintomas: ["Dispneia", "Taquipneia", "Baixa SatO₂", "Cianose"],
+  },
+  {
+    title: "Hemodinâmico",
+    subtitle: "Hipotensão, taquicardia, má perfusão e oligúria",
+    anamnese: { queixa: "Fraqueza intensa e tontura", clinica: "Urgência" },
+    exame: { pa: "85x50", fc: "122", chips: ["Hipotensão", "Taquicardia", "Má perfusão", "Oligúria"] },
+    sintomas: ["Hipotensão", "Taquicardia", "Má perfusão", "Oligúria"],
+  },
+  {
+    title: "Neurológico",
+    subtitle: "Sonolência, desorientação e risco de queda",
+    anamnese: { queixa: "Confusão mental e sonolência", clinica: "Observação" },
+    exame: { glasgow: "13", pupilas: "isocóricas", chips: ["Sonolência", "Desorientação", "Risco de queda"] },
+    sintomas: ["Sonolência", "Desorientação", "Risco de queda"],
+  },
+];
 
 function normalize(s: string) {
   return s
@@ -195,6 +228,14 @@ function DiagnosticosAedePage() {
     setTimeout(() => window.scrollTo({ top: 0, behavior: "smooth" }), 0);
   };
 
+  const useQuickCase = (quick: QuickCase) => {
+    setAnamnese({ ...anamnese, ...quick.anamnese });
+    setExame({ ...exame, ...quick.exame, chips: quick.exame.chips ?? quick.sintomas });
+    setSintomas(quick.sintomas);
+    setStep(4);
+    setTimeout(() => window.scrollTo({ top: 0, behavior: "smooth" }), 0);
+  };
+
   const condutasDe = (id: string) =>
     (diagsQ.data?.condutas ?? []).filter((c) => c.diagnostico_id === id);
 
@@ -205,6 +246,8 @@ function DiagnosticosAedePage() {
         title="Diagnósticos e Prescrição AE/DE"
         description="Wizard de 5 passos: em 2 minutos você monta anamnese, exame físico, sinais/sintomas, escolhe diagnósticos e imprime a prescrição."
       />
+
+      <MiniAppContent slug="diagnosticos-aede" />
 
       {/* Instruções */}
       <Card className="mb-5 border-gold/40 bg-gradient-to-br from-primary/5 to-gold/10">
@@ -257,7 +300,7 @@ function DiagnosticosAedePage() {
       </div>
 
       {step === 1 && (
-        <StepAnamnese anamnese={anamnese} setAnamnese={setAnamnese} onNext={() => go(2)} />
+        <StepAnamnese anamnese={anamnese} setAnamnese={setAnamnese} onNext={() => go(2)} onUseCase={useQuickCase} />
       )}
       {step === 2 && (
         <StepExame
@@ -310,11 +353,12 @@ function DiagnosticosAedePage() {
 
 // ============ STEP 1 ============
 function StepAnamnese({
-  anamnese, setAnamnese, onNext,
+  anamnese, setAnamnese, onNext, onUseCase,
 }: {
   anamnese: Anamnese;
   setAnamnese: (a: Anamnese) => void;
   onNext: () => void;
+  onUseCase: (quick: QuickCase) => void;
 }) {
   const F = (k: keyof Anamnese, label: string, opts: { textarea?: boolean; type?: string; placeholder?: string } = {}) => (
     <label className="block text-sm font-semibold">
@@ -342,17 +386,31 @@ function StepAnamnese({
   return (
     <Card>
       <SectionTitle icon={ClipboardList} title="1. Anamnese" subtitle="Todos os campos são opcionais — preencha o que quiser." />
+
+      <div className="mb-4 grid gap-2 md:grid-cols-3">
+        {QUICK_CASES.map((quick) => (
+          <button
+            key={quick.title}
+            onClick={() => onUseCase(quick)}
+            className="rounded-xl border border-gold/40 bg-gold/10 p-3 text-left transition-colors hover:border-gold hover:bg-gold/20"
+          >
+            <span className="block font-display text-sm font-bold text-foreground">{quick.title}</span>
+            <span className="mt-1 block text-xs leading-relaxed text-muted-foreground">{quick.subtitle}</span>
+          </button>
+        ))}
+      </div>
+
       <div className="grid gap-3 md:grid-cols-2">
-        {F("paciente", "Nome do paciente")}
-        {F("idade", "Idade", { type: "number" })}
-        {F("sexo", "Sexo")}
-        {F("leito", "Leito")}
-        {F("clinica", "Clínica / Setor")}
-        {F("queixa", "Queixa principal")}
+        {F("paciente", "Nome do paciente", { placeholder: "Ex.: Maria S." })}
+        {F("idade", "Idade", { type: "number", placeholder: "Ex.: 68" })}
+        {F("sexo", "Sexo", { placeholder: "Ex.: Feminino" })}
+        {F("leito", "Leito", { placeholder: "Ex.: 204-B" })}
+        {F("clinica", "Clínica / Setor", { placeholder: "Ex.: Clínica médica" })}
+        {F("queixa", "Queixa principal", { placeholder: "Ex.: dispneia há 2 horas" })}
       </div>
       <div className="mt-3 grid gap-3">
-        {F("hda", "HDA — História da Doença Atual", { textarea: true })}
-        {F("antecedentes", "Antecedentes (comorbidades, alergias, medicações em uso)", { textarea: true })}
+        {F("hda", "HDA — História da Doença Atual", { textarea: true, placeholder: "Ex.: iniciou com tosse, evoluiu com desconforto respiratório e queda de saturação." })}
+        {F("antecedentes", "Antecedentes (comorbidades, alergias, medicações em uso)", { textarea: true, placeholder: "Ex.: HAS, DM, alergia negada, usa losartana." })}
       </div>
       <NavRow onNext={onNext} nextLabel="Avançar para Exame Físico" />
     </Card>
