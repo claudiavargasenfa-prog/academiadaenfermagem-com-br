@@ -923,7 +923,7 @@ function ClinicalOverview({
       step: 4,
       title: "Diagnósticos",
       icon: ListChecks,
-      body: `${diagnosticosCount} sugestão${diagnosticosCount === 1 ? "" : "ões"} com base em: ${sintomas.slice(0, 3).join(", ") || "—"}`,
+      body: `${diagnosticosCount} ${diagnosticosCount === 1 ? "sugestão" : "sugestões"} com base em: ${sintomas.slice(0, 3).join(", ") || "—"}`,
     },
     {
       step: 5,
