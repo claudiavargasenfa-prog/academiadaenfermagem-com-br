@@ -688,12 +688,16 @@ function Container({
   onRemove,
   onAddTo,
   available,
+  targetApps,
+  onMoveTo,
 }: {
   container: { id: string; title: string; emoji: string | null; sectionId: string | null; items: MiniAppPlacement[] };
   miniById: Map<string, any>;
   onRemove: (id: string) => void;
   onAddTo: (miniAppId: string) => void;
   available: any[];
+  targetApps: AppRow[];
+  onMoveTo: (miniAppId: string, targetAppId: string, placementId: string) => void;
 }) {
   const ids = container.items.map((i) => i.id);
   return (
@@ -716,7 +720,9 @@ function Container({
         >
           <option value="">+ adicionar aqui…</option>
           {available.map((m) => (
-            <option key={m.id} value={m.id}>{m.name}</option>
+            <option key={m.id} value={m.id}>
+              {m.name}{!m.is_active ? " (inativo)" : ""}
+            </option>
           ))}
         </select>
       </div>
@@ -730,7 +736,18 @@ function Container({
           {container.items.map((p) => {
             const m = miniById.get(p.mini_app_id);
             if (!m) return null;
-            return <SortableItem key={p.id} id={p.id} title={m.name} icon={m.icon ?? "📘"} onRemove={() => onRemove(p.id)} />;
+            return (
+              <SortableItem
+                key={p.id}
+                id={p.id}
+                title={m.name}
+                icon={m.icon ?? "📘"}
+                inactive={!m.is_active}
+                onRemove={() => onRemove(p.id)}
+                targetApps={targetApps}
+                onMoveTo={(targetAppId) => onMoveTo(m.id, targetAppId, p.id)}
+              />
+            );
           })}
         </ul>
       </SortableContext>
@@ -738,7 +755,23 @@ function Container({
   );
 }
 
-function SortableItem({ id, title, icon, onRemove }: { id: string; title: string; icon: string; onRemove: () => void }) {
+function SortableItem({
+  id,
+  title,
+  icon,
+  inactive,
+  onRemove,
+  targetApps,
+  onMoveTo,
+}: {
+  id: string;
+  title: string;
+  icon: string;
+  inactive?: boolean;
+  onRemove: () => void;
+  targetApps: AppRow[];
+  onMoveTo: (targetAppId: string) => void;
+}) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id });
   const style: React.CSSProperties = {
     transform: CSS.Transform.toString(transform),
@@ -750,13 +783,39 @@ function SortableItem({ id, title, icon, onRemove }: { id: string; title: string
       <button {...attributes} {...listeners} className="cursor-grab touch-none rounded p-1 text-muted-foreground hover:bg-foreground/10" aria-label="Arrastar">
         <GripVertical className="h-3.5 w-3.5" />
       </button>
-      <span className="flex-1 truncate"><span className="mr-1">{icon}</span>{title}</span>
+      <span className="flex-1 truncate">
+        <span className="mr-1">{icon}</span>
+        {title}
+        {inactive && (
+          <span className="ml-1 rounded-full bg-foreground/10 px-1.5 py-0.5 text-[9px] font-bold uppercase">inativo</span>
+        )}
+      </span>
+      {targetApps.length > 0 && (
+        <select
+          className="rounded-md border border-foreground/15 bg-background px-1.5 py-0.5 text-[10px]"
+          defaultValue=""
+          title="Mover (e reativar) para outro app"
+          onChange={(e) => {
+            const v = e.target.value;
+            if (v) {
+              onMoveTo(v);
+              e.currentTarget.value = "";
+            }
+          }}
+        >
+          <option value="">↪ mover para…</option>
+          {targetApps.map((a) => (
+            <option key={a.id} value={a.id}>{a.emoji} {a.short_name ?? a.name}</option>
+          ))}
+        </select>
+      )}
       <button onClick={onRemove} className="rounded p-1 text-destructive hover:bg-destructive/10" aria-label="Remover deste app">
         <X className="h-3.5 w-3.5" />
       </button>
     </li>
   );
 }
+
 
 const input =
   "rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary/40";
