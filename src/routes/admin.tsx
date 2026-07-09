@@ -918,7 +918,7 @@ function QuizzesDynamicContentNotice({
           <div className="mt-3 flex flex-wrap gap-2">
             <Link
               to="/quizzes"
-              className="rounded-full bg-amber-600 px-3 py-1.5 text-xs font-bold text-white transition hover:bg-amber-700"
+              className="rounded-full bg-amber-600 px-3 py-1.5 text-xs font-bold text-background transition hover:bg-amber-700"
             >
               Abrir todos os quizzes
             </Link>
