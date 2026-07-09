@@ -1,23 +1,27 @@
-## Problema
-No formulário admin do mini app "Diagnósticos e Prescrição AE/DE", o campo **Conteúdo (texto/markdown)** está exibindo `\n` literais no meio do texto ("...em 5 passos:\n\n1. Anamnese...\n2. Exame físico..."), em vez de quebras de linha reais.
+Entendi o problema do print: o campo grande do admin aparece vazio porque os 50 quizzes não ficam salvos em “Conteúdo / Markdown”. Eles estão em uma tela dinâmica própria (`/quizzes`) e em um arquivo de dados do app. Por isso o aluno vê os quizzes na página certa, mas o editor do admin parece vazio.
 
-Isso aconteceu porque, na correção anterior, o `content_md` foi gravado no banco com a sequência de caracteres `\` + `n` em vez de quebras de linha reais (`E'...'` faltando ou aspas simples normais interpretando `\n` como texto).
+Plano para corrigir sem apagar nada:
 
-## Correção
-Rodar UMA migração que faz `UPDATE public.mini_apps SET content_md = ...` para o slug `diagnosticos-aede`, usando string com quebras de linha reais (via `E'...\n...'` do Postgres ou string multi-linha), com este conteúdo:
+1. Ajustar a tela do admin para mini apps dinâmicos
+   - Quando o mini app tiver rota própria, como `/quizzes`, mostrar um aviso claro acima do campo vazio:
+     “Este mini app usa uma tela dinâmica. O conteúdo principal não fica neste campo.”
+   - Assim você não vai achar que perdeu o conteúdo.
 
-```
-Diagnósticos e Prescrição AE/DE
+2. Mostrar um resumo dos quizzes no próprio admin
+   - Para o slug `quizzes`, exibir no editor:
+     - total de quizzes encontrados;
+     - total de perguntas;
+     - primeiros títulos como conferência rápida.
+   - Isso confirma visualmente que os quizzes continuam lá.
 
-Siga os 5 passos para gerar diagnósticos e prescrição em até 2 minutos:
+3. Proteger contra confusão no campo “Conteúdo / Markdown”
+   - Manter o campo disponível apenas para descrição complementar.
+   - Não mexer nos 50 quizzes nem sobrescrever o conteúdo dinâmico.
 
-1. Anamnese — dados do paciente e queixa principal.
-2. Exame físico — achados por sistema.
-3. Sinais e sintomas — selecione os achados do paciente.
-4. Diagnósticos — escolha os diagnósticos com CDE, MM e RC.
-5. Prescrição — gere a tabela com Nº, Diagnóstico, Horário e Aprazamento.
+4. Conferir o link do card
+   - Garantir que a rota interna continue `/quizzes`, para abrir a página dinâmica correta e não uma página genérica vazia.
 
-Clique em acessar para abrir o formulário dinâmico completo.
-```
-
-Nenhuma outra mudança — só reescrever esse campo com as quebras de linha corretas. O front-end e o restante do mini app continuam iguais.
+Resultado esperado:
+- No admin, o mini app “Quizzes de Enfermagem” não parecerá mais vazio.
+- Os 50 quizzes continuarão intactos.
+- Você conseguirá identificar que aquele mini app é dinâmico, não preenchido pelo campo markdown.
