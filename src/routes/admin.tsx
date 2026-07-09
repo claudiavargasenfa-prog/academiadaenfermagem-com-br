@@ -13,6 +13,7 @@ import { BadgesEditor } from "@/components/admin/BadgesEditor";
 import { SubtopicsAdmin } from "@/components/admin/SubtopicsAdmin";
 import { AppsAdmin } from "@/components/admin/AppsAdmin";
 import { fetchApps } from "@/lib/apps";
+import { QUIZZES } from "@/data/quizzes";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({ meta: [{ title: "Admin — Academia da Enfermagem" }] }),
@@ -550,6 +551,8 @@ function MiniAppForm({
   });
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
+  const normalizedSlug = form.slug.trim().toLowerCase();
+  const isQuizzesMiniApp = normalizedSlug === "quizzes";
 
   // Apps disponíveis (dinâmico, vem da tabela `apps`) + placements atuais deste mini app.
   const appsQ = useQuery({ queryKey: ["apps"], queryFn: fetchApps });
@@ -770,6 +773,7 @@ function MiniAppForm({
             />
           </Field>
         </div>
+        {isQuizzesMiniApp && <QuizzesDynamicContentNotice routePath={form.route_path} />}
         <ContentMarkdownEditor
           value={form.content_md}
           onChange={(v) => setForm({ ...form, content_md: v })}
@@ -884,6 +888,53 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
       </span>
       {children}
     </label>
+  );
+}
+
+function QuizzesDynamicContentNotice({ routePath }: { routePath: string }) {
+  const totalQuestions = QUIZZES.reduce((sum, quiz) => sum + quiz.questions.length, 0);
+  const routeOk = routePath.trim() === "/quizzes";
+
+  return (
+    <div className="rounded-xl border border-amber-300/70 bg-amber-50 px-4 py-3 text-sm text-amber-950">
+      <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+        <div>
+          <p className="font-display text-base font-bold">Conteúdo dinâmico dos Quizzes preservado</p>
+          <p className="mt-1 text-xs leading-relaxed">
+            Este mini app não usa o campo “Conteúdo / Markdown” para guardar os quizzes. Os cards e perguntas ficam na tela dinâmica própria; este campo abaixo serve só para texto complementar.
+          </p>
+        </div>
+        <div className="grid min-w-[220px] grid-cols-3 gap-2 text-center text-xs font-bold">
+          <div className="rounded-lg bg-background/70 px-2 py-2">
+            <span className="block text-lg">{QUIZZES.length}</span>
+            quizzes
+          </div>
+          <div className="rounded-lg bg-background/70 px-2 py-2">
+            <span className="block text-lg">{totalQuestions}</span>
+            perguntas
+          </div>
+          <div className={`rounded-lg px-2 py-2 ${routeOk ? "bg-emerald-100 text-emerald-800" : "bg-red-100 text-red-800"}`}>
+            <span className="block text-lg">{routeOk ? "OK" : "!"}</span>
+            rota
+          </div>
+        </div>
+      </div>
+      <div className="mt-3 rounded-lg bg-background/70 p-3">
+        <p className="mb-2 text-xs font-bold uppercase tracking-wide">Primeiros quizzes encontrados</p>
+        <div className="flex flex-wrap gap-2">
+          {QUIZZES.slice(0, 8).map((quiz) => (
+            <span key={quiz.slug} className="rounded-full border border-amber-200 bg-amber-100/70 px-2.5 py-1 text-xs font-semibold">
+              {quiz.title}
+            </span>
+          ))}
+        </div>
+        {!routeOk && (
+          <p className="mt-3 text-xs font-bold text-red-700">
+            Ajuste a rota interna para <code>/quizzes</code> para abrir a tela dinâmica correta.
+          </p>
+        )}
+      </div>
+    </div>
   );
 }
 
