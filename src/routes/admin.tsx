@@ -773,7 +773,12 @@ function MiniAppForm({
             />
           </Field>
         </div>
-        {isQuizzesMiniApp && <QuizzesDynamicContentNotice routePath={form.route_path} />}
+        {isQuizzesMiniApp && (
+          <QuizzesDynamicContentNotice
+            routePath={form.route_path}
+            onUseCorrectRoute={() => setForm({ ...form, route_path: "/quizzes" })}
+          />
+        )}
         <ContentMarkdownEditor
           value={form.content_md}
           onChange={(v) => setForm({ ...form, content_md: v })}
@@ -891,9 +896,16 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
   );
 }
 
-function QuizzesDynamicContentNotice({ routePath }: { routePath: string }) {
+function QuizzesDynamicContentNotice({
+  routePath,
+  onUseCorrectRoute,
+}: {
+  routePath: string;
+  onUseCorrectRoute: () => void;
+}) {
   const totalQuestions = QUIZZES.reduce((sum, quiz) => sum + quiz.questions.length, 0);
   const routeOk = routePath.trim() === "/quizzes";
+  const firstQuiz = QUIZZES[0];
 
   return (
     <div className="rounded-xl border border-amber-300/70 bg-amber-50 px-4 py-3 text-sm text-amber-950">
@@ -901,8 +913,34 @@ function QuizzesDynamicContentNotice({ routePath }: { routePath: string }) {
         <div>
           <p className="font-display text-base font-bold">Conteúdo dinâmico dos Quizzes preservado</p>
           <p className="mt-1 text-xs leading-relaxed">
-            Este mini app não usa o campo “Conteúdo / Markdown” para guardar os quizzes. Os cards e perguntas ficam na tela dinâmica própria; este campo abaixo serve só para texto complementar.
+            Este mini app não usa o campo “Conteúdo / Markdown” para guardar os quizzes. Clique abaixo para abrir a tela real dos quizzes ou testar um quiz individual.
           </p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <Link
+              to="/quizzes"
+              className="rounded-full bg-amber-600 px-3 py-1.5 text-xs font-bold text-white transition hover:bg-amber-700"
+            >
+              Abrir todos os quizzes
+            </Link>
+            {firstQuiz && (
+              <Link
+                to="/quizzes/$slug"
+                params={{ slug: firstQuiz.slug }}
+                className="rounded-full border border-amber-300 bg-background/80 px-3 py-1.5 text-xs font-bold transition hover:border-amber-500 hover:bg-amber-100"
+              >
+                Testar primeiro quiz
+              </Link>
+            )}
+            {!routeOk && (
+              <button
+                type="button"
+                onClick={onUseCorrectRoute}
+                className="rounded-full border border-red-200 bg-red-50 px-3 py-1.5 text-xs font-bold text-red-700 transition hover:bg-red-100"
+              >
+                Corrigir rota para /quizzes
+              </button>
+            )}
+          </div>
         </div>
         <div className="grid min-w-[220px] grid-cols-3 gap-2 text-center text-xs font-bold">
           <div className="rounded-lg bg-background/70 px-2 py-2">
@@ -923,9 +961,14 @@ function QuizzesDynamicContentNotice({ routePath }: { routePath: string }) {
         <p className="mb-2 text-xs font-bold uppercase tracking-wide">Primeiros quizzes encontrados</p>
         <div className="flex flex-wrap gap-2">
           {QUIZZES.slice(0, 8).map((quiz) => (
-            <span key={quiz.slug} className="rounded-full border border-amber-200 bg-amber-100/70 px-2.5 py-1 text-xs font-semibold">
+            <Link
+              key={quiz.slug}
+              to="/quizzes/$slug"
+              params={{ slug: quiz.slug }}
+              className="rounded-full border border-amber-200 bg-amber-100/70 px-2.5 py-1 text-xs font-semibold transition hover:border-amber-500 hover:bg-amber-200"
+            >
               {quiz.title}
-            </span>
+            </Link>
           ))}
         </div>
         {!routeOk && (
