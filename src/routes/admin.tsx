@@ -813,7 +813,6 @@ function MiniAppForm({
             />
           </Field>
         </div>
-        {app && <SubtopicsAdmin miniAppId={app.id} />}
         <div className="rounded-xl border border-border p-3">
           <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
             Disponível nos aplicativos
@@ -893,6 +892,11 @@ function MiniAppForm({
           </button>
         </div>
       </form>
+      {app && (
+        <div className="mt-4 border-t border-border pt-4">
+          <SubtopicsAdmin miniAppId={app.id} />
+        </div>
+      )}
     </Card>
   );
 }
