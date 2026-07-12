@@ -224,30 +224,35 @@ function AdminContent() {
 
       <div className="mb-4 flex flex-wrap gap-2 rounded-xl bg-foreground/5 p-1 text-sm font-semibold">
         <button
+          type="button"
           onClick={() => setTab("apps")}
           className={`flex-1 rounded-lg px-3 py-2 ${tab === "apps" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
         >
           Mini apps
         </button>
         <button
+          type="button"
           onClick={() => setTab("organize")}
           className={`flex-1 rounded-lg px-3 py-2 ${tab === "organize" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
         >
           Apps & Organização
         </button>
         <button
+          type="button"
           onClick={() => setTab("subs")}
           className={`flex-1 rounded-lg px-3 py-2 ${tab === "subs" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
         >
           Planos / Cakto
         </button>
         <button
+          type="button"
           onClick={() => setTab("users")}
           className={`flex-1 rounded-lg px-3 py-2 ${tab === "users" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
         >
           Usuários
         </button>
         <button
+          type="button"
           onClick={() => setTab("texts")}
           className={`flex-1 rounded-lg px-3 py-2 ${tab === "texts" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
         >
@@ -409,6 +414,7 @@ function AdminContent() {
               <div className="flex shrink-0 gap-1">
                 {!app.is_active && (
                   <button
+                    type="button"
                     onClick={() => handleReactivate(app)}
                     disabled={reactivating === app.id}
                     className="rounded-lg bg-emerald-500/10 p-2 text-emerald-600 hover:bg-emerald-500/20 disabled:opacity-50"
@@ -419,6 +425,7 @@ function AdminContent() {
                   </button>
                 )}
                 <button
+                  type="button"
                   onClick={() => {
                     setEditing(app);
                     if (typeof window !== "undefined") {
@@ -431,6 +438,7 @@ function AdminContent() {
                   <Pencil className="h-4 w-4" />
                 </button>
                 <button
+                  type="button"
                   onClick={() => handleDelete(app.id)}
                   className="rounded-lg bg-destructive/10 p-2 text-destructive hover:bg-destructive/20"
                   aria-label="Apagar"
