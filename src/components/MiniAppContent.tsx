@@ -106,8 +106,10 @@ function HtmlContent({ html }: { html: string }) {
       }
     };
 
-    const btnP = root.querySelector<HTMLButtonElement>("#btn-salvar-prescricao");
-    const btnE = root.querySelector<HTMLButtonElement>("#btn-salvar-evolucao");
+    const checkedLabelTexts = () =>
+      Array.from(root.querySelectorAll<HTMLInputElement>('input[type="checkbox"]:checked'))
+        .map((input) => input.closest("label")?.innerText?.replace(/\s+/g, " ").trim() ?? "")
+        .filter(Boolean);
 
     const onPrescricao = (e: Event) => {
       e.preventDefault();
@@ -124,7 +126,14 @@ function HtmlContent({ html }: { html: string }) {
         }
       });
       if (!tem) {
-        alert("Selecione ao menos um cuidado de enfermagem antes de exportar.");
+        const marcados = checkedLabelTexts();
+        marcados.forEach((item) => {
+          texto += `• ${item}\n`;
+          tem = true;
+        });
+      }
+      if (!tem) {
+        alert("Selecione ao menos um diagnóstico, cuidado ou prescrição antes de exportar.");
         return;
       }
       download(texto, "Prescricao_de_Enfermagem.doc");
@@ -150,11 +159,15 @@ function HtmlContent({ html }: { html: string }) {
       download(texto, "Evolucao_de_Enfermagem.doc");
     };
 
-    btnP?.addEventListener("click", onPrescricao);
-    btnE?.addEventListener("click", onEvolucao);
+    const onClick = (e: MouseEvent) => {
+      const target = e.target as Element | null;
+      if (target?.closest("#btn-salvar-prescricao")) onPrescricao(e);
+      if (target?.closest("#btn-salvar-evolucao")) onEvolucao(e);
+    };
+
+    root.addEventListener("click", onClick);
     return () => {
-      btnP?.removeEventListener("click", onPrescricao);
-      btnE?.removeEventListener("click", onEvolucao);
+      root.removeEventListener("click", onClick);
     };
   }, [html]);
 
