@@ -1,27 +1,18 @@
-Entendi o problema do print: o campo grande do admin aparece vazio porque os 50 quizzes não ficam salvos em “Conteúdo / Markdown”. Eles estão em uma tela dinâmica própria (`/quizzes`) e em um arquivo de dados do app. Por isso o aluno vê os quizzes na página certa, mas o editor do admin parece vazio.
+Sim, dá pra fazer 100% grátis — igual já fazemos na página `/prescricao`: o próprio navegador gera o PDF via "Imprimir → Salvar como PDF", sem custo de servidor, sem envio de e-mail, sem armazenamento.
 
-Plano para corrigir sem apagar nada:
+## O que vou fazer no mini app "Fundamentos dos Diagnósticos de Enfermagem"
 
-1. Ajustar a tela do admin para mini apps dinâmicos
-   - Quando o mini app tiver rota própria, como `/quizzes`, mostrar um aviso claro acima do campo vazio:
-     “Este mini app usa uma tela dinâmica. O conteúdo principal não fica neste campo.”
-   - Assim você não vai achar que perdeu o conteúdo.
+1. Localizar a página desse mini app (rota atual com os dois botões no final).
+2. Trocar/garantir dois botões independentes no rodapé:
+   - **Salvar Prescrição (PDF)** → abre nova aba só com a tabela/texto da Prescrição, com título "Prescrição de Enfermagem" e data, e dispara `window.print()`.
+   - **Salvar Evolução (PDF)** → abre nova aba só com o texto da Evolução, com título "Evolução de Enfermagem" e data, e dispara `window.print()`.
+3. Usar o mesmo padrão visual já existente em `src/routes/prescricao.tsx` (folha A4, margens 2,5cm/2cm, fonte serifada, cabeçalho centralizado, data à direita). Nada de backend, nada de e-mail, nada de storage.
+4. Botões desabilitados quando o conteúdo correspondente estiver vazio, com aviso curto ("Preencha a prescrição para salvar").
 
-2. Mostrar um resumo dos quizzes no próprio admin
-   - Para o slug `quizzes`, exibir no editor:
-     - total de quizzes encontrados;
-     - total de perguntas;
-     - primeiros títulos como conferência rápida.
-   - Isso confirma visualmente que os quizzes continuam lá.
+## Custo
 
-3. Proteger contra confusão no campo “Conteúdo / Markdown”
-   - Manter o campo disponível apenas para descrição complementar.
-   - Não mexer nos 50 quizzes nem sobrescrever o conteúdo dinâmico.
+Zero de infraestrutura. O PDF é gerado pelo navegador do usuário (funciona em celular e PC). Só consome créditos a edição do código em si.
 
-4. Conferir o link do card
-   - Garantir que a rota interna continue `/quizzes`, para abrir a página dinâmica correta e não uma página genérica vazia.
+## Antes de eu implementar, me confirma:
 
-Resultado esperado:
-- No admin, o mini app “Quizzes de Enfermagem” não parecerá mais vazio.
-- Os 50 quizzes continuarão intactos.
-- Você conseguirá identificar que aquele mini app é dinâmico, não preenchido pelo campo markdown.
+- O mini app que você chama de "Fundamentos dos Diagnósticos de Enfermagem" é o que hoje abre em **`/diagnosticos-aede`** (o wizard Anamnese → Exame → Sinais → Diagnósticos → Prescrição)? Se for outra rota, me diz qual, pra eu não mexer no lugar errado.
