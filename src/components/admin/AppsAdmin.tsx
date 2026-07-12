@@ -52,6 +52,7 @@ export function AppsAdmin() {
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h2 className="font-display text-lg font-bold">Apps (academias)</h2>
         <button
+          type="button"
           onClick={() => setCreatingApp(true)}
           className="inline-flex items-center gap-1.5 rounded-xl gold-gradient px-4 py-2 text-sm font-bold"
         >
@@ -73,6 +74,7 @@ export function AppsAdmin() {
       <div className="flex flex-wrap gap-2">
         {apps.map((app) => (
           <button
+            type="button"
             key={app.id}
             onClick={() => setSelectedAppId(app.id)}
             className={`flex items-center gap-1.5 rounded-xl border px-3 py-2 text-sm font-semibold ${
@@ -103,6 +105,7 @@ export function AppsAdmin() {
             </div>
             <div className="flex gap-1">
               <button
+                type="button"
                 onClick={() => setEditingApp(selected)}
                 className="rounded-lg bg-primary/10 p-2 text-primary hover:bg-primary/20"
                 aria-label="Editar"
@@ -110,6 +113,7 @@ export function AppsAdmin() {
                 <Pencil className="h-4 w-4" />
               </button>
               <button
+                type="button"
                 onClick={() => handleDeleteApp(selected.id)}
                 className="rounded-lg bg-destructive/10 p-2 text-destructive hover:bg-destructive/20"
                 aria-label="Excluir"
@@ -143,11 +147,14 @@ function AppForm({ app, onClose }: { app: AppRow | null; onClose: () => void }) 
   });
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
+  const [ok, setOk] = useState<string | null>(null);
 
   async function handleSave(e: React.FormEvent) {
     e.preventDefault();
+    if (busy) return;
     setBusy(true);
     setErr(null);
+    setOk(null);
     const payload = {
       ...form,
       short_name: form.short_name || null,
@@ -158,7 +165,8 @@ function AppForm({ app, onClose }: { app: AppRow | null; onClose: () => void }) 
       : await supabase.from("apps").insert(payload);
     setBusy(false);
     if (res.error) return setErr(res.error.message);
-    onClose();
+    setOk("✅ Salvo com sucesso.");
+    window.setTimeout(onClose, 450);
   }
 
   return (
@@ -204,12 +212,13 @@ function AppForm({ app, onClose }: { app: AppRow | null; onClose: () => void }) 
           </Field>
         </div>
         {err && <p className="text-xs text-destructive">{err}</p>}
+        {ok && <p className="rounded-lg bg-emerald-500/10 px-3 py-2 text-xs font-bold text-emerald-700">{ok}</p>}
         <div className="flex justify-end gap-2 pt-2">
           <button type="button" onClick={onClose} className="rounded-xl bg-foreground/10 px-4 py-2 text-sm font-semibold">
             Cancelar
           </button>
-          <button type="submit" disabled={busy} className="rounded-xl bg-primary px-4 py-2 text-sm font-bold text-primary-foreground disabled:opacity-60">
-            {busy ? "Salvando..." : "Salvar"}
+          <button type="submit" disabled={busy} className="rounded-xl bg-primary px-4 py-2 text-sm font-bold text-primary-foreground shadow-sm transition hover:brightness-110 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-60">
+            {busy ? "Salvando..." : ok ? "Salvo" : "Salvar"}
           </button>
         </div>
       </form>
@@ -566,6 +575,7 @@ function AppContent({ app }: { app: AppRow }) {
                         )}
                       </span>
                       <button
+                        type="button"
                         onClick={() => addPlacement(m.id, null)}
                         className="shrink-0 rounded-md bg-primary/10 px-2 py-0.5 text-[10px] font-bold text-primary hover:bg-primary/20"
                         title="Adicionar aqui em 'Sem seção' (reativa se estiver inativo)"
@@ -650,7 +660,7 @@ function SectionsManager({ appId, sections }: { appId: string; sections: AppSect
       <div className="mb-3 flex flex-wrap gap-2">
         <input value={emoji} onChange={(e) => setEmoji(e.target.value)} className={`${input} w-20`} placeholder="📚" />
         <input value={title} onChange={(e) => setTitle(e.target.value)} className={`${input} flex-1 min-w-[200px]`} placeholder="Nova seção (ex.: SAE, Saúde do Adulto…)" />
-        <button onClick={addSection} className="rounded-lg bg-primary px-3 py-2 text-xs font-bold text-primary-foreground">
+        <button type="button" onClick={addSection} className="rounded-lg bg-primary px-3 py-2 text-xs font-bold text-primary-foreground">
           + Adicionar seção
         </button>
       </div>
@@ -665,10 +675,10 @@ function SectionsManager({ appId, sections }: { appId: string; sections: AppSect
                 {s.title}
               </span>
               <div className="flex gap-1">
-                <button onClick={() => move(s, -1)} className="rounded p-1 hover:bg-foreground/10" aria-label="Subir"><ArrowUp className="h-3.5 w-3.5" /></button>
-                <button onClick={() => move(s, 1)} className="rounded p-1 hover:bg-foreground/10" aria-label="Descer"><ArrowDown className="h-3.5 w-3.5" /></button>
-                <button onClick={() => rename(s)} className="rounded p-1 hover:bg-foreground/10" aria-label="Renomear"><Pencil className="h-3.5 w-3.5" /></button>
-                <button onClick={() => remove(s)} className="rounded p-1 text-destructive hover:bg-destructive/10" aria-label="Excluir"><Trash2 className="h-3.5 w-3.5" /></button>
+                <button type="button" onClick={() => move(s, -1)} className="rounded p-1 hover:bg-foreground/10" aria-label="Subir"><ArrowUp className="h-3.5 w-3.5" /></button>
+                <button type="button" onClick={() => move(s, 1)} className="rounded p-1 hover:bg-foreground/10" aria-label="Descer"><ArrowDown className="h-3.5 w-3.5" /></button>
+                <button type="button" onClick={() => rename(s)} className="rounded p-1 hover:bg-foreground/10" aria-label="Renomear"><Pencil className="h-3.5 w-3.5" /></button>
+                <button type="button" onClick={() => remove(s)} className="rounded p-1 text-destructive hover:bg-destructive/10" aria-label="Excluir"><Trash2 className="h-3.5 w-3.5" /></button>
               </div>
             </li>
           ))}
@@ -780,7 +790,7 @@ function SortableItem({
   };
   return (
     <li ref={setNodeRef} style={style} className="flex items-center justify-between gap-2 rounded-md border border-foreground/10 bg-background px-2 py-1.5 text-sm">
-      <button {...attributes} {...listeners} className="cursor-grab touch-none rounded p-1 text-muted-foreground hover:bg-foreground/10" aria-label="Arrastar">
+      <button type="button" {...attributes} {...listeners} className="cursor-grab touch-none rounded p-1 text-muted-foreground hover:bg-foreground/10" aria-label="Arrastar">
         <GripVertical className="h-3.5 w-3.5" />
       </button>
       <span className="flex-1 truncate">
@@ -809,7 +819,7 @@ function SortableItem({
           ))}
         </select>
       )}
-      <button onClick={onRemove} className="rounded p-1 text-destructive hover:bg-destructive/10" aria-label="Remover deste app">
+      <button type="button" onClick={onRemove} className="rounded p-1 text-destructive hover:bg-destructive/10" aria-label="Remover deste app">
         <X className="h-3.5 w-3.5" />
       </button>
     </li>

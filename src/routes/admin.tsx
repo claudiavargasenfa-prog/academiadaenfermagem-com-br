@@ -551,6 +551,7 @@ function MiniAppForm({
   });
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
+  const [ok, setOk] = useState<string | null>(null);
   const normalizedSlug = form.slug.trim().toLowerCase();
   const isQuizzesMiniApp = normalizedSlug === "quizzes";
 
@@ -600,8 +601,10 @@ function MiniAppForm({
 
   async function handleSave(e: React.FormEvent) {
     e.preventDefault();
+    if (busy) return;
     setBusy(true);
     setErr(null);
+    setOk(null);
     const { price_reais, price_original_reais, ...rest } = form;
     const priceOriginalCents = reaisToCents(price_original_reais);
     const payload = {
@@ -639,21 +642,32 @@ function MiniAppForm({
       const toAdd = [...placementAppIds].filter((id) => !existingIds.has(id));
       const toRemove = (existing ?? []).filter((p) => !placementAppIds.has(p.app_id));
       if (toAdd.length) {
-        await supabase.from("mini_app_placements").insert(
+        const addRes = await supabase.from("mini_app_placements").insert(
           toAdd.map((app_id) => ({ app_id, mini_app_id: savedApp.id, ordem: 999 })) as any,
         );
+        if (addRes.error) {
+          setBusy(false);
+          setErr(addRes.error.message);
+          return;
+        }
       }
       if (toRemove.length) {
-        await supabase
+        const removeRes = await supabase
           .from("mini_app_placements")
           .delete()
           .in("id", toRemove.map((p) => p.id));
+        if (removeRes.error) {
+          setBusy(false);
+          setErr(removeRes.error.message);
+          return;
+        }
       }
     }
 
     setBusy(false);
+    setOk("✅ Salvo com sucesso.");
     if (savedApp) onSaved(savedApp);
-    onClose();
+    window.setTimeout(onClose, 450);
   }
 
   return (
@@ -860,6 +874,7 @@ function MiniAppForm({
         </div>
 
         {err && <p className="text-xs text-destructive">{err}</p>}
+        {ok && <p className="rounded-lg bg-emerald-500/10 px-3 py-2 text-xs font-bold text-emerald-700">{ok}</p>}
 
         <div className="flex justify-end gap-2 pt-2">
           <button
@@ -872,9 +887,9 @@ function MiniAppForm({
           <button
             type="submit"
             disabled={busy}
-            className="rounded-xl bg-primary px-4 py-2 text-sm font-bold text-primary-foreground disabled:opacity-60"
+            className="rounded-xl bg-primary px-4 py-2 text-sm font-bold text-primary-foreground shadow-sm transition hover:brightness-110 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-60"
           >
-            {busy ? "Salvando..." : "Salvar"}
+            {busy ? "Salvando..." : ok ? "Salvo" : "Salvar"}
           </button>
         </div>
       </form>
