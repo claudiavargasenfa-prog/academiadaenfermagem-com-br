@@ -224,30 +224,35 @@ function AdminContent() {
 
       <div className="mb-4 flex flex-wrap gap-2 rounded-xl bg-foreground/5 p-1 text-sm font-semibold">
         <button
+          type="button"
           onClick={() => setTab("apps")}
           className={`flex-1 rounded-lg px-3 py-2 ${tab === "apps" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
         >
           Mini apps
         </button>
         <button
+          type="button"
           onClick={() => setTab("organize")}
           className={`flex-1 rounded-lg px-3 py-2 ${tab === "organize" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
         >
           Apps & Organização
         </button>
         <button
+          type="button"
           onClick={() => setTab("subs")}
           className={`flex-1 rounded-lg px-3 py-2 ${tab === "subs" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
         >
           Planos / Cakto
         </button>
         <button
+          type="button"
           onClick={() => setTab("users")}
           className={`flex-1 rounded-lg px-3 py-2 ${tab === "users" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
         >
           Usuários
         </button>
         <button
+          type="button"
           onClick={() => setTab("texts")}
           className={`flex-1 rounded-lg px-3 py-2 ${tab === "texts" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
         >
@@ -409,6 +414,7 @@ function AdminContent() {
               <div className="flex shrink-0 gap-1">
                 {!app.is_active && (
                   <button
+                    type="button"
                     onClick={() => handleReactivate(app)}
                     disabled={reactivating === app.id}
                     className="rounded-lg bg-emerald-500/10 p-2 text-emerald-600 hover:bg-emerald-500/20 disabled:opacity-50"
@@ -419,6 +425,7 @@ function AdminContent() {
                   </button>
                 )}
                 <button
+                  type="button"
                   onClick={() => {
                     setEditing(app);
                     if (typeof window !== "undefined") {
@@ -431,6 +438,7 @@ function AdminContent() {
                   <Pencil className="h-4 w-4" />
                 </button>
                 <button
+                  type="button"
                   onClick={() => handleDelete(app.id)}
                   className="rounded-lg bg-destructive/10 p-2 text-destructive hover:bg-destructive/20"
                   aria-label="Apagar"
@@ -551,6 +559,7 @@ function MiniAppForm({
   });
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
+  const [ok, setOk] = useState<string | null>(null);
   const normalizedSlug = form.slug.trim().toLowerCase();
   const isQuizzesMiniApp = normalizedSlug === "quizzes";
 
@@ -600,8 +609,10 @@ function MiniAppForm({
 
   async function handleSave(e: React.FormEvent) {
     e.preventDefault();
+    if (busy) return;
     setBusy(true);
     setErr(null);
+    setOk(null);
     const { price_reais, price_original_reais, ...rest } = form;
     const priceOriginalCents = reaisToCents(price_original_reais);
     const payload = {
@@ -639,21 +650,32 @@ function MiniAppForm({
       const toAdd = [...placementAppIds].filter((id) => !existingIds.has(id));
       const toRemove = (existing ?? []).filter((p) => !placementAppIds.has(p.app_id));
       if (toAdd.length) {
-        await supabase.from("mini_app_placements").insert(
+        const addRes = await supabase.from("mini_app_placements").insert(
           toAdd.map((app_id) => ({ app_id, mini_app_id: savedApp.id, ordem: 999 })) as any,
         );
+        if (addRes.error) {
+          setBusy(false);
+          setErr(addRes.error.message);
+          return;
+        }
       }
       if (toRemove.length) {
-        await supabase
+        const removeRes = await supabase
           .from("mini_app_placements")
           .delete()
           .in("id", toRemove.map((p) => p.id));
+        if (removeRes.error) {
+          setBusy(false);
+          setErr(removeRes.error.message);
+          return;
+        }
       }
     }
 
     setBusy(false);
+    setOk("✅ Salvo com sucesso.");
     if (savedApp) onSaved(savedApp);
-    onClose();
+    window.setTimeout(onClose, 450);
   }
 
   return (
@@ -799,7 +821,6 @@ function MiniAppForm({
             />
           </Field>
         </div>
-        {app && <SubtopicsAdmin miniAppId={app.id} />}
         <div className="rounded-xl border border-border p-3">
           <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
             Disponível nos aplicativos
@@ -860,6 +881,7 @@ function MiniAppForm({
         </div>
 
         {err && <p className="text-xs text-destructive">{err}</p>}
+        {ok && <p className="rounded-lg bg-emerald-500/10 px-3 py-2 text-xs font-bold text-emerald-700">{ok}</p>}
 
         <div className="flex justify-end gap-2 pt-2">
           <button
@@ -872,12 +894,17 @@ function MiniAppForm({
           <button
             type="submit"
             disabled={busy}
-            className="rounded-xl bg-primary px-4 py-2 text-sm font-bold text-primary-foreground disabled:opacity-60"
+            className="rounded-xl bg-primary px-4 py-2 text-sm font-bold text-primary-foreground shadow-sm transition hover:brightness-110 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-60"
           >
-            {busy ? "Salvando..." : "Salvar"}
+            {busy ? "Salvando..." : ok ? "Salvo" : "Salvar"}
           </button>
         </div>
       </form>
+      {app && (
+        <div className="mt-4 border-t border-border pt-4">
+          <SubtopicsAdmin miniAppId={app.id} />
+        </div>
+      )}
     </Card>
   );
 }

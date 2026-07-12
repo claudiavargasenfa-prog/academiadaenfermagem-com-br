@@ -96,6 +96,7 @@ export function UsersAdmin() {
           </select>
         </div>
         <button
+          type="button"
           onClick={() => setCreating(true)}
           className="inline-flex items-center gap-1.5 rounded-xl gold-gradient px-3 py-2 text-xs font-bold"
         >
@@ -159,16 +160,16 @@ export function UsersAdmin() {
                   )}
                 </div>
                 <div className="flex shrink-0 flex-wrap gap-1">
-                  <button onClick={() => setExtending(u)} className="rounded-lg bg-emerald-500/15 p-2 text-emerald-700 hover:bg-emerald-500/25" aria-label="Estender trial/assinatura" title="Estender acesso">
+                  <button type="button" onClick={() => setExtending(u)} className="rounded-lg bg-emerald-500/15 p-2 text-emerald-700 hover:bg-emerald-500/25" aria-label="Estender trial/assinatura" title="Estender acesso">
                     <Calendar className="h-4 w-4" />
                   </button>
-                  <button onClick={() => setResetting(u)} className="rounded-lg bg-amber-500/15 p-2 text-amber-700 hover:bg-amber-500/25" aria-label="Resetar senha" title="Resetar senha">
+                  <button type="button" onClick={() => setResetting(u)} className="rounded-lg bg-amber-500/15 p-2 text-amber-700 hover:bg-amber-500/25" aria-label="Resetar senha" title="Resetar senha">
                     <KeyRound className="h-4 w-4" />
                   </button>
-                  <button onClick={() => setEditing(u)} className="rounded-lg bg-primary/10 p-2 text-primary hover:bg-primary/20" aria-label="Editar" title="Editar">
+                  <button type="button" onClick={() => setEditing(u)} className="rounded-lg bg-primary/10 p-2 text-primary hover:bg-primary/20" aria-label="Editar" title="Editar">
                     <Pencil className="h-4 w-4" />
                   </button>
-                  <button onClick={() => setDeleting(u)} className="rounded-lg bg-destructive/10 p-2 text-destructive hover:bg-destructive/20" aria-label="Excluir" title="Excluir usuário">
+                  <button type="button" onClick={() => setDeleting(u)} className="rounded-lg bg-destructive/10 p-2 text-destructive hover:bg-destructive/20" aria-label="Excluir" title="Excluir usuário">
                     <Trash2 className="h-4 w-4" />
                   </button>
                 </div>
