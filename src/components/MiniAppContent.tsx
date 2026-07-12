@@ -6,9 +6,6 @@ import { Card } from "@/components/AppShell";
 import { useAuthReady } from "@/lib/access";
 import { renderContent } from "@/lib/markdown";
 
-import { Card } from "@/components/AppShell";
-import { useAuthReady } from "@/lib/access";
-import { renderContent } from "@/lib/markdown";
 
 /**
  * Renderiza o conteúdo editável do mini app (vindo do Admin):
