@@ -71,12 +71,100 @@ export function MiniAppContent({ slug }: { slug: string }) {
 
       {content_md?.trim() && (
         <Card>
-          <div className="prose-sm max-w-none">{renderContent(content_md)}</div>
+          <HtmlContent html={content_md} />
         </Card>
       )}
     </div>
   );
 }
+
+/**
+ * Renderiza HTML/markdown do mini app e ativa comportamentos interativos
+ * embutidos que o React não executa sozinho (ex.: botões "Salvar Prescrição"
+ * e "Salvar Evolução" do mini app FUNDAMENTOS DOS DIAGNÓSTICOS — download
+ * .doc 100% no navegador, sem backend, sem custo).
+ */
+function HtmlContent({ html }: { html: string }) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const root = ref.current;
+    if (!root) return;
+
+    const download = (conteudo: string, nome: string) => {
+      try {
+        const blob = new Blob([conteudo], { type: "application/msword;charset=utf-8" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = nome;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+      } catch {
+        alert("Não foi possível gerar o arquivo.");
+      }
+    };
+
+    const btnP = root.querySelector<HTMLButtonElement>("#btn-salvar-prescricao");
+    const btnE = root.querySelector<HTMLButtonElement>("#btn-salvar-evolucao");
+
+    const onPrescricao = (e: Event) => {
+      e.preventDefault();
+      const itens = root.querySelectorAll<HTMLElement>(".output-item");
+      let texto =
+        "PLANO DE CUIDADOS E PRESCRIÇÃO DE ENFERMAGEM\n" +
+        "Diretriz de Raciocínio Clínico — Resolução COFEN 736/2024\n" +
+        "--------------------------------------------------------\n\n";
+      let tem = false;
+      itens.forEach((it) => {
+        if (window.getComputedStyle(it).display !== "none") {
+          texto += (it.innerText || "") + "\n";
+          tem = true;
+        }
+      });
+      if (!tem) {
+        alert("Selecione ao menos um cuidado de enfermagem antes de exportar.");
+        return;
+      }
+      download(texto, "Prescricao_de_Enfermagem.doc");
+    };
+
+    const onEvolucao = (e: Event) => {
+      e.preventDefault();
+      const campo = root.querySelector<HTMLTextAreaElement | HTMLInputElement>(
+        "#txt-evolucao-lavoble",
+      );
+      const val = (campo?.value ?? "").trim();
+      if (!val) {
+        alert("Digite a evolução clínica do paciente antes de exportar.");
+        return;
+      }
+      const texto =
+        "EVOLUÇÃO DIÁRIA DE ENFERMAGEM\n" +
+        "Data: " +
+        new Date().toLocaleDateString("pt-BR") +
+        "\n--------------------------------------------------------\n\n" +
+        val +
+        "\n";
+      download(texto, "Evolucao_de_Enfermagem.doc");
+    };
+
+    btnP?.addEventListener("click", onPrescricao);
+    btnE?.addEventListener("click", onEvolucao);
+    return () => {
+      btnP?.removeEventListener("click", onPrescricao);
+      btnE?.removeEventListener("click", onEvolucao);
+    };
+  }, [html]);
+
+  return (
+    <div ref={ref} className="prose-sm max-w-none">
+      {renderContent(html)}
+    </div>
+  );
+}
+
 
 function VideoEmbed({ url }: { url: string }) {
   const embed = toEmbedUrl(url);
