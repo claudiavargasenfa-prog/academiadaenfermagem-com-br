@@ -1,33 +1,32 @@
-## Causa raiz
+Diagnóstico minucioso feito:
 
-Todo o "cérebro" JS do mini app SAE está dentro de:
+O botão não está “morto”. Ele recebe o clique e abre a área de diagnósticos, mas para o caso digitado pela usuária (“dor no peito, dor na cabeça e enjoo”) ele termina com 0 diagnósticos porque o script atual só procura checkboxes marcados. Ele não lê o texto livre digitado na caixa de sinais/sintomas para decidir quais cards mostrar.
 
-```js
-document.addEventListener("DOMContentLoaded", function() { ... });
-```
+Também encontrei um erro real no script: a função de evolução tenta ler um campo inexistente chamado `medicamentos`. Isso gera erro no navegador (“Cannot read properties of null (reading 'value')”) e pode quebrar partes da automação depois do clique.
 
-Esse evento já disparou muito antes do React injetar o HTML do mini app. Quando o script é re-executado, o callback nunca roda → **nenhum event listener é registrado** → o botão "Gerar Diagnósticos", os checkboxes do exame e a numeração de prioridade ficam inertes. Explica exatamente o sintoma: você preenche tudo, clica e nada acontece.
+Plano de correção, sem mexer no design e sem alterar o conteúdo clínico visual:
 
-## Correção (mínima e cirúrgica)
+1. Corrigir o erro silencioso do campo ausente
+   - Ajustar a camada de ativação do SAE em `MiniAppContent.tsx` para criar uma leitura segura quando o HTML não tiver o campo `medicamentos`.
+   - Isso evita que a evolução automática quebre por causa de um ID inexistente.
 
-Editar apenas `src/components/MiniAppContent.tsx` no bloco que já re-injeta os `<script>` do SAE:
+2. Fazer o botão considerar texto livre
+   - Manter a lógica atual dos checkboxes.
+   - Acrescentar uma ponte mínima para ler `#txt-sinais-sintomas-consolidados` quando o usuário digitar sintomas.
+   - Mapear termos simples do texto digitado para os cards já existentes:
+     - “cabeça”, “cefaleia”, “desorientação”, “agitação” → neurológico.
+     - “peito”, “dispneia”, “falta de ar”, “saturação”, “tosse” → respiratório/cardiovascular conforme os cards disponíveis.
+     - “enjoo”, “náusea”, “vômito” → digestório/geral; como o HTML atual não tem card digestório, não vou inventar novo bloco visual sem sua autorização. Posso apenas preservar isso na evolução e, se houver card compatível já existente, exibir.
+     - “dor” → sinal geral e evolução.
 
-1. Após re-executar os scripts, disparar um `DOMContentLoaded` sintético no `document` para que o callback do próprio HTML rode e registre todos os listeners internos (botão gerar diagnósticos, checkboxes do exame, prioridade, etc.).
-2. Manter tudo o que já existe: listener do textarea manual, cleanup, marcador `lavoble-sae-descomplicada`.
+3. Não alterar aparência nem conteúdo da página
+   - Não trocar banner, cores, textos, ordem das seções, cards, nomes ou layout.
+   - Não editar o banco de dados/migração se der para resolver pela camada de ativação.
 
-## O que NÃO muda
+4. Verificação obrigatória antes de concluir
+   - Abrir o mini app SAE em sessão limpa.
+   - Digitar “dor no peito, dor na cabeça e enjoo”.
+   - Clicar “Gerar Diagnósticos”.
+   - Confirmar que a grade sai de vazia, o contador muda quando houver card compatível, e a evolução recebe o texto digitado sem erro no console.
 
-- Nenhuma alteração de design, cores, banner, ordem das seções.
-- Nenhuma alteração no `content_md` do banco (nenhuma migration).
-- Nenhuma mudança no comportamento dos outros mini apps.
-- A lógica clínica (matriz de diagnósticos, prescrição, evolução) continua exatamente como está no seu HTML — só passa a **funcionar** porque agora os listeners são anexados.
-
-## Verificação
-
-Playwright abrindo a rota do mini app → marca 2 checkboxes do exame + digita "dor no peito" na caixa de sintomas → clica em "Gerar Diagnósticos" → confere que `#grade-diagnosticos-prioridade` fica visível e ao menos 1 `#card_diag_*` aparece. Sem isso, não fecho.
-
-## Arquivos tocados
-
-- `src/components/MiniAppContent.tsx` — adicionar `document.dispatchEvent(new Event("DOMContentLoaded"))` logo após o loop que recria os `<script>`.
-
-Zero migração, zero mudança visual, ~1 linha efetiva de código.
+Observação importante: se você quiser que “enjoo/náusea” gere um diagnóstico próprio, o HTML atual precisa ter um card digestório ou uma matriz digestória. Isso seria uma etapa separada porque aí já muda o conteúdo clínico exibido.

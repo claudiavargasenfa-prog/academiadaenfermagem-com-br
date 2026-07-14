@@ -180,6 +180,78 @@ function HtmlContent({ html }: { html: string }) {
     const isSaeApp = !!root.querySelector(".lavoble-sae-descomplicada");
     let livreListener: (() => void) | null = null;
     if (isSaeApp) {
+      if (!root.querySelector("#medicamentos")) {
+        const medicamentosFallback = document.createElement("input");
+        medicamentosFallback.type = "hidden";
+        medicamentosFallback.id = "medicamentos";
+        medicamentosFallback.value = "Nenhum de uso contínuo.";
+        root.appendChild(medicamentosFallback);
+      }
+
+      const normalizeClinicalText = (value: string) =>
+        value
+          .toLowerCase()
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "");
+
+      const SAE_FREE_TEXT_MARK = "📝 SINAIS/SINTOMAS INFORMADOS MANUALMENTE:";
+
+      const applyFreeTextToEvolution = () => {
+        const livre = root.querySelector<HTMLTextAreaElement>(
+          "#txt-sinais-sintomas-consolidados",
+        );
+        const evol = root.querySelector<HTMLTextAreaElement>(
+          "#txt-evolucao-clinica-mestre",
+        );
+        if (!livre || !evol) return;
+
+        const manual = livre.value.trim();
+        const base = evol.value ?? "";
+        const cut = base.indexOf(SAE_FREE_TEXT_MARK);
+        const head = (cut >= 0 ? base.slice(0, cut) : base).trimEnd();
+        evol.value = manual ? `${head}\n\n${SAE_FREE_TEXT_MARK}\n${manual}\n` : head;
+      };
+
+      const syncFreeTextDiagnosisCards = () => {
+        const livre = root.querySelector<HTMLTextAreaElement>(
+          "#txt-sinais-sintomas-consolidados",
+        );
+        const grid = root.querySelector<HTMLElement>("#grade-diagnosticos-prioridade");
+        if (!livre || !grid || window.getComputedStyle(grid).display === "none") return;
+
+        applyFreeTextToEvolution();
+
+        const text = normalizeClinicalText(livre.value);
+        const hasNeu = /\b(cabeca|cefaleia|tontura|confus|desorient|agit|letarg|sonol|convuls|rebaix)/.test(text);
+        const hasResp = /\b(peito|torac|dispne|falta de ar|cansaco|satur|spo2|tosse|secrecao|respir|taquip|bradip|oxigen)/.test(text);
+        const hasRenal = /\b(urina|diure|oligur|poliur|nictur|disur|ardor|edema|inchac|hidrat|desidrat)/.test(text);
+        const hasPele = /\b(pele|ferida|lesao|curativo|pressao|lpp|imobil|acesso|flogist|vermelh|secrecao)/.test(text);
+
+        const show = (id: string, visible: boolean) => {
+          const card = root.querySelector<HTMLElement>(`#${id}`);
+          if (card) card.style.display = visible ? "flex" : "none";
+        };
+
+        show("card_diag_neu", hasNeu || window.getComputedStyle(root.querySelector<HTMLElement>("#card_diag_neu") ?? document.body).display === "flex");
+        show("card_diag_resp", hasResp || window.getComputedStyle(root.querySelector<HTMLElement>("#card_diag_resp") ?? document.body).display === "flex");
+        show("card_diag_renal", hasRenal || window.getComputedStyle(root.querySelector<HTMLElement>("#card_diag_renal") ?? document.body).display === "flex");
+        show("card_diag_pele", hasPele || window.getComputedStyle(root.querySelector<HTMLElement>("#card_diag_pele") ?? document.body).display === "flex");
+
+        const visibleCount = Array.from(
+          root.querySelectorAll<HTMLElement>("#grade-diagnosticos-prioridade > div"),
+        ).filter((card) => window.getComputedStyle(card).display === "flex").length;
+        const counter = root.querySelector<HTMLElement>("#diagnosisCounter");
+        if (counter) {
+          counter.textContent = `${visibleCount} ${visibleCount === 1 ? "diagnóstico" : "diagnósticos"}`;
+        }
+
+        const step3Div = root.querySelector<HTMLElement>("#step3 div:first-child");
+        if (step3Div && visibleCount > 0) {
+          step3Div.style.background = "#166534";
+          step3Div.style.color = "#ffffff";
+        }
+      };
+
       root.querySelectorAll("script").forEach((oldScript) => {
         const s = document.createElement("script");
         for (const attr of Array.from(oldScript.attributes)) {
@@ -202,16 +274,17 @@ function HtmlContent({ html }: { html: string }) {
         "#txt-evolucao-clinica-mestre",
       );
       if (livre && evol) {
-        const MARK = "📝 SINAIS/SINTOMAS INFORMADOS MANUALMENTE:";
         const onLivreInput = () => {
-          const manual = livre.value.trim();
-          const base = evol.value ?? "";
-          const cut = base.indexOf(MARK);
-          const head = (cut >= 0 ? base.slice(0, cut) : base).trimEnd();
-          evol.value = manual ? `${head}\n\n${MARK}\n${manual}\n` : head;
+          applyFreeTextToEvolution();
+          syncFreeTextDiagnosisCards();
         };
+        const gerarBtn = root.querySelector<HTMLButtonElement>("#btn-gerar-diagnosticos");
+        gerarBtn?.addEventListener("click", syncFreeTextDiagnosisCards);
         livre.addEventListener("input", onLivreInput);
-        livreListener = () => livre.removeEventListener("input", onLivreInput);
+        livreListener = () => {
+          livre.removeEventListener("input", onLivreInput);
+          gerarBtn?.removeEventListener("click", syncFreeTextDiagnosisCards);
+        };
       }
     }
 
