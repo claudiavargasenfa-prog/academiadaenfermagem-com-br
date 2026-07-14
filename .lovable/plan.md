@@ -1,18 +1,33 @@
-Sim, dá pra fazer 100% grátis — igual já fazemos na página `/prescricao`: o próprio navegador gera o PDF via "Imprimir → Salvar como PDF", sem custo de servidor, sem envio de e-mail, sem armazenamento.
+## Causa raiz
 
-## O que vou fazer no mini app "Fundamentos dos Diagnósticos de Enfermagem"
+Todo o "cérebro" JS do mini app SAE está dentro de:
 
-1. Localizar a página desse mini app (rota atual com os dois botões no final).
-2. Trocar/garantir dois botões independentes no rodapé:
-   - **Salvar Prescrição (PDF)** → abre nova aba só com a tabela/texto da Prescrição, com título "Prescrição de Enfermagem" e data, e dispara `window.print()`.
-   - **Salvar Evolução (PDF)** → abre nova aba só com o texto da Evolução, com título "Evolução de Enfermagem" e data, e dispara `window.print()`.
-3. Usar o mesmo padrão visual já existente em `src/routes/prescricao.tsx` (folha A4, margens 2,5cm/2cm, fonte serifada, cabeçalho centralizado, data à direita). Nada de backend, nada de e-mail, nada de storage.
-4. Botões desabilitados quando o conteúdo correspondente estiver vazio, com aviso curto ("Preencha a prescrição para salvar").
+```js
+document.addEventListener("DOMContentLoaded", function() { ... });
+```
 
-## Custo
+Esse evento já disparou muito antes do React injetar o HTML do mini app. Quando o script é re-executado, o callback nunca roda → **nenhum event listener é registrado** → o botão "Gerar Diagnósticos", os checkboxes do exame e a numeração de prioridade ficam inertes. Explica exatamente o sintoma: você preenche tudo, clica e nada acontece.
 
-Zero de infraestrutura. O PDF é gerado pelo navegador do usuário (funciona em celular e PC). Só consome créditos a edição do código em si.
+## Correção (mínima e cirúrgica)
 
-## Antes de eu implementar, me confirma:
+Editar apenas `src/components/MiniAppContent.tsx` no bloco que já re-injeta os `<script>` do SAE:
 
-- O mini app que você chama de "Fundamentos dos Diagnósticos de Enfermagem" é o que hoje abre em **`/diagnosticos-aede`** (o wizard Anamnese → Exame → Sinais → Diagnósticos → Prescrição)? Se for outra rota, me diz qual, pra eu não mexer no lugar errado.
+1. Após re-executar os scripts, disparar um `DOMContentLoaded` sintético no `document` para que o callback do próprio HTML rode e registre todos os listeners internos (botão gerar diagnósticos, checkboxes do exame, prioridade, etc.).
+2. Manter tudo o que já existe: listener do textarea manual, cleanup, marcador `lavoble-sae-descomplicada`.
+
+## O que NÃO muda
+
+- Nenhuma alteração de design, cores, banner, ordem das seções.
+- Nenhuma alteração no `content_md` do banco (nenhuma migration).
+- Nenhuma mudança no comportamento dos outros mini apps.
+- A lógica clínica (matriz de diagnósticos, prescrição, evolução) continua exatamente como está no seu HTML — só passa a **funcionar** porque agora os listeners são anexados.
+
+## Verificação
+
+Playwright abrindo a rota do mini app → marca 2 checkboxes do exame + digita "dor no peito" na caixa de sintomas → clica em "Gerar Diagnósticos" → confere que `#grade-diagnosticos-prioridade` fica visível e ao menos 1 `#card_diag_*` aparece. Sem isso, não fecho.
+
+## Arquivos tocados
+
+- `src/components/MiniAppContent.tsx` — adicionar `document.dispatchEvent(new Event("DOMContentLoaded"))` logo após o loop que recria os `<script>`.
+
+Zero migração, zero mudança visual, ~1 linha efetiva de código.
