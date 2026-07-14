@@ -217,7 +217,14 @@ function HtmlContent({ html }: { html: string }) {
 
   return (
     <div ref={ref} className="prose-sm max-w-none">
-      {renderContent(html)}
+      {isSae ? (
+        <div
+          className="mini-app-html"
+          dangerouslySetInnerHTML={{ __html: html }}
+        />
+      ) : (
+        renderContent(html)
+      )}
     </div>
   );
 }
