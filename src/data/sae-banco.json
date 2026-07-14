@@ -1,0 +1,1070 @@
+[
+  {
+    "id": "BL01_NEURO_01",
+    "sinais": "Sonolência profunda; Rebaixamento do nível de consciência; Escala de Glasgow reduzida; Pupilas anisocóricas ou fotorreagentes alteradas.",
+    "diagnostico": "Rebaixamento do Nível de Consciência com Risco de Aspiração",
+    "condutas": [
+      {
+        "conduta": "1. Avaliar o nível de consciência utilizando escalas padronizadas (Escala de Glasgow).",
+        "horario": "2/2H",
+        "aprazamento": "1. De 2h em 2h."
+      },
+      {
+        "conduta": "2. Monitorar o diâmetro e a reatividade das pupilas.",
+        "horario": "2/2H",
+        "aprazamento": "2. De 2h em 2h."
+      },
+      {
+        "conduta": "3. Manter a cabeceira elevada a 30° para otimizar a perfusão cerebral e reduzir o risco de aspiração.",
+        "horario": "Rotina",
+        "aprazamento": "3. Contínuo (Rotina do leito)."
+      },
+      {
+        "conduta": "4. Estimular o paciente verbalmente e por toque durante os cuidados, registrando o tipo de resposta.",
+        "horario": "4/4h",
+        "aprazamento": "4. De 4h em 4h."
+      }
+    ],
+    "meta": "Manutenção do nível de consciência basal estável e identificação precoce de piora neurológica.",
+    "raciocinio": "O rebaixamento do nível de consciência diminui os reflexos de proteção das vias aéreas (tosse e deglutição), aumentando drasticamente o risco de parada respiratória e pneumonia por aspiração."
+  },
+  {
+    "id": "BL01_NEURO_02",
+    "sinais": "Agitação psicomotora súbita; Desorientação alopsíquica; Comportamento agressivo ou disruptivo; Tentativa de tração de dispositivos invasivos.",
+    "diagnostico": "Agitação Psicomotora com Risco à Integridade Física",
+    "condutas": [
+      {
+        "conduta": "1. Avaliar a presença de fatores físicos desencadeantes da agitação (dor crônica, retenção urinária ou constipação).",
+        "horario": "10 e 22",
+        "aprazamento": "1. Uma vez por plantão (A cada 12h: 10h - 22h)."
+      },
+      {
+        "conduta": "2. Adotar tom de voz calmo, baixo e pausado nas interações, evitando confrontos ou discussões.",
+        "horario": "Rotina",
+        "aprazamento": "2. Contínuo (Rotina do leito)."
+      },
+      {
+        "conduta": "3. Reduzir estímulos ambientais estressores (luzes fortes, barulhos de alarmes e movimentação excessiva).",
+        "horario": "Rotina",
+        "aprazamento": "3. Contínuo (Rotina do leito)."
+      },
+      {
+        "conduta": "4. Garantir a presença de acompanhante familiar e manter as grades do leito elevadas.",
+        "horario": "Rotina",
+        "aprazamento": "4. Contínuo (Rotina do leito)."
+      }
+    ],
+    "meta": "Paciente mantido seguro, livre de lesões autoinfligidas e com comportamento calmo.",
+    "raciocinio": "A agitação psicomotora em pacientes internados frequentemente resulta na perda acidental de dispositivos invasivos (sondas e acessos venosos) e em quedas graves, exigindo intervenção ambiental imediata antes de medidas restritivas."
+  },
+  {
+    "id": "BL01_NEURO_03",
+    "sinais": "Cefaleia holocraniana intensa; Sensação de pressão craniana relatada; Escala visual analógica de dor (EVA) elevada na região cefálica.",
+    "diagnostico": "Cefaleia Intensa com Risco de Instabilidade Hemodinâmica",
+    "condutas": [
+      {
+        "conduta": "1. Avaliar a intensidade da dor utilizando a régua de dor (Escala Visual Analógica de 0 a 10) e registrar a localização.",
+        "horario": "",
+        "aprazamento": "1. De 4h em 4h."
+      },
+      {
+        "conduta": "2. Administrar medicações analgésicas prescritas exatamente nos horários recomendados e reavaliar a dor após 30 minutos.",
+        "horario": "",
+        "aprazamento": "2. Conforme horários padrão de prescrição médica (ex: 8/8h = 14h - 22h - 06h)."
+      },
+      {
+        "conduta": "3. Proporcionar um ambiente de repouso com o mínimo de luz (penumbra) e silêncio absoluto para diminuir o estímulo sensorial.",
+        "horario": "Rotina",
+        "aprazamento": "3. Contínuo (Rotina do leito)."
+      },
+      {
+        "conduta": "4. Aplicar compressas frias ou mornas na região da testa ou nuca, conforme a preferência do paciente.",
+        "horario": "",
+        "aprazamento": "4. Se necessário (S/N)."
+      }
+    ],
+    "meta": "Redução da intensidade da dor relatada, idealmente para níveis toleráveis ou escore zero.",
+    "raciocinio": "A cefaleia intensa pode ser um sintoma isolado de estresse, mas também atua como sinal de alerta para picos de hipertensão arterial ou alterações vasculares intracranianas graves."
+  },
+  {
+    "id": "BL02_CARDIO_01",
+    "sinais": "Edema bilateral grave em membros inferiores; Ortopneia; Ganho ponderal abrupto nas últimas 48h; Sinal do cacifo positivo (Godet).",
+    "diagnostico": "Excesso de Líquidos Corporais com Edema Geral - Anasarca",
+    "condutas": [
+      {
+        "conduta": "1. Realizar controle rigoroso de balanço hídrico (entradas e saídas de líquidos).",
+        "horario": "",
+        "aprazamento": "1. De 6h em 6h (12h - 18h - 24h - 06h)."
+      },
+      {
+        "conduta": "2. Manter a cabeceira do leito elevada em posição de Fowler a 45 graus.",
+        "horario": "Rotina",
+        "aprazamento": "2. Contínuo (Rotina do leito)."
+      },
+      {
+        "conduta": "3. Avaliar e registrar a evolução do edema periférico através da pesquisa do sinal do cacifo em cruzes (+/4+).",
+        "horario": "",
+        "aprazamento": "3. 12/12h (10h - 22h)."
+      }
+    ],
+    "meta": "Paciente apresentar regressão progressiva do edema, balanço hídrico equilibrado e estabilização do peso corporal.",
+    "raciocinio": "O acúmulo excessivo de volume intravascular (hipervolemia) sobrecarrega o miocárdio, podendo evoluir rapidamente para congestão pulmonar aguda e choque cardiogênico com alto risco de óbito."
+  },
+  {
+    "id": "BL02_RESP_01",
+    "sinais": "Dispneia evidente; Uso de musculatura acessória respiratória; Taquipneia; SatO2 < 90% em ar ambiente.",
+    "diagnostico": "Padrão Respiratório Ineficaz com Hipoxemia Aguda",
+    "condutas": [
+      {
+        "conduta": "1. Elevar a cabeceira do leito entre 30° e 45° (Posição de Fowler) para facilitar a expansão pulmonar.",
+        "horario": "Rotina",
+        "aprazamento": "1. Contínuo (Rotina do leito)."
+      },
+      {
+        "conduta": "2. Monitorar a saturação de oxigênio (SpO2) e a frequência respiratória regularmente.",
+        "horario": "",
+        "aprazamento": "2. De 2h em 2h."
+      },
+      {
+        "conduta": "3. Administrar oxigenoterapia conforme prescrição médica e avaliar a resposta do paciente.",
+        "horario": "Rotina",
+        "aprazamento": "3. Contínuo (Rotina do leito) ou conforme necessidade."
+      },
+      {
+        "conduta": "4. Estimular e orientar a realização de respirações profundas e calmas.",
+        "horario": "",
+        "aprazamento": "4. De 4h em 4h."
+      }
+    ],
+    "meta": "Melhora do padrão respiratório, estabilizando a frequência respiratória e normalizando a troca gasosa.",
+    "raciocinio": "A dispneia gera ansiedade extrema no paciente, o que aumenta o consumo de oxigênio pelo miocárdio, piorando o quadro clínico se não houver intervenção rápida."
+  },
+  {
+    "id": "BL02_RESP_02",
+    "sinais": "Roncos e estertores difusos na ausculta pulmonar; Tosse ineficaz ou produtiva com secreção espessa; Incapacidade de expectorar espontaneamente.",
+    "diagnostico": "Desobstrução Ineficaz de Vias Aéreas por Acúmulo de Secreção",
+    "condutas": [
+      {
+        "conduta": "1. Estimular a tosse eficaz e a ingestão de líquidos (se não houver restrição hídrica) para fluidificar a secreção.",
+        "horario": "",
+        "aprazamento": "1. De 4h em 4h."
+      },
+      {
+        "conduta": "2. Realizar a mudança de decúbito de duas em duas horas para mobilizar a secreção pulmonar.",
+        "horario": "",
+        "aprazamento": "2. De 2h em 2h."
+      },
+      {
+        "conduta": "3. Realizar a aspiração de vias aéreas (secreção traqueal/oral) se o paciente não conseguir tossir sozinho.",
+        "horario": "",
+        "aprazamento": "3. Conforme necessidade (S/N) ou de 4h em 4h se intubado."
+      },
+      {
+        "conduta": "4. Auscultar os pulmões antes e após os procedimentos de higiene brônquica.",
+        "horario": "",
+        "aprazamento": "4. De 4h em 4h."
+      }
+    ],
+    "meta": "Vias aéreas patentes, limpas e desimpedidas, com ruídos adventícios diminuídos na ausculta.",
+    "raciocinio": "O acúmulo de secreções em vias aéreas inferiores bloqueia a troca gasosa adequada e funciona como meio de cultura perfeito para o desenvolvimento de pneumonia."
+  },
+  {
+    "id": "BL03_GASTRO_01",
+    "sinais": "Abdômen visivelmente distendido ou endurecido; Flatulência excessiva acompanhada de cólicas; Ruídos hidroaéreos diminuídos ou ausentes.",
+    "diagnostico": "Motilidade Gastrintestinal Prejudicada por Parada ou Lentidão Intestinal",
+    "condutas": [
+      {
+        "conduta": "1. Realizar a ausculta dos ruídos intestinais (ruídos hidroaéreos) nos quatro quadrantes abdominais.",
+        "horario": "",
+        "aprazamento": "1. De 6h em 6h (12h - 18h - 24h - 06h)."
+      },
+      {
+        "conduta": "2. Estimular e auxiliar a deambulação precoce e frequente para ativar os movimentos peristálticos.",
+        "horario": "",
+        "aprazamento": "2. De 4h em 4h."
+      },
+      {
+        "conduta": "3. Monitorar a aceitação da dieta e a presença de náuseas, vômitos ou sensação de estufamento.",
+        "horario": "",
+        "aprazamento": "3. A cada refeição (7h - 12h - 15h - 18h)."
+      },
+      {
+        "conduta": "4. Avaliar a necessidade de comunicar a equipe médica para suspensão da dieta ou passagem de sonda gástrica se houver vômitos repetidos.",
+        "horario": "",
+        "aprazamento": "4. Conforme necessidade (S/N)."
+      }
+    ],
+    "meta": "Paciente apresentar diminuição da distensão abdominal, eliminação de gases e retorno dos ruídos intestinais normais.",
+    "raciocinio": "A redução drástica ou parada dos movimentos intestinais (peristaltismo) causa acúmulo de gases e secreções, podendo evoluir para uma obstrução intestinal grave (íleo paralítico)."
+  },
+  {
+    "id": "BL03_GASTRO_02",
+    "sinais": "Eliminação involuntária de fezes ou gases; Pele da região glútea ou perineal com eritema e umidade constante; Relato de constrangimento e isolamento.",
+    "diagnostico": "Continência Fecal Prejudicada com Risco de Lesão por Umidade",
+    "condutas": [
+      {
+        "conduta": "1. Realizar a higiene íntima e glútea imediatamente após cada episódio de eliminação involuntária, secando a pele sem friccionar.",
+        "horario": "",
+        "aprazamento": "1. Conforme necessidade (S/N) ou imediatamente após episódios."
+      },
+      {
+        "conduta": "2. Aplicar uma camada fina de creme de barreira protetora (à base de óxido de zinco ou silicone) na pele exposta.",
+        "horario": "",
+        "aprazamento": "2. De 12h em 12h (10h - 22h)."
+      },
+      {
+        "conduta": "3. Oferecer a comadre ou acompanhar o paciente ao banheiro em horários programados logo após as refeições (treino intestinal).",
+        "horario": "",
+        "aprazamento": "3. De 4h em 4h."
+      },
+      {
+        "conduta": "4. Monitorar a consistência das fezes e correlacionar com o uso de medicamentos ou dietas específicas.",
+        "horario": "",
+        "aprazamento": "4. Uma vez por plantão (A cada 12h)."
+      }
+    ],
+    "meta": "Paciente apresentar redução dos episódios de perda involuntária e manutenção da integridade da pele glútea.",
+    "raciocinio": "A exposição contínua da pele da região glútea às enzimas digestivas presentes nas fezes destrói as camadas de proteção da pele de forma muito rápida, causando dermatites e feridas dolorosas."
+  },
+  {
+    "id": "BL03_GASTRO_03",
+    "sinais": "Fezes ressecadas e endurecidas; Evacuações infrequentes (intervalo maior que 3 dias); Esforço evacuatório excessivo; Dor ou desconforto abdominal baixo.",
+    "diagnostico": "Constipação Intestinal com Risco de Impactação Fecal (Fecaloma)",
+    "condutas": [
+      {
+        "conduta": "1. Investigar e registrar a frequência das evacuações e o aspecto das fezes utilizando a Escala de Bristol.",
+        "horario": "",
+        "aprazamento": "1. Uma vez por plantão (A cada 12h)."
+      },
+      {
+        "conduta": "2. Estimular a ingestão de líquidos (mínimo de 2 litros ao dia, se não houver restrição médica).",
+        "horario": "",
+        "aprazamento": "2. De 2h em 2h (Intervalo das 07h às 22h)."
+      },
+      {
+        "conduta": "3. Incentivar o consumo de alimentos ricos em fibras (frutas com casca, verduras, cereais) fornecidos na dieta.",
+        "horario": "",
+        "aprazamento": "3. A cada refeição."
+      },
+      {
+        "conduta": "4. Auxiliar e estimular a deambulação ativa para auxiliar nos movimentos peristálticos.",
+        "horario": "",
+        "aprazamento": "4. De 4h em 4h."
+      }
+    ],
+    "meta": "Paciente restabelecer o padrão evacuatório com fezes de consistência macia e sem esforço excessivo.",
+    "raciocinio": "O acúmulo prolongado de fezes no cólon causa distensão abdominal, gases, perda de apetite e, em casos graves, pode evoluir para uma obstrução intestinal mecânica por fecaloma."
+  },
+  {
+    "id": "BL03_GASTRO_04",
+    "sinais": "Episódios frequentes de eliminação de fezes líquidas ou amolecidas; Hiperemia cutânea em região perineal; Queixa de cólicas abdominais (tenesmo).",
+    "diagnostico": "Diarreia Aguda com Risco de Desidratação e Desequilíbrio Eletrolítico",
+    "condutas": [
+      {
+        "conduta": "1. Registrar a quantidade, a frequência e o aspecto de cada episódio de eliminação diarreica.",
+        "horario": "",
+        "aprazamento": "1. Conforme necessidade (S/N) ou após cada episódio."
+      },
+      {
+        "conduta": "2. Inspecionar rigorosamente a pele da região íntima e aplicar creme protetor (barreira) após cada higiene para evitar dermatites.",
+        "horario": "",
+        "aprazamento": "2. Conforme necessidade (S/N) ou após cada episódio."
+      },
+      {
+        "conduta": "3. Oferecer hidratação oral contínua (água, soro caseiro ou chá) após cada evacuação líquida.",
+        "horario": "",
+        "aprazamento": "3. Conforme necessidade (S/N) ou após cada episódio."
+      },
+      {
+        "conduta": "4. Administrar medicações prescritas (como probióticos ou sintomáticos) e observar os efeitos.",
+        "horario": "",
+        "aprazamento": "4. Nos horários da prescrição médica (ex: de 8h em 8h = 14h - 22h - 06h)."
+      }
+    ],
+    "meta": "Redução no número de episódios diarreicos e retorno progressivo à consistência normal das fezes.",
+    "raciocinio": "A diarreia causa perda rápida de água e eletrólitos essenciais (como potássio e sódio), podendo levar o paciente à desidratação e a arritmias cardíacas graves."
+  },
+  {
+    "id": "BL03_HIDRA_01",
+    "sinais": "Mucosas orais visivelmente secas; Turgor cutâneo severamente diminuído; Oligúria com urina de coloração escura e odor forte; Sede intensa com tontura ortostática.",
+    "diagnostico": "Déficit de Volume de Líquidos Corporais - Sinais de Desidratação",
+    "condutas": [
+      {
+        "conduta": "1. Estimular e oferecer hidratação por via oral (água ou soro) em intervalos programados, se tolerado pelo paciente.",
+        "horario": "",
+        "aprazamento": "1. De 2h em 2h (Intervalo das 07h às 22h)."
+      },
+      {
+        "conduta": "2. Controlar e registrar rigorosamente o volume e o aspecto de cada eliminação urinária (diurese).",
+        "horario": "",
+        "aprazamento": "2. De 6h em 6h (12h - 18h - 24h - 06h)."
+      },
+      {
+        "conduta": "3. Monitorar a pressão arterial nas posições deitada e em pé (risco de queda por hipotensão ortostática).",
+        "horario": "",
+        "aprazamento": "3. Uma vez por plantão (A cada 12h: 10h - 22h)."
+      },
+      {
+        "conduta": "4. Avaliar a necessidade de comunicar a equipe médica para início de hidratação intravenosa (soroterapia de reposição).",
+        "horario": "",
+        "aprazamento": "4. Conforme necessidade (S/N)."
+      }
+    ],
+    "meta": "Paciente restabelecer a hidratação das mucosas, turgor cutâneo normal e volume urinário fisiológico.",
+    "raciocinio": "A perda severa de líquidos reduz o volume de sangue circulante (volemia), podendo levar o paciente ao choque hipovolêmico e à falência renal aguda por falta de perfusão."
+  },
+  {
+    "id": "BL03_CIRUR_01",
+    "sinais": "Presença de incisão cirúrgica recente (ferida operatória); Queixa de dor intensa no local que não cessa com analgésicos; Abertura parcial das bordas da ferida (deiscência); Presença de secreção espessa ou purulenta.",
+    "diagnostico": "Recuperação ou Cicatrização Pós-Cirúrgica Atrasada",
+    "condutas": [
+      {
+        "conduta": "1. Inspecionar a ferida operatória diariamente, avaliando o aspecto das bordas, integridade dos pontos e presença de secreções.",
+        "horario": "",
+        "aprazamento": "1. Uma vez por dia (A cada 24h: às 12h)."
+      },
+      {
+        "conduta": "2. Mensurar e registrar a temperatura corporal para vigilância epidemiológica de infecção cirúrgica.",
+        "horario": "",
+        "aprazamento": "2. De 4h em 4h."
+      },
+      {
+        "conduta": "3. Estimular a movimentação no leito e a deambulação precoce para evitar aderências intestinais e trombose, conforme tolerado.",
+        "horario": "",
+        "aprazamento": "3. De 4h em 4h."
+      },
+      {
+        "conduta": "4. Orientar o paciente sobre os cuidados de higiene com o curativo e a importância de repouso relativo do membro ou região operada.",
+        "horario": "",
+        "aprazamento": "4. Uma vez por plantão (A cada 12h: 10h - 22h)."
+      }
+    ],
+    "meta": "Paciente apresentar cicatrização segura da ferida operatória, com bordas aproximadas e ausência de sinais de infecção.",
+    "raciocinio": "O atraso na recuperação pós-cirúrgica expõe o paciente ao risco de infecções profundas da parede abdominal ou órgãos, além de deiscências graves que exigem novas intervenções cirúrgicas de urgência."
+  },
+  {
+    "id": "BL04_URIN_01",
+    "sinais": "Incapacidade de esvaziar a bexiga; Abaulamento palpável e doloroso em região suprapúbica; Ausência de diurese espontânea; Bexigoma evidente.",
+    "diagnostico": "Retenção Urinária Aguda com Presença de Bexigoma",
+    "condutas": [
+      {
+        "conduta": "1. Palpar e percutir a região suprapúbica para avaliar a presença de distensão vesical e dor.",
+        "horario": "",
+        "aprazamento": "1. De 4h em 4h."
+      },
+      {
+        "conduta": "2. Estimular a micção espontânea por métodos físicos (indução sonora por água corrente ou aplicação de compressa morna em baixo ventre).",
+        "horario": "",
+        "aprazamento": "2. De 2h em 2h."
+      },
+      {
+        "conduta": "3. Monitorar, mensurar e registrar o volume e o aspecto da diurese eliminada.",
+        "horario": "",
+        "aprazamento": "3. De 6h em 6h (12h - 18h - 24h - 06h)."
+      },
+      {
+        "conduta": "4. Executar o cateterismo urinário de alívio ou de demora conforme prescrição médica e protocolo institucional.",
+        "horario": "",
+        "aprazamento": "4. Conforme necessidade (S/N) ou sob prescrição."
+      }
+    ],
+    "meta": "Paciente restabelecer a eliminação urinária espontânea e apresentar esvaziamento vesical completo.",
+    "raciocinio": "A retenção urinária prolongada gera dor intensa, eleva reflexamente a pressão arterial e pode causar o refluxo da urina para os ureteres e rins, desencadeando lesão renal aguda."
+  },
+  {
+    "id": "BL04_URIN_02",
+    "sinais": "Perda involuntária de urina associada a esforços físicos, tosse, espirro ou manobra de Valsalva; Uso de protetores ou fraldas devido a escapes constantes.",
+    "diagnostico": "Perda Involuntária de Urina aos Esforços (Incontinência de Esforço)",
+    "condutas": [
+      {
+        "conduta": "1. Orientar e treinar a paciente na realização de exercícios de fortalecimento da musculatura do assoalho pélvico (exercícios de Kegel).",
+        "horario": "",
+        "aprazamento": "1. De 8h em 8h (14h - 22h - 06h)."
+      },
+      {
+        "conduta": "2. Orientar sobre o controle ponderal e regulação do hábito intestinal para diminuir a pressão intra-abdominal sobre a pélvis.",
+        "horario": "",
+        "aprazamento": "2. Uma vez por plantão (A cada 12h: 10h - 22h)."
+      },
+      {
+        "conduta": "3. Estabelecer um cronograma de esvaziamento vesical programado (estimular a ida ao banheiro em intervalos fixos).",
+        "horario": "",
+        "aprazamento": "3. De 2h em 2h (Intervalo das 07h às 22h)."
+      },
+      {
+        "conduta": "4. Registrar a frequência, o volume aproximado e o impacto dos episódios de perda urinária na rotina.",
+        "horario": "",
+        "aprazamento": "4. Uma vez por plantão (A cada 12h)."
+      }
+    ],
+    "meta": "Paciente apresentar redução progressiva ou controle total dos episódios de perda urinária durante esforços físicos.",
+    "raciocinio": "A fraqueza dos músculos do assoalho pélvico diminui o suporte uretral; o treinamento muscular e o esvaziamento preventivo devolvem a continência e evitam o isolamento social do paciente."
+  },
+  {
+    "id": "BL04_URIN_03",
+    "sinais": "Desejo súbito, premente e incontrolável de urinar com incapacidade de chegar ao banheiro a tempo; Noctúria; Polaciúria.",
+    "diagnostico": "Desejo Súbito e Incontrolável de Urinar com Perda (Incontinência de Urgência)",
+    "condutas": [
+      {
+        "conduta": "1. Orientar e treinar a paciente na técnica de postergação da micção através do treinamento vesical em horários progressivos.",
+        "horario": "",
+        "aprazamento": "1. De 4h em 4h."
+      },
+      {
+        "conduta": "2. Orientar a restrição ou eliminação do consumo de substâncias irritantes vesicais (cafeína, chás escuros, refrigerantes e tabaco).",
+        "horario": "",
+        "aprazamento": "2. Uma vez por plantão (A cada 12h: 10h - 22h)."
+      },
+      {
+        "conduta": "3. Garantir o acesso rápido e desimpedido ao banheiro ou manter o dispositivo de eliminação (comadre/papagaio) próximo ao leito.",
+        "horario": "",
+        "aprazamento": "3. Contínuo (Rotina do leito)."
+      },
+      {
+        "conduta": "4. Monitorar e rastrear sinais flogísticos urinários e realizar teste rápido de urina para descartar infecção oculta.",
+        "horario": "",
+        "aprazamento": "4. Uma vez por plantão (A cada 12h)."
+      }
+    ],
+    "meta": "Paciente demonstrar aumento dos intervalos entre as micções e capacidade de reter a urina até o banheiro.",
+    "raciocinio": "A urgência mictória está comumente ligada à hiperatividade do músculo detrusor da bexiga; a retirada de estimulantes e o recondicionamento vesical reduzem os espasmos involuntários."
+  },
+  {
+    "id": "BL04_PERI_01",
+    "sinais": "Eritema perineal; Maceração de pregas cutâneas; Prurido local intenso; Odor fétido em região íntima; Soluções de continuidade na mucosa perineal.",
+    "diagnostico": "Dermatite Perineal Associada à Umidade Crônica",
+    "condutas": [
+      {
+        "conduta": "1. Realizar a higiene perineal e íntima com água morna e sabonete de pH neutro após cada episódio de eliminação, secando sem fricção.",
+        "horario": "",
+        "aprazamento": "1. Conforme necessidade (S/N) ou após cada eliminação."
+      },
+      {
+        "conduta": "2. Aplicar uma camada fina de creme de barreira protetora (óxido de zinco ou barreira de silicone) na pele exposta a efluentes.",
+        "horario": "",
+        "aprazamento": "2. De 12h em 12h (10h - 22h)."
+      },
+      {
+        "conduta": "3. Evitar o uso de fraldas descartáveis excessivamente apertadas e priorizar roupas que facilitem a ventilação local.",
+        "horario": "",
+        "aprazamento": "3. Contínuo (Rotina do leito)."
+      },
+      {
+        "conduta": "4. Inspecionar meticulosamente a mucosa perineal, glúteos e sulco interglúteo em busca de novas áreas de fragilidade cutânea.",
+        "horario": "",
+        "aprazamento": "4. De 2h em 2h (Associado à mudança de decúbito)."
+      }
+    ],
+    "meta": "Paciente apresentar regressão do eritema, cicatrização da mucosa perineal e integridade cutânea preservada.",
+    "raciocinio": "A região perineal possui alta carga bacteriana; a exposição constante à acidez da urina e enzimas das fezes causa quebra da barreira cutânea, facilitando infecções subcutâneas graves."
+  },
+  {
+    "id": "BL05_PELE_01",
+    "sinais": "Eritema que não empalidece ao toque sobre proeminência óssea; Solução de continuidade na epiderme/derme; Lesão cavitária sacra, trocantérica ou maleolar.",
+    "diagnostico": "Lesão por Pressão Estabelecida em Proeminência Óssea",
+    "condutas": [
+      {
+        "conduta": "1. Executar a mudança de decúbito do paciente rigidamente a cada 2 horas, seguindo o relógio de posicionamento institucional.",
+        "horario": "",
+        "aprazamento": "1. De 2h em 2h."
+      },
+      {
+        "conduta": "2. Utilizar colchão de alívio de pressão (piramidal ou pneumático articulado) para redistribuição da carga corporal.",
+        "horario": "",
+        "aprazamento": "2. Contínuo (Rotina do leito)."
+      },
+      {
+        "conduta": "3. Aplicar óleo de Ácidos Graxos Essenciais (AGE) ou hidratante nas áreas de risco periféricas, massageando apenas a pele íntegra.",
+        "horario": "",
+        "aprazamento": "3. De 12h em 12h (10h - 22h)."
+      },
+      {
+        "conduta": "4. Realizar o curativo na lesão por pressão conforme o tipo de tecido presente e protocolo de estomaterapia da instituição.",
+        "horario": "",
+        "aprazamento": "4. Uma vez por dia (A cada 24h: às 10h) ou se saturar."
+      }
+    ],
+    "meta": "Lesão por pressão apresentar processo visível de cicatrização, com retração de bordas e preenchimento por tecido de granulação.",
+    "raciocinio": "A pressão contínua isquemia os tecidos subcutâneos; a falta de descompressão leva à necrose celular e abertura de úlceras complexas que estendem o tempo de internação e geram risco de osteomelite."
+  },
+  {
+    "id": "BL05_QUED_01",
+    "sinais": "Déficit de equilíbrio dinâmico; Alteração na marcha com passos curtos ou arrastados; Tontura ou instabilidade ao ficar em pé; Escore elevado na Escala de Morse.",
+    "diagnostico": "Alto Risco de Quedas por Instabilidade Motora ou Cognitiva",
+    "condutas": [
+      {
+        "conduta": "1. Identificar o leito com sinalização visual de risco de quedas e aplicar a pulseira padronizada no punho do paciente.",
+        "horario": "",
+        "aprazamento": "1. Contínuo (Rotina do leito)."
+      },
+      {
+        "conduta": "2. Manter as grades laterais do leito elevadas e travadas bilateralmente em tempo integral.",
+        "horario": "",
+        "aprazamento": "2. Contínuo (Rotina do leito)."
+      },
+      {
+        "conduta": "3. Manter a campainha de chamada de enfermagem e os objetos de uso pessoal do paciente fixos e ao alcance das mãos.",
+        "horario": "",
+        "aprazamento": "3. Contínuo (Rotina do leito)."
+      },
+      {
+        "conduta": "4. Auxiliar obrigatoriamente o paciente em todos os deslocamentos, deambulações e idas ao sanitário.",
+        "horario": "",
+        "aprazamento": "4. Conforme necessidade (S/N)."
+      }
+    ],
+    "meta": "Paciente mantido em segurança no leito e durante deslocamentos, sem apresentar episódios de quedas ou traumas.",
+    "raciocinio": "Quedas em ambiente institucional resultam em fraturas ósseas graves, traumatismos cranioencefálicos e repercussões ético-legais severas, exigindo barreiras físicas preventivas contínuas."
+  },
+  {
+    "id": "BL05_MOVI_01",
+    "sinais": "Incapacidade ou dificuldade extrema para andar, mover membros ou realizar mudanças de decúbito na cama; Paresia ou plegia de extremidades; Atrofia por desuso.",
+    "diagnostico": "Mobilidade Física Prejudicada com Risco de Atrofia e Trombose",
+    "condutas": [
+      {
+        "conduta": "1. Auxiliar o paciente na realização de mudanças de posicionamento no leito e estimular a movimentação ativa das articulações livres.",
+        "horario": "",
+        "aprazamento": "1. De 2h em 2h."
+      },
+      {
+        "conduta": "2. Apoiar, supervisionar e acompanhar o paciente durante as transferências para a poltrona ou saídas do leito.",
+        "horario": "",
+        "aprazamento": "2. De 4h em 4h."
+      },
+      {
+        "conduta": "3. Utilizar dispositivos auxiliares de marcha (andador, bengala, cadeira de rodas) devidamente travados antes do uso.",
+        "horario": "",
+        "aprazamento": "3. Conforme necessidade (S/N)."
+      },
+      {
+        "conduta": "4. Estimular e supervisionar a execução de atividades de autocuidado simples para preservação do tônus e força muscular.",
+        "horario": "",
+        "aprazamento": "4. A cada turno assistencial."
+      }
+    ],
+    "meta": "Paciente demonstrar preservação da amplitude articular, incremento na tolerância aos movimentos e independência progressiva.",
+    "raciocinio": "A imobilidade física crônica induz à atrofia muscular por desuso, rigidez capsular, perda de equilíbrio e favorece fortemente a estase venosa profunda com risco de tromboembolismo pulmonar."
+  },
+  {
+    "id": "BL05_ACES_01",
+    "sinais": "Presença de cateter venoso periférico ou central; Sinais inflamatórios locais (dor, eritema, edema ou calor na inserção); Flebite visível; Curativo do cateter solto ou úmido.",
+    "diagnostico": "Acesso Venoso Invasivo com Risco de Flebite ou Infecção Sistêmica",
+    "condutas": [
+      {
+        "conduta": "1. Inspecionar o sítio de inserção do cateter venoso em busca de sinais flogísticos ou infiltrações de fluidos.",
+        "horario": "",
+        "aprazamento": "1. De 2h em 2h (Associado à infusão) ou a cada plantão."
+      },
+      {
+        "conduta": "2. Realizar a antissepsia friccional das conexões, tampas e ampolas com álcool a 70% antes de infundir qualquer medicação.",
+        "horario": "",
+        "aprazamento": "2. A cada administração de medicamento."
+      },
+      {
+        "conduta": "3. Manter o curativo do acesso venoso limpo, seco e fixado com película transparente, substituindo o cateter conforme prazos institucionais.",
+        "horario": "",
+        "aprazamento": "3. Uma vez por dia (A cada 24h: às 10h) ou se soltar."
+      },
+      {
+        "conduta": "4. Realizar a lavagem e a higienização das mãos com água e sabão ou fricção antisséptica com álcool em gel antes e após manipular o dispositivo.",
+        "horario": "",
+        "aprazamento": "4. A cada manipulação do acesso."
+      }
+    ],
+    "meta": "Acesso venoso mantido patente, curativo íntegro e sítio de inserção livre de sinais inflamatórios ou infecção locorregional.",
+    "raciocinio": "O cateter venoso rompe a barreira de proteção cutânea e estabelece contato direto com a corrente sanguínea; falhas na antissepsia colonizam o trajeto vascular, gerando flebites e quadros de sepse."
+  },
+  {
+    "id": "BL05_TEMP_01",
+    "sinais": "Temperatura axilar aferida abaixo de 36,0°C (adulto) ou 36,5°C (recém-nascido); Extremidades frias e pálidas; Tremores musculares; Cianose labial ou de extremidades.",
+    "diagnostico": "Hipotermia Aguda por Falha na Termorregulação",
+    "condutas": [
+      {
+        "conduta": "1. Mensurar a temperatura corporal através do termômetro axilar e monitorar a evolução após medidas.",
+        "horario": "",
+        "aprazamento": "1. De 2h em 2h até estabilização."
+      },
+      {
+        "conduta": "2. Aplicar métodos de aquecimento passivo e ativo (cobrir com mantas aquecidas, remover vestimentas úmidas e aquecer o ambiente).",
+        "horario": "",
+        "aprazamento": "2. Imediatamente após detecção."
+      },
+      {
+        "conduta": "3. Em recém-nascidos, estimular o contato pele a pele com a genitora (Método Canguru) e proteger a região cefálica com touca.",
+        "horario": "",
+        "aprazamento": "3. Contínuo (Rotina do leito neonatal)."
+      },
+      {
+        "conduta": "4. Monitorar continuamente a oximetria de pulso e a frequência cardíaca para avaliar o status perfusional central.",
+        "horario": "",
+        "aprazamento": "4. De 2h em 2h."
+      }
+    ],
+    "meta": "Paciente restabelecer e manter a temperatura corporal dentro dos parâmetros fisiológicos normais de segurança térmica.",
+    "raciocinio": "A hipotermia severa reduz a velocidade metabólica celular, causa vasoconstrição periférica severa, predispõe a arritmias cardíacas por instabilidade miocárdica e, em neonatos, consome rapidamente a glicose causando sofrimento metabólico."
+  },
+  {
+    "id": "BL06_ADES_01",
+    "sinais": "Relato de esquecimento contínuo de doses medicamentosas; Descumprimento de consultas agendadas; Dificuldade financeira manifestada para adquirir insumos; Erros na execução do plano terapêutico.",
+    "diagnostico": "Dificuldade na Adesão ou Controle de Regimes Terapêuticos",
+    "condutas": [
+      {
+        "conduta": "1. Investigar ativamente as principais barreiras socioeconômicas e cognitivas que impedem o cumprimento do tratamento.",
+        "horario": "",
+        "aprazamento": "1. Uma vez por consulta/atendimento."
+      },
+      {
+        "conduta": "2. Desenvolver estratégias personalizadas de lembrete diário junto ao paciente (alarmes sonoros no celular, organizadores de comprimidos).",
+        "horario": "",
+        "aprazamento": "2. Uma vez por consulta/atendimento."
+      },
+      {
+        "conduta": "3. Simplificar as orientações de alta e receitas médicas por escrito, traduzindo termos técnicos para linguagem leiga.",
+        "horario": "",
+        "aprazamento": "3. Uma vez por consulta/atendimento."
+      },
+      {
+        "conduta": "4. Realizar a verificação do entendimento do plano terapêutico solicitando que o paciente repita as condutas explicadas.",
+        "horario": "",
+        "aprazamento": "4. Uma vez por consulta/atendimento."
+      }
+    ],
+    "meta": "Paciente verbalizar compreensão completa sobre o regime de tratamento e estabelecer rotina eficaz para autogestão da saúde.",
+    "raciocinio": "O descumprimento terapêutico em patologias de base crônicas (como hipertensão e diabetes) acelera o dano em órgãos-alvo, eleva os índices de reinternações hospitalares evitáveis e encarece o custo assistencial."
+  },
+  {
+    "id": "BL06_GLIC_01",
+    "sinais": "Glicemia capilar instável no glicosímetro; Sintomas relatados de tremores, sudorese fria, tontura ou episódios de síncope; Uso irregular ou incorreto de insulinoterapia.",
+    "diagnostico": "Instabilidade do Padrão Glicêmico com Risco de Cetoacidose ou Choque",
+    "condutas": [
+      {
+        "conduta": "1. Orientar detalhadamente sobre horários de aplicação, armazenamento térmico da insulina e rodízio sistemático de sítios subcutâneos na pele.",
+        "horario": "",
+        "aprazamento": "1. Uma vez por consulta ou a cada orientação."
+      },
+      {
+        "conduta": "2. Capacitar o paciente e cuidadores na identificação precoce de manifestações clínicas de hipoglicemia e hiperglicemia.",
+        "horario": "",
+        "aprazamento": "2. Uma vez por plantão (A cada 12h: 10h - 22h)."
+      },
+      {
+        "conduta": "3. Estimular e fornecer diário impresso/digital para o registro das taxas de glicose capilar em jejum e pós-prandiais.",
+        "horario": "",
+        "aprazamento": "3. Uma vez por consulta/atendimento."
+      },
+      {
+        "conduta": "4. Monitorar a glicemia capilar conforme rotina institucional ou protocolo clínico de controle de glicemia.",
+        "horario": "",
+        "aprazamento": "4. Conforme protocolo médico (ex: antes das refeições: 7h - 11h - 17h)."
+      }
+    ],
+    "meta": "Paciente demonstrar estabilização estável dos níveis glicêmicos e executar corretamente as técnicas de automonitoramento.",
+    "raciocinio": "O descontrole glicêmico crônico induz a micro e macroangiopatias severas, resultando em nefropatia diabética, retinopatia com perda visual, neuropatia periférica e risco de coma metabólico agudo."
+  },
+  {
+    "id": "BL06_IDMA_01",
+    "sinais": "Perda ponderal involuntária recente; Diminuição acentuada da força de preensão palmar e lentidão na marcha; Déficit de memória relatado; Dependência em AVDs.",
+    "diagnostico": "Vulnerabilidade e Fragilidade Funcional do Idoso Crônico",
+    "condutas": [
+      {
+        "conduta": "1. Aplicar escalas clínicas validadas de rastreamento de fragilidade e triagem cognitiva gerontológica (Escala de Barthel e Mini-Mental).",
+        "horario": "",
+        "aprazamento": "1. Uma vez por consulta ou na admissão geriátrica."
+      },
+      {
+        "conduta": "2. Orientar a família sobre modificações de segurança ambiental no lar (remoção de tapetes soltos, instalação de barras de apoio e iluminação noturna).",
+        "horario": "",
+        "aprazamento": "2. Uma vez por consulta ou no planejamento da alta domiciliar."
+      },
+      {
+        "conduta": "3. Estimular a execução de exercícios resistidos leves para fortalecimento muscular e treino de equilíbrio, respeitando os limites físicos.",
+        "horario": "",
+        "aprazamento": "3. De 12h em 12h (10h - 22h)."
+      },
+      {
+        "conduta": "4. Coordenar junto aos cuidadores familiares uma rotina de acompanhamento nutricional hiperproteico e estímulo à manutenção da autonomia.",
+        "horario": "",
+        "aprazamento": "4. A cada refeição."
+      }
+    ],
+    "meta": "Idoso apresentar estabilização ou ganho na capacidade funcional motora e familiares estabelecerem ambiente doméstico seguro.",
+    "raciocinio": "A síndrome da fragilidade no idoso indica uma redução drástica da reserva homeostática; pequenos estresses ambientais ou quedas nessa fase desencadeiam perdas de autonomia irreversíveis e hospitalização."
+  },
+  {
+    "id": "BL06_MENT_01",
+    "sinais": "Verbalização contínua de desespero, inutilidade ou desejo explícito de morte; Autoextermínio verbalizado; Presença de lesões autoprovocadas ocultadas por vestes.",
+    "diagnostico": "Ideação Suicida ou Risco Elevado de Comportamento Autolesivo",
+    "condutas": [
+      {
+        "conduta": "1. Monitorar continuamente o comportamento do paciente, instituindo supervisão profissional direta e restringindo o acesso a objetos perfurocortantes.",
+        "horario": "",
+        "aprazamento": "1. Contínuo (Supervisão 1 a 1)."
+      },
+      {
+        "conduta": "2. Estabelecer relação terapêutica baseada em escuta ativa e acolhimento empático, permitindo o desabafo sem julgamentos éticos/morais.",
+        "horario": "",
+        "aprazamento": "2. Contínuo (A cada interação assistencial)."
+      },
+      {
+        "conduta": "3. Garantir a permanência em tempo integral de um acompanhante familiar e acionar imediatamente a equipe de psicologia médica.",
+        "horario": "",
+        "aprazamento": "3. Contínuo (Rotina do leito)."
+      },
+      {
+        "conduta": "4. Orientar os familiares sobre o plano de segurança pós-alta domiciliar e fornecer os canais oficiais de apoio e suporte em crises.",
+        "horario": "",
+        "aprazamento": "4. No planejamento da alta hospitalar."
+      }
+    ],
+    "meta": "Paciente manifestar declínio da ideação autodestrutiva, expressar aceitação do suporte multiprofissional e manter-se livre de traumas autoinfligidos.",
+    "raciocinio": "O sofrimento psíquico severo com ideação autolesiva é uma emergência psiquiátrica de alta prioridade; a intervenção e a vigilância ambiental do enfermeiro neutralizam as oportunidades de execução."
+  },
+  {
+    "id": "BL06_EMOC_01",
+    "sinais": "Flutuações rápidas do estado de humor (euforia a choro fácil); Sinais autonômicos de abstinência (tremores, diaforese, taquicardia); Fissura por substâncias químicas.",
+    "diagnostico": "Instabilidade Emocional Intensa ou Crise de Abstinência Aguda",
+    "condutas": [
+      {
+        "conduta": "1. Monitorar e documentar o padrão comportamental, nível de irritabilidade ou sinais de fissura em cada turno assistencial.",
+        "horario": "",
+        "aprazamento": "1. De 4h em 4h."
+      },
+      {
+        "conduta": "2. Adotar postura firme, neutra, calma e acolhedora durante os episódios de alteração de humor, preservando a segurança física do paciente e da equipe.",
+        "horario": "",
+        "aprazamento": "2. Contínuo (Rotina do leito)."
+      },
+      {
+        "conduta": "3. Estimular o paciente a expressar e identificar os gatilhos emocionais da crise nos momentos de estabilidade clínica.",
+        "horario": "",
+        "aprazamento": "3. Uma vez por plantão (A cada 12h)."
+      },
+      {
+        "conduta": "4. Administrar a terapêutica farmacológica prescrita para controle dos sintomas agudos da síndrome de abstinência, vigiando os efeitos colaterais.",
+        "horario": "",
+        "aprazamento": "4. Conforme horários estabelecidos na prescrição médica (ex: de 6h em 6h = 12h - 18h - 24h - 06h)."
+      }
+    ],
+    "meta": "Paciente apresentar estabilização progressiva do humor, alívio dos tremores físicos e redução nos níveis de ansiedade e agitação.",
+    "raciocinio": "A crise de abstinência e a desregulação emocional geram hiperatividade simpática, desorientam a percepção da realidade e elevam criticamente os índices de evasão do tratamento e agressividade involuntária."
+  },
+  {
+    "id": "BL06_ESPI_01",
+    "sinais": "Questionamentos profundos sobre o sentido da vida ou sofrimento; Sentimento relatado de punição divina; Recusa de condutas vitais por dogmas religiosos.",
+    "diagnostico": "Sofrimento ou Angústia Espiritual em Relação ao Processo de Adoecimento",
+    "condutas": [
+      {
+        "conduta": "1. Escutar o paciente de forma atenta, compassiva e respeitosa, legitimando suas angústias existenciais sem impor convicções pessoais.",
+        "horario": "",
+        "aprazamento": "1. Contínuo (A cada abordagem assistencial)."
+      },
+      {
+        "conduta": "2. Facilitar e coordenar a visita de assistência espiritual, religiosa ou pastoral solicitada pelo paciente ou familiares de direito.",
+        "horario": "",
+        "aprazamento": "2. Conforme demanda do paciente/família."
+      },
+      {
+        "conduta": "3. Mediar a comunicação entre a equipe médica e o paciente para buscar alternativas terapêuticas seguras que respeitem as convicções religiosas.",
+        "horario": "",
+        "aprazamento": "3. Uma vez por plantão ou se houver conflito terapêutico."
+      },
+      {
+        "conduta": "4. Proporcionar momentos e espaços de penumbra e privacidade no leito para que o paciente execute suas preces, meditações ou leituras sagradas.",
+        "horario": "",
+        "aprazamento": "4. De 12h em 12h (10h - 22h)."
+      }
+    ],
+    "meta": "Paciente verbalizar alívio do sentimento de angústia espiritual e alcançar conciliação harmoniosa entre suas crenças e o plano de tratamento.",
+    "raciocinio": "O sofrimento espiritual desestrutura o enfrentamento psicológico da doença, intensifica de forma psicossomática a percepção de dores físicas e induz à recusa de cuidados essenciais à vida."
+  },
+  {
+    "id": "BL07_NEON_01",
+    "sinais": "Pigmentação amarelada visível em pele, mucosas e escleras do recém-nascido; Hiporrexia ou sonolência profunda; Bilirrubina plasmática elevada.",
+    "diagnostico": "Hiperbilirrubinemia Neonatal com Risco de Toxicidade do Sistema Nervoso",
+    "condutas": [
+      {
+        "conduta": "1. Solicitar exames laboratoriais de dosagem de bilirrubina total e frações, conforme autonomia legal e protocolos institucionais locais.",
+        "horario": "",
+        "aprazamento": "1. Sob avaliação clínica ou conforme rotina da unidade."
+      },
+      {
+        "conduta": "2. Inspecionar a pele do recém-nascido totalmente despido sob luz natural direta, realizando digitopressão para avaliar a progressão cefalocaudal da icterícia.",
+        "horario": "",
+        "aprazamento": "2. De 4h em 4h."
+      },
+      {
+        "conduta": "3. Orientar e apoiar a genitora no incremento da frequência das mamadas em livre demanda para acelerar o trânsito intestinal e a eliminação de metabólitos.",
+        "horario": "2/2H",
+        "aprazamento": "3. De 2h em 2h (Livre demanda)."
+      },
+      {
+        "conduta": "4. Encaminhar para avaliação pediátrica imediata ou início de fototerapia terapêutica caso os níveis atinjam zonas de risco corporal (Zonas de Kramer avançadas).",
+        "horario": "",
+        "aprazamento": "4. Imediatamente após constatação de risco."
+      }
+    ],
+    "meta": "Recém-nascido apresentar clareamento progressivo do tom cutâneo e estabilização segura das taxas séricas de bilirrubina abaixo dos limites de risco.",
+    "raciocinio": "A bilirrubina livre em níveis séricos elevados ultrapassa a barreira hematoencefálica e torna-se altamente neurotóxica para o neonato, podendo causar encefalopatia bilirrubínica crônica irreversível (Kernicterus) e surdez neurossensorial."
+  },
+  {
+    "id": "BL07_AMAM_01",
+    "sinais": "Presença de fissuras lineares sangrantes ou escoriações em mamilos; Ingurgitamento mamário lobular doloroso; Pega incorreta do lactente no complexo areolar.",
+    "diagnostico": "Trauma de Mamilos e Aréolas por Amamentação Ineficaz (Fissura Mamária)",
+    "condutas": [
+      {
+        "conduta": "1. Avaliar minuciosamente a dinâmica da mamada, inspecionando a pega, o alinhamento corporal do binômio mãe-bebê e a eficiência da sucção.",
+        "horario": "3/3",
+        "aprazamento": "1. A cada mamada ou de 3h em 3h."
+      },
+      {
+        "conduta": "2. Orientar a puérpera a realizar a ordenha manual de alívio da aréola antes de ofertar o peito, facilitando a flexibilidade do tecido.",
+        "horario": "",
+        "aprazamento": "2. Imediatamente antes de cada mamada."
+      },
+      {
+        "conduta": "3. Instruir a lactante a aplicar gotas do próprio leite materno na região do complexo mamilo-areolar após cada mamada, mantendo as mamas secas ao ar.",
+        "horario": "",
+        "aprazamento": "3. Imediatamente após cada mamada."
+      },
+      {
+        "conduta": "4. Contraindicar formalmente o uso de sabonetes secativos, buchas, pomadas pastosas espessas ou protetores rígidos que favoreçam a maceração da pele.",
+        "horario": "",
+        "aprazamento": "4. Uma vez por plantão (Orientação contínua)."
+      }
+    ],
+    "meta": "Lactante apresentar regeneração tecidual das fissuras mamárias, regressão do ingurgitamento e relatar amamentação confortável livre de dores.",
+    "raciocinio": "A pega incorreta faz com que o lactente exerça fricção mecânica direta e dolorosa sobre o mamilo em vez da aréola, abrindo soluções de continuidade na pele que funcionam como porta de entrada bacteriana para mastites graves."
+  },
+  {
+    "id": "BL07_PART_01",
+    "sinais": "Relato de dor álgica lombar e abdominal severa associada a contrações uterinas rítmicas; Fáceis de sofrimento; Agitação psicomotora reflexa às dores.",
+    "diagnostico": "Dor Aguda Fisiológica Associada à Dinâmica do Trabalho de Parto",
+    "condutas": [
+      {
+        "conduta": "1. Avaliar a progressão e a ritmicidade das contrações uterinas e a intensidade da dor através do autorrelato da parturiente em escalas visuais.",
+        "horario": "1/1H",
+        "aprazamento": "1. De 1h em 1h ou conforme evolução do partograma."
+      },
+      {
+        "conduta": "2. Estimular e aplicar métodos não farmacológicos de alívio da dor: hidroterapia (banho de chuveiro morno focado), massagem lombossacra firme e uso da bola suíça.",
+        "horario": "",
+        "aprazamento": "2. Conforme necessidade (S/N) ou contínuo nas crises."
+      },
+      {
+        "conduta": "3. Orientar, guiar e acompanhar o padrão respiratório (respirações lentas, profundas e diafragmáticas) durante o pico das contrações uterinas.",
+        "horario": "",
+        "aprazamento": "3. A cada contração uterina."
+      },
+      {
+        "conduta": "4. Proporcionar um ambiente de penumbra, acolhedor e silencioso, garantindo e incentivando a coparticipação ativa do acompanhante de livre escolha da gestante.",
+        "horario": "",
+        "aprazamento": "4. Contínuo (Rotina do pré-parto)."
+      }
+    ],
+    "meta": "Parturiente verbalizar maior tolerância à dor, demonstrar relaxamento muscular nos intervalos intercontráteis e evolução obstétrica segura.",
+    "raciocinio": "A dor intensa no trabalho de parto eleva os níveis circulantes de catecolaminas (adrenalina e cortisol), o que gera vasoconstrição uteroplacentária, reduz o aporte de oxigênio fetal e pode desordenar ou lentificar as contrações uterinas fisiológicas."
+  },
+  {
+    "id": "BL07_PEDI_01",
+    "sinais": "Criança que não atinge os marcos de desenvolvimento neuropsicomotor para a idade cronológica; Gráficos de crescimento linear (peso/altura) em declínio acentuado.",
+    "diagnostico": "Atraso no Crescimento Físico ou no Desenvolvimento Neuropsicomotor Infantil",
+    "condutas": [
+      {
+        "conduta": "1. Realizar a consulta de acompanhamento de puericultura avaliando detalhadamente os marcos motores, reflexos, linguagem e o perímetro cefálico.",
+        "horario": "",
+        "aprazamento": "1. A cada consulta programada de puericultura."
+      },
+      {
+        "conduta": "2. Registrar, plotar e monitorar rigorosamente as curvas de crescimento físico nos gráficos específicos contidos na Caderneta da Criança.",
+        "horario": "",
+        "aprazamento": "2. A cada consulta programada de puericultura."
+      },
+      {
+        "conduta": "3. Orientar minuciosamente os pais ou cuidadores legais sobre técnicas diárias de estímulo motor, afetivo, de linguagem e alimentar adequados para a idade.",
+        "horario": "",
+        "aprazamento": "3. Uma vez por consulta (Orientação familiar)."
+      },
+      {
+        "conduta": "4. Encaminhar a criança para avaliação médica especializada (pediatria/neuropediatria) se houver ausência ou perda de marcos de desenvolvimento já adquiridos.",
+        "horario": "",
+        "aprazamento": "4. Imediatamente após a constatação de sinais de alerta de atraso."
+      }
+    ],
+    "meta": "Criança apresentar evolução progressiva na aquisição dos marcos neuropsicomotores e pais executarem corretamente as orientações de estímulo no domicílio.",
+    "raciocinio": "Os primeiros anos de vida representam a janela de maior plasticidade cerebral; o rastreamento semiológico pelo enfermeiro identifica desvios precocemente, possibilitando intervenções oportunas que evitam sequelas cognitivas e motoras permanentes na infância."
+  },
+  {
+    "id": "BL08_ONCO_01",
+    "sinais": "Neutropenia severa pós-quimioterapia; Febre inexplicável (>37,8°C); Calafrios; Contagem de leucócitos criticamente baixa.",
+    "diagnostico": "Imunossupressão Severa por Neutropenia Febril Oncológica",
+    "condutas": [
+      {
+        "conduta": "1. Instituir isolamento protetor/reverso rigoroso em quarto privativo e restringir visitas.",
+        "horario": "Rotina",
+        "aprazamento": "1. Contínuo (Rotina do leito)."
+      },
+      {
+        "conduta": "2. Exigir lavagem das mãos e uso de EPIs (máscara cirúrgica/avental) por qualquer pessoa que adentre o quarto.",
+        "horario": "ATENÇÃO",
+        "aprazamento": "2. A cada abordagem assistencial."
+      },
+      {
+        "conduta": "3. Monitorar a temperatura corporal axilar com vigilância rigorosa.",
+        "horario": "2/2",
+        "aprazamento": "3. De 2h em 2h."
+      },
+      {
+        "conduta": "4. Administrar antibioticoterapia intravenosa de amplo espectro prescrita nos horários exatos (protocolo de sepse).",
+        "horario": "8/8",
+        "aprazamento": "4. Conforme prescrição médica (ex: 8/8h = 14h - 22h - 06h)."
+      }
+    ],
+    "meta": "Paciente mantido livre de infecções secundárias oportunistas e estabilização da temperatura corporal.",
+    "raciocinio": "A neutropenia pós-quimioterapia zera as defesas imunológicas; qualquer infecção comum evolui para choque séptico e óbito em poucas horas se os antibióticos atrasarem."
+  },
+  {
+    "id": "BL09_NEFRO_01",
+    "sinais": "Prurido urêmico generalizado severo; Lesões por coçadura (escoriações) em pele; Pele descamativa e ressecada; Retenção de escórias nitrogenadas.",
+    "diagnostico": "Prurido Urêmico Crônico por Insuficiência Renal Terminal",
+    "condutas": [
+      {
+        "conduta": "1. Aplicar hidratantes corporais densos e sem perfume na pele do paciente, massageando suavemente.",
+        "horario": "8/8",
+        "aprazamento": "1. De 8h em 8h (14h - 22h - 06h)."
+      },
+      {
+        "conduta": "2. Orientar o paciente a manter as unhas curtas e limpas para evitar infecções secundárias por coçadura.",
+        "horario": "10",
+        "aprazamento": "2. Uma vez por dia (Às 10h)."
+      },
+      {
+        "conduta": "3. Orientar e supervisionar banhos mornos ou frios, evitando o uso de sabonetes secativos com excesso de soda.",
+        "horario": "No banho",
+        "aprazamento": "3. A cada banho."
+      },
+      {
+        "conduta": "4. Monitorar o surgimento de infecções ou soluções de continuidade nas áreas de escoriação cutânea.",
+        "horario": "10",
+        "aprazamento": "4. Uma vez por plantão (A cada 12h)."
+      }
+    ],
+    "meta": "Paciente relatar alívio da sensação de coçadura, integridade da pele preservada e sem sinais de infecção local.",
+    "raciocinio": "O acúmulo de toxinas urêmicas que o rim doente não filtra causa um depósito de cristais na pele que gera coçadura lancinante; as feridas abertas pelo próprio paciente viram portas de entrada para bactérias."
+  },
+  {
+    "id": "BL10_HEMAT_01",
+    "sinais": "Crise álgica vaso-oclusiva (dores ósseas/abdominais lancinantes); Escala de dor (EVA) máxima; Palidez cutâneo-mucosa acentuada; Diagnóstico de anemia falciforme.",
+    "diagnostico": "Crise Vaso-Oclusiva Isquêmica por Anemia Falciforme",
+    "condutas": [
+      {
+        "conduta": "1. Avaliar a intensidade e localização exata da dor utilizando a régua visual analógica (0 a 10).",
+        "horario": "2/2",
+        "aprazamento": "1. De 2h em 2h."
+      },
+      {
+        "conduta": "2. Administrar analgesia escalonada prescrita (incluindo opioides se indicado) rigorosamente nos horários e avaliar o alívio.",
+        "horario": "4/4",
+        "aprazamento": "2. Conforme prescrição médica (ex: de 4h em 4h)."
+      },
+      {
+        "conduta": "3. Estimular a hidratação oral vigorosa ou controlar a infusão de hidratação venosa para diminuir a viscosidade sanguínea.",
+        "horario": "2/2",
+        "aprazamento": "3. De 2h em 2h (Controle de volume)."
+      },
+      {
+        "conduta": "4. Oferecer oxigenoterapia sob cateter nasal se a saturação (SpO2) estiver abaixo do limite de segurança.",
+        "horario": "SOS",
+        "aprazamento": "4. Contínuo (Se hipoxêmico)."
+      }
+    ],
+    "meta": "Paciente relatar alívio significativo da dor, melhora na perfusão periférica e estabilização clínica.",
+    "raciocinio": "Na anemia falciforme, as hemácias em formato de foice entopem os pequenos vasos (vaso-oclusão), causando isquemia tecidual e dores ósseas e viscerais violentas que exigem analgesia de horário e hidratação rápida para destravar o fluxo."
+  },
+  {
+    "id": "BL11_INFECT_101",
+    "sinais": "Diagnóstico de patologia por transmissão aérea (Tuberculose/Meningite); Tosse produtiva persistente; Rigidez de nuca relatada.",
+    "diagnostico": "Risco de Disseminação de Patógenos por Isolamento de Aerossóis",
+    "condutas": [
+      {
+        "conduta": "1. Garantir o isolamento do paciente em quarto individual com porta mantida fechada em tempo integral.",
+        "horario": "Rotina",
+        "aprazamento": "1. Contínuo (Rotina do isolamento)."
+      },
+      {
+        "conduta": "2. Exigir o uso de máscara respiratória de alta eficácia (N95 ou PFF2) por toda a equipe antes de entrar no quarto.",
+        "horario": "ATENÇÃO",
+        "aprazamento": "2. A cada entrada no quarto."
+      },
+      {
+        "conduta": "3. Orientar e garantir o uso de máscara cirúrgica comum pelo paciente caso ele precise sair do quarto para exames.",
+        "horario": "Uso de máscara",
+        "aprazamento": "3. Conforme necessidade (S/N)."
+      },
+      {
+        "conduta": "4. Realizar a desinfecção rigorosa de equipamentos de uso exclusivo do leito (estetoscópio, termômetro) com álcool 70%.",
+        "horario": "Ao usar",
+        "aprazamento": "4. A cada uso do dispositivo."
+      }
+    ],
+    "meta": "Manutenção das barreiras de isolamento sem falhas e ausência de contaminação cruzada na unidade.",
+    "raciocinio": "Patologias como Tuberculose transmitem-se por partículas leves que flutuam no ar; a quebra do isolamento ou o não uso da máscara N95 infecta a equipe de saúde e outros pacientes internados."
+  },
+  {
+    "id": "BL12_DERMAT_01",
+    "sinais": "Perda total ou parcial da sensibilidade térmica e dolorosa periférica; \n\nLesões ulceradas indolores em pés/mãos; \n\nDiagnóstico de Hanseníase.",
+    "diagnostico": "Déficit de Sensibilidade Periférica com Risco de Traumas Ocultos",
+    "condutas": [
+      {
+        "conduta": "1. Inspecionar meticulosamente a planta dos pés e palmas das mãos em busca de calosidades, bolhas ou feridas ocultas.",
+        "horario": "10",
+        "aprazamento": "1. Uma vez por dia (Às 10h)."
+      },
+      {
+        "conduta": "2. Orientar o paciente a nunca andar descalço e a verificar o interior dos calçados antes de calçá-los.",
+        "horario": "10",
+        "aprazamento": "2. Uma vez por plantão (Orientação contínua)."
+      },
+      {
+        "conduta": "3. Instruir o paciente e familiares a testarem a temperatura da água do banho com o antebraço (região com sensibilidade preservada) para evitar queimaduras.",
+        "horario": "No banho",
+        "aprazamento": "3. A cada banho."
+      },
+      {
+        "conduta": "4. Realizar a hidratação profunda das extremidades para evitar o ressecamento e fissuras na pele.",
+        "horario": "46368",
+        "aprazamento": "4. De 12h em 12h (10h - 22h)."
+      }
+    ],
+    "meta": "Paciente manter as extremidades livres de novos traumas, queimaduras ou úlceras por pressão e familiares capacitados.",
+    "raciocinio": "A perda de sensibilidade protetora faz com que o paciente sofra pressões mecânicas, cortes ou queimaduras graves sem sentir dor alguma, o que atrasa a busca por cuidados e gera feridas crônicas de difícil cicatrização."
+  },
+  {
+    "id": "BL13_LABIR_01",
+    "sinais": "Tontura rotatória incapacitante (vertigem); Nistagmo visível; Náuseas severas e vômitos ao menor movimento cefálico.",
+    "diagnostico": "Crise Vertiginosa Aguda com Alto Risco de Quedas e Broncoaspiração",
+    "condutas": [
+      {
+        "conduta": "1. Manter o paciente em repouso absoluto no leito com a cabeceira discretamente elevada e as grades travadas.",
+        "horario": "Rotina",
+        "aprazamento": "1. Contínuo (Rotina do leito)."
+      },
+      {
+        "conduta": "2. Orientar o paciente a evitar movimentos bruscos ou virar a cabeça rapidamente durante os cuidados.",
+        "horario": "Rotina",
+        "aprazamento": "2. Contínuo (Rotina do leito)."
+      },
+      {
+        "conduta": "3. Administrar medicações antivertiginosas e antieméticas prescritas e registrar a resposta.",
+        "horario": "46242",
+        "aprazamento": "3. Conforme horários padrão (ex: 8/8h = 14h - 22h - 06h)."
+      },
+      {
+        "conduta": "4. Manter o dispositivo de eliminação de vômitos (cuba rim) sempre disponível e ao alcance imediato do paciente.",
+        "horario": "Rotina",
+        "aprazamento": "4. Contínuo (À beira do leito)."
+      }
+    ],
+    "meta": "Paciente relatar atenuação da tontura, cessação dos vômitos e manutenção da segurança física contra quedas.",
+    "raciocinio": "A vertigem severa desorienta completamente o equilíbrio e o reflexo espacial; qualquer tentativa de levantar sem auxílio resulta em queda imediata, e os vômitos associados geram risco de broncoaspiração se o paciente estiver deitado reto."
+  }
+]

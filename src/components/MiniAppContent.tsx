@@ -5,6 +5,13 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/AppShell";
 import { useAuthReady } from "@/lib/access";
 import { renderContent } from "@/lib/markdown";
+import {
+  matchDiagnosticos,
+  renderDiagnosticoCard,
+  renderPrescricaoRow,
+  buildEvolucao,
+  type SaeDiagnostico,
+} from "@/lib/sae-engine";
 
 
 /**
@@ -172,157 +179,202 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
     root.addEventListener("click", onClick);
 
     // ===== SAE DESCOMPLICADA E AUTOMATIZADA =====
-    // O HTML deste mini app traz um <script> embutido (o "cérebro" que amarra
-    // Anamnese + Exame Físico + Diagnósticos à Evolução). O React não executa
-    // scripts injetados via innerHTML, então recriamos cada <script> como um
-    // elemento real para o navegador executá-lo. Etapa 1: também escutamos o
-    // texto livre para que edições manuais do usuário entrem na Evolução.
+    // Motor autoral que consulta o BANCO DE DADOS MESTRE (planilha AE/DE)
+    // e gera diagnósticos + prescrição + evolução consolidada.
     const isSaeApp = !!root.querySelector(".lavoble-sae-descomplicada");
     let cleanupSaeListeners: (() => void) | null = null;
     if (isSaeApp) {
+      // Evita crash do script legado que procura #medicamentos
       if (!root.querySelector("#medicamentos")) {
-        const medicamentosFallback = document.createElement("input");
-        medicamentosFallback.type = "hidden";
-        medicamentosFallback.id = "medicamentos";
-        medicamentosFallback.value = "Nenhum de uso contínuo.";
-        root.appendChild(medicamentosFallback);
+        const m = document.createElement("input");
+        m.type = "hidden";
+        m.id = "medicamentos";
+        m.value = "Nenhum de uso contínuo.";
+        root.appendChild(m);
       }
 
-      const normalizeClinicalText = (value: string) =>
-        value
-          .toLowerCase()
-          .normalize("NFD")
-          .replace(/[\u0300-\u036f]/g, "");
+      // Esconde os 4 cards fixos legados — vamos preencher a grade dinamicamente
+      ["card_diag_neu", "card_diag_resp", "card_diag_renal", "card_diag_pele"].forEach((id) => {
+        const el = root.querySelector<HTMLElement>(`#${id}`);
+        if (el) el.style.display = "none";
+      });
 
-      const SAE_FREE_TEXT_MARK = "📝 SINAIS/SINTOMAS INFORMADOS MANUALMENTE:";
+      // Container dinâmico dentro da grade
+      const grade = root.querySelector<HTMLElement>("#grade-diagnosticos-prioridade");
+      let dyn = root.querySelector<HTMLElement>("#sae-diag-dinamicos");
+      if (grade && !dyn) {
+        dyn = document.createElement("div");
+        dyn.id = "sae-diag-dinamicos";
+        dyn.style.cssText = "display:flex;flex-direction:column;gap:12px;width:100%;";
+        grade.appendChild(dyn);
+      }
 
-      const applyFreeTextToEvolution = () => {
-        const livre = root.querySelector<HTMLTextAreaElement>(
-          "#txt-sinais-sintomas-consolidados",
-        );
-        const evol = root.querySelector<HTMLTextAreaElement>(
-          "#txt-evolucao-clinica-mestre",
-        );
-        if (!livre || !evol) return;
+      let diagnosticosAtivos: SaeDiagnostico[] = [];
 
-        const manual = livre.value.trim();
-        const base = evol.value ?? "";
-        const cut = base.indexOf(SAE_FREE_TEXT_MARK);
-        const head = (cut >= 0 ? base.slice(0, cut) : base).trimEnd();
-        evol.value = manual ? `${head}\n\n${SAE_FREE_TEXT_MARK}\n${manual}\n` : head;
+      const coletarCorpus = (): string => {
+        const livre =
+          root.querySelector<HTMLTextAreaElement>("#txt-sinais-sintomas-consolidados")?.value ?? "";
+        const queixa =
+          root.querySelector<HTMLTextAreaElement>("#queixaPrincipal")?.value ?? "";
+        const hda = root.querySelector<HTMLTextAreaElement>("#hda")?.value ?? "";
+        const diagMed = root.querySelector<HTMLInputElement>("#diagMedico")?.value ?? "";
+        const marcados = Array.from(
+          root.querySelectorAll<HTMLInputElement>('input[type="checkbox"]:checked'),
+        )
+          .map((i) =>
+            (i.value || "") +
+            " " +
+            (i.closest("label")?.textContent?.replace(/\s+/g, " ").trim() ?? ""),
+          )
+          .join(" ");
+        return [livre, queixa, hda, diagMed, marcados].join(" \n ");
       };
 
-      const hasCheckedValue = (values: string[]) =>
-        values.some(
-          (value) => !!root.querySelector<HTMLInputElement>(`input[value="${value}"]:checked`),
-        );
+      const gerarDiagnosticos = () => {
+        if (!dyn) return;
+        const corpus = coletarCorpus();
+        const matches = matchDiagnosticos(corpus, 12);
+        diagnosticosAtivos = matches.map((m) => m.diag);
 
-      const runSaeDiagnosisEngine = () => {
-        const livre = root.querySelector<HTMLTextAreaElement>(
-          "#txt-sinais-sintomas-consolidados",
-        );
-        const grid = root.querySelector<HTMLElement>("#grade-diagnosticos-prioridade");
-        const vazio = root.querySelector<HTMLElement>("#painel-vazio-diagnosticos");
-        if (!grid) return;
+        const painelVazio = root.querySelector<HTMLElement>("#painel-vazio-diagnosticos");
+        if (painelVazio) painelVazio.style.display = matches.length ? "none" : "block";
+        if (grade) grade.style.display = "flex";
 
-        if (vazio) vazio.style.display = "none";
-        grid.style.display = "flex";
-
-        applyFreeTextToEvolution();
-
-        const text = normalizeClinicalText(livre?.value ?? "");
-        const hasNeu =
-          /\b(cabeca|cefaleia|tontura|confus|desorient|agit|letarg|sonol|convuls|rebaix|nause|enjoo|vomit)/.test(text) ||
-          hasCheckedValue(["desorientacao", "agitacao"]);
-        const hasResp =
-          /\b(peito|torac|dispne|falta de ar|cansaco|satur|spo2|tosse|secrecao|respir|taquip|bradip|oxigen)/.test(text) ||
-          hasCheckedValue(["taquipneia", "bradipneia", "alt_ritmo", "spo2"]);
-        const hasRenal =
-          /\b(urina|diure|oligur|poliur|nictur|disur|ardor|edema|inchac|hidrat|desidrat)/.test(text) ||
-          hasCheckedValue(["oliguria", "poliuria", "nicturia", "edema_mmii", "edema_mmss"]);
-        const hasPele =
-          /\b(pele|ferida|lesao|curativo|pressao|lpp|imobil|acesso|flogist|vermelh|secrecao)/.test(text) ||
-          hasCheckedValue(["ferida", "imobilidade", "flogistico_acesso"]);
-
-        const show = (id: string, visible: boolean) => {
-          const card = root.querySelector<HTMLElement>(`#${id}`);
-          if (card) card.style.display = visible ? "flex" : "none";
-        };
-
-        show("card_diag_neu", hasNeu);
-        show("card_diag_resp", hasResp);
-        show("card_diag_renal", hasRenal);
-        show("card_diag_pele", hasPele);
-
-        const visibleCount = Array.from(
-          root.querySelectorAll<HTMLElement>("#grade-diagnosticos-prioridade > div"),
-        ).filter((card) => window.getComputedStyle(card).display === "flex").length;
-        const counter = root.querySelector<HTMLElement>("#diagnosisCounter");
-        if (counter) {
-          counter.textContent = `${visibleCount} ${visibleCount === 1 ? "diagnóstico" : "diagnósticos"}`;
+        if (matches.length === 0) {
+          dyn.innerHTML =
+            '<div style="padding:14px;background:#fef2f2;border:1px solid #fecaca;border-radius:8px;color:#991b1b;font-size:13px;">Nenhum diagnóstico compatível encontrado. Descreva sinais/sintomas com mais detalhes (ex.: "dor no peito", "edema em MMII", "febre e tosse").</div>';
+        } else {
+          dyn.innerHTML = matches.map((m, i) => renderDiagnosticoCard(m, i)).join("");
         }
 
+        const counter = root.querySelector<HTMLElement>("#diagnosisCounter");
+        if (counter)
+          counter.textContent = `${matches.length} ${matches.length === 1 ? "diagnóstico" : "diagnósticos"}`;
+
         const step3Div = root.querySelector<HTMLElement>("#step3 div:first-child");
-        if (step3Div && visibleCount > 0) {
+        if (step3Div && matches.length > 0) {
           step3Div.style.background = "#166534";
           step3Div.style.color = "#ffffff";
         }
-
-        try {
-          const update = (window as any).atualizarEvolucaoAutomatica;
-          if (typeof update === "function") update();
-        } catch {
-          // A evolução manual continua funcionando mesmo que o script legado falhe.
-        }
-        applyFreeTextToEvolution();
       };
 
-      root.querySelectorAll("script").forEach((oldScript) => {
-        const s = document.createElement("script");
-        for (const attr of Array.from(oldScript.attributes)) {
-          s.setAttribute(attr.name, attr.value);
-        }
-        s.textContent = oldScript.textContent;
-        oldScript.parentNode?.replaceChild(s, oldScript);
-      });
-      // O JS do mini app registra seus listeners dentro de
-      // document.addEventListener("DOMContentLoaded", ...). Esse evento já
-      // disparou antes do React injetar o HTML, então disparamos um sintético
-      // para que o callback rode e anexe os listeners (botão Gerar
-      // Diagnósticos, checkboxes do exame físico, prioridades, etc.).
-      document.dispatchEvent(new Event("DOMContentLoaded"));
+      const gerarPrescricao = () => {
+        const tbody = root.querySelector<HTMLElement>("#corpo-tabela-prescricao");
+        const wrapper = root.querySelector<HTMLElement>("#wrapper-tabela-prescricao");
+        const vazio = root.querySelector<HTMLElement>("#painel-vazio-prescricao");
+        if (!tbody) return;
 
-      const livre = root.querySelector<HTMLTextAreaElement>(
-        "#txt-sinais-sintomas-consolidados",
-      );
-      const evol = root.querySelector<HTMLTextAreaElement>(
-        "#txt-evolucao-clinica-mestre",
-      );
-      if (livre && evol) {
-        const onLivreInput = () => {
-          applyFreeTextToEvolution();
-          const grid = root.querySelector<HTMLElement>("#grade-diagnosticos-prioridade");
-          if (grid && window.getComputedStyle(grid).display !== "none") {
-            runSaeDiagnosisEngine();
+        // Junta os diagnósticos selecionados (checkbox) com sua prioridade
+        const selecionados: { d: SaeDiagnostico; prio: number }[] = [];
+        diagnosticosAtivos.forEach((d, idx) => {
+          const chk = root.querySelector<HTMLInputElement>(
+            `.sae-diag-select[data-diag-id="${d.id}"]`,
+          );
+          if (chk?.checked) {
+            const p = root.querySelector<HTMLInputElement>(
+              `.sae-diag-prio[data-diag-id="${d.id}"]`,
+            );
+            const prio = parseInt(p?.value || "", 10);
+            selecionados.push({ d, prio: Number.isFinite(prio) ? prio : idx + 100 });
           }
+        });
+
+        if (selecionados.length === 0) {
+          alert(
+            "Selecione ao menos um diagnóstico (marque a caixinha 'Selecionar') e informe a prioridade antes de gerar a prescrição.",
+          );
+          return;
+        }
+
+        selecionados.sort((a, b) => a.prio - b.prio);
+        // Remove linhas legadas fixas
+        tbody.innerHTML = selecionados
+          .map((s, i) => renderPrescricaoRow(s.d, i + 1))
+          .join("");
+
+        if (wrapper) wrapper.style.display = "block";
+        if (vazio) vazio.style.display = "none";
+
+        const step4Div = root.querySelector<HTMLElement>("#step4 div:first-child");
+        if (step4Div) {
+          step4Div.style.background = "#166534";
+          step4Div.style.color = "#ffffff";
+        }
+      };
+
+      const gerarEvolucao = () => {
+        const evol = root.querySelector<HTMLTextAreaElement>("#txt-evolucao-clinica-mestre");
+        if (!evol) return;
+        const get = (id: string) =>
+          (root.querySelector<HTMLInputElement | HTMLTextAreaElement>(`#${id}`)?.value ?? "").trim();
+
+        const identificacao = {
+          Nome: get("nomePaciente"),
+          Idade: get("idadePaciente"),
+          Leito: get("leitoPaciente"),
+          "Diagnóstico Médico": get("diagMedico"),
+          Alergias: get("alergias"),
+          "Queixa Principal": get("queixaPrincipal"),
+          HDA: get("hda"),
         };
-        const gerarBtn = root.querySelector<HTMLButtonElement>("#btn-gerar-diagnosticos");
-        const onGerarDiagnosticos = (e: Event) => {
-          e.preventDefault();
-          runSaeDiagnosisEngine();
-        };
-        gerarBtn?.addEventListener("click", onGerarDiagnosticos);
-        livre.addEventListener("input", onLivreInput);
-        const priorityInputs = Array.from(
-          root.querySelectorAll<HTMLInputElement>(".txt-prioridade-item"),
+
+        const antecedentes = Array.from(
+          root.querySelectorAll<HTMLInputElement>(".antecedente-chk:checked"),
+        ).map((i) => i.value || i.closest("label")?.textContent?.trim() || "");
+
+        const exameCheck = Array.from(
+          root.querySelectorAll<HTMLInputElement>('input[type="checkbox"]:checked'),
+        )
+          .filter((i) => !i.classList.contains("antecedente-chk") && !i.classList.contains("sae-diag-select"))
+          .map((i) => i.closest("label")?.textContent?.replace(/\s+/g, " ").trim() || i.value)
+          .filter(Boolean);
+
+        const selecionados: SaeDiagnostico[] = diagnosticosAtivos.filter(
+          (d) =>
+            !!root.querySelector<HTMLInputElement>(
+              `.sae-diag-select[data-diag-id="${d.id}"]:checked`,
+            ),
         );
-        priorityInputs.forEach((input) => input.addEventListener("input", applyFreeTextToEvolution));
-        cleanupSaeListeners = () => {
-          livre.removeEventListener("input", onLivreInput);
-          gerarBtn?.removeEventListener("click", onGerarDiagnosticos);
-          priorityInputs.forEach((input) => input.removeEventListener("input", applyFreeTextToEvolution));
-        };
-      }
+
+        evol.value = buildEvolucao({
+          identificacao,
+          anamneseCheckLabels: antecedentes,
+          exameFisicoCheckLabels: exameCheck,
+          sintomasLivres: get("txt-sinais-sintomas-consolidados"),
+          diagnosticosSelecionados: selecionados,
+        });
+
+        const sucesso = root.querySelector<HTMLElement>("#painel-sucesso-evolucao");
+        if (sucesso) sucesso.style.display = "block";
+      };
+
+      // Botões
+      const btnDiag = root.querySelector<HTMLButtonElement>("#btn-gerar-diagnosticos");
+      const btnPresc = root.querySelector<HTMLButtonElement>("#btn-disparar-prescricao");
+      const btnEvol = root.querySelector<HTMLButtonElement>("#btn-disparar-evolucao-final");
+
+      const onDiag = (e: Event) => {
+        e.preventDefault();
+        gerarDiagnosticos();
+      };
+      const onPresc = (e: Event) => {
+        e.preventDefault();
+        gerarPrescricao();
+      };
+      const onEvol = (e: Event) => {
+        e.preventDefault();
+        gerarEvolucao();
+      };
+
+      btnDiag?.addEventListener("click", onDiag);
+      btnPresc?.addEventListener("click", onPresc);
+      btnEvol?.addEventListener("click", onEvol);
+
+      cleanupSaeListeners = () => {
+        btnDiag?.removeEventListener("click", onDiag);
+        btnPresc?.removeEventListener("click", onPresc);
+        btnEvol?.removeEventListener("click", onEvol);
+      };
     }
 
     return () => {
