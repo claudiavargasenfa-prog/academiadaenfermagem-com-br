@@ -86,6 +86,10 @@ export function MiniAppContent({ slug }: { slug: string }) {
  */
 function HtmlContent({ html }: { html: string }) {
   const ref = useRef<HTMLDivElement>(null);
+  // Mini app SAE traz <script> embutido; renderizamos o HTML bruto (sem
+  // sanitização) pois o conteúdo é escrito pelo admin e precisamos preservar
+  // os <script> — DOMPurify remove todos por padrão.
+  const isSae = /lavoble-sae-descomplicada/.test(html);
 
   useEffect(() => {
     const root = ref.current;
