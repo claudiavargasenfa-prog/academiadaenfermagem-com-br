@@ -1,48 +1,39 @@
-Diagnóstico técnico fechado:
+## Ajustes solicitados (2 mudanças pontuais, sem quebrar nada)
 
-O problema principal não é o conteúdo visual do mini app. O SAE foi salvo como um bloco grande de HTML com JavaScript interno. Esse JavaScript depende de `DOMContentLoaded`, mas o app injeta o HTML depois que a página já carregou. Resultado: o botão `Gerar Diagnósticos` pode aparecer visualmente, mas o motor que deveria ligar o clique não fica confiável.
+### 1. Tabela de Prescrição — nova estrutura de 4 colunas
 
-Também há uma segunda diferença importante: na tela do Admin, a pré-visualização usa um renderizador simples/sanitizado, que remove ou não executa o JavaScript do SAE. Por isso o comportamento no Admin e na tela real do mini app pode ficar diferente.
+Arquivo: `src/lib/sae-engine.ts` (função `renderPrescricaoRow`)
 
-Plano de correção, sem alterar design nem conteúdo clínico:
+**Colunas novas:** `Nº | PRESCRIÇÃO | APRAZAMENTO | ANOTAÇÕES`
 
-1. Transformar o renderizador interativo do mini app em componente reutilizável
-   - O mesmo motor usado na tela real do mini app será usado também na pré-visualização do Admin.
-   - Isso elimina a diferença entre “funciona fora do Admin” e “não funciona no Admin”.
+- Remover a coluna **HORÁRIO**.
+- Coluna **PRESCRIÇÃO**: cada conduta vira uma linha com o horário embutido no final entre colchetes dourados. Ex.: `• Avaliar edema periférico em cruzes (+/4+). [12/12H]`
+- Coluna **APRAZAMENTO**: mostrar apenas os horários no formato solicitado, separados por hífen. Ex.: `10 - 22` ou `12 - 18 - 24 - 06` (sem numeração "1., 2.").
+- Coluna **ANOTAÇÕES**: totalmente vazia, com **fundo pautado** (linhas horizontais a cada 24px usando `background-image: repeating-linear-gradient(...)`), altura mínima ~140px para caber várias linhas de escrita manual/impressa.
+- **Separador entre itens**: manter a borda inferior dourada (`border-bottom: 3px solid #ca8a04`) já existente + adicionar `<tr>` divisor extra se necessário para reforço visual.
+- Atualizar o cabeçalho `<thead>` correspondente no HTML do mini app (banco de dados, registro `c020e2e7-...`) para refletir as 4 colunas.
 
-2. Corrigir o botão `Gerar Diagnósticos` por fora do script antigo
-   - Manter o HTML, cores, textos e layout exatamente como estão.
-   - Adicionar um listener React seguro no botão.
-   - No clique, o sistema vai abrir a matriz de diagnósticos e esconder o painel inicial.
+### 2. Sinais Gerais — transformar régua de temperatura em opções marcáveis
 
-3. Fazer a análise de sinais/sintomas funcionar com texto digitado e checkboxes
-   - Checkboxes do exame físico continuam valendo.
-   - Texto livre como “dor no peito”, “dor de cabeça”, “enjoo”, “vômito”, “falta de ar”, “edema”, “ferida” etc. passa a acionar os cards compatíveis.
-   - Cards previstos no SAE atual:
-     - Neurológico
-     - Respiratório/Cardiorrespiratório
-     - Renal/Eliminação
-     - Pele/Integridade cutânea
+Arquivo: HTML do mini app SAE AUTOMÁTICA no banco (`mini_apps.content` do registro `c020e2e7-90db-449f-a508-2c173f4cada2`).
 
-4. Garantir que a evolução seja preenchida
-   - O texto digitado em sinais/sintomas será consolidado na evolução.
-   - O motor tentará acionar a função legada de evolução quando ela existir.
-   - Se o script legado falhar, a evolução manual/consolidada ainda continuará funcionando.
+Na seção **SINAIS GERAIS**, **antes** das inclusões atuais, adicionar 4 checkboxes (mesmo padrão dos demais achados do exame físico, para que sejam capturados pelo motor e enviados à evolução):
 
-5. Preservar etapas seguintes
-   - Não remover o botão de gerar prescrição.
-   - Não mexer na tabela de prescrição.
-   - Não alterar o layout de 5 colunas.
-   - Não editar o conteúdo clínico salvo no mini app.
+- ☐ Afebril: Temperatura normal 36°C e 37,2°C.
+- ☐ Subfebril (ainda não considerada febre): 37,3°C a 37,7°C.
+- ☐ Pirexia: 37,8°C a 38,9°C.
+- ☐ Hiperpirexia: acima de 39°C.
 
-6. Validação final
-   - Testar no preview real com o fluxo:
-     1. abrir SAE;
-     2. digitar “dor no peito, dor de cabeça e enjoo”;
-     3. clicar em `Gerar Diagnósticos`;
-     4. confirmar que a grade aparece;
-     5. confirmar que os cards aparecem;
-     6. confirmar que a evolução recebe os dados.
-   - Testar também dentro do Admin em pré-visualização para confirmar que não fica mais “morto”.
+Cada checkbox usa a mesma classe/estrutura dos outros itens marcáveis do exame físico, para que a função `atualizarEvolucaoAutomatica` já existente colete a label automaticamente.
 
-Resumo direto: a correção será no motor de renderização/interação, não no design nem no conteúdo do SAE.
+### O que NÃO será alterado
+
+- Motor de matching de diagnósticos (`matchDiagnosticos`).
+- Estrutura de anamnese, demais sistemas do exame físico, geração de evolução.
+- Estilo visual global (glassmorphism, cores pastel, dourado).
+- Nenhum outro mini app.
+
+### Como será validado
+
+- Abrir SAE AUTOMÁTICA no preview, gerar diagnósticos com um sintoma teste, clicar "Gerar Prescrição" e conferir: 4 colunas, aprazamento no formato `HH - HH - HH`, coluna de anotações pautada e vazia, linha divisória entre itens.
+- Marcar "Pirexia" em Sinais Gerais e confirmar que aparece na Evolução consolidada.
