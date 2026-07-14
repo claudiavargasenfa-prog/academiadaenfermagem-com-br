@@ -5,6 +5,13 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/AppShell";
 import { useAuthReady } from "@/lib/access";
 import { renderContent } from "@/lib/markdown";
+import {
+  matchDiagnosticos,
+  renderDiagnosticoCard,
+  renderPrescricaoRow,
+  buildEvolucao,
+  type SaeDiagnostico,
+} from "@/lib/sae-engine";
 
 
 /**
