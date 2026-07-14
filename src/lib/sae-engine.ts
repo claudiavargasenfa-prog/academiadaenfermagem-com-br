@@ -133,29 +133,27 @@ export function renderPrescricaoRow(
   numero: number,
 ): string {
   const condutasHtml = d.condutas
-    .map((c) => `<div style="margin-bottom:6px;">• ${esc(c.conduta)}</div>`)
+    .map(
+      (c) =>
+        `<div style="margin-bottom:6px;">• ${esc(c.conduta)}${c.horario ? ` <span style="color:#854d0e;font-weight:700;">[${esc(c.horario)}]</span>` : ""}</div>`,
+    )
     .join("");
-  const horarios = d.condutas
-    .map((c) => c.horario)
-    .filter(Boolean)
-    .join(" • ");
   const aprazamentos = d.condutas
-    .map((c, i) => `${i + 1}. ${esc(c.aprazamento || "—")}`)
+    .map((c) => (c.aprazamento || "").trim())
+    .filter(Boolean)
     .join("<br>");
+  const pautado =
+    "background-image: repeating-linear-gradient(to bottom, transparent 0, transparent 23px, #cbd5e1 23px, #cbd5e1 24px); background-size: 100% 24px; min-height:144px;";
   return `
-<tr style="border-bottom:2px solid #ca8a04;background:${numero % 2 === 0 ? "#fffbeb" : "#ffffff"};">
-  <td style="padding:14px 10px;text-align:center;font-weight:bold;color:#14532d;vertical-align:top;border-right:1px solid #fde68a;">${numero}</td>
+<tr style="border-bottom:3px solid #ca8a04;background:${numero % 2 === 0 ? "#fffbeb" : "#ffffff"};">
+  <td style="padding:14px 10px;text-align:center;font-weight:bold;color:#14532d;vertical-align:top;border-right:1px solid #fde68a;font-size:16px;">${numero}</td>
   <td style="padding:14px 10px;line-height:1.5;vertical-align:top;border-right:1px solid #fde68a;">
-    <div style="font-weight:700;color:#14532d;margin-bottom:6px;">${esc(d.diagnostico)} <span style="font-size:10px;color:#854d0e;">(${esc(d.id)})</span></div>
+    <div style="font-weight:700;color:#14532d;margin-bottom:8px;">${esc(d.diagnostico)} <span style="font-size:10px;color:#854d0e;">(${esc(d.id)})</span></div>
     ${condutasHtml}
   </td>
-  <td style="padding:14px 10px;text-align:center;vertical-align:top;border-right:1px solid #fde68a;">
-    <span style="border:1px solid #ca8a04;background:#fffbeb;padding:2px 6px;border-radius:4px;font-weight:bold;color:#854d0e;font-size:11px;">${esc(horarios || "—")}</span>
-  </td>
-  <td style="padding:14px 10px;vertical-align:top;font-size:12px;color:#4b5563;border-right:1px solid #fde68a;">${aprazamentos}</td>
-  <td style="padding:14px 10px;vertical-align:top;"><div style="width:100%;min-height:45px;border-bottom:1px dashed #cbd5e1;"></div></td>
+  <td style="padding:14px 10px;vertical-align:top;font-size:13px;color:#14532d;font-weight:600;border-right:1px solid #fde68a;text-align:center;">${aprazamentos || "—"}</td>
+  <td style="padding:14px 10px;vertical-align:top;"><div style="width:100%;${pautado}"></div></td>
 </tr>`;
-
 }
 
 export function buildEvolucao(params: {
