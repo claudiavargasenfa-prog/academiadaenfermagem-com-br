@@ -212,23 +212,12 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
       let diagnosticosAtivos: SaeDiagnostico[] = [];
 
       const coletarCorpus = (): string => {
-        const livre =
-          root.querySelector<HTMLTextAreaElement>("#txt-sinais-sintomas-consolidados")?.value ?? "";
-        const queixa =
-          root.querySelector<HTMLTextAreaElement>("#queixaPrincipal")?.value ?? "";
-        const hda = root.querySelector<HTMLTextAreaElement>("#hda")?.value ?? "";
-        const diagMed = root.querySelector<HTMLInputElement>("#diagMedico")?.value ?? "";
-        const marcados = Array.from(
-          root.querySelectorAll<HTMLInputElement>('input[type="checkbox"]:checked'),
-        )
-          .map((i) =>
-            (i.value || "") +
-            " " +
-            (i.closest("label")?.textContent?.replace(/\s+/g, " ").trim() ?? ""),
-          )
-          .join(" ");
-        return [livre, queixa, hda, diagMed, marcados].join(" \n ");
+        // Somente o texto livre digitado pelo usuário na caixa de sinais/sintomas.
+        return (
+          root.querySelector<HTMLTextAreaElement>("#txt-sinais-sintomas-consolidados")?.value ?? ""
+        );
       };
+
 
       const gerarDiagnosticos = () => {
         if (!dyn) return;

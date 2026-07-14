@@ -143,18 +143,19 @@ export function renderPrescricaoRow(
     .map((c, i) => `${i + 1}. ${esc(c.aprazamento || "—")}`)
     .join("<br>");
   return `
-<tr style="border-bottom:1px solid #e5e7eb;">
-  <td style="padding:12px 10px;text-align:center;font-weight:bold;color:#14532d;vertical-align:top;">${numero}</td>
-  <td style="padding:12px 10px;line-height:1.5;vertical-align:top;">
-    <div style="font-weight:700;color:#14532d;margin-bottom:4px;">${esc(d.diagnostico)} <span style="font-size:10px;color:#854d0e;">(${esc(d.id)})</span></div>
+<tr style="border-bottom:2px solid #ca8a04;background:${numero % 2 === 0 ? "#fffbeb" : "#ffffff"};">
+  <td style="padding:14px 10px;text-align:center;font-weight:bold;color:#14532d;vertical-align:top;border-right:1px solid #fde68a;">${numero}</td>
+  <td style="padding:14px 10px;line-height:1.5;vertical-align:top;border-right:1px solid #fde68a;">
+    <div style="font-weight:700;color:#14532d;margin-bottom:6px;">${esc(d.diagnostico)} <span style="font-size:10px;color:#854d0e;">(${esc(d.id)})</span></div>
     ${condutasHtml}
   </td>
-  <td style="padding:12px 10px;text-align:center;vertical-align:top;">
+  <td style="padding:14px 10px;text-align:center;vertical-align:top;border-right:1px solid #fde68a;">
     <span style="border:1px solid #ca8a04;background:#fffbeb;padding:2px 6px;border-radius:4px;font-weight:bold;color:#854d0e;font-size:11px;">${esc(horarios || "—")}</span>
   </td>
-  <td style="padding:12px 10px;vertical-align:top;font-size:12px;color:#4b5563;">${aprazamentos}</td>
-  <td style="padding:12px 10px;vertical-align:top;"><div style="width:100%;min-height:35px;border-bottom:1px dashed #cbd5e1;"></div></td>
+  <td style="padding:14px 10px;vertical-align:top;font-size:12px;color:#4b5563;border-right:1px solid #fde68a;">${aprazamentos}</td>
+  <td style="padding:14px 10px;vertical-align:top;"><div style="width:100%;min-height:45px;border-bottom:1px dashed #cbd5e1;"></div></td>
 </tr>`;
+
 }
 
 export function buildEvolucao(params: {
