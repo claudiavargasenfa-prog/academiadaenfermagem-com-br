@@ -194,12 +194,32 @@ function HtmlContent({ html }: { html: string }) {
           .normalize("NFD")
           .replace(/[\u0300-\u036f]/g, "");
 
+      const SAE_FREE_TEXT_MARK = "📝 SINAIS/SINTOMAS INFORMADOS MANUALMENTE:";
+
+      const applyFreeTextToEvolution = () => {
+        const livre = root.querySelector<HTMLTextAreaElement>(
+          "#txt-sinais-sintomas-consolidados",
+        );
+        const evol = root.querySelector<HTMLTextAreaElement>(
+          "#txt-evolucao-clinica-mestre",
+        );
+        if (!livre || !evol) return;
+
+        const manual = livre.value.trim();
+        const base = evol.value ?? "";
+        const cut = base.indexOf(SAE_FREE_TEXT_MARK);
+        const head = (cut >= 0 ? base.slice(0, cut) : base).trimEnd();
+        evol.value = manual ? `${head}\n\n${SAE_FREE_TEXT_MARK}\n${manual}\n` : head;
+      };
+
       const syncFreeTextDiagnosisCards = () => {
         const livre = root.querySelector<HTMLTextAreaElement>(
           "#txt-sinais-sintomas-consolidados",
         );
         const grid = root.querySelector<HTMLElement>("#grade-diagnosticos-prioridade");
         if (!livre || !grid || window.getComputedStyle(grid).display === "none") return;
+
+        applyFreeTextToEvolution();
 
         const text = normalizeClinicalText(livre.value);
         const hasNeu = /\b(cabeca|cefaleia|tontura|confus|desorient|agit|letarg|sonol|convuls|rebaix)/.test(text);
@@ -254,13 +274,8 @@ function HtmlContent({ html }: { html: string }) {
         "#txt-evolucao-clinica-mestre",
       );
       if (livre && evol) {
-        const MARK = "📝 SINAIS/SINTOMAS INFORMADOS MANUALMENTE:";
         const onLivreInput = () => {
-          const manual = livre.value.trim();
-          const base = evol.value ?? "";
-          const cut = base.indexOf(MARK);
-          const head = (cut >= 0 ? base.slice(0, cut) : base).trimEnd();
-          evol.value = manual ? `${head}\n\n${MARK}\n${manual}\n` : head;
+          applyFreeTextToEvolution();
           syncFreeTextDiagnosisCards();
         };
         const gerarBtn = root.querySelector<HTMLButtonElement>("#btn-gerar-diagnosticos");
