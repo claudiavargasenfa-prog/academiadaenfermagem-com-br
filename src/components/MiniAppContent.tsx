@@ -379,11 +379,125 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
       };
       root.addEventListener("click", onChip);
 
+      // ===== EXPORTAÇÃO ABNT (PDF via impressão do navegador) =====
+      const abrirParaImprimir = (titulo: string, corpoHtml: string) => {
+        const w = window.open("", "_blank", "width=900,height=1000");
+        if (!w) {
+          alert("Habilite popups para exportar em PDF.");
+          return;
+        }
+        const dataHoje = new Date().toLocaleDateString("pt-BR");
+        w.document.write(`<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>${titulo}</title>
+<style>
+  @page { size: A4; margin: 3cm 2cm 2cm 3cm; }
+  html, body { background:#fff; color:#000; }
+  body { font-family: "Times New Roman", Times, serif; font-size: 12pt; line-height: 1.5; margin:0; }
+  h1 { font-size: 14pt; text-align:center; text-transform:uppercase; margin: 0 0 24pt; font-weight:bold; letter-spacing:.5px; }
+  h2 { font-size: 12pt; text-transform:uppercase; margin: 18pt 0 6pt; font-weight:bold; }
+  .abnt-meta { font-size: 11pt; margin-bottom: 18pt; }
+  .abnt-body { text-align: justify; text-indent: 1.25cm; white-space: pre-wrap; }
+  .assinatura { margin-top: 60pt; text-align:center; page-break-inside: avoid; }
+  .assinatura .linha { border-top: 1px solid #000; width: 70%; margin: 40pt auto 4pt; }
+  .assinatura small { font-size: 10pt; display:block; }
+  .carimbo { margin: 30pt auto 0; border: 1px dashed #666; height: 90pt; width: 60%; display:flex; align-items:center; justify-content:center; font-size:10pt; color:#666; }
+  table { width:100%; border-collapse: collapse; font-size: 11pt; }
+  th, td { border: 1px solid #000; padding: 6pt; vertical-align: top; }
+  th { background:#f3f3f3; text-transform:uppercase; font-size:10pt; }
+  @media print { .no-print { display:none !important; } }
+  .no-print { position: fixed; top:10px; right:10px; background:#166534; color:#fff; padding:8px 14px; border-radius:6px; cursor:pointer; border:0; font-family: system-ui; }
+</style></head><body>
+<button class="no-print" onclick="window.print()">Imprimir / Salvar PDF</button>
+<h1>${titulo}</h1>
+<div class="abnt-meta"><strong>Data:</strong> ${dataHoje}</div>
+${corpoHtml}
+<div class="assinatura">
+  <div class="linha"></div>
+  <small>Assinatura do(a) Enfermeiro(a)</small>
+  <small>COREN: ______________________</small>
+  <div class="carimbo">Espaço reservado para carimbo</div>
+</div>
+<script>window.addEventListener('load',()=>setTimeout(()=>window.print(),400));</script>
+</body></html>`);
+        w.document.close();
+      };
+
+      const exportarEvolucaoAbnt = () => {
+        const evol = (
+          root.querySelector<HTMLTextAreaElement>("#txt-evolucao-clinica-mestre")?.value ?? ""
+        ).trim();
+        if (!evol) {
+          alert('Gere a evolução consolidada antes de exportar (botão "Gerar Evolução").');
+          return;
+        }
+        const esc = evol.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        abrirParaImprimir("Evolução de Enfermagem", `<div class="abnt-body">${esc}</div>`);
+      };
+
+      const exportarPrescricaoAbnt = () => {
+        const wrapper = root.querySelector<HTMLElement>("#wrapper-tabela-prescricao");
+        const tbody = root.querySelector<HTMLElement>("#corpo-tabela-prescricao");
+        if (!wrapper || !tbody || !tbody.children.length) {
+          alert('Gere a prescrição antes de exportar (botão "Gerar Prescrição").');
+          return;
+        }
+        const paciente = (root.querySelector<HTMLInputElement>("#nomePaciente")?.value ?? "").trim();
+        const leito = (root.querySelector<HTMLInputElement>("#leitoPaciente")?.value ?? "").trim();
+        const tabela = wrapper.querySelector("table")?.outerHTML ?? "";
+        const cab = `<div class="abnt-meta">${paciente ? `<div><strong>Paciente:</strong> ${paciente}</div>` : ""}${leito ? `<div><strong>Leito:</strong> ${leito}</div>` : ""}</div><h2>Plano de Prescrição de Enfermagem</h2>`;
+        abrirParaImprimir("Plano de Prescrição de Enfermagem", cab + tabela);
+      };
+
+      const injetarBotoes = () => {
+        if (!root.querySelector("#btn-export-evolucao-abnt")) {
+          const alvo =
+            root.querySelector<HTMLElement>("#btn-disparar-evolucao-final")?.parentElement ||
+            root.querySelector<HTMLElement>("#txt-evolucao-clinica-mestre")?.parentElement;
+          if (alvo) {
+            const b = document.createElement("button");
+            b.id = "btn-export-evolucao-abnt";
+            b.type = "button";
+            b.textContent = "📄 Exportar Evolução (PDF ABNT)";
+            b.style.cssText =
+              "margin:10px 6px;padding:10px 16px;background:#166534;color:#fff;border:0;border-radius:8px;font-weight:600;cursor:pointer;";
+            alvo.appendChild(b);
+          }
+        }
+        if (!root.querySelector("#btn-export-prescricao-abnt")) {
+          const wrap = root.querySelector<HTMLElement>("#wrapper-tabela-prescricao");
+          const alvo =
+            root.querySelector<HTMLElement>("#btn-disparar-prescricao")?.parentElement ||
+            wrap?.parentElement;
+          if (alvo) {
+            const b = document.createElement("button");
+            b.id = "btn-export-prescricao-abnt";
+            b.type = "button";
+            b.textContent = "📄 Exportar Prescrição (PDF ABNT)";
+            b.style.cssText =
+              "margin:10px 6px;padding:10px 16px;background:#b8860b;color:#fff;border:0;border-radius:8px;font-weight:600;cursor:pointer;";
+            alvo.appendChild(b);
+          }
+        }
+      };
+      injetarBotoes();
+
+      const onExportClick = (e: Event) => {
+        const t = e.target as HTMLElement;
+        if (t.closest("#btn-export-evolucao-abnt")) {
+          e.preventDefault();
+          exportarEvolucaoAbnt();
+        } else if (t.closest("#btn-export-prescricao-abnt")) {
+          e.preventDefault();
+          exportarPrescricaoAbnt();
+        }
+      };
+      root.addEventListener("click", onExportClick);
+
       cleanupSaeListeners = () => {
         btnDiag?.removeEventListener("click", onDiag);
         btnPresc?.removeEventListener("click", onPresc);
         btnEvol?.removeEventListener("click", onEvol);
         root.removeEventListener("click", onChip);
+        root.removeEventListener("click", onExportClick);
       };
     }
 
