@@ -359,12 +359,34 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
       btnPresc?.addEventListener("click", onPresc);
       btnEvol?.addEventListener("click", onEvol);
 
+      // Chips de sinais/sintomas: adicionam ao textarea
+      const onChip = (e: Event) => {
+        const t = e.target as HTMLElement;
+        const btn = t.closest<HTMLElement>(".sae-sinal-chip");
+        if (!btn) return;
+        e.preventDefault();
+        const s = btn.dataset.sinal || btn.textContent?.trim() || "";
+        if (!s) return;
+        const ta = root.querySelector<HTMLTextAreaElement>(
+          "#txt-sinais-sintomas-consolidados",
+        );
+        if (!ta) return;
+        const cur = ta.value.trim();
+        if (cur.toLowerCase().includes(s.toLowerCase())) return;
+        ta.value = cur ? cur.replace(/[.;]\s*$/, "") + "; " + s + "." : s + ".";
+        ta.dispatchEvent(new Event("input", { bubbles: true }));
+        btn.style.background = "#bbf7d0";
+      };
+      root.addEventListener("click", onChip);
+
       cleanupSaeListeners = () => {
         btnDiag?.removeEventListener("click", onDiag);
         btnPresc?.removeEventListener("click", onPresc);
         btnEvol?.removeEventListener("click", onEvol);
+        root.removeEventListener("click", onChip);
       };
     }
+
 
     return () => {
       root.removeEventListener("click", onClick);
