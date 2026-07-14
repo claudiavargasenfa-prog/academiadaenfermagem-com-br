@@ -134,24 +134,32 @@ export function renderPrescricaoRow(
 ): string {
   const condutasHtml = d.condutas
     .map(
-      (c) =>
-        `<div style="margin-bottom:6px;">• ${esc(c.conduta)}${c.horario ? ` <span style="color:#854d0e;font-weight:700;">[${esc(c.horario)}]</span>` : ""}</div>`,
+      (c, i) =>
+        `<div style="padding:10px 0;border-bottom:1px dashed #94a3b8;">
+          <span style="font-weight:600;color:#14532d;">${i + 1}.</span> ${esc(c.conduta)}${c.horario ? ` <span style="color:#854d0e;font-weight:700;">${esc(c.horario)}</span>` : ""}
+        </div>`,
     )
     .join("");
   const aprazamentos = d.condutas
-    .map((c) => (c.aprazamento || "").trim())
-    .filter(Boolean)
-    .join("<br>");
+    .map((c, i) => {
+      const apr = (c.aprazamento || "").trim();
+      const hor = (c.horario || "").trim();
+      if (!apr && !hor) return `<div style="padding:10px 0;border-bottom:1px dashed #94a3b8;">—</div>`;
+      return `<div style="padding:10px 0;border-bottom:1px dashed #94a3b8;font-size:13px;color:#14532d;">
+        <span style="font-weight:600;">${i + 1}.</span> ${hor ? `De ${esc(hor)}` : ""}${apr ? ` <span style="color:#166534;font-weight:700;">(${esc(apr)})</span>` : ""}
+      </div>`;
+    })
+    .join("");
   const pautado =
-    "background-image: repeating-linear-gradient(to bottom, transparent 0, transparent 23px, #cbd5e1 23px, #cbd5e1 24px); background-size: 100% 24px; min-height:144px;";
+    "background-image: repeating-linear-gradient(to bottom, transparent 0, transparent 23px, #cbd5e1 23px, #cbd5e1 24px); background-size: 100% 24px; min-height:180px;";
   return `
 <tr style="border-bottom:3px solid #ca8a04;background:${numero % 2 === 0 ? "#fffbeb" : "#ffffff"};">
   <td style="padding:14px 10px;text-align:center;font-weight:bold;color:#14532d;vertical-align:top;border-right:1px solid #fde68a;font-size:16px;">${numero}</td>
   <td style="padding:14px 10px;line-height:1.5;vertical-align:top;border-right:1px solid #fde68a;">
-    <div style="font-weight:700;color:#14532d;margin-bottom:8px;">${esc(d.diagnostico)} <span style="font-size:10px;color:#854d0e;">(${esc(d.id)})</span></div>
+    <div style="font-weight:700;color:#14532d;margin-bottom:8px;font-size:13px;">${esc(d.diagnostico)} <span style="font-size:10px;color:#854d0e;">(${esc(d.id)})</span></div>
     ${condutasHtml}
   </td>
-  <td style="padding:14px 10px;vertical-align:top;font-size:13px;color:#14532d;font-weight:600;border-right:1px solid #fde68a;text-align:center;">${aprazamentos || "—"}</td>
+  <td style="padding:14px 10px;vertical-align:top;border-right:1px solid #fde68a;">${aprazamentos}</td>
   <td style="padding:14px 10px;vertical-align:top;"><div style="width:100%;${pautado}"></div></td>
 </tr>`;
 }
