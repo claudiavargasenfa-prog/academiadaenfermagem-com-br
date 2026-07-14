@@ -71,7 +71,7 @@ export function MiniAppContent({ slug }: { slug: string }) {
 
       {content_md?.trim() && (
         <Card>
-          <HtmlContent html={content_md} />
+          <MiniAppHtmlContent html={content_md} />
         </Card>
       )}
     </div>
@@ -84,7 +84,7 @@ export function MiniAppContent({ slug }: { slug: string }) {
  * e "Salvar Evolução" do mini app FUNDAMENTOS DOS DIAGNÓSTICOS — download
  * .doc 100% no navegador, sem backend, sem custo).
  */
-function HtmlContent({ html }: { html: string }) {
+export function MiniAppHtmlContent({ html }: { html: string }) {
   const ref = useRef<HTMLDivElement>(null);
   // Mini app SAE traz <script> embutido; renderizamos o HTML bruto (sem
   // sanitização) pois o conteúdo é escrito pelo admin e precisamos preservar
@@ -178,7 +178,7 @@ function HtmlContent({ html }: { html: string }) {
     // elemento real para o navegador executá-lo. Etapa 1: também escutamos o
     // texto livre para que edições manuais do usuário entrem na Evolução.
     const isSaeApp = !!root.querySelector(".lavoble-sae-descomplicada");
-    let livreListener: (() => void) | null = null;
+    let cleanupSaeListeners: (() => void) | null = null;
     if (isSaeApp) {
       if (!root.querySelector("#medicamentos")) {
         const medicamentosFallback = document.createElement("input");
@@ -212,30 +212,47 @@ function HtmlContent({ html }: { html: string }) {
         evol.value = manual ? `${head}\n\n${SAE_FREE_TEXT_MARK}\n${manual}\n` : head;
       };
 
-      const syncFreeTextDiagnosisCards = () => {
+      const hasCheckedValue = (values: string[]) =>
+        values.some(
+          (value) => !!root.querySelector<HTMLInputElement>(`input[value="${value}"]:checked`),
+        );
+
+      const runSaeDiagnosisEngine = () => {
         const livre = root.querySelector<HTMLTextAreaElement>(
           "#txt-sinais-sintomas-consolidados",
         );
         const grid = root.querySelector<HTMLElement>("#grade-diagnosticos-prioridade");
-        if (!livre || !grid || window.getComputedStyle(grid).display === "none") return;
+        const vazio = root.querySelector<HTMLElement>("#painel-vazio-diagnosticos");
+        if (!grid) return;
+
+        if (vazio) vazio.style.display = "none";
+        grid.style.display = "flex";
 
         applyFreeTextToEvolution();
 
-        const text = normalizeClinicalText(livre.value);
-        const hasNeu = /\b(cabeca|cefaleia|tontura|confus|desorient|agit|letarg|sonol|convuls|rebaix)/.test(text);
-        const hasResp = /\b(peito|torac|dispne|falta de ar|cansaco|satur|spo2|tosse|secrecao|respir|taquip|bradip|oxigen)/.test(text);
-        const hasRenal = /\b(urina|diure|oligur|poliur|nictur|disur|ardor|edema|inchac|hidrat|desidrat)/.test(text);
-        const hasPele = /\b(pele|ferida|lesao|curativo|pressao|lpp|imobil|acesso|flogist|vermelh|secrecao)/.test(text);
+        const text = normalizeClinicalText(livre?.value ?? "");
+        const hasNeu =
+          /\b(cabeca|cefaleia|tontura|confus|desorient|agit|letarg|sonol|convuls|rebaix|nause|enjoo|vomit)/.test(text) ||
+          hasCheckedValue(["desorientacao", "agitacao"]);
+        const hasResp =
+          /\b(peito|torac|dispne|falta de ar|cansaco|satur|spo2|tosse|secrecao|respir|taquip|bradip|oxigen)/.test(text) ||
+          hasCheckedValue(["taquipneia", "bradipneia", "alt_ritmo", "spo2"]);
+        const hasRenal =
+          /\b(urina|diure|oligur|poliur|nictur|disur|ardor|edema|inchac|hidrat|desidrat)/.test(text) ||
+          hasCheckedValue(["oliguria", "poliuria", "nicturia", "edema_mmii", "edema_mmss"]);
+        const hasPele =
+          /\b(pele|ferida|lesao|curativo|pressao|lpp|imobil|acesso|flogist|vermelh|secrecao)/.test(text) ||
+          hasCheckedValue(["ferida", "imobilidade", "flogistico_acesso"]);
 
         const show = (id: string, visible: boolean) => {
           const card = root.querySelector<HTMLElement>(`#${id}`);
           if (card) card.style.display = visible ? "flex" : "none";
         };
 
-        show("card_diag_neu", hasNeu || window.getComputedStyle(root.querySelector<HTMLElement>("#card_diag_neu") ?? document.body).display === "flex");
-        show("card_diag_resp", hasResp || window.getComputedStyle(root.querySelector<HTMLElement>("#card_diag_resp") ?? document.body).display === "flex");
-        show("card_diag_renal", hasRenal || window.getComputedStyle(root.querySelector<HTMLElement>("#card_diag_renal") ?? document.body).display === "flex");
-        show("card_diag_pele", hasPele || window.getComputedStyle(root.querySelector<HTMLElement>("#card_diag_pele") ?? document.body).display === "flex");
+        show("card_diag_neu", hasNeu);
+        show("card_diag_resp", hasResp);
+        show("card_diag_renal", hasRenal);
+        show("card_diag_pele", hasPele);
 
         const visibleCount = Array.from(
           root.querySelectorAll<HTMLElement>("#grade-diagnosticos-prioridade > div"),
@@ -250,6 +267,14 @@ function HtmlContent({ html }: { html: string }) {
           step3Div.style.background = "#166534";
           step3Div.style.color = "#ffffff";
         }
+
+        try {
+          const update = (window as any).atualizarEvolucaoAutomatica;
+          if (typeof update === "function") update();
+        } catch {
+          // A evolução manual continua funcionando mesmo que o script legado falhe.
+        }
+        applyFreeTextToEvolution();
       };
 
       root.querySelectorAll("script").forEach((oldScript) => {
@@ -276,21 +301,33 @@ function HtmlContent({ html }: { html: string }) {
       if (livre && evol) {
         const onLivreInput = () => {
           applyFreeTextToEvolution();
-          syncFreeTextDiagnosisCards();
+          const grid = root.querySelector<HTMLElement>("#grade-diagnosticos-prioridade");
+          if (grid && window.getComputedStyle(grid).display !== "none") {
+            runSaeDiagnosisEngine();
+          }
         };
         const gerarBtn = root.querySelector<HTMLButtonElement>("#btn-gerar-diagnosticos");
-        gerarBtn?.addEventListener("click", syncFreeTextDiagnosisCards);
+        const onGerarDiagnosticos = (e: Event) => {
+          e.preventDefault();
+          runSaeDiagnosisEngine();
+        };
+        gerarBtn?.addEventListener("click", onGerarDiagnosticos);
         livre.addEventListener("input", onLivreInput);
-        livreListener = () => {
+        const priorityInputs = Array.from(
+          root.querySelectorAll<HTMLInputElement>(".txt-prioridade-item"),
+        );
+        priorityInputs.forEach((input) => input.addEventListener("input", applyFreeTextToEvolution));
+        cleanupSaeListeners = () => {
           livre.removeEventListener("input", onLivreInput);
-          gerarBtn?.removeEventListener("click", syncFreeTextDiagnosisCards);
+          gerarBtn?.removeEventListener("click", onGerarDiagnosticos);
+          priorityInputs.forEach((input) => input.removeEventListener("input", applyFreeTextToEvolution));
         };
       }
     }
 
     return () => {
       root.removeEventListener("click", onClick);
-      livreListener?.();
+      cleanupSaeListeners?.();
     };
   }, [html]);
 

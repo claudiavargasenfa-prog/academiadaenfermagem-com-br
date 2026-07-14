@@ -3,9 +3,9 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { Pencil, Plus, Trash2 } from "lucide-react";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
+import { MiniAppHtmlContent } from "@/components/MiniAppContent";
 import { supabase } from "@/integrations/supabase/client";
 import { fetchMiniApps, formatPriceBRL, useIsAdmin, type MiniApp } from "@/lib/access";
-import { renderContent } from "@/lib/markdown";
 import { SubscriptionsAdmin } from "@/components/admin/SubscriptionsAdmin";
 import { UsersAdmin } from "@/components/admin/UsersAdmin";
 import { TextsAdmin } from "@/components/admin/TextsAdmin";
@@ -1058,7 +1058,7 @@ function ContentMarkdownEditor({
       ) : (
         <div className="min-h-[200px] rounded-lg border border-border bg-background px-3 py-2">
           {value.trim() ? (
-            renderContent(value)
+            <MiniAppHtmlContent html={value} />
           ) : (
             <p className="text-xs text-muted-foreground">
               Nada digitado ainda. Vá em "Editar" e comece a escrever.
