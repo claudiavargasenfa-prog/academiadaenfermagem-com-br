@@ -188,6 +188,12 @@ function HtmlContent({ html }: { html: string }) {
         s.textContent = oldScript.textContent;
         oldScript.parentNode?.replaceChild(s, oldScript);
       });
+      // O JS do mini app registra seus listeners dentro de
+      // document.addEventListener("DOMContentLoaded", ...). Esse evento já
+      // disparou antes do React injetar o HTML, então disparamos um sintético
+      // para que o callback rode e anexe os listeners (botão Gerar
+      // Diagnósticos, checkboxes do exame físico, prioridades, etc.).
+      document.dispatchEvent(new Event("DOMContentLoaded"));
 
       const livre = root.querySelector<HTMLTextAreaElement>(
         "#txt-sinais-sintomas-consolidados",
