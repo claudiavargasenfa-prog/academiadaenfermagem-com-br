@@ -86,6 +86,10 @@ export function MiniAppContent({ slug }: { slug: string }) {
  */
 function HtmlContent({ html }: { html: string }) {
   const ref = useRef<HTMLDivElement>(null);
+  // Mini app SAE traz <script> embutido; renderizamos o HTML bruto (sem
+  // sanitização) pois o conteúdo é escrito pelo admin e precisamos preservar
+  // os <script> — DOMPurify remove todos por padrão.
+  const isSae = /lavoble-sae-descomplicada/.test(html);
 
   useEffect(() => {
     const root = ref.current;
@@ -166,14 +170,61 @@ function HtmlContent({ html }: { html: string }) {
     };
 
     root.addEventListener("click", onClick);
+
+    // ===== SAE DESCOMPLICADA E AUTOMATIZADA =====
+    // O HTML deste mini app traz um <script> embutido (o "cérebro" que amarra
+    // Anamnese + Exame Físico + Diagnósticos à Evolução). O React não executa
+    // scripts injetados via innerHTML, então recriamos cada <script> como um
+    // elemento real para o navegador executá-lo. Etapa 1: também escutamos o
+    // texto livre para que edições manuais do usuário entrem na Evolução.
+    const isSaeApp = !!root.querySelector(".lavoble-sae-descomplicada");
+    let livreListener: (() => void) | null = null;
+    if (isSaeApp) {
+      root.querySelectorAll("script").forEach((oldScript) => {
+        const s = document.createElement("script");
+        for (const attr of Array.from(oldScript.attributes)) {
+          s.setAttribute(attr.name, attr.value);
+        }
+        s.textContent = oldScript.textContent;
+        oldScript.parentNode?.replaceChild(s, oldScript);
+      });
+
+      const livre = root.querySelector<HTMLTextAreaElement>(
+        "#txt-sinais-sintomas-consolidados",
+      );
+      const evol = root.querySelector<HTMLTextAreaElement>(
+        "#txt-evolucao-clinica-mestre",
+      );
+      if (livre && evol) {
+        const MARK = "📝 SINAIS/SINTOMAS INFORMADOS MANUALMENTE:";
+        const onLivreInput = () => {
+          const manual = livre.value.trim();
+          const base = evol.value ?? "";
+          const cut = base.indexOf(MARK);
+          const head = (cut >= 0 ? base.slice(0, cut) : base).trimEnd();
+          evol.value = manual ? `${head}\n\n${MARK}\n${manual}\n` : head;
+        };
+        livre.addEventListener("input", onLivreInput);
+        livreListener = () => livre.removeEventListener("input", onLivreInput);
+      }
+    }
+
     return () => {
       root.removeEventListener("click", onClick);
+      livreListener?.();
     };
   }, [html]);
 
   return (
     <div ref={ref} className="prose-sm max-w-none">
-      {renderContent(html)}
+      {isSae ? (
+        <div
+          className="mini-app-html"
+          dangerouslySetInnerHTML={{ __html: html }}
+        />
+      ) : (
+        renderContent(html)
+      )}
     </div>
   );
 }
