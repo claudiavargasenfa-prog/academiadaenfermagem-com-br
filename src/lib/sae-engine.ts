@@ -132,35 +132,36 @@ export function renderPrescricaoRow(
   d: SaeDiagnostico,
   numero: number,
 ): string {
-  const condutasHtml = d.condutas
+  // Texto corrido: junta todas as condutas em uma sequência, com horário inline em dourado.
+  const prescricaoTexto = d.condutas
     .map(
-      (c, i) =>
-        `<div style="padding:10px 0;border-bottom:1px dashed #94a3b8;">
-          <span style="font-weight:600;color:#14532d;">${i + 1}.</span> ${esc(c.conduta)}${c.horario ? ` <span style="color:#854d0e;font-weight:700;">${esc(c.horario)}</span>` : ""}
-        </div>`,
+      (c) =>
+        `${esc(c.conduta).replace(/\s*\.?\s*$/, "")}.${c.horario ? ` <span style="color:#854d0e;font-weight:700;">${esc(c.horario)}</span>` : ""}`,
     )
-    .join("");
-  const aprazamentos = d.condutas
-    .map((c, i) => {
+    .join(" ");
+  const aprazamentoTexto = d.condutas
+    .map((c) => {
       const apr = (c.aprazamento || "").trim();
       const hor = (c.horario || "").trim();
-      if (!apr && !hor) return `<div style="padding:10px 0;border-bottom:1px dashed #94a3b8;">—</div>`;
-      return `<div style="padding:10px 0;border-bottom:1px dashed #94a3b8;font-size:13px;color:#14532d;">
-        <span style="font-weight:600;">${i + 1}.</span> ${hor ? `De ${esc(hor)}` : ""}${apr ? ` <span style="color:#166534;font-weight:700;">(${esc(apr)})</span>` : ""}
-      </div>`;
+      if (!apr && !hor) return "";
+      return `${hor ? `De ${esc(hor)}` : ""}${apr ? ` <span style="color:#166534;font-weight:700;">(${esc(apr)})</span>` : ""}`;
     })
-    .join("");
+    .filter(Boolean)
+    .join(" · ");
   const pautado =
     "background-image: repeating-linear-gradient(to bottom, transparent 0, transparent 23px, #cbd5e1 23px, #cbd5e1 24px); background-size: 100% 24px; min-height:180px;";
   return `
-<tr style="border-bottom:3px solid #ca8a04;background:${numero % 2 === 0 ? "#fffbeb" : "#ffffff"};">
-  <td style="padding:14px 10px;text-align:center;font-weight:bold;color:#14532d;vertical-align:top;border-right:1px solid #fde68a;font-size:16px;">${numero}</td>
-  <td style="padding:14px 10px;line-height:1.5;vertical-align:top;border-right:1px solid #fde68a;">
-    <div style="font-weight:700;color:#14532d;margin-bottom:8px;font-size:13px;">${esc(d.diagnostico)} <span style="font-size:10px;color:#854d0e;">(${esc(d.id)})</span></div>
-    ${condutasHtml}
+<tr class="sae-presc-row" data-diag-id="${esc(d.id)}" style="border-bottom:3px solid #ca8a04;background:#ffffff;">
+  <td style="padding:14px 10px;text-align:center;font-weight:bold;color:#14532d;vertical-align:top;border-right:1px solid #fde68a;font-size:16px;background:#ffffff;">
+    <span class="sae-presc-num">${numero}</span>
+    <button type="button" class="sae-presc-del" data-diag-id="${esc(d.id)}" title="Excluir este item" aria-label="Excluir item" style="display:block;margin:8px auto 0;background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;font-weight:700;font-size:11px;padding:4px 8px;border-radius:6px;cursor:pointer;">✕ Excluir</button>
   </td>
-  <td style="padding:14px 10px;vertical-align:top;border-right:1px solid #fde68a;">${aprazamentos}</td>
-  <td style="padding:14px 10px;vertical-align:top;"><div style="width:100%;${pautado}"></div></td>
+  <td style="padding:14px 10px;line-height:1.6;vertical-align:top;border-right:1px solid #fde68a;background:#ffffff;">
+    <div style="font-weight:700;color:#14532d;margin-bottom:8px;font-size:13px;">${esc(d.diagnostico)} <span style="font-size:10px;color:#854d0e;">(${esc(d.id)})</span></div>
+    <p style="margin:0;font-size:13px;color:#14532d;text-align:justify;">${prescricaoTexto}</p>
+  </td>
+  <td style="padding:14px 10px;vertical-align:top;border-right:1px solid #fde68a;background:#ffffff;font-size:13px;color:#14532d;line-height:1.6;">${aprazamentoTexto || "—"}</td>
+  <td style="padding:14px 10px;vertical-align:top;background:#ffffff;"><div style="width:100%;${pautado}"></div></td>
 </tr>`;
 }
 
