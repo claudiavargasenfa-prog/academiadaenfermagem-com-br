@@ -174,6 +174,18 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
       const target = e.target as Element | null;
       if (target?.closest("#btn-salvar-prescricao")) onPrescricao(e);
       if (target?.closest("#btn-salvar-evolucao")) onEvolucao(e);
+      const delBtn = target?.closest<HTMLButtonElement>(".sae-presc-del");
+      if (delBtn) {
+        const row = delBtn.closest<HTMLTableRowElement>("tr.sae-presc-row");
+        if (row) {
+          const tbody = row.parentElement;
+          row.remove();
+          // Renumera as linhas restantes
+          tbody?.querySelectorAll<HTMLElement>("tr.sae-presc-row .sae-presc-num").forEach((el, i) => {
+            el.textContent = String(i + 1);
+          });
+        }
+      }
     };
 
     root.addEventListener("click", onClick);
