@@ -132,36 +132,39 @@ export function renderPrescricaoRow(
   d: SaeDiagnostico,
   numero: number,
 ): string {
-  // Texto corrido: junta todas as condutas em uma sequência, com horário inline em dourado.
+  // Texto corrido numerado: "1. conduta. 2. conduta ..." com horário em negrito verde.
   const prescricaoTexto = d.condutas
-    .map(
-      (c) =>
-        `${esc(c.conduta).replace(/\s*\.?\s*$/, "")}.${c.horario ? ` <span style="color:#854d0e;font-weight:700;">${esc(c.horario)}</span>` : ""}`,
-    )
-    .join(" ");
-  const aprazamentoTexto = d.condutas
-    .map((c) => {
-      const apr = (c.aprazamento || "").trim();
-      const hor = (c.horario || "").trim();
-      if (!apr && !hor) return "";
-      return `${hor ? `De ${esc(hor)}` : ""}${apr ? ` <span style="color:#166534;font-weight:700;">(${esc(apr)})</span>` : ""}`;
+    .map((c, i) => {
+      const txt = esc(c.conduta).replace(/\s*\.?\s*$/, "");
+      const hor = c.horario
+        ? ` <strong style="color:#166534;">${esc(c.horario)}</strong>`
+        : "";
+      return `${i + 1}. ${txt}.${hor}`;
     })
-    .filter(Boolean)
-    .join(" · ");
+    .join(" ");
+  // Aprazamento: só horas separadas por espaço, ex.: "12 18 24 06".
+  const aprazTokens: string[] = [];
+  d.condutas.forEach((c) => {
+    const apr = (c.aprazamento || "").trim();
+    if (apr) apr.split(/[^0-9]+/).filter(Boolean).forEach((h) => aprazTokens.push(h));
+  });
+  const aprazamentoTexto = aprazTokens.length
+    ? aprazTokens.join(" ")
+    : `<span style="color:#166534;font-weight:700;letter-spacing:2px;">A T E N Ç Ã O</span>`;
+  // Coluna de anotações pautada (linhas verdes finas), vazia para escrita manual.
   const pautado =
-    "background-image: repeating-linear-gradient(to bottom, transparent 0, transparent 23px, #cbd5e1 23px, #cbd5e1 24px); background-size: 100% 24px; min-height:180px;";
+    "background-image: repeating-linear-gradient(to bottom, transparent 0, transparent 27px, #86efac 27px, #86efac 28px); background-size: 100% 28px; min-height:170px;";
   return `
-<tr class="sae-presc-row" data-diag-id="${esc(d.id)}" style="border-bottom:3px solid #ca8a04;background:#ffffff;">
-  <td style="padding:14px 10px;text-align:center;font-weight:bold;color:#14532d;vertical-align:top;border-right:1px solid #fde68a;font-size:16px;background:#ffffff;">
-    <span class="sae-presc-num">${numero}</span>
-    <button type="button" class="sae-presc-del" data-diag-id="${esc(d.id)}" title="Excluir este item" aria-label="Excluir item" style="display:block;margin:8px auto 0;background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;font-weight:700;font-size:11px;padding:4px 8px;border-radius:6px;cursor:pointer;">✕ Excluir</button>
+<tr class="sae-presc-row" data-diag-id="${esc(d.id)}" style="border-bottom:1px solid #86efac;background:#ffffff;">
+  <td style="padding:12px 12px;line-height:1.55;vertical-align:top;border-right:1px solid #86efac;background:#ffffff;color:#14532d;font-size:13px;text-align:justify;">
+    <div style="font-weight:700;color:#14532d;margin-bottom:6px;font-size:12px;">${esc(d.diagnostico)} <span style="font-size:10px;color:#166534;">(${esc(d.id)})</span>
+      <button type="button" class="sae-presc-del" data-diag-id="${esc(d.id)}" title="Excluir este item" aria-label="Excluir item" style="float:right;background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;font-weight:700;font-size:11px;padding:2px 8px;border-radius:6px;cursor:pointer;">✕ Excluir</button>
+    </div>
+    ${prescricaoTexto}
+    <span class="sae-presc-num" style="display:none;">${numero}</span>
   </td>
-  <td style="padding:14px 10px;line-height:1.6;vertical-align:top;border-right:1px solid #fde68a;background:#ffffff;">
-    <div style="font-weight:700;color:#14532d;margin-bottom:8px;font-size:13px;">${esc(d.diagnostico)} <span style="font-size:10px;color:#854d0e;">(${esc(d.id)})</span></div>
-    <p style="margin:0;font-size:13px;color:#14532d;text-align:justify;">${prescricaoTexto}</p>
-  </td>
-  <td style="padding:14px 10px;vertical-align:top;border-right:1px solid #fde68a;background:#ffffff;font-size:13px;color:#14532d;line-height:1.6;">${aprazamentoTexto || "—"}</td>
-  <td style="padding:14px 10px;vertical-align:top;background:#ffffff;"><div style="width:100%;${pautado}"></div></td>
+  <td style="padding:12px 10px;vertical-align:top;border-right:1px solid #86efac;background:#ffffff;font-size:14px;color:#166534;font-weight:700;text-align:center;letter-spacing:1px;">${aprazamentoTexto}</td>
+  <td style="padding:8px 8px;vertical-align:top;background:#ffffff;"><div style="width:100%;${pautado}"></div></td>
 </tr>`;
 }
 
