@@ -55,7 +55,7 @@ function AuthScreen() {
   const [password, setPassword] = useState("");
   const [nome, setNome] = useState("");
   const [phone, setPhone] = useState("");
-  const [categoria, setCategoria] = useState<"academico" | "tecnico" | "enfermeiro" | "">("");
+  const [categoria, setCategoria] = useState<"academico" | "tecnico-estudante" | "tecnico" | "enfermeiro" | "">("");
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<{ type: "error" | "info"; text: string } | null>(null);
 
@@ -83,7 +83,7 @@ function AuthScreen() {
           throw new Error("Celular inválido. Use o formato (DDD) 9XXXX-XXXX.");
         }
         if (!categoria) {
-          throw new Error("Selecione sua categoria (Acadêmico, Técnico ou Enfermeiro).");
+          throw new Error("Selecione sua categoria (Acadêmico, Estudante de Técnico, Técnico ou Enfermeiro).");
         }
         const { data, error } = await supabase.auth.signUp({
           email,
@@ -221,10 +221,11 @@ function AuthScreen() {
                 </div>
                 <div>
                   <label className={label}>Categoria *</label>
-                  <div className="mt-1 grid grid-cols-3 gap-1.5">
+                  <div className="mt-1 grid grid-cols-2 gap-1.5">
                     {(
                       [
                         { v: "academico", label: "Acadêmico", emoji: "🎓" },
+                        { v: "tecnico-estudante", label: "Estudante de Técnico", emoji: "📘" },
                         { v: "tecnico", label: "Técnico", emoji: "🩺" },
                         { v: "enfermeiro", label: "Enfermeiro", emoji: "👩‍⚕️" },
                       ] as const
