@@ -559,6 +559,12 @@ function AppContent({ app }: { app: AppRow }) {
                 onMoveTo={(miniAppId, targetAppId, placementId) =>
                   moveMiniAppToApp(miniAppId, targetAppId, { removeFromCurrent: true, currentPlacementId: placementId })
                 }
+                onReorder={(containerId, from, to) => {
+                  const cont = containers.find((x) => x.id === containerId);
+                  if (!cont) return;
+                  const reordered = arrayMove(cont.items, from, to);
+                  persistContainer(containerId, reordered);
+                }}
               />
             ))}
           </div>
@@ -711,6 +717,7 @@ function Container({
   available,
   targetApps,
   onMoveTo,
+  onReorder,
 }: {
   container: { id: string; title: string; emoji: string | null; sectionId: string | null; items: MiniAppPlacement[] };
   miniById: Map<string, any>;
@@ -719,6 +726,7 @@ function Container({
   available: any[];
   targetApps: AppRow[];
   onMoveTo: (miniAppId: string, targetAppId: string, placementId: string) => void;
+  onReorder: (containerId: string, from: number, to: number) => void;
 }) {
   const ids = container.items.map((i) => i.id);
   return (
@@ -754,7 +762,7 @@ function Container({
               Arraste mini apps para cá
             </li>
           )}
-          {container.items.map((p) => {
+          {container.items.map((p, idx) => {
             const m = miniById.get(p.mini_app_id);
             if (!m) return null;
             return (
@@ -767,6 +775,8 @@ function Container({
                 onRemove={() => onRemove(p.id)}
                 targetApps={targetApps}
                 onMoveTo={(targetAppId) => onMoveTo(m.id, targetAppId, p.id)}
+                onUp={idx > 0 ? () => onReorder(container.id, idx, idx - 1) : undefined}
+                onDown={idx < container.items.length - 1 ? () => onReorder(container.id, idx, idx + 1) : undefined}
               />
             );
           })}
@@ -784,6 +794,8 @@ function SortableItem({
   onRemove,
   targetApps,
   onMoveTo,
+  onUp,
+  onDown,
 }: {
   id: string;
   title: string;
@@ -792,6 +804,8 @@ function SortableItem({
   onRemove: () => void;
   targetApps: AppRow[];
   onMoveTo: (targetAppId: string) => void;
+  onUp?: () => void;
+  onDown?: () => void;
 }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id });
   const style: React.CSSProperties = {
@@ -803,6 +817,12 @@ function SortableItem({
     <li ref={setNodeRef} style={style} className="flex items-center justify-between gap-2 rounded-md border border-foreground/10 bg-background px-2 py-1.5 text-sm">
       <button type="button" {...attributes} {...listeners} className="cursor-grab touch-none rounded p-1 text-muted-foreground hover:bg-foreground/10" aria-label="Arrastar">
         <GripVertical className="h-3.5 w-3.5" />
+      </button>
+      <button type="button" onClick={onUp} disabled={!onUp} className="rounded p-1 text-muted-foreground hover:bg-foreground/10 disabled:opacity-30" aria-label="Subir" title="Subir">
+        <ArrowUp className="h-3.5 w-3.5" />
+      </button>
+      <button type="button" onClick={onDown} disabled={!onDown} className="rounded p-1 text-muted-foreground hover:bg-foreground/10 disabled:opacity-30" aria-label="Descer" title="Descer">
+        <ArrowDown className="h-3.5 w-3.5" />
       </button>
       <span className="flex-1 truncate">
         <span className="mr-1">{icon}</span>
