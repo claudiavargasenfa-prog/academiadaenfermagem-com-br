@@ -1,30 +1,46 @@
 ## Objetivo
+Transformar o app "Academia da Enfermagem" em um PWA instalável, que funcione offline no celular do aluno/profissional, sem quebrar login, Lovable Cloud, nem preview.
 
-1. Dar autonomia total para você trocar a logo do app pelo painel admin (sem depender de mim).
-2. Corrigir a falha: quando o app "Estudante de Técnico" (slug `tecnico-estudante`) foi criado, não apareceu a caixa dele em **Textos do App**. Fazer isso funcionar agora e nunca mais faltar em apps futuros.
+## O que o usuário vai ganhar
+- **Instalar no celular** (Android/iOS) como se fosse app de loja, com ícone na tela inicial e sem barra do navegador.
+- **Abrir sem internet**: SAE Descomplicada, Escalas Clínicas, Quizzes, Procedimentos, Calculadora — tudo já embarcado no app funciona offline.
+- **Rascunhos salvos no aparelho**: evolução, prescrição e diário já usam `localStorage`, então continuam salvos mesmo sem sinal.
+- **Login persistente**: exige internet só na primeira vez; depois a sessão fica guardada por semanas.
+- **Atualizações automáticas**: quando o app publicado ganhar uma versão nova, o celular atualiza sozinho da próxima vez que abrir com internet.
 
----
+## O que continua exigindo internet (e por quê)
+- Primeiro login e cadastro (validação no servidor).
+- Sincronizar entre 2 celulares (dados locais ficam no aparelho).
+- Ditado por voz (Web Speech API depende do Google).
+- Painel do admin (lê/escreve no banco em tempo real).
 
-## Parte 1 — Logo editável pelo admin
+## Passos técnicos
 
-- Criar chave de texto `branding.logo_url` na tabela `app_texts` (valor inicial = a URL da logo atual).
-- No `src/components/AppShell.tsx`, ler essa chave via `useText("branding.logo_url", <fallback atual>)` em vez do import fixo `logoAsset`.
-- Na aba **Admin → Textos do App**, essa chave aparece igual às outras — você cola a URL de uma imagem (ou faz upload no Storage e cola o link público) e salva. A logo troca em todo o app na hora.
-- Bônus: adicionar um campinho de **upload de imagem** ao lado do texto `branding.logo_url` que envia para o bucket `public-assets` do Storage e preenche a URL sozinho (se preferir só campo de URL, me avise).
+1. **Instalar `vite-plugin-pwa`** e configurá-lo em `vite.config.ts` com:
+   - `registerType: "autoUpdate"`
+   - `injectRegister: null` e `devOptions.enabled: false` (não registra em dev/preview)
+   - `workbox`: `NetworkFirst` para navegações HTML, `CacheFirst` só para assets com hash, exclui `/~oauth` e rotas `/api/*`
+   - `manifest`: reaproveita o `public/manifest.webmanifest` existente (nome, cores, ícones 192/512 já prontos)
 
-## Parte 2 — Texto do "Estudante de Técnico" + prevenção
+2. **Criar `src/lib/pwa-register.ts`** — wrapper único de registro do service worker, que só registra quando:
+   - `import.meta.env.PROD` for verdadeiro
+   - não estiver dentro de iframe
+   - hostname NÃO for `id-preview--*`, `preview--*`, `lovableproject.com`, `lovableproject-dev.com`, `beta.lovable.dev`
+   - URL não tiver `?sw=off` (kill switch de emergência)
+   Em qualquer contexto recusado, desregistra SW antigo de `/sw.js`.
 
-- Inserir agora o registro faltante:
-  - `aplicativo.tecnico-estudante.slogan` — para você editar o slogan que aparece no card da loja.
-- Na tela **Admin → Apps** (`AppsAdmin.tsx`), ao criar um novo plano/app, gerar automaticamente a chave `aplicativo.<slug>.slogan` em `app_texts` com valor vazio, para que ela já apareça na aba **Textos do App** sem precisar cadastrar manualmente.
-- Também rodar uma varredura única: para cada plano existente sem `aplicativo.<slug>.slogan`, criar a chave vazia (isso resolve o `tecnico-estudante` e qualquer outro que tenha ficado para trás).
+3. **Chamar o wrapper** uma única vez em `src/routes/__root.tsx` dentro de `useEffect`.
 
----
+4. **Confirmar que o manifest está linkado no `<head>`** (já está em `__root.tsx`) e que os ícones 192/512 existem em `public/`.
 
-## Detalhes técnicos
+5. **Não mudar nada em**: Supabase client, rotas autenticadas, SAE, Escalas, Quizzes, admin. O banco mestre da SAE já está embarcado em `src/data/sae-banco.json` — offline nativo.
 
-- Tabela afetada: `app_texts` (apenas INSERT/UPDATE de dados via `supabase--insert`, sem mudança de schema).
-- Arquivos afetados: `src/components/AppShell.tsx`, `src/components/admin/AppsAdmin.tsx`, `src/components/admin/TextsAdmin.tsx` (só se eu adicionar o upload).
-- Storage: se você aprovar o upload, crio um bucket público `branding` (uma vez).
+## Como testar
+- No **preview do Lovable**: SW **não** registra (proteção intencional) — nada muda visualmente.
+- Depois de **Publicar**: abrir `academiadaenfermagem.com.br` no celular → menu do navegador → "Instalar app" / "Adicionar à tela inicial" → abrir em modo avião → SAE, Escalas, Quizzes carregam.
 
-Confirma que posso implementar assim?
+## Riscos e mitigação
+- **Cache preso após atualização**: `autoUpdate` + `NetworkFirst` para HTML resolvem; kill switch `?sw=off` disponível se algo travar.
+- **iOS é mais restrito**: instalação via "Compartilhar → Adicionar à Tela de Início" (Safari). Funciona, mas o usuário precisa saber o caminho — vou deixar uma mensagem curta na tela inicial explicando.
+
+Sem mexer em design, conteúdo, ou lógica de negócio. Só infraestrutura.
