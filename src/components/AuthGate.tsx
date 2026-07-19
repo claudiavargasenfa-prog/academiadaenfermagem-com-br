@@ -83,7 +83,7 @@ function AuthScreen() {
           throw new Error("Celular inválido. Use o formato (DDD) 9XXXX-XXXX.");
         }
         if (!categoria) {
-          throw new Error("Selecione sua categoria (Acadêmico, Técnico ou Enfermeiro).");
+          throw new Error("Selecione sua categoria (Acadêmico, Estudante de Técnico, Técnico ou Enfermeiro).");
         }
         const { data, error } = await supabase.auth.signUp({
           email,
