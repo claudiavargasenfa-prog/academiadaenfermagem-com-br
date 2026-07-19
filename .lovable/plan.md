@@ -1,56 +1,40 @@
+## Objetivo
 
-## Diagnóstico
+Inserir os achados clínicos que você mandou como **checkboxes marcáveis** dentro do bloco **Exame Físico** do mini app **SAE DESCOMPLICADA E AUTOMATIZADA**. Toda marcação vai automaticamente para a Evolução (comportamento que já funciona hoje via classe `.symptom`).
 
-Auditei o mini app **SAE Descomplicada e Automatizada** (id `c020e2e7…`) e encontrei **dois problemas** que explicam por que os botões de baixar Prescrição e Evolução não funcionam — principalmente no celular (você está em viewport 411px):
+## Escopo — só os 7 sistemas que já existem no SAE
 
-### Problema 1 — Erro de JavaScript em cascata
-O HTML salvo no banco tem **25 chamadas inline** para uma função chamada `atualizarEvolucaoAutomatica()` (em `oninput=` e `onchange=` de vários campos: Nome, Idade, Leito, checkboxes de exame físico, etc.). Essa função **não existe mais** — foi substituída pelo motor novo (`sae-engine.ts`), mas as chamadas antigas ficaram no HTML.
+Os demais sistemas da sua lista (Cabeça, Olhos, Ouvidos, Nariz, Boca, Pescoço, Mamas, Musculoesquelético, Vascular Periférico, Linfático, Endócrino, Psíquico, Reprodutor) **não serão criados** — você pediu para apenas atualizar os existentes.
 
-Resultado (confirmado no console do preview):
-```
-Uncaught ReferenceError: atualizarEvolucaoAutomatica is not defined
-```
-Todo clique/digitação em campo do paciente ou checkbox dispara esse erro, o que **interrompe a propagação de eventos** e, em alguns navegadores mobile, também impede o preenchimento correto da caixa de evolução.
+| Seção no SAE hoje | Recebe da sua lista |
+|---|---|
+| Sinais Gerais | Estado Geral |
+| Tegumentar / Pele | Pele |
+| Respiratório | Sistema Respiratório |
+| Cardiovascular | Sistema Cardiovascular |
+| Digestório | Abdome + Sistema Gastrointestinal (fundidos) |
+| Renal | Sistema Geniturinário |
+| Neurológico | Sistema Neurológico |
 
-### Problema 2 — Exportação usa popup (bloqueado no celular)
-Os botões **📄 Exportar Evolução (PDF ABNT)** e **📄 Exportar Prescrição (PDF ABNT)** hoje chamam `window.open("", "_blank")` para abrir uma nova aba com o conteúdo e disparar `window.print()`. Isso é bloqueado por padrão em:
-- Chrome/Safari no celular (bloqueador de popup ativo)
-- App instalado como PWA
-- WebView do Instagram/Facebook
+## Como cada seção vai ficar
 
-Quando o popup é bloqueado, o código mostra `alert("Habilite popups para exportar em PDF.")` — mas em muitos navegadores mobile nem esse alerta aparece: o clique simplesmente "não faz nada".
+Em cada uma das 7 seções, adicionar dois blocos novos logo abaixo do que já existe, sem remover nada:
 
----
+- **✅ Achados de normalidade** — cada item da sua lista vira um checkbox verde independente (ex.: ☐ BEG, ☐ Consciente, ☐ Orientado no tempo/espaço/pessoa, ☐ Hidratado, ☐ Corado, ☐ Acianótico, ☐ Anictérico, ☐ Afebril).
+- **⚠️ Achados de anormalidade** — cada item vira um checkbox âmbar independente (ex.: ☐ Torporoso, ☐ Sonolento, ☐ Confuso, ☐ Desidratado, ☐ Hipocorado, ☐ Cianótico, ☐ Ictérico, ☐ Febril).
 
-## Correção proposta
+Regras aplicadas a todos os checkboxes novos:
+- Classe `.symptom` → alimenta a Evolução automaticamente igual aos demais.
+- Label curta e clínica (a frase-mãe da sua lista fica como legenda do bloco).
+- Layout em grid responsivo (2–3 colunas no desktop, 1 no mobile), coerente com o padrão verde/dourado do SAE.
+- Não mexo nos campos livres de observação, nem no texto padrão de normalidade que já preenche a evolução, nem nos AVP/CVP/temperatura que já estão lá.
 
-### 1. Neutralizar o `ReferenceError` (arquivo `src/components/MiniAppContent.tsx`)
-Dentro do bloco `if (isSaeApp)`, expor no `window` uma função `atualizarEvolucaoAutomatica` como **no-op** (função vazia). Assim as 25 chamadas inline param de quebrar sem precisar reescrever o HTML gigante do banco. Também remove essa função no cleanup do `useEffect`.
+## Onde a mudança acontece
 
-### 2. Trocar popup por **download direto** (mesmo padrão dos botões `.doc` que já funcionam)
-Substituir `abrirParaImprimir()` por `baixarHtmlAbnt()`:
-- Gera o mesmo HTML formatado em ABNT (Times New Roman 12pt, margens 3/2cm, espaço para assinatura e carimbo).
-- Empacota em `Blob` do tipo `text/html`.
-- Usa `<a download="Evolucao_ABNT.html">` para baixar direto — **funciona em 100% dos navegadores mobile e desktop, sem popup**.
-- O arquivo baixado abre no navegador do celular e o usuário usa "Imprimir / Salvar em PDF" nativo do sistema (mesmo comportamento visual do ABNT que já existe).
+Um único UPDATE no `content_md` do registro `mini_apps` slug **SAE AUTOMÁTICA** (id `c020e2e7-90db-449f-a508-2c173f4cada2`), inserindo os dois blocos dentro de cada uma das 7 seções existentes. Nada muda em `sae-engine.ts`, `MiniAppContent.tsx` nem no banco de diagnósticos — só HTML da tela.
 
-Renomear os rótulos para deixar claro:
-- **📄 Baixar Evolução (ABNT)**
-- **📄 Baixar Prescrição (ABNT)**
+## Fora de escopo
 
-### 3. Ajuste de UX
-- Se o usuário clicar em "Baixar Evolução" sem ter gerado a evolução consolidada antes, **gerar automaticamente** e depois baixar (hoje mostra um `alert` e não faz nada) — evita o "não funciona" quando o passo intermediário foi pulado.
-- Mesma coisa para prescrição: se houver diagnósticos selecionados mas o usuário não clicou em "Gerar Prescrição", chamar `gerarPrescricao()` antes do download.
-
----
-
-## Escopo
-
-Só **1 arquivo** alterado, sem tocar no HTML do banco nem no visual:
-- `src/components/MiniAppContent.tsx` — dentro do bloco `isSaeApp`:
-  - Expor `window.atualizarEvolucaoAutomatica = () => {}` (com cleanup).
-  - Substituir `abrirParaImprimir` por `baixarHtmlAbnt` (Blob + `<a download>`).
-  - Atualizar `exportarEvolucaoAbnt` e `exportarPrescricaoAbnt` para chamar `gerarEvolucao()`/`gerarPrescricao()` automaticamente quando faltar dado.
-  - Renomear texto dos botões injetados.
-
-Sem alteração no banco, no `sae-engine.ts`, no design ou no fluxo.
+- Criar seções novas (Cabeça, Olhos, etc.).
+- Reescrever seções existentes.
+- Mudar cores, tipografia, motor de diagnósticos ou lógica de prescrição.
