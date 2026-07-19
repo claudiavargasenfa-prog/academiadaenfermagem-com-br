@@ -145,6 +145,14 @@ export function AppShell({
                 </Link>
               );
             })}
+            <button
+              onClick={handleShare}
+              className="flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-primary-foreground/80 transition-colors hover:bg-white/10 hover:text-gold"
+              aria-label={compartilharLabel}
+            >
+              <Share2 className="h-3.5 w-3.5" />
+              {compartilharLabel}
+            </button>
           </nav>
         </div>
         {open && (
