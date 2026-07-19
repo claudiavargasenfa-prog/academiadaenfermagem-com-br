@@ -15,6 +15,7 @@ import { TrialCountdownBanner } from "./TrialCountdownBanner";
 import { useIsAdmin } from "@/lib/access";
 import { useText } from "@/lib/app-texts";
 import logoAsset from "@/assets/logo.png.asset.json";
+const DEFAULT_LOGO_URL = logoAsset.url;
 
 export function AppShell({
   children,
@@ -41,6 +42,7 @@ export function AppShell({
   const headerSubtitle = useText("header.subtitle", "Informação Atualizada em suas Mãos");
   const headerTitleSize = useText("header.title.size", "16");
   const headerSubtitleSize = useText("header.subtitle.size", "11");
+  const logoUrl = useText("branding.logo_url", DEFAULT_LOGO_URL) || DEFAULT_LOGO_URL;
 
   const historiaLabel = useText("menu.minha_historia", "Minha História");
   const baseNav = [
@@ -65,7 +67,7 @@ export function AppShell({
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3">
           <Link to="/" className="flex min-w-0 items-center gap-3">
             <img
-              src={logoAsset.url}
+              src={logoUrl}
               alt="Logotipo Academia da Enfermagem"
               className="h-11 w-11 shrink-0 rounded-xl object-contain bg-white/10 p-1 ring-1 ring-gold/40"
             />
