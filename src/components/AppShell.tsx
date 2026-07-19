@@ -7,7 +7,9 @@ import {
   User,
   Shield,
   BookOpen,
+  Share2,
 } from "lucide-react";
+import { toast } from "sonner";
 import { useEffect, useState, type ReactNode } from "react";
 import { ReferencesFooter } from "./References";
 import { AuthGate, signOut } from "./AuthGate";
