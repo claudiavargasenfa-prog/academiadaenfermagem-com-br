@@ -1,39 +1,68 @@
-## Ajustes solicitados (2 mudanças pontuais, sem quebrar nada)
+## O que muda
 
-### 1. Tabela de Prescrição — nova estrutura de 4 colunas
+Troca do **banco de dados mestre** do mini app "SAE DESCOMPLICADA E AUTOMATIZADA" pela planilha nova enviada no chat, mantendo intacto todo o fluxo, o visual e a tabela de prescrição verde (3 colunas) que já funciona hoje.
 
-Arquivo: `src/lib/sae-engine.ts` (função `renderPrescricaoRow`)
+## Passos
 
-**Colunas novas:** `Nº | PRESCRIÇÃO | APRAZAMENTO | ANOTAÇÕES`
+### 1. Converter a planilha em JSON
+- Ler `PLANILIA_OFICIAL_DE_DIAGNOSTICOS_E_PRESCRIÇÃO_DE_ENFERMAGEM.xlsx` (1.496 linhas úteis, 1.344 códigos únicos ADEC-XXXX).
+- Agrupar por `Código` (TAB. 1) — quando o mesmo código repete em várias linhas (várias intervenções), consolidar as intervenções em uma lista.
+- Gerar `src/data/sae-banco.json` **substituindo** o arquivo atual, com este shape por diagnóstico:
 
-- Remover a coluna **HORÁRIO**.
-- Coluna **PRESCRIÇÃO**: cada conduta vira uma linha com o horário embutido no final entre colchetes dourados. Ex.: `• Avaliar edema periférico em cruzes (+/4+). [12/12H]`
-- Coluna **APRAZAMENTO**: mostrar apenas os horários no formato solicitado, separados por hífen. Ex.: `10 - 22` ou `12 - 18 - 24 - 06` (sem numeração "1., 2.").
-- Coluna **ANOTAÇÕES**: totalmente vazia, com **fundo pautado** (linhas horizontais a cada 24px usando `background-image: repeating-linear-gradient(...)`), altura mínima ~140px para caber várias linhas de escrita manual/impressa.
-- **Separador entre itens**: manter a borda inferior dourada (`border-bottom: 3px solid #ca8a04`) já existente + adicionar `<tr>` divisor extra se necessário para reforço visual.
-- Atualizar o cabeçalho `<thead>` correspondente no HTML do mini app (banco de dados, registro `c020e2e7-...`) para refletir as 4 colunas.
+```
+{
+  "id": "ADEC-0001",
+  "matriz": "TAB. 2 — Matriz Clínica",
+  "eixo":   "TAB. 3 — Eixo Assistencial",
+  "sinais": "TAB. 4 — Evidências Clínicas",      // usado só para BUSCA
+  "criteriosEssenciais": "TAB. 5",
+  "criteriosAssociados": "TAB. 6",
+  "diagnostico": "TAB. 7 — Hipótese Diagnóstica",
+  "condutas": [
+    {
+      "conduta":    "TAB. 8 — Intervenções",
+      "horario":    "TAB. 9 — Frequência",       // mesmo slot de hoje
+      "aprazamento":"TAB. 10 — Aprazamento",     // mesmo slot de hoje
+      "objetivo":   "TAB. 11",
+      "prioridade": "TAB. 12",
+      "palavras":   "TAB. 13",
+      "obs":        "TAB. 14"
+    }
+  ]
+}
+```
 
-### 2. Sinais Gerais — transformar régua de temperatura em opções marcáveis
+### 2. Ajustar o motor de matching
+Arquivo: `src/lib/sae-engine.ts`
 
-Arquivo: HTML do mini app SAE AUTOMÁTICA no banco (`mini_apps.content` do registro `c020e2e7-90db-449f-a508-2c173f4cada2`).
+- **Busca (chips + textarea "Sinais e Sintomas")**: passa a casar **somente contra TAB. 4 (Evidências Clínicas)** + TAB. 13 (Palavras-chave) como reforço. Nada mais alimenta o buscador — é o que você pediu ("TAB. 4 vai ser a Sinais e Sintomas, que são as busca por diagnósticos").
+- **Card do diagnóstico exibido** ao usuário: TAB. 2, TAB. 3, TAB. 5, TAB. 6, TAB. 7 (nessa ordem, com TAB. 7 como título principal em negrito).
+- **Bloco expandível "Ver condutas"** dentro do card: TAB. 8, TAB. 11 (Objetivo/Meta), TAB. 12 (Prioridade), TAB. 14 (Observações).
+- **Índice de busca** recalculado a partir de TAB. 4 + TAB. 13 (frases e keywords), mantendo lista de stopwords atual.
 
-Na seção **SINAIS GERAIS**, **antes** das inclusões atuais, adicionar 4 checkboxes (mesmo padrão dos demais achados do exame físico, para que sejam capturados pelo motor e enviados à evolução):
+### 3. Tabela de prescrição — permanece igual
+- Mesmas 3 colunas verdes: `PRESCRIÇÃO DE ENFERMAGEM | APRAZAMENTO | ANOTAÇÕES DE ENFERMAGEM`.
+- Cada conduta renderiza no texto corrido com **TAB. 9 (Frequência) em negrito verde inline** — mesmo lugar onde hoje entra "12/12h".
+- Coluna APRAZAMENTO exibe **TAB. 10** — mesmo lugar onde hoje entra "10 - 22".
+- Cabeçalho do paciente, botão ✕ Excluir por linha, coluna pautada e exportação PDF ABNT: **sem alteração**.
 
-- ☐ Afebril: Temperatura normal 36°C e 37,2°C.
-- ☐ Subfebril (ainda não considerada febre): 37,3°C a 37,7°C.
-- ☐ Pirexia: 37,8°C a 38,9°C.
-- ☐ Hiperpirexia: acima de 39°C.
+### 4. Evolução consolidada
+Sem mudança de estrutura. Cada diagnóstico selecionado aparece como:
+`N. TAB.7 (ADEC-XXXX) — Meta: TAB.11`
 
-Cada checkbox usa a mesma classe/estrutura dos outros itens marcáveis do exame físico, para que a função `atualizarEvolucaoAutomatica` já existente colete a label automaticamente.
+### 5. Volume (1.344 itens)
+Confirmado por você. O JSON fica em ~600–900 KB, carregado 1 vez por sessão. Adiciono `useMemo` no índice de busca para que a filtragem continue instantânea depois do primeiro carregamento.
 
-### O que NÃO será alterado
+## O que **NÃO** vai mudar
 
-- Motor de matching de diagnósticos (`matchDiagnosticos`).
-- Estrutura de anamnese, demais sistemas do exame físico, geração de evolução.
-- Estilo visual global (glassmorphism, cores pastel, dourado).
+- HTML do mini app no banco (nenhuma migração SQL nesta rodada).
+- Cabeçalho do paciente, chips de sinais/sintomas, checkboxes do exame físico, geração de evolução, botões de exportar PDF ABNT.
+- Cores, tipografia, glassmorphism, layout dos cards.
 - Nenhum outro mini app.
 
-### Como será validado
+## Validação
 
-- Abrir SAE AUTOMÁTICA no preview, gerar diagnósticos com um sintoma teste, clicar "Gerar Prescrição" e conferir: 4 colunas, aprazamento no formato `HH - HH - HH`, coluna de anotações pautada e vazia, linha divisória entre itens.
-- Marcar "Pirexia" em Sinais Gerais e confirmar que aparece na Evolução consolidada.
+1. Abrir SAE, digitar "queda" no textarea → deve casar ADEC-0002 (Prevenção de Quedas) via TAB. 4.
+2. Selecionar 2 diagnósticos, clicar **Gerar Prescrição** → tabela verde com TAB. 8 no texto, TAB. 9 em negrito verde, TAB. 10 na coluna do meio.
+3. Clicar **Gerar Evolução** → linhas com TAB. 7 + código ADEC + Meta (TAB. 11).
+4. Exportar PDF ABNT → conteúdo preservado.

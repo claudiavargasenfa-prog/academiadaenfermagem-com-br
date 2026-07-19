@@ -1,14 +1,26 @@
-// Motor do SAE AUTOMÁTICA — usa o BANCO DE DADOS MESTRE (planilha da usuária).
-// Casa sinais/sintomas digitados + achados marcados com os 37 diagnósticos
-// autorais e monta a prescrição e a evolução consolidada.
+// Motor do SAE AUTOMÁTICA — usa o BANCO DE DADOS MESTRE (planilha oficial).
+// Casa o texto de "Sinais e Sintomas" com os diagnósticos ADEC via
+// TAB. 4 (Evidências Clínicas) + TAB. 13 (Palavras-chave).
 
 import banco from "@/data/sae-banco.json";
 
-export type SaeConduta = { conduta: string; horario: string; aprazamento: string };
+export type SaeConduta = {
+  conduta: string;
+  horario: string;
+  aprazamento: string;
+  objetivo?: string;
+  prioridade?: string;
+  palavras?: string;
+  obs?: string;
+};
 export type SaeDiagnostico = {
   id: string;
-  sinais: string;
-  diagnostico: string;
+  matriz?: string;
+  eixo?: string;
+  sinais: string;                 // TAB. 4 — Evidências Clínicas
+  criteriosEssenciais?: string;   // TAB. 5
+  criteriosAssociados?: string;   // TAB. 6
+  diagnostico: string;            // TAB. 7 — Hipótese Diagnóstica
   condutas: SaeConduta[];
   meta: string;
   raciocinio: string;
@@ -17,15 +29,16 @@ export type SaeDiagnostico = {
 export const SAE_BANCO: SaeDiagnostico[] = banco as SaeDiagnostico[];
 
 const STOP = new Set([
-  "com","sem","por","para","dos","das","dos","que","uma","umas","uns","não",
-  "nao","como","aos","seu","sua","seus","suas","essa","esse","este","esta",
-  "risco","aguda","aguda","paciente","nivel","grau","tipo","fisica","fisico",
-  "corporal","corporais","associada","associado","possivel","alteracao",
-  "alteracoes","ineficaz","prejudicada","prejudicado","presenca","perda",
-  "grande","pequeno","padrao","instabilidade","alterada","alteradas","risco",
-  "sinais","sintomas","dificuldade","excesso","deficit","alto","baixa","baixo",
-  "fatores","funcional","funcional","cronico","cronica","atrasada","severo",
-  "severa","intensa","intenso","aguda","cronico","cronica","completa",
+  "com","sem","por","para","dos","das","que","uma","umas","uns","não","nao",
+  "como","aos","seu","sua","seus","suas","essa","esse","este","esta","risco",
+  "aguda","paciente","nivel","grau","tipo","fisica","fisico","corporal",
+  "corporais","associada","associado","possivel","alteracao","alteracoes",
+  "ineficaz","prejudicada","prejudicado","presenca","perda","grande","pequeno",
+  "padrao","instabilidade","alterada","alteradas","sinais","sintomas",
+  "dificuldade","excesso","deficit","alto","baixa","baixo","fatores","funcional",
+  "cronico","cronica","atrasada","severo","severa","intensa","intenso",
+  "completa","clinica","clinico","assistencial","assistenciais","evidencias",
+  "durante","quando","onde","ainda","muito","pouco","tambem",
 ]);
 
 function norm(s: string): string {
@@ -41,12 +54,11 @@ function tokens(s: string, minLen = 5): string[] {
     .filter((t) => t.length >= minLen && !STOP.has(t));
 }
 
-// Índice pré-calculado: para cada diagnóstico, keywords vindas de sinais + título.
+// Índice pré-calculado: keywords vindas SOMENTE de TAB. 4 (sinais) + TAB. 13 (palavras).
 const INDEX = SAE_BANCO.map((d) => {
   const kw = new Set<string>();
   tokens(d.sinais).forEach((t) => kw.add(t));
-  tokens(d.diagnostico).forEach((t) => kw.add(t));
-  // frases inteiras (para casar "dor no peito", "trabalho de parto", etc.)
+  d.condutas.forEach((c) => tokens(c.palavras || "").forEach((t) => kw.add(t)));
   const phrases = norm(d.sinais)
     .split(/[;.,]/)
     .map((p) => p.trim())
@@ -56,7 +68,7 @@ const INDEX = SAE_BANCO.map((d) => {
 
 export type SaeMatch = { diag: SaeDiagnostico; score: number; hits: string[] };
 
-export function matchDiagnosticos(corpusRaw: string, maxResults = 12): SaeMatch[] {
+export function matchDiagnosticos(corpusRaw: string, maxResults = 15): SaeMatch[] {
   const corpus = norm(corpusRaw);
   if (!corpus.trim()) return [];
   const results: SaeMatch[] = [];
@@ -70,7 +82,6 @@ export function matchDiagnosticos(corpusRaw: string, maxResults = 12): SaeMatch[
       }
     }
     for (const k of keywords) {
-      // \b não funciona bem com números; usa regex word-boundary básico
       const re = new RegExp(`(^|[^a-z0-9])${k}([^a-z0-9]|$)`);
       if (re.test(corpus)) {
         score += 1;
@@ -95,11 +106,18 @@ function esc(s: string): string {
 export function renderDiagnosticoCard(m: SaeMatch, idx: number): string {
   const d = m.diag;
   const condutasHtml = d.condutas
-    .map(
-      (c) =>
-        `<li style="margin-bottom:4px;">${esc(c.conduta)} <span style="color:#854d0e;font-weight:600;">[${esc(c.horario || "—")}]</span></li>`,
-    )
+    .map((c) => {
+      const hor = c.horario ? ` <span style="color:#854d0e;font-weight:600;">[${esc(c.horario)}]</span>` : "";
+      const apr = c.aprazamento ? ` <span style="color:#166534;font-weight:600;">(${esc(c.aprazamento)})</span>` : "";
+      return `<li style="margin-bottom:4px;">${esc(c.conduta)}${hor}${apr}</li>`;
+    })
     .join("");
+  const objetivos = d.condutas.map((c) => c.objetivo).filter(Boolean);
+  const prioridade = d.condutas.find((c) => c.prioridade)?.prioridade || "";
+  const observ = d.condutas.map((c) => c.obs).filter(Boolean);
+  const matrizChip = d.matriz
+    ? `<span style="font-size:10.5px;background:#dcfce7;color:#14532d;padding:2px 8px;border-radius:4px;font-weight:600;">${esc(d.matriz)}${d.eixo ? " · " + esc(d.eixo) : ""}</span>`
+    : "";
   return `
 <div class="sae-diag-card" data-diag-id="${esc(d.id)}" style="background:#f0fdf4;border-radius:10px;padding:14px;border:1px solid #bbf7d0;border-left:5px solid #ca8a04;display:flex;align-items:flex-start;justify-content:space-between;gap:15px;">
   <div style="flex:1;">
@@ -108,16 +126,20 @@ export function renderDiagnosticoCard(m: SaeMatch, idx: number): string {
         <input type="checkbox" class="sae-diag-select" data-diag-id="${esc(d.id)}" style="accent-color:#166534;width:16px;height:16px;"> Selecionar
       </label>
       <span style="font-size:11px;background:#fef08a;color:#854d0e;padding:2px 8px;border-radius:4px;font-weight:bold;">${esc(d.id)}</span>
+      ${matrizChip}
     </div>
     <h4 style="margin:0 0 6px 0;font-size:14px;color:#14532d;font-weight:bold;line-height:1.4;">${esc(d.diagnostico)}</h4>
-    <p style="margin:0 0 6px 0;font-size:12px;color:#4b5563;"><strong style="color:#166534;">Sinais/Sintomas:</strong> ${esc(d.sinais)}</p>
+    <p style="margin:0 0 4px 0;font-size:12px;color:#4b5563;"><strong style="color:#166534;">Evidências Clínicas:</strong> ${esc(d.sinais)}</p>
+    ${d.criteriosEssenciais ? `<p style="margin:0 0 4px 0;font-size:12px;color:#4b5563;"><strong style="color:#166534;">Critérios essenciais:</strong> ${esc(d.criteriosEssenciais)}</p>` : ""}
+    ${d.criteriosAssociados ? `<p style="margin:0 0 6px 0;font-size:12px;color:#4b5563;"><strong style="color:#166534;">Critérios associados:</strong> ${esc(d.criteriosAssociados)}</p>` : ""}
     <details style="margin:4px 0;">
-      <summary style="cursor:pointer;font-size:12px;color:#166534;font-weight:600;">Ver condutas (CDE), meta e raciocínio</summary>
+      <summary style="cursor:pointer;font-size:12px;color:#166534;font-weight:600;">Ver intervenções, objetivos e observações</summary>
       <div style="margin-top:6px;font-size:12px;color:#4b5563;">
-        <p style="margin:0 0 4px 0;"><strong style="color:#166534;">Condutas (CDE):</strong></p>
+        <p style="margin:0 0 4px 0;"><strong style="color:#166534;">Intervenções assistenciais:</strong></p>
         <ul style="margin:0 0 8px 18px;padding:0;">${condutasHtml}</ul>
-        <p style="margin:0 0 4px 0;"><strong style="color:#166534;">Meta (MM):</strong> ${esc(d.meta)}</p>
-        <p style="margin:0;"><strong style="color:#166534;">Raciocínio (RC):</strong> ${esc(d.raciocinio)}</p>
+        ${objetivos.length ? `<p style="margin:0 0 4px 0;"><strong style="color:#166534;">Objetivos:</strong> ${esc(objetivos.join(" • "))}</p>` : ""}
+        ${prioridade ? `<p style="margin:0 0 4px 0;"><strong style="color:#166534;">Prioridade clínica:</strong> ${esc(prioridade)}</p>` : ""}
+        ${observ.length ? `<p style="margin:0;"><strong style="color:#166534;">Observações:</strong> ${esc(observ.join(" • "))}</p>` : ""}
       </div>
     </details>
   </div>
@@ -132,7 +154,7 @@ export function renderPrescricaoRow(
   d: SaeDiagnostico,
   numero: number,
 ): string {
-  // Texto corrido numerado: "1. conduta. 2. conduta ..." com horário em negrito verde.
+  // Texto corrido numerado com TAB. 9 (frequência) em negrito verde inline.
   const prescricaoTexto = d.condutas
     .map((c, i) => {
       const txt = esc(c.conduta).replace(/\s*\.?\s*$/, "");
@@ -142,16 +164,14 @@ export function renderPrescricaoRow(
       return `${i + 1}. ${txt}.${hor}`;
     })
     .join(" ");
-  // Aprazamento: só horas separadas por espaço, ex.: "12 18 24 06".
-  const aprazTokens: string[] = [];
-  d.condutas.forEach((c) => {
-    const apr = (c.aprazamento || "").trim();
-    if (apr) apr.split(/[^0-9]+/).filter(Boolean).forEach((h) => aprazTokens.push(h));
-  });
-  const aprazamentoTexto = aprazTokens.length
-    ? aprazTokens.join(" ")
+  // APRAZAMENTO: exibe TAB. 10 (texto tal como vem da planilha).
+  const aprazTextos = d.condutas
+    .map((c) => (c.aprazamento || "").trim())
+    .filter(Boolean);
+  const uniqAprz = Array.from(new Set(aprazTextos));
+  const aprazamentoTexto = uniqAprz.length
+    ? uniqAprz.map((a) => esc(a)).join("<br/>")
     : `<span style="color:#166534;font-weight:700;letter-spacing:2px;">A T E N Ç Ã O</span>`;
-  // Coluna de anotações pautada (linhas verdes finas), vazia para escrita manual.
   const pautado =
     "background-image: repeating-linear-gradient(to bottom, transparent 0, transparent 27px, #86efac 27px, #86efac 28px); background-size: 100% 28px; min-height:170px;";
   return `
@@ -163,7 +183,7 @@ export function renderPrescricaoRow(
     ${prescricaoTexto}
     <span class="sae-presc-num" style="display:none;">${numero}</span>
   </td>
-  <td style="padding:12px 10px;vertical-align:top;border-right:1px solid #86efac;background:#ffffff;font-size:14px;color:#166534;font-weight:700;text-align:center;letter-spacing:1px;">${aprazamentoTexto}</td>
+  <td style="padding:12px 10px;vertical-align:top;border-right:1px solid #86efac;background:#ffffff;font-size:13px;color:#166534;font-weight:700;text-align:center;line-height:1.4;">${aprazamentoTexto}</td>
   <td style="padding:8px 8px;vertical-align:top;background:#ffffff;"><div style="width:100%;${pautado}"></div></td>
 </tr>`;
 }
@@ -182,7 +202,7 @@ export function buildEvolucao(params: {
     .map(([k, v]) => `${k}: ${v.trim()}`)
     .join(" | ");
   const dxLines = diagnosticosSelecionados
-    .map((d, i) => `${i + 1}. ${d.diagnostico} (${d.id}) — Meta: ${d.meta}`)
+    .map((d, i) => `${i + 1}. ${d.diagnostico} (${d.id})${d.meta ? " — Meta: " + d.meta : ""}`)
     .join("\n");
   return [
     `EVOLUÇÃO CLÍNICA DE ENFERMAGEM — ${dt}`,
@@ -198,10 +218,10 @@ export function buildEvolucao(params: {
     "SINAIS E SINTOMAS INFORMADOS:",
     sintomasLivres.trim() || "• Nenhum sintoma livre informado.",
     "",
-    "DIAGNÓSTICOS DE ENFERMAGEM (AE/DE):",
+    "DIAGNÓSTICOS DE ENFERMAGEM (ADEC):",
     dxLines || "• Nenhum diagnóstico selecionado.",
     "",
-    "CONDUTA: Prescrição de enfermagem gerada conforme banco de dados mestre AE/DE.",
+    "CONDUTA: Prescrição de enfermagem gerada conforme banco oficial ADEC.",
   ]
     .filter((l) => l !== null && l !== undefined)
     .join("\n");
