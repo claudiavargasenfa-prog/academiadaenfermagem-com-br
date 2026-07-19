@@ -10,7 +10,6 @@ import {
 } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import { ReferencesFooter } from "./References";
-import { InstallAppButton } from "./InstallAppButton";
 import { AuthGate, signOut } from "./AuthGate";
 import { TrialCountdownBanner } from "./TrialCountdownBanner";
 import { useIsAdmin } from "@/lib/access";
@@ -176,7 +175,6 @@ export function AppShell({
           })}
         </div>
       </nav>
-      <InstallAppButton />
     </div>
   );
 

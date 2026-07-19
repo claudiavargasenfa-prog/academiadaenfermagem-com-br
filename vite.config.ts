@@ -19,6 +19,15 @@ export default defineConfig({
         manifest: false, // usamos public/manifest.webmanifest existente
         workbox: {
           globPatterns: ["**/*.{js,css,html,ico,png,svg,webp,woff2,json}"],
+          manifestTransforms: [
+            (entries) => ({
+              manifest: entries.map((entry) => ({
+                ...entry,
+                url: entry.url.replace(/^client\//, ""),
+              })),
+              warnings: [],
+            }),
+          ],
           navigateFallback: "/",
           navigateFallbackDenylist: [
             /^\/api\//,
