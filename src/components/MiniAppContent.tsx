@@ -554,6 +554,11 @@ ${corpoHtml}
         btnEvol?.removeEventListener("click", onEvol);
         root.removeEventListener("click", onChip);
         root.removeEventListener("click", onExportClick);
+        if (hadFn) {
+          w.atualizarEvolucaoAutomatica = prevFn;
+        } else {
+          delete w.atualizarEvolucaoAutomatica;
+        }
       };
     }
 
