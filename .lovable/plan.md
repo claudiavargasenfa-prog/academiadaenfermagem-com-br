@@ -1,40 +1,30 @@
 ## Objetivo
 
-Inserir os achados clínicos que você mandou como **checkboxes marcáveis** dentro do bloco **Exame Físico** do mini app **SAE DESCOMPLICADA E AUTOMATIZADA**. Toda marcação vai automaticamente para a Evolução (comportamento que já funciona hoje via classe `.symptom`).
+1. Dar autonomia total para você trocar a logo do app pelo painel admin (sem depender de mim).
+2. Corrigir a falha: quando o app "Estudante de Técnico" (slug `tecnico-estudante`) foi criado, não apareceu a caixa dele em **Textos do App**. Fazer isso funcionar agora e nunca mais faltar em apps futuros.
 
-## Escopo — só os 7 sistemas que já existem no SAE
+---
 
-Os demais sistemas da sua lista (Cabeça, Olhos, Ouvidos, Nariz, Boca, Pescoço, Mamas, Musculoesquelético, Vascular Periférico, Linfático, Endócrino, Psíquico, Reprodutor) **não serão criados** — você pediu para apenas atualizar os existentes.
+## Parte 1 — Logo editável pelo admin
 
-| Seção no SAE hoje | Recebe da sua lista |
-|---|---|
-| Sinais Gerais | Estado Geral |
-| Tegumentar / Pele | Pele |
-| Respiratório | Sistema Respiratório |
-| Cardiovascular | Sistema Cardiovascular |
-| Digestório | Abdome + Sistema Gastrointestinal (fundidos) |
-| Renal | Sistema Geniturinário |
-| Neurológico | Sistema Neurológico |
+- Criar chave de texto `branding.logo_url` na tabela `app_texts` (valor inicial = a URL da logo atual).
+- No `src/components/AppShell.tsx`, ler essa chave via `useText("branding.logo_url", <fallback atual>)` em vez do import fixo `logoAsset`.
+- Na aba **Admin → Textos do App**, essa chave aparece igual às outras — você cola a URL de uma imagem (ou faz upload no Storage e cola o link público) e salva. A logo troca em todo o app na hora.
+- Bônus: adicionar um campinho de **upload de imagem** ao lado do texto `branding.logo_url` que envia para o bucket `public-assets` do Storage e preenche a URL sozinho (se preferir só campo de URL, me avise).
 
-## Como cada seção vai ficar
+## Parte 2 — Texto do "Estudante de Técnico" + prevenção
 
-Em cada uma das 7 seções, adicionar dois blocos novos logo abaixo do que já existe, sem remover nada:
+- Inserir agora o registro faltante:
+  - `aplicativo.tecnico-estudante.slogan` — para você editar o slogan que aparece no card da loja.
+- Na tela **Admin → Apps** (`AppsAdmin.tsx`), ao criar um novo plano/app, gerar automaticamente a chave `aplicativo.<slug>.slogan` em `app_texts` com valor vazio, para que ela já apareça na aba **Textos do App** sem precisar cadastrar manualmente.
+- Também rodar uma varredura única: para cada plano existente sem `aplicativo.<slug>.slogan`, criar a chave vazia (isso resolve o `tecnico-estudante` e qualquer outro que tenha ficado para trás).
 
-- **✅ Achados de normalidade** — cada item da sua lista vira um checkbox verde independente (ex.: ☐ BEG, ☐ Consciente, ☐ Orientado no tempo/espaço/pessoa, ☐ Hidratado, ☐ Corado, ☐ Acianótico, ☐ Anictérico, ☐ Afebril).
-- **⚠️ Achados de anormalidade** — cada item vira um checkbox âmbar independente (ex.: ☐ Torporoso, ☐ Sonolento, ☐ Confuso, ☐ Desidratado, ☐ Hipocorado, ☐ Cianótico, ☐ Ictérico, ☐ Febril).
+---
 
-Regras aplicadas a todos os checkboxes novos:
-- Classe `.symptom` → alimenta a Evolução automaticamente igual aos demais.
-- Label curta e clínica (a frase-mãe da sua lista fica como legenda do bloco).
-- Layout em grid responsivo (2–3 colunas no desktop, 1 no mobile), coerente com o padrão verde/dourado do SAE.
-- Não mexo nos campos livres de observação, nem no texto padrão de normalidade que já preenche a evolução, nem nos AVP/CVP/temperatura que já estão lá.
+## Detalhes técnicos
 
-## Onde a mudança acontece
+- Tabela afetada: `app_texts` (apenas INSERT/UPDATE de dados via `supabase--insert`, sem mudança de schema).
+- Arquivos afetados: `src/components/AppShell.tsx`, `src/components/admin/AppsAdmin.tsx`, `src/components/admin/TextsAdmin.tsx` (só se eu adicionar o upload).
+- Storage: se você aprovar o upload, crio um bucket público `branding` (uma vez).
 
-Um único UPDATE no `content_md` do registro `mini_apps` slug **SAE AUTOMÁTICA** (id `c020e2e7-90db-449f-a508-2c173f4cada2`), inserindo os dois blocos dentro de cada uma das 7 seções existentes. Nada muda em `sae-engine.ts`, `MiniAppContent.tsx` nem no banco de diagnósticos — só HTML da tela.
-
-## Fora de escopo
-
-- Criar seções novas (Cabeça, Olhos, etc.).
-- Reescrever seções existentes.
-- Mudar cores, tipografia, motor de diagnósticos ou lógica de prescrição.
+Confirma que posso implementar assim?
