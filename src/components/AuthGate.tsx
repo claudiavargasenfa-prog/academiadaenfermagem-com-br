@@ -55,7 +55,7 @@ function AuthScreen() {
   const [password, setPassword] = useState("");
   const [nome, setNome] = useState("");
   const [phone, setPhone] = useState("");
-  const [categoria, setCategoria] = useState<"academico" | "tecnico" | "enfermeiro" | "">("");
+  const [categoria, setCategoria] = useState<"academico" | "tecnico-estudante" | "tecnico" | "enfermeiro" | "">("");
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<{ type: "error" | "info"; text: string } | null>(null);
 
