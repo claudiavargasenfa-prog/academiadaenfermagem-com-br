@@ -221,10 +221,11 @@ function AuthScreen() {
                 </div>
                 <div>
                   <label className={label}>Categoria *</label>
-                  <div className="mt-1 grid grid-cols-3 gap-1.5">
+                  <div className="mt-1 grid grid-cols-2 gap-1.5">
                     {(
                       [
                         { v: "academico", label: "Acadêmico", emoji: "🎓" },
+                        { v: "tecnico-estudante", label: "Estudante de Técnico", emoji: "📘" },
                         { v: "tecnico", label: "Técnico", emoji: "🩺" },
                         { v: "enfermeiro", label: "Enfermeiro", emoji: "👩‍⚕️" },
                       ] as const
