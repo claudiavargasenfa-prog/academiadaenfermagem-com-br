@@ -177,6 +177,13 @@ export function AppShell({
                   </Link>
                 );
               })}
+              <button
+                onClick={() => { setOpen(false); handleShare(); }}
+                className="flex items-center gap-2 rounded-xl bg-white/10 px-3 py-2.5 text-sm font-medium text-primary-foreground"
+              >
+                <Share2 className="h-4 w-4" />
+                {compartilharLabel}
+              </button>
             </div>
           </div>
         )}
