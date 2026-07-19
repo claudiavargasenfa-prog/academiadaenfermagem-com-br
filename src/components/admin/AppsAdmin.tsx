@@ -711,6 +711,7 @@ function Container({
   available,
   targetApps,
   onMoveTo,
+  onReorder,
 }: {
   container: { id: string; title: string; emoji: string | null; sectionId: string | null; items: MiniAppPlacement[] };
   miniById: Map<string, any>;
@@ -719,6 +720,7 @@ function Container({
   available: any[];
   targetApps: AppRow[];
   onMoveTo: (miniAppId: string, targetAppId: string, placementId: string) => void;
+  onReorder: (containerId: string, from: number, to: number) => void;
 }) {
   const ids = container.items.map((i) => i.id);
   return (
