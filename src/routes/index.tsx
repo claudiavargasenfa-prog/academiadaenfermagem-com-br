@@ -127,7 +127,7 @@ function StoreHome() {
 
 
   const homeTitle = useText("home.title", "Academia da Enfermagem");
-  const homeDesc = useText("home.description", "Três aplicativos, uma só academia.");
+  const homeDesc = useText("home.description", "Quatro aplicativos, uma só academia. Assine o seu e libere todo o conteúdo.");
   const ctaSection = useText("home.cta_section", "Assine um aplicativo · acesso ilimitado");
   const compraSegura = useText("compra.segura", "🔒 COMPRA SEGURA");
   const migracaoBanner = useText("migracao.banner", "**MIGRE PARA OUTRO APP E GANHE 15% DE DESCONTO POR 3 MESES**");
