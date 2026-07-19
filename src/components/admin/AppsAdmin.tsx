@@ -754,7 +754,7 @@ function Container({
               Arraste mini apps para cá
             </li>
           )}
-          {container.items.map((p) => {
+          {container.items.map((p, idx) => {
             const m = miniById.get(p.mini_app_id);
             if (!m) return null;
             return (
@@ -767,6 +767,8 @@ function Container({
                 onRemove={() => onRemove(p.id)}
                 targetApps={targetApps}
                 onMoveTo={(targetAppId) => onMoveTo(m.id, targetAppId, p.id)}
+                onUp={idx > 0 ? () => onReorder(container.id, idx, idx - 1) : undefined}
+                onDown={idx < container.items.length - 1 ? () => onReorder(container.id, idx, idx + 1) : undefined}
               />
             );
           })}
