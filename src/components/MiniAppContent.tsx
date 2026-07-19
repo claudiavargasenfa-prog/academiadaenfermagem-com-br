@@ -512,7 +512,7 @@ ${corpoHtml}
             const b = document.createElement("button");
             b.id = "btn-export-evolucao-abnt";
             b.type = "button";
-            b.textContent = "📄 Exportar Evolução (PDF ABNT)";
+            b.textContent = "📄 Baixar Evolução (ABNT)";
             b.style.cssText =
               "margin:10px 6px;padding:10px 16px;background:#166534;color:#fff;border:0;border-radius:8px;font-weight:600;cursor:pointer;";
             alvo.appendChild(b);
