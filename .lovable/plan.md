@@ -1,18 +1,18 @@
-## Corrigir o nome do app
+Diagnóstico técnico confirmado:
 
-Trocar "ACADÊMICO DE BOLSO" / "Acadêmico de Bolsa" por **Academia da Enfermagem** em todos os lugares que aparecem para o usuário e para o celular quando instala o app.
+1. O manifest existe e está válido.
+2. O Chrome não aponta erro de instalabilidade no manifest.
+3. Porém o service worker não fica registrado no domínio publicado.
+4. O arquivo `sw.js` gerado está tentando cachear arquivos no caminho `/client/assets/...`, mas no site publicado os arquivos reais estão em `/assets/...`. Esses caminhos dão 404.
+5. Resultado prático: o PWA fica tecnicamente incompleto para o Chrome Android liberar o banner automático de instalação.
+6. O botão interno “Instalar App” também não aparece para visitante não logado, porque está dentro do layout protegido por login.
 
-### Arquivos a alterar
+Plano de correção:
 
-1. **`src/routes/__root.tsx`** — títulos e metatags (title, og:title, twitter:title). Trocar "ACADÊMICO DE BOLSO— Informações em suas mãos" por "Academia da Enfermagem — Informações em suas mãos".
+1. Ajustar a configuração do PWA para gerar o cache com os caminhos corretos do site publicado, removendo o prefixo incorreto `client/` dos arquivos cacheados.
+2. Garantir que o service worker registre corretamente em `academiadaenfermagem.com.br` e continue bloqueado no preview do Lovable, para não travar versões antigas.
+3. Tornar o botão “Instalar App” visível também na tela pública de login/cadastro, não apenas depois que a pessoa entra no app.
+4. Adicionar metadados móveis faltantes para Android/iPhone, como `apple-touch-icon` e tags de app mobile, mantendo o nome “Academia da Enfermagem”.
+5. Depois da implementação, testar tecnicamente no domínio publicado: manifest, service worker, erros de instalabilidade e presença do botão de instalação.
 
-2. **`public/manifest.webmanifest`** — `name` e `short_name` que aparecem quando o aluno instala no celular:
-   - `name`: "Academia da Enfermagem"
-   - `short_name`: "Academia"
-   - `description`: atualizar para refletir a Academia da Enfermagem.
-
-### Fora do escopo
-- Não mexer em conteúdo, design, rotas, ou lógica.
-- Não mudar o domínio nem republicar automaticamente — depois de aprovar, você clica em **Publicar** para o novo nome ir ao ar.
-
-Observação: quem já instalou o app antigo no celular pode continuar vendo o nome antigo até desinstalar e reinstalar — iOS e Android guardam o `name` no momento da instalação.
+Observação importante: no Android o banner automático depende do Chrome e pode não aparecer em todos os acessos; por isso o botão fixo “Instalar App” será a solução prática e controlável dentro do próprio app.
