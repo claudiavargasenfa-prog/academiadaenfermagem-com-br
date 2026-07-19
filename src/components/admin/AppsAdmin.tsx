@@ -165,6 +165,17 @@ function AppForm({ app, onClose }: { app: AppRow | null; onClose: () => void }) 
       : await supabase.from("apps").insert(payload);
     setBusy(false);
     if (res.error) return setErr(res.error.message);
+    if (!app && payload.slug) {
+      // Cria automaticamente a chave de slogan em Textos do App para o novo app
+      await supabase.from("app_texts").upsert(
+        {
+          key: `aplicativo.${payload.slug}.slogan`,
+          value: "",
+          description: `Slogan do card do app ${payload.name} na loja.`,
+        },
+        { onConflict: "key" },
+      );
+    }
     setOk("✅ Salvo com sucesso.");
     window.setTimeout(onClose, 450);
   }
