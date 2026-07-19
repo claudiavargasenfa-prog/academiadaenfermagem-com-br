@@ -196,6 +196,13 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
     const isSaeApp = !!root.querySelector(".lavoble-sae-descomplicada");
     let cleanupSaeListeners: (() => void) | null = null;
     if (isSaeApp) {
+      // Neutraliza referências inline legadas (oninput/onchange="atualizarEvolucaoAutomatica()")
+      // que sobraram no HTML do banco e disparavam ReferenceError a cada clique/digitação.
+      const w = window as unknown as Record<string, unknown>;
+      const hadFn = "atualizarEvolucaoAutomatica" in w;
+      const prevFn = w.atualizarEvolucaoAutomatica;
+      w.atualizarEvolucaoAutomatica = () => {};
+
       // Evita crash do script legado que procura #medicamentos
       if (!root.querySelector("#medicamentos")) {
         const m = document.createElement("input");

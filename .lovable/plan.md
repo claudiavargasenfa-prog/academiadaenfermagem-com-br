@@ -1,68 +1,56 @@
-## O que muda
 
-Troca do **banco de dados mestre** do mini app "SAE DESCOMPLICADA E AUTOMATIZADA" pela planilha nova enviada no chat, mantendo intacto todo o fluxo, o visual e a tabela de prescrição verde (3 colunas) que já funciona hoje.
+## Diagnóstico
 
-## Passos
+Auditei o mini app **SAE Descomplicada e Automatizada** (id `c020e2e7…`) e encontrei **dois problemas** que explicam por que os botões de baixar Prescrição e Evolução não funcionam — principalmente no celular (você está em viewport 411px):
 
-### 1. Converter a planilha em JSON
-- Ler `PLANILIA_OFICIAL_DE_DIAGNOSTICOS_E_PRESCRIÇÃO_DE_ENFERMAGEM.xlsx` (1.496 linhas úteis, 1.344 códigos únicos ADEC-XXXX).
-- Agrupar por `Código` (TAB. 1) — quando o mesmo código repete em várias linhas (várias intervenções), consolidar as intervenções em uma lista.
-- Gerar `src/data/sae-banco.json` **substituindo** o arquivo atual, com este shape por diagnóstico:
+### Problema 1 — Erro de JavaScript em cascata
+O HTML salvo no banco tem **25 chamadas inline** para uma função chamada `atualizarEvolucaoAutomatica()` (em `oninput=` e `onchange=` de vários campos: Nome, Idade, Leito, checkboxes de exame físico, etc.). Essa função **não existe mais** — foi substituída pelo motor novo (`sae-engine.ts`), mas as chamadas antigas ficaram no HTML.
 
+Resultado (confirmado no console do preview):
 ```
-{
-  "id": "ADEC-0001",
-  "matriz": "TAB. 2 — Matriz Clínica",
-  "eixo":   "TAB. 3 — Eixo Assistencial",
-  "sinais": "TAB. 4 — Evidências Clínicas",      // usado só para BUSCA
-  "criteriosEssenciais": "TAB. 5",
-  "criteriosAssociados": "TAB. 6",
-  "diagnostico": "TAB. 7 — Hipótese Diagnóstica",
-  "condutas": [
-    {
-      "conduta":    "TAB. 8 — Intervenções",
-      "horario":    "TAB. 9 — Frequência",       // mesmo slot de hoje
-      "aprazamento":"TAB. 10 — Aprazamento",     // mesmo slot de hoje
-      "objetivo":   "TAB. 11",
-      "prioridade": "TAB. 12",
-      "palavras":   "TAB. 13",
-      "obs":        "TAB. 14"
-    }
-  ]
-}
+Uncaught ReferenceError: atualizarEvolucaoAutomatica is not defined
 ```
+Todo clique/digitação em campo do paciente ou checkbox dispara esse erro, o que **interrompe a propagação de eventos** e, em alguns navegadores mobile, também impede o preenchimento correto da caixa de evolução.
 
-### 2. Ajustar o motor de matching
-Arquivo: `src/lib/sae-engine.ts`
+### Problema 2 — Exportação usa popup (bloqueado no celular)
+Os botões **📄 Exportar Evolução (PDF ABNT)** e **📄 Exportar Prescrição (PDF ABNT)** hoje chamam `window.open("", "_blank")` para abrir uma nova aba com o conteúdo e disparar `window.print()`. Isso é bloqueado por padrão em:
+- Chrome/Safari no celular (bloqueador de popup ativo)
+- App instalado como PWA
+- WebView do Instagram/Facebook
 
-- **Busca (chips + textarea "Sinais e Sintomas")**: passa a casar **somente contra TAB. 4 (Evidências Clínicas)** + TAB. 13 (Palavras-chave) como reforço. Nada mais alimenta o buscador — é o que você pediu ("TAB. 4 vai ser a Sinais e Sintomas, que são as busca por diagnósticos").
-- **Card do diagnóstico exibido** ao usuário: TAB. 2, TAB. 3, TAB. 5, TAB. 6, TAB. 7 (nessa ordem, com TAB. 7 como título principal em negrito).
-- **Bloco expandível "Ver condutas"** dentro do card: TAB. 8, TAB. 11 (Objetivo/Meta), TAB. 12 (Prioridade), TAB. 14 (Observações).
-- **Índice de busca** recalculado a partir de TAB. 4 + TAB. 13 (frases e keywords), mantendo lista de stopwords atual.
+Quando o popup é bloqueado, o código mostra `alert("Habilite popups para exportar em PDF.")` — mas em muitos navegadores mobile nem esse alerta aparece: o clique simplesmente "não faz nada".
 
-### 3. Tabela de prescrição — permanece igual
-- Mesmas 3 colunas verdes: `PRESCRIÇÃO DE ENFERMAGEM | APRAZAMENTO | ANOTAÇÕES DE ENFERMAGEM`.
-- Cada conduta renderiza no texto corrido com **TAB. 9 (Frequência) em negrito verde inline** — mesmo lugar onde hoje entra "12/12h".
-- Coluna APRAZAMENTO exibe **TAB. 10** — mesmo lugar onde hoje entra "10 - 22".
-- Cabeçalho do paciente, botão ✕ Excluir por linha, coluna pautada e exportação PDF ABNT: **sem alteração**.
+---
 
-### 4. Evolução consolidada
-Sem mudança de estrutura. Cada diagnóstico selecionado aparece como:
-`N. TAB.7 (ADEC-XXXX) — Meta: TAB.11`
+## Correção proposta
 
-### 5. Volume (1.344 itens)
-Confirmado por você. O JSON fica em ~600–900 KB, carregado 1 vez por sessão. Adiciono `useMemo` no índice de busca para que a filtragem continue instantânea depois do primeiro carregamento.
+### 1. Neutralizar o `ReferenceError` (arquivo `src/components/MiniAppContent.tsx`)
+Dentro do bloco `if (isSaeApp)`, expor no `window` uma função `atualizarEvolucaoAutomatica` como **no-op** (função vazia). Assim as 25 chamadas inline param de quebrar sem precisar reescrever o HTML gigante do banco. Também remove essa função no cleanup do `useEffect`.
 
-## O que **NÃO** vai mudar
+### 2. Trocar popup por **download direto** (mesmo padrão dos botões `.doc` que já funcionam)
+Substituir `abrirParaImprimir()` por `baixarHtmlAbnt()`:
+- Gera o mesmo HTML formatado em ABNT (Times New Roman 12pt, margens 3/2cm, espaço para assinatura e carimbo).
+- Empacota em `Blob` do tipo `text/html`.
+- Usa `<a download="Evolucao_ABNT.html">` para baixar direto — **funciona em 100% dos navegadores mobile e desktop, sem popup**.
+- O arquivo baixado abre no navegador do celular e o usuário usa "Imprimir / Salvar em PDF" nativo do sistema (mesmo comportamento visual do ABNT que já existe).
 
-- HTML do mini app no banco (nenhuma migração SQL nesta rodada).
-- Cabeçalho do paciente, chips de sinais/sintomas, checkboxes do exame físico, geração de evolução, botões de exportar PDF ABNT.
-- Cores, tipografia, glassmorphism, layout dos cards.
-- Nenhum outro mini app.
+Renomear os rótulos para deixar claro:
+- **📄 Baixar Evolução (ABNT)**
+- **📄 Baixar Prescrição (ABNT)**
 
-## Validação
+### 3. Ajuste de UX
+- Se o usuário clicar em "Baixar Evolução" sem ter gerado a evolução consolidada antes, **gerar automaticamente** e depois baixar (hoje mostra um `alert` e não faz nada) — evita o "não funciona" quando o passo intermediário foi pulado.
+- Mesma coisa para prescrição: se houver diagnósticos selecionados mas o usuário não clicou em "Gerar Prescrição", chamar `gerarPrescricao()` antes do download.
 
-1. Abrir SAE, digitar "queda" no textarea → deve casar ADEC-0002 (Prevenção de Quedas) via TAB. 4.
-2. Selecionar 2 diagnósticos, clicar **Gerar Prescrição** → tabela verde com TAB. 8 no texto, TAB. 9 em negrito verde, TAB. 10 na coluna do meio.
-3. Clicar **Gerar Evolução** → linhas com TAB. 7 + código ADEC + Meta (TAB. 11).
-4. Exportar PDF ABNT → conteúdo preservado.
+---
+
+## Escopo
+
+Só **1 arquivo** alterado, sem tocar no HTML do banco nem no visual:
+- `src/components/MiniAppContent.tsx` — dentro do bloco `isSaeApp`:
+  - Expor `window.atualizarEvolucaoAutomatica = () => {}` (com cleanup).
+  - Substituir `abrirParaImprimir` por `baixarHtmlAbnt` (Blob + `<a download>`).
+  - Atualizar `exportarEvolucaoAbnt` e `exportarPrescricaoAbnt` para chamar `gerarEvolucao()`/`gerarPrescricao()` automaticamente quando faltar dado.
+  - Renomear texto dos botões injetados.
+
+Sem alteração no banco, no `sae-engine.ts`, no design ou no fluxo.
