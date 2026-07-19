@@ -398,55 +398,67 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
       };
       root.addEventListener("click", onChip);
 
-      // ===== EXPORTAÇÃO ABNT — download direto (funciona em mobile, sem popup) =====
-      const baixarHtmlAbnt = (titulo: string, corpoHtml: string, nomeArquivo: string) => {
-        const dataHoje = new Date().toLocaleDateString("pt-BR");
-        const doc = `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>${titulo}</title>
-<style>
-  @page { size: A4; margin: 3cm 2cm 2cm 3cm; }
-  html, body { background:#fff; color:#000; }
-  body { font-family: "Times New Roman", Times, serif; font-size: 12pt; line-height: 1.5; margin: 2cm; }
-  h1 { font-size: 14pt; text-align:center; text-transform:uppercase; margin: 0 0 24pt; font-weight:bold; letter-spacing:.5px; }
-  h2 { font-size: 12pt; text-transform:uppercase; margin: 18pt 0 6pt; font-weight:bold; }
-  .abnt-meta { font-size: 11pt; margin-bottom: 18pt; }
-  .abnt-body { text-align: justify; text-indent: 1.25cm; white-space: pre-wrap; }
-  .assinatura { margin-top: 60pt; text-align:center; page-break-inside: avoid; }
-  .assinatura .linha { border-top: 1px solid #000; width: 70%; margin: 40pt auto 4pt; }
-  .assinatura small { font-size: 10pt; display:block; }
-  .carimbo { margin: 30pt auto 0; border: 1px dashed #666; height: 90pt; width: 60%; display:flex; align-items:center; justify-content:center; font-size:10pt; color:#666; }
-  table { width:100%; border-collapse: collapse; font-size: 11pt; }
-  th, td { border: 1px solid #000; padding: 6pt; vertical-align: top; }
-  th { background:#f3f3f3; text-transform:uppercase; font-size:10pt; }
-  @media print { .no-print { display:none !important; } }
-  .no-print { position: fixed; top:10px; right:10px; background:#166534; color:#fff; padding:10px 16px; border-radius:6px; cursor:pointer; border:0; font-family: system-ui; font-size:14px; }
-</style></head><body>
-<button class="no-print" onclick="window.print()">🖨️ Imprimir / Salvar em PDF</button>
-<h1>${titulo}</h1>
-<div class="abnt-meta"><strong>Data:</strong> ${dataHoje}</div>
-${corpoHtml}
-<div class="assinatura">
-  <div class="linha"></div>
-  <small>Assinatura do(a) Enfermeiro(a)</small>
-  <small>COREN: ______________________</small>
-  <div class="carimbo">Espaço reservado para carimbo</div>
-</div>
-</body></html>`;
-        try {
-          const blob = new Blob([doc], { type: "text/html;charset=utf-8" });
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement("a");
-          a.href = url;
-          a.download = nomeArquivo;
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-          setTimeout(() => URL.revokeObjectURL(url), 1500);
-        } catch {
-          alert("Não foi possível gerar o arquivo para download.");
-        }
+      // ===== EXPORTAÇÃO ABNT — PDF real, sem popup e sem depender do imprimir do navegador =====
+      const limparTextoPdf = (valor: string) =>
+        (valor || "")
+          .replace(/[📄🖨️📋🧭⚕️📝🔍✅⚠️🧠🫁❤️🟡🔵⚪]/g, "")
+          .replace(/✕\s*Excluir/g, "")
+          .replace(/\s+/g, " ")
+          .trim();
+
+      const getTextoCelula = (cell: Element | undefined) => {
+        if (!cell) return "";
+        const clone = cell.cloneNode(true) as HTMLElement;
+        clone.querySelectorAll("button, .sae-presc-num").forEach((el) => el.remove());
+        return limparTextoPdf(clone.textContent ?? "");
       };
 
-      const exportarEvolucaoAbnt = () => {
+      const criarPdfBase = async (titulo: string) => {
+        const { jsPDF } = await import("jspdf");
+        const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+        const pageW = pdf.internal.pageSize.getWidth();
+        const margin = { left: 30, top: 30, right: 20, bottom: 20 };
+        const contentW = pageW - margin.left - margin.right;
+        let y = margin.top;
+        const addPageIfNeeded = (needed = 10) => {
+          const pageH = pdf.internal.pageSize.getHeight();
+          if (y + needed > pageH - margin.bottom) {
+            pdf.addPage();
+            y = margin.top;
+          }
+        };
+        pdf.setFont("times", "bold");
+        pdf.setFontSize(14);
+        pdf.text(titulo.toUpperCase(), pageW / 2, y, { align: "center" });
+        y += 14;
+        pdf.setFont("times", "normal");
+        pdf.setFontSize(11);
+        pdf.text(`Data: ${new Date().toLocaleDateString("pt-BR")}`, margin.left, y);
+        y += 10;
+        return { pdf, margin, contentW, get y() { return y; }, set y(next: number) { y = next; }, addPageIfNeeded };
+      };
+
+      const finalizarPdfComAssinatura = (ctx: Awaited<ReturnType<typeof criarPdfBase>>) => {
+        const { pdf, margin, contentW, addPageIfNeeded } = ctx;
+        addPageIfNeeded(58);
+        ctx.y += 18;
+        const center = margin.left + contentW / 2;
+        pdf.setDrawColor(0, 0, 0);
+        pdf.line(center - 55, ctx.y, center + 55, ctx.y);
+        ctx.y += 5;
+        pdf.setFont("times", "normal");
+        pdf.setFontSize(10);
+        pdf.text("Assinatura do(a) Enfermeiro(a)", center, ctx.y, { align: "center" });
+        ctx.y += 5;
+        pdf.text("COREN: ______________________", center, ctx.y, { align: "center" });
+        ctx.y += 10;
+        pdf.setLineDashPattern([2, 2], 0);
+        pdf.rect(center - 45, ctx.y, 90, 28);
+        pdf.setLineDashPattern([], 0);
+        pdf.text("Espaço reservado para carimbo", center, ctx.y + 15, { align: "center" });
+      };
+
+      const exportarEvolucaoAbnt = async () => {
         let evol = (
           root.querySelector<HTMLTextAreaElement>("#txt-evolucao-clinica-mestre")?.value ?? ""
         ).trim();
@@ -461,15 +473,26 @@ ${corpoHtml}
           alert("Preencha ao menos a anamnese ou os sinais/sintomas antes de baixar a evolução.");
           return;
         }
-        const esc = evol.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-        baixarHtmlAbnt(
-          "Evolução de Enfermagem",
-          `<div class="abnt-body">${esc}</div>`,
-          "Evolucao_Enfermagem_ABNT.html",
-        );
+        try {
+          const ctx = await criarPdfBase("Evolução de Enfermagem");
+          const { pdf, margin, contentW, addPageIfNeeded } = ctx;
+          pdf.setFont("times", "normal");
+          pdf.setFontSize(12);
+          const blocos = evol.split(/\n+/).map((linha) => linha.trim()).filter(Boolean);
+          for (const bloco of blocos) {
+            const linhas = pdf.splitTextToSize(limparTextoPdf(bloco), contentW);
+            addPageIfNeeded(linhas.length * 7 + 4);
+            pdf.text(linhas, margin.left, ctx.y, { align: "justify", maxWidth: contentW });
+            ctx.y += linhas.length * 7 + 3;
+          }
+          finalizarPdfComAssinatura(ctx);
+          pdf.save("Evolucao_Enfermagem_ABNT.pdf");
+        } catch {
+          alert("Não foi possível baixar a evolução em PDF. Tente novamente.");
+        }
       };
 
-      const exportarPrescricaoAbnt = () => {
+      const exportarPrescricaoAbnt = async () => {
         let wrapper = root.querySelector<HTMLElement>("#wrapper-tabela-prescricao");
         let tbody = root.querySelector<HTMLElement>("#corpo-tabela-prescricao");
         // Auto-gera se ainda não houver linhas mas existirem diagnósticos selecionados
@@ -493,14 +516,76 @@ ${corpoHtml}
           return;
         }
         const paciente = (root.querySelector<HTMLInputElement>("#nomePaciente")?.value ?? "").trim();
+        const idade = (root.querySelector<HTMLInputElement>("#idadePaciente")?.value ?? "").trim();
         const leito = (root.querySelector<HTMLInputElement>("#leitoPaciente")?.value ?? "").trim();
-        const tabela = wrapper.querySelector("table")?.outerHTML ?? "";
-        const cab = `<div class="abnt-meta">${paciente ? `<div><strong>Paciente:</strong> ${paciente}</div>` : ""}${leito ? `<div><strong>Leito:</strong> ${leito}</div>` : ""}</div><h2>Plano de Prescrição de Enfermagem</h2>`;
-        baixarHtmlAbnt(
-          "Plano de Prescrição de Enfermagem",
-          cab + tabela,
-          "Prescricao_Enfermagem_ABNT.html",
-        );
+        try {
+          const ctx = await criarPdfBase("Plano de Prescrição de Enfermagem");
+          const { pdf, margin, contentW, addPageIfNeeded } = ctx;
+          pdf.setFont("times", "normal");
+          pdf.setFontSize(10);
+          const meta = [
+            paciente ? `Paciente: ${paciente}` : "Paciente: ______________________________",
+            idade ? `Idade: ${idade}` : "Idade: ______",
+            leito ? `Leito: ${leito}` : "Leito: ______",
+          ];
+          pdf.text(meta.join("    "), margin.left, ctx.y);
+          ctx.y += 9;
+
+          const rows = Array.from(tbody.querySelectorAll<HTMLTableRowElement>("tr.sae-presc-row"));
+          const colW = [contentW * 0.48, contentW * 0.20, contentW * 0.32];
+          const headerH = 10;
+          const drawHeader = () => {
+            pdf.setFillColor(22, 101, 52);
+            pdf.setTextColor(255, 255, 255);
+            pdf.setFont("times", "bold");
+            pdf.setFontSize(8.5);
+            let x = margin.left;
+            ["PRESCRIÇÃO DE ENFERMAGEM", "APRAZAMENTO", "ANOTAÇÕES DE ENFERMAGEM"].forEach((h, i) => {
+              pdf.rect(x, ctx.y, colW[i], headerH, "FD");
+              pdf.text(h, x + colW[i] / 2, ctx.y + 6.5, { align: "center" });
+              x += colW[i];
+            });
+            ctx.y += headerH;
+            pdf.setTextColor(0, 0, 0);
+          };
+          drawHeader();
+
+          rows.forEach((row) => {
+            const cells = Array.from(row.cells);
+            const prescricao = getTextoCelula(cells[0]);
+            const aprazamento = getTextoCelula(cells[1]);
+            pdf.setFont("times", "normal");
+            pdf.setFontSize(9);
+            const prescLines = pdf.splitTextToSize(prescricao, colW[0] - 6);
+            const aprazLines = pdf.splitTextToSize(aprazamento, colW[1] - 6);
+            const rowH = Math.max(44, prescLines.length * 5 + 10, aprazLines.length * 5 + 10);
+            addPageIfNeeded(rowH + headerH);
+            if (ctx.y + rowH > pdf.internal.pageSize.getHeight() - margin.bottom) {
+              pdf.addPage();
+              ctx.y = margin.top;
+              drawHeader();
+            }
+            let x = margin.left;
+            pdf.setDrawColor(22, 101, 52);
+            pdf.rect(x, ctx.y, colW[0], rowH);
+            pdf.text(prescLines, x + 3, ctx.y + 6, { maxWidth: colW[0] - 6 });
+            x += colW[0];
+            pdf.rect(x, ctx.y, colW[1], rowH);
+            pdf.setFont("times", "bold");
+            pdf.text(aprazLines, x + colW[1] / 2, ctx.y + 8, { align: "center", maxWidth: colW[1] - 6 });
+            x += colW[1];
+            pdf.rect(x, ctx.y, colW[2], rowH);
+            pdf.setDrawColor(134, 239, 172);
+            for (let lineY = ctx.y + 9; lineY < ctx.y + rowH - 4; lineY += 7) {
+              pdf.line(x + 3, lineY, x + colW[2] - 3, lineY);
+            }
+            ctx.y += rowH;
+          });
+          finalizarPdfComAssinatura(ctx);
+          pdf.save("Prescricao_Enfermagem_ABNT.pdf");
+        } catch {
+          alert("Não foi possível baixar a prescrição em PDF. Tente novamente.");
+        }
       };
 
       const injetarBotoes = () => {
@@ -540,10 +625,10 @@ ${corpoHtml}
         const t = e.target as HTMLElement;
         if (t.closest("#btn-export-evolucao-abnt")) {
           e.preventDefault();
-          exportarEvolucaoAbnt();
+          void exportarEvolucaoAbnt();
         } else if (t.closest("#btn-export-prescricao-abnt")) {
           e.preventDefault();
-          exportarPrescricaoAbnt();
+          void exportarPrescricaoAbnt();
         }
       };
       root.addEventListener("click", onExportClick);
