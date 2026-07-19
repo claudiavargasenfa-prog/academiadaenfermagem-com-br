@@ -196,6 +196,13 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
     const isSaeApp = !!root.querySelector(".lavoble-sae-descomplicada");
     let cleanupSaeListeners: (() => void) | null = null;
     if (isSaeApp) {
+      // Neutraliza referências inline legadas (oninput/onchange="atualizarEvolucaoAutomatica()")
+      // que sobraram no HTML do banco e disparavam ReferenceError a cada clique/digitação.
+      const w = window as unknown as Record<string, unknown>;
+      const hadFn = "atualizarEvolucaoAutomatica" in w;
+      const prevFn = w.atualizarEvolucaoAutomatica;
+      w.atualizarEvolucaoAutomatica = () => {};
+
       // Evita crash do script legado que procura #medicamentos
       if (!root.querySelector("#medicamentos")) {
         const m = document.createElement("input");
@@ -391,19 +398,14 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
       };
       root.addEventListener("click", onChip);
 
-      // ===== EXPORTAÇÃO ABNT (PDF via impressão do navegador) =====
-      const abrirParaImprimir = (titulo: string, corpoHtml: string) => {
-        const w = window.open("", "_blank", "width=900,height=1000");
-        if (!w) {
-          alert("Habilite popups para exportar em PDF.");
-          return;
-        }
+      // ===== EXPORTAÇÃO ABNT — download direto (funciona em mobile, sem popup) =====
+      const baixarHtmlAbnt = (titulo: string, corpoHtml: string, nomeArquivo: string) => {
         const dataHoje = new Date().toLocaleDateString("pt-BR");
-        w.document.write(`<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>${titulo}</title>
+        const doc = `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>${titulo}</title>
 <style>
   @page { size: A4; margin: 3cm 2cm 2cm 3cm; }
   html, body { background:#fff; color:#000; }
-  body { font-family: "Times New Roman", Times, serif; font-size: 12pt; line-height: 1.5; margin:0; }
+  body { font-family: "Times New Roman", Times, serif; font-size: 12pt; line-height: 1.5; margin: 2cm; }
   h1 { font-size: 14pt; text-align:center; text-transform:uppercase; margin: 0 0 24pt; font-weight:bold; letter-spacing:.5px; }
   h2 { font-size: 12pt; text-transform:uppercase; margin: 18pt 0 6pt; font-weight:bold; }
   .abnt-meta { font-size: 11pt; margin-bottom: 18pt; }
@@ -416,9 +418,9 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
   th, td { border: 1px solid #000; padding: 6pt; vertical-align: top; }
   th { background:#f3f3f3; text-transform:uppercase; font-size:10pt; }
   @media print { .no-print { display:none !important; } }
-  .no-print { position: fixed; top:10px; right:10px; background:#166534; color:#fff; padding:8px 14px; border-radius:6px; cursor:pointer; border:0; font-family: system-ui; }
+  .no-print { position: fixed; top:10px; right:10px; background:#166534; color:#fff; padding:10px 16px; border-radius:6px; cursor:pointer; border:0; font-family: system-ui; font-size:14px; }
 </style></head><body>
-<button class="no-print" onclick="window.print()">Imprimir / Salvar PDF</button>
+<button class="no-print" onclick="window.print()">🖨️ Imprimir / Salvar em PDF</button>
 <h1>${titulo}</h1>
 <div class="abnt-meta"><strong>Data:</strong> ${dataHoje}</div>
 ${corpoHtml}
@@ -428,35 +430,77 @@ ${corpoHtml}
   <small>COREN: ______________________</small>
   <div class="carimbo">Espaço reservado para carimbo</div>
 </div>
-<script>window.addEventListener('load',()=>setTimeout(()=>window.print(),400));</script>
-</body></html>`);
-        w.document.close();
+</body></html>`;
+        try {
+          const blob = new Blob([doc], { type: "text/html;charset=utf-8" });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = nomeArquivo;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          setTimeout(() => URL.revokeObjectURL(url), 1500);
+        } catch {
+          alert("Não foi possível gerar o arquivo para download.");
+        }
       };
 
       const exportarEvolucaoAbnt = () => {
-        const evol = (
+        let evol = (
           root.querySelector<HTMLTextAreaElement>("#txt-evolucao-clinica-mestre")?.value ?? ""
         ).trim();
+        // Auto-gera se ainda estiver vazio
         if (!evol) {
-          alert('Gere a evolução consolidada antes de exportar (botão "Gerar Evolução").');
+          gerarEvolucao();
+          evol = (
+            root.querySelector<HTMLTextAreaElement>("#txt-evolucao-clinica-mestre")?.value ?? ""
+          ).trim();
+        }
+        if (!evol) {
+          alert("Preencha ao menos a anamnese ou os sinais/sintomas antes de baixar a evolução.");
           return;
         }
         const esc = evol.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-        abrirParaImprimir("Evolução de Enfermagem", `<div class="abnt-body">${esc}</div>`);
+        baixarHtmlAbnt(
+          "Evolução de Enfermagem",
+          `<div class="abnt-body">${esc}</div>`,
+          "Evolucao_Enfermagem_ABNT.html",
+        );
       };
 
       const exportarPrescricaoAbnt = () => {
-        const wrapper = root.querySelector<HTMLElement>("#wrapper-tabela-prescricao");
-        const tbody = root.querySelector<HTMLElement>("#corpo-tabela-prescricao");
+        let wrapper = root.querySelector<HTMLElement>("#wrapper-tabela-prescricao");
+        let tbody = root.querySelector<HTMLElement>("#corpo-tabela-prescricao");
+        // Auto-gera se ainda não houver linhas mas existirem diagnósticos selecionados
+        if ((!tbody || !tbody.children.length) && diagnosticosAtivos.length) {
+          const algumSelecionado = diagnosticosAtivos.some(
+            (d) =>
+              !!root.querySelector<HTMLInputElement>(
+                `.sae-diag-select[data-diag-id="${d.id}"]:checked`,
+              ),
+          );
+          if (algumSelecionado) {
+            gerarPrescricao();
+            wrapper = root.querySelector<HTMLElement>("#wrapper-tabela-prescricao");
+            tbody = root.querySelector<HTMLElement>("#corpo-tabela-prescricao");
+          }
+        }
         if (!wrapper || !tbody || !tbody.children.length) {
-          alert('Gere a prescrição antes de exportar (botão "Gerar Prescrição").');
+          alert(
+            'Selecione ao menos um diagnóstico (com prioridade) e clique em "Gerar Prescrição" antes de baixar.',
+          );
           return;
         }
         const paciente = (root.querySelector<HTMLInputElement>("#nomePaciente")?.value ?? "").trim();
         const leito = (root.querySelector<HTMLInputElement>("#leitoPaciente")?.value ?? "").trim();
         const tabela = wrapper.querySelector("table")?.outerHTML ?? "";
         const cab = `<div class="abnt-meta">${paciente ? `<div><strong>Paciente:</strong> ${paciente}</div>` : ""}${leito ? `<div><strong>Leito:</strong> ${leito}</div>` : ""}</div><h2>Plano de Prescrição de Enfermagem</h2>`;
-        abrirParaImprimir("Plano de Prescrição de Enfermagem", cab + tabela);
+        baixarHtmlAbnt(
+          "Plano de Prescrição de Enfermagem",
+          cab + tabela,
+          "Prescricao_Enfermagem_ABNT.html",
+        );
       };
 
       const injetarBotoes = () => {
@@ -468,7 +512,7 @@ ${corpoHtml}
             const b = document.createElement("button");
             b.id = "btn-export-evolucao-abnt";
             b.type = "button";
-            b.textContent = "📄 Exportar Evolução (PDF ABNT)";
+            b.textContent = "📄 Baixar Evolução (ABNT)";
             b.style.cssText =
               "margin:10px 6px;padding:10px 16px;background:#166534;color:#fff;border:0;border-radius:8px;font-weight:600;cursor:pointer;";
             alvo.appendChild(b);
@@ -483,7 +527,7 @@ ${corpoHtml}
             const b = document.createElement("button");
             b.id = "btn-export-prescricao-abnt";
             b.type = "button";
-            b.textContent = "📄 Exportar Prescrição (PDF ABNT)";
+            b.textContent = "📄 Baixar Prescrição (ABNT)";
             b.style.cssText =
               "margin:10px 6px;padding:10px 16px;background:#b8860b;color:#fff;border:0;border-radius:8px;font-weight:600;cursor:pointer;";
             alvo.appendChild(b);
@@ -510,6 +554,11 @@ ${corpoHtml}
         btnEvol?.removeEventListener("click", onEvol);
         root.removeEventListener("click", onChip);
         root.removeEventListener("click", onExportClick);
+        if (hadFn) {
+          w.atualizarEvolucaoAutomatica = prevFn;
+        } else {
+          delete w.atualizarEvolucaoAutomatica;
+        }
       };
     }
 
