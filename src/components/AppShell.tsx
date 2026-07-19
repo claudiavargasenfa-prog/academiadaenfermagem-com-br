@@ -176,6 +176,7 @@ export function AppShell({
           })}
         </div>
       </nav>
+      <InstallAppButton />
     </div>
   );
 
