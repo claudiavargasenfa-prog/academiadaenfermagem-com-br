@@ -47,6 +47,7 @@ export function AppShell({
   const logoUrl = useText("branding.logo_url", DEFAULT_LOGO_URL) || DEFAULT_LOGO_URL;
 
   const historiaLabel = useText("menu.minha_historia", "Minha História");
+  const compartilharLabel = useText("menu.compartilhar", "Compartilhar");
   const baseNav = [
     { to: "/" as const, label: lojaLabel, icon: Store },
     { to: "/minha-conta" as const, label: minhaContaLabel, icon: User },
@@ -55,6 +56,29 @@ export function AppShell({
   const navItems = admin
     ? [...baseNav, { to: "/admin" as const, label: adminLabel, icon: Shield }]
     : baseNav;
+
+  async function handleShare() {
+    const shareUrl = "https://academiadaenfermagem.com.br";
+    const shareData = {
+      title: "Academia da Enfermagem",
+      text: "Informação atualizada em suas mãos — conheça o app que descomplica a enfermagem.",
+      url: shareUrl,
+    };
+    try {
+      if (typeof navigator !== "undefined" && (navigator as any).share) {
+        await (navigator as any).share(shareData);
+        return;
+      }
+    } catch {
+      // user cancelled or share failed — fall back to copy
+    }
+    try {
+      await navigator.clipboard.writeText(shareUrl);
+      toast.success("Link copiado! Cole onde quiser compartilhar.");
+    } catch {
+      toast.error("Não foi possível compartilhar. Copie manualmente: " + shareUrl);
+    }
+  }
 
   const bgStyle: React.CSSProperties | undefined = tint
     ? { backgroundColor: `color-mix(in oklab, ${tint} 35%, transparent)` }
