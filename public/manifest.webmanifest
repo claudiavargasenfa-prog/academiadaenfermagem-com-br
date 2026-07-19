@@ -1,7 +1,7 @@
 {
-  "name": "Acadêmico de Bolsa — Enfermagem",
-  "short_name": "Acadêmico",
-  "description": "Caderno de estágio interativo para acadêmicos de enfermagem.",
+  "name": "Academia da Enfermagem",
+  "short_name": "Academia",
+  "description": "Academia da Enfermagem — informações clínicas em suas mãos: SAE, escalas, procedimentos, cálculos e quizzes.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#eafff3",
