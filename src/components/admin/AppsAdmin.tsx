@@ -559,6 +559,12 @@ function AppContent({ app }: { app: AppRow }) {
                 onMoveTo={(miniAppId, targetAppId, placementId) =>
                   moveMiniAppToApp(miniAppId, targetAppId, { removeFromCurrent: true, currentPlacementId: placementId })
                 }
+                onReorder={(containerId, from, to) => {
+                  const cont = containers.find((x) => x.id === containerId);
+                  if (!cont) return;
+                  const reordered = arrayMove(cont.items, from, to);
+                  persistContainer(containerId, reordered);
+                }}
               />
             ))}
           </div>
