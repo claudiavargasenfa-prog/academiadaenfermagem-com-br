@@ -794,6 +794,8 @@ function SortableItem({
   onRemove,
   targetApps,
   onMoveTo,
+  onUp,
+  onDown,
 }: {
   id: string;
   title: string;
@@ -802,6 +804,8 @@ function SortableItem({
   onRemove: () => void;
   targetApps: AppRow[];
   onMoveTo: (targetAppId: string) => void;
+  onUp?: () => void;
+  onDown?: () => void;
 }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id });
   const style: React.CSSProperties = {
@@ -813,6 +817,12 @@ function SortableItem({
     <li ref={setNodeRef} style={style} className="flex items-center justify-between gap-2 rounded-md border border-foreground/10 bg-background px-2 py-1.5 text-sm">
       <button type="button" {...attributes} {...listeners} className="cursor-grab touch-none rounded p-1 text-muted-foreground hover:bg-foreground/10" aria-label="Arrastar">
         <GripVertical className="h-3.5 w-3.5" />
+      </button>
+      <button type="button" onClick={onUp} disabled={!onUp} className="rounded p-1 text-muted-foreground hover:bg-foreground/10 disabled:opacity-30" aria-label="Subir" title="Subir">
+        <ArrowUp className="h-3.5 w-3.5" />
+      </button>
+      <button type="button" onClick={onDown} disabled={!onDown} className="rounded p-1 text-muted-foreground hover:bg-foreground/10 disabled:opacity-30" aria-label="Descer" title="Descer">
+        <ArrowDown className="h-3.5 w-3.5" />
       </button>
       <span className="flex-1 truncate">
         <span className="mr-1">{icon}</span>
