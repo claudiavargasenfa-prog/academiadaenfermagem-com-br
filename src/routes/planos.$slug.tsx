@@ -189,11 +189,26 @@ function PlanoPage() {
                 >
                   ✓ Acessar meus mini apps →
                 </Link>
+              ) : isLoggedIn ? (
+                <>
+                  {checkoutUrl && (
+                    <a
+                      href={checkoutUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="group inline-flex items-center gap-2 rounded-2xl bg-primary px-6 py-3.5 text-sm font-extrabold text-primary-foreground shadow-lg transition hover:-translate-y-0.5 hover:opacity-90 hover:shadow-xl"
+                    >
+                      <Sparkles className="h-4 w-4" />
+                      Assinar agora
+                      <ExternalLink className="h-4 w-4" />
+                    </a>
+                  )}
+                </>
               ) : (
                 <>
                   <a
                     href={`/?cadastro=${slug}`}
-                    className="group inline-flex items-center gap-2 rounded-2xl bg-foreground px-6 py-3.5 text-sm font-extrabold text-background shadow-lg transition hover:-translate-y-0.5 hover:shadow-xl"
+                    className="group inline-flex items-center gap-2 rounded-2xl bg-primary px-6 py-3.5 text-sm font-extrabold text-primary-foreground shadow-lg transition hover:-translate-y-0.5 hover:opacity-90 hover:shadow-xl"
                   >
                     <Sparkles className="h-4 w-4" />
                     Começar meus {TRIAL_DAYS} dias grátis
@@ -212,6 +227,19 @@ function PlanoPage() {
                 </>
               )}
             </div>
+
+            {isLoggedIn && !subscribed && (
+              <p className="mt-3 max-w-xl rounded-xl bg-white/70 px-3 py-2 text-xs font-semibold text-emerald-950 backdrop-blur">
+                Você já está logada como <strong>{session?.user?.email}</strong>. O período grátis é só para novos cadastros — para liberar este aplicativo, faça a assinatura.
+                <button
+                  type="button"
+                  onClick={() => signOut().then(() => window.location.reload())}
+                  className="ml-2 underline hover:text-emerald-700"
+                >
+                  Sair da conta
+                </button>
+              </p>
+            )}
 
             <p className="mt-4 text-xs font-semibold opacity-70">
               {t("hero_footnote", "Sem cartão de crédito · Ativa na hora · PIX ou cartão só depois do teste")}
