@@ -1,5 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+import type { Session } from "@supabase/supabase-js";
 import { ExternalLink, ArrowLeft, CheckCircle2, MessageCircle, ShieldCheck, Sparkles, Wifi } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import {
@@ -10,6 +12,8 @@ import {
 } from "@/lib/access";
 import { fetchAppBySlug, fetchPlacementsForApp } from "@/lib/apps";
 import { useAppTexts } from "@/lib/app-texts";
+import { supabase } from "@/integrations/supabase/client";
+import { signOut } from "@/components/AuthGate";
 
 const ALLOWED = new Set(["academico", "tecnico", "tecnico-estudante", "enfermeiro"]);
 
