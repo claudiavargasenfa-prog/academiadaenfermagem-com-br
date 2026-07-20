@@ -178,7 +178,7 @@ function StoreHome() {
                   </div>
                   <PlanSlogan slug={slug} />
                   {plan.description && (
-                    <p className="text-xs opacity-80">{plan.description}</p>
+                    <p className="text-xs opacity-80"><RichText>{plan.description}</RichText></p>
                   )}
 
                   <div className="mt-auto space-y-2 pt-4">
