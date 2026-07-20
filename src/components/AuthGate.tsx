@@ -1,9 +1,13 @@
 import { useEffect, useState, type ReactNode } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import type { Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 import { Loader2 } from "lucide-react";
 import logoAsset from "@/assets/logo.png.asset.json";
+import { getDeviceId } from "@/lib/device-fingerprint";
+import { checkTrialEligibility, recordTrialFingerprint } from "@/lib/trial-guard.functions";
+
 
 export function AuthGate({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
@@ -64,6 +68,10 @@ function AuthScreen() {
   const [categoria, setCategoria] = useState<"academico" | "tecnico-estudante" | "tecnico" | "enfermeiro" | "">(initialCategoria);
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<{ type: "error" | "info"; text: string } | null>(null);
+  const checkTrial = useServerFn(checkTrialEligibility);
+  const recordTrial = useServerFn(recordTrialFingerprint);
+
+
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -91,6 +99,14 @@ function AuthScreen() {
         if (!categoria) {
           throw new Error("Selecione sua categoria (Acadêmico, Estudante de Técnico, Técnico ou Enfermeiro).");
         }
+        // Antifraude: bloqueia se celular/dispositivo já usou grátis
+        const deviceId = await getDeviceId();
+        const check = await checkTrial({
+          data: { email, phone_digits: phoneDigits, device_id: deviceId },
+        });
+        if (!check.allowed) {
+          throw new Error(check.reason || "Não foi possível liberar o período grátis.");
+        }
         const { data, error } = await supabase.auth.signUp({
           email,
           password,
@@ -104,6 +120,19 @@ function AuthScreen() {
           },
         });
         if (error) throw error;
+        // Registra fingerprint depois do signup bem-sucedido
+        try {
+          await recordTrial({
+            data: {
+              email,
+              phone_digits: phoneDigits,
+              device_id: deviceId,
+              user_id: data.user?.id ?? null,
+            },
+          });
+        } catch (e) {
+          console.error("[trial] record failed", e);
+        }
         if (!data.session) {
           setMsg({
             type: "info",
@@ -111,6 +140,7 @@ function AuthScreen() {
           });
           setMode("signin");
         }
+
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
