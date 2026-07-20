@@ -121,6 +121,7 @@ export type Database = {
           slug: string
           sort_mode: string
           updated_at: string
+          whatsapp_group_url: string | null
         }
         Insert: {
           bg_color?: string | null
@@ -136,6 +137,7 @@ export type Database = {
           slug: string
           sort_mode?: string
           updated_at?: string
+          whatsapp_group_url?: string | null
         }
         Update: {
           bg_color?: string | null
@@ -151,6 +153,7 @@ export type Database = {
           slug?: string
           sort_mode?: string
           updated_at?: string
+          whatsapp_group_url?: string | null
         }
         Relationships: []
       }
