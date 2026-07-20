@@ -1,7 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import {
-  ExternalLink,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
@@ -17,10 +16,10 @@ import imgIras from "@/assets/carousel/iras.jpg";
 import {
   fetchSubscriptionPlans,
   fetchMyActiveSubscriptions,
-  formatPriceBRL,
 } from "@/lib/access";
 import { useApps } from "@/lib/apps";
 import { RichText, useText } from "@/lib/app-texts";
+
 
 
 
