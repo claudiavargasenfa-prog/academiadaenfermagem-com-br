@@ -377,11 +377,6 @@ function PlanoPage() {
               </>
             )}
           </div>
-              >
-                Experimentar {TRIAL_DAYS} dias grátis
-              </a>
-            )}
-          </div>
           <p className="mt-3 text-[11px] font-extrabold uppercase tracking-wide text-emerald-700">
             <CheckCircle2 className="mr-1 inline h-3 w-3" /> Compra segura
           </p>
