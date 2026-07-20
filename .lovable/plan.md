@@ -1,68 +1,33 @@
+## Auditoria — por que o botão "volta pra loja"
 
-## Análise da sua ideia
+Reproduzi o cenário e o replay confirma: você está **logada** no app. Quando clica em "Começar meus 15 dias grátis" na landing `/planos/tecnico`, o botão faz um `<a href="/?cadastro=tecnico">` — uma navegação de página inteira (por isso demora 7–9s: recarrega bundle + service worker).
 
-**1. Cards da loja sem preço e sem acesso direto — só via landing page ✅ Viável e recomendado**
-Faz sentido comercial: hoje a pessoa vê o preço antes de entender o valor do produto. Movendo tudo para a landing page, ela primeiro se apaixona pelo conteúdo e só depois vê o valor + o botão de 15 dias grátis. Isso costuma aumentar bastante conversão.
+Quando a página `/` termina de carregar, o `AuthGate` vê que já existe sessão e **não abre o formulário de cadastro** — mostra direto a loja. O parâmetro `?cadastro=tecnico` só é lido dentro do formulário de login, então para usuário logado ele é ignorado. Resultado percebido: "voltou pra loja".
 
-**2. Cadastro grátis sem cartão ✅ Correto**
-Você está certo: exigir cartão no cadastro afasta muito aluno (que só tem PIX). Melhor deixar o PIX/cartão como opção só na hora de assinar, depois dos 15 dias.
+Não é bug do fingerprint nem do backend — é fluxo: usuário logado não deveria ver "15 dias grátis" de outro app; deveria ver "Assinar agora" (checkout) ou "Você já tem acesso".
 
-**3. Técnico que também faz faculdade de Enfermagem ✅ Resolvível**
-Faço o seguinte no cadastro:
-- Pergunta principal: "Qual seu perfil hoje?" (as 4 opções)
-- Pergunta extra só para Técnico e Estudante de Técnico: "Você também estuda/atua como enfermeiro(a)?" → se sim, libera trial de 15 dias nos 2 apps (ex: Técnico + Acadêmico) usando o MESMO cadastro.
-- Enfermeiro só ganha trial no app de Enfermeiro (como você pediu).
+## O que vou fazer
 
-**4. Antifraude do trial (o "malandrinho" que cria e-mail novo)**
-Aqui preciso ser honesto: **nenhum método é 100%**, mas dá para dificultar muito. Combinação recomendada:
+### 1. `src/routes/planos.$slug.tsx` — CTA sensível ao estado de login
+- Ler a sessão atual (`supabase.auth.getSession`) via hook simples.
+- **Não logado** → botão principal continua "Começar meus {15} dias grátis" e vai para `/?cadastro=<slug>` (comportamento atual, correto para visitante).
+- **Logado, sem essa assinatura** → botão principal vira **"Assinar agora"** apontando para o `checkoutUrl` do plano (Cakto), e mostra abaixo um aviso pequeno: *"Você já está logada como <email>. O período grátis é só para novos cadastros — para liberar este app, faça a assinatura."* Com um link secundário "Sair da conta" (usa `signOut()` do `AuthGate`) caso queira criar outro cadastro.
+- **Logado, com assinatura ativa deste plano** → já funciona hoje ("Acessar meus mini apps").
+- Aplicar a mesma lógica no CTA final (rodapé).
 
-- **Celular obrigatório + confirmação por SMS/WhatsApp** — é o filtro mais eficaz. O sujeito precisaria de um chip novo a cada trial. Já temos o campo celular no cadastro, falta só validar com código.
-- **Fingerprint do dispositivo** (biblioteca gratuita FingerprintJS open-source) — gera um ID único do navegador/celular. Mesmo trocando e-mail, o dispositivo é reconhecido.
-- **IP + faixa de IP** — ajuda, mas é fraco sozinho (a pessoa troca de Wi-Fi/4G e escapa). Serve como sinal secundário.
-- **Bloqueio de e-mails descartáveis** (tipo tempmail, 10minutemail) — lista pública gratuita.
+### 2. Cor dos botões "Assinar agora" / "Começar meus 15 dias grátis"
+- Trocar `bg-foreground text-background` (preto/branco atual) por `bg-primary text-primary-foreground` (verde escuro do tema com letra branca) — tanto no banner do hero quanto no CTA final, nos 4 planos (academico, tecnico, tecnico-estudante, enfermeiro). Como a landing é uma única rota parametrizada, uma alteração cobre todos.
+- Manter hover suave (`hover:opacity-90`) e sombra atual.
 
-Com celular verificado + fingerprint, a fraude cai drasticamente. IP sozinho não vale o esforço.
+### 3. Pequeno ganho de velocidade
+- Manter `<a href>` apenas na transição visitante→cadastro (precisa recarregar para o AuthGate rodar). Para usuário logado, usar `<a href={checkoutUrl} target="_blank">` (checkout externo, comportamento certo) — sem full-reload interno inútil.
 
----
+## Fora do escopo
+- Não vou mexer no fluxo antifraude, no fingerprint, no schema do banco, nem no visual do resto da landing (banner, promo, FAQ, mini apps).
+- Não vou mudar a categoria de cadastro nem regras de trial.
 
-## Plano de implementação
-
-### 1. Loja (`src/routes/index.tsx`)
-- Remover preço e botão "Experimentar" dos cards dos 4 apps.
-- Cada card vira só: emoji + nome + slogan curto + botão **"Conhecer"** que leva para `/planos/{slug}`.
-- Manter o resto da home (sobre, depoimentos, etc.) igual.
-
-### 2. Landing pages (`src/routes/planos.$slug.tsx`)
-- Continua como está (já tem preço, benefícios, FAQ, mini apps).
-- Único ponto de entrada para cadastro/assinatura.
-- O botão "Experimentar 15 dias grátis" continua levando para `/?cadastro={slug}`.
-
-### 3. Cadastro (`src/components/AuthGate.tsx`)
-- Categoria vem pré-selecionada da landing (já funciona).
-- **Novo campo** só quando categoria = `tecnico` ou `tecnico-estudante`:
-  checkbox "Também estudo/atuo como Enfermagem (Acadêmico)" → se marcado, cria trial nos 2 apps.
-- **Sem cartão** (já é assim hoje).
-- **Confirmação de celular por SMS/WhatsApp** — novo passo antes de liberar acesso.
-
-### 4. Trial expandido (banco)
-- Ajustar o trigger `handle_new_user` para, quando marcado o segundo perfil, criar 2 linhas em `user_subscriptions` (uma por app).
-
-### 5. Antifraude
-- Instalar FingerprintJS open-source (grátis, sem chave).
-- Nova tabela `trial_fingerprints` (device_id, phone, email, ip, created_at).
-- Antes de criar o trial: se o fingerprint OU o telefone já foi usado em um trial nos últimos 90 dias → bloqueia com mensagem "Você já usou seu período grátis. Continue com uma assinatura."
-- Lista de domínios descartáveis para barrar no cadastro.
-
-### 6. Verificação de celular
-- Usar SMS via Supabase Auth (nativo) OU WhatsApp Cloud API (grátis até 1.000/mês).
-- Preciso confirmar com você qual canal prefere.
-
----
-
-## O que preciso confirmar com você antes de codar
-
-1. **Verificação de celular:** SMS (nativo, mais fácil, tem custo pequeno depois de X envios) ou WhatsApp (grátis até 1.000/mês, mas precisa configurar Meta Business)?
-2. **Duplo perfil:** confirma que só Técnico e Estudante de Técnico podem marcar "também Acadêmico"? Enfermeiro fica só com o app dele?
-3. **Bloqueio antifraude:** se detectar fraude, bloqueio total ("já usou seu grátis") ou libero só 3 dias em vez de 15?
-
-Depois que você aprovar, implemento tudo mantendo 100% do design pastel e sem mexer no conteúdo dos mini apps.
+## Como validar
+Depois de aplicar:
+1. Aba anônima → abrir `/planos/tecnico` → botão verde "Começar meus 15 dias grátis" → abre cadastro com "Técnico" pré-selecionado.
+2. Logada como você → abrir `/planos/tecnico` → botão verde "Assinar agora" abre o checkout Cakto; aparece aviso + link "Sair da conta".
+3. Logada com plano ativo → botão "Acessar meus mini apps" (inalterado).

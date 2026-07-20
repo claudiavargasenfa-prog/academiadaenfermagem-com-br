@@ -1,5 +1,7 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+import type { Session } from "@supabase/supabase-js";
 import { ExternalLink, ArrowLeft, CheckCircle2, MessageCircle, ShieldCheck, Sparkles, Wifi } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import {
@@ -10,6 +12,8 @@ import {
 } from "@/lib/access";
 import { fetchAppBySlug, fetchPlacementsForApp } from "@/lib/apps";
 import { useAppTexts } from "@/lib/app-texts";
+import { supabase } from "@/integrations/supabase/client";
+import { signOut } from "@/components/AuthGate";
 
 const ALLOWED = new Set(["academico", "tecnico", "tecnico-estudante", "enfermeiro"]);
 
@@ -62,6 +66,14 @@ function PlanoPage() {
   const { slug } = Route.useParams();
   const label = LABELS[slug];
 
+  const [session, setSession] = useState<Session | null>(null);
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => setSession(data.session));
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => setSession(s));
+    return () => sub.subscription.unsubscribe();
+  }, []);
+  const isLoggedIn = !!session;
+
   const appQ = useQuery({ queryKey: ["app", slug], queryFn: () => fetchAppBySlug(slug) });
   const placementsQ = useQuery({
     queryKey: ["app_placements", appQ.data?.id],
@@ -70,7 +82,7 @@ function PlanoPage() {
   });
   const miniAppsQ = useQuery({ queryKey: ["mini_apps"], queryFn: fetchMiniApps });
   const plansQ = useQuery({ queryKey: ["subscription_plans"], queryFn: fetchSubscriptionPlans });
-  const subsQ = useQuery({ queryKey: ["my_subs"], queryFn: fetchMyActiveSubscriptions });
+  const subsQ = useQuery({ queryKey: ["my_subs"], queryFn: fetchMyActiveSubscriptions, enabled: isLoggedIn });
   const textsQ = useAppTexts();
   const t = (key: string, fallback: string) => textsQ.data?.[`plano.${slug}.${key}`] ?? fallback;
 
@@ -177,11 +189,26 @@ function PlanoPage() {
                 >
                   ✓ Acessar meus mini apps →
                 </Link>
+              ) : isLoggedIn ? (
+                <>
+                  {checkoutUrl && (
+                    <a
+                      href={checkoutUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="group inline-flex items-center gap-2 rounded-2xl bg-primary px-6 py-3.5 text-sm font-extrabold text-primary-foreground shadow-lg transition hover:-translate-y-0.5 hover:opacity-90 hover:shadow-xl"
+                    >
+                      <Sparkles className="h-4 w-4" />
+                      Assinar agora
+                      <ExternalLink className="h-4 w-4" />
+                    </a>
+                  )}
+                </>
               ) : (
                 <>
                   <a
                     href={`/?cadastro=${slug}`}
-                    className="group inline-flex items-center gap-2 rounded-2xl bg-foreground px-6 py-3.5 text-sm font-extrabold text-background shadow-lg transition hover:-translate-y-0.5 hover:shadow-xl"
+                    className="group inline-flex items-center gap-2 rounded-2xl bg-primary px-6 py-3.5 text-sm font-extrabold text-primary-foreground shadow-lg transition hover:-translate-y-0.5 hover:opacity-90 hover:shadow-xl"
                   >
                     <Sparkles className="h-4 w-4" />
                     Começar meus {TRIAL_DAYS} dias grátis
@@ -200,6 +227,19 @@ function PlanoPage() {
                 </>
               )}
             </div>
+
+            {isLoggedIn && !subscribed && (
+              <p className="mt-3 max-w-xl rounded-xl bg-white/70 px-3 py-2 text-xs font-semibold text-emerald-950 backdrop-blur">
+                Você já está logada como <strong>{session?.user?.email}</strong>. O período grátis é só para novos cadastros — para liberar este aplicativo, faça a assinatura.
+                <button
+                  type="button"
+                  onClick={() => signOut().then(() => window.location.reload())}
+                  className="ml-2 underline hover:text-emerald-700"
+                >
+                  Sair da conta
+                </button>
+              </p>
+            )}
 
             <p className="mt-4 text-xs font-semibold opacity-70">
               {t("hero_footnote", "Sem cartão de crédito · Ativa na hora · PIX ou cartão só depois do teste")}
@@ -296,31 +336,45 @@ function PlanoPage() {
             {formatPriceBRL(price)}/mês · {TRIAL_DAYS} dias grátis · cancele quando quiser
           </p>
           <div className="mt-5 flex flex-wrap justify-center gap-3">
-            {checkoutUrl && !subscribed && (
-              <a
-                href={checkoutUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-1.5 rounded-xl bg-foreground px-6 py-3 text-sm font-extrabold text-background shadow hover:opacity-90"
-              >
-                Assinar agora <ExternalLink className="h-4 w-4" />
-              </a>
-            )}
             {subscribed ? (
               <Link
                 to="/trilha/$slug"
                 params={{ slug }}
-                className="inline-flex items-center gap-1.5 rounded-xl border-2 border-white/60 bg-white/90 px-6 py-3 text-sm font-extrabold hover:bg-white"
+                className="inline-flex items-center gap-1.5 rounded-xl bg-primary px-6 py-3 text-sm font-extrabold text-primary-foreground shadow hover:opacity-90"
               >
                 Acessar mini apps →
               </Link>
+            ) : isLoggedIn ? (
+              checkoutUrl && (
+                <a
+                  href={checkoutUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1.5 rounded-xl bg-primary px-6 py-3 text-sm font-extrabold text-primary-foreground shadow hover:opacity-90"
+                >
+                  Assinar agora <ExternalLink className="h-4 w-4" />
+                </a>
+              )
             ) : (
-              <a
-                href={`/?cadastro=${slug}`}
-                className="inline-flex items-center gap-1.5 rounded-xl border-2 border-white/60 bg-white/90 px-6 py-3 text-sm font-extrabold hover:bg-white"
-              >
-                Experimentar {TRIAL_DAYS} dias grátis
-              </a>
+              <>
+                <a
+                  href={`/?cadastro=${slug}`}
+                  className="inline-flex items-center gap-1.5 rounded-xl bg-primary px-6 py-3 text-sm font-extrabold text-primary-foreground shadow hover:opacity-90"
+                >
+                  <Sparkles className="h-4 w-4" />
+                  Começar meus {TRIAL_DAYS} dias grátis
+                </a>
+                {checkoutUrl && (
+                  <a
+                    href={checkoutUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1.5 rounded-xl border-2 border-white/60 bg-white/90 px-6 py-3 text-sm font-extrabold hover:bg-white"
+                  >
+                    Assinar agora <ExternalLink className="h-4 w-4" />
+                  </a>
+                )}
+              </>
             )}
           </div>
           <p className="mt-3 text-[11px] font-extrabold uppercase tracking-wide text-emerald-700">
