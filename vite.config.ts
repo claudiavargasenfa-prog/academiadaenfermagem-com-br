@@ -18,6 +18,9 @@ export default defineConfig({
         filename: "sw.js",
         manifest: false, // usamos public/manifest.webmanifest existente
         workbox: {
+          cleanupOutdatedCaches: true,
+          skipWaiting: true,
+          clientsClaim: true,
           globPatterns: ["**/*.{js,css,html,ico,png,svg,webp,woff2,json}"],
           manifestTransforms: [
             (entries) => ({
@@ -35,6 +38,14 @@ export default defineConfig({
             /^\/_server/,
           ],
           runtimeCaching: [
+            {
+              urlPattern: ({ request, url }) =>
+                request.mode === "navigate" &&
+                (url.pathname === "/" ||
+                  url.pathname.startsWith("/planos/") ||
+                  url.searchParams.has("cadastro")),
+              handler: "NetworkOnly",
+            },
             {
               urlPattern: ({ request }) => request.mode === "navigate",
               handler: "NetworkFirst",
