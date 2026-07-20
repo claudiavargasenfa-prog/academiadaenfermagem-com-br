@@ -193,11 +193,11 @@ function PlanoPage() {
             {miniApps.map((m) => (
               <div key={m.id} className="rounded-2xl border border-white/60 bg-white/80 p-4 shadow-sm backdrop-blur">
                 <div className="flex items-center gap-2">
-                  <span className="text-xl">{(m as any).emoji ?? "•"}</span>
-                  <h3 className="font-display text-sm font-extrabold leading-tight">{m.titulo}</h3>
+                  <span className="text-xl">{m.icon ?? "•"}</span>
+                  <h3 className="font-display text-sm font-extrabold leading-tight">{m.name}</h3>
                 </div>
-                {m.descricao && (
-                  <p className="mt-1.5 line-clamp-3 text-xs text-muted-foreground">{m.descricao}</p>
+                {m.description && (
+                  <p className="mt-1.5 line-clamp-3 text-xs text-muted-foreground">{m.description}</p>
                 )}
               </div>
             ))}
