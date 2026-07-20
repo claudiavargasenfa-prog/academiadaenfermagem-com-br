@@ -15,6 +15,7 @@ import {
 } from "@/lib/access";
 import { fetchAppBySlug, fetchAppSections, fetchPlacementsForApp } from "@/lib/apps";
 import { useLocal } from "@/lib/storage";
+import { RichText, useText } from "@/lib/app-texts";
 
 export const Route = createFileRoute("/trilha/$slug")({
   head: ({ params }) => ({
