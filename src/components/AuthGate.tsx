@@ -194,7 +194,7 @@ function AuthScreen() {
 
           {mode === "signup" && (
             <div className="mb-3 rounded-lg bg-emerald-500/10 px-3 py-2 text-xs font-semibold text-emerald-800">
-              🎁 Cadastro novo ganha <strong>30 dias grátis</strong> do seu aplicativo — sem cartão.
+              🎁 Cadastro novo ganha <strong>15 dias grátis</strong> do seu aplicativo — sem cartão.
             </div>
           )}
 
@@ -320,7 +320,7 @@ function AuthScreen() {
               {busy
                 ? "Aguarde..."
                 : mode === "signup"
-                ? "Criar conta com 30 dias grátis"
+                ? "Criar conta com 15 dias grátis"
                 : mode === "forgot"
                 ? "Enviar link de redefinição"
                 : "Entrar"}
