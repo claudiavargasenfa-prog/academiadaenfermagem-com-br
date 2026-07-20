@@ -280,13 +280,12 @@ function PlanoPage() {
                 Acessar mini apps →
               </Link>
             ) : (
-              <Link
-                to="/"
-                search={{ cadastro: slug }}
+              <a
+                href={`/?cadastro=${slug}`}
                 className="inline-flex items-center gap-1.5 rounded-xl border-2 border-white/60 bg-white/90 px-6 py-3 text-sm font-extrabold hover:bg-white"
               >
                 Experimentar {TRIAL_DAYS} dias grátis
-              </Link>
+              </a>
             )}
           </div>
           <p className="mt-3 text-[11px] font-extrabold uppercase tracking-wide text-emerald-700">
