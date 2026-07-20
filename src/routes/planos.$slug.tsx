@@ -272,13 +272,23 @@ function PlanoPage() {
                 Assinar agora <ExternalLink className="h-4 w-4" />
               </a>
             )}
-            <Link
-              to="/trilha/$slug"
-              params={{ slug }}
-              className="inline-flex items-center gap-1.5 rounded-xl border-2 border-white/60 bg-white/90 px-6 py-3 text-sm font-extrabold hover:bg-white"
-            >
-              {subscribed ? "Acessar mini apps →" : `Experimentar ${TRIAL_DAYS} dias grátis`}
-            </Link>
+            {subscribed ? (
+              <Link
+                to="/trilha/$slug"
+                params={{ slug }}
+                className="inline-flex items-center gap-1.5 rounded-xl border-2 border-white/60 bg-white/90 px-6 py-3 text-sm font-extrabold hover:bg-white"
+              >
+                Acessar mini apps →
+              </Link>
+            ) : (
+              <Link
+                to="/"
+                search={{ cadastro: slug }}
+                className="inline-flex items-center gap-1.5 rounded-xl border-2 border-white/60 bg-white/90 px-6 py-3 text-sm font-extrabold hover:bg-white"
+              >
+                Experimentar {TRIAL_DAYS} dias grátis
+              </Link>
+            )}
           </div>
           <p className="mt-3 text-[11px] font-extrabold uppercase tracking-wide text-emerald-700">
             <CheckCircle2 className="mr-1 inline h-3 w-3" /> Compra segura
