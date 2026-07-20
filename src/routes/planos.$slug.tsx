@@ -80,7 +80,7 @@ function PlanoPage() {
 
   const placedIds = new Set((placementsQ.data ?? []).map((p) => p.mini_app_id));
   const miniApps = (miniAppsQ.data ?? [])
-    .filter((m) => placedIds.has(m.id) && (m as any).ativo !== false && !(m as any).arquivado)
+    .filter((m) => placedIds.has(m.id) && m.is_active !== false)
     .slice(0, 24);
 
   const promo = isPromoActive();
