@@ -80,6 +80,14 @@ export function AppShell({
     }
   }
 
+  async function handleSignOut() {
+    setOpen(false);
+    await signOut();
+    if (typeof window !== "undefined") {
+      window.location.assign("/");
+    }
+  }
+
   const bgStyle: React.CSSProperties | undefined = tint
     ? { backgroundColor: `color-mix(in oklab, ${tint} 35%, transparent)` }
     : trackSlug
@@ -115,7 +123,7 @@ export function AppShell({
           <div className="flex items-center gap-1">
             <button
               aria-label="Sair"
-              onClick={() => signOut()}
+              onClick={handleSignOut}
               className="hidden h-10 items-center gap-1.5 rounded-xl bg-white/10 px-3 text-xs font-semibold text-gold hover:bg-white/20 md:inline-flex"
             >
               <LogOut className="h-4 w-4" /> Sair
@@ -184,6 +192,13 @@ export function AppShell({
                 <Share2 className="h-4 w-4" />
                 {compartilharLabel}
               </button>
+              <button
+                onClick={handleSignOut}
+                className="flex items-center gap-2 rounded-xl bg-white/10 px-3 py-2.5 text-sm font-medium text-gold"
+              >
+                <LogOut className="h-4 w-4" />
+                Sair
+              </button>
             </div>
           </div>
         )}
@@ -214,6 +229,15 @@ export function AppShell({
               </Link>
             );
           })}
+          <button
+            type="button"
+            onClick={handleSignOut}
+            className="flex min-w-14 flex-col items-center gap-0.5 rounded-xl px-2 py-1.5 text-[10px] font-semibold text-gold"
+            aria-label="Sair"
+          >
+            <LogOut className="h-4 w-4" />
+            Sair
+          </button>
         </div>
       </nav>
     </div>
