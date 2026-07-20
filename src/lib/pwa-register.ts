@@ -4,6 +4,7 @@
 // Se detectar SW antigo em contexto proibido, desregistra.
 
 const APP_SW_PATH = "/sw.js";
+const LEGACY_HTML_CACHE_MARKERS = ["html-pages"];
 
 function isRefusedContext(): boolean {
   if (typeof window === "undefined") return true;
@@ -48,6 +49,20 @@ async function unregisterExisting(): Promise<void> {
   }
 }
 
+async function clearLegacyHtmlCaches(): Promise<void> {
+  if (typeof window === "undefined" || !("caches" in window)) return;
+  try {
+    const names = await window.caches.keys();
+    await Promise.all(
+      names
+        .filter((name) => LEGACY_HTML_CACHE_MARKERS.some((marker) => name.includes(marker)))
+        .map((name) => window.caches.delete(name)),
+    );
+  } catch {
+    /* ignore */
+  }
+}
+
 export async function registerPWA(): Promise<void> {
   if (typeof navigator === "undefined" || !("serviceWorker" in navigator)) return;
   if (isRefusedContext()) {
@@ -55,6 +70,7 @@ export async function registerPWA(): Promise<void> {
     return;
   }
   try {
+    await clearLegacyHtmlCaches();
     await navigator.serviceWorker.register(APP_SW_PATH, { scope: "/" });
   } catch (err) {
     console.warn("[PWA] registration failed", err);
