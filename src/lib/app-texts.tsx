@@ -103,6 +103,29 @@ function BulletIcon({ marker }: { marker: string }) {
   return <span className={`mt-[7px] inline-block h-1.5 w-1.5 shrink-0 rounded-full ${color}`} aria-hidden />;
 }
 
+function parseRich(input: string): ReactNode[] {
+  const tokens = input.split(/(\*\*[^*]+\*\*|__[^_]+__|\^\^[^^]+\^\^)/g);
+  return tokens.map((t, i) => {
+    if (t.startsWith("**") && t.endsWith("**")) {
+      return <strong key={i} className="font-extrabold">{t.slice(2, -2)}</strong>;
+    }
+    if (t.startsWith("__") && t.endsWith("__")) {
+      return <span key={i} className="font-bold text-gold">{t.slice(2, -2)}</span>;
+    }
+    if (t.startsWith("^^") && t.endsWith("^^")) {
+      return (
+        <span
+          key={i}
+          className="mx-0.5 inline-flex items-center rounded-md bg-gold/20 px-1.5 py-0.5 text-[0.85em] font-extrabold uppercase tracking-wide text-amber-900"
+        >
+          {t.slice(2, -2).toUpperCase()}
+        </span>
+      );
+    }
+    return <Fragment key={i}>{t}</Fragment>;
+  });
+}
+
 /** Hook utilitário: pega um texto pelo key com fallback. */
 export function useText(key: string, fallback = ""): string {
   const q = useAppTexts();
