@@ -44,18 +44,24 @@ function formatPhoneBR(v: string): string {
 
 function AuthScreen() {
   const currentPath = typeof window !== "undefined" ? window.location.pathname : "/";
+  const searchParams = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : new URLSearchParams();
+  const cadastroSlug = searchParams.get("cadastro");
+  const validCategorias = ["academico", "tecnico-estudante", "tecnico", "enfermeiro"] as const;
+  const initialCategoria = (validCategorias as readonly string[]).includes(cadastroSlug ?? "")
+    ? (cadastroSlug as typeof validCategorias[number])
+    : "";
   const requestedPage =
     currentPath === "/escalas-clinicas" || currentPath === "/novo-app"
       ? "Escalas Clínicas na Prática"
       : currentPath !== "/"
         ? "a página solicitada"
         : null;
-  const [mode, setMode] = useState<"signin" | "signup" | "forgot">("signin");
+  const [mode, setMode] = useState<"signin" | "signup" | "forgot">(cadastroSlug ? "signup" : "signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [nome, setNome] = useState("");
   const [phone, setPhone] = useState("");
-  const [categoria, setCategoria] = useState<"academico" | "tecnico-estudante" | "tecnico" | "enfermeiro" | "">("");
+  const [categoria, setCategoria] = useState<"academico" | "tecnico-estudante" | "tecnico" | "enfermeiro" | "">(initialCategoria);
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<{ type: "error" | "info"; text: string } | null>(null);
 
