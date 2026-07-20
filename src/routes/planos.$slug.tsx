@@ -118,7 +118,7 @@ function PlanoPage() {
   ];
 
   return (
-    <AppShell hideReferences>
+    <AppShell hideReferences publicRoute>
       <div className="mx-auto max-w-5xl">
         <Link to="/" className="mb-4 inline-flex items-center gap-1.5 text-sm font-semibold text-muted-foreground hover:text-foreground">
           <ArrowLeft className="h-4 w-4" /> Voltar à loja

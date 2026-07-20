@@ -31,7 +31,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Academia da Enfermagem: 3 aplicativos de mini apps para acadêmicos, técnicos e enfermeiros. 30 dias grátis.",
+          "Academia da Enfermagem: 4 aplicativos de mini apps para acadêmicos, estudantes de técnico, técnicos e enfermeiros. 15 dias grátis.",
       },
     ],
   }),
@@ -160,7 +160,7 @@ function StoreHome() {
             {activePlans.map((plan) => {
               const appRow = appBySlug.get(plan.slug);
               const sub = mySubs.find((s) => s.plan_slug === plan.slug);
-              const subscribed = !!sub && sub.status === "active";
+              const subscribed = !!sub && (sub.status === "active" || sub.status === "trial");
               const inTrial = !!sub && sub.status === "trial";
               const isMigracao = hasAnyOtherTrack(plan.slug)
                 && !subscribed
@@ -223,7 +223,9 @@ function StoreHome() {
                           Ver mini apps →
                         </Link>
                         <span className="block w-full rounded-xl bg-white/40 py-2 text-center text-xs font-bold">
-                          ✓ Assinatura ativa
+                          {inTrial
+                            ? `🎁 Trial ativo · até ${new Date(sub!.expires_at).toLocaleDateString("pt-BR")}`
+                            : "✓ Assinatura ativa"}
                         </span>
                       </>
                     ) : ckLink ? (
@@ -236,13 +238,12 @@ function StoreHome() {
                         >
                           Ativar Assinatura Mensal <ExternalLink className="h-3.5 w-3.5" />
                         </a>
-                        <Link
-                          to="/trilha/$slug"
-                          params={{ slug }}
+                        <a
+                          href={`/?cadastro=${encodeURIComponent(slug)}`}
                           className="block w-full rounded-xl border-2 border-white/60 bg-white/80 py-2 text-center text-sm font-extrabold hover:bg-white"
                         >
-                          Experimentar Grátis
-                        </Link>
+                          Experimentar 15 dias grátis
+                        </a>
                         {inTrial && (
                           <span className="block w-full rounded-xl bg-white/40 py-2 text-center text-xs font-bold">
                             🎁 Trial ativo · até {new Date(sub!.expires_at).toLocaleDateString("pt-BR")}

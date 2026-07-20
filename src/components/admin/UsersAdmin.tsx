@@ -15,12 +15,13 @@ import {
 const input =
   "w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary/40";
 
-type Categoria = "academico" | "tecnico" | "enfermeiro";
+type Categoria = "academico" | "tecnico-estudante" | "tecnico" | "enfermeiro";
 
 type UserRow = Awaited<ReturnType<typeof listUsersAdmin>>[number];
 
 function badgeForCategoria(c: string | null | undefined) {
   if (c === "academico") return { label: "🎓 Acadêmico", bg: "var(--track-academico-bg)", fg: "var(--track-academico-fg)" };
+  if (c === "tecnico-estudante") return { label: "📘 Estudante de Técnico", bg: "#DBEAFE", fg: "#1D4ED8" };
   if (c === "tecnico") return { label: "🩺 Técnico", bg: "var(--track-tecnico-bg)", fg: "var(--track-tecnico-fg)" };
   if (c === "enfermeiro") return { label: "👩‍⚕️ Enfermeiro", bg: "var(--track-enfermeiro-bg)", fg: "var(--track-enfermeiro-fg)" };
   return { label: "—", bg: "#eee", fg: "#444" };
@@ -50,7 +51,7 @@ export function UsersAdmin() {
         const hay = `${u.full_name ?? ""} ${u.email ?? ""}`.toLowerCase();
         if (!hay.includes(q)) return false;
       }
-      if (filter === "academico" || filter === "tecnico" || filter === "enfermeiro") {
+      if (filter === "academico" || filter === "tecnico-estudante" || filter === "tecnico" || filter === "enfermeiro") {
         if (u.categoria !== filter) return false;
       }
       if (filter === "trial") {
@@ -88,6 +89,7 @@ export function UsersAdmin() {
           >
             <option value="todos">Todos</option>
             <option value="academico">🎓 Acadêmico</option>
+            <option value="tecnico-estudante">📘 Estudante de Técnico</option>
             <option value="tecnico">🩺 Técnico</option>
             <option value="enfermeiro">👩‍⚕️ Enfermeiro</option>
             <option value="trial">Em trial</option>
@@ -208,7 +210,7 @@ function FormShell({ title, children, onClose, submitting, error, onSubmit, subm
 
 function CreateUserForm({ onClose }: { onClose: () => void }) {
   const create = useServerFn(createUserAdmin);
-  const [form, setForm] = useState({ email: "", password: "", full_name: "", phone: "", categoria: "academico" as Categoria, trial_days: 30 });
+  const [form, setForm] = useState({ email: "", password: "", full_name: "", phone: "", categoria: "academico" as Categoria, trial_days: 15 });
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
 
@@ -222,7 +224,7 @@ function CreateUserForm({ onClose }: { onClose: () => void }) {
   }
 
   return (
-    <FormShell title="Criar novo usuário" onClose={onClose} submitting={busy} error={err} onSubmit={save} submitLabel="Criar com 30 dias trial">
+    <FormShell title="Criar novo usuário" onClose={onClose} submitting={busy} error={err} onSubmit={save} submitLabel="Criar com 15 dias trial">
       <label className="block"><span className="mb-1 block text-xs font-semibold uppercase text-muted-foreground">Nome completo *</span>
         <input className={input} value={form.full_name} onChange={(e) => setForm({ ...form, full_name: e.target.value })} required /></label>
       <div className="grid gap-3 sm:grid-cols-2">
@@ -235,6 +237,7 @@ function CreateUserForm({ onClose }: { onClose: () => void }) {
         <label className="block"><span className="mb-1 block text-xs font-semibold uppercase text-muted-foreground">Categoria *</span>
           <select className={input} value={form.categoria} onChange={(e) => setForm({ ...form, categoria: e.target.value as Categoria })}>
             <option value="academico">🎓 Acadêmico</option>
+            <option value="tecnico-estudante">📘 Estudante de Técnico</option>
             <option value="tecnico">🩺 Técnico</option>
             <option value="enfermeiro">👩‍⚕️ Enfermeiro</option>
           </select></label>
@@ -277,6 +280,7 @@ function EditUserForm({ user, onClose }: { user: UserRow; onClose: () => void })
         <select className={input} value={form.categoria} onChange={(e) => setForm({ ...form, categoria: e.target.value as any })}>
           <option value="">— sem categoria —</option>
           <option value="academico">🎓 Acadêmico</option>
+          <option value="tecnico-estudante">📘 Estudante de Técnico</option>
           <option value="tecnico">🩺 Técnico</option>
           <option value="enfermeiro">👩‍⚕️ Enfermeiro</option>
         </select></label>
@@ -354,6 +358,7 @@ function ExtendTrialForm({ user, onClose }: { user: UserRow; onClose: () => void
         <label className="block"><span className="mb-1 block text-xs font-semibold uppercase text-muted-foreground">Aplicativo</span>
           <select className={input} value={form.plan_slug} onChange={(e) => setForm({ ...form, plan_slug: e.target.value as Categoria })}>
             <option value="academico">🎓 Acadêmico</option>
+            <option value="tecnico-estudante">📘 Estudante de Técnico</option>
             <option value="tecnico">🩺 Técnico</option>
             <option value="enfermeiro">👩‍⚕️ Enfermeiro</option>
           </select></label>

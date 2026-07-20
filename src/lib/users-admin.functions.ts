@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
-type Categoria = "academico" | "tecnico" | "enfermeiro";
+type Categoria = "academico" | "tecnico-estudante" | "tecnico" | "enfermeiro";
 
 async function ensureAdmin(context: { supabase: any; userId: string }) {
   const { data } = await context.supabase
@@ -77,8 +77,8 @@ export const createUserAdmin = createServerFn({ method: "POST" })
     if (!d.full_name || d.full_name.trim().length < 3) throw new Error("Nome completo é obrigatório");
     const phoneDigits = (d.phone || "").replace(/\D/g, "");
     if (phoneDigits.length < 10 || phoneDigits.length > 11) throw new Error("Celular inválido");
-    if (!["academico", "tecnico", "enfermeiro"].includes(d.categoria)) throw new Error("Categoria inválida");
-    return { ...d, phone: phoneDigits, trial_days: d.trial_days ?? 30 };
+    if (!["academico", "tecnico-estudante", "tecnico", "enfermeiro"].includes(d.categoria)) throw new Error("Categoria inválida");
+    return { ...d, phone: phoneDigits, trial_days: d.trial_days ?? 15 };
   })
   .handler(async ({ context, data }) => {
     await ensureAdmin(context);

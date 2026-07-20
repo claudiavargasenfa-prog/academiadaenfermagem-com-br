@@ -47,13 +47,14 @@ function TrilhaPage() {
   const adminQ = useIsAdmin();
   const isAdminUser = !!adminQ.data;
 
-  if (appQ.isLoading) {
+  if (appQ.isPending || appQ.isFetching || !appQ.isFetched) {
     return (
       <AppShell>
         <Card>Carregando…</Card>
       </AppShell>
     );
   }
+  if (appQ.isError) throw appQ.error;
   const app = appQ.data;
   if (!app) throw notFound();
 
