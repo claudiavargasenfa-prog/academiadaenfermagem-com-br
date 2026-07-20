@@ -601,6 +601,39 @@ export type Database = {
           },
         ]
       }
+      trial_fingerprints: {
+        Row: {
+          blocked: boolean
+          created_at: string
+          device_id: string | null
+          email: string
+          id: string
+          ip: string | null
+          phone_digits: string | null
+          user_id: string | null
+        }
+        Insert: {
+          blocked?: boolean
+          created_at?: string
+          device_id?: string | null
+          email: string
+          id?: string
+          ip?: string | null
+          phone_digits?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          blocked?: boolean
+          created_at?: string
+          device_id?: string | null
+          email?: string
+          id?: string
+          ip?: string | null
+          phone_digits?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       user_app_access: {
         Row: {
           cakto_order_id: string | null
