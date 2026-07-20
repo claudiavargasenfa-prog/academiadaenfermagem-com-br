@@ -9,9 +9,7 @@ import {
   formatPriceBRL,
 } from "@/lib/access";
 import { fetchAppBySlug, fetchPlacementsForApp } from "@/lib/apps";
-
-const PROMO_START = new Date("2026-08-01T00:00:00-03:00");
-const PROMO_END = new Date("2026-10-02T00:00:00-03:00");
+import { useAppTexts } from "@/lib/app-texts";
 
 const ALLOWED = new Set(["academico", "tecnico", "tecnico-estudante", "enfermeiro"]);
 
@@ -22,17 +20,27 @@ const LABELS: Record<string, string> = {
   enfermeiro: "Academia do Enfermeiro",
 };
 
-const SLOGANS: Record<string, string> = {
-  academico: "Do primeiro estágio ao TCC — sem sofrer.",
-  tecnico: "Prática segura, plantão tranquilo.",
-  "tecnico-estudante": "Passa na prova, encara o campo com confiança.",
-  enfermeiro: "Menos burocracia, mais paciente.",
+const DEFAULTS: Record<string, Record<string, string>> = {
+  academico: {
+    slogan: "Do primeiro estágio ao TCC — sem sofrer.",
+  },
+  tecnico: {
+    slogan: "Prática segura, plantão tranquilo.",
+  },
+  "tecnico-estudante": {
+    slogan: "Passa na prova, encara o campo com confiança.",
+  },
+  enfermeiro: {
+    slogan: "Menos burocracia, mais paciente.",
+  },
 };
+
+const TRIAL_DAYS = 15;
 
 export const Route = createFileRoute("/planos/$slug")({
   head: ({ params }) => {
     const label = LABELS[params.slug] ?? "Academia da Enfermagem";
-    const desc = `Conheça a ${label}: mini apps, escalas clínicas, SAE automatizada, quizzes e muito mais. 15 dias grátis + Grupo VIP no WhatsApp.`;
+    const desc = `Conheça a ${label}: mini apps, escalas clínicas, SAE automatizada, quizzes e muito mais. ${TRIAL_DAYS} dias grátis + Grupo VIP no WhatsApp.`;
     return {
       meta: [
         { title: `${label} — Planos | Academia da Enfermagem` },
@@ -50,11 +58,6 @@ export const Route = createFileRoute("/planos/$slug")({
   component: PlanoPage,
 });
 
-function isPromoActive() {
-  const now = new Date();
-  return now >= PROMO_START && now < PROMO_END;
-}
-
 function PlanoPage() {
   const { slug } = Route.useParams();
   const label = LABELS[slug];
@@ -68,6 +71,8 @@ function PlanoPage() {
   const miniAppsQ = useQuery({ queryKey: ["mini_apps"], queryFn: fetchMiniApps });
   const plansQ = useQuery({ queryKey: ["subscription_plans"], queryFn: fetchSubscriptionPlans });
   const subsQ = useQuery({ queryKey: ["my_subs"], queryFn: fetchMyActiveSubscriptions });
+  const textsQ = useAppTexts();
+  const t = (key: string, fallback: string) => textsQ.data?.[`plano.${slug}.${key}`] ?? fallback;
 
   const plan = (plansQ.data ?? []).find((p) => p.slug === slug);
   const sub = (subsQ.data ?? []).find((s) => s.plan_slug === slug);
@@ -83,8 +88,34 @@ function PlanoPage() {
     .filter((m) => placedIds.has(m.id) && m.is_active !== false)
     .slice(0, 24);
 
-  const promo = isPromoActive();
-  const trialDays = promo ? 15 : 30;
+  const slogan = t("slogan", DEFAULTS[slug]?.slogan ?? "");
+  const promoTitle = t("promo_title", "🎁 Promoção de lançamento");
+  const promoText = t("promo_text", `${TRIAL_DAYS} dias grátis + Grupo VIP no WhatsApp — válido até 01/10/2026`);
+  const ctaFinalTitle = t("cta_final_title", "Pronto para começar?");
+  const miniAppsTitle = t("mini_apps_title", "🧩 O que você vai encontrar");
+
+  const faqs = [
+    {
+      q: t("faq1_q", "Como funciona o período grátis?"),
+      a: t("faq1_a", `Você se cadastra e ganha ${TRIAL_DAYS} dias de acesso ao conteúdo, sem precisar informar cartão. No fim do período, é só assinar para continuar.`),
+    },
+    {
+      q: t("faq2_q", "Como entro no Grupo VIP do WhatsApp?"),
+      a: t("faq2_a", "Assim que ativar seu acesso, o link do grupo aparece aqui e dentro do app."),
+    },
+    {
+      q: t("faq3_q", "Posso cancelar quando quiser?"),
+      a: t("faq3_a", "Sim. A assinatura é mensal e sem fidelidade — você cancela pelo checkout a qualquer momento."),
+    },
+    {
+      q: t("faq4_q", "Funciona offline?"),
+      a: t("faq4_a", "Sim. Instale como app no celular (PWA) e a maior parte do conteúdo funciona sem internet, ideal para plantão."),
+    },
+    {
+      q: t("faq5_q", "Recebo atualizações?"),
+      a: t("faq5_a", "Sim. Escalas, protocolos e legislações são atualizados mensalmente, sem custo extra."),
+    },
+  ];
 
   return (
     <AppShell hideReferences>
@@ -102,7 +133,7 @@ function PlanoPage() {
             {appQ.data?.emoji ?? "📱"} Plano mensal
           </p>
           <h1 className="mt-1 font-display text-3xl font-extrabold leading-tight md:text-5xl">{label}</h1>
-          <p className="mt-3 max-w-xl text-base opacity-85 md:text-lg">{SLOGANS[slug]}</p>
+          <p className="mt-3 max-w-xl text-base opacity-85 md:text-lg">{slogan}</p>
 
           <div className="mt-5 flex flex-wrap items-baseline gap-2">
             <span className="text-4xl font-extrabold md:text-5xl">{formatPriceBRL(price)}</span>
@@ -135,7 +166,7 @@ function PlanoPage() {
                   params={{ slug }}
                   className="inline-flex items-center gap-1.5 rounded-xl border-2 border-white/60 bg-white/80 px-5 py-3 text-sm font-extrabold hover:bg-white"
                 >
-                  Experimentar {trialDays} dias grátis
+                  Experimentar {TRIAL_DAYS} dias grátis
                 </Link>
               </>
             )}
@@ -143,35 +174,33 @@ function PlanoPage() {
         </section>
 
         {/* PROMO BANNER */}
-        {promo && (
-          <section className="mt-4 rounded-3xl border border-amber-300 bg-gradient-to-r from-amber-100 via-yellow-50 to-amber-100 p-5 shadow-sm">
-            <div className="flex flex-wrap items-center gap-3">
-              <span className="rounded-full bg-amber-500 px-3 py-1 text-xs font-extrabold uppercase tracking-wider text-white">
-                🎁 Promoção de lançamento
-              </span>
-              <p className="text-sm font-bold text-amber-950">
-                <strong>15 dias grátis + Grupo VIP no WhatsApp</strong> — válido até 01/10/2026
-              </p>
-            </div>
-            {whatsappUrl && (
-              <a
-                href={whatsappUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-2 text-xs font-extrabold text-white hover:bg-emerald-700"
-              >
-                <MessageCircle className="h-4 w-4" /> Entrar no Grupo do WhatsApp
-              </a>
-            )}
-          </section>
-        )}
+        <section className="mt-4 rounded-3xl border border-amber-300 bg-gradient-to-r from-amber-100 via-yellow-50 to-amber-100 p-5 shadow-sm">
+          <div className="flex flex-wrap items-center gap-3">
+            <span className="rounded-full bg-amber-500 px-3 py-1 text-xs font-extrabold uppercase tracking-wider text-white">
+              {promoTitle}
+            </span>
+            <p className="text-sm font-bold text-amber-950">
+              <strong>{promoText}</strong>
+            </p>
+          </div>
+          {whatsappUrl && (
+            <a
+              href={whatsappUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-2 text-xs font-extrabold text-white hover:bg-emerald-700"
+            >
+              <MessageCircle className="h-4 w-4" /> Entrar no Grupo do WhatsApp
+            </a>
+          )}
+        </section>
 
         {/* DIFERENCIAIS */}
         <section className="mt-6 grid gap-3 sm:grid-cols-3">
           {[
-            { icon: ShieldCheck, title: "Base COFEN/COREN", desc: "Conteúdo alinhado com COFEN, CORENs, ANVISA, MS e OMS." },
-            { icon: Wifi, title: "Funciona offline (PWA)", desc: "Instale no celular e use no plantão sem sinal." },
-            { icon: Sparkles, title: "Atualizações mensais", desc: "PCDTs, escalas e legislação sempre em dia." },
+            { icon: ShieldCheck, title: t("dif1_title", "Base COFEN/COREN"), desc: t("dif1_desc", "Conteúdo alinhado com COFEN, CORENs, ANVISA, MS e OMS.") },
+            { icon: Wifi, title: t("dif2_title", "Funciona offline (PWA)"), desc: t("dif2_desc", "Instale no celular e use no plantão sem sinal.") },
+            { icon: Sparkles, title: t("dif3_title", "Atualizações mensais"), desc: t("dif3_desc", "PCDTs, escalas e legislação sempre em dia.") },
           ].map((d) => (
             <div key={d.title} className="rounded-2xl border border-white/60 bg-white/70 p-4 shadow-sm backdrop-blur">
               <d.icon className="h-5 w-5 text-emerald-700" />
@@ -183,7 +212,7 @@ function PlanoPage() {
 
         {/* MINI APPS */}
         <section className="mt-8">
-          <h2 className="font-display text-xl font-extrabold">🧩 O que você vai encontrar</h2>
+          <h2 className="font-display text-xl font-extrabold">{miniAppsTitle}</h2>
           <p className="mt-1 text-sm text-muted-foreground">
             {miniApps.length > 0
               ? `${miniApps.length} mini apps prontos para o seu dia a dia:`
@@ -208,30 +237,7 @@ function PlanoPage() {
         <section className="mt-8">
           <h2 className="font-display text-xl font-extrabold">❓ Dúvidas frequentes</h2>
           <div className="mt-4 space-y-2">
-            {[
-              {
-                q: "Como funciona o período grátis?",
-                a: `Você se cadastra e ganha ${trialDays} dias de acesso ao conteúdo, sem precisar informar cartão. No fim do período, é só assinar para continuar.`,
-              },
-              {
-                q: "Como entro no Grupo VIP do WhatsApp?",
-                a: whatsappUrl
-                  ? "Assim que ativar seu acesso, o link do grupo aparece aqui e dentro do app."
-                  : "O link do grupo é liberado dentro do app assim que sua conta é criada.",
-              },
-              {
-                q: "Posso cancelar quando quiser?",
-                a: "Sim. A assinatura é mensal e sem fidelidade — você cancela pelo checkout a qualquer momento.",
-              },
-              {
-                q: "Funciona offline?",
-                a: "Sim. Instale como app no celular (PWA) e a maior parte do conteúdo funciona sem internet, ideal para plantão.",
-              },
-              {
-                q: "Recebo atualizações?",
-                a: "Sim. Escalas, protocolos e legislações são atualizados mensalmente, sem custo extra.",
-              },
-            ].map((f, i) => (
+            {faqs.map((f, i) => (
               <details
                 key={i}
                 className="group rounded-2xl border border-white/60 bg-white/80 p-4 shadow-sm backdrop-blur open:bg-white"
@@ -251,9 +257,9 @@ function PlanoPage() {
           className="mt-10 rounded-3xl border border-white/60 p-6 text-center shadow-sm md:p-8"
           style={{ backgroundColor: bg, color: fg }}
         >
-          <h2 className="font-display text-2xl font-extrabold md:text-3xl">Pronto para começar?</h2>
+          <h2 className="font-display text-2xl font-extrabold md:text-3xl">{ctaFinalTitle}</h2>
           <p className="mt-2 text-sm opacity-80">
-            {formatPriceBRL(price)}/mês · {trialDays} dias grátis · cancele quando quiser
+            {formatPriceBRL(price)}/mês · {TRIAL_DAYS} dias grátis · cancele quando quiser
           </p>
           <div className="mt-5 flex flex-wrap justify-center gap-3">
             {checkoutUrl && !subscribed && (
@@ -271,7 +277,7 @@ function PlanoPage() {
               params={{ slug }}
               className="inline-flex items-center gap-1.5 rounded-xl border-2 border-white/60 bg-white/90 px-6 py-3 text-sm font-extrabold hover:bg-white"
             >
-              {subscribed ? "Acessar mini apps →" : `Experimentar ${trialDays} dias grátis`}
+              {subscribed ? "Acessar mini apps →" : `Experimentar ${TRIAL_DAYS} dias grátis`}
             </Link>
           </div>
           <p className="mt-3 text-[11px] font-extrabold uppercase tracking-wide text-emerald-700">
