@@ -255,6 +255,14 @@ function StoreHome() {
                       </button>
                     )}
 
+                    <Link
+                      to="/planos/$slug"
+                      params={{ slug }}
+                      className="block w-full text-center text-xs font-bold underline underline-offset-2 opacity-80 hover:opacity-100"
+                    >
+                      Saiba mais sobre este plano →
+                    </Link>
+
                     <p className="text-center text-[11px] font-extrabold tracking-wide text-emerald-700">
                       <RichText>{compraSegura}</RichText>
                     </p>

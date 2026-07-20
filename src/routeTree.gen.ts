@@ -42,6 +42,7 @@ import { Route as AclsRouteImport } from './routes/acls'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TrilhaSlugRouteImport } from './routes/trilha.$slug'
 import { Route as QuizzesSlugRouteImport } from './routes/quizzes.$slug'
+import { Route as PlanosSlugRouteImport } from './routes/planos.$slug'
 import { Route as AppSlugRouteImport } from './routes/app.$slug'
 import { Route as AppSlugIndexRouteImport } from './routes/app.$slug.index'
 import { Route as AppSlugSubtopicRouteImport } from './routes/app.$slug.$subtopic'
@@ -212,6 +213,11 @@ const QuizzesSlugRoute = QuizzesSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => QuizzesRoute,
 } as any)
+const PlanosSlugRoute = PlanosSlugRouteImport.update({
+  id: '/planos/$slug',
+  path: '/planos/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppSlugRoute = AppSlugRouteImport.update({
   id: '/app/$slug',
   path: '/app/$slug',
@@ -266,6 +272,7 @@ export interface FileRoutesByFullPath {
   '/sv-pediatrico': typeof SvPediatricoRoute
   '/uti': typeof UtiRoute
   '/app/$slug': typeof AppSlugRouteWithChildren
+  '/planos/$slug': typeof PlanosSlugRoute
   '/quizzes/$slug': typeof QuizzesSlugRoute
   '/trilha/$slug': typeof TrilhaSlugRoute
   '/api/public/cakto-webhook': typeof ApiPublicCaktoWebhookRoute
@@ -304,6 +311,7 @@ export interface FileRoutesByTo {
   '/sv-gestante': typeof SvGestanteRoute
   '/sv-pediatrico': typeof SvPediatricoRoute
   '/uti': typeof UtiRoute
+  '/planos/$slug': typeof PlanosSlugRoute
   '/quizzes/$slug': typeof QuizzesSlugRoute
   '/trilha/$slug': typeof TrilhaSlugRoute
   '/api/public/cakto-webhook': typeof ApiPublicCaktoWebhookRoute
@@ -344,6 +352,7 @@ export interface FileRoutesById {
   '/sv-pediatrico': typeof SvPediatricoRoute
   '/uti': typeof UtiRoute
   '/app/$slug': typeof AppSlugRouteWithChildren
+  '/planos/$slug': typeof PlanosSlugRoute
   '/quizzes/$slug': typeof QuizzesSlugRoute
   '/trilha/$slug': typeof TrilhaSlugRoute
   '/api/public/cakto-webhook': typeof ApiPublicCaktoWebhookRoute
@@ -385,6 +394,7 @@ export interface FileRouteTypes {
     | '/sv-pediatrico'
     | '/uti'
     | '/app/$slug'
+    | '/planos/$slug'
     | '/quizzes/$slug'
     | '/trilha/$slug'
     | '/api/public/cakto-webhook'
@@ -423,6 +433,7 @@ export interface FileRouteTypes {
     | '/sv-gestante'
     | '/sv-pediatrico'
     | '/uti'
+    | '/planos/$slug'
     | '/quizzes/$slug'
     | '/trilha/$slug'
     | '/api/public/cakto-webhook'
@@ -462,6 +473,7 @@ export interface FileRouteTypes {
     | '/sv-pediatrico'
     | '/uti'
     | '/app/$slug'
+    | '/planos/$slug'
     | '/quizzes/$slug'
     | '/trilha/$slug'
     | '/api/public/cakto-webhook'
@@ -502,6 +514,7 @@ export interface RootRouteChildren {
   SvPediatricoRoute: typeof SvPediatricoRoute
   UtiRoute: typeof UtiRoute
   AppSlugRoute: typeof AppSlugRouteWithChildren
+  PlanosSlugRoute: typeof PlanosSlugRoute
   TrilhaSlugRoute: typeof TrilhaSlugRoute
   ApiPublicCaktoWebhookRoute: typeof ApiPublicCaktoWebhookRoute
 }
@@ -739,6 +752,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof QuizzesSlugRouteImport
       parentRoute: typeof QuizzesRoute
     }
+    '/planos/$slug': {
+      id: '/planos/$slug'
+      path: '/planos/$slug'
+      fullPath: '/planos/$slug'
+      preLoaderRoute: typeof PlanosSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/app/$slug': {
       id: '/app/$slug'
       path: '/app/$slug'
@@ -827,6 +847,7 @@ const rootRouteChildren: RootRouteChildren = {
   SvPediatricoRoute: SvPediatricoRoute,
   UtiRoute: UtiRoute,
   AppSlugRoute: AppSlugRouteWithChildren,
+  PlanosSlugRoute: PlanosSlugRoute,
   TrilhaSlugRoute: TrilhaSlugRoute,
   ApiPublicCaktoWebhookRoute: ApiPublicCaktoWebhookRoute,
 }

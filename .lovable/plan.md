@@ -1,38 +1,29 @@
-## 1. Botão "Compartilhar App" no cabeçalho
+## Landing pages públicas por app + promoção de lançamento
 
-Adicionar um item **Compartilhar** no menu de navegação do `AppShell` (aparece logo abaixo de "Minha Conta" no menu mobile e ao lado dela no desktop), disponível em todos os apps (Acadêmico, Estudante de Técnico, Técnico, Enfermeiro).
+Migração já preparada (aguardando execução) com:
+- Coluna `whatsapp_group_url` na tabela `apps` (você cola o link do grupo pelo admin)
+- Trial passa a **15 dias** entre 01/08/2026 e 01/10/2026 (fora da janela: 30 dias)
+- Preços já batem com os informados (24,99 / 13,99 / 16,99 / 39,99) — nada a alterar
 
-Comportamento ao clicar:
-- Se o navegador suportar **Web Share API** (padrão em celular Android/iOS): abre a folha nativa de compartilhar (WhatsApp, Instagram, e-mail, SMS etc.) com:
-  - Título: "Academia da Enfermagem"
-  - Texto: "Informação atualizada em suas mãos — conheça o app que descomplica a enfermagem."
-  - Link: `https://academiadaenfermagem.com.br`
-- Se não suportar (desktop antigo): copia o link para a área de transferência e mostra um toast "Link copiado! Cole onde quiser compartilhar."
+### Rota nova
+`src/routes/planos.$slug.tsx` — uma landing pública, SSR, indexável, que serve os 4 slugs:
+`academico`, `tecnico`, `tecnico-estudante`, `enfermeiro`.
 
-Ícone: `Share2` do lucide-react. Rótulo editável via `app_texts` na chave `menu.compartilhar` (padrão "Compartilhar").
+Cada landing tem, no padrão glassmorphism/pastel:
+1. **Hero** com cor do app, nome, slogan, preço grande, botões "Assinar" e "Experimentar 15 dias grátis"
+2. **Banner dourado da promoção** (só aparece entre 01/08 e 01/10/2026), com botão "Entrar no Grupo VIP no WhatsApp" quando o link estiver preenchido
+3. **3 diferenciais**: COFEN/COREN, PWA offline, atualizações mensais
+4. **Lista dos mini apps** daquele plano (puxada de `mini_app_placements` + `mini_apps`)
+5. **FAQ em acordeon** (`<details>`): como funciona o trial, WhatsApp, cancelamento, offline, atualizações
+6. **CTA final** com preço e mesmos botões
+7. **SEO por slug**: title, description, og:title, og:description únicos
 
-Arquivo alterado: `src/components/AppShell.tsx` (acrescentar o item no array `baseNav` e criar handler `handleShare`). Nenhuma mudança de layout ou cor.
+### Home
+Adiciono um link **"Saiba mais →"** em cada card de `src/routes/index.tsx` apontando para `/planos/{slug}`. Os botões "Ativar Assinatura" e "Experimentar Grátis" continuam funcionando como hoje.
 
-## 2. Corrigir frase cortada no celular na Home
+### O que NÃO muda
+- Nada dentro dos mini apps (SAE, Escalas, etc.)
+- Nada no checkout Cakto
+- Nada no visual dos apps de aluno assinante
 
-Na Home (`src/routes/index.tsx`), o título vem do texto editável `home.description`. O texto atual salvo no banco é **"Quatro aplicativos, uma só academia..."**, mas no celular aparece só **"Três app, uma só academia"** sem o resto.
-
-Causas prováveis (a confirmar ao abrir o arquivo em build mode):
-- O elemento `<h1>` ou `<p>` da descrição está com `truncate` / `overflow-hidden` cortando no mobile.
-- Ou uma versão antiga do texto foi cacheada no PWA/service worker.
-
-Correção:
-- Remover qualquer classe `truncate` do bloco de título/descrição da Home para deixar quebrar em várias linhas no celular.
-- Confirmar que o valor salvo em `app_texts.home.description` está com o texto novo ("Quatro aplicativos, uma só academia..."). Se estiver desatualizado, atualizar via UPDATE simples no `app_texts`.
-- Como o PWA já tem `autoUpdate`, após publicar o texto correto aparece assim que o usuário reabrir o app.
-
-## Detalhes técnicos
-
-- Web Share API: `navigator.share({ title, text, url })`. Fallback: `navigator.clipboard.writeText(url)` + toast (já existe `sonner` no projeto).
-- Não altero cores, banner, logo, nem estrutura de menu — só adiciono 1 item.
-- Não mexo em nada da SAE, escalas ou outros mini apps.
-
-## O que vou entregar
-
-1. Item **Compartilhar** funcionando no cabeçalho de todos os apps (mobile + desktop).
-2. Frase "Quatro aplicativos, uma só academia..." aparecendo por inteiro no celular.
+Se aprovar, entro em modo build e faço tudo em uma tacada só.
