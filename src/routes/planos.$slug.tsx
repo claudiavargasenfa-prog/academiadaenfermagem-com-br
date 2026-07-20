@@ -126,49 +126,84 @@ function PlanoPage() {
 
         {/* HERO */}
         <section
-          className="relative overflow-hidden rounded-3xl border border-white/60 p-6 shadow-sm md:p-10"
+          className="relative overflow-hidden rounded-[2rem] border border-white/70 p-6 shadow-lg md:p-12"
           style={{ backgroundColor: bg, color: fg }}
         >
-          <p className="text-xs font-bold uppercase tracking-widest opacity-70">
-            {appQ.data?.emoji ?? "📱"} Plano mensal
-          </p>
-          <h1 className="mt-1 font-display text-3xl font-extrabold leading-tight md:text-5xl">{label}</h1>
-          <p className="mt-3 max-w-xl text-base opacity-85 md:text-lg">{slogan}</p>
+          {/* Decorative glows */}
+          <div className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-white/40 blur-3xl" />
+          <div className="pointer-events-none absolute -bottom-32 -left-20 h-72 w-72 rounded-full bg-white/30 blur-3xl" />
+          <div
+            className="pointer-events-none absolute inset-0 opacity-60"
+            style={{ background: `linear-gradient(135deg, transparent 40%, ${bg} 100%)` }}
+          />
 
-          <div className="mt-5 flex flex-wrap items-baseline gap-2">
-            <span className="text-4xl font-extrabold md:text-5xl">{formatPriceBRL(price)}</span>
-            <span className="text-sm opacity-70">/mês · cancele quando quiser</span>
-          </div>
+          <div className="relative">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/60 bg-white/70 px-3 py-1 text-[11px] font-extrabold uppercase tracking-widest shadow-sm backdrop-blur">
+              <span className="text-base leading-none">{appQ.data?.emoji ?? "📱"}</span>
+              {t("hero_eyebrow", "Academia da Enfermagem")}
+            </div>
 
-          <div className="mt-5 flex flex-wrap gap-3">
-            {subscribed ? (
-              <Link
-                to="/trilha/$slug"
-                params={{ slug }}
-                className="inline-flex items-center gap-1.5 rounded-xl bg-white/90 px-5 py-3 text-sm font-extrabold hover:bg-white"
-              >
-                ✓ Acessar meus mini apps →
-              </Link>
-            ) : (
-              <>
-                {checkoutUrl && (
-                  <a
-                    href={checkoutUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-1.5 rounded-xl bg-foreground px-5 py-3 text-sm font-extrabold text-background shadow hover:opacity-90"
-                  >
-                    Assinar agora <ExternalLink className="h-4 w-4" />
-                  </a>
-                )}
-                <a
-                  href={`/?cadastro=${slug}`}
-                  className="inline-flex items-center gap-1.5 rounded-xl border-2 border-white/60 bg-white/80 px-5 py-3 text-sm font-extrabold hover:bg-white"
+            <h1 className="mt-4 font-display text-4xl font-extrabold leading-[1.05] tracking-tight md:text-6xl">
+              {t("hero_title", label)}
+            </h1>
+
+            <p className="mt-4 max-w-2xl text-base font-medium opacity-90 md:text-xl">
+              {slogan}
+            </p>
+
+            {/* Trust chips */}
+            <div className="mt-6 flex flex-wrap gap-2">
+              {[
+                `✨ ${TRIAL_DAYS} dias grátis`,
+                "💳 Sem cartão no cadastro",
+                "🚪 Cancele quando quiser",
+                "📶 Funciona offline",
+              ].map((chip) => (
+                <span
+                  key={chip}
+                  className="rounded-full border border-white/60 bg-white/80 px-3 py-1.5 text-xs font-extrabold shadow-sm backdrop-blur"
                 >
-                  Experimentar {TRIAL_DAYS} dias grátis
-                </a>
-              </>
-            )}
+                  {chip}
+                </span>
+              ))}
+            </div>
+
+            <div className="mt-7 flex flex-wrap gap-3">
+              {subscribed ? (
+                <Link
+                  to="/trilha/$slug"
+                  params={{ slug }}
+                  className="inline-flex items-center gap-1.5 rounded-2xl bg-white px-6 py-3.5 text-sm font-extrabold shadow-md transition hover:-translate-y-0.5 hover:shadow-lg"
+                >
+                  ✓ Acessar meus mini apps →
+                </Link>
+              ) : (
+                <>
+                  <a
+                    href={`/?cadastro=${slug}`}
+                    className="group inline-flex items-center gap-2 rounded-2xl bg-foreground px-6 py-3.5 text-sm font-extrabold text-background shadow-lg transition hover:-translate-y-0.5 hover:shadow-xl"
+                  >
+                    <Sparkles className="h-4 w-4" />
+                    Começar meus {TRIAL_DAYS} dias grátis
+                    <span className="transition group-hover:translate-x-0.5">→</span>
+                  </a>
+                  {checkoutUrl && (
+                    <a
+                      href={checkoutUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1.5 rounded-2xl border-2 border-white/70 bg-white/70 px-6 py-3.5 text-sm font-extrabold backdrop-blur transition hover:bg-white"
+                    >
+                      Já quero assinar <ExternalLink className="h-4 w-4" />
+                    </a>
+                  )}
+                </>
+              )}
+            </div>
+
+            <p className="mt-4 text-xs font-semibold opacity-70">
+              {t("hero_footnote", "Sem cartão de crédito · Ativa na hora · PIX ou cartão só depois do teste")}
+            </p>
           </div>
         </section>
 
