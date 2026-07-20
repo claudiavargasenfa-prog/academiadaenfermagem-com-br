@@ -121,15 +121,13 @@ function StoreHome() {
       return ((a as any).sort_order ?? 0) - ((b as any).sort_order ?? 0);
     });
   const mySubs = mySubsQ.data ?? [];
-  const hasAnyOtherTrack = (slug: string) =>
-    mySubs.some((s) => s.plan_slug !== slug && s.status !== "trial");
 
 
   const homeTitle = useText("home.title", "Academia da Enfermagem");
-  const homeDesc = useText("home.description", "Quatro aplicativos, uma só academia. Assine o seu e libere todo o conteúdo.");
-  const ctaSection = useText("home.cta_section", "Assine um aplicativo · acesso ilimitado");
+  const homeDesc = useText("home.description", "Quatro aplicativos, uma só academia. Conheça cada um e comece com 15 dias grátis — sem cartão.");
+  const ctaSection = useText("home.cta_section", "Conheça os aplicativos");
   const compraSegura = useText("compra.segura", "🔒 COMPRA SEGURA");
-  const migracaoBanner = useText("migracao.banner", "**MIGRE PARA OUTRO APP E GANHE 15% DE DESCONTO POR 3 MESES**");
+
 
 
   return (
