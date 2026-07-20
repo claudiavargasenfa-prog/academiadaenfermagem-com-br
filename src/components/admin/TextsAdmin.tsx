@@ -79,6 +79,17 @@ export function TextsAdmin() {
           <li><code className="rounded bg-foreground/5 px-1">__texto__</code> → <span className="font-bold text-gold">texto</span> em cor dourada</li>
           <li><code className="rounded bg-foreground/5 px-1">^^texto^^</code> → <span className="inline-flex items-center rounded-md bg-gold/20 px-1.5 py-0.5 text-[0.85em] font-extrabold uppercase text-amber-900">TEXTO</span> em pílula colorida</li>
         </ul>
+        <p className="mt-3 text-xs font-bold">Listas (um item por linha):</p>
+        <ul className="mt-1 space-y-1 text-xs">
+          <li><code className="rounded bg-foreground/5 px-1">- item</code> → <span className="inline-block h-1.5 w-1.5 rounded-full bg-foreground/60 align-middle" /> bolinha cinza (padrão)</li>
+          <li><code className="rounded bg-foreground/5 px-1">&gt; item</code> → <span className="text-gold">▸</span> setinha dourada</li>
+          <li><code className="rounded bg-foreground/5 px-1">* item</code> → <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-500 align-middle" /> bolinha verde</li>
+          <li><code className="rounded bg-foreground/5 px-1">+ item</code> → <span className="inline-block h-1.5 w-1.5 rounded-full bg-blue-900 align-middle" /> bolinha azul escura</li>
+          <li><code className="rounded bg-foreground/5 px-1"># item</code> → <span className="inline-block h-1.5 w-1.5 rounded-full bg-amber-800 align-middle" /> bolinha marrom</li>
+        </ul>
+        <p className="mt-2 text-[11px] text-muted-foreground">
+          Aperte Enter pra pular linha. Linhas em branco também funcionam.
+        </p>
       </Card>
 
       {q.data?.map((row) => {
