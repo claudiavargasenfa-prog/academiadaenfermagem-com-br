@@ -56,7 +56,7 @@ function TrilhaPage() {
   }
   if (appQ.isError) throw appQ.error;
   const app = appQ.data;
-  if (appQ.isFetched && !app) throw notFound();
+  if (!app) throw notFound();
 
   const placements = placementsQ.data ?? [];
   const sections = sectionsQ.data ?? [];
