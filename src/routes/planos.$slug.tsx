@@ -74,6 +74,16 @@ function PlanoPage() {
   }, []);
   const isLoggedIn = !!session;
 
+  const isAdminQ = useQuery({
+    queryKey: ["is_admin", session?.user?.id],
+    enabled: isLoggedIn,
+    queryFn: async () => {
+      const { data } = await supabase.rpc("has_role", { _user_id: session!.user.id, _role: "admin" });
+      return !!data;
+    },
+  });
+  const isAdmin = !!isAdminQ.data;
+
   const appQ = useQuery({ queryKey: ["app", slug], queryFn: () => fetchAppBySlug(slug) });
   const placementsQ = useQuery({
     queryKey: ["app_placements", appQ.data?.id],
