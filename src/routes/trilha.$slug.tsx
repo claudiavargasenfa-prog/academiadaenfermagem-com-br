@@ -222,6 +222,18 @@ function TrackAppCard({ app, unlocked, extraExpiresAt, isAdmin }: { app: MiniApp
   );
 }
 
+function TrilhaHeader({ slug, count }: { slug: string; count: number }) {
+  const title = useText(`trilha.${slug}.title`, `${count} mini apps neste aplicativo`);
+  const desc = useText(`trilha.${slug}.description`, "Apps grátis liberam para qualquer pessoa. Os demais exigem assinatura deste aplicativo.");
+  const rendered = title.replace(/\{count\}/g, String(count));
+  return (
+    <div className="mb-4">
+      <h2 className="font-display text-xl font-bold text-foreground"><RichText>{rendered}</RichText></h2>
+      {desc && <p className="mt-1 text-sm text-muted-foreground"><RichText>{desc}</RichText></p>}
+    </div>
+  );
+}
+
 function MeuEstagioCard() {
   const [estagio] = useLocal("estagio-info", { campo: "", preceptor: "", periodo: "" });
   return (
