@@ -139,7 +139,7 @@ function TrilhaPage() {
 
       {(app.slug === "academico" || app.slug === "tecnico-estudante") && <MeuEstagioCard />}
 
-      <PageHeader title={`${items.length} mini apps neste aplicativo`} description="Apps grátis liberam para qualquer pessoa. Os demais exigem assinatura deste aplicativo." />
+      <TrilhaHeader slug={app.slug} count={items.length} />
 
       {grouped.length === 0 ? (
         <Card>
