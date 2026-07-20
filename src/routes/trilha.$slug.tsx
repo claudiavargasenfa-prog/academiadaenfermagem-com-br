@@ -15,6 +15,7 @@ import {
 } from "@/lib/access";
 import { fetchAppBySlug, fetchAppSections, fetchPlacementsForApp } from "@/lib/apps";
 import { useLocal } from "@/lib/storage";
+import { RichText, useText } from "@/lib/app-texts";
 
 export const Route = createFileRoute("/trilha/$slug")({
   head: ({ params }) => ({
@@ -138,7 +139,7 @@ function TrilhaPage() {
 
       {(app.slug === "academico" || app.slug === "tecnico-estudante") && <MeuEstagioCard />}
 
-      <PageHeader title={`${items.length} mini apps neste aplicativo`} description="Apps grátis liberam para qualquer pessoa. Os demais exigem assinatura deste aplicativo." />
+      <TrilhaHeader slug={app.slug} count={items.length} />
 
       {grouped.length === 0 ? (
         <Card>
@@ -217,6 +218,18 @@ function TrackAppCard({ app, unlocked, extraExpiresAt, isAdmin }: { app: MiniApp
           </button>
         )}
       </div>
+    </div>
+  );
+}
+
+function TrilhaHeader({ slug, count }: { slug: string; count: number }) {
+  const title = useText(`trilha.${slug}.title`, `${count} mini apps neste aplicativo`);
+  const desc = useText(`trilha.${slug}.description`, "Apps grátis liberam para qualquer pessoa. Os demais exigem assinatura deste aplicativo.");
+  const rendered = title.replace(/\{count\}/g, String(count));
+  return (
+    <div className="mb-4">
+      <h2 className="font-display text-xl font-bold text-foreground"><RichText>{rendered}</RichText></h2>
+      {desc && <p className="mt-1 text-sm text-muted-foreground"><RichText>{desc}</RichText></p>}
     </div>
   );
 }
