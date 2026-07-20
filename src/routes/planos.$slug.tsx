@@ -161,13 +161,12 @@ function PlanoPage() {
                     Assinar agora <ExternalLink className="h-4 w-4" />
                   </a>
                 )}
-                <Link
-                  to="/"
-                  search={{ cadastro: slug }}
+                <a
+                  href={`/?cadastro=${slug}`}
                   className="inline-flex items-center gap-1.5 rounded-xl border-2 border-white/60 bg-white/80 px-5 py-3 text-sm font-extrabold hover:bg-white"
                 >
                   Experimentar {TRIAL_DAYS} dias grátis
-                </Link>
+                </a>
               </>
             )}
           </div>
