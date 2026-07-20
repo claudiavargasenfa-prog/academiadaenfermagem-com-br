@@ -336,28 +336,47 @@ function PlanoPage() {
             {formatPriceBRL(price)}/mês · {TRIAL_DAYS} dias grátis · cancele quando quiser
           </p>
           <div className="mt-5 flex flex-wrap justify-center gap-3">
-            {checkoutUrl && !subscribed && (
-              <a
-                href={checkoutUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-1.5 rounded-xl bg-foreground px-6 py-3 text-sm font-extrabold text-background shadow hover:opacity-90"
-              >
-                Assinar agora <ExternalLink className="h-4 w-4" />
-              </a>
-            )}
             {subscribed ? (
               <Link
                 to="/trilha/$slug"
                 params={{ slug }}
-                className="inline-flex items-center gap-1.5 rounded-xl border-2 border-white/60 bg-white/90 px-6 py-3 text-sm font-extrabold hover:bg-white"
+                className="inline-flex items-center gap-1.5 rounded-xl bg-primary px-6 py-3 text-sm font-extrabold text-primary-foreground shadow hover:opacity-90"
               >
                 Acessar mini apps →
               </Link>
+            ) : isLoggedIn ? (
+              checkoutUrl && (
+                <a
+                  href={checkoutUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1.5 rounded-xl bg-primary px-6 py-3 text-sm font-extrabold text-primary-foreground shadow hover:opacity-90"
+                >
+                  Assinar agora <ExternalLink className="h-4 w-4" />
+                </a>
+              )
             ) : (
-              <a
-                href={`/?cadastro=${slug}`}
-                className="inline-flex items-center gap-1.5 rounded-xl border-2 border-white/60 bg-white/90 px-6 py-3 text-sm font-extrabold hover:bg-white"
+              <>
+                <a
+                  href={`/?cadastro=${slug}`}
+                  className="inline-flex items-center gap-1.5 rounded-xl bg-primary px-6 py-3 text-sm font-extrabold text-primary-foreground shadow hover:opacity-90"
+                >
+                  <Sparkles className="h-4 w-4" />
+                  Começar meus {TRIAL_DAYS} dias grátis
+                </a>
+                {checkoutUrl && (
+                  <a
+                    href={checkoutUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1.5 rounded-xl border-2 border-white/60 bg-white/90 px-6 py-3 text-sm font-extrabold hover:bg-white"
+                  >
+                    Assinar agora <ExternalLink className="h-4 w-4" />
+                  </a>
+                )}
+              </>
+            )}
+          </div>
               >
                 Experimentar {TRIAL_DAYS} dias grátis
               </a>
