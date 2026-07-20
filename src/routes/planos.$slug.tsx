@@ -66,6 +66,14 @@ function PlanoPage() {
   const { slug } = Route.useParams();
   const label = LABELS[slug];
 
+  const [session, setSession] = useState<Session | null>(null);
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => setSession(data.session));
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => setSession(s));
+    return () => sub.subscription.unsubscribe();
+  }, []);
+  const isLoggedIn = !!session;
+
   const appQ = useQuery({ queryKey: ["app", slug], queryFn: () => fetchAppBySlug(slug) });
   const placementsQ = useQuery({
     queryKey: ["app_placements", appQ.data?.id],
@@ -74,7 +82,7 @@ function PlanoPage() {
   });
   const miniAppsQ = useQuery({ queryKey: ["mini_apps"], queryFn: fetchMiniApps });
   const plansQ = useQuery({ queryKey: ["subscription_plans"], queryFn: fetchSubscriptionPlans });
-  const subsQ = useQuery({ queryKey: ["my_subs"], queryFn: fetchMyActiveSubscriptions });
+  const subsQ = useQuery({ queryKey: ["my_subs"], queryFn: fetchMyActiveSubscriptions, enabled: isLoggedIn });
   const textsQ = useAppTexts();
   const t = (key: string, fallback: string) => textsQ.data?.[`plano.${slug}.${key}`] ?? fallback;
 
