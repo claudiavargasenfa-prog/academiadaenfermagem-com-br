@@ -152,7 +152,7 @@ function StoreHome() {
       </div>
 
 
-      {/* 2) 3 aplicativos (cores próprias) */}
+      {/* 2) Cards dos aplicativos — sem preço, só apresentação + botão "Conhecer" */}
       {activePlans.length > 0 && (
         <section id="aplicativos" className="mb-8 scroll-mt-20">
           <h2 className="mb-3 font-display text-lg font-bold"><RichText>{ctaSection}</RichText></h2>
@@ -162,18 +162,6 @@ function StoreHome() {
               const sub = mySubs.find((s) => s.plan_slug === plan.slug);
               const subscribed = !!sub && (sub.status === "active" || sub.status === "trial");
               const inTrial = !!sub && sub.status === "trial";
-              const isMigracao = hasAnyOtherTrack(plan.slug)
-                && !subscribed
-                && !!(plan as any).price_promo_migracao_cents
-                && !!(plan as any).cakto_link_migracao;
-
-              const priceFrom = (plan as any).price_original_migracao_cents as number | null;
-              const pricePromo = (plan as any).price_promo_migracao_cents as number | null;
-              const priceNovo = (plan as any).price_novo_cents ?? plan.price_cents;
-              const ckLink = isMigracao
-                ? (plan as any).cakto_link_migracao
-                : ((plan as any).cakto_link_novo || plan.cakto_checkout_url);
-
               const slug = plan.slug;
               const cardStyle: React.CSSProperties = {
                 backgroundColor: appRow?.bg_color ?? "#F3F4F6",
@@ -196,29 +184,13 @@ function StoreHome() {
                     <p className="text-xs opacity-80">{plan.description}</p>
                   )}
 
-                  <div className="mt-3">
-                    {isMigracao && priceFrom ? (
-                      <>
-                        <p className="text-xs font-bold uppercase opacity-80"><RichText>{migracaoBanner}</RichText></p>
-                        <p className="mt-1 text-sm font-semibold opacity-70 line-through">De {formatPriceBRL(priceFrom)}</p>
-                        <p className="text-2xl font-extrabold">
-                          Por {formatPriceBRL(pricePromo!)}<span className="text-xs font-normal opacity-70">/mês</span>
-                        </p>
-                      </>
-                    ) : (
-                      <p className="text-2xl font-extrabold">
-                        {formatPriceBRL(priceNovo)}<span className="text-xs font-normal opacity-70">/mês</span>
-                      </p>
-                    )}
-                  </div>
-
-                  <div className="mt-3 space-y-2">
+                  <div className="mt-auto space-y-2 pt-4">
                     {subscribed ? (
                       <>
                         <Link
                           to="/trilha/$slug"
                           params={{ slug }}
-                          className="block w-full rounded-xl bg-white/70 py-2 text-center text-sm font-bold hover:bg-white"
+                          className="block w-full rounded-xl bg-foreground py-2.5 text-center text-sm font-extrabold text-background shadow hover:opacity-90"
                         >
                           Ver mini apps →
                         </Link>
@@ -228,41 +200,15 @@ function StoreHome() {
                             : "✓ Assinatura ativa"}
                         </span>
                       </>
-                    ) : ckLink ? (
-                      <>
-                        <a
-                          href={ckLink}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="flex w-full items-center justify-center gap-1 rounded-xl bg-foreground py-2.5 text-sm font-extrabold text-background shadow hover:opacity-90"
-                        >
-                          Ativar Assinatura Mensal <ExternalLink className="h-3.5 w-3.5" />
-                        </a>
-                        <a
-                          href={`/?cadastro=${encodeURIComponent(slug)}`}
-                          className="block w-full rounded-xl border-2 border-white/60 bg-white/80 py-2 text-center text-sm font-extrabold hover:bg-white"
-                        >
-                          Experimentar 15 dias grátis
-                        </a>
-                        {inTrial && (
-                          <span className="block w-full rounded-xl bg-white/40 py-2 text-center text-xs font-bold">
-                            🎁 Trial ativo · até {new Date(sub!.expires_at).toLocaleDateString("pt-BR")}
-                          </span>
-                        )}
-                      </>
                     ) : (
-                      <button disabled className="w-full cursor-not-allowed rounded-xl bg-white/40 py-2 text-sm font-semibold opacity-60">
-                        Em breve
-                      </button>
+                      <Link
+                        to="/planos/$slug"
+                        params={{ slug }}
+                        className="block w-full rounded-xl bg-foreground py-2.5 text-center text-sm font-extrabold text-background shadow hover:opacity-90"
+                      >
+                        Conhecer este aplicativo →
+                      </Link>
                     )}
-
-                    <Link
-                      to="/planos/$slug"
-                      params={{ slug }}
-                      className="block w-full text-center text-xs font-bold underline underline-offset-2 opacity-80 hover:opacity-100"
-                    >
-                      Saiba mais sobre este plano →
-                    </Link>
 
                     <p className="text-center text-[11px] font-extrabold tracking-wide text-emerald-700">
                       <RichText>{compraSegura}</RichText>
@@ -274,6 +220,7 @@ function StoreHome() {
           </div>
         </section>
       )}
+
 
 
     </AppShell>
