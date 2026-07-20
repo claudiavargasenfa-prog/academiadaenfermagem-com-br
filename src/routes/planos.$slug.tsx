@@ -1,0 +1,284 @@
+import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
+import { ExternalLink, ArrowLeft, CheckCircle2, MessageCircle, ShieldCheck, Sparkles, Wifi } from "lucide-react";
+import { AppShell } from "@/components/AppShell";
+import {
+  fetchMiniApps,
+  fetchSubscriptionPlans,
+  fetchMyActiveSubscriptions,
+  formatPriceBRL,
+} from "@/lib/access";
+import { fetchAppBySlug, fetchPlacementsForApp } from "@/lib/apps";
+
+const PROMO_START = new Date("2026-08-01T00:00:00-03:00");
+const PROMO_END = new Date("2026-10-02T00:00:00-03:00");
+
+const ALLOWED = new Set(["academico", "tecnico", "tecnico-estudante", "enfermeiro"]);
+
+const LABELS: Record<string, string> = {
+  academico: "Academia do Acadêmico",
+  tecnico: "Academia do Técnico em Enfermagem",
+  "tecnico-estudante": "Academia do Estudante de Técnico em Enfermagem",
+  enfermeiro: "Academia do Enfermeiro",
+};
+
+const SLOGANS: Record<string, string> = {
+  academico: "Do primeiro estágio ao TCC — sem sofrer.",
+  tecnico: "Prática segura, plantão tranquilo.",
+  "tecnico-estudante": "Passa na prova, encara o campo com confiança.",
+  enfermeiro: "Menos burocracia, mais paciente.",
+};
+
+export const Route = createFileRoute("/planos/$slug")({
+  head: ({ params }) => {
+    const label = LABELS[params.slug] ?? "Academia da Enfermagem";
+    const desc = `Conheça a ${label}: mini apps, escalas clínicas, SAE automatizada, quizzes e muito mais. 15 dias grátis + Grupo VIP no WhatsApp.`;
+    return {
+      meta: [
+        { title: `${label} — Planos | Academia da Enfermagem` },
+        { name: "description", content: desc },
+        { property: "og:title", content: `${label} — Academia da Enfermagem` },
+        { property: "og:description", content: desc },
+        { property: "og:type", content: "website" },
+        { name: "twitter:card", content: "summary_large_image" },
+      ],
+    };
+  },
+  beforeLoad: ({ params }) => {
+    if (!ALLOWED.has(params.slug)) throw notFound();
+  },
+  component: PlanoPage,
+});
+
+function isPromoActive() {
+  const now = new Date();
+  return now >= PROMO_START && now < PROMO_END;
+}
+
+function PlanoPage() {
+  const { slug } = Route.useParams();
+  const label = LABELS[slug];
+
+  const appQ = useQuery({ queryKey: ["app", slug], queryFn: () => fetchAppBySlug(slug) });
+  const placementsQ = useQuery({
+    queryKey: ["app_placements", appQ.data?.id],
+    enabled: !!appQ.data?.id,
+    queryFn: () => fetchPlacementsForApp(appQ.data!.id),
+  });
+  const miniAppsQ = useQuery({ queryKey: ["mini_apps"], queryFn: fetchMiniApps });
+  const plansQ = useQuery({ queryKey: ["subscription_plans"], queryFn: fetchSubscriptionPlans });
+  const subsQ = useQuery({ queryKey: ["my_subs"], queryFn: fetchMyActiveSubscriptions });
+
+  const plan = (plansQ.data ?? []).find((p) => p.slug === slug);
+  const sub = (subsQ.data ?? []).find((s) => s.plan_slug === slug);
+  const subscribed = !!sub && (sub.status === "active" || sub.status === "trial");
+  const price = (plan as any)?.price_novo_cents ?? (plan as any)?.price_cents ?? 0;
+  const checkoutUrl = (plan as any)?.cakto_link_novo || (plan as any)?.cakto_checkout_url || "";
+  const bg = appQ.data?.bg_color ?? "#FEF3C7";
+  const fg = appQ.data?.fg_color ?? "#78350F";
+  const whatsappUrl = (appQ.data as any)?.whatsapp_group_url as string | undefined;
+
+  const placedIds = new Set((placementsQ.data ?? []).map((p) => p.mini_app_id));
+  const miniApps = (miniAppsQ.data ?? [])
+    .filter((m) => placedIds.has(m.id) && (m as any).ativo !== false && !(m as any).arquivado)
+    .slice(0, 24);
+
+  const promo = isPromoActive();
+  const trialDays = promo ? 15 : 30;
+
+  return (
+    <AppShell hideReferences>
+      <div className="mx-auto max-w-5xl">
+        <Link to="/" className="mb-4 inline-flex items-center gap-1.5 text-sm font-semibold text-muted-foreground hover:text-foreground">
+          <ArrowLeft className="h-4 w-4" /> Voltar à loja
+        </Link>
+
+        {/* HERO */}
+        <section
+          className="relative overflow-hidden rounded-3xl border border-white/60 p-6 shadow-sm md:p-10"
+          style={{ backgroundColor: bg, color: fg }}
+        >
+          <p className="text-xs font-bold uppercase tracking-widest opacity-70">
+            {appQ.data?.emoji ?? "📱"} Plano mensal
+          </p>
+          <h1 className="mt-1 font-display text-3xl font-extrabold leading-tight md:text-5xl">{label}</h1>
+          <p className="mt-3 max-w-xl text-base opacity-85 md:text-lg">{SLOGANS[slug]}</p>
+
+          <div className="mt-5 flex flex-wrap items-baseline gap-2">
+            <span className="text-4xl font-extrabold md:text-5xl">{formatPriceBRL(price)}</span>
+            <span className="text-sm opacity-70">/mês · cancele quando quiser</span>
+          </div>
+
+          <div className="mt-5 flex flex-wrap gap-3">
+            {subscribed ? (
+              <Link
+                to="/trilha/$slug"
+                params={{ slug }}
+                className="inline-flex items-center gap-1.5 rounded-xl bg-white/90 px-5 py-3 text-sm font-extrabold hover:bg-white"
+              >
+                ✓ Acessar meus mini apps →
+              </Link>
+            ) : (
+              <>
+                {checkoutUrl && (
+                  <a
+                    href={checkoutUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1.5 rounded-xl bg-foreground px-5 py-3 text-sm font-extrabold text-background shadow hover:opacity-90"
+                  >
+                    Assinar agora <ExternalLink className="h-4 w-4" />
+                  </a>
+                )}
+                <Link
+                  to="/trilha/$slug"
+                  params={{ slug }}
+                  className="inline-flex items-center gap-1.5 rounded-xl border-2 border-white/60 bg-white/80 px-5 py-3 text-sm font-extrabold hover:bg-white"
+                >
+                  Experimentar {trialDays} dias grátis
+                </Link>
+              </>
+            )}
+          </div>
+        </section>
+
+        {/* PROMO BANNER */}
+        {promo && (
+          <section className="mt-4 rounded-3xl border border-amber-300 bg-gradient-to-r from-amber-100 via-yellow-50 to-amber-100 p-5 shadow-sm">
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="rounded-full bg-amber-500 px-3 py-1 text-xs font-extrabold uppercase tracking-wider text-white">
+                🎁 Promoção de lançamento
+              </span>
+              <p className="text-sm font-bold text-amber-950">
+                <strong>15 dias grátis + Grupo VIP no WhatsApp</strong> — válido até 01/10/2026
+              </p>
+            </div>
+            {whatsappUrl && (
+              <a
+                href={whatsappUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="mt-3 inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-2 text-xs font-extrabold text-white hover:bg-emerald-700"
+              >
+                <MessageCircle className="h-4 w-4" /> Entrar no Grupo do WhatsApp
+              </a>
+            )}
+          </section>
+        )}
+
+        {/* DIFERENCIAIS */}
+        <section className="mt-6 grid gap-3 sm:grid-cols-3">
+          {[
+            { icon: ShieldCheck, title: "Base COFEN/COREN", desc: "Conteúdo alinhado com COFEN, CORENs, ANVISA, MS e OMS." },
+            { icon: Wifi, title: "Funciona offline (PWA)", desc: "Instale no celular e use no plantão sem sinal." },
+            { icon: Sparkles, title: "Atualizações mensais", desc: "PCDTs, escalas e legislação sempre em dia." },
+          ].map((d) => (
+            <div key={d.title} className="rounded-2xl border border-white/60 bg-white/70 p-4 shadow-sm backdrop-blur">
+              <d.icon className="h-5 w-5 text-emerald-700" />
+              <p className="mt-2 font-display text-sm font-extrabold">{d.title}</p>
+              <p className="mt-1 text-xs text-muted-foreground">{d.desc}</p>
+            </div>
+          ))}
+        </section>
+
+        {/* MINI APPS */}
+        <section className="mt-8">
+          <h2 className="font-display text-xl font-extrabold">🧩 O que você vai encontrar</h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {miniApps.length > 0
+              ? `${miniApps.length} mini apps prontos para o seu dia a dia:`
+              : "Carregando mini apps..."}
+          </p>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {miniApps.map((m) => (
+              <div key={m.id} className="rounded-2xl border border-white/60 bg-white/80 p-4 shadow-sm backdrop-blur">
+                <div className="flex items-center gap-2">
+                  <span className="text-xl">{(m as any).emoji ?? "•"}</span>
+                  <h3 className="font-display text-sm font-extrabold leading-tight">{m.titulo}</h3>
+                </div>
+                {m.descricao && (
+                  <p className="mt-1.5 line-clamp-3 text-xs text-muted-foreground">{m.descricao}</p>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* FAQ */}
+        <section className="mt-8">
+          <h2 className="font-display text-xl font-extrabold">❓ Dúvidas frequentes</h2>
+          <div className="mt-4 space-y-2">
+            {[
+              {
+                q: "Como funciona o período grátis?",
+                a: `Você se cadastra e ganha ${trialDays} dias de acesso ao conteúdo, sem precisar informar cartão. No fim do período, é só assinar para continuar.`,
+              },
+              {
+                q: "Como entro no Grupo VIP do WhatsApp?",
+                a: whatsappUrl
+                  ? "Assim que ativar seu acesso, o link do grupo aparece aqui e dentro do app."
+                  : "O link do grupo é liberado dentro do app assim que sua conta é criada.",
+              },
+              {
+                q: "Posso cancelar quando quiser?",
+                a: "Sim. A assinatura é mensal e sem fidelidade — você cancela pelo checkout a qualquer momento.",
+              },
+              {
+                q: "Funciona offline?",
+                a: "Sim. Instale como app no celular (PWA) e a maior parte do conteúdo funciona sem internet, ideal para plantão.",
+              },
+              {
+                q: "Recebo atualizações?",
+                a: "Sim. Escalas, protocolos e legislações são atualizados mensalmente, sem custo extra.",
+              },
+            ].map((f, i) => (
+              <details
+                key={i}
+                className="group rounded-2xl border border-white/60 bg-white/80 p-4 shadow-sm backdrop-blur open:bg-white"
+              >
+                <summary className="cursor-pointer list-none font-display text-sm font-extrabold marker:hidden">
+                  <span className="mr-2 inline-block transition group-open:rotate-90">▸</span>
+                  {f.q}
+                </summary>
+                <p className="mt-2 pl-6 text-sm text-muted-foreground">{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+
+        {/* CTA FINAL */}
+        <section
+          className="mt-10 rounded-3xl border border-white/60 p-6 text-center shadow-sm md:p-8"
+          style={{ backgroundColor: bg, color: fg }}
+        >
+          <h2 className="font-display text-2xl font-extrabold md:text-3xl">Pronto para começar?</h2>
+          <p className="mt-2 text-sm opacity-80">
+            {formatPriceBRL(price)}/mês · {trialDays} dias grátis · cancele quando quiser
+          </p>
+          <div className="mt-5 flex flex-wrap justify-center gap-3">
+            {checkoutUrl && !subscribed && (
+              <a
+                href={checkoutUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1.5 rounded-xl bg-foreground px-6 py-3 text-sm font-extrabold text-background shadow hover:opacity-90"
+              >
+                Assinar agora <ExternalLink className="h-4 w-4" />
+              </a>
+            )}
+            <Link
+              to="/trilha/$slug"
+              params={{ slug }}
+              className="inline-flex items-center gap-1.5 rounded-xl border-2 border-white/60 bg-white/90 px-6 py-3 text-sm font-extrabold hover:bg-white"
+            >
+              {subscribed ? "Acessar mini apps →" : `Experimentar ${trialDays} dias grátis`}
+            </Link>
+          </div>
+          <p className="mt-3 text-[11px] font-extrabold uppercase tracking-wide text-emerald-700">
+            <CheckCircle2 className="mr-1 inline h-3 w-3" /> Compra segura
+          </p>
+        </section>
+      </div>
+    </AppShell>
+  );
+}
