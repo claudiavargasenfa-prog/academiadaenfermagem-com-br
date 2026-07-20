@@ -162,8 +162,8 @@ function PlanoPage() {
                   </a>
                 )}
                 <Link
-                  to="/trilha/$slug"
-                  params={{ slug }}
+                  to="/"
+                  search={{ cadastro: slug }}
                   className="inline-flex items-center gap-1.5 rounded-xl border-2 border-white/60 bg-white/80 px-5 py-3 text-sm font-extrabold hover:bg-white"
                 >
                   Experimentar {TRIAL_DAYS} dias grátis
