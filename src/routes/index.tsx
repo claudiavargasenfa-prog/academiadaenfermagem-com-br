@@ -7,7 +7,6 @@ import {
 
 import { useQuery } from "@tanstack/react-query";
 import { AppShell } from "@/components/AppShell";
-import { AuthScreen } from "@/components/AuthGate";
 import mascotesAsset from "@/assets/mascotes-iras.png.asset.json";
 import imgManual from "@/assets/carousel/manual.jpg";
 import imgCalculos from "@/assets/carousel/calculos.jpg";
@@ -116,16 +115,6 @@ function Carousel() {
 
 
 function StoreHome() {
-  const [cadastroSlug, setCadastroSlug] = useState<string | null>(null);
-
-  useEffect(() => {
-    const slug = new URLSearchParams(window.location.search).get("cadastro");
-    const validCadastroSlugs = new Set(["academico", "tecnico", "tecnico-estudante", "enfermeiro"]);
-    setCadastroSlug(slug && validCadastroSlugs.has(slug) ? slug : null);
-  }, []);
-
-  if (cadastroSlug) return <AuthScreen cadastroSlug={cadastroSlug} />;
-
   return <StoreHomeContent />;
 }
 

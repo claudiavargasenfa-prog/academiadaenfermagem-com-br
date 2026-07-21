@@ -217,7 +217,7 @@ function PlanoPage() {
               ) : (
                 <>
                   <a
-                    href={`/?cadastro=${slug}`}
+                    href={`/cadastro/${slug}`}
                     className="group inline-flex items-center gap-2 rounded-2xl bg-primary px-6 py-3.5 text-sm font-extrabold text-primary-foreground shadow-lg transition hover:-translate-y-0.5 hover:opacity-90 hover:shadow-xl"
                   >
                     <Sparkles className="h-4 w-4" />
@@ -368,7 +368,7 @@ function PlanoPage() {
             ) : (
               <>
                 <a
-                  href={`/?cadastro=${slug}`}
+                  href={`/cadastro/${slug}`}
                   className="inline-flex items-center gap-1.5 rounded-xl bg-primary px-6 py-3 text-sm font-extrabold text-primary-foreground shadow hover:opacity-90"
                 >
                   <Sparkles className="h-4 w-4" />
