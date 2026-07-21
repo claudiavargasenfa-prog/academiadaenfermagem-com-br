@@ -25,9 +25,6 @@ import { RichText, useText } from "@/lib/app-texts";
 
 
 export const Route = createFileRoute("/")({
-  validateSearch: (search: Record<string, unknown>) => ({
-    cadastro: typeof search.cadastro === "string" ? search.cadastro : undefined,
-  }),
   head: () => ({
     meta: [
       { title: "Loja — Academia da Enfermagem" },
@@ -119,11 +116,15 @@ function Carousel() {
 
 
 function StoreHome() {
-  const { cadastro: cadastroSlug } = Route.useSearch();
-  const validCadastroSlugs = new Set(["academico", "tecnico", "tecnico-estudante", "enfermeiro"]);
-  if (cadastroSlug && validCadastroSlugs.has(cadastroSlug)) {
-    return <AuthScreen cadastroSlug={cadastroSlug} />;
-  }
+  const [cadastroSlug, setCadastroSlug] = useState<string | null>(null);
+
+  useEffect(() => {
+    const slug = new URLSearchParams(window.location.search).get("cadastro");
+    const validCadastroSlugs = new Set(["academico", "tecnico", "tecnico-estudante", "enfermeiro"]);
+    setCadastroSlug(slug && validCadastroSlugs.has(slug) ? slug : null);
+  }, []);
+
+  if (cadastroSlug) return <AuthScreen cadastroSlug={cadastroSlug} />;
 
   return <StoreHomeContent />;
 }
