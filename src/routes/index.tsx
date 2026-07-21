@@ -122,7 +122,7 @@ function StoreHome() {
   const { cadastro: cadastroSlug } = Route.useSearch();
   const validCadastroSlugs = new Set(["academico", "tecnico", "tecnico-estudante", "enfermeiro"]);
   if (cadastroSlug && validCadastroSlugs.has(cadastroSlug)) {
-    return <AuthScreen />;
+    return <AuthScreen cadastroSlug={cadastroSlug} />;
   }
 
   return <StoreHomeContent />;
