@@ -7,6 +7,7 @@ import {
 
 import { useQuery } from "@tanstack/react-query";
 import { AppShell } from "@/components/AppShell";
+import { AuthScreen } from "@/components/AuthGate";
 import mascotesAsset from "@/assets/mascotes-iras.png.asset.json";
 import imgManual from "@/assets/carousel/manual.jpg";
 import imgCalculos from "@/assets/carousel/calculos.jpg";
@@ -107,6 +108,13 @@ function Carousel() {
 
 
 function StoreHome() {
+  const searchParams = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : new URLSearchParams();
+  const cadastroSlug = searchParams.get("cadastro");
+  const validCadastroSlugs = new Set(["academico", "tecnico", "tecnico-estudante", "enfermeiro"]);
+  if (cadastroSlug && validCadastroSlugs.has(cadastroSlug)) {
+    return <AuthScreen />;
+  }
+
   const plansQ = useQuery({ queryKey: ["subscription_plans"], queryFn: fetchSubscriptionPlans });
   const mySubsQ = useQuery({ queryKey: ["my_subs"], queryFn: fetchMyActiveSubscriptions });
   const appsQ = useApps();
@@ -131,7 +139,7 @@ function StoreHome() {
 
 
   return (
-    <AppShell hideReferences>
+    <AppShell hideReferences publicRoute>
       <div className="mb-6">
         <p className="mb-1 text-xs font-semibold uppercase tracking-widest text-gold">Loja</p>
         <h1 className="font-display text-3xl font-bold text-foreground md:text-4xl"><RichText>{homeTitle}</RichText></h1>

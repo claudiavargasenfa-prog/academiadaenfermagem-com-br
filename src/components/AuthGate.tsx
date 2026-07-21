@@ -46,7 +46,7 @@ function formatPhoneBR(v: string): string {
   return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`;
 }
 
-function AuthScreen() {
+export function AuthScreen() {
   const currentPath = typeof window !== "undefined" ? window.location.pathname : "/";
   const searchParams = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : new URLSearchParams();
   const cadastroSlug = searchParams.get("cadastro");
