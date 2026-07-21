@@ -64,14 +64,14 @@ export function RichText({ children, className = "" }: { children: string | unde
       {blocks.map((b, i) => {
         if (b.type === "list") {
           return (
-            <ul key={i} className="my-1 space-y-1">
+            <span key={i} role="list" className="my-1 block space-y-1">
               {b.items.map((it, j) => (
-                <li key={j} className="flex items-start gap-2">
+                <span key={j} role="listitem" className="flex items-start gap-2">
                   <BulletIcon marker={b.marker!} />
                   <span className="min-w-0 flex-1">{parseRich(it)}</span>
-                </li>
+                </span>
               ))}
-            </ul>
+            </span>
           );
         }
         // Bloco de texto: preserva quebras de linha simples
