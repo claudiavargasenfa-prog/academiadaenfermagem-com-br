@@ -46,10 +46,14 @@ function formatPhoneBR(v: string): string {
   return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`;
 }
 
-function AuthScreen() {
-  const currentPath = typeof window !== "undefined" ? window.location.pathname : "/";
-  const searchParams = typeof window !== "undefined" ? new URLSearchParams(window.location.search) : new URLSearchParams();
-  const cadastroSlug = searchParams.get("cadastro");
+export function AuthScreen({ cadastroSlug: forcedCadastroSlug }: { cadastroSlug?: string } = {}) {
+  const currentPath = forcedCadastroSlug ? "/" : typeof window !== "undefined" ? window.location.pathname : "/";
+  const searchParams = forcedCadastroSlug
+    ? new URLSearchParams()
+    : typeof window !== "undefined"
+      ? new URLSearchParams(window.location.search)
+      : new URLSearchParams();
+  const cadastroSlug = forcedCadastroSlug ?? searchParams.get("cadastro");
   const validCategorias = ["academico", "tecnico-estudante", "tecnico", "enfermeiro"] as const;
   const initialCategoria = (validCategorias as readonly string[]).includes(cadastroSlug ?? "")
     ? (cadastroSlug as typeof validCategorias[number])

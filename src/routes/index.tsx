@@ -32,6 +32,14 @@ export const Route = createFileRoute("/")({
         content:
           "Academia da Enfermagem: 4 aplicativos de mini apps para acadêmicos, estudantes de técnico, técnicos e enfermeiros. 15 dias grátis.",
       },
+      { property: "og:title", content: "Loja — Academia da Enfermagem" },
+      {
+        property: "og:description",
+        content:
+          "Conheça os 4 aplicativos da Academia da Enfermagem antes de iniciar seus 15 dias grátis.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: StoreHome,
@@ -107,6 +115,10 @@ function Carousel() {
 
 
 function StoreHome() {
+  return <StoreHomeContent />;
+}
+
+function StoreHomeContent() {
   const plansQ = useQuery({ queryKey: ["subscription_plans"], queryFn: fetchSubscriptionPlans });
   const mySubsQ = useQuery({ queryKey: ["my_subs"], queryFn: fetchMyActiveSubscriptions });
   const appsQ = useApps();
@@ -131,7 +143,7 @@ function StoreHome() {
 
 
   return (
-    <AppShell hideReferences>
+    <AppShell hideReferences publicRoute>
       <div className="mb-6">
         <p className="mb-1 text-xs font-semibold uppercase tracking-widest text-gold">Loja</p>
         <h1 className="font-display text-3xl font-bold text-foreground md:text-4xl"><RichText>{homeTitle}</RichText></h1>

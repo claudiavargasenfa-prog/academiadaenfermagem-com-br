@@ -43,6 +43,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as TrilhaSlugRouteImport } from './routes/trilha.$slug'
 import { Route as QuizzesSlugRouteImport } from './routes/quizzes.$slug'
 import { Route as PlanosSlugRouteImport } from './routes/planos.$slug'
+import { Route as CadastroSlugRouteImport } from './routes/cadastro.$slug'
 import { Route as AppSlugRouteImport } from './routes/app.$slug'
 import { Route as AppSlugIndexRouteImport } from './routes/app.$slug.index'
 import { Route as AppSlugSubtopicRouteImport } from './routes/app.$slug.$subtopic'
@@ -218,6 +219,11 @@ const PlanosSlugRoute = PlanosSlugRouteImport.update({
   path: '/planos/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CadastroSlugRoute = CadastroSlugRouteImport.update({
+  id: '/cadastro/$slug',
+  path: '/cadastro/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppSlugRoute = AppSlugRouteImport.update({
   id: '/app/$slug',
   path: '/app/$slug',
@@ -272,6 +278,7 @@ export interface FileRoutesByFullPath {
   '/sv-pediatrico': typeof SvPediatricoRoute
   '/uti': typeof UtiRoute
   '/app/$slug': typeof AppSlugRouteWithChildren
+  '/cadastro/$slug': typeof CadastroSlugRoute
   '/planos/$slug': typeof PlanosSlugRoute
   '/quizzes/$slug': typeof QuizzesSlugRoute
   '/trilha/$slug': typeof TrilhaSlugRoute
@@ -311,6 +318,7 @@ export interface FileRoutesByTo {
   '/sv-gestante': typeof SvGestanteRoute
   '/sv-pediatrico': typeof SvPediatricoRoute
   '/uti': typeof UtiRoute
+  '/cadastro/$slug': typeof CadastroSlugRoute
   '/planos/$slug': typeof PlanosSlugRoute
   '/quizzes/$slug': typeof QuizzesSlugRoute
   '/trilha/$slug': typeof TrilhaSlugRoute
@@ -352,6 +360,7 @@ export interface FileRoutesById {
   '/sv-pediatrico': typeof SvPediatricoRoute
   '/uti': typeof UtiRoute
   '/app/$slug': typeof AppSlugRouteWithChildren
+  '/cadastro/$slug': typeof CadastroSlugRoute
   '/planos/$slug': typeof PlanosSlugRoute
   '/quizzes/$slug': typeof QuizzesSlugRoute
   '/trilha/$slug': typeof TrilhaSlugRoute
@@ -394,6 +403,7 @@ export interface FileRouteTypes {
     | '/sv-pediatrico'
     | '/uti'
     | '/app/$slug'
+    | '/cadastro/$slug'
     | '/planos/$slug'
     | '/quizzes/$slug'
     | '/trilha/$slug'
@@ -433,6 +443,7 @@ export interface FileRouteTypes {
     | '/sv-gestante'
     | '/sv-pediatrico'
     | '/uti'
+    | '/cadastro/$slug'
     | '/planos/$slug'
     | '/quizzes/$slug'
     | '/trilha/$slug'
@@ -473,6 +484,7 @@ export interface FileRouteTypes {
     | '/sv-pediatrico'
     | '/uti'
     | '/app/$slug'
+    | '/cadastro/$slug'
     | '/planos/$slug'
     | '/quizzes/$slug'
     | '/trilha/$slug'
@@ -514,6 +526,7 @@ export interface RootRouteChildren {
   SvPediatricoRoute: typeof SvPediatricoRoute
   UtiRoute: typeof UtiRoute
   AppSlugRoute: typeof AppSlugRouteWithChildren
+  CadastroSlugRoute: typeof CadastroSlugRoute
   PlanosSlugRoute: typeof PlanosSlugRoute
   TrilhaSlugRoute: typeof TrilhaSlugRoute
   ApiPublicCaktoWebhookRoute: typeof ApiPublicCaktoWebhookRoute
@@ -759,6 +772,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlanosSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/cadastro/$slug': {
+      id: '/cadastro/$slug'
+      path: '/cadastro/$slug'
+      fullPath: '/cadastro/$slug'
+      preLoaderRoute: typeof CadastroSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/app/$slug': {
       id: '/app/$slug'
       path: '/app/$slug'
@@ -847,6 +867,7 @@ const rootRouteChildren: RootRouteChildren = {
   SvPediatricoRoute: SvPediatricoRoute,
   UtiRoute: UtiRoute,
   AppSlugRoute: AppSlugRouteWithChildren,
+  CadastroSlugRoute: CadastroSlugRoute,
   PlanosSlugRoute: PlanosSlugRoute,
   TrilhaSlugRoute: TrilhaSlugRoute,
   ApiPublicCaktoWebhookRoute: ApiPublicCaktoWebhookRoute,
