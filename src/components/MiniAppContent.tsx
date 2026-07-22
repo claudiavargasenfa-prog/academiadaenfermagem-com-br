@@ -984,7 +984,25 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
         painelColeta.value = laudo;
         painelColeta.dispatchEvent(new Event("input", { bubbles: true }));
         painelColeta.scrollIntoView({ behavior: "smooth", block: "center" });
+
+        // Empilha no histórico do paciente ativo (persistido no aparelho)
+        const horaHist = data.toLocaleTimeString("pt-BR", {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+        const item: HistItem = {
+          id: `h-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+          hora: horaHist,
+          texto: laudo,
+        };
+        setColetaRef.current((prev) => ({
+          ...prev,
+          pacientes: prev.pacientes.map((p) =>
+            p.id === prev.ativoId ? { ...p, historico: [...p.historico, item] } : p,
+          ),
+        }));
       };
+
 
       const onColetaClick = (e: Event) => {
         const t = e.target as HTMLElement | null;
