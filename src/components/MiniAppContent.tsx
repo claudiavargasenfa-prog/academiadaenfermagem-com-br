@@ -469,8 +469,10 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
     }));
   };
 
+  useEffect(() => {
     const root = ref.current;
     if (!root) return;
+
 
     const download = (conteudo: string, nome: string) => {
       try {
