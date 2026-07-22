@@ -163,6 +163,162 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
   // os <script> — DOMPurify remove todos por padrão.
   const isSae = /lavoble-sae-descomplicada/.test(html);
 
+  // Detecta o mini app COLETA DE DADOS + ADMISSÃO DE TURNO pelos IDs
+  // característicos do formulário (não depende de slug — resiste a duplicações).
+  const isColeta =
+    /id=["']anotacao_final_painel["']/.test(html) &&
+    /name=["']item_procedencia["']/.test(html);
+
+  const initialColeta = useMemo<ColetaState>(() => {
+    const p = novoPacienteObj(1);
+    return { pacientes: [p], ativoId: p.id };
+  }, []);
+  const [coleta, setColeta] = useLocal<ColetaState>("coleta-turno-v1", initialColeta);
+  const setColetaRef = useRef(setColeta);
+  setColetaRef.current = setColeta;
+
+  const ativoPaciente =
+    coleta.pacientes.find((p) => p.id === coleta.ativoId) ?? coleta.pacientes[0] ?? null;
+
+  // Garante estado consistente (pelo menos 1 paciente, ativoId válido)
+  useEffect(() => {
+    if (!isColeta) return;
+    if (!coleta.pacientes.length) {
+      const p = novoPacienteObj(1);
+      setColeta({ pacientes: [p], ativoId: p.id });
+    } else if (!coleta.pacientes.find((p) => p.id === coleta.ativoId)) {
+      setColeta((s) => ({ ...s, ativoId: s.pacientes[0].id }));
+    }
+  }, [isColeta, coleta.ativoId, coleta.pacientes, setColeta]);
+
+  // Restaura os valores do paciente ativo no formulário quando trocar de aba
+  // ou remontar o HTML.
+  useEffect(() => {
+    if (!isColeta) return;
+    const root = ref.current;
+    if (!root) return;
+    const cur = coleta.pacientes.find((p) => p.id === coleta.ativoId);
+    if (cur) restoreFormSnap(root, cur.form);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isColeta, coleta.ativoId, html]);
+
+  // Autosave: qualquer input/change no formulário salva no paciente ativo.
+  useEffect(() => {
+    if (!isColeta) return;
+    const root = ref.current;
+    if (!root) return;
+    let timer: ReturnType<typeof setTimeout> | null = null;
+    const save = () => {
+      const snap = snapshotForm(root);
+      setColetaRef.current((prev) => ({
+        ...prev,
+        pacientes: prev.pacientes.map((p) =>
+          p.id === prev.ativoId
+            ? {
+                ...p,
+                form: snap,
+                nome: (typeof snap["paciente_nome"] === "string" && snap["paciente_nome"]) || p.nome,
+                leito:
+                  (typeof snap["paciente_leito"] === "string" && snap["paciente_leito"]) || p.leito,
+              }
+            : p,
+        ),
+      }));
+    };
+    const onIn = () => {
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(save, 400);
+    };
+    root.addEventListener("input", onIn);
+    root.addEventListener("change", onIn);
+    return () => {
+      if (timer) clearTimeout(timer);
+      root.removeEventListener("input", onIn);
+      root.removeEventListener("change", onIn);
+    };
+  }, [isColeta, html]);
+
+  // Ações do painel multi-paciente
+  const switchAtivo = (id: string) => {
+    if (id === coleta.ativoId) return;
+    const root = ref.current;
+    const curSnap = root ? snapshotForm(root) : {};
+    setColeta((s) => ({
+      pacientes: s.pacientes.map((x) => (x.id === s.ativoId ? { ...x, form: curSnap } : x)),
+      ativoId: id,
+    }));
+  };
+  const addPaciente = () => {
+    const root = ref.current;
+    const curSnap = root ? snapshotForm(root) : {};
+    setColeta((s) => {
+      const p = novoPacienteObj(s.pacientes.length + 1);
+      return {
+        pacientes: [
+          ...s.pacientes.map((x) => (x.id === s.ativoId ? { ...x, form: curSnap } : x)),
+          p,
+        ],
+        ativoId: p.id,
+      };
+    });
+  };
+  const removerAtivo = () => {
+    if (!ativoPaciente) return;
+    if (
+      !window.confirm(
+        `Remover ${ativoPaciente.nome}${ativoPaciente.leito ? ` (leito ${ativoPaciente.leito})` : ""} e todas as suas anotações?`,
+      )
+    )
+      return;
+    setColeta((s) => {
+      const filtered = s.pacientes.filter((p) => p.id !== s.ativoId);
+      if (filtered.length === 0) {
+        const p = novoPacienteObj(1);
+        return { pacientes: [p], ativoId: p.id };
+      }
+      return { pacientes: filtered, ativoId: filtered[0].id };
+    });
+  };
+  const encerrarPlantao = () => {
+    if (
+      !window.confirm(
+        "Encerrar plantão? Todos os pacientes e anotações deste aparelho serão apagados.",
+      )
+    )
+      return;
+    const p = novoPacienteObj(1);
+    setColeta({ pacientes: [p], ativoId: p.id });
+  };
+  const copiar = async (t: string) => {
+    try {
+      await navigator.clipboard.writeText(t);
+    } catch {
+      /* ignore */
+    }
+  };
+  const copiarPlantaoTodo = () => {
+    if (!ativoPaciente) return;
+    const cabecalho = `PLANTÃO — ${ativoPaciente.nome}${ativoPaciente.leito ? ` (leito ${ativoPaciente.leito})` : ""}`;
+    const corpo = ativoPaciente.historico.map((h) => `\n[${h.hora}] ${h.texto}`).join("\n");
+    void copiar(`${cabecalho}\n${corpo}`);
+  };
+  const removerHist = (hid: string) => {
+    setColeta((s) => ({
+      ...s,
+      pacientes: s.pacientes.map((p) =>
+        p.id === s.ativoId ? { ...p, historico: p.historico.filter((h) => h.id !== hid) } : p,
+      ),
+    }));
+  };
+  const limparHistoricoAtivo = () => {
+    if (!window.confirm("Apagar todas as anotações deste paciente neste plantão?")) return;
+    setColeta((s) => ({
+      ...s,
+      pacientes: s.pacientes.map((p) => (p.id === s.ativoId ? { ...p, historico: [] } : p)),
+    }));
+  };
+
+
   useEffect(() => {
     const root = ref.current;
     if (!root) return;
