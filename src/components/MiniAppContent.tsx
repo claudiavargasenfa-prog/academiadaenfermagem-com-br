@@ -1374,6 +1374,72 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
           )}
         </div>
       )}
+
+      {isSae && ativoSae && (
+        <div className="mt-6 rounded-xl border border-primary/20 bg-white p-4 shadow-sm">
+          <div className="mb-3 flex items-center justify-between gap-2">
+            <h4 className="text-sm font-semibold text-primary">
+              📋 Evoluções do plantão — {ativoSae.nome}
+              {ativoSae.leito ? ` (leito ${ativoSae.leito})` : ""}
+            </h4>
+            <span className="text-xs text-muted-foreground">
+              {ativoSae.historico.length}{" "}
+              {ativoSae.historico.length === 1 ? "evolução" : "evoluções"}
+            </span>
+          </div>
+          {ativoSae.historico.length === 0 ? (
+            <p className="text-sm text-muted-foreground">
+              Nenhuma evolução gerada ainda para este paciente. Preencha o formulário acima e
+              clique em <b>Gerar Evolução Final</b>.
+            </p>
+          ) : (
+            <ul className="space-y-2">
+              {ativoSae.historico.map((h) => (
+                <li key={h.id} className="rounded-lg bg-primary/5 p-2">
+                  <div className="mb-1 flex items-center gap-2">
+                    <span className="text-sm font-semibold text-primary">🕒 {h.hora}</span>
+                    <div className="ml-auto flex gap-1">
+                      <button
+                        type="button"
+                        onClick={() => void copiar(h.texto)}
+                        className="rounded bg-primary px-2 py-1 text-xs font-medium text-primary-foreground hover:opacity-90"
+                      >
+                        Copiar
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => removerHistSae(h.id)}
+                        className="rounded bg-red-100 px-2 py-1 text-xs font-medium text-red-700 hover:bg-red-200"
+                      >
+                        Excluir
+                      </button>
+                    </div>
+                  </div>
+                  <p className="whitespace-pre-wrap text-sm text-foreground">{h.texto}</p>
+                </li>
+              ))}
+            </ul>
+          )}
+          {ativoSae.historico.length > 0 && (
+            <div className="mt-3 flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={copiarPlantaoTodoSae}
+                className="rounded-lg bg-emerald-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-emerald-700"
+              >
+                Copiar plantão inteiro
+              </button>
+              <button
+                type="button"
+                onClick={limparHistoricoAtivoSae}
+                className="rounded-lg bg-red-100 px-3 py-1.5 text-sm font-medium text-red-700 hover:bg-red-200"
+              >
+                Limpar plantão deste paciente
+              </button>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
