@@ -396,8 +396,79 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
     }));
   };
 
+  // ===== Ações SAE (multi-paciente) =====
+  const switchAtivoSae = (id: string) => {
+    if (id === sae.ativoId) return;
+    const root = ref.current;
+    const curSnap = root ? snapshotForm(root) : {};
+    setSae((s) => ({
+      pacientes: s.pacientes.map((x) => (x.id === s.ativoId ? { ...x, form: curSnap } : x)),
+      ativoId: id,
+    }));
+  };
+  const addPacienteSae = () => {
+    const root = ref.current;
+    const curSnap = root ? snapshotForm(root) : {};
+    setSae((s) => {
+      const p = novoPacienteObj(s.pacientes.length + 1);
+      return {
+        pacientes: [
+          ...s.pacientes.map((x) => (x.id === s.ativoId ? { ...x, form: curSnap } : x)),
+          p,
+        ],
+        ativoId: p.id,
+      };
+    });
+  };
+  const removerAtivoSae = () => {
+    if (!ativoSae) return;
+    if (
+      !window.confirm(
+        `Remover ${ativoSae.nome}${ativoSae.leito ? ` (leito ${ativoSae.leito})` : ""} e todas as suas evoluções?`,
+      )
+    )
+      return;
+    setSae((s) => {
+      const filtered = s.pacientes.filter((p) => p.id !== s.ativoId);
+      if (filtered.length === 0) {
+        const p = novoPacienteObj(1);
+        return { pacientes: [p], ativoId: p.id };
+      }
+      return { pacientes: filtered, ativoId: filtered[0].id };
+    });
+  };
+  const encerrarPlantaoSae = () => {
+    if (
+      !window.confirm(
+        "Encerrar plantão do SAE? Todos os pacientes e evoluções deste aparelho serão apagados.",
+      )
+    )
+      return;
+    const p = novoPacienteObj(1);
+    setSae({ pacientes: [p], ativoId: p.id });
+  };
+  const copiarPlantaoTodoSae = () => {
+    if (!ativoSae) return;
+    const cab = `SAE — ${ativoSae.nome}${ativoSae.leito ? ` (leito ${ativoSae.leito})` : ""}`;
+    const corpo = ativoSae.historico.map((h) => `\n[${h.hora}] ${h.texto}`).join("\n");
+    void copiar(`${cab}\n${corpo}`);
+  };
+  const removerHistSae = (hid: string) => {
+    setSae((s) => ({
+      ...s,
+      pacientes: s.pacientes.map((p) =>
+        p.id === s.ativoId ? { ...p, historico: p.historico.filter((h) => h.id !== hid) } : p,
+      ),
+    }));
+  };
+  const limparHistoricoAtivoSae = () => {
+    if (!window.confirm("Apagar todas as evoluções deste paciente neste plantão?")) return;
+    setSae((s) => ({
+      ...s,
+      pacientes: s.pacientes.map((p) => (p.id === s.ativoId ? { ...p, historico: [] } : p)),
+    }));
+  };
 
-  useEffect(() => {
     const root = ref.current;
     if (!root) return;
 
