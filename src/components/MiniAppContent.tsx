@@ -744,6 +744,27 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
       const onEvol = (e: Event) => {
         e.preventDefault();
         gerarEvolucao();
+        // Empilha a evolução gerada no histórico do paciente SAE ativo (localStorage)
+        const evolTxt = (
+          root.querySelector<HTMLTextAreaElement>("#txt-evolucao-clinica-mestre")?.value ?? ""
+        ).trim();
+        if (evolTxt) {
+          const hora = new Date().toLocaleTimeString("pt-BR", {
+            hour: "2-digit",
+            minute: "2-digit",
+          });
+          const item: HistItem = {
+            id: `h-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+            hora,
+            texto: evolTxt,
+          };
+          setSaeRef.current((prev) => ({
+            ...prev,
+            pacientes: prev.pacientes.map((p) =>
+              p.id === prev.ativoId ? { ...p, historico: [...p.historico, item] } : p,
+            ),
+          }));
+        }
       };
 
       btnDiag?.addEventListener("click", onDiag);
