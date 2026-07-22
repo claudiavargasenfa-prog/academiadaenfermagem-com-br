@@ -1,10 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { Video, Headphones } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/AppShell";
 import { useAuthReady } from "@/lib/access";
 import { renderContent } from "@/lib/markdown";
+import { useLocal } from "@/lib/storage";
 import {
   matchDiagnosticos,
   renderDiagnosticoCard,
@@ -12,6 +13,70 @@ import {
   buildEvolucao,
   type SaeDiagnostico,
 } from "@/lib/sae-engine";
+
+// ===== Tipos e helpers do mini app COLETA DE DADOS + ADMISSÃO DE TURNO =====
+// Multi-paciente com persistência local (localStorage) — sem custo de banco.
+type FormSnap = Record<string, string | boolean>;
+type HistItem = { id: string; hora: string; texto: string };
+type Paciente = {
+  id: string;
+  nome: string;
+  leito: string;
+  form: FormSnap;
+  historico: HistItem[];
+};
+type ColetaState = { pacientes: Paciente[]; ativoId: string };
+
+function novoPacienteObj(idx: number): Paciente {
+  const id = `p-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+  return { id, nome: `Paciente ${idx}`, leito: "", form: {}, historico: [] };
+}
+
+function snapshotForm(root: HTMLElement): FormSnap {
+  const out: FormSnap = {};
+  root
+    .querySelectorAll<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>(
+      "input, textarea, select",
+    )
+    .forEach((el) => {
+      const type = (el as HTMLInputElement).type;
+      if (type === "radio") {
+        const r = el as HTMLInputElement;
+        if (r.checked && r.name) out[`__r:${r.name}`] = r.value;
+      } else if (type === "checkbox") {
+        const c = el as HTMLInputElement;
+        const k = c.id || (c.name ? `__c:${c.name}:${c.value}` : "");
+        if (k) out[k] = c.checked;
+      } else {
+        const k = el.id || (el as HTMLInputElement).name;
+        if (k) out[k] = (el as HTMLInputElement).value;
+      }
+    });
+  return out;
+}
+
+function restoreFormSnap(root: HTMLElement, snap: FormSnap) {
+  root
+    .querySelectorAll<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>(
+      "input, textarea, select",
+    )
+    .forEach((el) => {
+      const type = (el as HTMLInputElement).type;
+      if (type === "radio") {
+        const r = el as HTMLInputElement;
+        const v = snap[`__r:${r.name}`];
+        r.checked = v === r.value;
+      } else if (type === "checkbox") {
+        const c = el as HTMLInputElement;
+        const k = c.id || (c.name ? `__c:${c.name}:${c.value}` : "");
+        c.checked = !!(k && snap[k]);
+      } else {
+        const k = el.id || (el as HTMLInputElement).name;
+        if (k) (el as HTMLInputElement).value = snap[k] != null ? String(snap[k]) : "";
+      }
+    });
+}
+
 
 
 /**
@@ -97,6 +162,162 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
   // sanitização) pois o conteúdo é escrito pelo admin e precisamos preservar
   // os <script> — DOMPurify remove todos por padrão.
   const isSae = /lavoble-sae-descomplicada/.test(html);
+
+  // Detecta o mini app COLETA DE DADOS + ADMISSÃO DE TURNO pelos IDs
+  // característicos do formulário (não depende de slug — resiste a duplicações).
+  const isColeta =
+    /id=["']anotacao_final_painel["']/.test(html) &&
+    /name=["']item_procedencia["']/.test(html);
+
+  const initialColeta = useMemo<ColetaState>(() => {
+    const p = novoPacienteObj(1);
+    return { pacientes: [p], ativoId: p.id };
+  }, []);
+  const [coleta, setColeta] = useLocal<ColetaState>("coleta-turno-v1", initialColeta);
+  const setColetaRef = useRef(setColeta);
+  setColetaRef.current = setColeta;
+
+  const ativoPaciente =
+    coleta.pacientes.find((p) => p.id === coleta.ativoId) ?? coleta.pacientes[0] ?? null;
+
+  // Garante estado consistente (pelo menos 1 paciente, ativoId válido)
+  useEffect(() => {
+    if (!isColeta) return;
+    if (!coleta.pacientes.length) {
+      const p = novoPacienteObj(1);
+      setColeta({ pacientes: [p], ativoId: p.id });
+    } else if (!coleta.pacientes.find((p) => p.id === coleta.ativoId)) {
+      setColeta((s) => ({ ...s, ativoId: s.pacientes[0].id }));
+    }
+  }, [isColeta, coleta.ativoId, coleta.pacientes, setColeta]);
+
+  // Restaura os valores do paciente ativo no formulário quando trocar de aba
+  // ou remontar o HTML.
+  useEffect(() => {
+    if (!isColeta) return;
+    const root = ref.current;
+    if (!root) return;
+    const cur = coleta.pacientes.find((p) => p.id === coleta.ativoId);
+    if (cur) restoreFormSnap(root, cur.form);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isColeta, coleta.ativoId, html]);
+
+  // Autosave: qualquer input/change no formulário salva no paciente ativo.
+  useEffect(() => {
+    if (!isColeta) return;
+    const root = ref.current;
+    if (!root) return;
+    let timer: ReturnType<typeof setTimeout> | null = null;
+    const save = () => {
+      const snap = snapshotForm(root);
+      setColetaRef.current((prev) => ({
+        ...prev,
+        pacientes: prev.pacientes.map((p) =>
+          p.id === prev.ativoId
+            ? {
+                ...p,
+                form: snap,
+                nome: (typeof snap["paciente_nome"] === "string" && snap["paciente_nome"]) || p.nome,
+                leito:
+                  (typeof snap["paciente_leito"] === "string" && snap["paciente_leito"]) || p.leito,
+              }
+            : p,
+        ),
+      }));
+    };
+    const onIn = () => {
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(save, 400);
+    };
+    root.addEventListener("input", onIn);
+    root.addEventListener("change", onIn);
+    return () => {
+      if (timer) clearTimeout(timer);
+      root.removeEventListener("input", onIn);
+      root.removeEventListener("change", onIn);
+    };
+  }, [isColeta, html]);
+
+  // Ações do painel multi-paciente
+  const switchAtivo = (id: string) => {
+    if (id === coleta.ativoId) return;
+    const root = ref.current;
+    const curSnap = root ? snapshotForm(root) : {};
+    setColeta((s) => ({
+      pacientes: s.pacientes.map((x) => (x.id === s.ativoId ? { ...x, form: curSnap } : x)),
+      ativoId: id,
+    }));
+  };
+  const addPaciente = () => {
+    const root = ref.current;
+    const curSnap = root ? snapshotForm(root) : {};
+    setColeta((s) => {
+      const p = novoPacienteObj(s.pacientes.length + 1);
+      return {
+        pacientes: [
+          ...s.pacientes.map((x) => (x.id === s.ativoId ? { ...x, form: curSnap } : x)),
+          p,
+        ],
+        ativoId: p.id,
+      };
+    });
+  };
+  const removerAtivo = () => {
+    if (!ativoPaciente) return;
+    if (
+      !window.confirm(
+        `Remover ${ativoPaciente.nome}${ativoPaciente.leito ? ` (leito ${ativoPaciente.leito})` : ""} e todas as suas anotações?`,
+      )
+    )
+      return;
+    setColeta((s) => {
+      const filtered = s.pacientes.filter((p) => p.id !== s.ativoId);
+      if (filtered.length === 0) {
+        const p = novoPacienteObj(1);
+        return { pacientes: [p], ativoId: p.id };
+      }
+      return { pacientes: filtered, ativoId: filtered[0].id };
+    });
+  };
+  const encerrarPlantao = () => {
+    if (
+      !window.confirm(
+        "Encerrar plantão? Todos os pacientes e anotações deste aparelho serão apagados.",
+      )
+    )
+      return;
+    const p = novoPacienteObj(1);
+    setColeta({ pacientes: [p], ativoId: p.id });
+  };
+  const copiar = async (t: string) => {
+    try {
+      await navigator.clipboard.writeText(t);
+    } catch {
+      /* ignore */
+    }
+  };
+  const copiarPlantaoTodo = () => {
+    if (!ativoPaciente) return;
+    const cabecalho = `PLANTÃO — ${ativoPaciente.nome}${ativoPaciente.leito ? ` (leito ${ativoPaciente.leito})` : ""}`;
+    const corpo = ativoPaciente.historico.map((h) => `\n[${h.hora}] ${h.texto}`).join("\n");
+    void copiar(`${cabecalho}\n${corpo}`);
+  };
+  const removerHist = (hid: string) => {
+    setColeta((s) => ({
+      ...s,
+      pacientes: s.pacientes.map((p) =>
+        p.id === s.ativoId ? { ...p, historico: p.historico.filter((h) => h.id !== hid) } : p,
+      ),
+    }));
+  };
+  const limparHistoricoAtivo = () => {
+    if (!window.confirm("Apagar todas as anotações deste paciente neste plantão?")) return;
+    setColeta((s) => ({
+      ...s,
+      pacientes: s.pacientes.map((p) => (p.id === s.ativoId ? { ...p, historico: [] } : p)),
+    }));
+  };
+
 
   useEffect(() => {
     const root = ref.current;
@@ -763,7 +984,25 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
         painelColeta.value = laudo;
         painelColeta.dispatchEvent(new Event("input", { bubbles: true }));
         painelColeta.scrollIntoView({ behavior: "smooth", block: "center" });
+
+        // Empilha no histórico do paciente ativo (persistido no aparelho)
+        const horaHist = data.toLocaleTimeString("pt-BR", {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+        const item: HistItem = {
+          id: `h-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+          hora: horaHist,
+          texto: laudo,
+        };
+        setColetaRef.current((prev) => ({
+          ...prev,
+          pacientes: prev.pacientes.map((p) =>
+            p.id === prev.ativoId ? { ...p, historico: [...p.historico, item] } : p,
+          ),
+        }));
       };
+
 
       const onColetaClick = (e: Event) => {
         const t = e.target as HTMLElement | null;
@@ -788,18 +1027,134 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
   }, [html]);
 
   return (
-    <div ref={ref} className="prose-sm max-w-none">
-      {isSae ? (
-        <div
-          className="mini-app-html"
-          dangerouslySetInnerHTML={{ __html: html }}
-        />
-      ) : (
-        renderContent(html)
+    <div>
+      {isColeta && (
+        <>
+          <div className="mb-3 flex flex-wrap items-center gap-2 rounded-xl border border-primary/20 bg-primary/5 p-2">
+            {coleta.pacientes.map((p, i) => (
+              <button
+                key={p.id}
+                type="button"
+                onClick={() => switchAtivo(p.id)}
+                className={`rounded-lg px-3 py-1.5 text-sm font-medium transition ${
+                  p.id === coleta.ativoId
+                    ? "bg-primary text-primary-foreground shadow-sm"
+                    : "bg-white text-primary hover:bg-primary/10"
+                }`}
+              >
+                {p.nome || `Paciente ${i + 1}`}
+                {p.leito ? ` · ${p.leito}` : ""}
+              </button>
+            ))}
+            <button
+              type="button"
+              onClick={addPaciente}
+              className="rounded-lg bg-emerald-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-emerald-700"
+            >
+              + Adicionar paciente
+            </button>
+            {coleta.pacientes.length > 1 && (
+              <button
+                type="button"
+                onClick={removerAtivo}
+                className="rounded-lg bg-red-100 px-3 py-1.5 text-sm font-medium text-red-700 hover:bg-red-200"
+              >
+                Remover atual
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={encerrarPlantao}
+              className="ml-auto rounded-lg bg-amber-100 px-3 py-1.5 text-sm font-medium text-amber-800 hover:bg-amber-200"
+            >
+              Encerrar plantão
+            </button>
+          </div>
+          <div className="mb-3 rounded-lg border border-amber-200 bg-amber-50 p-2 text-xs text-amber-900">
+            ⚠️ As anotações ficam salvas <b>apenas neste aparelho e navegador</b>. Copie para o
+            prontuário oficial ao final do plantão. Se limpar dados do navegador ou trocar de
+            aparelho, elas serão perdidas.
+          </div>
+        </>
+      )}
+
+      <div ref={ref} className="prose-sm max-w-none">
+        {isSae ? (
+          <div className="mini-app-html" dangerouslySetInnerHTML={{ __html: html }} />
+        ) : (
+          renderContent(html)
+        )}
+      </div>
+
+      {isColeta && ativoPaciente && (
+        <div className="mt-6 rounded-xl border border-primary/20 bg-white p-4 shadow-sm">
+          <div className="mb-3 flex items-center justify-between gap-2">
+            <h4 className="text-sm font-semibold text-primary">
+              📋 Histórico do plantão — {ativoPaciente.nome}
+              {ativoPaciente.leito ? ` (leito ${ativoPaciente.leito})` : ""}
+            </h4>
+            <span className="text-xs text-muted-foreground">
+              {ativoPaciente.historico.length}{" "}
+              {ativoPaciente.historico.length === 1 ? "anotação" : "anotações"}
+            </span>
+          </div>
+          {ativoPaciente.historico.length === 0 ? (
+            <p className="text-sm text-muted-foreground">
+              Nenhuma anotação gerada ainda para este paciente. Preencha o formulário acima e
+              clique em <b>Gerar Anotação</b>.
+            </p>
+          ) : (
+            <ul className="space-y-2">
+              {ativoPaciente.historico.map((h) => (
+                <li key={h.id} className="rounded-lg bg-primary/5 p-2">
+                  <div className="mb-1 flex items-center gap-2">
+                    <span className="text-sm font-semibold text-primary">🕒 {h.hora}</span>
+                    <div className="ml-auto flex gap-1">
+                      <button
+                        type="button"
+                        onClick={() => void copiar(h.texto)}
+                        className="rounded bg-primary px-2 py-1 text-xs font-medium text-primary-foreground hover:opacity-90"
+                      >
+                        Copiar
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => removerHist(h.id)}
+                        className="rounded bg-red-100 px-2 py-1 text-xs font-medium text-red-700 hover:bg-red-200"
+                      >
+                        Excluir
+                      </button>
+                    </div>
+                  </div>
+                  <p className="whitespace-pre-wrap text-sm text-foreground">{h.texto}</p>
+                </li>
+              ))}
+            </ul>
+          )}
+          {ativoPaciente.historico.length > 0 && (
+            <div className="mt-3 flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={copiarPlantaoTodo}
+                className="rounded-lg bg-emerald-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-emerald-700"
+              >
+                Copiar plantão inteiro
+              </button>
+              <button
+                type="button"
+                onClick={limparHistoricoAtivo}
+                className="rounded-lg bg-red-100 px-3 py-1.5 text-sm font-medium text-red-700 hover:bg-red-200"
+              >
+                Limpar plantão deste paciente
+              </button>
+            </div>
+          )}
+        </div>
       )}
     </div>
   );
 }
+
 
 
 function VideoEmbed({ url }: { url: string }) {
