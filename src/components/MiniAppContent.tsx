@@ -191,6 +191,27 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
     }
   }, [isColeta, coleta.ativoId, coleta.pacientes, setColeta]);
 
+  // ===== SAE DESCOMPLICADA — multi-paciente próprio (localStorage "sae-turno-v1")
+  const initialSae = useMemo<ColetaState>(() => {
+    const p = novoPacienteObj(1);
+    return { pacientes: [p], ativoId: p.id };
+  }, []);
+  const [sae, setSae] = useLocal<ColetaState>("sae-turno-v1", initialSae);
+  const setSaeRef = useRef(setSae);
+  setSaeRef.current = setSae;
+  const ativoSae =
+    sae.pacientes.find((p) => p.id === sae.ativoId) ?? sae.pacientes[0] ?? null;
+
+  useEffect(() => {
+    if (!isSae) return;
+    if (!sae.pacientes.length) {
+      const p = novoPacienteObj(1);
+      setSae({ pacientes: [p], ativoId: p.id });
+    } else if (!sae.pacientes.find((p) => p.id === sae.ativoId)) {
+      setSae((s) => ({ ...s, ativoId: s.pacientes[0].id }));
+    }
+  }, [isSae, sae.ativoId, sae.pacientes, setSae]);
+
   // Restaura os valores do paciente ativo no formulário quando trocar de aba
   // ou remontar o HTML.
   useEffect(() => {
@@ -237,6 +258,63 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
       root.removeEventListener("change", onIn);
     };
   }, [isColeta, html]);
+
+  // ===== SAE: restaura formulário do paciente ativo e limpa diagnósticos/prescrição dinâmicos
+  useEffect(() => {
+    if (!isSae) return;
+    const root = ref.current;
+    if (!root) return;
+    const cur = sae.pacientes.find((p) => p.id === sae.ativoId);
+    if (cur) restoreFormSnap(root, cur.form);
+    const dyn = root.querySelector<HTMLElement>("#sae-diag-dinamicos");
+    if (dyn) dyn.innerHTML = "";
+    const tbody = root.querySelector<HTMLElement>("#corpo-tabela-prescricao");
+    if (tbody) tbody.innerHTML = "";
+    const wrap = root.querySelector<HTMLElement>("#wrapper-tabela-prescricao");
+    if (wrap) wrap.style.display = "none";
+    const vazioDiag = root.querySelector<HTMLElement>("#painel-vazio-diagnosticos");
+    if (vazioDiag) vazioDiag.style.display = "block";
+    const vazioPresc = root.querySelector<HTMLElement>("#painel-vazio-prescricao");
+    if (vazioPresc) vazioPresc.style.display = "block";
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSae, sae.ativoId, html]);
+
+  // ===== SAE: autosave do formulário no paciente ativo
+  useEffect(() => {
+    if (!isSae) return;
+    const root = ref.current;
+    if (!root) return;
+    let timer: ReturnType<typeof setTimeout> | null = null;
+    const save = () => {
+      const snap = snapshotForm(root);
+      setSaeRef.current((prev) => ({
+        ...prev,
+        pacientes: prev.pacientes.map((p) =>
+          p.id === prev.ativoId
+            ? {
+                ...p,
+                form: snap,
+                nome:
+                  (typeof snap["nomePaciente"] === "string" && snap["nomePaciente"]) || p.nome,
+                leito:
+                  (typeof snap["leitoPaciente"] === "string" && snap["leitoPaciente"]) || p.leito,
+              }
+            : p,
+        ),
+      }));
+    };
+    const onIn = () => {
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(save, 400);
+    };
+    root.addEventListener("input", onIn);
+    root.addEventListener("change", onIn);
+    return () => {
+      if (timer) clearTimeout(timer);
+      root.removeEventListener("input", onIn);
+      root.removeEventListener("change", onIn);
+    };
+  }, [isSae, html]);
 
   // Ações do painel multi-paciente
   const switchAtivo = (id: string) => {
@@ -318,10 +396,83 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
     }));
   };
 
+  // ===== Ações SAE (multi-paciente) =====
+  const switchAtivoSae = (id: string) => {
+    if (id === sae.ativoId) return;
+    const root = ref.current;
+    const curSnap = root ? snapshotForm(root) : {};
+    setSae((s) => ({
+      pacientes: s.pacientes.map((x) => (x.id === s.ativoId ? { ...x, form: curSnap } : x)),
+      ativoId: id,
+    }));
+  };
+  const addPacienteSae = () => {
+    const root = ref.current;
+    const curSnap = root ? snapshotForm(root) : {};
+    setSae((s) => {
+      const p = novoPacienteObj(s.pacientes.length + 1);
+      return {
+        pacientes: [
+          ...s.pacientes.map((x) => (x.id === s.ativoId ? { ...x, form: curSnap } : x)),
+          p,
+        ],
+        ativoId: p.id,
+      };
+    });
+  };
+  const removerAtivoSae = () => {
+    if (!ativoSae) return;
+    if (
+      !window.confirm(
+        `Remover ${ativoSae.nome}${ativoSae.leito ? ` (leito ${ativoSae.leito})` : ""} e todas as suas evoluções?`,
+      )
+    )
+      return;
+    setSae((s) => {
+      const filtered = s.pacientes.filter((p) => p.id !== s.ativoId);
+      if (filtered.length === 0) {
+        const p = novoPacienteObj(1);
+        return { pacientes: [p], ativoId: p.id };
+      }
+      return { pacientes: filtered, ativoId: filtered[0].id };
+    });
+  };
+  const encerrarPlantaoSae = () => {
+    if (
+      !window.confirm(
+        "Encerrar plantão do SAE? Todos os pacientes e evoluções deste aparelho serão apagados.",
+      )
+    )
+      return;
+    const p = novoPacienteObj(1);
+    setSae({ pacientes: [p], ativoId: p.id });
+  };
+  const copiarPlantaoTodoSae = () => {
+    if (!ativoSae) return;
+    const cab = `SAE — ${ativoSae.nome}${ativoSae.leito ? ` (leito ${ativoSae.leito})` : ""}`;
+    const corpo = ativoSae.historico.map((h) => `\n[${h.hora}] ${h.texto}`).join("\n");
+    void copiar(`${cab}\n${corpo}`);
+  };
+  const removerHistSae = (hid: string) => {
+    setSae((s) => ({
+      ...s,
+      pacientes: s.pacientes.map((p) =>
+        p.id === s.ativoId ? { ...p, historico: p.historico.filter((h) => h.id !== hid) } : p,
+      ),
+    }));
+  };
+  const limparHistoricoAtivoSae = () => {
+    if (!window.confirm("Apagar todas as evoluções deste paciente neste plantão?")) return;
+    setSae((s) => ({
+      ...s,
+      pacientes: s.pacientes.map((p) => (p.id === s.ativoId ? { ...p, historico: [] } : p)),
+    }));
+  };
 
   useEffect(() => {
     const root = ref.current;
     if (!root) return;
+
 
     const download = (conteudo: string, nome: string) => {
       try {
@@ -593,6 +744,27 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
       const onEvol = (e: Event) => {
         e.preventDefault();
         gerarEvolucao();
+        // Empilha a evolução gerada no histórico do paciente SAE ativo (localStorage)
+        const evolTxt = (
+          root.querySelector<HTMLTextAreaElement>("#txt-evolucao-clinica-mestre")?.value ?? ""
+        ).trim();
+        if (evolTxt) {
+          const hora = new Date().toLocaleTimeString("pt-BR", {
+            hour: "2-digit",
+            minute: "2-digit",
+          });
+          const item: HistItem = {
+            id: `h-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+            hora,
+            texto: evolTxt,
+          };
+          setSaeRef.current((prev) => ({
+            ...prev,
+            pacientes: prev.pacientes.map((p) =>
+              p.id === prev.ativoId ? { ...p, historico: [...p.historico, item] } : p,
+            ),
+          }));
+        }
       };
 
       btnDiag?.addEventListener("click", onDiag);
@@ -1078,6 +1250,57 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
         </>
       )}
 
+      {isSae && (
+        <>
+          <div className="mb-3 flex flex-wrap items-center gap-2 rounded-xl border border-primary/20 bg-primary/5 p-2">
+            {sae.pacientes.map((p, i) => (
+              <button
+                key={p.id}
+                type="button"
+                onClick={() => switchAtivoSae(p.id)}
+                className={`rounded-lg px-3 py-1.5 text-sm font-medium transition ${
+                  p.id === sae.ativoId
+                    ? "bg-primary text-primary-foreground shadow-sm"
+                    : "bg-white text-primary hover:bg-primary/10"
+                }`}
+              >
+                {p.nome || `Paciente ${i + 1}`}
+                {p.leito ? ` · ${p.leito}` : ""}
+              </button>
+            ))}
+            <button
+              type="button"
+              onClick={addPacienteSae}
+              className="rounded-lg bg-emerald-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-emerald-700"
+            >
+              + Adicionar paciente
+            </button>
+            {sae.pacientes.length > 1 && (
+              <button
+                type="button"
+                onClick={removerAtivoSae}
+                className="rounded-lg bg-red-100 px-3 py-1.5 text-sm font-medium text-red-700 hover:bg-red-200"
+              >
+                Remover atual
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={encerrarPlantaoSae}
+              className="ml-auto rounded-lg bg-amber-100 px-3 py-1.5 text-sm font-medium text-amber-800 hover:bg-amber-200"
+            >
+              Encerrar plantão
+            </button>
+          </div>
+          <div className="mb-3 rounded-lg border border-amber-200 bg-amber-50 p-2 text-xs text-amber-900">
+            ⚠️ As evoluções ficam salvas <b>apenas neste aparelho e navegador</b>. Ao trocar de
+            paciente, os diagnósticos e a prescrição na tela são limpos — clique em <b>Gerar
+            Diagnósticos</b> novamente para o paciente selecionado. Copie para o prontuário
+            oficial ao final do plantão.
+          </div>
+        </>
+      )}
+
       <div ref={ref} className="prose-sm max-w-none">
         {isSae ? (
           <div className="mini-app-html" dangerouslySetInnerHTML={{ __html: html }} />
@@ -1143,6 +1366,72 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
               <button
                 type="button"
                 onClick={limparHistoricoAtivo}
+                className="rounded-lg bg-red-100 px-3 py-1.5 text-sm font-medium text-red-700 hover:bg-red-200"
+              >
+                Limpar plantão deste paciente
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+
+      {isSae && ativoSae && (
+        <div className="mt-6 rounded-xl border border-primary/20 bg-white p-4 shadow-sm">
+          <div className="mb-3 flex items-center justify-between gap-2">
+            <h4 className="text-sm font-semibold text-primary">
+              📋 Evoluções do plantão — {ativoSae.nome}
+              {ativoSae.leito ? ` (leito ${ativoSae.leito})` : ""}
+            </h4>
+            <span className="text-xs text-muted-foreground">
+              {ativoSae.historico.length}{" "}
+              {ativoSae.historico.length === 1 ? "evolução" : "evoluções"}
+            </span>
+          </div>
+          {ativoSae.historico.length === 0 ? (
+            <p className="text-sm text-muted-foreground">
+              Nenhuma evolução gerada ainda para este paciente. Preencha o formulário acima e
+              clique em <b>Gerar Evolução Final</b>.
+            </p>
+          ) : (
+            <ul className="space-y-2">
+              {ativoSae.historico.map((h) => (
+                <li key={h.id} className="rounded-lg bg-primary/5 p-2">
+                  <div className="mb-1 flex items-center gap-2">
+                    <span className="text-sm font-semibold text-primary">🕒 {h.hora}</span>
+                    <div className="ml-auto flex gap-1">
+                      <button
+                        type="button"
+                        onClick={() => void copiar(h.texto)}
+                        className="rounded bg-primary px-2 py-1 text-xs font-medium text-primary-foreground hover:opacity-90"
+                      >
+                        Copiar
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => removerHistSae(h.id)}
+                        className="rounded bg-red-100 px-2 py-1 text-xs font-medium text-red-700 hover:bg-red-200"
+                      >
+                        Excluir
+                      </button>
+                    </div>
+                  </div>
+                  <p className="whitespace-pre-wrap text-sm text-foreground">{h.texto}</p>
+                </li>
+              ))}
+            </ul>
+          )}
+          {ativoSae.historico.length > 0 && (
+            <div className="mt-3 flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={copiarPlantaoTodoSae}
+                className="rounded-lg bg-emerald-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-emerald-700"
+              >
+                Copiar plantão inteiro
+              </button>
+              <button
+                type="button"
+                onClick={limparHistoricoAtivoSae}
                 className="rounded-lg bg-red-100 px-3 py-1.5 text-sm font-medium text-red-700 hover:bg-red-200"
               >
                 Limpar plantão deste paciente
