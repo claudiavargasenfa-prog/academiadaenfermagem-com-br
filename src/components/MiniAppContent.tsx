@@ -259,6 +259,63 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
     };
   }, [isColeta, html]);
 
+  // ===== SAE: restaura formulário do paciente ativo e limpa diagnósticos/prescrição dinâmicos
+  useEffect(() => {
+    if (!isSae) return;
+    const root = ref.current;
+    if (!root) return;
+    const cur = sae.pacientes.find((p) => p.id === sae.ativoId);
+    if (cur) restoreFormSnap(root, cur.form);
+    const dyn = root.querySelector<HTMLElement>("#sae-diag-dinamicos");
+    if (dyn) dyn.innerHTML = "";
+    const tbody = root.querySelector<HTMLElement>("#corpo-tabela-prescricao");
+    if (tbody) tbody.innerHTML = "";
+    const wrap = root.querySelector<HTMLElement>("#wrapper-tabela-prescricao");
+    if (wrap) wrap.style.display = "none";
+    const vazioDiag = root.querySelector<HTMLElement>("#painel-vazio-diagnosticos");
+    if (vazioDiag) vazioDiag.style.display = "block";
+    const vazioPresc = root.querySelector<HTMLElement>("#painel-vazio-prescricao");
+    if (vazioPresc) vazioPresc.style.display = "block";
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSae, sae.ativoId, html]);
+
+  // ===== SAE: autosave do formulário no paciente ativo
+  useEffect(() => {
+    if (!isSae) return;
+    const root = ref.current;
+    if (!root) return;
+    let timer: ReturnType<typeof setTimeout> | null = null;
+    const save = () => {
+      const snap = snapshotForm(root);
+      setSaeRef.current((prev) => ({
+        ...prev,
+        pacientes: prev.pacientes.map((p) =>
+          p.id === prev.ativoId
+            ? {
+                ...p,
+                form: snap,
+                nome:
+                  (typeof snap["nomePaciente"] === "string" && snap["nomePaciente"]) || p.nome,
+                leito:
+                  (typeof snap["leitoPaciente"] === "string" && snap["leitoPaciente"]) || p.leito,
+              }
+            : p,
+        ),
+      }));
+    };
+    const onIn = () => {
+      if (timer) clearTimeout(timer);
+      timer = setTimeout(save, 400);
+    };
+    root.addEventListener("input", onIn);
+    root.addEventListener("change", onIn);
+    return () => {
+      if (timer) clearTimeout(timer);
+      root.removeEventListener("input", onIn);
+      root.removeEventListener("change", onIn);
+    };
+  }, [isSae, html]);
+
   // Ações do painel multi-paciente
   const switchAtivo = (id: string) => {
     if (id === coleta.ativoId) return;
