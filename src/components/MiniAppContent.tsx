@@ -647,10 +647,143 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
       };
     }
 
+    // ===== COLETA DE DADOS + ADMISSÃO DE TURNO (Técnico) =====
+    // Ativa o botão "Gerar Anotação" gerando um rascunho de anotação técnica
+    // a partir de todas as marcações e observações do formulário.
+    let cleanupColeta: (() => void) | null = null;
+    const painelColeta = root.querySelector<HTMLTextAreaElement>("#anotacao_final_painel");
+    const temProcedencia = root.querySelector('input[name="item_procedencia"]');
+    if (painelColeta && temProcedencia) {
+      const val = (sel: string) =>
+        (root.querySelector<HTMLInputElement | HTMLTextAreaElement>(sel)?.value ?? "").trim();
+      const radio = (name: string, fallback: string) =>
+        root.querySelector<HTMLInputElement>(`input[name="${name}"]:checked`)?.value ?? fallback;
+
+      const gerarAnotacaoTecnica = () => {
+        const nomePac = val("#paciente_nome") || "NOME NÃO INFORMADO";
+        const leitoPac = val("#paciente_leito") || "S/L";
+
+        const procedencia = radio("item_procedencia", "vinda do plantão anterior");
+        const consciencia = radio("item_consciencia", "consciente e orientado");
+        const comportamento = radio("item_comportamento", "calmo e cooperativo");
+        const peleCor = radio("item_pele_cor", "corado e hidratado");
+        const peleInteg = radio("item_pele_integ", "com pele íntegra e sem lesões");
+        const dorGrau = radio("dor_grau", "com ausência de queixas álgicas (grau 0)");
+        const queixasGerais = radio("item_queixas", "sem queixas clínicas registradas");
+        const eliminacoes = radio("item_eliminacoes", "diurese e evacuações presentes e normais");
+
+        const zones: Array<[string, string]> = [
+          ["lpp_trocanter_d", "Trocanter D"],
+          ["lpp_trocanter_e", "Trocanter E"],
+          ["lpp_cocci", "Cóccix"],
+          ["lpp_calcaneo_d", "Calcâneo D"],
+          ["lpp_calcaneo_e", "Calcâneo E"],
+        ];
+        const lppsMarcadas = zones
+          .filter(([id]) => root.querySelector<HTMLInputElement>(`#${id}`)?.checked)
+          .map(([, label]) => label);
+        const escoriacao = !!root.querySelector<HTMLInputElement>("#item_pele_escoriacao")?.checked;
+        let textoLpp = "";
+        if (lppsMarcadas.length > 0) {
+          textoLpp =
+            " apresentando lesão por pressão (LPP) ativa em regiões de: " +
+            lppsMarcadas.join(", ");
+        }
+        if (escoriacao) {
+          textoLpp +=
+            (textoLpp ? " e " : " apresentando ") +
+            "escoriações/hematomas cutâneos visíveis no corpo";
+        }
+
+        const pa = val("#vit_pa");
+        const fc = val("#vit_fc");
+        const fr = val("#vit_fr");
+        const temp = val("#vit_temp");
+        const spo2 = val("#vit_spo2");
+
+        const dispositivos: string[] = [];
+        if (root.querySelector<HTMLInputElement>("#disp_avp")?.checked) {
+          let s = "acesso venoso periférico (AVP) pérvio";
+          const d = val("#disp_avp_data");
+          if (d) s += " puncionado em " + d;
+          dispositivos.push(s);
+        }
+        if (root.querySelector<HTMLInputElement>("#disp_svd")?.checked)
+          dispositivos.push(
+            "sonda vesical de demora (SVD) locada em sistema fechado drenando diurese clara",
+          );
+        if (root.querySelector<HTMLInputElement>("#disp_bomba")?.checked)
+          dispositivos.push("infusões parenterais contínuas mantidas em bomba de infusão");
+        if (root.querySelector<HTMLInputElement>("#disp_nenhum")?.checked)
+          dispositivos.push("livre de cateteres ou dispositivos invasivos aparentes");
+
+        const obs = {
+          procedencia: val("#obs_procedencia"),
+          neurologico: val("#obs_neurologico"),
+          pele: val("#obs_pele"),
+          vitais: val("#obs_vitais"),
+          dispositivos: val("#obs_dispositivos"),
+          queixas: val("#obs_queixas"),
+        };
+
+        const data = new Date();
+        const strData = data.toLocaleDateString("pt-BR");
+        const strHora = data.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+
+        let laudo =
+          `${strData} às ${strHora}h - Assumido cuidados de assistência do paciente ${nomePac} no leito ${leitoPac}, por motivo de ${procedencia}.`;
+        if (obs.procedencia) laudo += ` Nota de procedência: ${obs.procedencia}.`;
+
+        laudo += ` Paciente encontra-se estado neurológico ${consciencia}, mantendo-se ${comportamento}.`;
+        if (obs.neurologico) laudo += ` Nota neurológica: ${obs.neurologico}.`;
+
+        laudo += ` Ao exame geral apresenta pele e mucosas com padrão ${peleCor}, estando ${textoLpp || peleInteg}.`;
+        if (obs.pele) laudo += ` Nota de integridade cutânea: ${obs.pele}.`;
+
+        laudo += " Sinais vitais aferidos no início do turno apresentando: ";
+        laudo += pa ? `PA: ${pa} mmHg, ` : "PA: não informada, ";
+        laudo += fc ? `FC: ${fc} bpm, ` : "FC: não informada, ";
+        laudo += fr ? `FR: ${fr} ipm, ` : "FR: não informada, ";
+        laudo += temp ? `T: ${temp} °C, ` : "T: não informada, ";
+        laudo += spo2 ? `SpO₂: ${spo2}%. ` : "SpO₂: não informada. ";
+
+        laudo += ` Avaliação do nível de dor indica paciente ${dorGrau}.`;
+        if (obs.vitais) laudo += ` Nota de sinais vitais/dor: ${obs.vitais}.`;
+
+        if (dispositivos.length > 0) {
+          laudo += ` Identificado em uso de dispositivos assistenciais: ${dispositivos.join(", ")}.`;
+        }
+        if (obs.dispositivos) laudo += ` Nota de dispositivos: ${obs.dispositivos}.`;
+
+        laudo += ` Paciente evolui ${queixasGerais} e aponta ${eliminacoes}.`;
+        if (obs.queixas) laudo += ` Nota de queixas/eliminações: ${obs.queixas}.`;
+
+        laudo += " Segue sob cuidados e monitorização contínua da equipe técnica de enfermagem.";
+
+        painelColeta.value = laudo;
+        painelColeta.dispatchEvent(new Event("input", { bubbles: true }));
+        painelColeta.scrollIntoView({ behavior: "smooth", block: "center" });
+      };
+
+      const onColetaClick = (e: Event) => {
+        const t = e.target as HTMLElement | null;
+        if (!t) return;
+        const btn = t.closest<HTMLButtonElement>("button");
+        if (!btn) return;
+        const txt = (btn.textContent || "").trim().toLowerCase();
+        if (!/gerar\s+anota/.test(txt)) return;
+        e.preventDefault();
+        gerarAnotacaoTecnica();
+      };
+      root.addEventListener("click", onColetaClick);
+      cleanupColeta = () => root.removeEventListener("click", onColetaClick);
+    }
+
 
     return () => {
       root.removeEventListener("click", onClick);
       cleanupSaeListeners?.();
+      cleanupColeta?.();
     };
   }, [html]);
 
