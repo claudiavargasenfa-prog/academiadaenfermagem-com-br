@@ -1,10 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { Video, Headphones } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/AppShell";
 import { useAuthReady } from "@/lib/access";
 import { renderContent } from "@/lib/markdown";
+import { useLocal } from "@/lib/storage";
 import {
   matchDiagnosticos,
   renderDiagnosticoCard,
@@ -12,6 +13,70 @@ import {
   buildEvolucao,
   type SaeDiagnostico,
 } from "@/lib/sae-engine";
+
+// ===== Tipos e helpers do mini app COLETA DE DADOS + ADMISSÃO DE TURNO =====
+// Multi-paciente com persistência local (localStorage) — sem custo de banco.
+type FormSnap = Record<string, string | boolean>;
+type HistItem = { id: string; hora: string; texto: string };
+type Paciente = {
+  id: string;
+  nome: string;
+  leito: string;
+  form: FormSnap;
+  historico: HistItem[];
+};
+type ColetaState = { pacientes: Paciente[]; ativoId: string };
+
+function novoPacienteObj(idx: number): Paciente {
+  const id = `p-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+  return { id, nome: `Paciente ${idx}`, leito: "", form: {}, historico: [] };
+}
+
+function snapshotForm(root: HTMLElement): FormSnap {
+  const out: FormSnap = {};
+  root
+    .querySelectorAll<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>(
+      "input, textarea, select",
+    )
+    .forEach((el) => {
+      const type = (el as HTMLInputElement).type;
+      if (type === "radio") {
+        const r = el as HTMLInputElement;
+        if (r.checked && r.name) out[`__r:${r.name}`] = r.value;
+      } else if (type === "checkbox") {
+        const c = el as HTMLInputElement;
+        const k = c.id || (c.name ? `__c:${c.name}:${c.value}` : "");
+        if (k) out[k] = c.checked;
+      } else {
+        const k = el.id || (el as HTMLInputElement).name;
+        if (k) out[k] = (el as HTMLInputElement).value;
+      }
+    });
+  return out;
+}
+
+function restoreFormSnap(root: HTMLElement, snap: FormSnap) {
+  root
+    .querySelectorAll<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>(
+      "input, textarea, select",
+    )
+    .forEach((el) => {
+      const type = (el as HTMLInputElement).type;
+      if (type === "radio") {
+        const r = el as HTMLInputElement;
+        const v = snap[`__r:${r.name}`];
+        r.checked = v === r.value;
+      } else if (type === "checkbox") {
+        const c = el as HTMLInputElement;
+        const k = c.id || (c.name ? `__c:${c.name}:${c.value}` : "");
+        c.checked = !!(k && snap[k]);
+      } else {
+        const k = el.id || (el as HTMLInputElement).name;
+        if (k) (el as HTMLInputElement).value = snap[k] != null ? String(snap[k]) : "";
+      }
+    });
+}
+
 
 
 /**
