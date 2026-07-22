@@ -1027,18 +1027,134 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
   }, [html]);
 
   return (
-    <div ref={ref} className="prose-sm max-w-none">
-      {isSae ? (
-        <div
-          className="mini-app-html"
-          dangerouslySetInnerHTML={{ __html: html }}
-        />
-      ) : (
-        renderContent(html)
+    <div>
+      {isColeta && (
+        <>
+          <div className="mb-3 flex flex-wrap items-center gap-2 rounded-xl border border-primary/20 bg-primary/5 p-2">
+            {coleta.pacientes.map((p, i) => (
+              <button
+                key={p.id}
+                type="button"
+                onClick={() => switchAtivo(p.id)}
+                className={`rounded-lg px-3 py-1.5 text-sm font-medium transition ${
+                  p.id === coleta.ativoId
+                    ? "bg-primary text-primary-foreground shadow-sm"
+                    : "bg-white text-primary hover:bg-primary/10"
+                }`}
+              >
+                {p.nome || `Paciente ${i + 1}`}
+                {p.leito ? ` · ${p.leito}` : ""}
+              </button>
+            ))}
+            <button
+              type="button"
+              onClick={addPaciente}
+              className="rounded-lg bg-emerald-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-emerald-700"
+            >
+              + Adicionar paciente
+            </button>
+            {coleta.pacientes.length > 1 && (
+              <button
+                type="button"
+                onClick={removerAtivo}
+                className="rounded-lg bg-red-100 px-3 py-1.5 text-sm font-medium text-red-700 hover:bg-red-200"
+              >
+                Remover atual
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={encerrarPlantao}
+              className="ml-auto rounded-lg bg-amber-100 px-3 py-1.5 text-sm font-medium text-amber-800 hover:bg-amber-200"
+            >
+              Encerrar plantão
+            </button>
+          </div>
+          <div className="mb-3 rounded-lg border border-amber-200 bg-amber-50 p-2 text-xs text-amber-900">
+            ⚠️ As anotações ficam salvas <b>apenas neste aparelho e navegador</b>. Copie para o
+            prontuário oficial ao final do plantão. Se limpar dados do navegador ou trocar de
+            aparelho, elas serão perdidas.
+          </div>
+        </>
+      )}
+
+      <div ref={ref} className="prose-sm max-w-none">
+        {isSae ? (
+          <div className="mini-app-html" dangerouslySetInnerHTML={{ __html: html }} />
+        ) : (
+          renderContent(html)
+        )}
+      </div>
+
+      {isColeta && ativoPaciente && (
+        <div className="mt-6 rounded-xl border border-primary/20 bg-white p-4 shadow-sm">
+          <div className="mb-3 flex items-center justify-between gap-2">
+            <h4 className="text-sm font-semibold text-primary">
+              📋 Histórico do plantão — {ativoPaciente.nome}
+              {ativoPaciente.leito ? ` (leito ${ativoPaciente.leito})` : ""}
+            </h4>
+            <span className="text-xs text-muted-foreground">
+              {ativoPaciente.historico.length}{" "}
+              {ativoPaciente.historico.length === 1 ? "anotação" : "anotações"}
+            </span>
+          </div>
+          {ativoPaciente.historico.length === 0 ? (
+            <p className="text-sm text-muted-foreground">
+              Nenhuma anotação gerada ainda para este paciente. Preencha o formulário acima e
+              clique em <b>Gerar Anotação</b>.
+            </p>
+          ) : (
+            <ul className="space-y-2">
+              {ativoPaciente.historico.map((h) => (
+                <li key={h.id} className="rounded-lg bg-primary/5 p-2">
+                  <div className="mb-1 flex items-center gap-2">
+                    <span className="text-sm font-semibold text-primary">🕒 {h.hora}</span>
+                    <div className="ml-auto flex gap-1">
+                      <button
+                        type="button"
+                        onClick={() => void copiar(h.texto)}
+                        className="rounded bg-primary px-2 py-1 text-xs font-medium text-primary-foreground hover:opacity-90"
+                      >
+                        Copiar
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => removerHist(h.id)}
+                        className="rounded bg-red-100 px-2 py-1 text-xs font-medium text-red-700 hover:bg-red-200"
+                      >
+                        Excluir
+                      </button>
+                    </div>
+                  </div>
+                  <p className="whitespace-pre-wrap text-sm text-foreground">{h.texto}</p>
+                </li>
+              ))}
+            </ul>
+          )}
+          {ativoPaciente.historico.length > 0 && (
+            <div className="mt-3 flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={copiarPlantaoTodo}
+                className="rounded-lg bg-emerald-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-emerald-700"
+              >
+                Copiar plantão inteiro
+              </button>
+              <button
+                type="button"
+                onClick={limparHistoricoAtivo}
+                className="rounded-lg bg-red-100 px-3 py-1.5 text-sm font-medium text-red-700 hover:bg-red-200"
+              >
+                Limpar plantão deste paciente
+              </button>
+            </div>
+          )}
+        </div>
       )}
     </div>
   );
 }
+
 
 
 function VideoEmbed({ url }: { url: string }) {
