@@ -191,6 +191,27 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
     }
   }, [isColeta, coleta.ativoId, coleta.pacientes, setColeta]);
 
+  // ===== SAE DESCOMPLICADA — multi-paciente próprio (localStorage "sae-turno-v1")
+  const initialSae = useMemo<ColetaState>(() => {
+    const p = novoPacienteObj(1);
+    return { pacientes: [p], ativoId: p.id };
+  }, []);
+  const [sae, setSae] = useLocal<ColetaState>("sae-turno-v1", initialSae);
+  const setSaeRef = useRef(setSae);
+  setSaeRef.current = setSae;
+  const ativoSae =
+    sae.pacientes.find((p) => p.id === sae.ativoId) ?? sae.pacientes[0] ?? null;
+
+  useEffect(() => {
+    if (!isSae) return;
+    if (!sae.pacientes.length) {
+      const p = novoPacienteObj(1);
+      setSae({ pacientes: [p], ativoId: p.id });
+    } else if (!sae.pacientes.find((p) => p.id === sae.ativoId)) {
+      setSae((s) => ({ ...s, ativoId: s.pacientes[0].id }));
+    }
+  }, [isSae, sae.ativoId, sae.pacientes, setSae]);
+
   // Restaura os valores do paciente ativo no formulário quando trocar de aba
   // ou remontar o HTML.
   useEffect(() => {
