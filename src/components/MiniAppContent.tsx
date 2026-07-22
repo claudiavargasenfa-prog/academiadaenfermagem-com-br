@@ -1250,6 +1250,57 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
         </>
       )}
 
+      {isSae && (
+        <>
+          <div className="mb-3 flex flex-wrap items-center gap-2 rounded-xl border border-primary/20 bg-primary/5 p-2">
+            {sae.pacientes.map((p, i) => (
+              <button
+                key={p.id}
+                type="button"
+                onClick={() => switchAtivoSae(p.id)}
+                className={`rounded-lg px-3 py-1.5 text-sm font-medium transition ${
+                  p.id === sae.ativoId
+                    ? "bg-primary text-primary-foreground shadow-sm"
+                    : "bg-white text-primary hover:bg-primary/10"
+                }`}
+              >
+                {p.nome || `Paciente ${i + 1}`}
+                {p.leito ? ` · ${p.leito}` : ""}
+              </button>
+            ))}
+            <button
+              type="button"
+              onClick={addPacienteSae}
+              className="rounded-lg bg-emerald-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-emerald-700"
+            >
+              + Adicionar paciente
+            </button>
+            {sae.pacientes.length > 1 && (
+              <button
+                type="button"
+                onClick={removerAtivoSae}
+                className="rounded-lg bg-red-100 px-3 py-1.5 text-sm font-medium text-red-700 hover:bg-red-200"
+              >
+                Remover atual
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={encerrarPlantaoSae}
+              className="ml-auto rounded-lg bg-amber-100 px-3 py-1.5 text-sm font-medium text-amber-800 hover:bg-amber-200"
+            >
+              Encerrar plantão
+            </button>
+          </div>
+          <div className="mb-3 rounded-lg border border-amber-200 bg-amber-50 p-2 text-xs text-amber-900">
+            ⚠️ As evoluções ficam salvas <b>apenas neste aparelho e navegador</b>. Ao trocar de
+            paciente, os diagnósticos e a prescrição na tela são limpos — clique em <b>Gerar
+            Diagnósticos</b> novamente para o paciente selecionado. Copie para o prontuário
+            oficial ao final do plantão.
+          </div>
+        </>
+      )}
+
       <div ref={ref} className="prose-sm max-w-none">
         {isSae ? (
           <div className="mini-app-html" dangerouslySetInnerHTML={{ __html: html }} />
