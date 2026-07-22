@@ -1,33 +1,51 @@
-## Auditoria — por que o botão "volta pra loja"
 
-Reproduzi o cenário e o replay confirma: você está **logada** no app. Quando clica em "Começar meus 15 dias grátis" na landing `/planos/tecnico`, o botão faz um `<a href="/?cadastro=tecnico">` — uma navegação de página inteira (por isso demora 7–9s: recarrega bundle + service worker).
+## Diagnóstico
 
-Quando a página `/` termina de carregar, o `AuthGate` vê que já existe sessão e **não abre o formulário de cadastro** — mostra direto a loja. O parâmetro `?cadastro=tecnico` só é lido dentro do formulário de login, então para usuário logado ele é ignorado. Resultado percebido: "voltou pra loja".
+O HTML do mini app **Coleta de Dados + Admissão de Turno** (slug `ColetaDados-AdmissãoTurno`) já contém:
 
-Não é bug do fingerprint nem do backend — é fluxo: usuário logado não deveria ver "15 dias grátis" de outro app; deveria ver "Assinar agora" (checkout) ou "Você já tem acesso".
+- Formulário completo (inputs de texto, radios, checkboxes, textareas de observação por seção).
+- Botão verde `<button onclick="processarProntuarioTecnico()">Gerar Anotação</button>`.
+- Textarea `#anotacao_final_painel` para o rascunho.
+- Uma tag `<script>` com a função `processarProntuarioTecnico()`.
 
-## O que vou fazer
+**Problema:** o `MiniAppContent` renderiza o HTML via React (innerHTML). Navegadores **não executam** `<script>` inserido dessa forma, e handlers inline `onclick="..."` também não encontram a função. Por isso o botão não faz nada — mesma causa que já resolvemos para o SAE e os botões salvar prescrição/evolução.
 
-### 1. `src/routes/planos.$slug.tsx` — CTA sensível ao estado de login
-- Ler a sessão atual (`supabase.auth.getSession`) via hook simples.
-- **Não logado** → botão principal continua "Começar meus {15} dias grátis" e vai para `/?cadastro=<slug>` (comportamento atual, correto para visitante).
-- **Logado, sem essa assinatura** → botão principal vira **"Assinar agora"** apontando para o `checkoutUrl` do plano (Cakto), e mostra abaixo um aviso pequeno: *"Você já está logada como <email>. O período grátis é só para novos cadastros — para liberar este app, faça a assinatura."* Com um link secundário "Sair da conta" (usa `signOut()` do `AuthGate`) caso queira criar outro cadastro.
-- **Logado, com assinatura ativa deste plano** → já funciona hoje ("Acessar meus mini apps").
-- Aplicar a mesma lógica no CTA final (rodapé).
+## O que fazer (somente frontend, sem tocar no conteúdo do banco)
 
-### 2. Cor dos botões "Assinar agora" / "Começar meus 15 dias grátis"
-- Trocar `bg-foreground text-background` (preto/branco atual) por `bg-primary text-primary-foreground` (verde escuro do tema com letra branca) — tanto no banner do hero quanto no CTA final, nos 4 planos (academico, tecnico, tecnico-estudante, enfermeiro). Como a landing é uma única rota parametrizada, uma alteração cobre todos.
-- Manter hover suave (`hover:opacity-90`) e sombra atual.
+Editar **apenas** `src/components/MiniAppContent.tsx` para adicionar um novo bloco de comportamento, no mesmo padrão dos já existentes (SAE, salvar prescrição). Nada no visual muda.
 
-### 3. Pequeno ganho de velocidade
-- Manter `<a href>` apenas na transição visitante→cadastro (precisa recarregar para o AuthGate rodar). Para usuário logado, usar `<a href={checkoutUrl} target="_blank">` (checkout externo, comportamento certo) — sem full-reload interno inútil.
+### Passos
 
-## Fora do escopo
-- Não vou mexer no fluxo antifraude, no fingerprint, no schema do banco, nem no visual do resto da landing (banner, promo, FAQ, mini apps).
-- Não vou mudar a categoria de cadastro nem regras de trial.
+1. Detectar o mini app pela presença dos IDs característicos no HTML (`#anotacao_final_painel` e ao menos um `[name="item_procedencia"]`). Não depende de slug — se o admin duplicar/renomear continua funcionando.
 
-## Como validar
-Depois de aplicar:
-1. Aba anônima → abrir `/planos/tecnico` → botão verde "Começar meus 15 dias grátis" → abre cadastro com "Técnico" pré-selecionado.
-2. Logada como você → abrir `/planos/tecnico` → botão verde "Assinar agora" abre o checkout Cakto; aparece aviso + link "Sair da conta".
-3. Logada com plano ativo → botão "Acessar meus mini apps" (inalterado).
+2. Adicionar um listener de clique delegado que dispara quando o usuário clicar no botão "Gerar Anotação" (identificado por texto do botão + presença de `onclick*="processarProntuarioTecnico"`). Chamar `e.preventDefault()` e rodar nossa função nativa.
+
+3. Implementar `gerarAnotacaoTecnica(root)` que, para cada seção do formulário, coleta:
+   - **Identificação:** valores dos inputs de texto (nome, leito, idade, data/hora se existirem).
+   - **Radios marcados:** para cada grupo `name="item_*"`, pega o `value` do radio `:checked`.
+   - **Checkboxes marcados:** pega o texto do `<label>` pai (removendo o quadradinho ⬜ decorativo).
+   - **Observações livres:** valor de cada `<textarea id="obs_*">` não vazio.
+
+4. Montar o rascunho em texto corrido, em formato de anotação técnica cefalocaudal, agrupando por seção na mesma ordem em que aparecem no formulário (procedência → neurológico → pele → e assim por diante). Exemplo de linha gerada:
+   ```
+   Paciente João da Silva, leito 204-A, vinda do plantão anterior. 
+   Encontra-se consciente e orientado, calmo e cooperativo. 
+   Pele corada e hidratada, íntegra e sem lesões. (...)
+   Obs.: [texto da caixa de observações da seção, se houver].
+   ```
+
+5. Escrever o resultado em `#anotacao_final_painel` (a textarea permanece editável, como já está). Disparar `input` event para o React não sobrescrever.
+
+6. Se nenhum campo estiver preenchido/marcado, mostrar `alert("Preencha ou marque ao menos um item antes de gerar a anotação.")`.
+
+7. Registrar o cleanup do listener no `useEffect` (como os demais).
+
+### Detalhes técnicos
+
+- Local: dentro do mesmo `useEffect` que já trata SAE e botões de download, adicionar bloco `isColetaTecnico` logo após o bloco SAE.
+- Sem novas dependências. Sem migration. Sem alteração no `content_md` do banco.
+- Não altera cores, layout, textos nem qualquer elemento do HTML já cadastrado.
+
+### Validação
+
+Rodar Playwright em `/app/ColetaDados-AdmissãoTurno`: preencher nome + leito, marcar 2–3 radios/checkboxes, clicar em "Gerar Anotação" e verificar que `#anotacao_final_painel` recebeu o rascunho formatado.
