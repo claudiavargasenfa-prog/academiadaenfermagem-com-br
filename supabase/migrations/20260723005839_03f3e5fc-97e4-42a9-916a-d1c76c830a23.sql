@@ -1,0 +1,1 @@
+DELETE FROM public.app_texts WHERE key = 'branding.logo_url';
