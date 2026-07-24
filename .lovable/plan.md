@@ -1,64 +1,73 @@
-## O que vou construir
 
-Uma nova página de vendas em `/vendas`, separada da loja atual (que continua igual). Ela é feita para tráfego pago do Instagram: quem clica no anúncio cai direto nela, vê a proposta, escolhe um dos 4 apps e vai pro checkout da Cakto correspondente.
+## Objetivo
+Redesenhar `/vendas` no estilo premium (verde escuro + dourado), aplicar o novo logo **ADEC** em todo o site, e aplicar todos os ajustes de texto pedidos.
 
-Estética: **fundo claro pastel** (mesma família do app), com **verde escuro do logo** e **dourado** como cores fortes. Bem profissional, tipografia elegante, muito respiro, nada carnavalesco.
+## 1. Logo ADEC em todo o site
+- Fazer upload do ADEC via `lovable-assets` → substituir `src/assets/logo.png.asset.json` (mantém o mesmo caminho, então PWA/topo/favicon herdam automaticamente).
+- Regenerar ícones PWA (192, 512, maskable) a partir do ADEC.
+- Deixar o hexagonal como asset backup para caso queira voltar (não referenciado).
 
-## Estrutura da página (na ordem em que a pessoa vê)
+## 2. Landing `/vendas` — visual verde escuro + dourado
+Reescrever `src/routes/vendas.tsx` mantendo estrutura de dados (planos vindos do DB), trocando só o skin visual:
 
-1. **Topo fixo discreto** — logo + selo "Compra segura" + botão "Assinar agora" (scroll pros planos).
-2. **Hero** — título forte ("A Academia da Enfermagem que cabe no seu bolso"), subtítulo curto, mascote/imagem, 4 selos de confiança (15 dias grátis · sem cartão no cadastro · offline · atualizações mensais), CTA principal ("Ver os 4 planos").
-3. **Faixa de credibilidade** — "Base COFEN/COREN · ANVISA · MS · OMS" + números (mini apps, escalas, procedimentos, quizzes).
-4. **Para quem é** — 4 cards curtinhos: Acadêmico / Técnico / Estudante de Técnico / Enfermeiro, cada um dizendo em 1 frase a dor que resolve.
-5. **O que você recebe** — grid visual com os principais mini apps (SAE, Escalas Clínicas, Procedimentos, Coleta de Turno, Quizzes, Diagnósticos AE/DE...) usando ícones + 1 linha cada.
-6. **Antes x Depois** — tabela pastel comparando "Plantão sem a Academia" vs "Plantão com a Academia".
-7. **Os 4 planos (bloco principal de venda)** — 4 cards lado a lado (empilha no celular), cada um com:
-   - Emoji + nome do app
-   - 1 frase de posicionamento
-   - 4-6 bullets do que tem dentro
-   - Preço (puxado do banco, mesma fonte que a loja usa hoje)
-   - Botão **"Começar 15 dias grátis"** → `/cadastro/<slug>`
-   - Botão secundário **"Já quero assinar"** → link Cakto do plano
-8. **Garantia + Grupo VIP no WhatsApp** — selo de 15 dias grátis sem cartão + convite pro grupo depois da assinatura.
-9. **Depoimentos** — 3-6 cards (com placeholders "seu depoimento aqui" se você ainda não me mandar depoimentos reais — eu deixo pronto pra você preencher no admin depois).
-10. **FAQ** — 6 perguntas em accordion (como funciona o grátis, cancelar, offline, WhatsApp, nota fiscal, dispositivos).
-11. **CTA final** — bloco grande verde escuro com dourado: "Escolha seu plano e comece hoje" + os 4 botões dos planos de novo.
-12. **Rodapé enxuto** — logo, contato, links legais.
+- **Paleta local da página** (definida inline no root da rota, não polui o resto do app):
+  - Fundo: `#0d3b2e` (verde profundo) com camadas `#0a2f24` / `#124a3a`
+  - Acento: `#d4af37` (dourado) e `#f0d78c` (dourado claro)
+  - Texto: `#f5f0e0` (creme) e `#ffffff`
+- Efeitos: glows radiais dourados, glassmorphism escuro (`bg-white/5 backdrop-blur border border-white/10`), divisores dourados finos.
+- Header com **logo ADEC** grande + subtítulos "AVALIAÇÃO DIAGNÓSTICA EM ENFERMAGEM CLÍNICA" / "SISTEMA BRASILEIRO DE HIPÓTESES DIAGNÓSTICAS DE ENFERMAGEM" como cabeçalho (substituindo o header antigo).
 
-## Como as informações são puxadas
+## 3. Ajustes de copy na `/vendas`
 
-- **Preço, link Cakto e slug de cada plano** → mesma fonte que `/planos/$slug` já usa (`fetchSubscriptionPlans` de `src/lib/access.ts`). Nada de valor "chumbado" no código — se você trocar o preço no admin, muda aqui automaticamente.
-- **Nome, cor e emoji de cada app** → `fetchAppBySlug` (mesma coisa que a loja atual).
-- **Textos editáveis** (título do hero, subtítulos, bullets, FAQ, depoimentos) → armazenados como `app_texts` com prefixo `vendas.*`, editáveis no painel admin em **Textos**, do mesmo jeito que os textos de `/planos/$slug` já funcionam hoje. Você muda a copy sem me chamar.
-- **Depoimentos** → também via `app_texts` (`vendas.depoimento1_nome`, `vendas.depoimento1_texto`...), pra você preencher quando tiver os reais.
+**Hero (bloco 1):**
+- Título: *"Enfermagem Baseada em Evidências: escolha o App certo para o seu momento na Enfermagem"*
+- Subtítulo: *"4 apps completos com SAE automatizada, processos de enfermagem, escalas clínicas, procedimentos, farmacologia e simulações reais. Estágios e plantões fundamentado em evidência científica."*
+- **Remover os 2 botões do 1º bloco.**
 
-## Design
+**Barra de credibilidade:**
+- "Aprovado por quem vive o plantão e o consultório"
+- Trocar "mini apps" por **"Módulos de Suporte à Decisão Clínica (MSDC)"** em toda a página.
+- Trocar bullet base de dados → **"Resoluções, normas, diretrizes e protocolos atualizados"**
+- Trocar "atualizações mensais" → **"atualizações contínuas e automáticas"**
+- Incluir bullet **"Com certificação opcional"**.
 
-- Fundo claro com os mesmos radial gradients suaves de fundo que o app já usa.
-- Blocos em **glass cards** (mesmo estilo do resto: `bg-white/70 backdrop-blur border border-white/60 rounded-3xl shadow-sm`).
-- Títulos na fonte **Manrope** (já é a `font-display` do projeto), corpo em **Inter**.
-- Cor forte dos CTAs: **verde escuro** (`--primary` do projeto) com texto branco.
-- Selos, preços e detalhes premium: **dourado** (`--gold` do projeto).
-- Tudo responsivo (mobile-first, já que o tráfego é do Instagram).
-- Micro animações discretas (fade-in no scroll, hover leve nos cards). Nada de neon, nada de piscando.
+**Bloco "Plantão com a Academia" (Before x After / benefícios):**
+Substituir os bullets pelos 5 exatos:
+- ✅ Anotação e evolução gerada automaticamente de acordo com suas avaliações
+- ✅ Farmacologia e aprazamento baseados nas metas de segurança do paciente
+- ✅ SAE + PE personalizados por paciente, com prescrição automatizada
+- ✅ 22+ escalas clínicas atualizadas, offline
+- ✅ Procedimentos passo a passo antes de encostar no paciente
 
-## O que NÃO vou fazer
+**Slogans dos cards de app (na /vendas E na /loja):**
+- Acadêmico → *"Do primeiro ao último estágio, sem sofrer."*
+- Enfermeiro → *"Menos burocracia, mais assistência com tranquilidade."*
+- (Técnico e Técnico-Estudante mantêm slogans atuais — ela não pediu troca)
 
-- Não mexo em `/`, `/loja`, `/planos/$slug`, `/cadastro/$slug` — todas continuam iguais.
-- Não crio banco novo, não crio migration, não gasto crédito de Cloud (a página só lê o que já existe).
-- Não invento depoimentos falsos — deixo placeholders identificáveis pra você trocar.
-- Não coloco countdown de escassez falso. Se um dia você quiser um countdown real (ex: fim de promoção de verdade), me pede depois e eu adiciono.
+**Todos os apps — descrição de quizzes:**
+Adicionar linha padrão: *"Quizzes por tema para fixar antes da prova"*.
 
-## Detalhes técnicos (pode pular)
+## 4. Nova seção "SOBRE A AUTORA" (antes do FAQ)
+Adicionar bloco em card escuro com dourado, dividido em 3 subseções:
 
-- Arquivo novo: `src/routes/vendas.tsx` com `createFileRoute("/vendas")`, `head()` com SEO próprio (title, description, og:*, twitter:card) e `component: VendasPage`.
-- Reaproveita `AppShell` com `publicRoute` e `hideReferences` (mesmo padrão de `/planos/$slug`).
-- Usa `useQuery` com as mesmas queryKeys já existentes (`subscription_plans`, `mini_apps`, `app_texts`) — cache compartilhado, sem requests duplicados se a pessoa navegar pra loja depois.
-- Se a pessoa já estiver logada e assinante de algum plano, o botão daquele plano vira "✓ Acessar meus mini apps" apontando pra `/trilha/$slug` (mesma lógica que a loja já usa hoje).
-- Zero dependência nova. Zero mudança em `package.json`.
+- **A História** — texto completo enviado
+- **O Propósito** — texto completo enviado
+- **Minha Promessa** — texto completo enviado
+- Título de abertura: *"Conheça um pouco da minha História"*
+- Foto opcional da fundadora (já existe `src/assets/foto-fundadora.jpeg.asset.json`).
+- CTA discreto no fim: link para `/minha-historia`.
 
-## Depois que estiver pronto
+## 5. Também na /loja
+- Aplicar os 2 slogans novos (Acadêmico e Enfermeiro) nos cards.
+- Trocar "mini apps" por "MSDC" no texto público.
 
-Você pega o link `https://academiadaenfermagem.com.br/vendas` e usa nos anúncios do Instagram/Meta Ads. Se quiser variantes A/B depois (ex: `/vendas-tecnico` só focado no Técnico), eu duplico rapidinho a partir dessa base.
+## 6. Publicar
+Depois de aplicado + validado no preview, publicar para o domínio atualizar.
 
-Se aprovar, eu implemento na sequência.
+---
+
+### Detalhes técnicos
+- Textos ficam em `app_texts` (chaves `plano.*` e `vendas.*`), então dá pra editar depois sem código.
+- A troca "mini apps" → "MSDC" é só em copy **público** (`/vendas`, `/loja`, `/planos/$slug`, `/minha-historia`); admin e código interno continuam "mini_apps" (é nome de tabela).
+- Logo é substituição do asset existente → nada muda em código que referencia `logo.png.asset.json`.
+- Nenhuma mudança de schema / backend.
