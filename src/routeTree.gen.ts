@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as VendasRouteImport } from './routes/vendas'
 import { Route as UtiRouteImport } from './routes/uti'
 import { Route as SvPediatricoRouteImport } from './routes/sv-pediatrico'
 import { Route as SvGestanteRouteImport } from './routes/sv-gestante'
@@ -49,6 +50,11 @@ import { Route as AppSlugIndexRouteImport } from './routes/app.$slug.index'
 import { Route as AppSlugSubtopicRouteImport } from './routes/app.$slug.$subtopic'
 import { Route as ApiPublicCaktoWebhookRouteImport } from './routes/api/public/cakto-webhook'
 
+const VendasRoute = VendasRouteImport.update({
+  id: '/vendas',
+  path: '/vendas',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const UtiRoute = UtiRouteImport.update({
   id: '/uti',
   path: '/uti',
@@ -277,6 +283,7 @@ export interface FileRoutesByFullPath {
   '/sv-gestante': typeof SvGestanteRoute
   '/sv-pediatrico': typeof SvPediatricoRoute
   '/uti': typeof UtiRoute
+  '/vendas': typeof VendasRoute
   '/app/$slug': typeof AppSlugRouteWithChildren
   '/cadastro/$slug': typeof CadastroSlugRoute
   '/planos/$slug': typeof PlanosSlugRoute
@@ -318,6 +325,7 @@ export interface FileRoutesByTo {
   '/sv-gestante': typeof SvGestanteRoute
   '/sv-pediatrico': typeof SvPediatricoRoute
   '/uti': typeof UtiRoute
+  '/vendas': typeof VendasRoute
   '/cadastro/$slug': typeof CadastroSlugRoute
   '/planos/$slug': typeof PlanosSlugRoute
   '/quizzes/$slug': typeof QuizzesSlugRoute
@@ -359,6 +367,7 @@ export interface FileRoutesById {
   '/sv-gestante': typeof SvGestanteRoute
   '/sv-pediatrico': typeof SvPediatricoRoute
   '/uti': typeof UtiRoute
+  '/vendas': typeof VendasRoute
   '/app/$slug': typeof AppSlugRouteWithChildren
   '/cadastro/$slug': typeof CadastroSlugRoute
   '/planos/$slug': typeof PlanosSlugRoute
@@ -402,6 +411,7 @@ export interface FileRouteTypes {
     | '/sv-gestante'
     | '/sv-pediatrico'
     | '/uti'
+    | '/vendas'
     | '/app/$slug'
     | '/cadastro/$slug'
     | '/planos/$slug'
@@ -443,6 +453,7 @@ export interface FileRouteTypes {
     | '/sv-gestante'
     | '/sv-pediatrico'
     | '/uti'
+    | '/vendas'
     | '/cadastro/$slug'
     | '/planos/$slug'
     | '/quizzes/$slug'
@@ -483,6 +494,7 @@ export interface FileRouteTypes {
     | '/sv-gestante'
     | '/sv-pediatrico'
     | '/uti'
+    | '/vendas'
     | '/app/$slug'
     | '/cadastro/$slug'
     | '/planos/$slug'
@@ -525,6 +537,7 @@ export interface RootRouteChildren {
   SvGestanteRoute: typeof SvGestanteRoute
   SvPediatricoRoute: typeof SvPediatricoRoute
   UtiRoute: typeof UtiRoute
+  VendasRoute: typeof VendasRoute
   AppSlugRoute: typeof AppSlugRouteWithChildren
   CadastroSlugRoute: typeof CadastroSlugRoute
   PlanosSlugRoute: typeof PlanosSlugRoute
@@ -534,6 +547,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/vendas': {
+      id: '/vendas'
+      path: '/vendas'
+      fullPath: '/vendas'
+      preLoaderRoute: typeof VendasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/uti': {
       id: '/uti'
       path: '/uti'
@@ -866,6 +886,7 @@ const rootRouteChildren: RootRouteChildren = {
   SvGestanteRoute: SvGestanteRoute,
   SvPediatricoRoute: SvPediatricoRoute,
   UtiRoute: UtiRoute,
+  VendasRoute: VendasRoute,
   AppSlugRoute: AppSlugRouteWithChildren,
   CadastroSlugRoute: CadastroSlugRoute,
   PlanosSlugRoute: PlanosSlugRoute,
@@ -875,13 +896,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
