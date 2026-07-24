@@ -752,6 +752,33 @@ export type Database = {
         }
         Returns: boolean
       }
+      list_mini_apps_catalog: {
+        Args: never
+        Returns: {
+          badges: Json
+          cakto_checkout_url: string
+          cakto_product_id: string
+          created_at: string
+          description: string
+          em_breve: boolean
+          gratuito: boolean
+          horas_certificado: number
+          icon: string
+          id: string
+          is_active: boolean
+          kind: string
+          name: string
+          price_cents: number
+          price_original_cents: number
+          route_path: string
+          slug: string
+          sort_order: number
+          track_academico: boolean
+          track_enfermeiro: boolean
+          track_tecnico: boolean
+          updated_at: string
+        }[]
+      }
     }
     Enums: {
       app_role: "admin" | "aluno"
