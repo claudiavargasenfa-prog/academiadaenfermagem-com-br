@@ -141,11 +141,12 @@ function RelatorioPage() {
       // Catalog RPC returns non-sensitive columns for any signed-in user,
       // even if they haven't purchased yet — needed to display the checkout URL.
       const { data: catalog } = await (supabase as any).rpc("list_mini_apps_catalog");
-      const apps = ((catalog ?? []) as Array<{ id: string; name: string; description: string | null; price_cents: number | null; cakto_checkout_url: string | null; kind: string | null }>)
+      const apps = ((catalog ?? []) as any[])
         .filter((r) => r.kind === "relatorio")
-        .slice(0, 1);
+        .slice(0, 1) as RelatorioApp[];
       const a = apps?.[0] ?? null;
       setApp(a);
+
 
 
       if (a) {
