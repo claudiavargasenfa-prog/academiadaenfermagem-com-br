@@ -105,15 +105,14 @@ export function daysUntil(iso: string | null | undefined): number | null {
 }
 
 export async function fetchMiniApps(): Promise<MiniApp[]> {
-  const { data, error } = await supabase
-    .from("mini_apps")
-    .select("*")
-    .eq("is_active", true)
-    .order("sort_order", { ascending: true })
-    .order("name", { ascending: true });
+  // Uses SECURITY DEFINER RPC to expose only non-sensitive catalog columns
+  // (no content_md/video_url/audio_url). Paid content is gated by RLS on
+  // the base table via has_app_access.
+  const { data, error } = await (supabase as any).rpc("list_mini_apps_catalog");
   if (error) throw error;
-  return data ?? [];
+  return (data ?? []) as MiniApp[];
 }
+
 
 export async function fetchMyExtraAccess(): Promise<UserAppAccess[]> {
   const { data, error } = await supabase
