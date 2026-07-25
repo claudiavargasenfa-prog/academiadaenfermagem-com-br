@@ -730,13 +730,19 @@ function Container({
 }) {
   const ids = container.items.map((i) => i.id);
   return (
-    <div className="rounded-xl border border-foreground/10 bg-background p-3">
+    <div className={`rounded-xl border p-3 ${container.items.length === 0 ? "border-dashed border-foreground/15 bg-foreground/3 opacity-70" : "border-foreground/10 bg-background"}`}>
       <div className="mb-2 flex items-center justify-between gap-2">
         <h4 className="text-sm font-bold">
           <span className="mr-1">{container.emoji ?? "📦"}</span>
           {container.title}
           <span className="ml-2 text-[10px] font-normal text-muted-foreground">({container.items.length})</span>
+          {container.items.length === 0 && (
+            <span className="ml-2 rounded-full bg-foreground/10 px-2 py-0.5 text-[10px] font-semibold text-muted-foreground">
+              sem conteúdo — não aparece para o aluno
+            </span>
+          )}
         </h4>
+
         <select
           className="rounded-md border border-foreground/15 bg-background px-2 py-1 text-[11px]"
           defaultValue=""
