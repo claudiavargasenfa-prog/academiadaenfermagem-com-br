@@ -1,73 +1,45 @@
+## O que verifiquei no banco (dados reais)
 
-## Objetivo
-Redesenhar `/vendas` no estilo premium (verde escuro + dourado), aplicar o novo logo **ADEC** em todo o site, e aplicar todos os ajustes de texto pedidos.
+Mini apps ativos por aplicativo:
 
-## 1. Logo ADEC em todo o site
-- Fazer upload do ADEC via `lovable-assets` → substituir `src/assets/logo.png.asset.json` (mantém o mesmo caminho, então PWA/topo/favicon herdam automaticamente).
-- Regenerar ícones PWA (192, 512, maskable) a partir do ADEC.
-- Deixar o hexagonal como asset backup para caso queira voltar (não referenciado).
+```text
+Acadêmico ............. 17 mini apps · 17 seções (3 vazias)
+Enfermeiro ............ 16 mini apps · 15 seções (3 vazias)
+Técnico ............... 15 mini apps · 15 seções (3 vazias)
+Estudante de Técnico ... 4 mini apps · 15 seções (11 vazias)
+Arquivo — 2º Projeto .. 42 mini apps (arquivados)
+```
 
-## 2. Landing `/vendas` — visual verde escuro + dourado
-Reescrever `src/routes/vendas.tsx` mantendo estrutura de dados (planos vindos do DB), trocando só o skin visual:
+Nenhum mini app está mais em "Sem seção (geral)". A diferença entre os apps tem 3 causas:
 
-- **Paleta local da página** (definida inline no root da rota, não polui o resto do app):
-  - Fundo: `#0d3b2e` (verde profundo) com camadas `#0a2f24` / `#124a3a`
-  - Acento: `#d4af37` (dourado) e `#f0d78c` (dourado claro)
-  - Texto: `#f5f0e0` (creme) e `#ffffff`
-- Efeitos: glows radiais dourados, glassmorphism escuro (`bg-white/5 backdrop-blur border border-white/10`), divisores dourados finos.
-- Header com **logo ADEC** grande + subtítulos "AVALIAÇÃO DIAGNÓSTICA EM ENFERMAGEM CLÍNICA" / "SISTEMA BRASILEIRO DE HIPÓTESES DIAGNÓSTICAS DE ENFERMAGEM" como cabeçalho (substituindo o header antigo).
+### 1. Os catálogos são realmente diferentes
+- **Só no Enfermeiro (3):** Anamnese/Exame/Diagnósticos/Prescrição, Farmacologia Avançada, SAE Automática.
+- **Só no Acadêmico (3):** Saúde Mental, Orientações para Anamnese/Exame/Evolução, Manual de Sobrevivência (este também no Estudante).
+- **Só no Técnico (5):** HAS/DM, Sinais Vitais Adulto, Semana da Enfermagem, Ética do Técnico, Coleta de Dados + Admissão de Turno.
+- **Acadêmico + Enfermeiro, fora do Técnico (4):** Simulação/Raciocínio Clínico, Fundamentos dos DE, CCR e Quizz, Obstetrícia.
+- **Estudante de Técnico tem só 4** (Escalas, IRAS, Medicação, Manual) — por isso parece vazio.
 
-## 3. Ajustes de copy na `/vendas`
+### 2. Nomes de seção diferentes entre apps
+- Acadêmico: **Obstetrícia** · **Neonatologia & Pediatria** · **SAE & Processos de Enfermagem**
+- Técnico/Enfermeiro: **Obstétrica** · **Neonatologia e Pediatria** · **SAE & Processo de Enfermagem**
+- **Curativos e Lesões de Pele** só existe no Técnico e Enfermeiro (e vazia).
+- Acadêmico tem 3 seções extras criadas por engano (já existem como mini app): *SAE Descomplicada – COFEN 736/2024*, *Fundamentos dos Diagnósticos de Enfermagem*, *Diagnósticos de Enfermagem*.
 
-**Hero (bloco 1):**
-- Título: *"Enfermagem Baseada em Evidências: escolha o App certo para o seu momento na Enfermagem"*
-- Subtítulo: *"4 apps completos com SAE automatizada, processos de enfermagem, escalas clínicas, procedimentos, farmacologia e simulações reais. Estágios e plantões fundamentado em evidência científica."*
-- **Remover os 2 botões do 1º bloco.**
+### 3. Seções vazias
+Promoção da Saúde, Postura e Ética, Manual de Sobrevivência (vazia no Técnico/Enfermeiro), Curativos, Saúde Mental (vazia no Enfermeiro) aparecem com **(0)** no Admin e não aparecem para o aluno.
 
-**Barra de credibilidade:**
-- "Aprovado por quem vive o plantão e o consultório"
-- Trocar "mini apps" por **"Módulos de Suporte à Decisão Clínica (MSDC)"** em toda a página.
-- Trocar bullet base de dados → **"Resoluções, normas, diretrizes e protocolos atualizados"**
-- Trocar "atualizações mensais" → **"atualizações contínuas e automáticas"**
-- Incluir bullet **"Com certificação opcional"**.
+## Plano de correção (1 migração + 1 ajuste de UI)
 
-**Bloco "Plantão com a Academia" (Before x After / benefícios):**
-Substituir os bullets pelos 5 exatos:
-- ✅ Anotação e evolução gerada automaticamente de acordo com suas avaliações
-- ✅ Farmacologia e aprazamento baseados nas metas de segurança do paciente
-- ✅ SAE + PE personalizados por paciente, com prescrição automatizada
-- ✅ 22+ escalas clínicas atualizadas, offline
-- ✅ Procedimentos passo a passo antes de encostar no paciente
+1. **Padronizar os títulos e a ordem das seções** nos 4 apps: Manual de Sobrevivência · Postura e Ética · Segurança do Paciente · Promoção da Saúde · IRAS · Farmacologia e Calculadoras · Clínica Médica · Saúde do Adulto · Saúde do Idoso · Saúde Mental · Obstetrícia · Neonatologia e Pediatria · Curativos e Lesões de Pele · SAE & Processo de Enfermagem · Quizzes e Simulações.
+2. **Remover as 3 seções duplicadas do Acadêmico**.
+3. **Igualar o catálogo** conforme a regra abaixo.
+4. **Marcar seções vazias no Admin** como "sem conteúdo" (só UI, em `src/components/admin/AppsAdmin.tsx`), para não parecer erro.
 
-**Slogans dos cards de app (na /vendas E na /loja):**
-- Acadêmico → *"Do primeiro ao último estágio, sem sofrer."*
-- Enfermeiro → *"Menos burocracia, mais assistência com tranquilidade."*
-- (Técnico e Técnico-Estudante mantêm slogans atuais — ela não pediu troca)
+## Regra de catálogo que vou aplicar (diga se quer diferente)
 
-**Todos os apps — descrição de quizzes:**
-Adicionar linha padrão: *"Quizzes por tema para fixar antes da prova"*.
+- **Enfermeiro** = todos os mini apps ativos (o mais completo).
+- **Acadêmico** = tudo, menos os exclusivos do técnico (Ética do Técnico, Coleta de Dados de Turno).
+- **Técnico** = clínicos/operacionais + Obstetrícia, Simulação, CCR e Quizz.
+- **Estudante de Técnico** = básico (Manual, IRAS, Segurança, Escalas, Sinais Vitais, Medicação, Ética do Técnico, Quizzes).
 
-## 4. Nova seção "SOBRE A AUTORA" (antes do FAQ)
-Adicionar bloco em card escuro com dourado, dividido em 3 subseções:
-
-- **A História** — texto completo enviado
-- **O Propósito** — texto completo enviado
-- **Minha Promessa** — texto completo enviado
-- Título de abertura: *"Conheça um pouco da minha História"*
-- Foto opcional da fundadora (já existe `src/assets/foto-fundadora.jpeg.asset.json`).
-- CTA discreto no fim: link para `/minha-historia`.
-
-## 5. Também na /loja
-- Aplicar os 2 slogans novos (Acadêmico e Enfermeiro) nos cards.
-- Trocar "mini apps" por "MSDC" no texto público.
-
-## 6. Publicar
-Depois de aplicado + validado no preview, publicar para o domínio atualizar.
-
----
-
-### Detalhes técnicos
-- Textos ficam em `app_texts` (chaves `plano.*` e `vendas.*`), então dá pra editar depois sem código.
-- A troca "mini apps" → "MSDC" é só em copy **público** (`/vendas`, `/loja`, `/planos/$slug`, `/minha-historia`); admin e código interno continuam "mini_apps" (é nome de tabela).
-- Logo é substituição do asset existente → nada muda em código que referencia `logo.png.asset.json`.
-- Nenhuma mudança de schema / backend.
+Se preferir outra divisão, me diga e eu aplico exatamente como você quiser — tudo em uma execução só.
