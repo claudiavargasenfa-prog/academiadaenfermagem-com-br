@@ -469,6 +469,89 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
     }));
   };
 
+  // ===== CENTRAL DE CÁLCULOS ASSISTENCIAIS =====
+  // Motor nativo: gotejamento (macro/micro/mL·h) + dosagem pediátrica por Kg.
+  // O HTML do admin é puramente declarativo (handlers inline não executam).
+  useEffect(() => {
+    const root = ref.current;
+    if (!root) return;
+    const bloco = root.querySelector<HTMLElement>(".central-calculos-enfermagem");
+    if (!bloco) return;
+
+    const val = (id: string) => {
+      const el = bloco.querySelector<HTMLInputElement | HTMLSelectElement>(`#${id}`);
+      const n = parseFloat(String(el?.value ?? "").replace(",", "."));
+      return isFinite(n) ? n : NaN;
+    };
+    const out = (id: string, texto: string) => {
+      const el = bloco.querySelector<HTMLElement>(`#${id}`);
+      if (el) el.textContent = texto;
+    };
+
+    const recalcular = () => {
+      // --- 1. Gotejamento
+      const v = val("got-v");
+      const th = val("got-th");
+      const tm = val("got-tm");
+      const usaMin = tm > 0; // minutos têm prioridade
+      const campoHoras = bloco.querySelector<HTMLElement>("#got-th");
+      if (campoHoras) campoHoras.style.opacity = usaMin ? "0.45" : "1";
+
+      if (v > 0 && usaMin) {
+        out("out-gotas", String(Math.round((v * 20) / tm)));
+        out("out-microgotas", String(Math.round((v * 60) / tm)));
+        out("out-mlhora", String(Math.round((v * 60) / tm)));
+      } else if (v > 0 && th > 0) {
+        out("out-gotas", String(Math.round(v / (th * 3))));
+        out("out-microgotas", String(Math.round(v / th)));
+        out("out-mlhora", String(Math.round(v / th)));
+      } else {
+        out("out-gotas", "--");
+        out("out-microgotas", "--");
+        out("out-mlhora", "--");
+      }
+
+      // --- 2. Dosagem pediátrica por peso
+      const dose = val("ped-dose");
+      const peso = val("ped-peso");
+      const fracaRaw = val("ped-fraca");
+      const fraca = fracaRaw > 0 ? fracaRaw : 1;
+      const conc = val("ped-conc");
+      const liq = val("ped-liq");
+
+      if (dose > 0 && peso > 0) {
+        const mgDia = dose * peso;
+        const mgDose = mgDia / fraca;
+        out("out-mg-dia", `${mgDia.toFixed(1)} mg/dia`);
+        out("out-mg-dose", `${mgDose.toFixed(1)} mg/dose`);
+        if (conc > 0 && liq > 0) {
+          out("out-ml-ped-final", `${((mgDose * liq) / conc).toFixed(2)} mL / dose`);
+        } else {
+          out("out-ml-ped-final", "--");
+        }
+      } else {
+        out("out-mg-dia", "--");
+        out("out-mg-dose", "--");
+        out("out-ml-ped-final", "--");
+      }
+    };
+
+    // Impede submit acidental dos <form> do conteúdo
+    const onSubmit = (e: Event) => e.preventDefault();
+
+    bloco.addEventListener("input", recalcular);
+    bloco.addEventListener("change", recalcular);
+    bloco.addEventListener("submit", onSubmit);
+    recalcular();
+
+    return () => {
+      bloco.removeEventListener("input", recalcular);
+      bloco.removeEventListener("change", recalcular);
+      bloco.removeEventListener("submit", onSubmit);
+    };
+  }, [html]);
+
+
   useEffect(() => {
     const root = ref.current;
     if (!root) return;
