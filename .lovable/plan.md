@@ -1,45 +1,30 @@
-## O que verifiquei no banco (dados reais)
+## Objetivo
 
-Mini apps ativos por aplicativo:
+Fazer os dois módulos do seu HTML funcionarem de verdade dentro do mini app:
 
-```text
-Acadêmico ............. 17 mini apps · 17 seções (3 vazias)
-Enfermeiro ............ 16 mini apps · 15 seções (3 vazias)
-Técnico ............... 15 mini apps · 15 seções (3 vazias)
-Estudante de Técnico ... 4 mini apps · 15 seções (11 vazias)
-Arquivo — 2º Projeto .. 42 mini apps (arquivados)
-```
+1. **Gotejamento** — informar Volume (mL) + Tempo (horas **ou** minutos) e o sistema calcula automaticamente **macrogotas (gts/min)**, **microgotas (mgts/min)** e **mL/h (bomba)**.
+2. **Dose pediátrica por Kg** — informar dose (mg/Kg/dia), peso, vezes ao dia, concentração e volume do líquido, e o sistema calcula **mg/dia**, **mg/dose** e **mL por dose**.
 
-Nenhum mini app está mais em "Sem seção (geral)". A diferença entre os apps tem 3 causas:
+## Por que hoje não funciona
 
-### 1. Os catálogos são realmente diferentes
-- **Só no Enfermeiro (3):** Anamnese/Exame/Diagnósticos/Prescrição, Farmacologia Avançada, SAE Automática.
-- **Só no Acadêmico (3):** Saúde Mental, Orientações para Anamnese/Exame/Evolução, Manual de Sobrevivência (este também no Estudante).
-- **Só no Técnico (5):** HAS/DM, Sinais Vitais Adulto, Semana da Enfermagem, Ética do Técnico, Coleta de Dados + Admissão de Turno.
-- **Acadêmico + Enfermeiro, fora do Técnico (4):** Simulação/Raciocínio Clínico, Fundamentos dos DE, CCR e Quizz, Obstetrícia.
-- **Estudante de Técnico tem só 4** (Escalas, IRAS, Medicação, Manual) — por isso parece vazio.
+O conteúdo dos mini apps é injetado como HTML no React. Handlers escritos direto no HTML (`oninput="..."`, `<script>`) não são executados de forma confiável nesse caminho — por isso os campos ficam com `--`. Os mini apps que já funcionam (SAE Descomplicada, Coleta de Dados/Admissão de Turno) usam um motor nativo em `src/components/MiniAppContent.tsx` que reconhece o bloco pela classe e liga os campos por ID.
 
-### 2. Nomes de seção diferentes entre apps
-- Acadêmico: **Obstetrícia** · **Neonatologia & Pediatria** · **SAE & Processos de Enfermagem**
-- Técnico/Enfermeiro: **Obstétrica** · **Neonatologia e Pediatria** · **SAE & Processo de Enfermagem**
-- **Curativos e Lesões de Pele** só existe no Técnico e Enfermeiro (e vazia).
-- Acadêmico tem 3 seções extras criadas por engano (já existem como mini app): *SAE Descomplicada – COFEN 736/2024*, *Fundamentos dos Diagnósticos de Enfermagem*, *Diagnósticos de Enfermagem*.
+## O que será feito
 
-### 3. Seções vazias
-Promoção da Saúde, Postura e Ética, Manual de Sobrevivência (vazia no Técnico/Enfermeiro), Curativos, Saúde Mental (vazia no Enfermeiro) aparecem com **(0)** no Admin e não aparecem para o aluno.
+- Em `src/components/MiniAppContent.tsx`, adicionar um motor nativo que detecta o bloco pela classe `central-calculos-enfermagem`.
+- Ele liga os inputs pelos IDs que você já usa (`got-v`, `got-th`, `got-tm`, `ped-dose`, `ped-peso`, `ped-fraca`, `ped-conc`, `ped-liq`) e escreve nos resultados (`out-gotas`, `out-microgotas`, `out-mlhora`, `out-mg-dia`, `out-mg-dose`, `out-ml-ped-final`).
+- Regras de cálculo:
+  - Horas: macrogotas = Volume ÷ (Horas × 3); microgotas = mL/h = Volume ÷ Horas.
+  - Minutos: macrogotas = (Volume × 20) ÷ min; microgotas = (Volume × 60) ÷ min; mL/h = (Volume × 60) ÷ min.
+  - Pediatria: mg/dia = dose × peso; mg/dose = mg/dia ÷ vezes; mL/dose = (mg/dose × volume do líquido) ÷ concentração.
+  - Se os dois campos de tempo estiverem preenchidos, **minutos tem prioridade** e o campo de horas fica visualmente atenuado (evita erro de leitura).
+- Limpeza automática (`--`) quando os campos estiverem vazios ou inválidos, e proteção contra divisão por zero.
 
-## Plano de correção (1 migração + 1 ajuste de UI)
+## Sem mudanças de design ou conteúdo
 
-1. **Padronizar os títulos e a ordem das seções** nos 4 apps: Manual de Sobrevivência · Postura e Ética · Segurança do Paciente · Promoção da Saúde · IRAS · Farmacologia e Calculadoras · Clínica Médica · Saúde do Adulto · Saúde do Idoso · Saúde Mental · Obstetrícia · Neonatologia e Pediatria · Curativos e Lesões de Pele · SAE & Processo de Enfermagem · Quizzes e Simulações.
-2. **Remover as 3 seções duplicadas do Acadêmico**.
-3. **Igualar o catálogo** conforme a regra abaixo.
-4. **Marcar seções vazias no Admin** como "sem conteúdo" (só UI, em `src/components/admin/AppsAdmin.tsx`), para não parecer erro.
+O HTML que você escreveu (cores, cards, textos, medidas) permanece exatamente igual. Só passa a ter cérebro por trás. Você continua colando o mesmo HTML no admin do mini app.
 
-## Regra de catálogo que vou aplicar (diga se quer diferente)
+## Detalhes técnicos
 
-- **Enfermeiro** = todos os mini apps ativos (o mais completo).
-- **Acadêmico** = tudo, menos os exclusivos do técnico (Ética do Técnico, Coleta de Dados de Turno).
-- **Técnico** = clínicos/operacionais + Obstetrícia, Simulação, CCR e Quizz.
-- **Estudante de Técnico** = básico (Manual, IRAS, Segurança, Escalas, Sinais Vitais, Medicação, Ética do Técnico, Quizzes).
-
-Se preferir outra divisão, me diga e eu aplico exatamente como você quiser — tudo em uma execução só.
+- Ativação via `useEffect` no `MiniAppHtmlContent`, com listeners `input` delegados no container e `cleanup` no desmonte — mesmo padrão dos motores SAE/Coleta já existentes.
+- Nenhuma alteração de banco, rota ou backend.
