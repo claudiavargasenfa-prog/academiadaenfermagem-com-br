@@ -1,8 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { AppShell, Card, PageHeader } from "@/components/AppShell";
+import { AppShell, PageHeader } from "@/components/AppShell";
 import { AppAccessGate } from "@/components/ContentProtection";
 import { MiniAppContent } from "@/components/MiniAppContent";
-import { Brain } from "lucide-react";
 
 export const Route = createFileRoute("/saude-mental")({
   head: () => ({
