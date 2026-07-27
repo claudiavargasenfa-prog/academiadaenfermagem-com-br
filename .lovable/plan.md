@@ -1,30 +1,32 @@
 ## Objetivo
 
-Fazer os dois módulos do seu HTML funcionarem de verdade dentro do mini app:
+Preencher o mini app **Código de Ética: Direitos, Deveres e Limites Técnicos** (hoje vazio, slug `etica-tecnico`) com um conteúdo bonito, fluido e didático, baseado na **Resolução COFEN nº 564/2017**, em tons pastel (azul bebê, verde menta, rosa claro, lilás suave).
 
-1. **Gotejamento** — informar Volume (mL) + Tempo (horas **ou** minutos) e o sistema calcula automaticamente **macrogotas (gts/min)**, **microgotas (mgts/min)** e **mL/h (bomba)**.
-2. **Dose pediátrica por Kg** — informar dose (mg/Kg/dia), peso, vezes ao dia, concentração e volume do líquido, e o sistema calcula **mg/dia**, **mg/dose** e **mL por dose**.
+## Fonte
 
-## Por que hoje não funciona
+Vou ler a página oficial do COFEN (Resolução 564/2017) e extrair, com fidelidade, os capítulos de **Direitos**, **Deveres**, **Proibições** e **Responsabilidades**, além das penalidades. Nada de invenção: cada bloco cita o artigo correspondente.
 
-O conteúdo dos mini apps é injetado como HTML no React. Handlers escritos direto no HTML (`oninput="..."`, `<script>`) não são executados de forma confiável nesse caminho — por isso os campos ficam com `--`. Os mini apps que já funcionam (SAE Descomplicada, Coleta de Dados/Admissão de Turno) usam um motor nativo em `src/components/MiniAppContent.tsx` que reconhece o bloco pela classe e liga os campos por ID.
+## Estrutura do conteúdo
 
-## O que será feito
+1. **Capa (banner pastel)** — título, subtítulo "Resolução COFEN nº 564/2017", chips dos temas.
+2. **AVISO EM DESTAQUE (logo abaixo da capa)** — faixa dourada/âmbar com ícone de alerta informando: *o Código de Ética está em processo de atualização desde março/2026, com previsão de publicação ainda em 2026*; enquanto isso, a Resolução COFEN nº 564/2017 permanece vigente, e o conteúdo do mini app será revisado assim que o novo texto for publicado.
+3. **Por que isso importa** — 3 cartões curtos: proteger o paciente, proteger você, proteger a profissão.
+4. **Princípios fundamentais** — resumo do preâmbulo em linguagem simples.
+5. **SEUS DIREITOS** (cartões verde-menta) — recusa de atividade fora da competência, condições dignas de trabalho, objeção de consciência, acesso a informações, com nº do artigo.
+6. **SEUS DEVERES** (cartões azul bebê) — registro, sigilo, comunicação, identificação, cuidado seguro.
+7. **É PROIBIDO** (cartões rosa/coral suave) — foto de paciente em rede social, delegar fora da competência, administrar sem conferência, abandono de plantão, assinar o que não executou.
+8. **Limites técnicos por categoria** — tabela pastel comparando o privativo do **Enfermeiro**, o que cabe ao **Técnico/Auxiliar** e o que o **Acadêmico** só faz sob supervisão.
+9. **Penalidades** — advertência verbal, multa, censura, suspensão e cassação, em linguagem clara.
+10. **Situações reais do dia a dia** — 5 mini-casos "e agora?" com a resposta ética correta.
+11. **Checklist final** — "antes de agir, pergunte-se…" (5 itens).
+12. **Rodapé** — repete de forma discreta o aviso da revisão em curso (março/2026, previsão 2026) + aviso educativo e referência COFEN.
 
-- Em `src/components/MiniAppContent.tsx`, adicionar um motor nativo que detecta o bloco pela classe `central-calculos-enfermagem`.
-- Ele liga os inputs pelos IDs que você já usa (`got-v`, `got-th`, `got-tm`, `ped-dose`, `ped-peso`, `ped-fraca`, `ped-conc`, `ped-liq`) e escreve nos resultados (`out-gotas`, `out-microgotas`, `out-mlhora`, `out-mg-dia`, `out-mg-dose`, `out-ml-ped-final`).
-- Regras de cálculo:
-  - Horas: macrogotas = Volume ÷ (Horas × 3); microgotas = mL/h = Volume ÷ Horas.
-  - Minutos: macrogotas = (Volume × 20) ÷ min; microgotas = (Volume × 60) ÷ min; mL/h = (Volume × 60) ÷ min.
-  - Pediatria: mg/dia = dose × peso; mg/dose = mg/dia ÷ vezes; mL/dose = (mg/dose × volume do líquido) ÷ concentração.
-  - Se os dois campos de tempo estiverem preenchidos, **minutos tem prioridade** e o campo de horas fica visualmente atenuado (evita erro de leitura).
-- Limpeza automática (`--`) quando os campos estiverem vazios ou inválidos, e proteção contra divisão por zero.
+## Estilo
 
-## Sem mudanças de design ou conteúdo
-
-O HTML que você escreveu (cores, cards, textos, medidas) permanece exatamente igual. Só passa a ter cérebro por trás. Você continua colando o mesmo HTML no admin do mini app.
+Mesmo padrão visual já aprovado no projeto: cartões arredondados, gradientes suaves, ícones/emojis discretos, blocos curtos, muito respiro, leitura em tópicos. Paleta bebê: `#EAF4FF`, `#E7F7F0`, `#FDEEF4`, `#F3EEFB`, textos em `#1F3A5F`/`#4B5563`. O aviso da atualização usa âmbar suave (`#FEF3C7` com borda `#D4A84B`) para se destacar sem quebrar a harmonia.
 
 ## Detalhes técnicos
 
-- Ativação via `useEffect` no `MiniAppHtmlContent`, com listeners `input` delegados no container e `cleanup` no desmonte — mesmo padrão dos motores SAE/Coleta já existentes.
-- Nenhuma alteração de banco, rota ou backend.
+- Conteúdo em HTML inline (mesmo formato dos outros mini apps) gravado em `mini_apps.content_md` do registro `etica-tecnico`, via migração SQL — sem alterar componentes React nem o design do app.
+- Nenhuma mudança em rotas, RLS ou tabelas; apenas `UPDATE` de conteúdo.
+- Sem scripts/handlers inline (removidos pela sanitização): conteúdo 100% estático.
