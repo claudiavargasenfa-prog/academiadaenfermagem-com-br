@@ -110,7 +110,7 @@ export async function fetchMiniApps(): Promise<MiniApp[]> {
   // (sem content_md/video_url/audio_url). O conteúdo pago continua
   // protegido por RLS na tabela base via has_app_access.
   const data = await listMiniAppsCatalog();
-  return (data ?? []) as MiniApp[];
+  return (data ?? []) as unknown as MiniApp[];
 }
 
 
