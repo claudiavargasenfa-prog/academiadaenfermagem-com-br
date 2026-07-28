@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
 import { MiniAppContent } from "@/components/MiniAppContent";
 import { supabase } from "@/integrations/supabase/client";
+import { listMiniAppsCatalog } from "@/lib/catalog.functions";
 import { useLocal } from "@/lib/storage";
 import { FileText, Lock, AlertTriangle, Printer, ShoppingCart, Loader2 } from "lucide-react";
 
@@ -138,9 +139,8 @@ function RelatorioPage() {
         setProfileName(p?.full_name ?? "");
       }
 
-      // Catalog RPC returns non-sensitive columns for any signed-in user,
-      // even if they haven't purchased yet — needed to display the checkout URL.
-      const { data: catalog } = await (supabase as any).rpc("list_mini_apps_catalog");
+      // Catálogo público (colunas não sensíveis) via server function.
+      const catalog = await listMiniAppsCatalog();
       const apps = ((catalog ?? []) as any[])
         .filter((r) => r.kind === "relatorio")
         .slice(0, 1) as RelatorioApp[];

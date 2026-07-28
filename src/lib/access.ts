@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import { listMiniAppsCatalog } from "@/lib/catalog.functions";
 import type { Database } from "@/integrations/supabase/types";
 import type { User } from "@supabase/supabase-js";
 import { useQuery } from "@tanstack/react-query";
@@ -105,12 +106,11 @@ export function daysUntil(iso: string | null | undefined): number | null {
 }
 
 export async function fetchMiniApps(): Promise<MiniApp[]> {
-  // Uses SECURITY DEFINER RPC to expose only non-sensitive catalog columns
-  // (no content_md/video_url/audio_url). Paid content is gated by RLS on
-  // the base table via has_app_access.
-  const { data, error } = await (supabase as any).rpc("list_mini_apps_catalog");
-  if (error) throw error;
-  return (data ?? []) as MiniApp[];
+  // Server function retorna apenas colunas não sensíveis do catálogo
+  // (sem content_md/video_url/audio_url). O conteúdo pago continua
+  // protegido por RLS na tabela base via has_app_access.
+  const data = await listMiniAppsCatalog();
+  return (data ?? []) as unknown as MiniApp[];
 }
 
 
