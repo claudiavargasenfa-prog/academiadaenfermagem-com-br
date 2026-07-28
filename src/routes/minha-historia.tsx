@@ -102,6 +102,11 @@ function MinhaHistoriaPage() {
           <h1 className="font-display text-2xl font-extrabold leading-snug text-foreground md:text-3xl">
             <RichText>{t.titulo}</RichText>
           </h1>
+          {t.subtitulo && (
+            <p className="mt-2 text-sm font-medium text-muted-foreground md:text-base">
+              <RichText>{t.subtitulo}</RichText>
+            </p>
+          )}
 
           <div className="mt-6 space-y-6 text-foreground/90">
             {secoes.map((s, i) =>
@@ -118,7 +123,27 @@ function MinhaHistoriaPage() {
                 </section>
               ) : null,
             )}
+
+            {t.frase && (
+              <blockquote className="rounded-2xl border-l-4 border-gold bg-gold/10 px-5 py-4 font-display text-base font-bold italic leading-relaxed text-foreground md:text-lg">
+                “<RichText>{t.frase}</RichText>”
+              </blockquote>
+            )}
+
+            {(t.sec6Titulo || t.sec6Texto) && (
+              <section>
+                {t.sec6Titulo && (
+                  <h2 className="mb-2 font-display text-lg font-bold text-primary">
+                    <RichText>{t.sec6Titulo}</RichText>
+                  </h2>
+                )}
+                <p className="text-sm leading-relaxed md:text-base">
+                  <RichText>{t.sec6Texto}</RichText>
+                </p>
+              </section>
+            )}
           </div>
+
 
           {/* Botão WhatsApp */}
           {t.zapUrl && t.zapLabel && (
