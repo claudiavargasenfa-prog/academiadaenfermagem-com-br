@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import { listMiniAppsCatalog } from "@/lib/catalog.functions";
 import type { Database } from "@/integrations/supabase/types";
 import type { User } from "@supabase/supabase-js";
 import { useQuery } from "@tanstack/react-query";
