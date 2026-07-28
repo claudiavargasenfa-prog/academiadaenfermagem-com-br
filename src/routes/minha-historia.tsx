@@ -3,6 +3,7 @@ import { AppShell } from "@/components/AppShell";
 import fotoFundadora from "@/assets/foto-fundadora.jpeg.asset.json";
 import mascotesAsset from "@/assets/mascotes-iras.png.asset.json";
 import { MessageCircle, ArrowLeft } from "lucide-react";
+import { RichText, useText } from "@/lib/app-texts";
 
 export const Route = createFileRoute("/minha-historia")({
   head: () => ({
@@ -25,6 +26,27 @@ export const Route = createFileRoute("/minha-historia")({
 });
 
 function MinhaHistoriaPage() {
+  const t = {
+    titulo: useText("historia.titulo", "Da Beira do Leito para a Tecnologia: Conheça um pouco da minha História."),
+    sec1Titulo: useText("historia.sec1.titulo", "A História"),
+    sec1Texto: useText("historia.sec1.texto", ""),
+    sec2Titulo: useText("historia.sec2.titulo", "O Propósito"),
+    sec2Texto: useText("historia.sec2.texto", ""),
+    sec3Titulo: useText("historia.sec3.titulo", "Minha Promessa"),
+    sec3Texto: useText("historia.sec3.texto", ""),
+    mascotes: useText("historia.mascotes.legenda", "Prevenção contra IRAS"),
+    fotoAlt: useText("historia.foto.alt", "Foto da fundadora da Academia da Enfermagem"),
+    zapLabel: useText("historia.whatsapp.label", "Entrar no grupo do WhatsApp"),
+    zapUrl: useText("historia.whatsapp.url", "https://chat.whatsapp.com/HUv5XdngfQYGR3pxWuG3J3"),
+    voltar: useText("historia.voltar.label", "Voltar"),
+  };
+
+  const secoes = [
+    { titulo: t.sec1Titulo, texto: t.sec1Texto },
+    { titulo: t.sec2Titulo, texto: t.sec2Texto },
+    { titulo: t.sec3Titulo, texto: t.sec3Texto },
+  ];
+
   return (
     <AppShell hideReferences publicRoute>
       {/* Voltar */}
@@ -33,7 +55,7 @@ function MinhaHistoriaPage() {
           to="/"
           className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground"
         >
-          <ArrowLeft className="h-4 w-4" /> Voltar
+          <ArrowLeft className="h-4 w-4" /> {t.voltar}
         </Link>
       </div>
 
@@ -45,7 +67,7 @@ function MinhaHistoriaPage() {
             <div className="rounded-full border-4 border-primary/80 p-1 shadow-[var(--shadow-soft)]">
               <img
                 src={fotoFundadora.url}
-                alt="Foto da fundadora da Academia da Enfermagem"
+                alt={t.fotoAlt}
                 className="h-56 w-56 rounded-full object-cover md:h-64 md:w-64"
               />
             </div>
@@ -59,7 +81,7 @@ function MinhaHistoriaPage() {
               className="h-28 w-auto object-contain md:h-32 wave-animation"
             />
             <span className="mt-1 text-[10px] font-bold uppercase tracking-widest text-primary/70">
-              Prevenção contra IRAS
+              {t.mascotes}
             </span>
           </div>
         </aside>
@@ -67,73 +89,43 @@ function MinhaHistoriaPage() {
         {/* Coluna direita: texto */}
         <article className="min-w-0">
           <h1 className="font-display text-2xl font-extrabold leading-snug text-foreground md:text-3xl">
-            Da Beira do Leito para a Tecnologia: Conheça um pouco da minha
-            História.
+            <RichText>{t.titulo}</RichText>
           </h1>
 
           <div className="mt-6 space-y-6 text-foreground/90">
-            <section>
-              <h2 className="mb-2 font-display text-lg font-bold text-primary">
-                A História
-              </h2>
-              <p className="text-sm leading-relaxed md:text-base">
-                A Academia da Enfermagem não nasceu em um escritório de
-                tecnologia de computadores. Ela nasceu nos corredores de
-                hospitais, nas noites em claro de plantão e na vivência real de
-                quem dedicou 35 anos da vida à arte de cuidar. Sou auxiliar de
-                enfermagem e enfermeira e, assim como você, passei décadas
-                sentindo a dor de usar horas preciosas do plantão preenchendo as
-                burocracias necessárias em papéis e tentando decifrar manuais
-                complexos, em vez de focar no que realmente importa: o nosso
-                paciente.
-              </p>
-            </section>
-
-            <section>
-              <h2 className="mb-2 font-display text-lg font-bold text-primary">
-                O Propósito
-              </h2>
-              <p className="text-sm leading-relaxed md:text-base">
-                Após me aposentar, a apenas 4 anos, decidi que a minha missão
-                ainda não estava cumprida. Eu precisava usar toda a minha
-                bagagem prática para criar a ferramenta que eu sempre sonhei em
-                ter na beira do leito. Um ecossistema simples, ágil e seguro,
-                feito de enfermeira para a enfermagem, de enfermeira para
-                estudante, a final, também passei por esse caminho.
-              </p>
-            </section>
-
-            <section>
-              <h2 className="mb-2 font-display text-lg font-bold text-primary">
-                Minha Promessa
-              </h2>
-              <p className="text-sm leading-relaxed md:text-base">
-                A Academia da Enfermagem é o resultado de uma vida inteira de
-                dedicação. Ela foi feita para mitigar o seu tempo, descomplicar
-                o seu estágio, garantir a precisão dos seus cálculos e te levar
-                uma certa segurança jurídica, desde que bem empregada, tudo
-                baseado rigorosamente nas leis do nosso COFEN. Seja muito
-                bem-vindo à evolução da nossa categoria. Aqui, nós cuidamos de
-                quem cuida!
-              </p>
-            </section>
+            {secoes.map((s, i) =>
+              s.titulo || s.texto ? (
+                <section key={i}>
+                  {s.titulo && (
+                    <h2 className="mb-2 font-display text-lg font-bold text-primary">
+                      <RichText>{s.titulo}</RichText>
+                    </h2>
+                  )}
+                  <p className="text-sm leading-relaxed md:text-base">
+                    <RichText>{s.texto}</RichText>
+                  </p>
+                </section>
+              ) : null,
+            )}
           </div>
 
           {/* Botão WhatsApp */}
-          <div className="mt-8 flex justify-start">
-            <a
-              href="https://chat.whatsapp.com/HUv5XdngfQYGR3pxWuG3J3"
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-sm font-extrabold text-white shadow-md transition-colors hover:bg-emerald-700"
-            >
-              <MessageCircle className="h-5 w-5" />
-              Entrar no grupo do WhatsApp
-            </a>
-          </div>
+          {t.zapUrl && t.zapLabel && (
+            <div className="mt-8 flex justify-start">
+              <a
+                href={t.zapUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-3 text-sm font-extrabold text-white shadow-md transition-colors hover:bg-emerald-700"
+              >
+                <MessageCircle className="h-5 w-5" />
+                {t.zapLabel}
+              </a>
+            </div>
+          )}
         </article>
       </div>
-
     </AppShell>
   );
 }
+
