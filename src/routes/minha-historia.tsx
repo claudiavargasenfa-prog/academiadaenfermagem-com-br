@@ -3,6 +3,7 @@ import { AppShell } from "@/components/AppShell";
 import fotoFundadora from "@/assets/foto-fundadora.jpeg.asset.json";
 import mascotesAsset from "@/assets/mascotes-iras.png.asset.json";
 import { MessageCircle, ArrowLeft } from "lucide-react";
+import { RichText, useText } from "@/lib/app-texts";
 
 export const Route = createFileRoute("/minha-historia")({
   head: () => ({
