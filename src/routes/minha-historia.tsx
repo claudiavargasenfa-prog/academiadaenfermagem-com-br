@@ -27,13 +27,21 @@ export const Route = createFileRoute("/minha-historia")({
 
 function MinhaHistoriaPage() {
   const t = {
-    titulo: useText("historia.titulo", "Da Beira do Leito para a Tecnologia: Conheça um pouco da minha História."),
-    sec1Titulo: useText("historia.sec1.titulo", "A História"),
+    titulo: useText("historia.titulo", "Da Beira do Leito para a Tecnologia"),
+    subtitulo: useText("historia.subtitulo", ""),
+    frase: useText("historia.frase", ""),
+    sec1Titulo: useText("historia.sec1.titulo", "Minha História"),
     sec1Texto: useText("historia.sec1.texto", ""),
-    sec2Titulo: useText("historia.sec2.titulo", "O Propósito"),
+    sec2Titulo: useText("historia.sec2.titulo", "Meu Propósito"),
     sec2Texto: useText("historia.sec2.texto", ""),
-    sec3Titulo: useText("historia.sec3.titulo", "Minha Promessa"),
+    sec3Titulo: useText("historia.sec3.titulo", "O que você encontrará aqui"),
     sec3Texto: useText("historia.sec3.texto", ""),
+    sec4Titulo: useText("historia.sec4.titulo", "Minha Promessa"),
+    sec4Texto: useText("historia.sec4.texto", ""),
+    sec5Titulo: useText("historia.sec5.titulo", "Nosso Compromisso"),
+    sec5Texto: useText("historia.sec5.texto", ""),
+    sec6Titulo: useText("historia.sec6.titulo", "Encerramento"),
+    sec6Texto: useText("historia.sec6.texto", ""),
     mascotes: useText("historia.mascotes.legenda", "Prevenção contra IRAS"),
     fotoAlt: useText("historia.foto.alt", "Foto da fundadora da Academia da Enfermagem"),
     zapLabel: useText("historia.whatsapp.label", "Entrar no grupo do WhatsApp"),
@@ -45,7 +53,10 @@ function MinhaHistoriaPage() {
     { titulo: t.sec1Titulo, texto: t.sec1Texto },
     { titulo: t.sec2Titulo, texto: t.sec2Texto },
     { titulo: t.sec3Titulo, texto: t.sec3Texto },
+    { titulo: t.sec4Titulo, texto: t.sec4Texto },
+    { titulo: t.sec5Titulo, texto: t.sec5Texto },
   ];
+
 
   return (
     <AppShell hideReferences publicRoute>
@@ -91,6 +102,11 @@ function MinhaHistoriaPage() {
           <h1 className="font-display text-2xl font-extrabold leading-snug text-foreground md:text-3xl">
             <RichText>{t.titulo}</RichText>
           </h1>
+          {t.subtitulo && (
+            <p className="mt-2 text-sm font-medium text-muted-foreground md:text-base">
+              <RichText>{t.subtitulo}</RichText>
+            </p>
+          )}
 
           <div className="mt-6 space-y-6 text-foreground/90">
             {secoes.map((s, i) =>
@@ -107,7 +123,27 @@ function MinhaHistoriaPage() {
                 </section>
               ) : null,
             )}
+
+            {t.frase && (
+              <blockquote className="rounded-2xl border-l-4 border-gold bg-gold/10 px-5 py-4 font-display text-base font-bold italic leading-relaxed text-foreground md:text-lg">
+                “<RichText>{t.frase}</RichText>”
+              </blockquote>
+            )}
+
+            {(t.sec6Titulo || t.sec6Texto) && (
+              <section>
+                {t.sec6Titulo && (
+                  <h2 className="mb-2 font-display text-lg font-bold text-primary">
+                    <RichText>{t.sec6Titulo}</RichText>
+                  </h2>
+                )}
+                <p className="text-sm leading-relaxed md:text-base">
+                  <RichText>{t.sec6Texto}</RichText>
+                </p>
+              </section>
+            )}
           </div>
+
 
           {/* Botão WhatsApp */}
           {t.zapUrl && t.zapLabel && (
