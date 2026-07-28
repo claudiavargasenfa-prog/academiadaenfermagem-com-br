@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
 import { MiniAppContent } from "@/components/MiniAppContent";
 import { supabase } from "@/integrations/supabase/client";
+import { listMiniAppsCatalog } from "@/lib/catalog.functions";
 import { useLocal } from "@/lib/storage";
 import { FileText, Lock, AlertTriangle, Printer, ShoppingCart, Loader2 } from "lucide-react";
 
