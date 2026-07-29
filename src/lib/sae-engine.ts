@@ -190,19 +190,32 @@ export function renderPrescricaoRow(
       <button type="button" class="sae-hor-del" title="Excluir este horário" aria-label="Excluir horário" style="background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;border-radius:999px;font-size:9.5px;line-height:1;padding:2px 5px;cursor:pointer;">✕</button>
     </span>`,
   ).join("");
+  const prioridade = d.condutas.find((c) => c.prioridade)?.prioridade || "";
+  const pNorm = norm(prioridade);
+  const pCor = pNorm.includes("alta") || pNorm.includes("critic")
+    ? { bg: "#fef2f2", br: "#fecaca", tx: "#b91c1c" }
+    : pNorm.includes("medi") || pNorm.includes("moder")
+      ? { bg: "#fffbeb", br: "#fde68a", tx: "#92400e" }
+      : prioridade
+        ? { bg: "#f0fdf4", br: "#bbf7d0", tx: "#166534" }
+        : { bg: "#ffffff", br: "#e5e7eb", tx: "#374151" };
   return `
 <tr class="sae-presc-row" data-diag-id="${esc(d.id)}" style="border-bottom:1px solid #86efac;background:#ffffff;">
   <td style="width:5%;padding:10px 6px;vertical-align:top;border-right:1px solid #86efac;text-align:center;font-weight:800;color:#14532d;font-size:13px;"><span class="sae-presc-num">${num}</span></td>
-  <td style="width:47%;padding:10px 12px;vertical-align:top;border-right:1px solid #86efac;color:#14532d;font-size:13px;line-height:1.5;text-align:justify;">
+  <td style="width:40%;padding:10px 12px;vertical-align:top;border-right:1px solid #86efac;color:#14532d;font-size:13px;line-height:1.5;text-align:justify;">
     <strong>${esc(d.diagnostico)}</strong> <span style="font-size:10px;color:#166534;">(${esc(d.id)})</span>
     <button type="button" class="sae-presc-del" data-diag-id="${esc(d.id)}" title="Excluir este diagnóstico" aria-label="Excluir diagnóstico" style="float:right;background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;font-weight:700;font-size:11px;padding:2px 8px;border-radius:6px;cursor:pointer;">✕ Excluir</button>
   </td>
-  <td class="sae-presc-horarios" style="width:22%;padding:10px 8px;vertical-align:top;border-right:1px solid #86efac;">${chips}</td>
-  <td style="width:26%;padding:10px 8px;vertical-align:top;">
+  <td class="sae-presc-horarios" style="width:19%;padding:10px 8px;vertical-align:top;border-right:1px solid #86efac;">${chips}</td>
+  <td style="width:23%;padding:10px 8px;vertical-align:top;border-right:1px solid #86efac;">
     <textarea class="sae-presc-apraz" rows="3" placeholder="Selecione um horário ao lado" style="width:100%;border:1px solid #bbf7d0;border-radius:8px;padding:6px 8px;font-size:12.5px;color:#166534;font-weight:700;background:#ffffff;box-sizing:border-box;resize:vertical;"></textarea>
+  </td>
+  <td style="width:13%;padding:10px 8px;vertical-align:top;text-align:center;">
+    <input type="text" class="sae-presc-prio" value="${esc(prioridade)}" placeholder="—" style="width:100%;border:1px solid ${pCor.br};background:${pCor.bg};color:${pCor.tx};border-radius:8px;padding:6px 4px;font-size:12px;font-weight:800;text-align:center;box-sizing:border-box;">
   </td>
 </tr>`;
 }
+
 
 
 export function buildEvolucao(params: {
