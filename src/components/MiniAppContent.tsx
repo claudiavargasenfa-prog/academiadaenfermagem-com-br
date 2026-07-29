@@ -1168,17 +1168,23 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
             const aprazamento = limparTextoPdf(
               cells[3]?.querySelector<HTMLTextAreaElement>(".sae-presc-apraz")?.value ?? "",
             );
+            const prioridade = limparTextoPdf(
+              cells[4]?.querySelector<HTMLInputElement>(".sae-presc-prio")?.value ?? "",
+            );
             pdf.setFont("times", "normal");
             pdf.setFontSize(9);
             const diagLines = pdf.splitTextToSize(diagnostico, colW[1] - 6);
             const horLines = pdf.splitTextToSize(horario, colW[2] - 6);
             const aprazLines = pdf.splitTextToSize(aprazamento, colW[3] - 6);
+            const prioLines = pdf.splitTextToSize(prioridade, colW[4] - 6);
             const rowH = Math.max(
               14,
               diagLines.length * 5 + 8,
               horLines.length * 5 + 8,
               aprazLines.length * 5 + 8,
+              prioLines.length * 5 + 8,
             );
+
             addPageIfNeeded(rowH + headerH);
             if (ctx.y + rowH > pdf.internal.pageSize.getHeight() - margin.bottom) {
               pdf.addPage();
