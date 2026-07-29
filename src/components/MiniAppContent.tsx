@@ -11,6 +11,8 @@ import {
   renderDiagnosticoCard,
   renderPrescricaoRow,
   buildEvolucao,
+  APRAZAMENTO_MAP,
+
   type SaeDiagnostico,
 } from "@/lib/sae-engine";
 
