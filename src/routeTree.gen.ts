@@ -39,6 +39,7 @@ import { Route as CurativosRouteImport } from './routes/curativos'
 import { Route as ConfiancaRouteImport } from './routes/confianca'
 import { Route as CalculadoraRouteImport } from './routes/calculadora'
 import { Route as AdminRouteImport } from './routes/admin'
+import { Route as AdecRouteImport } from './routes/adec'
 import { Route as AclsRouteImport } from './routes/acls'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TrilhaSlugRouteImport } from './routes/trilha.$slug'
@@ -200,6 +201,11 @@ const AdminRoute = AdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdecRoute = AdecRouteImport.update({
+  id: '/adec',
+  path: '/adec',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AclsRoute = AclsRouteImport.update({
   id: '/acls',
   path: '/acls',
@@ -254,6 +260,7 @@ const ApiPublicCaktoWebhookRoute = ApiPublicCaktoWebhookRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/acls': typeof AclsRoute
+  '/adec': typeof AdecRoute
   '/admin': typeof AdminRoute
   '/calculadora': typeof CalculadoraRoute
   '/confianca': typeof ConfiancaRoute
@@ -296,6 +303,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/acls': typeof AclsRoute
+  '/adec': typeof AdecRoute
   '/admin': typeof AdminRoute
   '/calculadora': typeof CalculadoraRoute
   '/confianca': typeof ConfiancaRoute
@@ -338,6 +346,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/acls': typeof AclsRoute
+  '/adec': typeof AdecRoute
   '/admin': typeof AdminRoute
   '/calculadora': typeof CalculadoraRoute
   '/confianca': typeof ConfiancaRoute
@@ -382,6 +391,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/acls'
+    | '/adec'
     | '/admin'
     | '/calculadora'
     | '/confianca'
@@ -424,6 +434,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/acls'
+    | '/adec'
     | '/admin'
     | '/calculadora'
     | '/confianca'
@@ -465,6 +476,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/acls'
+    | '/adec'
     | '/admin'
     | '/calculadora'
     | '/confianca'
@@ -508,6 +520,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AclsRoute: typeof AclsRoute
+  AdecRoute: typeof AdecRoute
   AdminRoute: typeof AdminRoute
   CalculadoraRoute: typeof CalculadoraRoute
   ConfiancaRoute: typeof ConfiancaRoute
@@ -757,6 +770,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/adec': {
+      id: '/adec'
+      path: '/adec'
+      fullPath: '/adec'
+      preLoaderRoute: typeof AdecRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/acls': {
       id: '/acls'
       path: '/acls'
@@ -857,6 +877,7 @@ const AppSlugRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AclsRoute: AclsRoute,
+  AdecRoute: AdecRoute,
   AdminRoute: AdminRoute,
   CalculadoraRoute: CalculadoraRoute,
   ConfiancaRoute: ConfiancaRoute,
