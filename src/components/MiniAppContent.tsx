@@ -1117,7 +1117,7 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
         const idade = (root.querySelector<HTMLInputElement>("#idadePaciente")?.value ?? "").trim();
         const leito = (root.querySelector<HTMLInputElement>("#leitoPaciente")?.value ?? "").trim();
         try {
-          const ctx = await criarPdfBase("Plano de Prescrição de Enfermagem");
+          const ctx = await criarPdfBase("Plano de Prescrição de Enfermagem", "landscape");
           const { pdf, margin, contentW, addPageIfNeeded } = ctx;
           pdf.setFont("times", "normal");
           pdf.setFontSize(10);
@@ -1130,7 +1130,7 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
           ctx.y += 9;
 
           const rows = Array.from(tbody.querySelectorAll<HTMLTableRowElement>("tr.sae-presc-row"));
-          const colW = [contentW * 0.48, contentW * 0.20, contentW * 0.32];
+          const colW = [contentW * 0.06, contentW * 0.5, contentW * 0.18, contentW * 0.26];
           const headerH = 10;
           const drawHeader = () => {
             pdf.setFillColor(22, 101, 52);
@@ -1138,7 +1138,7 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
             pdf.setFont("times", "bold");
             pdf.setFontSize(8.5);
             let x = margin.left;
-            ["PRESCRIÇÃO DE ENFERMAGEM", "APRAZAMENTO", "ANOTAÇÕES DE ENFERMAGEM"].forEach((h, i) => {
+            ["Nº", "DIAGNÓSTICO DE ENFERMAGEM", "HORÁRIO", "APRAZAMENTO"].forEach((h, i) => {
               pdf.rect(x, ctx.y, colW[i], headerH, "FD");
               pdf.text(h, x + colW[i] / 2, ctx.y + 6.5, { align: "center" });
               x += colW[i];
@@ -1148,15 +1148,31 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
           };
           drawHeader();
 
-          rows.forEach((row) => {
+          rows.forEach((row, idx) => {
             const cells = Array.from(row.cells);
-            const prescricao = getTextoCelula(cells[0]);
-            const aprazamento = getTextoCelula(cells[1]);
+            const numero = String(idx + 1).padStart(2, "0");
+            const diagnostico = getTextoCelula(cells[1]);
+            const itens = Array.from(
+              cells[2]?.querySelectorAll<HTMLElement>(".sae-hor-item") ?? [],
+            );
+            const selecionado = itens.find((i) => i.style.borderColor === "rgb(22, 163, 74)");
+            const horario = limparTextoPdf(
+              (selecionado ?? itens[0])?.querySelector(".sae-hor-chip")?.textContent ?? "",
+            );
+            const aprazamento = limparTextoPdf(
+              cells[3]?.querySelector<HTMLTextAreaElement>(".sae-presc-apraz")?.value ?? "",
+            );
             pdf.setFont("times", "normal");
             pdf.setFontSize(9);
-            const prescLines = pdf.splitTextToSize(prescricao, colW[0] - 6);
-            const aprazLines = pdf.splitTextToSize(aprazamento, colW[1] - 6);
-            const rowH = Math.max(44, prescLines.length * 5 + 10, aprazLines.length * 5 + 10);
+            const diagLines = pdf.splitTextToSize(diagnostico, colW[1] - 6);
+            const horLines = pdf.splitTextToSize(horario, colW[2] - 6);
+            const aprazLines = pdf.splitTextToSize(aprazamento, colW[3] - 6);
+            const rowH = Math.max(
+              14,
+              diagLines.length * 5 + 8,
+              horLines.length * 5 + 8,
+              aprazLines.length * 5 + 8,
+            );
             addPageIfNeeded(rowH + headerH);
             if (ctx.y + rowH > pdf.internal.pageSize.getHeight() - margin.bottom) {
               pdf.addPage();
@@ -1166,19 +1182,22 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
             let x = margin.left;
             pdf.setDrawColor(22, 101, 52);
             pdf.rect(x, ctx.y, colW[0], rowH);
-            pdf.text(prescLines, x + 3, ctx.y + 6, { maxWidth: colW[0] - 6 });
+            pdf.setFont("times", "bold");
+            pdf.text(numero, x + colW[0] / 2, ctx.y + 6, { align: "center" });
             x += colW[0];
             pdf.rect(x, ctx.y, colW[1], rowH);
-            pdf.setFont("times", "bold");
-            pdf.text(aprazLines, x + colW[1] / 2, ctx.y + 8, { align: "center", maxWidth: colW[1] - 6 });
+            pdf.setFont("times", "normal");
+            pdf.text(diagLines, x + 3, ctx.y + 6, { maxWidth: colW[1] - 6 });
             x += colW[1];
             pdf.rect(x, ctx.y, colW[2], rowH);
-            pdf.setDrawColor(134, 239, 172);
-            for (let lineY = ctx.y + 9; lineY < ctx.y + rowH - 4; lineY += 7) {
-              pdf.line(x + 3, lineY, x + colW[2] - 3, lineY);
-            }
+            pdf.setFont("times", "bold");
+            pdf.text(horLines, x + colW[2] / 2, ctx.y + 6, { align: "center", maxWidth: colW[2] - 6 });
+            x += colW[2];
+            pdf.rect(x, ctx.y, colW[3], rowH);
+            pdf.text(aprazLines, x + colW[3] / 2, ctx.y + 6, { align: "center", maxWidth: colW[3] - 6 });
             ctx.y += rowH;
           });
+
           finalizarPdfComAssinatura(ctx);
           pdf.save("Prescricao_Enfermagem_ABNT.pdf");
         } catch {
