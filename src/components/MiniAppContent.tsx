@@ -1385,12 +1385,9 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
       )}
 
       <div ref={ref} className="prose-sm max-w-none">
-        {isSae ? (
-          <div className="mini-app-html" dangerouslySetInnerHTML={{ __html: html }} />
-        ) : (
-          renderContent(html)
-        )}
+        {isSae ? <RawHtmlHost html={html} /> : renderContent(html)}
       </div>
+
 
       {isColeta && ativoPaciente && (
         <div className="mt-6 rounded-xl border border-primary/20 bg-white p-4 shadow-sm">
