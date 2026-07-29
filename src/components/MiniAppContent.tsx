@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useMemo, useRef } from "react";
+import { memo, useEffect, useMemo, useRef } from "react";
 import { Video, Headphones } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/AppShell";
@@ -156,6 +156,23 @@ export function MiniAppContent({ slug }: { slug: string }) {
  * e "Salvar Evolução" do mini app FUNDAMENTOS DOS DIAGNÓSTICOS — download
  * .doc 100% no navegador, sem backend, sem custo).
  */
+/**
+ * Host de HTML bruto isolado do ciclo de render do React.
+ * O HTML é injetado imperativamente UMA vez (e só de novo se o conteúdo mudar),
+ * de modo que atualizações de estado do componente pai (autosave, abas de
+ * paciente, histórico) nunca destroem o DOM vivo do mini app — campos digitados,
+ * sanfonas abertas, diagnósticos gerados e tabela de prescrição são preservados.
+ */
+const RawHtmlHost = memo(function RawHtmlHost({ html }: { html: string }) {
+  const hostRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = hostRef.current;
+    if (!el) return;
+    el.innerHTML = html;
+  }, [html]);
+  return <div ref={hostRef} className="mini-app-html" />;
+});
+
 export function MiniAppHtmlContent({ html }: { html: string }) {
   const ref = useRef<HTMLDivElement>(null);
   // Mini app SAE traz <script> embutido; renderizamos o HTML bruto (sem
@@ -1385,12 +1402,9 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
       )}
 
       <div ref={ref} className="prose-sm max-w-none">
-        {isSae ? (
-          <div className="mini-app-html" dangerouslySetInnerHTML={{ __html: html }} />
-        ) : (
-          renderContent(html)
-        )}
+        {isSae ? <RawHtmlHost html={html} /> : renderContent(html)}
       </div>
+
 
       {isColeta && ativoPaciente && (
         <div className="mt-6 rounded-xl border border-primary/20 bg-white p-4 shadow-sm">
