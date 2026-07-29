@@ -11,6 +11,8 @@ import {
   renderDiagnosticoCard,
   renderPrescricaoRow,
   buildEvolucao,
+  APRAZAMENTO_MAP,
+
   type SaeDiagnostico,
 } from "@/lib/sae-engine";
 
@@ -654,11 +656,36 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
           row.remove();
           // Renumera as linhas restantes
           tbody?.querySelectorAll<HTMLElement>("tr.sae-presc-row .sae-presc-num").forEach((el, i) => {
-            el.textContent = String(i + 1);
+            el.textContent = String(i + 1).padStart(2, "0");
           });
         }
       }
+      // COL. 15 — excluir um horário da linha
+      const horDel = target?.closest<HTMLButtonElement>(".sae-hor-del");
+      if (horDel) {
+        e.preventDefault();
+        horDel.closest(".sae-hor-item")?.remove();
+        return;
+      }
+      // COL. 15 -> COL. 16 — selecionar horário preenche o aprazamento
+      const horChip = target?.closest<HTMLButtonElement>(".sae-hor-chip");
+      if (horChip) {
+        e.preventDefault();
+        const row = horChip.closest<HTMLTableRowElement>("tr.sae-presc-row");
+        const h = horChip.dataset.h || horChip.textContent?.trim() || "";
+        row?.querySelectorAll<HTMLElement>(".sae-hor-item").forEach((it) => {
+          const on = it.getAttribute("data-h") === h;
+          it.style.background = on ? "#bbf7d0" : "#f0fdf4";
+          it.style.borderColor = on ? "#16a34a" : "#86efac";
+        });
+        const ta = row?.querySelector<HTMLTextAreaElement>(".sae-presc-apraz");
+        if (ta) {
+          ta.value = APRAZAMENTO_MAP[h] ?? h;
+          ta.dispatchEvent(new Event("input", { bubbles: true }));
+        }
+      }
     };
+
 
     root.addEventListener("click", onClick);
 
@@ -983,9 +1010,10 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
         return limparTextoPdf(clone.textContent ?? "");
       };
 
-      const criarPdfBase = async (titulo: string) => {
+      const criarPdfBase = async (titulo: string, orientation: "portrait" | "landscape" = "portrait") => {
         const { jsPDF } = await import("jspdf");
-        const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+        const pdf = new jsPDF({ orientation, unit: "mm", format: "a4" });
+
         const pageW = pdf.internal.pageSize.getWidth();
         const margin = { left: 30, top: 30, right: 20, bottom: 20 };
         const contentW = pageW - margin.left - margin.right;
@@ -1089,7 +1117,7 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
         const idade = (root.querySelector<HTMLInputElement>("#idadePaciente")?.value ?? "").trim();
         const leito = (root.querySelector<HTMLInputElement>("#leitoPaciente")?.value ?? "").trim();
         try {
-          const ctx = await criarPdfBase("Plano de Prescrição de Enfermagem");
+          const ctx = await criarPdfBase("Plano de Prescrição de Enfermagem", "landscape");
           const { pdf, margin, contentW, addPageIfNeeded } = ctx;
           pdf.setFont("times", "normal");
           pdf.setFontSize(10);
@@ -1102,7 +1130,7 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
           ctx.y += 9;
 
           const rows = Array.from(tbody.querySelectorAll<HTMLTableRowElement>("tr.sae-presc-row"));
-          const colW = [contentW * 0.48, contentW * 0.20, contentW * 0.32];
+          const colW = [contentW * 0.06, contentW * 0.5, contentW * 0.18, contentW * 0.26];
           const headerH = 10;
           const drawHeader = () => {
             pdf.setFillColor(22, 101, 52);
@@ -1110,7 +1138,7 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
             pdf.setFont("times", "bold");
             pdf.setFontSize(8.5);
             let x = margin.left;
-            ["PRESCRIÇÃO DE ENFERMAGEM", "APRAZAMENTO", "ANOTAÇÕES DE ENFERMAGEM"].forEach((h, i) => {
+            ["Nº", "DIAGNÓSTICO DE ENFERMAGEM", "HORÁRIO", "APRAZAMENTO"].forEach((h, i) => {
               pdf.rect(x, ctx.y, colW[i], headerH, "FD");
               pdf.text(h, x + colW[i] / 2, ctx.y + 6.5, { align: "center" });
               x += colW[i];
@@ -1120,15 +1148,31 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
           };
           drawHeader();
 
-          rows.forEach((row) => {
+          rows.forEach((row, idx) => {
             const cells = Array.from(row.cells);
-            const prescricao = getTextoCelula(cells[0]);
-            const aprazamento = getTextoCelula(cells[1]);
+            const numero = String(idx + 1).padStart(2, "0");
+            const diagnostico = getTextoCelula(cells[1]);
+            const itens = Array.from(
+              cells[2]?.querySelectorAll<HTMLElement>(".sae-hor-item") ?? [],
+            );
+            const selecionado = itens.find((i) => i.style.borderColor === "rgb(22, 163, 74)");
+            const horario = limparTextoPdf(
+              (selecionado ?? itens[0])?.querySelector(".sae-hor-chip")?.textContent ?? "",
+            );
+            const aprazamento = limparTextoPdf(
+              cells[3]?.querySelector<HTMLTextAreaElement>(".sae-presc-apraz")?.value ?? "",
+            );
             pdf.setFont("times", "normal");
             pdf.setFontSize(9);
-            const prescLines = pdf.splitTextToSize(prescricao, colW[0] - 6);
-            const aprazLines = pdf.splitTextToSize(aprazamento, colW[1] - 6);
-            const rowH = Math.max(44, prescLines.length * 5 + 10, aprazLines.length * 5 + 10);
+            const diagLines = pdf.splitTextToSize(diagnostico, colW[1] - 6);
+            const horLines = pdf.splitTextToSize(horario, colW[2] - 6);
+            const aprazLines = pdf.splitTextToSize(aprazamento, colW[3] - 6);
+            const rowH = Math.max(
+              14,
+              diagLines.length * 5 + 8,
+              horLines.length * 5 + 8,
+              aprazLines.length * 5 + 8,
+            );
             addPageIfNeeded(rowH + headerH);
             if (ctx.y + rowH > pdf.internal.pageSize.getHeight() - margin.bottom) {
               pdf.addPage();
@@ -1138,19 +1182,22 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
             let x = margin.left;
             pdf.setDrawColor(22, 101, 52);
             pdf.rect(x, ctx.y, colW[0], rowH);
-            pdf.text(prescLines, x + 3, ctx.y + 6, { maxWidth: colW[0] - 6 });
+            pdf.setFont("times", "bold");
+            pdf.text(numero, x + colW[0] / 2, ctx.y + 6, { align: "center" });
             x += colW[0];
             pdf.rect(x, ctx.y, colW[1], rowH);
-            pdf.setFont("times", "bold");
-            pdf.text(aprazLines, x + colW[1] / 2, ctx.y + 8, { align: "center", maxWidth: colW[1] - 6 });
+            pdf.setFont("times", "normal");
+            pdf.text(diagLines, x + 3, ctx.y + 6, { maxWidth: colW[1] - 6 });
             x += colW[1];
             pdf.rect(x, ctx.y, colW[2], rowH);
-            pdf.setDrawColor(134, 239, 172);
-            for (let lineY = ctx.y + 9; lineY < ctx.y + rowH - 4; lineY += 7) {
-              pdf.line(x + 3, lineY, x + colW[2] - 3, lineY);
-            }
+            pdf.setFont("times", "bold");
+            pdf.text(horLines, x + colW[2] / 2, ctx.y + 6, { align: "center", maxWidth: colW[2] - 6 });
+            x += colW[2];
+            pdf.rect(x, ctx.y, colW[3], rowH);
+            pdf.text(aprazLines, x + colW[3] / 2, ctx.y + 6, { align: "center", maxWidth: colW[3] - 6 });
             ctx.y += rowH;
           });
+
           finalizarPdfComAssinatura(ctx);
           pdf.save("Prescricao_Enfermagem_ABNT.pdf");
         } catch {
