@@ -1130,7 +1130,13 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
           ctx.y += 9;
 
           const rows = Array.from(tbody.querySelectorAll<HTMLTableRowElement>("tr.sae-presc-row"));
-          const colW = [contentW * 0.06, contentW * 0.5, contentW * 0.18, contentW * 0.26];
+          const colW = [
+            contentW * 0.05,
+            contentW * 0.4,
+            contentW * 0.19,
+            contentW * 0.23,
+            contentW * 0.13,
+          ];
           const headerH = 10;
           const drawHeader = () => {
             pdf.setFillColor(22, 101, 52);
@@ -1138,7 +1144,7 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
             pdf.setFont("times", "bold");
             pdf.setFontSize(8.5);
             let x = margin.left;
-            ["Nº", "DIAGNÓSTICO DE ENFERMAGEM", "HORÁRIO", "APRAZAMENTO"].forEach((h, i) => {
+            ["Nº", "DIAGNÓSTICO DE ENFERMAGEM", "HORÁRIO", "APRAZAMENTO", "PRIORIDADE CLÍNICA"].forEach((h, i) => {
               pdf.rect(x, ctx.y, colW[i], headerH, "FD");
               pdf.text(h, x + colW[i] / 2, ctx.y + 6.5, { align: "center" });
               x += colW[i];
@@ -1162,17 +1168,23 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
             const aprazamento = limparTextoPdf(
               cells[3]?.querySelector<HTMLTextAreaElement>(".sae-presc-apraz")?.value ?? "",
             );
+            const prioridade = limparTextoPdf(
+              cells[4]?.querySelector<HTMLInputElement>(".sae-presc-prio")?.value ?? "",
+            );
             pdf.setFont("times", "normal");
             pdf.setFontSize(9);
             const diagLines = pdf.splitTextToSize(diagnostico, colW[1] - 6);
             const horLines = pdf.splitTextToSize(horario, colW[2] - 6);
             const aprazLines = pdf.splitTextToSize(aprazamento, colW[3] - 6);
+            const prioLines = pdf.splitTextToSize(prioridade, colW[4] - 6);
             const rowH = Math.max(
               14,
               diagLines.length * 5 + 8,
               horLines.length * 5 + 8,
               aprazLines.length * 5 + 8,
+              prioLines.length * 5 + 8,
             );
+
             addPageIfNeeded(rowH + headerH);
             if (ctx.y + rowH > pdf.internal.pageSize.getHeight() - margin.bottom) {
               pdf.addPage();
@@ -1195,8 +1207,12 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
             x += colW[2];
             pdf.rect(x, ctx.y, colW[3], rowH);
             pdf.text(aprazLines, x + colW[3] / 2, ctx.y + 6, { align: "center", maxWidth: colW[3] - 6 });
+            x += colW[3];
+            pdf.rect(x, ctx.y, colW[4], rowH);
+            pdf.text(prioLines, x + colW[4] / 2, ctx.y + 6, { align: "center", maxWidth: colW[4] - 6 });
             ctx.y += rowH;
           });
+
 
           finalizarPdfComAssinatura(ctx);
           pdf.save("Prescricao_Enfermagem_ABNT.pdf");
