@@ -1130,7 +1130,13 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
           ctx.y += 9;
 
           const rows = Array.from(tbody.querySelectorAll<HTMLTableRowElement>("tr.sae-presc-row"));
-          const colW = [contentW * 0.06, contentW * 0.5, contentW * 0.18, contentW * 0.26];
+          const colW = [
+            contentW * 0.05,
+            contentW * 0.4,
+            contentW * 0.19,
+            contentW * 0.23,
+            contentW * 0.13,
+          ];
           const headerH = 10;
           const drawHeader = () => {
             pdf.setFillColor(22, 101, 52);
@@ -1138,7 +1144,7 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
             pdf.setFont("times", "bold");
             pdf.setFontSize(8.5);
             let x = margin.left;
-            ["Nº", "DIAGNÓSTICO DE ENFERMAGEM", "HORÁRIO", "APRAZAMENTO"].forEach((h, i) => {
+            ["Nº", "DIAGNÓSTICO DE ENFERMAGEM", "HORÁRIO", "APRAZAMENTO", "PRIORIDADE CLÍNICA"].forEach((h, i) => {
               pdf.rect(x, ctx.y, colW[i], headerH, "FD");
               pdf.text(h, x + colW[i] / 2, ctx.y + 6.5, { align: "center" });
               x += colW[i];
