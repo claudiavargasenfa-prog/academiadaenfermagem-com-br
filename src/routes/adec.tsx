@@ -180,27 +180,27 @@ function AdecPage() {
     >
       {/* Barra de urgência */}
       <div
-        className="w-full px-4 py-2 text-center text-[11px] font-extrabold uppercase tracking-widest"
+        className="w-full px-4 py-2 text-center text-[11px] lg:text-[13px] font-extrabold uppercase tracking-widest"
         style={{ background: C.orange, color: "#fff" }}
       >
         <Flame className="mr-1 inline h-3.5 w-3.5" />
         Vagas limitadas no Grupo VIP do WhatsApp desta turma — entre hoje e garanta a sua
       </div>
 
-      <header className="mx-auto flex max-w-6xl items-center justify-between px-5 pt-6">
+      <header className="mx-auto flex max-w-7xl items-center justify-between px-5 pt-6">
         <Link to="/" className="flex items-center gap-2 opacity-90 transition hover:opacity-100">
           <img src={logoAsset.url} alt="ADEC" className="h-10 w-auto" />
         </Link>
         <Link
           to="/"
-          className="rounded-full border px-4 py-1.5 text-xs font-bold uppercase tracking-widest transition hover:bg-white/60"
+          className="rounded-full border px-4 py-1.5 text-xs lg:text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl font-bold uppercase tracking-widest transition hover:bg-white/60"
           style={{ borderColor: C.line, color: C.cta, background: "rgba(255,255,255,0.5)" }}
         >
           Loja completa
         </Link>
       </header>
 
-      <div className="mx-auto max-w-6xl px-5 pb-20 pt-8">
+      <div className="mx-auto max-w-7xl px-5 pb-20 pt-8">
         {/* HERO */}
         <section
           className="relative overflow-hidden rounded-[2.5rem] border p-8 md:p-14"
@@ -212,19 +212,19 @@ function AdecPage() {
           <div className="relative flex flex-col items-center text-center">
             <img src={logoAsset.url} alt="ADEC — Avaliação Diagnóstica em Enfermagem Clínica" className="mx-auto h-36 w-auto drop-shadow-xl md:h-48" />
 
-            <p className="mt-2 text-[10px] font-extrabold uppercase tracking-[0.35em]" style={{ color: C.gold }}>
+            <p className="mt-2 text-[10px] lg:text-xs lg:text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl font-extrabold uppercase tracking-[0.35em]" style={{ color: C.gold }}>
               Avaliação Diagnóstica em Enfermagem Clínica
             </p>
             <div className="mx-auto mt-1 h-px w-40" style={{ background: `linear-gradient(90deg, transparent, ${C.goldBright}, transparent)` }} />
 
-            <h1 className="mt-8 max-w-3xl font-display text-3xl font-extrabold leading-[1.12] tracking-tight md:text-5xl" style={{ color: C.ink }}>
+            <h1 className="mt-8 max-w-4xl font-display text-3xl font-extrabold leading-[1.12] tracking-tight md:text-5xl" style={{ color: C.ink }}>
               {t(
                 "hero_title",
                 "Cansada de anotações manuais que roubam seu plantão? Automatize a escrita com 2 cliques e foque no paciente.",
               )}
             </h1>
 
-            <p className="mt-5 max-w-2xl text-base font-medium md:text-lg" style={{ color: C.inkSoft }}>
+            <p className="mt-5 max-w-2xl text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl font-medium md:text-lg lg:text-xl lg:text-2xl lg:text-3xl" style={{ color: C.inkSoft }}>
               {t(
                 "hero_sub",
                 "Você já saiu do plantão com a sensação de que passou mais tempo preenchendo papel do que cuidando? Ou teve aquele medo de errar um cálculo de medicação na correria? Se sim, você não está sozinha. Milhares de enfermeiras vivem isso todos os dias.",
@@ -233,14 +233,14 @@ function AdecPage() {
 
             <a
               href="#planos"
-              className="mt-8 inline-flex items-center justify-center gap-2 rounded-2xl px-7 py-4 text-sm font-extrabold uppercase tracking-wide transition hover:-translate-y-0.5 md:text-base"
+              className="mt-8 inline-flex items-center justify-center gap-2 rounded-2xl px-7 py-4 text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl font-extrabold uppercase tracking-wide transition hover:-translate-y-0.5 md:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl"
               style={ctaStyle}
             >
               <Sparkles className="h-4 w-4" style={{ color: C.goldBright }} />
               {CTA_TOPO}
             </a>
 
-            <p className="mt-3 flex items-center gap-1.5 text-xs font-bold" style={{ color: C.orange }}>
+            <p className="mt-3 flex items-center gap-1.5 text-xs lg:text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl font-bold" style={{ color: C.orange }}>
               <Users className="h-3.5 w-3.5" />
               {USUARIAS} enfermeiras, técnicas e estudantes já usam a ADEC
             </p>
@@ -254,7 +254,7 @@ function AdecPage() {
               ].map((c) => (
                 <span
                   key={c.label}
-                  className="rounded-full border px-3 py-1.5 text-xs font-extrabold backdrop-blur"
+                  className="rounded-full border px-3 py-1.5 text-xs lg:text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl font-extrabold backdrop-blur"
                   style={{ borderColor: C.line, background: "rgba(255,255,255,0.7)", color: C.ink }}
                 >
                   <span className="mr-1">{c.icon}</span>
@@ -263,7 +263,7 @@ function AdecPage() {
               ))}
             </div>
 
-            <p className="mt-6 flex items-center gap-1.5 text-xs font-semibold" style={{ color: C.inkSoft }}>
+            <p className="mt-6 flex items-center gap-1.5 text-xs lg:text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl font-semibold" style={{ color: C.inkSoft }}>
               <ShieldCheck className="h-3.5 w-3.5" style={{ color: C.gold }} />
               Compra segura · PIX ou cartão só depois do teste
             </p>
@@ -272,7 +272,7 @@ function AdecPage() {
 
         {/* CREDIBILIDADE */}
         <section className="mt-6 rounded-3xl border p-5 backdrop-blur" style={{ borderColor: C.line, background: C.card }}>
-          <p className="mb-4 text-center text-xs font-extrabold uppercase tracking-widest" style={{ color: C.gold }}>
+          <p className="mb-4 text-center text-xs lg:text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl font-extrabold uppercase tracking-widest" style={{ color: C.gold }}>
             Aprovado por quem vive o plantão e o consultório
           </p>
           <div className="flex flex-wrap items-center justify-around gap-4 text-center">
@@ -284,7 +284,7 @@ function AdecPage() {
             ].map((s) => (
               <div key={s.l} className="min-w-[140px]">
                 <p className="font-display text-3xl font-extrabold" style={{ color: C.cta }}>{s.n}</p>
-                <p className="mt-1 text-[10px] font-bold uppercase tracking-wider" style={{ color: C.inkSoft }}>{s.l}</p>
+                <p className="mt-1 text-[10px] lg:text-xs lg:text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl font-bold uppercase tracking-wider" style={{ color: C.inkSoft }}>{s.l}</p>
               </div>
             ))}
           </div>
@@ -293,7 +293,7 @@ function AdecPage() {
         {/* PARA QUEM É */}
         <section className="mt-14">
           <div className="text-center">
-            <p className="text-xs font-extrabold uppercase tracking-[0.3em]" style={{ color: C.gold }}>Para quem é</p>
+            <p className="text-xs lg:text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl font-extrabold uppercase tracking-[0.3em]" style={{ color: C.gold }}>Para quem é</p>
             <h2 className="mt-3 font-display text-3xl font-extrabold md:text-4xl" style={{ color: C.ink }}>
               Escolha o app da sua fase profissional
             </h2>
@@ -305,12 +305,12 @@ function AdecPage() {
                 className="rounded-2xl border p-5 backdrop-blur transition hover:-translate-y-1"
                 style={{ borderColor: C.line, background: C.card }}
               >
-                <div className="grid h-12 w-12 place-items-center rounded-xl text-2xl" style={{ background: "rgba(212,175,55,0.22)" }}>
+                <div className="grid h-12 w-12 place-items-center rounded-xl text-2xl lg:text-3xl" style={{ background: "rgba(212,175,55,0.22)" }}>
                   {p.emoji}
                 </div>
-                <p className="mt-3 font-display text-base font-extrabold leading-tight" style={{ color: C.ink }}>{p.label}</p>
-                <p className="mt-1 text-xs" style={{ color: C.inkSoft }}>{p.tag}</p>
-                <p className="mt-3 text-sm font-semibold" style={{ color: C.gold }}>{p.dor}</p>
+                <p className="mt-3 font-display text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl font-extrabold leading-tight" style={{ color: C.ink }}>{p.label}</p>
+                <p className="mt-1 text-xs lg:text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl" style={{ color: C.inkSoft }}>{p.tag}</p>
+                <p className="mt-3 text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl font-semibold" style={{ color: C.gold }}>{p.dor}</p>
               </div>
             ))}
           </div>
@@ -319,11 +319,11 @@ function AdecPage() {
         {/* BENEFÍCIOS */}
         <section className="mt-16">
           <div className="text-center">
-            <p className="text-xs font-extrabold uppercase tracking-[0.3em]" style={{ color: C.gold }}>O que muda na sua vida</p>
+            <p className="text-xs lg:text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl font-extrabold uppercase tracking-[0.3em]" style={{ color: C.gold }}>O que muda na sua vida</p>
             <h2 className="mt-3 font-display text-3xl font-extrabold md:text-4xl" style={{ color: C.ink }}>
               Não é só um app. É o seu plantão de volta.
             </h2>
-            <p className="mx-auto mt-3 max-w-2xl text-sm" style={{ color: C.inkSoft }}>
+            <p className="mx-auto mt-3 max-w-2xl text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl" style={{ color: C.inkSoft }}>
               Cada módulo resolve uma dor concreta do plantão, do consultório ou da prova — com base em evidência científica.
             </p>
           </div>
@@ -337,28 +337,28 @@ function AdecPage() {
                 <div className="grid h-10 w-10 place-items-center rounded-xl" style={{ background: "rgba(13,59,46,0.1)", color: C.cta }}>
                   <m.icon className="h-5 w-5" />
                 </div>
-                <p className="mt-3 font-display text-base font-extrabold" style={{ color: C.ink }}>{m.title}</p>
-                <p className="mt-1.5 text-sm" style={{ color: C.inkSoft }}>{m.desc}</p>
+                <p className="mt-3 font-display text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl font-extrabold" style={{ color: C.ink }}>{m.title}</p>
+                <p className="mt-1.5 text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl" style={{ color: C.inkSoft }}>{m.desc}</p>
               </div>
             ))}
           </div>
 
           <div className="mt-6 grid gap-3 md:grid-cols-2">
             <div className="rounded-2xl border p-5 backdrop-blur" style={{ borderColor: C.line, background: "rgba(212,175,55,0.14)" }}>
-              <p className="text-xs font-extrabold uppercase tracking-widest" style={{ color: C.gold }}>Base de dados</p>
-              <p className="mt-2 font-display text-lg font-extrabold" style={{ color: C.ink }}>
+              <p className="text-xs lg:text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl font-extrabold uppercase tracking-widest" style={{ color: C.gold }}>Base de dados</p>
+              <p className="mt-2 font-display text-lg lg:text-xl lg:text-2xl lg:text-3xl font-extrabold" style={{ color: C.ink }}>
                 Resoluções, normas, diretrizes e protocolos atualizados
               </p>
-              <p className="mt-1 text-sm" style={{ color: C.inkSoft }}>
+              <p className="mt-1 text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl" style={{ color: C.inkSoft }}>
                 COFEN, CORENs, ANVISA, Ministério da Saúde, OMS — sempre em dia.
               </p>
             </div>
             <div className="rounded-2xl border p-5 backdrop-blur" style={{ borderColor: C.line, background: "rgba(212,175,55,0.14)" }}>
-              <p className="text-xs font-extrabold uppercase tracking-widest" style={{ color: C.gold }}>Extra</p>
-              <p className="mt-2 font-display text-lg font-extrabold" style={{ color: C.ink }}>
+              <p className="text-xs lg:text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl font-extrabold uppercase tracking-widest" style={{ color: C.gold }}>Extra</p>
+              <p className="mt-2 font-display text-lg lg:text-xl lg:text-2xl lg:text-3xl font-extrabold" style={{ color: C.ink }}>
                 Com certificação opcional
               </p>
-              <p className="mt-1 text-sm" style={{ color: C.inkSoft }}>
+              <p className="mt-1 text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl" style={{ color: C.inkSoft }}>
                 Trilhas com emissão de certificado ao concluir os módulos.
               </p>
             </div>
@@ -368,7 +368,7 @@ function AdecPage() {
           <div className="mt-10 text-center">
             <a
               href="#planos"
-              className="inline-flex items-center justify-center gap-2 rounded-2xl px-7 py-4 text-sm font-extrabold uppercase tracking-wide transition hover:-translate-y-0.5 md:text-base"
+              className="inline-flex items-center justify-center gap-2 rounded-2xl px-7 py-4 text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl font-extrabold uppercase tracking-wide transition hover:-translate-y-0.5 md:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl"
               style={ctaStyle}
             >
               {CTA_MEIO}
@@ -380,7 +380,7 @@ function AdecPage() {
         {/* PLANTÃO COM A ACADEMIA */}
         <section className="mt-16 overflow-hidden rounded-3xl border p-8 md:p-12" style={{ borderColor: C.line, background: C.cardStrong }}>
           <div className="text-center">
-            <p className="text-xs font-extrabold uppercase tracking-[0.3em]" style={{ color: C.gold }}>Na prática</p>
+            <p className="text-xs lg:text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl font-extrabold uppercase tracking-[0.3em]" style={{ color: C.gold }}>Na prática</p>
             <h3 className="mt-3 font-display text-3xl font-extrabold md:text-4xl" style={{ color: C.ink }}>
               Plantão com a Academia
             </h3>
@@ -395,7 +395,7 @@ function AdecPage() {
             ].map((b) => (
               <li key={b} className="flex items-start gap-3 rounded-xl border p-4" style={{ borderColor: C.line, background: "rgba(255,255,255,0.65)" }}>
                 <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0" style={{ color: C.cta }} />
-                <span className="text-base font-medium" style={{ color: C.ink }}>{b}</span>
+                <span className="text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl font-medium" style={{ color: C.ink }}>{b}</span>
               </li>
             ))}
           </ul>
@@ -404,11 +404,11 @@ function AdecPage() {
         {/* PLANOS */}
         <section id="planos" className="mt-16 scroll-mt-16">
           <div className="text-center">
-            <p className="text-xs font-extrabold uppercase tracking-[0.3em]" style={{ color: C.gold }}>Escolha seu app</p>
+            <p className="text-xs lg:text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl font-extrabold uppercase tracking-[0.3em]" style={{ color: C.gold }}>Escolha seu app</p>
             <h2 className="mt-3 font-display text-3xl font-extrabold md:text-4xl" style={{ color: C.ink }}>
               {t("planos_title", "4 apps, um só padrão de excelência")}
             </h2>
-            <p className="mx-auto mt-3 max-w-2xl text-sm" style={{ color: C.inkSoft }}>
+            <p className="mx-auto mt-3 max-w-2xl text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl" style={{ color: C.inkSoft }}>
               {TRIAL_DAYS} dias grátis, sem cartão. Cancele quando quiser.
             </p>
           </div>
@@ -431,7 +431,7 @@ function AdecPage() {
                   }}
                 >
                   {destacado && (
-                    <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest shadow" style={{ background: C.orange, color: "#fff" }}>
+                    <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full px-3 py-1 text-[10px] lg:text-xs lg:text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl font-extrabold uppercase tracking-widest shadow" style={{ background: C.orange, color: "#fff" }}>
                       + escolhido
                     </span>
                   )}
@@ -440,11 +440,11 @@ function AdecPage() {
                     {p.emoji}
                   </div>
 
-                  <h3 className="mt-4 font-display text-lg font-extrabold leading-tight" style={{ color: C.ink }}>
+                  <h3 className="mt-4 font-display text-lg lg:text-xl lg:text-2xl lg:text-3xl font-extrabold leading-tight" style={{ color: C.ink }}>
                     {p.label}
                   </h3>
-                  <p className="mt-1 text-xs font-semibold" style={{ color: C.inkSoft }}>{p.tag}</p>
-                  <p className="mt-2 text-sm font-semibold" style={{ color: C.gold }}>{p.dor}</p>
+                  <p className="mt-1 text-xs lg:text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl font-semibold" style={{ color: C.inkSoft }}>{p.tag}</p>
+                  <p className="mt-2 text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl font-semibold" style={{ color: C.gold }}>{p.dor}</p>
 
                   <div className="mt-4">
                     {price > 0 ? (
@@ -452,19 +452,19 @@ function AdecPage() {
                         <span className="font-display text-3xl font-extrabold" style={{ color: C.ink }}>
                           {formatPriceBRL(price)}
                         </span>
-                        <span className="text-xs font-bold" style={{ color: C.inkSoft }}>/mês</span>
+                        <span className="text-xs lg:text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl font-bold" style={{ color: C.inkSoft }}>/mês</span>
                       </div>
                     ) : (
                       <div className="h-9 animate-pulse rounded" style={{ background: "rgba(13,59,46,0.08)" }} />
                     )}
-                    <p className="mt-1 text-[11px] font-extrabold uppercase tracking-wide" style={{ color: C.orange }}>
+                    <p className="mt-1 text-[11px] lg:text-[13px] font-extrabold uppercase tracking-wide" style={{ color: C.orange }}>
                       ✨ {TRIAL_DAYS} dias grátis · sem cartão
                     </p>
                   </div>
 
                   <ul className="mt-4 space-y-2 border-t pt-4" style={{ borderColor: C.line }}>
                     {p.bullets.map((b) => (
-                      <li key={b} className="flex gap-2 text-xs" style={{ color: C.inkSoft }}>
+                      <li key={b} className="flex gap-2 text-xs lg:text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl" style={{ color: C.inkSoft }}>
                         <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0" style={{ color: C.cta }} />
                         <span>{b}</span>
                       </li>
@@ -476,7 +476,7 @@ function AdecPage() {
                       <Link
                         to="/trilha/$slug"
                         params={{ slug: p.slug }}
-                        className="inline-flex items-center justify-center gap-1.5 rounded-xl px-4 py-3 text-sm font-extrabold transition hover:-translate-y-0.5"
+                        className="inline-flex items-center justify-center gap-1.5 rounded-xl px-4 py-3 text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl font-extrabold transition hover:-translate-y-0.5"
                         style={ctaStyle}
                       >
                         ✓ Acessar meu app →
@@ -484,7 +484,7 @@ function AdecPage() {
                     ) : (
                       <a
                         href={`/cadastro/${p.slug}`}
-                        className="inline-flex items-center justify-center gap-1.5 rounded-xl px-4 py-3 text-center text-xs font-extrabold uppercase leading-tight tracking-wide transition hover:-translate-y-0.5"
+                        className="inline-flex items-center justify-center gap-1.5 rounded-xl px-4 py-3 text-center text-xs lg:text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl font-extrabold uppercase leading-tight tracking-wide transition hover:-translate-y-0.5"
                         style={ctaStyle}
                       >
                         {CTA_TOPO}
@@ -502,21 +502,21 @@ function AdecPage() {
           <div className="rounded-3xl border p-6" style={{ borderColor: C.line, background: C.cardStrong }}>
             <div className="flex items-center gap-2">
               <ShieldCheck className="h-6 w-6" style={{ color: C.cta }} />
-              <p className="font-display text-lg font-extrabold" style={{ color: C.ink }}>Garantia real de {TRIAL_DAYS} dias</p>
+              <p className="font-display text-lg lg:text-xl lg:text-2xl lg:text-3xl font-extrabold" style={{ color: C.ink }}>Garantia real de {TRIAL_DAYS} dias</p>
             </div>
-            <p className="mt-2 text-sm" style={{ color: C.inkSoft }}>
+            <p className="mt-2 text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl" style={{ color: C.inkSoft }}>
               Você entra, testa tudo, e só assina se quiser continuar. Sem cartão no cadastro, sem cobrança escondida.
             </p>
           </div>
           <div className="rounded-3xl border-2 p-6" style={{ borderColor: C.orange, background: "rgba(234,88,12,0.08)" }}>
             <div className="flex items-center gap-2">
               <MessageCircle className="h-6 w-6" style={{ color: C.orange }} />
-              <p className="font-display text-lg font-extrabold" style={{ color: C.ink }}>Grupo VIP no WhatsApp</p>
+              <p className="font-display text-lg lg:text-xl lg:text-2xl lg:text-3xl font-extrabold" style={{ color: C.ink }}>Grupo VIP no WhatsApp</p>
             </div>
-            <p className="mt-2 text-sm" style={{ color: C.inkSoft }}>
+            <p className="mt-2 text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl" style={{ color: C.inkSoft }}>
               Tira-dúvidas direto com a fundadora, atualizações em primeira mão e trocas entre colegas de plantão.
             </p>
-            <p className="mt-3 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-extrabold uppercase tracking-wide" style={{ background: C.orange, color: "#fff" }}>
+            <p className="mt-3 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] lg:text-[13px] font-extrabold uppercase tracking-wide" style={{ background: C.orange, color: "#fff" }}>
               <Flame className="h-3.5 w-3.5" />
               Vagas limitadas nesta turma — o convite chega ao ativar seu teste
             </p>
@@ -526,7 +526,7 @@ function AdecPage() {
         {/* DEPOIMENTOS */}
         <section className="mt-16">
           <div className="text-center">
-            <p className="text-xs font-extrabold uppercase tracking-[0.3em]" style={{ color: C.gold }}>Quem já usa</p>
+            <p className="text-xs lg:text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl font-extrabold uppercase tracking-[0.3em]" style={{ color: C.gold }}>Quem já usa</p>
             <h2 className="mt-3 font-display text-3xl font-extrabold md:text-4xl" style={{ color: C.ink }}>
               {USUARIAS} profissionais já mudaram a rotina
             </h2>
@@ -561,10 +561,10 @@ function AdecPage() {
                       <Star key={i} className="h-4 w-4 fill-current" />
                     ))}
                   </div>
-                  <blockquote className="mt-3 flex-1 text-sm italic" style={{ color: C.inkSoft }}>
+                  <blockquote className="mt-3 flex-1 text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl italic" style={{ color: C.inkSoft }}>
                     “{t(`depoimento${n}_texto`, d.texto)}”
                   </blockquote>
-                  <figcaption className="mt-4 border-t pt-3 text-xs font-bold" style={{ borderColor: C.line, color: C.cta }}>
+                  <figcaption className="mt-4 border-t pt-3 text-xs lg:text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl font-bold" style={{ borderColor: C.line, color: C.cta }}>
                     {t(`depoimento${n}_nome`, d.nome)}
                   </figcaption>
                 </figure>
@@ -576,7 +576,7 @@ function AdecPage() {
         {/* SOBRE A AUTORA */}
         <section className="mt-16 overflow-hidden rounded-[2rem] border p-8 md:p-12" style={{ borderColor: C.line, background: C.cardStrong }}>
           <div className="text-center">
-            <p className="text-xs font-extrabold uppercase tracking-[0.3em]" style={{ color: C.gold }}>Sobre a autora</p>
+            <p className="text-xs lg:text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl font-extrabold uppercase tracking-[0.3em]" style={{ color: C.gold }}>Sobre a autora</p>
             <h2 className="mt-3 font-display text-3xl font-extrabold md:text-4xl" style={{ color: C.ink }}>
               Conheça um pouco da minha História
             </h2>
@@ -591,29 +591,29 @@ function AdecPage() {
 
             <div className="space-y-6">
               <div>
-                <h3 className="font-display text-xl font-extrabold" style={{ color: C.cta }}>A História</h3>
-                <p className="mt-2 text-sm leading-relaxed" style={{ color: C.inkSoft }}>
+                <h3 className="font-display text-xl lg:text-2xl lg:text-3xl font-extrabold" style={{ color: C.cta }}>A História</h3>
+                <p className="mt-2 text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl leading-relaxed" style={{ color: C.inkSoft }}>
                   A Academia da Enfermagem não nasceu em um escritório de tecnologia de computadores. Ela nasceu nos corredores de hospitais, nas noites em claro de plantão e na vivência real de quem dedicou 35 anos da vida à arte de cuidar. Sou auxiliar de enfermagem e Enfermeira e, assim como você, passei décadas sentindo a dor de usar horas preciosas do plantão preenchendo as burocracias necessárias em papéis e tentando decifrar manuais complexos, em vez de focar no que realmente importa: A assistência aos pacientes.
                 </p>
               </div>
 
               <div>
-                <h3 className="font-display text-xl font-extrabold" style={{ color: C.cta }}>O Propósito</h3>
-                <p className="mt-2 text-sm leading-relaxed" style={{ color: C.inkSoft }}>
+                <h3 className="font-display text-xl lg:text-2xl lg:text-3xl font-extrabold" style={{ color: C.cta }}>O Propósito</h3>
+                <p className="mt-2 text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl leading-relaxed" style={{ color: C.inkSoft }}>
                   Após me aposentar, a apenas 4 anos, decidi que a minha missão ainda não estava cumprida. Eu precisava usar toda a minha bagagem administrativa e prática para criar a ferramenta que eu sempre sonhei em ter na beira do leito. Um ecossistema simples, ágil e seguro, feito de enfermeira para a enfermagem, de enfermeira para estudante, a final, também passei por esse caminho.
                 </p>
               </div>
 
               <div>
-                <h3 className="font-display text-xl font-extrabold" style={{ color: C.cta }}>Minha Promessa</h3>
-                <p className="mt-2 text-sm leading-relaxed" style={{ color: C.inkSoft }}>
+                <h3 className="font-display text-xl lg:text-2xl lg:text-3xl font-extrabold" style={{ color: C.cta }}>Minha Promessa</h3>
+                <p className="mt-2 text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl leading-relaxed" style={{ color: C.inkSoft }}>
                   A Academia da Enfermagem é o resultado de uma vida inteira de dedicação. Ela foi feita para mitigar o seu tempo, descomplicar o seu estágio, garantir a precisão dos seus cálculos e te levar uma certa segurança jurídica, desde que bem empregada, tudo baseado rigorosamente nas leis do nosso COFEN. Seja muito bem-vindo à evolução da nossa categoria. Aqui, nós cuidamos de quem cuida!
                 </p>
               </div>
 
               <Link
                 to="/minha-historia"
-                className="inline-flex items-center gap-1.5 text-sm font-bold underline underline-offset-4 transition hover:opacity-80"
+                className="inline-flex items-center gap-1.5 text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl font-bold underline underline-offset-4 transition hover:opacity-80"
                 style={{ color: C.cta }}
               >
                 Ler minha história completa <ArrowRight className="h-4 w-4" />
@@ -625,7 +625,7 @@ function AdecPage() {
         {/* FAQ */}
         <section className="mt-16">
           <div className="text-center">
-            <p className="text-xs font-extrabold uppercase tracking-[0.3em]" style={{ color: C.gold }}>Dúvidas frequentes</p>
+            <p className="text-xs lg:text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl font-extrabold uppercase tracking-[0.3em]" style={{ color: C.gold }}>Dúvidas frequentes</p>
             <h2 className="mt-3 font-display text-3xl font-extrabold md:text-4xl" style={{ color: C.ink }}>
               Antes de decidir
             </h2>
@@ -662,13 +662,13 @@ function AdecPage() {
                 className="group rounded-2xl border p-5 backdrop-blur"
                 style={{ borderColor: C.line, background: C.card }}
               >
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-display text-sm font-extrabold marker:hidden" style={{ color: C.ink }}>
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 font-display text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl font-extrabold marker:hidden" style={{ color: C.ink }}>
                   <span>{f.q}</span>
                   <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full transition group-open:rotate-45" style={{ background: "rgba(13,59,46,0.12)", color: C.cta }}>
                     +
                   </span>
                 </summary>
-                <p className="mt-3 text-sm" style={{ color: C.inkSoft }}>{f.a}</p>
+                <p className="mt-3 text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl" style={{ color: C.inkSoft }}>{f.a}</p>
               </details>
             ))}
           </div>
@@ -683,14 +683,14 @@ function AdecPage() {
           <div className="pointer-events-none absolute -bottom-32 -left-24 h-80 w-80 rounded-full blur-3xl" style={{ background: "rgba(168,220,217,0.25)" }} />
 
           <div className="relative">
-            <div className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-extrabold uppercase tracking-widest" style={{ background: C.orange, color: "#fff" }}>
+            <div className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] lg:text-[13px] font-extrabold uppercase tracking-widest" style={{ background: C.orange, color: "#fff" }}>
               <Clock className="h-3.5 w-3.5" />
               Vagas do Grupo VIP desta turma acabando
             </div>
             <h2 className="mt-4 font-display text-3xl font-extrabold md:text-5xl" style={{ color: "#fff" }}>
               Saia do próximo plantão no horário
             </h2>
-            <p className="mx-auto mt-3 max-w-xl text-sm md:text-base" style={{ color: "rgba(255,255,255,0.85)" }}>
+            <p className="mx-auto mt-3 max-w-xl text-sm md:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl" style={{ color: "rgba(255,255,255,0.85)" }}>
               Sem cartão de crédito. Sem fidelidade. Cancele quando quiser. Junte-se às {USUARIAS} profissionais que já automatizaram a escrita.
             </p>
 
@@ -705,12 +705,12 @@ function AdecPage() {
                     style={{ borderColor: C.goldBright, background: "rgba(255,255,255,0.1)" }}
                   >
                     <div className="flex items-center gap-3">
-                      <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl text-xl" style={{ background: "rgba(212,175,55,0.25)" }}>
+                      <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl text-xl lg:text-2xl lg:text-3xl" style={{ background: "rgba(212,175,55,0.25)" }}>
                         {p.emoji}
                       </span>
                       <div>
-                        <p className="font-display text-sm font-extrabold" style={{ color: "#fff" }}>{p.label}</p>
-                        <p className="text-[11px] font-extrabold uppercase tracking-wide" style={{ color: "rgba(255,255,255,0.8)" }}>
+                        <p className="font-display text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl font-extrabold" style={{ color: "#fff" }}>{p.label}</p>
+                        <p className="text-[11px] lg:text-[13px] font-extrabold uppercase tracking-wide" style={{ color: "rgba(255,255,255,0.8)" }}>
                           {subscribed ? "Acessar" : CTA_RODAPE}
                         </p>
                       </div>
@@ -721,13 +721,13 @@ function AdecPage() {
               })}
             </div>
 
-            <p className="mt-6 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-extrabold uppercase tracking-wide" style={{ background: "rgba(255,255,255,0.14)", color: "#fff" }}>
+            <p className="mt-6 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] lg:text-[13px] font-extrabold uppercase tracking-wide" style={{ background: "rgba(255,255,255,0.14)", color: "#fff" }}>
               <ShieldCheck className="h-3.5 w-3.5" style={{ color: C.goldBright }} /> Compra 100% segura
             </p>
           </div>
         </section>
 
-        <p className="mt-8 text-center text-[11px]" style={{ color: C.inkSoft }}>
+        <p className="mt-8 text-center text-[11px] lg:text-[13px]" style={{ color: C.inkSoft }}>
           ADEC · Academia da Enfermagem · academiadaenfermagem.com.br
         </p>
       </div>
