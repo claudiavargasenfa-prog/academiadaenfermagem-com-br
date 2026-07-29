@@ -150,43 +150,60 @@ export function renderDiagnosticoCard(m: SaeMatch, idx: number): string {
 </div>`;
 }
 
+// COL. 15 — lista oficial de HORÁRIOS (igual para todos os diagnósticos)
+export const HORARIOS_OPCOES: string[] = [
+  "1/1h",
+  "2/2h",
+  "4/4h",
+  "6/6h",
+  "8/8h",
+  "12/12h",
+  "24/24h",
+  "Atenção",
+  "Rotina",
+  "Contínuo",
+  "Medir volume anotar",
+  "SN",
+  "AD",
+  "Obs.",
+];
+
+// COL. 16 — aprazamento correspondente a cada horário
+export const APRAZAMENTO_MAP: Record<string, string> = {
+  "1/1h": "1. 2. 3. 4. 5. 6. 7. 8. 9. 10. 11. 12. 13. 14. 15. 16. 17. 18. 19. 20. 21. 22. 23. 24.",
+  "2/2h": "2. 4. 6. 8. 10. 12. 14. 16. 18. 20. 22. 24.",
+  "4/4h": "8. 12. 16. 20. 24. 04.",
+  "6/6h": "12. 18. 24. 06.",
+  "8/8h": "14. 22. 06.",
+  "12/12h": "10. 22.",
+  "24/24h": "12.",
+};
+
 export function renderPrescricaoRow(
   d: SaeDiagnostico,
   numero: number,
 ): string {
-  // Texto corrido numerado com TAB. 9 (frequência) em negrito verde inline.
-  const prescricaoTexto = d.condutas
-    .map((c, i) => {
-      const txt = esc(c.conduta).replace(/\s*\.?\s*$/, "");
-      const hor = c.horario
-        ? ` <strong style="color:#166534;">${esc(c.horario)}</strong>`
-        : "";
-      return `${i + 1}. ${txt}.${hor}`;
-    })
-    .join(" ");
-  // APRAZAMENTO: exibe TAB. 10 (texto tal como vem da planilha).
-  const aprazTextos = d.condutas
-    .map((c) => (c.aprazamento || "").trim())
-    .filter(Boolean);
-  const uniqAprz = Array.from(new Set(aprazTextos));
-  const aprazamentoTexto = uniqAprz.length
-    ? uniqAprz.map((a) => esc(a)).join("<br/>")
-    : `<span style="color:#166534;font-weight:700;letter-spacing:2px;">A T E N Ç Ã O</span>`;
-  const pautado =
-    "background-image: repeating-linear-gradient(to bottom, transparent 0, transparent 27px, #86efac 27px, #86efac 28px); background-size: 100% 28px; min-height:170px;";
+  const num = String(numero).padStart(2, "0");
+  const chips = HORARIOS_OPCOES.map(
+    (h) => `<span class="sae-hor-item" data-h="${esc(h)}" style="display:inline-flex;align-items:center;gap:4px;margin:0 4px 4px 0;border:1px solid #86efac;border-radius:999px;background:#f0fdf4;padding:2px 4px 2px 8px;">
+      <button type="button" class="sae-hor-chip" data-h="${esc(h)}" style="background:transparent;border:0;color:#14532d;font-size:11.5px;font-weight:700;cursor:pointer;padding:2px 0;">${esc(h)}</button>
+      <button type="button" class="sae-hor-del" title="Excluir este horário" aria-label="Excluir horário" style="background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;border-radius:999px;font-size:9.5px;line-height:1;padding:2px 5px;cursor:pointer;">✕</button>
+    </span>`,
+  ).join("");
   return `
 <tr class="sae-presc-row" data-diag-id="${esc(d.id)}" style="border-bottom:1px solid #86efac;background:#ffffff;">
-  <td style="padding:12px 12px;line-height:1.55;vertical-align:top;border-right:1px solid #86efac;background:#ffffff;color:#14532d;font-size:13px;text-align:justify;">
-    <div style="font-weight:700;color:#14532d;margin-bottom:6px;font-size:12px;">${esc(d.diagnostico)} <span style="font-size:10px;color:#166534;">(${esc(d.id)})</span>
-      <button type="button" class="sae-presc-del" data-diag-id="${esc(d.id)}" title="Excluir este item" aria-label="Excluir item" style="float:right;background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;font-weight:700;font-size:11px;padding:2px 8px;border-radius:6px;cursor:pointer;">✕ Excluir</button>
-    </div>
-    ${prescricaoTexto}
-    <span class="sae-presc-num" style="display:none;">${numero}</span>
+  <td style="width:5%;padding:10px 6px;vertical-align:top;border-right:1px solid #86efac;text-align:center;font-weight:800;color:#14532d;font-size:13px;"><span class="sae-presc-num">${num}</span></td>
+  <td style="width:47%;padding:10px 12px;vertical-align:top;border-right:1px solid #86efac;color:#14532d;font-size:13px;line-height:1.5;text-align:justify;">
+    <strong>${esc(d.diagnostico)}</strong> <span style="font-size:10px;color:#166534;">(${esc(d.id)})</span>
+    <button type="button" class="sae-presc-del" data-diag-id="${esc(d.id)}" title="Excluir este diagnóstico" aria-label="Excluir diagnóstico" style="float:right;background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;font-weight:700;font-size:11px;padding:2px 8px;border-radius:6px;cursor:pointer;">✕ Excluir</button>
   </td>
-  <td style="padding:12px 10px;vertical-align:top;border-right:1px solid #86efac;background:#ffffff;font-size:13px;color:#166534;font-weight:700;text-align:center;line-height:1.4;">${aprazamentoTexto}</td>
-  <td style="padding:8px 8px;vertical-align:top;background:#ffffff;"><div style="width:100%;${pautado}"></div></td>
+  <td class="sae-presc-horarios" style="width:22%;padding:10px 8px;vertical-align:top;border-right:1px solid #86efac;">${chips}</td>
+  <td style="width:26%;padding:10px 8px;vertical-align:top;">
+    <textarea class="sae-presc-apraz" rows="3" placeholder="Selecione um horário ao lado" style="width:100%;border:1px solid #bbf7d0;border-radius:8px;padding:6px 8px;font-size:12.5px;color:#166534;font-weight:700;background:#ffffff;box-sizing:border-box;resize:vertical;"></textarea>
+  </td>
 </tr>`;
 }
+
 
 export function buildEvolucao(params: {
   identificacao: Record<string, string>;
