@@ -702,12 +702,89 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
 
       let diagnosticosAtivos: SaeDiagnostico[] = [];
 
-      const coletarCorpus = (): string => {
-        // Somente o texto livre digitado pelo usuário na caixa de sinais/sintomas.
-        return (
-          root.querySelector<HTMLTextAreaElement>("#txt-sinais-sintomas-consolidados")?.value ?? ""
-        );
+      // ---- Espelho automático: tudo que for marcado/escrito na anamnese e no
+      // exame físico é enviado para a caixa de pesquisa de diagnósticos. ----
+      const MARCA_INI = "[ACHADOS DA ANAMNESE E EXAME FÍSICO]";
+      const MARCA_FIM = "[FIM DOS ACHADOS]";
+      const IGNORAR_IDS = new Set([
+        "txt-sinais-sintomas-consolidados",
+        "txt-evolucao-clinica-mestre",
+        "medicamentos",
+        "nomePaciente",
+        "leitoPaciente",
+      ]);
+
+      const rotuloDe = (el: HTMLElement): string => {
+        const own = el.closest("label")?.textContent;
+        if (own && own.replace(/\s+/g, " ").trim()) return own.replace(/\s+/g, " ").trim();
+        const prev = el.previousElementSibling;
+        if (prev?.tagName === "LABEL") return (prev.textContent || "").replace(/\s+/g, " ").trim();
+        const cont = el.parentElement?.querySelector("label");
+        return (cont?.textContent || "").replace(/\s+/g, " ").trim();
       };
+
+      const coletarAchados = (): string[] => {
+        const linhas: string[] = [];
+
+        // 1) Tudo que foi marcado (achados fora da normalidade)
+        root
+          .querySelectorAll<HTMLInputElement>('input[type="checkbox"]:checked')
+          .forEach((chk) => {
+            if (chk.classList.contains("sae-diag-select")) return;
+            const txt = rotuloDe(chk) || chk.value;
+            if (txt) linhas.push(txt);
+          });
+
+        // 2) Tudo que foi escrito nos campos de anamnese / exame físico
+        root
+          .querySelectorAll<HTMLInputElement | HTMLTextAreaElement>(
+            'input[type="text"], input[type="number"], textarea',
+          )
+          .forEach((campo) => {
+            if (IGNORAR_IDS.has(campo.id)) return;
+            if (campo.classList.contains("sae-diag-prio")) return;
+            const v = (campo.value || "").replace(/\s+/g, " ").trim();
+            if (!v) return;
+            const rot = rotuloDe(campo).replace(/:\s*$/, "");
+            linhas.push(rot ? `${rot}: ${v}` : v);
+          });
+
+        return Array.from(new Set(linhas));
+      };
+
+      const sincronizarAchados = () => {
+        const ta = root.querySelector<HTMLTextAreaElement>("#txt-sinais-sintomas-consolidados");
+        if (!ta || document.activeElement === ta) return;
+        const achados = coletarAchados();
+        const atual = ta.value;
+        const idx = atual.indexOf(MARCA_INI);
+        const fim = atual.indexOf(MARCA_FIM);
+        const livre =
+          idx >= 0 && fim > idx ? atual.slice(fim + MARCA_FIM.length).replace(/^\s+/, "") : atual.trim();
+        const bloco = achados.length
+          ? `${MARCA_INI}\n${achados.map((l) => `• ${l}`).join("\n")}\n${MARCA_FIM}\n\n`
+          : "";
+        const novo = bloco + livre;
+        if (novo !== atual) ta.value = novo;
+      };
+
+      let syncTimer: number | undefined;
+      const agendarSync = () => {
+        window.clearTimeout(syncTimer);
+        syncTimer = window.setTimeout(sincronizarAchados, 350);
+      };
+      root.addEventListener("input", agendarSync);
+      root.addEventListener("change", agendarSync);
+      agendarSync();
+
+      const coletarCorpus = (): string => {
+        sincronizarAchados();
+        const livre =
+          root.querySelector<HTMLTextAreaElement>("#txt-sinais-sintomas-consolidados")?.value ?? "";
+        return [livre, coletarAchados().join(". ")].join(". ");
+      };
+
+
 
 
       const gerarDiagnosticos = () => {
@@ -1132,6 +1209,9 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
         btnEvol?.removeEventListener("click", onEvol);
         root.removeEventListener("click", onChip);
         root.removeEventListener("click", onExportClick);
+        root.removeEventListener("input", agendarSync);
+        root.removeEventListener("change", agendarSync);
+        window.clearTimeout(syncTimer);
         if (hadFn) {
           w.atualizarEvolucaoAutomatica = prevFn;
         } else {
