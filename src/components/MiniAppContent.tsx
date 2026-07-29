@@ -1010,9 +1010,10 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
         return limparTextoPdf(clone.textContent ?? "");
       };
 
-      const criarPdfBase = async (titulo: string) => {
+      const criarPdfBase = async (titulo: string, orientation: "portrait" | "landscape" = "portrait") => {
         const { jsPDF } = await import("jspdf");
-        const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
+        const pdf = new jsPDF({ orientation, unit: "mm", format: "a4" });
+
         const pageW = pdf.internal.pageSize.getWidth();
         const margin = { left: 30, top: 30, right: 20, bottom: 20 };
         const contentW = pageW - margin.left - margin.right;
