@@ -1209,6 +1209,9 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
         btnEvol?.removeEventListener("click", onEvol);
         root.removeEventListener("click", onChip);
         root.removeEventListener("click", onExportClick);
+        root.removeEventListener("input", agendarSync);
+        root.removeEventListener("change", agendarSync);
+        window.clearTimeout(syncTimer);
         if (hadFn) {
           w.atualizarEvolucaoAutomatica = prevFn;
         } else {
