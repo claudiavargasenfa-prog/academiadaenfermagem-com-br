@@ -654,11 +654,36 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
           row.remove();
           // Renumera as linhas restantes
           tbody?.querySelectorAll<HTMLElement>("tr.sae-presc-row .sae-presc-num").forEach((el, i) => {
-            el.textContent = String(i + 1);
+            el.textContent = String(i + 1).padStart(2, "0");
           });
         }
       }
+      // COL. 15 — excluir um horário da linha
+      const horDel = target?.closest<HTMLButtonElement>(".sae-hor-del");
+      if (horDel) {
+        e.preventDefault();
+        horDel.closest(".sae-hor-item")?.remove();
+        return;
+      }
+      // COL. 15 -> COL. 16 — selecionar horário preenche o aprazamento
+      const horChip = target?.closest<HTMLButtonElement>(".sae-hor-chip");
+      if (horChip) {
+        e.preventDefault();
+        const row = horChip.closest<HTMLTableRowElement>("tr.sae-presc-row");
+        const h = horChip.dataset.h || horChip.textContent?.trim() || "";
+        row?.querySelectorAll<HTMLElement>(".sae-hor-item").forEach((it) => {
+          const on = it.getAttribute("data-h") === h;
+          it.style.background = on ? "#bbf7d0" : "#f0fdf4";
+          it.style.borderColor = on ? "#16a34a" : "#86efac";
+        });
+        const ta = row?.querySelector<HTMLTextAreaElement>(".sae-presc-apraz");
+        if (ta) {
+          ta.value = APRAZAMENTO_MAP[h] ?? h;
+          ta.dispatchEvent(new Event("input", { bubbles: true }));
+        }
+      }
     };
+
 
     root.addEventListener("click", onClick);
 
