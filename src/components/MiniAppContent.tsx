@@ -1207,8 +1207,12 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
             x += colW[2];
             pdf.rect(x, ctx.y, colW[3], rowH);
             pdf.text(aprazLines, x + colW[3] / 2, ctx.y + 6, { align: "center", maxWidth: colW[3] - 6 });
+            x += colW[3];
+            pdf.rect(x, ctx.y, colW[4], rowH);
+            pdf.text(prioLines, x + colW[4] / 2, ctx.y + 6, { align: "center", maxWidth: colW[4] - 6 });
             ctx.y += rowH;
           });
+
 
           finalizarPdfComAssinatura(ctx);
           pdf.save("Prescricao_Enfermagem_ABNT.pdf");
