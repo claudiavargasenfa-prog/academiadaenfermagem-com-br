@@ -156,6 +156,23 @@ export function MiniAppContent({ slug }: { slug: string }) {
  * e "Salvar Evolução" do mini app FUNDAMENTOS DOS DIAGNÓSTICOS — download
  * .doc 100% no navegador, sem backend, sem custo).
  */
+/**
+ * Host de HTML bruto isolado do ciclo de render do React.
+ * O HTML é injetado imperativamente UMA vez (e só de novo se o conteúdo mudar),
+ * de modo que atualizações de estado do componente pai (autosave, abas de
+ * paciente, histórico) nunca destroem o DOM vivo do mini app — campos digitados,
+ * sanfonas abertas, diagnósticos gerados e tabela de prescrição são preservados.
+ */
+const RawHtmlHost = memo(function RawHtmlHost({ html }: { html: string }) {
+  const hostRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = hostRef.current;
+    if (!el) return;
+    el.innerHTML = html;
+  }, [html]);
+  return <div ref={hostRef} className="mini-app-html" />;
+});
+
 export function MiniAppHtmlContent({ html }: { html: string }) {
   const ref = useRef<HTMLDivElement>(null);
   // Mini app SAE traz <script> embutido; renderizamos o HTML bruto (sem
