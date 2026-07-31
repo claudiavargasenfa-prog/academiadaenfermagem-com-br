@@ -5,6 +5,7 @@ import { AppAccessGate } from "@/components/ContentProtection";
 import { MiniAppContent } from "@/components/MiniAppContent";
 import { PROCEDIMENTOS, type Procedimento } from "@/data/procedimentos";
 import { ProcedimentoPlayer } from "@/components/procedimentos/ProcedimentoPlayer";
+import { FlebitePanel } from "@/components/procedimentos/FlebitePanel";
 import { ProcedimentoChecklist } from "@/components/procedimentos/ProcedimentoChecklist";
 import { ChevronRight, ArrowLeft, Hourglass } from "lucide-react";
 
@@ -170,6 +171,13 @@ function ProcedimentoDetalhe({ proc, onVoltar }: { proc: Procedimento; onVoltar:
       <Card className="mb-3 p-4">
         <ProcedimentoChecklist slug={proc.slug} itens={proc.checklist} />
       </Card>
+
+      {proc.slug.startsWith("puncao-venosa") && (
+        <Card className="mb-3 p-4">
+          <FlebitePanel />
+        </Card>
+      )}
+
 
       <Card className="p-4">
         <h3 className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
