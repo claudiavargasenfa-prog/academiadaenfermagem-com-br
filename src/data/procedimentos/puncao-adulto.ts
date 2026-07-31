@@ -7,7 +7,7 @@ export const PROC_PUNCAO_ADULTO: Procedimento = {
   icon: "💉",
   cor: "text-red-600",
   publico: "Adulto",
-  emProducao: true,
+  
   materiais: [
     "Cateter venoso periférico (Jelco/Abbocath) — calibre conforme indicação (geralmente 18–22 G)",
     "Garrote",
