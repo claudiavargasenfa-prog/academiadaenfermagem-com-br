@@ -1,4 +1,16 @@
 import type { Procedimento } from "./index";
+import img01 from "@/assets/procedimentos/pva-01-preparo.jpg";
+import img02 from "@/assets/procedimentos/pva-02-maos.jpg";
+import img03 from "@/assets/procedimentos/pva-03-posicao.jpg";
+import img04 from "@/assets/procedimentos/pva-04-garrote.jpg";
+import img05 from "@/assets/procedimentos/pva-05-calibre.jpg";
+import img06 from "@/assets/procedimentos/pva-06-antissepsia.jpg";
+import img07 from "@/assets/procedimentos/pva-07-puncao.jpg";
+import img08 from "@/assets/procedimentos/pva-08-refluxo.jpg";
+import img09 from "@/assets/procedimentos/pva-09-conexao.jpg";
+import img10 from "@/assets/procedimentos/pva-10-salinizacao.jpg";
+import img11 from "@/assets/procedimentos/pva-11-fixacao.jpg";
+import img12 from "@/assets/procedimentos/pva-12-registro.jpg";
 
 export const PROC_PUNCAO_ADULTO: Procedimento = {
   slug: "puncao-venosa-adulto",
@@ -35,6 +47,7 @@ export const PROC_PUNCAO_ADULTO: Procedimento = {
   cenas: [
     {
       ordem: 1,
+      imagem: img01,
       titulo: "Checagem e preparo",
       descricao:
         "Confira a prescrição, identifique o paciente com dois identificadores, explique o procedimento e obtenha o consentimento. Separe todo o material em bandeja limpa e verifique validade e integridade das embalagens.",
@@ -42,6 +55,7 @@ export const PROC_PUNCAO_ADULTO: Procedimento = {
     },
     {
       ordem: 2,
+      imagem: img02,
       titulo: "Higienização das mãos",
       descricao:
         "Higienize as mãos com água e sabão ou álcool gel 70%, seguindo os 5 momentos da OMS. Calce luvas de procedimento após a antissepsia das mãos.",
@@ -49,6 +63,7 @@ export const PROC_PUNCAO_ADULTO: Procedimento = {
     },
     {
       ordem: 3,
+      imagem: img03,
       titulo: "Posicionamento e escolha do membro",
       descricao:
         "Posicione o braço apoiado, abaixo do nível do coração. Prefira o membro não dominante e evite membro com fístula, mastectomia, plegia, edema ou lesão de pele.",
@@ -56,6 +71,7 @@ export const PROC_PUNCAO_ADULTO: Procedimento = {
     },
     {
       ordem: 4,
+      imagem: img04,
       titulo: "Garroteamento e seleção da veia",
       descricao:
         "Aplique o garrote 10–15 cm acima do sítio escolhido. Selecione veia calibrosa, retilínea e palpável — preferencialmente antebraço, progredindo distal para proximal.",
@@ -64,6 +80,7 @@ export const PROC_PUNCAO_ADULTO: Procedimento = {
     },
     {
       ordem: 5,
+      imagem: img05,
       titulo: "Escolha do calibre",
       descricao:
         "Selecione o menor calibre capaz de atender à terapia: 22–24 G para infusões de rotina e idosos, 20 G para maioria dos adultos, 18 G ou maior para hemoterapia e reposição volêmica rápida.",
@@ -71,6 +88,7 @@ export const PROC_PUNCAO_ADULTO: Procedimento = {
     },
     {
       ordem: 6,
+      imagem: img06,
       titulo: "Antissepsia da pele",
       descricao:
         "Realize antissepsia com clorexidina alcoólica 0,5% em movimento único ou circular do centro para a periferia, e aguarde a secagem espontânea (cerca de 30 segundos).",
@@ -78,6 +96,7 @@ export const PROC_PUNCAO_ADULTO: Procedimento = {
     },
     {
       ordem: 7,
+      imagem: img07,
       titulo: "Punção",
       descricao:
         "Tracione a pele abaixo do sítio para estabilizar a veia e introduza o cateter com o bisel para cima, em ângulo de 15° a 30°, com movimento firme e contínuo.",
@@ -86,6 +105,7 @@ export const PROC_PUNCAO_ADULTO: Procedimento = {
     },
     {
       ordem: 8,
+      imagem: img08,
       titulo: "Refluxo e progressão do cateter",
       descricao:
         "Ao visualizar o refluxo sanguíneo na câmara, reduza o ângulo, avance mais 2–3 mm, recue a agulha-guia e progrida somente o cateter até o canhão.",
@@ -93,6 +113,7 @@ export const PROC_PUNCAO_ADULTO: Procedimento = {
     },
     {
       ordem: 9,
+      imagem: img09,
       titulo: "Soltar o garrote e conectar",
       descricao:
         "Solte o garrote, faça compressão digital acima da ponta do cateter, retire a agulha em dispositivo de segurança e conecte o extensor/conector valvulado previamente preenchido com SF 0,9%.",
@@ -100,6 +121,7 @@ export const PROC_PUNCAO_ADULTO: Procedimento = {
     },
     {
       ordem: 10,
+      imagem: img10,
       titulo: "Salinização e teste de permeabilidade",
       descricao:
         "Realize flushing com 10 mL de SF 0,9% em seringa de 10 ou 20 mL, com fluxo turbilhonar, observando ausência de dor, resistência, edema ou palidez local.",
@@ -107,6 +129,7 @@ export const PROC_PUNCAO_ADULTO: Procedimento = {
     },
     {
       ordem: 11,
+      imagem: img11,
       titulo: "Fixação e identificação",
       descricao:
         "Fixe com filme transparente estéril, mantendo o sítio visível. Identifique com data, hora, calibre do cateter e nome do profissional.",
@@ -114,6 +137,7 @@ export const PROC_PUNCAO_ADULTO: Procedimento = {
     },
     {
       ordem: 12,
+      imagem: img12,
       titulo: "Registro e monitoramento",
       descricao:
         "Descarte os resíduos, higienize as mãos e registre no prontuário: sítio, calibre, número de tentativas, intercorrências e aceitação do paciente. Avalie o sítio a cada plantão.",
