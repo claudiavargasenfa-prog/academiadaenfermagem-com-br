@@ -4,19 +4,24 @@ Hoje o mini app "Procedimentos de Enfermagem" já tem os módulos de SVD feminin
 
 ## O que será entregue
 
-### 1. SVD Feminino — 12 etapas ilustradas
+### 1. SVD Feminino — 12 etapas ilustradas - quero imagens so do procedimento em si
+
 Preparo e checagem da prescrição, higiene das mãos, materiais e escolha do calibre, privacidade e posicionamento (ginecológica), abertura da bandeja e campo estéril, teste do balonete e lubrificação, higiene íntima/antissepsia no sentido correto, separação dos grandes/pequenos lábios e identificação do meato uretral, introdução do cateter (5–7 cm) até refluxo de urina, insuflação do balonete, conexão ao sistema fechado e fixação na coxa, registro em prontuário.
 
 ### 2. SVD Masculino — 12 etapas ilustradas
+
 Mesma espinha dorsal, com as diferenças anatômicas: retração do prepúcio e antissepsia da glande em movimentos circulares, instilação de lidocaína gel uretral (10–20 mL), pênis tracionado a 90°, progressão de 18–22 cm com manobra de abaixamento na resistência do esfíncter externo, avanço adicional antes de insuflar o balonete, recolocação obrigatória do prepúcio (prevenção de parafimose) e fixação no abdome inferior.
 
 ### 3. Comparativo Homem × Mulher
+
 Painel lado a lado: comprimento uretral, posicionamento, uso de anestésico, profundidade de introdução, ponto de resistência, calibres usuais, fixação e complicações mais frequentes de cada sexo.
 
 ### 4. Técnica estéril / prevenção de ITU-AC
+
 Bundle de inserção e manutenção, sistema fechado, bolsa sempre abaixo do nível da bexiga, higiene diária, indicações e não-indicações de sondagem, critérios de retirada precoce, sinais de alerta (hematúria, ausência de refluxo, dor intensa, febre) e conduta em falso trajeto.
 
 ### 5. Texto do mini app (campo CONTEÚDO do Admin)
+
 O mesmo material em markdown no campo editável do mini app, para você poder revisar/editar pelo Admin, com referências (ANVISA RDC 36/2013 e caderno de IRAS, COFEN, INS/CDC 2024–2025).
 
 ## Imagens
