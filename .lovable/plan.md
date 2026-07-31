@@ -1,37 +1,32 @@
-# Punção Venosa Periférica — conteúdo premium com imagens passo a passo
+# Cateterismo Vesical — conteúdo completo com imagens passo a passo
 
-Hoje o procedimento "Punção Venosa Periférica — Adulto" (dentro de Procedimentos de Enfermagem) está marcado como "Em produção": tem materiais, indicações, contraindicações, complicações e checklist, mas nenhuma cena ilustrada. O player animado já existe e funciona — falta o conteúdo visual.
+Hoje o mini app "Procedimentos de Enfermagem" já tem os módulos de SVD feminino, SVD masculino e técnica estéril, mas os três estão marcados como "Em breve", sem etapas e sem imagens. O plano é transformá-los em um conteúdo completo, no mesmo padrão da Punção Venosa Periférica (imagens fotorrealistas + texto técnico por etapa).
 
-## O que será feito
+## O que será entregue
 
-1. **12 ilustrações originais** (estilo médico-didático, cores claras/bebê no padrão do app), uma por etapa:
-   1. Higienização das mãos e preparo da bandeja
-   2. Identificação do paciente e explicação do procedimento
-   3. Escolha do membro e avaliação da rede venosa
-   4. Aplicação do garrote 10–15 cm acima do sítio
-   5. Seleção da veia (mapa das veias do antebraço/dorso da mão)
-   6. Calçar luvas e antissepsia com movimento unidirecional
-   7. Tracionar a pele e posicionar o cateter (bisel para cima, 15–30°)
-   8. Punção e observação do refluxo
-   9. Recuar a agulha e progredir o cateter
-   10. Soltar o garrote, acionar dispositivo de segurança e descartar em perfurocortante
-   11. Conectar extensor, salinizar e testar permeabilidade
-   12. Fixação com filme transparente, identificação (data/hora/calibre) e registro
+### 1. SVD Feminino — 12 etapas ilustradas
+Preparo e checagem da prescrição, higiene das mãos, materiais e escolha do calibre, privacidade e posicionamento (ginecológica), abertura da bandeja e campo estéril, teste do balonete e lubrificação, higiene íntima/antissepsia no sentido correto, separação dos grandes/pequenos lábios e identificação do meato uretral, introdução do cateter (5–7 cm) até refluxo de urina, insuflação do balonete, conexão ao sistema fechado e fixação na coxa, registro em prontuário.
 
-2. **Texto de cada cena**: título, descrição técnica e um alerta "Atenção" com o erro mais comum daquela etapa.
+### 2. SVD Masculino — 12 etapas ilustradas
+Mesma espinha dorsal, com as diferenças anatômicas: retração do prepúcio e antissepsia da glande em movimentos circulares, instilação de lidocaína gel uretral (10–20 mL), pênis tracionado a 90°, progressão de 18–22 cm com manobra de abaixamento na resistência do esfíncter externo, avanço adicional antes de insuflar o balonete, recolocação obrigatória do prepúcio (prevenção de parafimose) e fixação no abdome inferior.
 
-3. **Pontos pulsantes (overlays)** sobre a imagem indicando onde olhar (local da veia, ângulo da agulha, ponto de fixação) — recurso já suportado pelo player.
+### 3. Comparativo Homem × Mulher
+Painel lado a lado: comprimento uretral, posicionamento, uso de anestésico, profundidade de introdução, ponto de resistência, calibres usuais, fixação e complicações mais frequentes de cada sexo.
 
-4. **Remover o aviso "Em produção"** desse procedimento, mantendo os demais blocos (materiais, indicações, contraindicações, complicações, checklist interativo e referências) como estão.
+### 4. Técnica estéril / prevenção de ITU-AC
+Bundle de inserção e manutenção, sistema fechado, bolsa sempre abaixo do nível da bexiga, higiene diária, indicações e não-indicações de sondagem, critérios de retirada precoce, sinais de alerta (hematúria, ausência de refluxo, dor intensa, febre) e conduta em falso trajeto.
 
-5. Opcional, sem custo extra de imagens: reaproveitar as mesmas cenas na versão "Punção com Dispositivo de Segurança", ajustando as etapas 10–12.
+### 5. Texto do mini app (campo CONTEÚDO do Admin)
+O mesmo material em markdown no campo editável do mini app, para você poder revisar/editar pelo Admin, com referências (ANVISA RDC 36/2013 e caderno de IRAS, COFEN, INS/CDC 2024–2025).
+
+## Imagens
+
+Serão geradas imagens clínicas fotorrealistas, uma por etapa: 12 para o módulo feminino e 12 para o masculino (24 no total), com enquadramento didático e respeitoso, mostrando mãos enluvadas, campo estéril e materiais — sem exposição gráfica desnecessária, no estilo já usado na punção venosa.
 
 ## Detalhes técnicos
 
-- Imagens geradas em `src/assets/procedimentos/puncao/` e referenciadas por import no arquivo de dados.
-- Edição apenas em `src/data/procedimentos/puncao-adulto.ts`: preencher `cenas[]` (ordem, título, descrição, atenção, imagem, overlays, duração ~6s) e remover `emProducao: true`.
-- Nenhuma mudança no player, no design ou no restante do app.
-
-## Observação sobre custo
-
-São 12 imagens geradas por IA — é a parte mais pesada do trabalho. Se preferir começar menor, posso fazer 6 cenas essenciais agora e completar depois.
+- `src/data/procedimentos/svd-fem.ts` e `svd-masc.ts`: remover `emProducao`, preencher `materiais`, `indicacoes`, `contraindicacoes`, `complicacoes` e 12 `cenas` com `imagem`, título, descrição e alertas.
+- `src/data/procedimentos/svd-esteril.ts`: bundle de prevenção de ITU-AC e comparativo homem × mulher.
+- Imagens em `src/assets/procedimentos/svd-f-01..12.jpg` e `svd-m-01..12.jpg`, importadas como ES modules (mesmo padrão do `pva-*`).
+- Novo componente de comparativo em `src/components/procedimentos/` exibido dentro do detalhe dos módulos de SVD.
+- Migração para preencher `content_md` do mini app `procedimentos-enfermagem` com a seção de cateterismo vesical, preservando o conteúdo atual de punção venosa/flebite.
