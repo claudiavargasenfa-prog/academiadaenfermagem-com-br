@@ -5,6 +5,7 @@ import { AppAccessGate } from "@/components/ContentProtection";
 import { MiniAppContent } from "@/components/MiniAppContent";
 import { PROCEDIMENTOS, type Procedimento } from "@/data/procedimentos";
 import { ProcedimentoPlayer } from "@/components/procedimentos/ProcedimentoPlayer";
+import { FlebitePanel } from "@/components/procedimentos/FlebitePanel";
 import { ProcedimentoChecklist } from "@/components/procedimentos/ProcedimentoChecklist";
 import { ChevronRight, ArrowLeft, Hourglass } from "lucide-react";
 
