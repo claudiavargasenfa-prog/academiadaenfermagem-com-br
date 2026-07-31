@@ -171,6 +171,13 @@ function ProcedimentoDetalhe({ proc, onVoltar }: { proc: Procedimento; onVoltar:
         <ProcedimentoChecklist slug={proc.slug} itens={proc.checklist} />
       </Card>
 
+      {proc.slug.startsWith("puncao-venosa") && (
+        <Card className="mb-3 p-4">
+          <FlebitePanel />
+        </Card>
+      )}
+
+
       <Card className="p-4">
         <h3 className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
           Referências
