@@ -6,6 +6,7 @@ import { MiniAppContent } from "@/components/MiniAppContent";
 import { PROCEDIMENTOS, type Procedimento } from "@/data/procedimentos";
 import { ProcedimentoPlayer } from "@/components/procedimentos/ProcedimentoPlayer";
 import { FlebitePanel } from "@/components/procedimentos/FlebitePanel";
+import { ComparativoSVDPanel } from "@/components/procedimentos/ComparativoSVDPanel";
 import { ProcedimentoChecklist } from "@/components/procedimentos/ProcedimentoChecklist";
 import { ChevronRight, ArrowLeft, Hourglass } from "lucide-react";
 
@@ -171,6 +172,12 @@ function ProcedimentoDetalhe({ proc, onVoltar }: { proc: Procedimento; onVoltar:
       <Card className="mb-3 p-4">
         <ProcedimentoChecklist slug={proc.slug} itens={proc.checklist} />
       </Card>
+
+      {proc.slug.startsWith("svd") && (
+        <Card className="mb-3 p-4">
+          <ComparativoSVDPanel />
+        </Card>
+      )}
 
       {proc.slug.startsWith("puncao-venosa") && (
         <Card className="mb-3 p-4">
