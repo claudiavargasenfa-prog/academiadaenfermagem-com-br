@@ -88,9 +88,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:title", content: "Academia da Enfermagem — Informações em suas mãos" },
-      { name: "description", content: "Academia da Enfermagem: SAE descomplicada, calculadora de cálculo, exame físico, sinais vitais (RN, criança, gestante, adulto, idoso), escalas clínicas, procedimentos e quizzes." },
-      { property: "og:description", content: "Academia da Enfermagem: SAE descomplicada, calculadora de cálculo, exame físico, sinais vitais (RN, criança, gestante, adulto, idoso), escalas clínicas, procedimentos e quizzes." },
-      { name: "twitter:description", content: "Academia da Enfermagem: SAE descomplicada, calculadora de cálculo, exame físico, sinais vitais (RN, criança, gestante, adulto, idoso), escalas clínicas, procedimentos e quizzes." },
+      { name: "description", content: "Academia da Enfermagem: SAE descomplicada, cálculo de medicamentos, exame físico, sinais vitais, escalas clínicas e procedimentos." },
+      { property: "og:description", content: "Academia da Enfermagem: SAE descomplicada, cálculo de medicamentos, exame físico, sinais vitais, escalas clínicas e procedimentos." },
+      { name: "twitter:description", content: "Academia da Enfermagem: SAE descomplicada, cálculo de medicamentos, exame físico, sinais vitais, escalas clínicas e procedimentos." },
+
       { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/7PxPELOptZPDxG1fCljnAraycx32/social-images/social-1781397482453-LOGO_DO_APP._-_SEM_NOME.webp" },
       { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/7PxPELOptZPDxG1fCljnAraycx32/social-images/social-1781397482453-LOGO_DO_APP._-_SEM_NOME.webp" },
     ],
@@ -106,6 +107,33 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap",
       },
     ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "WebSite",
+              name: "Academia da Enfermagem",
+              url: "https://academiadaenfermagem.com.br",
+              inLanguage: "pt-BR",
+            },
+            {
+              "@type": "SoftwareApplication",
+              name: "Academia da Enfermagem",
+              applicationCategory: "EducationalApplication",
+              operatingSystem: "Web, Android, iOS",
+              url: "https://academiadaenfermagem.com.br",
+              inLanguage: "pt-BR",
+              description:
+                "Aplicativos de suporte à decisão clínica para acadêmicos, técnicos e enfermeiros: SAE, cálculos, escalas e procedimentos.",
+            },
+          ],
+        }),
+      },
+    ],
+
   }),
   shellComponent: RootShell,
   component: RootComponent,
@@ -115,7 +143,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="pt-BR">
       <head>
         <HeadContent />
       </head>

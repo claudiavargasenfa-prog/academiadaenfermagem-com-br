@@ -39,8 +39,10 @@ export const Route = createFileRoute("/")({
           "Conheça os 4 aplicativos da Academia da Enfermagem antes de iniciar seus 15 dias grátis.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://academiadaenfermagem.com.br/" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "canonical", href: "https://academiadaenfermagem.com.br/" }],
   }),
   component: StoreHome,
 });
