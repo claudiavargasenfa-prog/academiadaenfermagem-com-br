@@ -242,8 +242,9 @@ function AdecPage() {
             </a>
 
             <p className="mt-3 flex items-center gap-1.5 text-xs lg:text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl font-bold" style={{ color: C.orange }}>
-              <Users className="h-3.5 w-3.5" />
-              {USUARIAS} enfermeiras, técnicas e estudantes já usam a ADEC
+              <Sparkles className="h-3.5 w-3.5" />
+              {LANCAMENTO}: os primeiros assinantes entram com acesso completo e canal direto com a autora
+
             </p>
 
             <div className="mt-7 flex flex-wrap justify-center gap-2">
@@ -274,11 +275,11 @@ function AdecPage() {
         {/* CREDIBILIDADE */}
         <section className="mt-6 rounded-3xl border p-5 backdrop-blur" style={{ borderColor: C.line, background: C.card }}>
           <p className="mb-4 text-center text-xs lg:text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl font-extrabold uppercase tracking-widest" style={{ color: C.gold }}>
-            Aprovado por quem vive o plantão e o consultório
+            Conteúdo construído por quem vive o plantão e o consultório
           </p>
           <div className="flex flex-wrap items-center justify-around gap-4 text-center">
             {[
-              { n: USUARIAS, l: "Usuárias ativas" },
+              { n: "35 anos", l: "De vivência em enfermagem" },
               { n: "60+", l: "MSDC — Módulos de Suporte à Decisão Clínica" },
               { n: "22+", l: "Escalas clínicas" },
               { n: "100%", l: "Base COFEN / COREN" },
