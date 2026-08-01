@@ -8,14 +8,14 @@ Abri a `/adec` renderizada e li o código (`src/routes/adec.tsx`, 800 linhas). P
 2. **Classes de tipografia quebradas.** Há dezenas de cadeias inválidas do tipo `text-xs lg:text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl` no mesmo elemento. Só a última vence, então textos secundários ficam gigantes no desktop e a hierarquia visual some.
 3. **Ícones quebrados.** Vários emojis aparecem como quadradinho vazio (barra de urgência, chips "15 dias grátis", "Funciona offline", cards Estudante/Técnico/Enfermeiro).
 4. **Zero prova visual do produto.** A referência vende com telas do produto; a nossa não mostra uma única tela dos apps. O usuário lê promessas sem ver nada.
-5. **Fundo verde-água claro plano.** A referência usa fundo escuro com gradiente em malha e luz — é isso que dá o "chama atenção".
+5. **Fundo plano e sem profundidade.** Não é questão de cor, e sim de camadas: falta gradiente em movimento, luz e relevo.
 6. **Sem CTA fixo.** Em página longa, o botão some e não volta.
 
 ## O que será feito
 
 Reescrita completa da `/adec` mantendo textos/preços/rotas atuais, com estética e efeitos no padrão da referência:
 
-- **Base escura premium**: fundo verde-floresta profundo com gradiente em malha animado (blobs em movimento lento), grão sutil e luz dourada — ouro só como acento, laranja só para urgência.
+- **Paleta mantida exatamente como está**: verde-água claro de fundo, verde-floresta do CTA, ouro nos detalhes e laranja na urgência. Nada de tema escuro. O impacto vem de camadas e movimento sobre essas mesmas cores: gradiente em malha animado, blobs dourados em deriva lenta, grão sutil e sombras com profundidade.
 - **Hero cinematográfico**: headline com revelação palavra a palavra, selo de inauguração pulsante, CTA com brilho deslizante, badge de confiança e "mockup" de celular flutuante mostrando um MSDC real do app.
 - **Faixa de logos/selos** em marquee infinito (COFEN, CORENs, ANVISA, MS, OMS).
 - **Números animados** (35 anos, 60+ MSDC, 22+ escalas) contando ao entrar na tela.
