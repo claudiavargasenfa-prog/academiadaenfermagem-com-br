@@ -17,7 +17,7 @@ import {
   Brain,
   HeartPulse,
   Flame,
-  Users,
+  
 } from "lucide-react";
 import logoAsset from "@/assets/logo.png.asset.json";
 import fotoFundadora from "@/assets/foto-fundadora.jpeg.asset.json";
@@ -51,7 +51,8 @@ const CTA_TOPO = "QUERO TESTAR GRÁTIS POR 15 DIAS →";
 const CTA_MEIO = "SIM, QUERO TRANSFORMAR MEU PLANTÃO";
 const CTA_RODAPE = "COMEÇAR MEU TESTE GRÁTIS →";
 
-const USUARIAS = "4.200+";
+/** Fase de inauguração: sem números de usuários e sem depoimentos até termos casos reais. */
+const LANCAMENTO = "Turma de inauguração";
 
 const PLANOS = [
   {
@@ -123,9 +124,9 @@ const MODULOS_SHOWCASE = [
 
 export const Route = createFileRoute("/adec")({
   head: () => {
-    const title = "ADEC — Automatize suas anotações e foque no paciente";
+    const title = "Inauguração da ADEC — Academia da Enfermagem | 15 dias grátis";
     const description =
-      "Cansada de anotações manuais que roubam seu plantão? Automatize a escrita com 2 cliques. 4 apps de Suporte à Decisão Clínica. 15 dias grátis, sem cartão.";
+      "Inauguração da ADEC: 4 apps de suporte à decisão clínica para acadêmicos, técnicos e enfermeiros. Anotação automática, SAE, cálculos e escalas. 15 dias grátis, sem cartão.";
     return {
       meta: [
         { title },
@@ -134,9 +135,67 @@ export const Route = createFileRoute("/adec")({
         { property: "og:description", content: description },
         { property: "og:type", content: "website" },
         { property: "og:url", content: "https://academiadaenfermagem.com.br/adec" },
+        { property: "og:locale", content: "pt_BR" },
         { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: title },
+        { name: "twitter:description", content: description },
       ],
       links: [{ rel: "canonical", href: "https://academiadaenfermagem.com.br/adec" }],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "SoftwareApplication",
+            name: "ADEC — Academia da Enfermagem",
+            applicationCategory: "HealthApplication",
+            operatingSystem: "Web, Android, iOS",
+            url: "https://academiadaenfermagem.com.br/adec",
+            inLanguage: "pt-BR",
+            description,
+            offers: {
+              "@type": "Offer",
+              priceCurrency: "BRL",
+              category: "subscription",
+              availability: "https://schema.org/InStock",
+              url: "https://academiadaenfermagem.com.br/adec",
+            },
+          }),
+        },
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: [
+              {
+                "@type": "Question",
+                name: "Preciso de cartão de crédito para testar?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "Não. O teste de 15 dias é liberado no cadastro, sem cartão de crédito.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "Para quem é a ADEC?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "Para acadêmicos de enfermagem, estudantes de técnico, técnicos em enfermagem e enfermeiros, com uma academia específica para cada fase profissional.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "O conteúdo é baseado em quê?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "Todo o conteúdo é construído com base em COFEN, CORENs, ANVISA, Ministério da Saúde e OMS, com atualização contínua.",
+                },
+              },
+            ],
+          }),
+        },
+      ],
     };
   },
   component: AdecPage,
@@ -184,7 +243,7 @@ function AdecPage() {
         style={{ background: C.orange, color: "#fff" }}
       >
         <Flame className="mr-1 inline h-3.5 w-3.5" />
-        Vagas limitadas no Grupo VIP do WhatsApp desta turma — entre hoje e garanta a sua
+        🎉 Inauguração da ADEC — turma fundadora aberta: comece hoje com {TRIAL_DAYS} dias grátis
       </div>
 
       <header className="mx-auto flex max-w-7xl items-center justify-between px-5 pt-6">
@@ -217,12 +276,21 @@ function AdecPage() {
             </p>
             <div className="mx-auto mt-1 h-px w-40" style={{ background: `linear-gradient(90deg, transparent, ${C.goldBright}, transparent)` }} />
 
-            <h1 className="mt-8 max-w-4xl font-display text-3xl font-extrabold leading-[1.12] tracking-tight md:text-5xl" style={{ color: C.ink }}>
+            <span
+              className="mt-5 inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-[11px] lg:text-[13px] font-extrabold uppercase tracking-widest"
+              style={{ background: C.orange, color: "#fff" }}
+            >
+              <Sparkles className="h-3.5 w-3.5" />
+              {t("hero_selo", "Inauguração oficial — estamos abrindo as portas")}
+            </span>
+
+            <h1 className="mt-6 max-w-4xl font-display text-3xl font-extrabold leading-[1.12] tracking-tight md:text-5xl" style={{ color: C.ink }}>
               {t(
                 "hero_title",
-                "Cansada de anotações manuais que roubam seu plantão? Automatize a escrita com 2 cliques e foque no paciente.",
+                "A ADEC está sendo inaugurada: automatize suas anotações com 2 cliques e foque no paciente.",
               )}
             </h1>
+
 
             <p className="mt-5 max-w-2xl text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl font-medium md:text-lg lg:text-xl lg:text-2xl lg:text-3xl" style={{ color: C.inkSoft }}>
               {t(
@@ -241,8 +309,9 @@ function AdecPage() {
             </a>
 
             <p className="mt-3 flex items-center gap-1.5 text-xs lg:text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl font-bold" style={{ color: C.orange }}>
-              <Users className="h-3.5 w-3.5" />
-              {USUARIAS} enfermeiras, técnicas e estudantes já usam a ADEC
+              <Sparkles className="h-3.5 w-3.5" />
+              {LANCAMENTO}: os primeiros assinantes entram com acesso completo e canal direto com a autora
+
             </p>
 
             <div className="mt-7 flex flex-wrap justify-center gap-2">
@@ -273,11 +342,11 @@ function AdecPage() {
         {/* CREDIBILIDADE */}
         <section className="mt-6 rounded-3xl border p-5 backdrop-blur" style={{ borderColor: C.line, background: C.card }}>
           <p className="mb-4 text-center text-xs lg:text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl font-extrabold uppercase tracking-widest" style={{ color: C.gold }}>
-            Aprovado por quem vive o plantão e o consultório
+            Conteúdo construído por quem vive o plantão e o consultório
           </p>
           <div className="flex flex-wrap items-center justify-around gap-4 text-center">
             {[
-              { n: USUARIAS, l: "Usuárias ativas" },
+              { n: "35 anos", l: "De vivência em enfermagem" },
               { n: "60+", l: "MSDC — Módulos de Suporte à Decisão Clínica" },
               { n: "22+", l: "Escalas clínicas" },
               { n: "100%", l: "Base COFEN / COREN" },
@@ -518,58 +587,53 @@ function AdecPage() {
             </p>
             <p className="mt-3 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] lg:text-[13px] font-extrabold uppercase tracking-wide" style={{ background: C.orange, color: "#fff" }}>
               <Flame className="h-3.5 w-3.5" />
-              Vagas limitadas nesta turma — o convite chega ao ativar seu teste
+              Grupo VIP da inauguração — o convite chega ao ativar seu teste
             </p>
           </div>
         </section>
 
-        {/* DEPOIMENTOS */}
+        {/* INAUGURAÇÃO — vantagens de entrar agora (sem depoimentos até termos casos reais) */}
         <section className="mt-16">
           <div className="text-center">
-            <p className="text-xs lg:text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl font-extrabold uppercase tracking-[0.3em]" style={{ color: C.gold }}>Quem já usa</p>
+            <p className="text-xs lg:text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl font-extrabold uppercase tracking-[0.3em]" style={{ color: C.gold }}>Inauguração</p>
             <h2 className="mt-3 font-display text-3xl font-extrabold md:text-4xl" style={{ color: C.ink }}>
-              {USUARIAS} profissionais já mudaram a rotina
+              {t("inauguracao_titulo", "Por que entrar agora, na turma de inauguração")}
             </h2>
+            <p className="mx-auto mt-3 max-w-2xl text-sm lg:text-base" style={{ color: C.inkSoft }}>
+              {t(
+                "inauguracao_sub",
+                "A ADEC está sendo inaugurada. Quem entra agora ajuda a moldar o app e recebe tudo o que for lançado dentro da sua academia.",
+              )}
+            </p>
           </div>
           <div className="mt-8 grid gap-4 md:grid-cols-3">
             {[
               {
-                texto:
-                  "Antes eu saía do plantão e passava mais 1h terminando anotações em casa. Chegava exausta e ainda com a cabeça no trabalho. Com o app, saio no horário e chego inteira pra minha família. Mudou minha rotina.",
-                nome: "Enfermeira, UTI adulto",
+                icon: Star,
+                title: "Acesso de fundadora",
+                desc: "Seu preço de entrada é mantido enquanto a assinatura estiver ativa, mesmo com novos módulos chegando.",
               },
               {
-                texto:
-                  "Eu chorava no carro depois do plantão de tanto medo de ter errado alguma dose. Hoje eu confiro tudo em segundos e vou pra casa leve, sabendo que fiz certo. Isso não tem preço.",
-                nome: "Técnica em Enfermagem, pronto-socorro",
+                icon: MessageCircle,
+                title: "Canal direto com a autora",
+                desc: "Pediu, foi analisado: nesta fase suas sugestões entram na fila de desenvolvimento com prioridade.",
               },
               {
-                texto:
-                  "Estagiar me dava um nó no estômago. Eu travava na frente do preceptor. Com os procedimentos passo a passo, entrei no campo confiante pela primeira vez — e ainda passei nas provas dormindo à noite.",
-                nome: "Acadêmica, 7º período",
+                icon: ShieldCheck,
+                title: "Teste sem risco",
+                desc: `${TRIAL_DAYS} dias grátis, sem cartão no cadastro. Você usa no plantão de verdade antes de decidir.`,
               },
-            ].map((d, idx) => {
-              const n = idx + 1;
-              return (
-                <figure
-                  key={n}
-                  className="flex flex-col rounded-3xl border p-6 backdrop-blur"
-                  style={{ borderColor: C.line, background: C.card }}
-                >
-                  <div className="flex gap-0.5" style={{ color: C.goldBright }}>
-                    {[0, 1, 2, 3, 4].map((i) => (
-                      <Star key={i} className="h-4 w-4 fill-current" />
-                    ))}
-                  </div>
-                  <blockquote className="mt-3 flex-1 text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl italic" style={{ color: C.inkSoft }}>
-                    “{t(`depoimento${n}_texto`, d.texto)}”
-                  </blockquote>
-                  <figcaption className="mt-4 border-t pt-3 text-xs lg:text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl font-bold" style={{ borderColor: C.line, color: C.cta }}>
-                    {t(`depoimento${n}_nome`, d.nome)}
-                  </figcaption>
-                </figure>
-              );
-            })}
+            ].map((c) => (
+              <div
+                key={c.title}
+                className="flex flex-col rounded-3xl border p-6 backdrop-blur"
+                style={{ borderColor: C.line, background: C.card }}
+              >
+                <c.icon className="h-6 w-6" style={{ color: C.gold }} />
+                <h3 className="mt-3 font-display text-lg font-extrabold" style={{ color: C.cta }}>{c.title}</h3>
+                <p className="mt-2 text-sm lg:text-base" style={{ color: C.inkSoft }}>{c.desc}</p>
+              </div>
+            ))}
           </div>
         </section>
 
@@ -685,13 +749,13 @@ function AdecPage() {
           <div className="relative">
             <div className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] lg:text-[13px] font-extrabold uppercase tracking-widest" style={{ background: C.orange, color: "#fff" }}>
               <Clock className="h-3.5 w-3.5" />
-              Vagas do Grupo VIP desta turma acabando
+              Turma de inauguração aberta agora
             </div>
             <h2 className="mt-4 font-display text-3xl font-extrabold md:text-5xl" style={{ color: "#fff" }}>
               Saia do próximo plantão no horário
             </h2>
             <p className="mx-auto mt-3 max-w-xl text-sm md:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl" style={{ color: "rgba(255,255,255,0.85)" }}>
-              Sem cartão de crédito. Sem fidelidade. Cancele quando quiser. Junte-se às {USUARIAS} profissionais que já automatizaram a escrita.
+              Sem cartão de crédito. Sem fidelidade. Cancele quando quiser. Entre na turma de inauguração da ADEC.
             </p>
 
             <div className="mx-auto mt-8 grid max-w-3xl gap-3 sm:grid-cols-2">
