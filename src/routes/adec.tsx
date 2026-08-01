@@ -51,7 +51,8 @@ const CTA_TOPO = "QUERO TESTAR GRÁTIS POR 15 DIAS →";
 const CTA_MEIO = "SIM, QUERO TRANSFORMAR MEU PLANTÃO";
 const CTA_RODAPE = "COMEÇAR MEU TESTE GRÁTIS →";
 
-const USUARIAS = "4.200+";
+/** Fase de inauguração: sem números de usuários e sem depoimentos até termos casos reais. */
+const LANCAMENTO = "Turma de inauguração";
 
 const PLANOS = [
   {
