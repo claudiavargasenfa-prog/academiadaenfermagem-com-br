@@ -13,6 +13,7 @@ import { Route as VendasRouteImport } from './routes/vendas'
 import { Route as UtiRouteImport } from './routes/uti'
 import { Route as SvPediatricoRouteImport } from './routes/sv-pediatrico'
 import { Route as SvGestanteRouteImport } from './routes/sv-gestante'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SinaisVitaisRouteImport } from './routes/sinais-vitais'
 import { Route as SimulacoesReaisRouteImport } from './routes/simulacoes-reais'
 import { Route as SegurancaRouteImport } from './routes/seguranca'
@@ -69,6 +70,11 @@ const SvPediatricoRoute = SvPediatricoRouteImport.update({
 const SvGestanteRoute = SvGestanteRouteImport.update({
   id: '/sv-gestante',
   path: '/sv-gestante',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SinaisVitaisRoute = SinaisVitaisRouteImport.update({
@@ -287,6 +293,7 @@ export interface FileRoutesByFullPath {
   '/seguranca': typeof SegurancaRoute
   '/simulacoes-reais': typeof SimulacoesReaisRoute
   '/sinais-vitais': typeof SinaisVitaisRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sv-gestante': typeof SvGestanteRoute
   '/sv-pediatrico': typeof SvPediatricoRoute
   '/uti': typeof UtiRoute
@@ -330,6 +337,7 @@ export interface FileRoutesByTo {
   '/seguranca': typeof SegurancaRoute
   '/simulacoes-reais': typeof SimulacoesReaisRoute
   '/sinais-vitais': typeof SinaisVitaisRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sv-gestante': typeof SvGestanteRoute
   '/sv-pediatrico': typeof SvPediatricoRoute
   '/uti': typeof UtiRoute
@@ -373,6 +381,7 @@ export interface FileRoutesById {
   '/seguranca': typeof SegurancaRoute
   '/simulacoes-reais': typeof SimulacoesReaisRoute
   '/sinais-vitais': typeof SinaisVitaisRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sv-gestante': typeof SvGestanteRoute
   '/sv-pediatrico': typeof SvPediatricoRoute
   '/uti': typeof UtiRoute
@@ -418,6 +427,7 @@ export interface FileRouteTypes {
     | '/seguranca'
     | '/simulacoes-reais'
     | '/sinais-vitais'
+    | '/sitemap.xml'
     | '/sv-gestante'
     | '/sv-pediatrico'
     | '/uti'
@@ -461,6 +471,7 @@ export interface FileRouteTypes {
     | '/seguranca'
     | '/simulacoes-reais'
     | '/sinais-vitais'
+    | '/sitemap.xml'
     | '/sv-gestante'
     | '/sv-pediatrico'
     | '/uti'
@@ -503,6 +514,7 @@ export interface FileRouteTypes {
     | '/seguranca'
     | '/simulacoes-reais'
     | '/sinais-vitais'
+    | '/sitemap.xml'
     | '/sv-gestante'
     | '/sv-pediatrico'
     | '/uti'
@@ -547,6 +559,7 @@ export interface RootRouteChildren {
   SegurancaRoute: typeof SegurancaRoute
   SimulacoesReaisRoute: typeof SimulacoesReaisRoute
   SinaisVitaisRoute: typeof SinaisVitaisRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SvGestanteRoute: typeof SvGestanteRoute
   SvPediatricoRoute: typeof SvPediatricoRoute
   UtiRoute: typeof UtiRoute
@@ -586,6 +599,13 @@ declare module '@tanstack/react-router' {
       path: '/sv-gestante'
       fullPath: '/sv-gestante'
       preLoaderRoute: typeof SvGestanteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/sinais-vitais': {
@@ -904,6 +924,7 @@ const rootRouteChildren: RootRouteChildren = {
   SegurancaRoute: SegurancaRoute,
   SimulacoesReaisRoute: SimulacoesReaisRoute,
   SinaisVitaisRoute: SinaisVitaisRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   SvGestanteRoute: SvGestanteRoute,
   SvPediatricoRoute: SvPediatricoRoute,
   UtiRoute: UtiRoute,
