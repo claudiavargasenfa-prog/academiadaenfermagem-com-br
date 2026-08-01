@@ -15,7 +15,7 @@ Abri a `/adec` renderizada e li o código (`src/routes/adec.tsx`, 800 linhas). P
 
 Reescrita completa da `/adec` mantendo textos/preços/rotas atuais, com estética e efeitos no padrão da referência:
 
-- **Base escura premium**: fundo verde-floresta profundo com gradiente em malha animado (blobs em movimento lento), grão sutil e luz dourada — ouro só como acento, laranja só para urgência.
+- **Paleta mantida exatamente como está**: verde-água claro de fundo, verde-floresta do CTA, ouro nos detalhes e laranja na urgência. Nada de tema escuro. O impacto vem de camadas e movimento sobre essas mesmas cores: gradiente em malha animado, blobs dourados em deriva lenta, grão sutil e sombras com profundidade.
 - **Hero cinematográfico**: headline com revelação palavra a palavra, selo de inauguração pulsante, CTA com brilho deslizante, badge de confiança e "mockup" de celular flutuante mostrando um MSDC real do app.
 - **Faixa de logos/selos** em marquee infinito (COFEN, CORENs, ANVISA, MS, OMS).
 - **Números animados** (35 anos, 60+ MSDC, 22+ escalas) contando ao entrar na tela.
