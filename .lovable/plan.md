@@ -8,7 +8,7 @@ Abri a `/adec` renderizada e li o código (`src/routes/adec.tsx`, 800 linhas). P
 2. **Classes de tipografia quebradas.** Há dezenas de cadeias inválidas do tipo `text-xs lg:text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl` no mesmo elemento. Só a última vence, então textos secundários ficam gigantes no desktop e a hierarquia visual some.
 3. **Ícones quebrados.** Vários emojis aparecem como quadradinho vazio (barra de urgência, chips "15 dias grátis", "Funciona offline", cards Estudante/Técnico/Enfermeiro).
 4. **Zero prova visual do produto.** A referência vende com telas do produto; a nossa não mostra uma única tela dos apps. O usuário lê promessas sem ver nada.
-5. **Fundo verde-água claro plano.** A referência usa fundo escuro com gradiente em malha e luz — é isso que dá o "chama atenção".
+5. **Fundo plano e sem profundidade.** Não é questão de cor, e sim de camadas: falta gradiente em movimento, luz e relevo.
 6. **Sem CTA fixo.** Em página longa, o botão some e não volta.
 
 ## O que será feito
