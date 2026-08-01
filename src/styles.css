@@ -193,3 +193,47 @@
 @utility wave-animation {
   animation: wave 2s ease-in-out infinite;
 }
+
+/* ---------- Landing ADEC — efeitos ---------- */
+
+@keyframes adec-drift-a {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(6%, 5%, 0) scale(1.15); }
+}
+
+@keyframes adec-drift-b {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1.1); }
+  50% { transform: translate3d(-7%, -6%, 0) scale(0.95); }
+}
+
+@keyframes adec-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@keyframes adec-shine {
+  0% { transform: translateX(-140%) skewX(-18deg); }
+  60%, 100% { transform: translateX(240%) skewX(-18deg); }
+}
+
+@keyframes adec-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+@utility adec-drift-a { animation: adec-drift-a 18s ease-in-out infinite; }
+@utility adec-drift-b { animation: adec-drift-b 22s ease-in-out infinite; }
+@utility adec-marquee { animation: adec-marquee 28s linear infinite; }
+@utility adec-shine { animation: adec-shine 3.4s ease-in-out infinite; }
+@utility adec-float { animation: adec-float 6s ease-in-out infinite; }
+
+@utility adec-grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .adec-drift-a, .adec-drift-b, .adec-marquee, .adec-shine, .adec-float {
+    animation: none !important;
+  }
+}
+
