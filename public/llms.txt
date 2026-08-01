@@ -1,0 +1,19 @@
+# Academia da Enfermagem
+
+> Plataforma brasileira com aplicativos de apoio à decisão clínica para acadêmicos, estudantes de técnico, técnicos em enfermagem e enfermeiros: SAE automatizada, cálculos de medicamentos, escalas clínicas, procedimentos e quizzes.
+
+## Pages
+
+- [Loja](/): Os quatro aplicativos da Academia da Enfermagem e como começar com 15 dias grátis.
+- [ADEC](/adec): Página de apresentação e vendas dos módulos de suporte à decisão clínica.
+- [Aplicativos](/loja): Catálogo dos aplicativos por perfil profissional.
+- [Manual de Sobrevivência do Estágio](/manual-sobrevivencia): Conteúdo gratuito com checklist da mochila, postura no campo e comunicação com o preceptor.
+- [Minha História](/minha-historia): História da fundadora e propósito do projeto.
+- [Confiança](/confianca): Bases legais e científicas (COFEN, CORENs, ANVISA, MS, OMS).
+
+## Optional
+
+- [Plano Acadêmico](/planos/academico): Detalhes do aplicativo para acadêmicos de enfermagem.
+- [Plano Técnico](/planos/tecnico): Detalhes do aplicativo para técnicos em enfermagem.
+- [Plano Estudante de Técnico](/planos/tecnico-estudante): Detalhes do aplicativo para estudantes de técnico.
+- [Plano Enfermeiro](/planos/enfermeiro): Detalhes do aplicativo para enfermeiros.
