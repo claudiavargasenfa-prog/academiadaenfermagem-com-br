@@ -688,7 +688,7 @@ function AdecPage() {
               Saia do próximo plantão no horário
             </h2>
             <p className="mx-auto mt-3 max-w-xl text-sm md:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl" style={{ color: "rgba(255,255,255,0.85)" }}>
-              Sem cartão de crédito. Sem fidelidade. Cancele quando quiser. Junte-se às {USUARIAS} profissionais que já automatizaram a escrita.
+              Sem cartão de crédito. Sem fidelidade. Cancele quando quiser. Entre na turma de inauguração da ADEC.
             </p>
 
             <div className="mx-auto mt-8 grid max-w-3xl gap-3 sm:grid-cols-2">
