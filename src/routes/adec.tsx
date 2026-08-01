@@ -17,7 +17,7 @@ import {
   Brain,
   HeartPulse,
   Flame,
-  Users,
+  
 } from "lucide-react";
 import logoAsset from "@/assets/logo.png.asset.json";
 import fotoFundadora from "@/assets/foto-fundadora.jpeg.asset.json";
@@ -587,7 +587,7 @@ function AdecPage() {
             </p>
             <p className="mt-3 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] lg:text-[13px] font-extrabold uppercase tracking-wide" style={{ background: C.orange, color: "#fff" }}>
               <Flame className="h-3.5 w-3.5" />
-              Vagas limitadas nesta turma — o convite chega ao ativar seu teste
+              Grupo VIP da inauguração — o convite chega ao ativar seu teste
             </p>
           </div>
         </section>
@@ -749,7 +749,7 @@ function AdecPage() {
           <div className="relative">
             <div className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] lg:text-[13px] font-extrabold uppercase tracking-widest" style={{ background: C.orange, color: "#fff" }}>
               <Clock className="h-3.5 w-3.5" />
-              Vagas do Grupo VIP desta turma acabando
+              Turma de inauguração aberta agora
             </div>
             <h2 className="mt-4 font-display text-3xl font-extrabold md:text-5xl" style={{ color: "#fff" }}>
               Saia do próximo plantão no horário
