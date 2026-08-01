@@ -243,7 +243,7 @@ function AdecPage() {
         style={{ background: C.orange, color: "#fff" }}
       >
         <Flame className="mr-1 inline h-3.5 w-3.5" />
-        Vagas limitadas no Grupo VIP do WhatsApp desta turma — entre hoje e garanta a sua
+        🎉 Inauguração da ADEC — turma fundadora aberta: comece hoje com {TRIAL_DAYS} dias grátis
       </div>
 
       <header className="mx-auto flex max-w-7xl items-center justify-between px-5 pt-6">
@@ -276,12 +276,21 @@ function AdecPage() {
             </p>
             <div className="mx-auto mt-1 h-px w-40" style={{ background: `linear-gradient(90deg, transparent, ${C.goldBright}, transparent)` }} />
 
-            <h1 className="mt-8 max-w-4xl font-display text-3xl font-extrabold leading-[1.12] tracking-tight md:text-5xl" style={{ color: C.ink }}>
+            <span
+              className="mt-5 inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-[11px] lg:text-[13px] font-extrabold uppercase tracking-widest"
+              style={{ background: C.orange, color: "#fff" }}
+            >
+              <Sparkles className="h-3.5 w-3.5" />
+              {t("hero_selo", "Inauguração oficial — estamos abrindo as portas")}
+            </span>
+
+            <h1 className="mt-6 max-w-4xl font-display text-3xl font-extrabold leading-[1.12] tracking-tight md:text-5xl" style={{ color: C.ink }}>
               {t(
                 "hero_title",
-                "Cansada de anotações manuais que roubam seu plantão? Automatize a escrita com 2 cliques e foque no paciente.",
+                "A ADEC está sendo inaugurada: automatize suas anotações com 2 cliques e foque no paciente.",
               )}
             </h1>
+
 
             <p className="mt-5 max-w-2xl text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl font-medium md:text-lg lg:text-xl lg:text-2xl lg:text-3xl" style={{ color: C.inkSoft }}>
               {t(
