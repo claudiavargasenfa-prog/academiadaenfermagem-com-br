@@ -124,9 +124,9 @@ const MODULOS_SHOWCASE = [
 
 export const Route = createFileRoute("/adec")({
   head: () => {
-    const title = "ADEC — Automatize suas anotações e foque no paciente";
+    const title = "Inauguração da ADEC — Academia da Enfermagem | 15 dias grátis";
     const description =
-      "Cansada de anotações manuais que roubam seu plantão? Automatize a escrita com 2 cliques. 4 apps de Suporte à Decisão Clínica. 15 dias grátis, sem cartão.";
+      "Inauguração da ADEC: 4 apps de suporte à decisão clínica para acadêmicos, técnicos e enfermeiros. Anotação automática, SAE, cálculos e escalas. 15 dias grátis, sem cartão.";
     return {
       meta: [
         { title },
@@ -135,9 +135,67 @@ export const Route = createFileRoute("/adec")({
         { property: "og:description", content: description },
         { property: "og:type", content: "website" },
         { property: "og:url", content: "https://academiadaenfermagem.com.br/adec" },
+        { property: "og:locale", content: "pt_BR" },
         { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: title },
+        { name: "twitter:description", content: description },
       ],
       links: [{ rel: "canonical", href: "https://academiadaenfermagem.com.br/adec" }],
+      scripts: [
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "SoftwareApplication",
+            name: "ADEC — Academia da Enfermagem",
+            applicationCategory: "HealthApplication",
+            operatingSystem: "Web, Android, iOS",
+            url: "https://academiadaenfermagem.com.br/adec",
+            inLanguage: "pt-BR",
+            description,
+            offers: {
+              "@type": "Offer",
+              priceCurrency: "BRL",
+              category: "subscription",
+              availability: "https://schema.org/InStock",
+              url: "https://academiadaenfermagem.com.br/adec",
+            },
+          }),
+        },
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: [
+              {
+                "@type": "Question",
+                name: "Preciso de cartão de crédito para testar?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "Não. O teste de 15 dias é liberado no cadastro, sem cartão de crédito.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "Para quem é a ADEC?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "Para acadêmicos de enfermagem, estudantes de técnico, técnicos em enfermagem e enfermeiros, com uma academia específica para cada fase profissional.",
+                },
+              },
+              {
+                "@type": "Question",
+                name: "O conteúdo é baseado em quê?",
+                acceptedAnswer: {
+                  "@type": "Answer",
+                  text: "Todo o conteúdo é construído com base em COFEN, CORENs, ANVISA, Ministério da Saúde e OMS, com atualização contínua.",
+                },
+              },
+            ],
+          }),
+        },
+      ],
     };
   },
   component: AdecPage,
