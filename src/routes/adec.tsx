@@ -525,53 +525,48 @@ function AdecPage() {
           </div>
         </section>
 
-        {/* DEPOIMENTOS */}
+        {/* INAUGURAÇÃO — vantagens de entrar agora (sem depoimentos até termos casos reais) */}
         <section className="mt-16">
           <div className="text-center">
-            <p className="text-xs lg:text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl font-extrabold uppercase tracking-[0.3em]" style={{ color: C.gold }}>Quem já usa</p>
+            <p className="text-xs lg:text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl font-extrabold uppercase tracking-[0.3em]" style={{ color: C.gold }}>Inauguração</p>
             <h2 className="mt-3 font-display text-3xl font-extrabold md:text-4xl" style={{ color: C.ink }}>
-              {USUARIAS} profissionais já mudaram a rotina
+              {t("inauguracao_titulo", "Por que entrar agora, na turma de inauguração")}
             </h2>
+            <p className="mx-auto mt-3 max-w-2xl text-sm lg:text-base" style={{ color: C.inkSoft }}>
+              {t(
+                "inauguracao_sub",
+                "A ADEC está sendo inaugurada. Quem entra agora ajuda a moldar o app e recebe tudo o que for lançado dentro da sua academia.",
+              )}
+            </p>
           </div>
           <div className="mt-8 grid gap-4 md:grid-cols-3">
             {[
               {
-                texto:
-                  "Antes eu saía do plantão e passava mais 1h terminando anotações em casa. Chegava exausta e ainda com a cabeça no trabalho. Com o app, saio no horário e chego inteira pra minha família. Mudou minha rotina.",
-                nome: "Enfermeira, UTI adulto",
+                icon: Star,
+                title: "Acesso de fundadora",
+                desc: "Seu preço de entrada é mantido enquanto a assinatura estiver ativa, mesmo com novos módulos chegando.",
               },
               {
-                texto:
-                  "Eu chorava no carro depois do plantão de tanto medo de ter errado alguma dose. Hoje eu confiro tudo em segundos e vou pra casa leve, sabendo que fiz certo. Isso não tem preço.",
-                nome: "Técnica em Enfermagem, pronto-socorro",
+                icon: MessageCircle,
+                title: "Canal direto com a autora",
+                desc: "Pediu, foi analisado: nesta fase suas sugestões entram na fila de desenvolvimento com prioridade.",
               },
               {
-                texto:
-                  "Estagiar me dava um nó no estômago. Eu travava na frente do preceptor. Com os procedimentos passo a passo, entrei no campo confiante pela primeira vez — e ainda passei nas provas dormindo à noite.",
-                nome: "Acadêmica, 7º período",
+                icon: ShieldCheck,
+                title: "Teste sem risco",
+                desc: `${TRIAL_DAYS} dias grátis, sem cartão no cadastro. Você usa no plantão de verdade antes de decidir.`,
               },
-            ].map((d, idx) => {
-              const n = idx + 1;
-              return (
-                <figure
-                  key={n}
-                  className="flex flex-col rounded-3xl border p-6 backdrop-blur"
-                  style={{ borderColor: C.line, background: C.card }}
-                >
-                  <div className="flex gap-0.5" style={{ color: C.goldBright }}>
-                    {[0, 1, 2, 3, 4].map((i) => (
-                      <Star key={i} className="h-4 w-4 fill-current" />
-                    ))}
-                  </div>
-                  <blockquote className="mt-3 flex-1 text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl italic" style={{ color: C.inkSoft }}>
-                    “{t(`depoimento${n}_texto`, d.texto)}”
-                  </blockquote>
-                  <figcaption className="mt-4 border-t pt-3 text-xs lg:text-sm lg:text-base lg:text-lg lg:text-xl lg:text-2xl lg:text-3xl font-bold" style={{ borderColor: C.line, color: C.cta }}>
-                    {t(`depoimento${n}_nome`, d.nome)}
-                  </figcaption>
-                </figure>
-              );
-            })}
+            ].map((c) => (
+              <div
+                key={c.title}
+                className="flex flex-col rounded-3xl border p-6 backdrop-blur"
+                style={{ borderColor: C.line, background: C.card }}
+              >
+                <c.icon className="h-6 w-6" style={{ color: C.gold }} />
+                <h3 className="mt-3 font-display text-lg font-extrabold" style={{ color: C.cta }}>{c.title}</h3>
+                <p className="mt-2 text-sm lg:text-base" style={{ color: C.inkSoft }}>{c.desc}</p>
+              </div>
+            ))}
           </div>
         </section>
 
