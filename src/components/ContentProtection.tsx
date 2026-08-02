@@ -73,9 +73,10 @@ export function ContentProtection({
 
   return (
     <div
-      className="relative"
+      className="content-protected relative"
       style={{ userSelect: "none", WebkitUserSelect: "none" }}
     >
+
       {children}
       {/* Marca d'água diagonal sobre todo o conteúdo */}
       <div
