@@ -1,6 +1,7 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 
 import { AuthScreen } from "@/components/AuthGate";
+import { WelcomePanel } from "@/components/cadastro/WelcomePanel";
 
 const ALLOWED = new Set(["academico", "tecnico", "tecnico-estudante", "enfermeiro"]);
 
@@ -34,5 +35,12 @@ export const Route = createFileRoute("/cadastro/$slug")({
 
 function CadastroPage() {
   const { slug } = Route.useParams();
-  return <AuthScreen cadastroSlug={slug} />;
+  return (
+    <div className="mx-auto grid max-w-6xl gap-6 px-4 py-8 md:grid-cols-2 md:items-start">
+      <WelcomePanel slug={slug} />
+      <div>
+        <AuthScreen cadastroSlug={slug} />
+      </div>
+    </div>
+  );
 }
