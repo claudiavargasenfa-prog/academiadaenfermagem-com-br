@@ -429,6 +429,42 @@ export type Database = {
         }
         Relationships: []
       }
+      pending_purchases: {
+        Row: {
+          consumed_at: string | null
+          created_at: string
+          email: string
+          id: string
+          next_billing_date: string | null
+          order_id: string | null
+          plan_slug: string
+          subscription_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          consumed_at?: string | null
+          created_at?: string
+          email: string
+          id?: string
+          next_billing_date?: string | null
+          order_id?: string | null
+          plan_slug: string
+          subscription_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          consumed_at?: string | null
+          created_at?: string
+          email?: string
+          id?: string
+          next_billing_date?: string | null
+          order_id?: string | null
+          plan_slug?: string
+          subscription_id?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           categoria: string | null
@@ -508,6 +544,7 @@ export type Database = {
           cakto_checkout_url: string | null
           cakto_link_migracao: string | null
           cakto_link_novo: string | null
+          cakto_product_id: string | null
           created_at: string
           description: string | null
           id: string
@@ -525,6 +562,7 @@ export type Database = {
           cakto_checkout_url?: string | null
           cakto_link_migracao?: string | null
           cakto_link_novo?: string | null
+          cakto_product_id?: string | null
           created_at?: string
           description?: string | null
           id?: string
@@ -542,6 +580,7 @@ export type Database = {
           cakto_checkout_url?: string | null
           cakto_link_migracao?: string | null
           cakto_link_novo?: string | null
+          cakto_product_id?: string | null
           created_at?: string
           description?: string | null
           id?: string
@@ -707,6 +746,7 @@ export type Database = {
           status: string
           updated_at: string
           user_id: string
+          was_trial: boolean
         }
         Insert: {
           created_at?: string
@@ -718,6 +758,7 @@ export type Database = {
           status?: string
           updated_at?: string
           user_id: string
+          was_trial?: boolean
         }
         Update: {
           created_at?: string
@@ -729,6 +770,7 @@ export type Database = {
           status?: string
           updated_at?: string
           user_id?: string
+          was_trial?: boolean
         }
         Relationships: []
       }
@@ -741,6 +783,7 @@ export type Database = {
         Args: { _mini_app_id: string }
         Returns: number
       }
+      expire_finished_trials: { Args: never; Returns: number }
       has_app_access: {
         Args: { _mini_app_id: string; _user_id: string }
         Returns: boolean
