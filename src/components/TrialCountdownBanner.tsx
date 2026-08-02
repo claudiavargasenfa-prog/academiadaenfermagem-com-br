@@ -46,27 +46,31 @@ export function TrialCountdownBanner() {
   const checkoutUrl = plan?.cakto_link_novo || plan?.cakto_checkout_url || "";
   const firstName = (profile?.full_name || "aluno(a)").split(" ")[0];
 
+  const priceLabel = ((plan?.price_novo_cents ?? plan?.price_cents ?? 2499) / 100)
+    .toFixed(2)
+    .replace(".", ",");
+
   const styles: Record<NonNullable<Stage>, { bg: string; fg: string; title: string; body: string; cta: string }> = {
     blue: {
       bg: "bg-sky-500",
       fg: "text-white",
-      title: `⏳ Sua gratuidade está terminando em ${days} ${days === 1 ? "dia" : "dias"}`,
-      body: `Olá, ${firstName}! Sua assinatura gratuita${plan ? ` (${plan.name})` : ""} termina em ${days} dias. Garanta seu acesso a todo o conteúdo por apenas R$ ${(plan?.price_novo_cents ?? plan?.price_cents ?? 2499) / 100}/mês.`,
+      title: "⏳ Seu tempo grátis termina em 5 dias",
+      body: `Olá, ${firstName}! Seu período gratuito${track ? ` na ${track.label}` : ""} termina em ${days} ${days === 1 ? "dia" : "dias"}. Para continuar com todo o conteúdo, associe-se por R$ ${priceLabel}/mês.`,
       cta: "🔐 GARANTIR ACESSO",
     },
     orange: {
       bg: "bg-orange-500",
       fg: "text-white",
-      title: `⚠️ ÚLTIMOS DIAS — Faltam ${days} ${days === 1 ? "dia" : "dias"}`,
-      body: `Atenção, ${firstName}! 🔥 VAGAS LIMITADAS: apenas 100 alunos pagantes nesta primeira turma. Não perca a oportunidade de continuar na Academia.`,
-      cta: "🔐 GARANTIR VAGA",
+      title: "⚠️ Seu tempo grátis termina em 3 dias",
+      body: `${firstName}, para continuar acessando todos os conteúdos, acesse o link e seja um associado por R$ ${priceLabel}/mês.`,
+      cta: "🔐 SER ASSOCIADO",
     },
     red: {
       bg: "bg-red-600",
       fg: "text-white",
-      title: "🚨 HOJE é o último dia da sua gratuidade!",
-      body: `${firstName}, a partir de amanhã seu acesso será bloqueado. Assine agora por R$ ${(plan?.price_novo_cents ?? plan?.price_cents ?? 2499) / 100}/mês e mantenha todos os conteúdos + atualizações mensais.`,
-      cta: "🔐 ASSINAR AGORA",
+      title: "🚨 Seu prazo de gratuidade é até amanhã",
+      body: `${firstName}, passando para lembrar que sua gratuidade termina amanhã. Não perca todo esse conteúdo e os demais que estão por vir — acesse o link e associe-se.`,
+      cta: "🔐 ASSOCIE-SE AGORA",
     },
   };
   const s = styles[stage];
@@ -88,13 +92,16 @@ export function TrialCountdownBanner() {
             {s.cta} <ExternalLink className="h-3 w-3" />
           </a>
         ) : null}
-        <button
-          aria-label="Fechar aviso"
-          onClick={() => setDismissed(true)}
-          className="shrink-0 rounded-full p-1 hover:bg-white/15"
-        >
-          <X className="h-4 w-4" />
-        </button>
+        {stage !== "red" ? (
+          <button
+            aria-label="Fechar aviso"
+            onClick={() => setDismissed(true)}
+            className="shrink-0 rounded-full p-1 hover:bg-white/15"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        ) : null}
+
       </div>
     </div>
   );
