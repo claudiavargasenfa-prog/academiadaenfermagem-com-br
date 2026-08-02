@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { ContentProtection } from "@/components/ContentProtection";
 import { AppShell, Card, DataTable, PageHeader } from "@/components/AppShell";
 import { MiniAppContent } from "@/components/MiniAppContent";
 
@@ -51,6 +52,7 @@ const sat: (string | number)[][] = [
 function SV() {
   return (
     <AppShell>
+      <ContentProtection allowPrint>
       <PageHeader
         eyebrow="Referências clínicas"
         title="Sinais vitais"
@@ -79,6 +81,7 @@ function SV() {
           <DataTable headers={["Classificação", "Valor"]} rows={temp} />
         </Card>
       </div>
+    </ContentProtection>
     </AppShell>
   );
 }

@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { ContentProtection } from "@/components/ContentProtection";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
 import { MiniAppContent } from "@/components/MiniAppContent";
 import { HandHeart, ShieldAlert, Sparkles, Activity } from "lucide-react";
@@ -51,6 +52,7 @@ const momentos = [
 function IRASPage() {
   return (
     <AppShell>
+      <ContentProtection allowPrint>
       <PageHeader
         eyebrow="Prevenção & Controle"
         title="Time Contra as IRAS"
@@ -146,6 +148,7 @@ function IRASPage() {
           ))}
         </ol>
       </section>
+    </ContentProtection>
     </AppShell>
   );
 }

@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { ContentProtection } from "@/components/ContentProtection";
 import { useState } from "react";
 import { AppShell, Card, PageHeader, DataTable } from "@/components/AppShell";
 import { MiniAppContent } from "@/components/MiniAppContent";
@@ -171,6 +172,7 @@ function Seguranca() {
 function CalcPage() {
   return (
     <AppShell>
+      <ContentProtection allowPrint>
       <PageHeader
         eyebrow="Cálculos clínicos"
         title="Cálculos de medicamentos"
@@ -199,6 +201,7 @@ function CalcPage() {
         </Card>
         <Seguranca />
       </div>
+    </ContentProtection>
     </AppShell>
   );
 }

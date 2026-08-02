@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { ContentProtection } from "@/components/ContentProtection";
 import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
@@ -270,6 +271,7 @@ function DiagnosticosAedePage() {
 
   return (
     <AppShell>
+      <ContentProtection allowPrint>
       <PageHeader
         eyebrow="Mini App"
         title="Diagnósticos e Prescrição AE/DE"
@@ -387,6 +389,7 @@ function DiagnosticosAedePage() {
           onBack={() => go(4)}
         />
       )}
+    </ContentProtection>
     </AppShell>
   );
 }
