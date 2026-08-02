@@ -26,7 +26,7 @@ const LABELS: Record<string, string> = {
 
 const DEFAULTS: Record<string, Record<string, string>> = {
   academico: {
-    slogan: "Do primeiro estágio ao TCC — sem sofrer.",
+    slogan: "Do primeiro estágio ao plantão — com segurança e confiança.",
   },
   tecnico: {
     slogan: "Prática segura, plantão tranquilo.",
