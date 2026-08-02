@@ -104,7 +104,7 @@ export const Route = createFileRoute("/api/public/cakto-webhook")({
               {
                 email,
                 plan_slug: plan.slug,
-                order_id: payload.data?.id ?? null,
+                order_id: payload.data?.order_id ?? null,
                 next_billing_date: expiresAt,
                 consumed_at: null,
               } as never,
@@ -143,7 +143,7 @@ export const Route = createFileRoute("/api/public/cakto-webhook")({
               status: "active",
               started_at: new Date().toISOString(),
               expires_at: expiresAt,
-              notes: `Compra Cakto ${payload.data?.id ?? ""}`.trim(),
+              notes: `Compra Cakto ${payload.data?.order_id ?? ""}`.trim(),
             } as never);
           }
 
