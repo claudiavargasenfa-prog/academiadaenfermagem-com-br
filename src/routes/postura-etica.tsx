@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { ContentProtection } from "@/components/ContentProtection";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
 import { MiniAppContent } from "@/components/MiniAppContent";
 import {
@@ -109,6 +110,7 @@ const redFlags = [
 function PosturaEticaPage() {
   return (
     <AppShell>
+      <ContentProtection allowPrint>
       <PageHeader
         eyebrow="Manual de Conduta"
         title="Postura, Ética e Comportamento Profissional"
@@ -195,6 +197,7 @@ function PosturaEticaPage() {
           </div>
         </div>
       </section>
+    </ContentProtection>
     </AppShell>
   );
 }

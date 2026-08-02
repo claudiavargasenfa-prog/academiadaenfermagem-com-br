@@ -76,6 +76,83 @@ export const Route = createFileRoute("/api/public/cakto-webhook")({
           .ilike("email", email)
           .maybeSingle();
 
+        // 1b) Assinatura de app inteiro (plano)? Libera acesso pago e encerra gratuidade.
+        const { data: plan } = await supabaseAdmin
+          .from("subscription_plans")
+          .select("slug")
+          .eq("cakto_product_id", productId)
+          .maybeSingle();
+
+        if (plan) {
+          const approved =
+            event === "purchase_approved" ||
+            event === "subscription_renewed" ||
+            event === "subscription_created";
+
+          if (!approved) {
+            return new Response(JSON.stringify({ ok: true, note: "plan_event_ignored" }), {
+              status: 200,
+              headers: { "Content-Type": "application/json" },
+            });
+          }
+
+          const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
+
+          if (!profile) {
+            // Comprou antes de criar conta: guarda para liberar no cadastro.
+            await supabaseAdmin.from("pending_purchases").upsert(
+              {
+                email,
+                plan_slug: plan.slug,
+                order_id: payload.data?.order_id ?? null,
+                next_billing_date: expiresAt,
+                consumed_at: null,
+              } as never,
+              { onConflict: "email,plan_slug" },
+            );
+            return new Response(JSON.stringify({ ok: true, note: "purchase_pending_signup" }), {
+              status: 200,
+              headers: { "Content-Type": "application/json" },
+            });
+          }
+
+          // Encerra qualquer gratuidade vigente deste aluno
+          await supabaseAdmin
+            .from("user_subscriptions")
+            .update({ status: "expired", expires_at: new Date().toISOString() })
+            .eq("user_id", profile.id)
+            .eq("status", "trial");
+
+          const { data: existing } = await supabaseAdmin
+            .from("user_subscriptions")
+            .select("id")
+            .eq("user_id", profile.id)
+            .eq("plan_slug", plan.slug)
+            .eq("status", "active")
+            .maybeSingle();
+
+          if (existing) {
+            await supabaseAdmin
+              .from("user_subscriptions")
+              .update({ expires_at: expiresAt })
+              .eq("id", existing.id);
+          } else {
+            await supabaseAdmin.from("user_subscriptions").insert({
+              user_id: profile.id,
+              plan_slug: plan.slug,
+              status: "active",
+              started_at: new Date().toISOString(),
+              expires_at: expiresAt,
+              notes: `Compra Cakto ${payload.data?.order_id ?? ""}`.trim(),
+            } as never);
+          }
+
+          return new Response(JSON.stringify({ ok: true, note: "plan_access_granted" }), {
+            status: 200,
+            headers: { "Content-Type": "application/json" },
+          });
+        }
+
         if (!profile) {
           console.warn("[cakto-webhook] usuário não encontrado para email:", email);
           return new Response(JSON.stringify({ ok: true, note: "user_not_found" }), {
@@ -83,6 +160,7 @@ export const Route = createFileRoute("/api/public/cakto-webhook")({
             headers: { "Content-Type": "application/json" },
           });
         }
+
 
         // 2) Encontrar o mini app pelo cakto_product_id
         const { data: miniApp } = await supabaseAdmin

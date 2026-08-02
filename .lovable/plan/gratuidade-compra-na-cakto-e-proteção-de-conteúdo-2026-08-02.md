@@ -7,6 +7,7 @@ Quatro regras de negócio para colocar no ar antes da divulgação.
 Hoje o sistema não sabe reconhecer a compra da mensalidade de uma academia: o recebimento automático da Cakto só entende mini apps avulsos, e todo cadastro novo ganha 15 dias grátis, inclusive quem já pagou.
 
 O que muda:
+
 - Cada plano (Acadêmico, Técnico, Estudante de Técnico, Enfermeiro) passa a ter o código do produto da Cakto cadastrado, editável na área de administração.
 - Quando a Cakto avisar "compra aprovada", o aluno recebe acesso pago de 30 dias àquela academia e a gratuidade daquele plano é encerrada na hora (vira assinatura paga).
 - Se a compra for reembolsada, cancelada ou houver chargeback, o acesso é encerrado — sem voltar para a gratuidade.
@@ -16,6 +17,7 @@ O que muda:
 ## 2. Avisos de fim da gratuidade (banner dentro do app)
 
 O banner já existe; será ajustado para os textos e a régua pedidos:
+
 - **Faltando 5 dias** (azul): "Seu tempo grátis termina em 5 dias."
 - **Faltando 3 dias** (laranja): "Seu tempo grátis termina em 3 dias. Para continuar acessando todos os conteúdos, acesse o link e seja um associado."
 - **Último dia** (vermelho, não pode ser fechado): "Seu prazo de gratuidade vai até amanhã. Não perca todo esse conteúdo e os que ainda virão — acesse o link e associe-se."
@@ -27,6 +29,7 @@ Cada aviso leva ao checkout do plano do próprio aluno. Também sai a frase de "
 - **Bloqueio automático:** ao completar 15 dias, o acesso é encerrado no mesmo instante — sem depender de o aluno recarregar a página. Uma rotina diária marca as gratuidades vencidas como expiradas e o app passa a mostrar a tela de "Gratuidade encerrada" com o botão de assinar.
 - **Uma academia por gratuidade:** o aluno em teste grátis só pode ter uma academia liberada. O sistema passa a garantir uma única gratuidade por pessoa (nunca uma segunda, nem em outra categoria, nem depois de a primeira acabar). Ao tentar abrir outra academia no plano gratuito, ele vê o convite para assinar aquela academia.
 - **Quem paga não tem esse limite:** comprando as 4 academias, acessa as 4 normalmente.
+- Quando terminar a promoção no dia 05.09.26, a gratuidade acaba. 
 
 ## 4. Bloqueio de cópia
 

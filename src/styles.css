@@ -237,3 +237,14 @@
   }
 }
 
+
+/* Bloqueio de cópia: libera seleção/digitação onde há salvamento */
+.content-protected input,
+.content-protected textarea,
+.content-protected select,
+.content-protected [contenteditable="true"],
+.content-protected .selectable,
+.content-protected .selectable * {
+  user-select: text !important;
+  -webkit-user-select: text !important;
+}

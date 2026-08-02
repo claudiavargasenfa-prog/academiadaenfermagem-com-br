@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { ContentProtection } from "@/components/ContentProtection";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
 import { MiniAppContent } from "@/components/MiniAppContent";
 import {
@@ -96,6 +97,7 @@ const metas = [
 function SegurancaPage() {
   return (
     <AppShell>
+      <ContentProtection allowPrint>
       <PageHeader
         eyebrow="NSP · Núcleo de Segurança"
         title="Segurança do Paciente"
@@ -187,6 +189,7 @@ function SegurancaPage() {
           </div>
         </div>
       </section>
+    </ContentProtection>
     </AppShell>
   );
 }

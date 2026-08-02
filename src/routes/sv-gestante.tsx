@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { ContentProtection } from "@/components/ContentProtection";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
 import { MiniAppContent } from "@/components/MiniAppContent";
 import { AlertTriangle, HeartPulse, Wind } from "lucide-react";
@@ -78,6 +79,7 @@ function Tabela({ title, rows }: { title: string; rows: Row[] }) {
 function SVGest() {
   return (
     <AppShell>
+      <ContentProtection allowPrint>
       <PageHeader
         eyebrow="Gestante"
         title="Sinais vitais na gestação"
@@ -137,6 +139,7 @@ function SVGest() {
         Fontes: FEBRASGO, Ministério da Saúde, OMS e Diretrizes AHA. Aplicativo educacional — não
         substitui o julgamento clínico do profissional de saúde.
       </p>
+    </ContentProtection>
     </AppShell>
   );
 }

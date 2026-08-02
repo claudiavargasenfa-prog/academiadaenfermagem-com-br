@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { ContentProtection } from "@/components/ContentProtection";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
 import { MiniAppContent } from "@/components/MiniAppContent";
 import { CheckCircle2, BookOpen, MessageCircle, Backpack } from "lucide-react";
@@ -20,6 +21,7 @@ export const Route = createFileRoute("/manual-sobrevivencia")({
 function Page() {
   return (
     <AppShell>
+      <ContentProtection allowPrint>
       <PageHeader
         eyebrow="Grátis"
         title="Manual de Sobrevivência do Estágio"
@@ -84,6 +86,7 @@ function Page() {
           </p>
         </Card>
       </div>
+    </ContentProtection>
     </AppShell>
   );
 }

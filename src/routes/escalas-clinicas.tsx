@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { ContentProtection } from "@/components/ContentProtection";
 import { AppShell, PageHeader } from "@/components/AppShell";
 import { MiniAppContent } from "@/components/MiniAppContent";
 
@@ -19,12 +20,14 @@ export const Route = createFileRoute("/escalas-clinicas")({
 export function EscalasPage() {
   return (
     <AppShell>
+      <ContentProtection allowPrint>
       <PageHeader
         eyebrow="Avaliação Clínica"
         title="Escalas Clínicas na Prática"
         description="8 escalas essenciais que todo enfermeiro precisa dominar. Clique em cada título para abrir."
       />
       <MiniAppContent slug="escalas-clinicas" />
+    </ContentProtection>
     </AppShell>
   );
 }

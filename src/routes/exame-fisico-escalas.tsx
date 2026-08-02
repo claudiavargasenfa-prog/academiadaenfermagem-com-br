@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { ContentProtection } from "@/components/ContentProtection";
 import { useMemo, useState } from "react";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
 import { MiniAppContent } from "@/components/MiniAppContent";
@@ -560,6 +561,7 @@ function Escalas() {
 function Page() {
   return (
     <AppShell>
+      <ContentProtection allowPrint>
       <PageHeader
         eyebrow="Avaliação Clínica"
         title="Exame Físico e Escalas de Avaliação"
@@ -570,6 +572,7 @@ function Page() {
         <ExameFisico />
         <Escalas />
       </div>
+    </ContentProtection>
     </AppShell>
   );
 }
