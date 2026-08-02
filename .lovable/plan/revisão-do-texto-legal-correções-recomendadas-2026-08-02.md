@@ -31,4 +31,4 @@ Arquivos tocados: `src/routes/legal.tsx` (conteúdo) e `src/lib/legal.ts` (`LEGA
 
 ## Antes de eu escrever
 
-Preciso confirmar dois números para não inventar: prazo de reembolso além dos 7 dias legais e se a assinatura é mensal com renovação automática.
+Preciso confirmar dois números para não inventar: prazo de reembolso além dos 7 dias legais e se a assinatura é mensal com renovação automática. SIM 7 DIAS 

@@ -61,7 +61,7 @@ function LegalPage() {
       <PageHeader
         eyebrow="Documentos legais"
         title="Termos de Uso, Aviso Legal, Política de Privacidade e Termo de Aceite"
-        description="Academia da Enfermagem · Claudia Vargas · Versão 1.0 — 02 de agosto de 2026"
+        description={`Academia da Enfermagem · Claudia Vargas · Versão ${LEGAL_DOC_VERSION} — 02 de agosto de 2026`}
       />
 
       <Card className="mb-4 border-emerald-900/20 bg-emerald-50/60">
@@ -161,12 +161,91 @@ function LegalPage() {
           tácita das novas condições.
         </P>
 
-        <H3>1.8 Do Foro e Legislação Aplicável</H3>
+        <H3>1.8 Dos Planos, da Assinatura e do Pagamento</H3>
         <P>
-          Estes Termos regem-se integralmente pela legislação da República Federativa do Brasil. Fica
-          eleito o foro da comarca do Rio de Janeiro/RJ, domicílio da desenvolvedora, para dirimir
-          quaisquer controvérsias oriundas deste instrumento, sem prejuízo da aplicação de normas de
-          ordem pública que estabeleçam foros diversos.
+          O acesso ao conteúdo é organizado em planos por trilha (Acadêmico, Técnico,
+          Técnico-Estudante e Enfermeiro). Os preços vigentes são os exibidos na página de venda do
+          respectivo plano no momento da contratação. O processamento do pagamento é realizado por
+          plataforma parceira especializada (Cakto), que opera como intermediadora financeira; a
+          Academia da Enfermagem não armazena dados de cartão de crédito. A liberação do acesso
+          ocorre após a confirmação do pagamento e o cadastro do usuário com o mesmo e-mail
+          utilizado na compra. Havendo cobrança recorrente, a renovação segue a periodicidade
+          informada no checkout e permanece ativa até o cancelamento pelo usuário. Em caso de
+          inadimplência ou de falha na renovação, o acesso é suspenso automaticamente até a
+          regularização, sem prejuízo do direito de nova contratação.
+        </P>
+
+        <H3>1.9 Do Período de Teste Gratuito</H3>
+        <P>
+          A plataforma poderá oferecer período de teste gratuito de <strong>15 (quinze) dias
+          corridos</strong>, contados do cadastro, com as seguintes condições: (a) o teste é
+          limitado a <strong>1 (uma) trilha por usuário</strong>, sendo vedado o acesso simultâneo a
+          mais de um aplicativo durante a gratuidade; (b) o teste é pessoal, intransferível e
+          concedido <strong>uma única vez por pessoa, dispositivo, e-mail e telefone</strong>; (c)
+          ao término do 15º dia o acesso é <strong>bloqueado automaticamente</strong>, permanecendo
+          a conta ativa apenas para contratação de um plano; (d) o usuário recebe avisos na própria
+          plataforma quando faltarem 5 (cinco) dias e no último dia do período; (e) o usuário que
+          adquirir o acesso pago diretamente não faz jus ao período de teste, pois já dispõe do
+          acesso integral contratado; (f) quem contratar as quatro trilhas terá acesso simultâneo às
+          quatro. Tentativas de burlar o limite de gratuidade mediante múltiplos cadastros poderão
+          resultar em bloqueio, conforme a cláusula 1.11.
+        </P>
+
+        <H3>1.10 Do Arrependimento, do Cancelamento e do Reembolso</H3>
+        <P>
+          Nos termos do <strong>art. 49 do Código de Defesa do Consumidor</strong>, o usuário pode
+          desistir da contratação no prazo de <strong>7 (sete) dias corridos</strong> contados da
+          data da compra, com <strong>devolução integral</strong> do valor pago, bastando solicitar
+          por e-mail para{" "}
+          <a className="font-semibold text-primary underline" href="mailto:academiadaenfermagem26@gmail.com">
+            academiadaenfermagem26@gmail.com
+          </a>
+          . O estorno é processado pela plataforma de pagamento, observados os prazos da
+          administradora do cartão ou da instituição financeira. Após o prazo de 7 dias, não há
+          reembolso do período já contratado, podendo o usuário cancelar a renovação a qualquer
+          tempo e manter o acesso até o fim do período vigente já pago. O cancelamento pode ser
+          solicitado pelo mesmo e-mail de contato.
+        </P>
+
+        <H3>1.11 Da Conta Individual e do Uso Indevido</H3>
+        <P>
+          A conta é <strong>pessoal e intransferível</strong>. É vedado compartilhar login e senha,
+          ceder acesso a terceiros, bem como copiar, imprimir, fotografar, gravar tela, extrair,
+          reproduzir ou redistribuir, total ou parcialmente, o conteúdo da plataforma. A plataforma
+          adota medidas técnicas de proteção do conteúdo; a tentativa de contorná-las constitui
+          infração contratual. Constatado o uso indevido, a desenvolvedora poderá suspender ou
+          encerrar o acesso, sem reembolso do período em curso, sem prejuízo das medidas cíveis e
+          criminais cabíveis (Lei nº 9.610/98).
+        </P>
+
+        <H3>1.12 Da Idade Mínima e das Comunicações</H3>
+        <P>
+          O uso é destinado a maiores de 18 anos; menores de 18 anos somente poderão utilizar a
+          plataforma assistidos ou representados por seus responsáveis legais. Ao se cadastrar, o
+          usuário concorda em receber comunicações operacionais (acesso, cobrança, avisos de prazo)
+          e, quando autorizado, comunicações informativas por e-mail e WhatsApp, incluindo o grupo
+          VIP, podendo solicitar o descadastramento dessas comunicações a qualquer momento pelo
+          e-mail de contato, sem prejuízo das mensagens estritamente operacionais.
+        </P>
+
+        <H3>1.13 Da Disponibilidade, do Suporte e das Atualizações Técnicas</H3>
+        <P>
+          A plataforma é fornecida em regime de melhores esforços, podendo haver indisponibilidades
+          temporárias decorrentes de manutenção programada, atualização de conteúdo, falhas de
+          terceiros (hospedagem, conectividade) ou eventos de força maior, sem que isso configure
+          descumprimento contratual. O suporte é prestado por e-mail em dias úteis. Funcionalidades
+          e módulos podem ser aprimorados, substituídos ou reorganizados ao longo do tempo,
+          preservando-se o escopo essencial do plano contratado.
+        </P>
+
+        <H3>1.14 Do Foro e Legislação Aplicável</H3>
+        <P>
+          Estes Termos regem-se integralmente pela legislação da República Federativa do Brasil.
+          Sendo o usuário consumidor, fica assegurado o direito de ajuizar eventual demanda no foro
+          de seu próprio domicílio, nos termos do art. 101, I, do Código de Defesa do Consumidor.
+          Nas demais hipóteses, fica eleito o foro da comarca do Rio de Janeiro/RJ, domicílio da
+          desenvolvedora, sem prejuízo da aplicação de normas de ordem pública que estabeleçam foros
+          diversos.
         </P>
       </Card>
 
@@ -203,16 +282,29 @@ function LegalPage() {
 
         <H3>3.2 Dos Dados Coletados e Finalidades</H3>
         <P>
-          (a) <strong>Dados de cadastro:</strong> nome completo, e-mail, categoria profissional e,
-          quando aplicável, número de registro no COREN, com a finalidade de identificação do usuário,
-          criação de conta individualizada, controle de acesso e segurança da plataforma e confecção
-          de certificado. (b) <strong>Dados de uso:</strong> logs de acesso, versão do aplicativo
-          utilizada, data e hora das interações, com a finalidade de garantir a segurança do sistema,
-          diagnóstico de falhas técnicas e melhoria contínua dos serviços. (c){" "}
-          <strong>Dados de saúde:</strong> o aplicativo NÃO coleta dados de saúde de pacientes em sua
-          funcionalidade atual. Caso funcionalidades futuras venham a envolver a coleta de dados de
-          saúde, será exigido consentimento específico, livre, informado e destacado do titular, nos
-          termos do art. 11 da LGPD.
+          (a) <strong>Dados de cadastro:</strong> nome completo, e-mail, telefone, categoria
+          profissional e, quando aplicável, número de registro no COREN, com a finalidade de
+          identificação do usuário, criação de conta individualizada, controle de acesso e segurança
+          da plataforma e confecção de certificado. (b) <strong>Dados de uso:</strong> logs de
+          acesso, versão do aplicativo utilizada, data e hora das interações, com a finalidade de
+          garantir a segurança do sistema, diagnóstico de falhas técnicas e melhoria contínua dos
+          serviços. (c) <strong>Dados técnicos de prevenção à fraude:</strong> identificador técnico
+          do dispositivo (fingerprint), endereço IP, navegador e sistema operacional, tratados
+          exclusivamente para verificar a elegibilidade ao período de teste gratuito, impedir
+          cadastros duplicados e proteger a plataforma contra abusos, com base no legítimo interesse
+          (art. 7º, IX, da LGPD) e na prevenção à fraude (art. 11, II, "g"). (d){" "}
+          <strong>Dados de transação:</strong> e-mail, identificador do pedido, plano contratado,
+          status e data de vencimento, recebidos da plataforma de pagamento para liberação e
+          manutenção do acesso — <strong>não recebemos nem armazenamos dados de cartão de
+          crédito</strong>. (e) <strong>Registros de aceite legal:</strong> data, hora, versão dos
+          documentos aceitos, identificador do usuário e do dispositivo, como prova do consentimento.
+          (f) <strong>Dados de saúde:</strong> o aplicativo NÃO coleta dados de saúde de pacientes.
+          Anotações clínicas eventualmente digitadas pelo usuário em módulos assistenciais são
+          armazenadas <strong>localmente no próprio dispositivo</strong> e não são enviadas aos nossos
+          servidores; o usuário não deve inserir dados que identifiquem pacientes. Caso
+          funcionalidades futuras venham a envolver a coleta de dados de saúde, será exigido
+          consentimento específico, livre, informado e destacado do titular, nos termos do art. 11 da
+          LGPD.
         </P>
 
         <H3>3.3 Das Bases Legais</H3>
@@ -220,35 +312,57 @@ function LegalPage() {
           O tratamento de dados fundamenta-se nas seguintes bases legais da Lei nº 13.709/2018:
           Consentimento (art. 7º, I, e art. 11, I); Execução de contrato ou procedimentos preliminares
           (art. 7º, V); Cumprimento de obrigação legal ou regulatória (art. 7º, II); e Legítimo
-          interesse da controladora para fins de segurança e aprimoramento tecnológico (art. 7º, IX).
+          interesse da controladora para fins de segurança, prevenção à fraude e aprimoramento
+          tecnológico (art. 7º, IX).
         </P>
 
-        <H3>3.4 Do Compartilhamento</H3>
+        <H3>3.4 Do Compartilhamento e dos Operadores</H3>
         <P>
-          Os dados pessoais coletados não são compartilhados com terceiros, exceto nas seguintes
-          hipóteses: (a) por estrito cumprimento de obrigação legal ou ordem judicial; (b) com
-          provedores de infraestrutura tecnológica e serviços de hospedagem, mediante contratos que
-          assegurem níveis de proteção de dados equivalentes aos previstos nesta política; (c)
+          Os dados pessoais não são vendidos nem cedidos para fins publicitários de terceiros. O
+          compartilhamento ocorre apenas nas seguintes hipóteses: (a) por estrito cumprimento de
+          obrigação legal ou ordem judicial; (b) com a <strong>plataforma de pagamento Cakto</strong>,
+          responsável pelo processamento das compras, cobranças e estornos; (c) com{" "}
+          <strong>provedores de infraestrutura tecnológica, banco de dados, autenticação e
+          hospedagem</strong> (incluindo Lovable Cloud/Supabase e provedores de rede de distribuição
+          de conteúdo), que atuam como operadores mediante contratos que asseguram níveis de proteção
+          equivalentes aos desta política; (d) com provedores de envio de e-mail transacional; (e)
           mediante consentimento prévio e expresso do titular para finalidades específicas.
         </P>
 
-        <H3>3.5 Do Armazenamento e Segurança</H3>
+        <H3>3.5 Da Transferência Internacional de Dados</H3>
+        <P>
+          Parte da infraestrutura tecnológica utilizada pode estar localizada fora do território
+          nacional. Nessas hipóteses, a transferência internacional observa o art. 33 da LGPD,
+          realizando-se para países ou fornecedores que assegurem grau de proteção adequado ou
+          mediante cláusulas contratuais específicas de proteção de dados firmadas com os operadores.
+        </P>
+
+        <H3>3.6 Do Armazenamento, da Retenção e da Segurança</H3>
         <P>
           São adotadas medidas técnicas e administrativas de segurança aptas a proteger os dados
           pessoais de acessos não autorizados e de situações acidentais ou ilícitas de destruição,
-          perda, alteração ou difusão, incluindo o uso de criptografia em trânsito e rígidos controles
-          de acesso. Os dados são retidos apenas pelo tempo necessário para atingir as finalidades
-          descritas ou pelos prazos exigidos por lei, sendo posteriormente eliminados ou anonimizados.
+          perda, alteração ou difusão, incluindo criptografia em trânsito, controle de acesso por
+          perfil e regras de segurança em nível de registro no banco de dados. Prazos de retenção:
+          (a) dados de cadastro e de acesso, enquanto a conta existir e por até{" "}
+          <strong>5 (cinco) anos</strong> após o encerramento, para exercício regular de direitos
+          (art. 16, II e III, da LGPD); (b) registros de transação e de aceite legal, por{" "}
+          <strong>5 (cinco) anos</strong>, por dever legal e como prova de consentimento; (c) dados
+          técnicos antifraude, por até <strong>24 (vinte e quatro) meses</strong>; (d) logs de acesso,
+          por <strong>6 (seis) meses</strong>, conforme o Marco Civil da Internet. Findos os prazos,
+          os dados são eliminados ou anonimizados.
         </P>
 
-        <H3>3.6 Dos Direitos do Titular</H3>
+        <H3>3.7 Dos Direitos do Titular e da Exclusão da Conta</H3>
         <P>
           Em conformidade com o art. 18 da LGPD, o usuário possui o direito de obter, a qualquer
           momento e mediante requisição: confirmação da existência de tratamento; acesso aos dados;
           correção de dados incompletos ou inexatos; anonimização, bloqueio ou eliminação de dados
           desnecessários; portabilidade; informação sobre compartilhamento; revogação do consentimento
-          e eliminação dos dados tratados sob tal base legal. Tais direitos podem ser exercidos via
-          e-mail direcionado ao Encarregado de Dados (academiadaenfermagem26@gmail.com).
+          e eliminação dos dados tratados sob tal base legal. A exclusão da conta pode ser solicitada
+          a qualquer momento por e-mail ao Encarregado de Dados
+          (academiadaenfermagem26@gmail.com), sendo atendida em até 15 (quinze) dias, ressalvados os
+          dados cuja guarda seja obrigatória por lei. O titular pode ainda peticionar perante a
+          Autoridade Nacional de Proteção de Dados (ANPD).
         </P>
       </Card>
 
@@ -266,12 +380,14 @@ function LegalPage() {
 
         <H3>4.2 Da Declaração do Usuário</H3>
         <P>
-          “Declaro que li e compreendi integralmente os Termos de Uso, o Aviso Legal e a Política de
-          Privacidade do aplicativo Academia da Enfermagem, na versão {LEGAL_DOC_VERSION} datada de 02
-          de agosto de 2026, e que estou plenamente ciente de que o aplicativo é uma ferramenta de
-          apoio à decisão clínica, não substituindo, em hipótese alguma, o meu julgamento técnico como
-          profissional de enfermagem. Consinto livremente com o tratamento dos meus dados pessoais
-          para as finalidades e condições indicadas na Política de Privacidade.”
+          “Declaro que li e compreendi integralmente os Termos de Uso — inclusive as condições de
+          assinatura, do período de teste gratuito, de arrependimento e cancelamento —, o Aviso Legal
+          e a Política de Privacidade do aplicativo Academia da Enfermagem, na versão{" "}
+          {LEGAL_DOC_VERSION} datada de 02 de agosto de 2026, e que estou plenamente ciente de que o
+          aplicativo é uma ferramenta de apoio à decisão clínica, não substituindo, em hipótese
+          alguma, o meu julgamento técnico como profissional de enfermagem. Declaro ainda que minha
+          conta é pessoal e intransferível. Consinto livremente com o tratamento dos meus dados
+          pessoais para as finalidades e condições indicadas na Política de Privacidade.”
         </P>
 
         <H3>4.3 Do Consentimento para Dados de Saúde</H3>

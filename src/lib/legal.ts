@@ -2,10 +2,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { getDeviceId } from "@/lib/device-fingerprint";
 
 /** Versão vigente dos documentos legais. Ao alterar os textos, suba a versão. */
-export const LEGAL_DOC_VERSION = "1.0";
+export const LEGAL_DOC_VERSION = "1.1";
 export const LEGAL_DOC_DATE = "2026-08-02";
-export const LEGAL_TERMS_VERSION = "1.0";
-export const LEGAL_PRIVACY_VERSION = "1.0";
+export const LEGAL_TERMS_VERSION = "1.1";
+export const LEGAL_PRIVACY_VERSION = "1.1";
 
 export const LEGAL_ACCEPT_STORAGE_KEY = `ae_legal_accept_${LEGAL_DOC_VERSION}`;
 
