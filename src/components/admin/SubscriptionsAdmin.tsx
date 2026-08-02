@@ -261,7 +261,10 @@ function PlanForm({ plan, onClose }: { plan: SubscriptionPlan; onClose: () => vo
             <label className="block"><span className="mb-1 block text-xs font-semibold uppercase text-muted-foreground">Link Cakto (novo)</span>
               <input className={input} value={form.cakto_link_novo} onChange={(e) => setForm({ ...form, cakto_link_novo: e.target.value })} placeholder="https://pay.cakto.com.br/..." /></label>
           </div>
+          <label className="mt-3 block"><span className="mb-1 block text-xs font-semibold uppercase text-muted-foreground">Código do produto na Cakto (libera o acesso automático)</span>
+            <input className={input} value={form.cakto_product_id} onChange={(e) => setForm({ ...form, cakto_product_id: e.target.value })} placeholder="ex.: 12345 ou abc-def" /></label>
         </fieldset>
+
 
         <fieldset className="rounded-xl border border-amber-400/40 bg-amber-50/40 p-3">
           <legend className="px-1 text-[10px] font-bold uppercase text-amber-700">Migre p/ outro app (15% por 3 meses)</legend>
