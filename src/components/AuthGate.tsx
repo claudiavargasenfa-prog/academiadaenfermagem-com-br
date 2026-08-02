@@ -33,9 +33,33 @@ export function AuthGate({ children }: { children: ReactNode }) {
     );
   }
 
-  if (!session) return <AuthScreen />;
+  if (!session) return <WelcomeAuthScreen />;
   return <>{children}</>;
 }
+
+const CADASTRO_SLUGS = ["academico", "tecnico", "tecnico-estudante", "enfermeiro"];
+
+function slugFromPath(): string {
+  if (typeof window === "undefined") return "academico";
+  const parts = window.location.pathname.split("/").filter(Boolean);
+  const found = parts.find((p) => CADASTRO_SLUGS.includes(p));
+  const q = new URLSearchParams(window.location.search).get("cadastro");
+  return found ?? (q && CADASTRO_SLUGS.includes(q) ? q : "academico");
+}
+
+/** Única porta de entrada: página de cadastro com boas-vindas. */
+export function WelcomeAuthScreen({ slug }: { slug?: string } = {}) {
+  const resolved = slug ?? slugFromPath();
+  return (
+    <div className="mx-auto grid max-w-6xl gap-6 px-4 py-8 md:grid-cols-2 md:items-start">
+      <WelcomePanel slug={resolved} />
+      <div>
+        <AuthScreen cadastroSlug={resolved} />
+      </div>
+    </div>
+  );
+}
+
 
 function formatPhoneBR(v: string): string {
   const digits = v.replace(/\D/g, "").slice(0, 11);
