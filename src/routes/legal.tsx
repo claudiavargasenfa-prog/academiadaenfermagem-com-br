@@ -1,0 +1,309 @@
+import { useState } from "react";
+import { createFileRoute } from "@tanstack/react-router";
+import { ShieldCheck, Scale, Lock, FileSignature, CheckCircle2 } from "lucide-react";
+
+import { AppShell, Card, PageHeader } from "@/components/AppShell";
+import {
+  LEGAL_DOC_VERSION,
+  hasAcceptedLegalLocally,
+  recordLegalAcceptance,
+} from "@/lib/legal";
+
+const TITLE = "Documentos Legais — Academia da Enfermagem";
+const DESC =
+  "Termos de Uso, Aviso Legal, Política de Privacidade (LGPD) e Termo de Aceite do aplicativo Academia da Enfermagem.";
+
+export const Route = createFileRoute("/legal")({
+  head: () => ({
+    meta: [
+      { title: TITLE },
+      { name: "description", content: DESC },
+      { property: "og:title", content: TITLE },
+      { property: "og:description", content: DESC },
+      { property: "og:type", content: "article" },
+      { name: "twitter:card", content: "summary" },
+    ],
+    links: [{ rel: "canonical", href: "https://academiadaenfermagem.com.br/legal" }],
+  }),
+  component: LegalPage,
+});
+
+function H2({ icon: Icon, id, children }: { icon: any; id: string; children: React.ReactNode }) {
+  return (
+    <h2 id={id} className="mb-3 flex scroll-mt-24 items-center gap-2 font-display text-lg font-extrabold text-foreground">
+      <Icon className="h-5 w-5 text-gold" />
+      {children}
+    </h2>
+  );
+}
+
+function H3({ children }: { children: React.ReactNode }) {
+  return <h3 className="mt-4 font-display text-sm font-extrabold text-foreground">{children}</h3>;
+}
+
+function P({ children }: { children: React.ReactNode }) {
+  return <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{children}</p>;
+}
+
+function LegalPage() {
+  const [accepted, setAccepted] = useState(() => hasAcceptedLegalLocally());
+  const [busy, setBusy] = useState(false);
+
+  async function accept() {
+    setBusy(true);
+    await recordLegalAcceptance("pagina_legal");
+    setBusy(false);
+    setAccepted(true);
+  }
+
+  return (
+    <AppShell publicRoute hideReferences>
+      <PageHeader
+        eyebrow="Documentos legais"
+        title="Termos de Uso, Aviso Legal, Política de Privacidade e Termo de Aceite"
+        description="Academia da Enfermagem · Claudia Vargas · Versão 1.0 — 02 de agosto de 2026"
+      />
+
+      <Card className="mb-4 border-emerald-900/20 bg-emerald-50/60">
+        <p className="text-xs leading-relaxed text-emerald-950">
+          <strong>Aviso Legal:</strong> este aplicativo é uma ferramenta técnico-científica de{" "}
+          <strong>apoio à decisão clínica</strong>. Não substitui o julgamento técnico do
+          profissional, o exame clínico do paciente, as fontes oficiais (COFEN, COREN, Ministério da
+          Saúde, ANVISA) nem os protocolos institucionais. A responsabilidade pela conduta clínica é
+          exclusivamente do profissional de enfermagem assistente.
+        </p>
+      </Card>
+
+      <Card className="mb-4">
+        <p className="text-[11px] font-extrabold uppercase tracking-widest text-gold">Índice</p>
+        <ul className="mt-2 grid gap-1 text-sm font-semibold text-primary sm:grid-cols-2">
+          <li><a href="#termos" className="hover:underline">Parte I — Termos de Uso</a></li>
+          <li><a href="#aviso" className="hover:underline">Parte II — Aviso Legal</a></li>
+          <li><a href="#privacidade" className="hover:underline">Parte III — Política de Privacidade (LGPD)</a></li>
+          <li><a href="#aceite" className="hover:underline">Parte IV — Termo de Aceite</a></li>
+        </ul>
+      </Card>
+
+      {/* PARTE I */}
+      <Card className="mb-4">
+        <H2 icon={Scale} id="termos">Parte I — Termos de Uso e Aceite das Diretrizes da Plataforma</H2>
+
+        <H3>1.1 Do Objeto</H3>
+        <P>
+          O aplicativo <strong>Academia da Enfermagem</strong> é uma ferramenta técnico-científica de
+          apoio à decisão clínica, destinada exclusivamente a estudantes de enfermagem e profissionais
+          de enfermagem, para consulta durante o plantão e atividades assistenciais. O conteúdo
+          disponibilizado é elaborado com rigor técnico, fundamentado em referências oficiais,
+          incluindo, mas não se limitando a, normativas do Conselho Federal de Enfermagem (COFEN),
+          Conselhos Regionais de Enfermagem (COREN), Ministério da Saúde e Agência Nacional de
+          Vigilância Sanitária (ANVISA), além de literatura técnico-científica consolidada e da
+          experiência profissional da desenvolvedora. Fica expressamente consignado que o aplicativo{" "}
+          <strong>NÃO</strong> substitui o julgamento técnico, o raciocínio clínico, o exame físico do
+          paciente nem a responsabilidade profissional do enfermeiro, que permanece integralmente com
+          o profissional assistente, nos termos da Lei nº 7.498/86 e da Resolução COFEN nº 564/2017.
+        </P>
+
+        <H3>1.2 Da Aceitação dos Termos</H3>
+        <P>
+          Ao baixar, acessar ou utilizar o aplicativo, o usuário declara ter lido, compreendido e
+          aceitado integralmente estes Termos de Uso e a Política de Privacidade. A continuidade do
+          uso após eventuais alterações nos textos legais implica renovação automática do aceite por
+          parte do usuário. A versão vigente e atualizada dos Termos estará permanentemente
+          disponível para consulta no interior da plataforma.
+        </P>
+
+        <H3>1.3 Do Público-Alvo e Condições de Uso</H3>
+        <P>
+          O uso da Academia da Enfermagem é restrito ao âmbito profissional e educacional da
+          enfermagem. É terminantemente vedado o uso por pessoas leigas para fins de autodiagnóstico
+          ou autotratamento. Ao utilizar a plataforma, o usuário declara e garante possuir a condição
+          de estudante de enfermagem ou de profissional de enfermagem devidamente habilitado.
+        </P>
+
+        <H3>1.4 Da Natureza do Conteúdo e Limitação de Responsabilidade</H3>
+        <P>
+          O conteúdo disponibilizado possui caráter meramente informativo e de apoio à decisão, não
+          constituindo prescrição, protocolo obrigatório ou substitutivo das fontes oficiais e dos
+          protocolos internos de cada instituição de saúde. A desenvolvedora não se responsabiliza
+          por atos praticados pelo profissional com base nas informações consultadas, nem garante
+          resultados clínicos específicos, uma vez que a prática da enfermagem exige análise
+          individualizada de cada caso. A limitação de responsabilidade aqui prevista não exclui a
+          responsabilidade por dolo ou culpa grave, em estrita observância ao art. 944 do Código Civil
+          e ao art. 14 do Código de Defesa do Consumidor (Lei nº 8.078/90), quando aplicável. O
+          usuário assume o dever de sempre confrontar as orientações do aplicativo com as fontes
+          oficiais e os protocolos vigentes em sua unidade de atuação.
+        </P>
+
+        <H3>1.5 Das Obrigações do Usuário</H3>
+        <P>
+          O usuário compromete-se a utilizar a ferramenta de forma ética e responsável, em total
+          conformidade com o Código de Ética dos Profissionais de Enfermagem (Resolução COFEN nº
+          564/2017). É proibida a inserção de dados pessoais de pacientes que permitam sua
+          identificação direta ou indireta no aplicativo, salvo em funcionalidades que venham a ser
+          expressamente destinadas a esse fim, sob estrita observância da Lei Geral de Proteção de
+          Dados (LGPD). É vedada a reprodução, distribuição ou comercialização de qualquer conteúdo do
+          aplicativo sem autorização prévia, expressa e por escrito da desenvolvedora.
+        </P>
+
+        <H3>1.6 Da Propriedade Intelectual</H3>
+        <P>
+          Todo o conteúdo, layout, marca, textos, logotipos e materiais didáticos do aplicativo são de
+          titularidade exclusiva da desenvolvedora e estão registrados. As referências bibliográficas
+          e normativas citadas pertencem aos seus respectivos autores e órgãos, sendo utilizadas
+          mediante citação adequada e para fins informativos, em conformidade com a Lei nº 9.610/98.
+        </P>
+
+        <H3>1.7 Das Atualizações</H3>
+        <P>
+          O conteúdo clínico é revisado e datado periodicamente para assegurar a atualidade das
+          informações. Alterações nestes Termos de Uso serão comunicadas aos usuários mediante aviso
+          prévio na plataforma, sendo que o uso continuado após tal comunicação importará em aceitação
+          tácita das novas condições.
+        </P>
+
+        <H3>1.8 Do Foro e Legislação Aplicável</H3>
+        <P>
+          Estes Termos regem-se integralmente pela legislação da República Federativa do Brasil. Fica
+          eleito o foro da comarca do Rio de Janeiro/RJ, domicílio da desenvolvedora, para dirimir
+          quaisquer controvérsias oriundas deste instrumento, sem prejuízo da aplicação de normas de
+          ordem pública que estabeleçam foros diversos.
+        </P>
+      </Card>
+
+      {/* PARTE II */}
+      <Card className="mb-4">
+        <H2 icon={ShieldCheck} id="aviso">Parte II — Aviso Legal (Disclaimer)</H2>
+        <P>
+          Este aplicativo é uma ferramenta técnico-científica de <strong>APOIO À DECISÃO CLÍNICA</strong>,
+          destinada a estudantes e profissionais de enfermagem. Ele <strong>NÃO</strong> substitui o
+          julgamento técnico do profissional, o exame clínico do paciente, nem as fontes oficiais
+          (COFEN, COREN, Ministério da Saúde, ANVISA) e os protocolos institucionais. A
+          responsabilidade pela conduta clínica é exclusivamente do profissional de enfermagem
+          assistente. Em caso de dúvida, consulte sempre as fontes oficiais e o serviço de referência
+          da sua instituição.
+        </P>
+      </Card>
+
+      {/* PARTE III */}
+      <Card className="mb-4">
+        <H2 icon={Lock} id="privacidade">Parte III — Política de Privacidade e Proteção de Dados Pessoais (LGPD)</H2>
+
+        <H3>3.1 Da Controladora e do Encarregado</H3>
+        <P>
+          A Controladora dos dados pessoais é <strong>Claudia Vargas</strong>, pessoa física, residente
+          na cidade do Rio de Janeiro/RJ, e-mail de contato{" "}
+          <a className="font-semibold text-primary underline" href="mailto:academiadaenfermagem26@gmail.com">
+            academiadaenfermagem26@gmail.com
+          </a>
+          . Por medida de segurança e em atenção aos princípios da LGPD, o número completo do CPF da
+          controladora não é divulgado neste documento público, sendo mantido apenas nos canais
+          privados de cadastro e registro. O Encarregado de Dados (DPO) designado é a própria Claudia
+          Vargas, que poderá ser contatada através do mesmo e-mail.
+        </P>
+
+        <H3>3.2 Dos Dados Coletados e Finalidades</H3>
+        <P>
+          (a) <strong>Dados de cadastro:</strong> nome completo, e-mail, categoria profissional e,
+          quando aplicável, número de registro no COREN, com a finalidade de identificação do usuário,
+          criação de conta individualizada, controle de acesso e segurança da plataforma e confecção
+          de certificado. (b) <strong>Dados de uso:</strong> logs de acesso, versão do aplicativo
+          utilizada, data e hora das interações, com a finalidade de garantir a segurança do sistema,
+          diagnóstico de falhas técnicas e melhoria contínua dos serviços. (c){" "}
+          <strong>Dados de saúde:</strong> o aplicativo NÃO coleta dados de saúde de pacientes em sua
+          funcionalidade atual. Caso funcionalidades futuras venham a envolver a coleta de dados de
+          saúde, será exigido consentimento específico, livre, informado e destacado do titular, nos
+          termos do art. 11 da LGPD.
+        </P>
+
+        <H3>3.3 Das Bases Legais</H3>
+        <P>
+          O tratamento de dados fundamenta-se nas seguintes bases legais da Lei nº 13.709/2018:
+          Consentimento (art. 7º, I, e art. 11, I); Execução de contrato ou procedimentos preliminares
+          (art. 7º, V); Cumprimento de obrigação legal ou regulatória (art. 7º, II); e Legítimo
+          interesse da controladora para fins de segurança e aprimoramento tecnológico (art. 7º, IX).
+        </P>
+
+        <H3>3.4 Do Compartilhamento</H3>
+        <P>
+          Os dados pessoais coletados não são compartilhados com terceiros, exceto nas seguintes
+          hipóteses: (a) por estrito cumprimento de obrigação legal ou ordem judicial; (b) com
+          provedores de infraestrutura tecnológica e serviços de hospedagem, mediante contratos que
+          assegurem níveis de proteção de dados equivalentes aos previstos nesta política; (c)
+          mediante consentimento prévio e expresso do titular para finalidades específicas.
+        </P>
+
+        <H3>3.5 Do Armazenamento e Segurança</H3>
+        <P>
+          São adotadas medidas técnicas e administrativas de segurança aptas a proteger os dados
+          pessoais de acessos não autorizados e de situações acidentais ou ilícitas de destruição,
+          perda, alteração ou difusão, incluindo o uso de criptografia em trânsito e rígidos controles
+          de acesso. Os dados são retidos apenas pelo tempo necessário para atingir as finalidades
+          descritas ou pelos prazos exigidos por lei, sendo posteriormente eliminados ou anonimizados.
+        </P>
+
+        <H3>3.6 Dos Direitos do Titular</H3>
+        <P>
+          Em conformidade com o art. 18 da LGPD, o usuário possui o direito de obter, a qualquer
+          momento e mediante requisição: confirmação da existência de tratamento; acesso aos dados;
+          correção de dados incompletos ou inexatos; anonimização, bloqueio ou eliminação de dados
+          desnecessários; portabilidade; informação sobre compartilhamento; revogação do consentimento
+          e eliminação dos dados tratados sob tal base legal. Tais direitos podem ser exercidos via
+          e-mail direcionado ao Encarregado de Dados (academiadaenfermagem26@gmail.com).
+        </P>
+      </Card>
+
+      {/* PARTE IV */}
+      <Card className="mb-4">
+        <H2 icon={FileSignature} id="aceite">Parte IV — Termo de Aceite e Consentimento</H2>
+
+        <H3>4.1 Do Registro do Aceite</H3>
+        <P>
+          O sistema de backend do aplicativo registra eletronicamente, no momento de cada aceite, a
+          data, a hora exata (timestamp), a versão específica dos Termos de Uso e da Política de
+          Privacidade aceitos, bem como o identificador único do usuário ou dispositivo. Este log de
+          aceite constitui prova digital do consentimento e da adesão às normas da plataforma.
+        </P>
+
+        <H3>4.2 Da Declaração do Usuário</H3>
+        <P>
+          “Declaro que li e compreendi integralmente os Termos de Uso, o Aviso Legal e a Política de
+          Privacidade do aplicativo Academia da Enfermagem, na versão {LEGAL_DOC_VERSION} datada de 02
+          de agosto de 2026, e que estou plenamente ciente de que o aplicativo é uma ferramenta de
+          apoio à decisão clínica, não substituindo, em hipótese alguma, o meu julgamento técnico como
+          profissional de enfermagem. Consinto livremente com o tratamento dos meus dados pessoais
+          para as finalidades e condições indicadas na Política de Privacidade.”
+        </P>
+
+        <H3>4.3 Do Consentimento para Dados de Saúde</H3>
+        <P>
+          Fica registrado que, na presente data e funcionalidade do aplicativo, não ocorre a coleta ou
+          processamento de dados de saúde de terceiros (pacientes). O usuário está ciente de que, caso
+          novas funcionalidades que envolvam tais dados sejam implementadas, um novo consentimento
+          específico e destacado será formalmente solicitado.
+        </P>
+
+        <div className="mt-5">
+          {accepted ? (
+            <p className="flex items-center gap-2 rounded-2xl bg-emerald-50 px-4 py-3 text-sm font-bold text-emerald-900">
+              <CheckCircle2 className="h-4 w-4" /> Aceite registrado nesta versão ({LEGAL_DOC_VERSION}).
+            </p>
+          ) : (
+            <button
+              type="button"
+              onClick={accept}
+              disabled={busy}
+              className="w-full rounded-xl bg-emerald-900 py-3 text-sm font-extrabold text-white shadow hover:opacity-90 disabled:opacity-60"
+            >
+              {busy ? "Registrando aceite…" : "Li e aceito os Termos de Uso e a Política de Privacidade"}
+            </button>
+          )}
+        </div>
+      </Card>
+
+      <p className="pb-6 text-center text-[11px] text-muted-foreground">
+        Academia da Enfermagem · Claudia Vargas · Rio de Janeiro/RJ · Versão {LEGAL_DOC_VERSION} —
+        02/08/2026 · academiadaenfermagem26@gmail.com
+      </p>
+    </AppShell>
+  );
+}
