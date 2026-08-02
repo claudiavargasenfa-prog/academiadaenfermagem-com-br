@@ -15,6 +15,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { ReferencesFooter } from "./References";
 import { AuthGate, signOut } from "./AuthGate";
 import { TrialCountdownBanner } from "./TrialCountdownBanner";
+import { LegalConsentGate } from "./LegalConsentGate";
 import { useAuthReady, useIsAdmin } from "@/lib/access";
 import { useText } from "@/lib/app-texts";
 import logoAsset from "@/assets/logo.png.asset.json";
@@ -217,7 +218,17 @@ export function AppShell({
       <main className="mx-auto max-w-5xl px-4 pb-28 pt-6 page-enter md:pb-10">
         {children}
         {!hideReferences && <ReferencesFooter compact />}
+        {pathname !== "/legal" && (
+          <p className="mt-6 text-center text-[11px] leading-relaxed text-muted-foreground">
+            Aviso Legal: ferramenta de apoio à decisão, não substitui o julgamento técnico do
+            profissional nem as fontes oficiais.{" "}
+            <Link to="/legal" className="font-bold underline">
+              Termos de Uso, Aviso Legal e Política de Privacidade
+            </Link>
+          </p>
+        )}
       </main>
+      {pathname !== "/legal" && <LegalConsentGate />}
 
       {/* Mobile bottom tab nav */}
       <nav className="fixed bottom-3 left-1/2 z-40 -translate-x-1/2 md:hidden">

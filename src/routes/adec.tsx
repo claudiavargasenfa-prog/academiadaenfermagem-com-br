@@ -1066,9 +1066,18 @@ function AdecPage() {
           </div>
         </section>
 
-        <p className="mt-8 text-center text-[11px]" style={{ color: C.inkSoft }}>
-          ADEC · Academia da Enfermagem · academiadaenfermagem.com.br
-        </p>
+        <footer className="mt-8 text-center text-[11px]" style={{ color: C.inkSoft }}>
+          <p className="mx-auto max-w-2xl leading-relaxed">
+            Aviso Legal: ferramenta de apoio à decisão clínica. Não substitui o julgamento técnico do
+            profissional, o exame do paciente nem as fontes oficiais (COFEN, COREN, MS, ANVISA).
+          </p>
+          <p className="mt-2">
+            <Link to="/legal" className="font-extrabold underline" style={{ color: C.goldBright }}>
+              Termos de Uso, Aviso Legal e Política de Privacidade
+            </Link>
+          </p>
+          <p className="mt-2">ADEC · Academia da Enfermagem · academiadaenfermagem.com.br</p>
+        </footer>
       </div>
 
       <StickyCTA
