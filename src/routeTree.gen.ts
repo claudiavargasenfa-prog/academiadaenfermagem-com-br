@@ -30,6 +30,7 @@ import { Route as MinhaHistoriaRouteImport } from './routes/minha-historia'
 import { Route as MinhaContaRouteImport } from './routes/minha-conta'
 import { Route as ManualSobrevivenciaRouteImport } from './routes/manual-sobrevivencia'
 import { Route as LojaRouteImport } from './routes/loja'
+import { Route as LegalRouteImport } from './routes/legal'
 import { Route as IrasRouteImport } from './routes/iras'
 import { Route as FarmacologiaAvancadaRouteImport } from './routes/farmacologia-avancada'
 import { Route as ExameFisicoEscalasRouteImport } from './routes/exame-fisico-escalas'
@@ -157,6 +158,11 @@ const LojaRoute = LojaRouteImport.update({
   path: '/loja',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LegalRoute = LegalRouteImport.update({
+  id: '/legal',
+  path: '/legal',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IrasRoute = IrasRouteImport.update({
   id: '/iras',
   path: '/iras',
@@ -277,6 +283,7 @@ export interface FileRoutesByFullPath {
   '/exame-fisico-escalas': typeof ExameFisicoEscalasRoute
   '/farmacologia-avancada': typeof FarmacologiaAvancadaRoute
   '/iras': typeof IrasRoute
+  '/legal': typeof LegalRoute
   '/loja': typeof LojaRoute
   '/manual-sobrevivencia': typeof ManualSobrevivenciaRoute
   '/minha-conta': typeof MinhaContaRoute
@@ -321,6 +328,7 @@ export interface FileRoutesByTo {
   '/exame-fisico-escalas': typeof ExameFisicoEscalasRoute
   '/farmacologia-avancada': typeof FarmacologiaAvancadaRoute
   '/iras': typeof IrasRoute
+  '/legal': typeof LegalRoute
   '/loja': typeof LojaRoute
   '/manual-sobrevivencia': typeof ManualSobrevivenciaRoute
   '/minha-conta': typeof MinhaContaRoute
@@ -365,6 +373,7 @@ export interface FileRoutesById {
   '/exame-fisico-escalas': typeof ExameFisicoEscalasRoute
   '/farmacologia-avancada': typeof FarmacologiaAvancadaRoute
   '/iras': typeof IrasRoute
+  '/legal': typeof LegalRoute
   '/loja': typeof LojaRoute
   '/manual-sobrevivencia': typeof ManualSobrevivenciaRoute
   '/minha-conta': typeof MinhaContaRoute
@@ -411,6 +420,7 @@ export interface FileRouteTypes {
     | '/exame-fisico-escalas'
     | '/farmacologia-avancada'
     | '/iras'
+    | '/legal'
     | '/loja'
     | '/manual-sobrevivencia'
     | '/minha-conta'
@@ -455,6 +465,7 @@ export interface FileRouteTypes {
     | '/exame-fisico-escalas'
     | '/farmacologia-avancada'
     | '/iras'
+    | '/legal'
     | '/loja'
     | '/manual-sobrevivencia'
     | '/minha-conta'
@@ -498,6 +509,7 @@ export interface FileRouteTypes {
     | '/exame-fisico-escalas'
     | '/farmacologia-avancada'
     | '/iras'
+    | '/legal'
     | '/loja'
     | '/manual-sobrevivencia'
     | '/minha-conta'
@@ -543,6 +555,7 @@ export interface RootRouteChildren {
   ExameFisicoEscalasRoute: typeof ExameFisicoEscalasRoute
   FarmacologiaAvancadaRoute: typeof FarmacologiaAvancadaRoute
   IrasRoute: typeof IrasRoute
+  LegalRoute: typeof LegalRoute
   LojaRoute: typeof LojaRoute
   ManualSobrevivenciaRoute: typeof ManualSobrevivenciaRoute
   MinhaContaRoute: typeof MinhaContaRoute
@@ -718,6 +731,13 @@ declare module '@tanstack/react-router' {
       path: '/loja'
       fullPath: '/loja'
       preLoaderRoute: typeof LojaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/legal': {
+      id: '/legal'
+      path: '/legal'
+      fullPath: '/legal'
+      preLoaderRoute: typeof LegalRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/iras': {
@@ -908,6 +928,7 @@ const rootRouteChildren: RootRouteChildren = {
   ExameFisicoEscalasRoute: ExameFisicoEscalasRoute,
   FarmacologiaAvancadaRoute: FarmacologiaAvancadaRoute,
   IrasRoute: IrasRoute,
+  LegalRoute: LegalRoute,
   LojaRoute: LojaRoute,
   ManualSobrevivenciaRoute: ManualSobrevivenciaRoute,
   MinhaContaRoute: MinhaContaRoute,
