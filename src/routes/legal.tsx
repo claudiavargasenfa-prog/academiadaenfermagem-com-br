@@ -161,12 +161,91 @@ function LegalPage() {
           tácita das novas condições.
         </P>
 
-        <H3>1.8 Do Foro e Legislação Aplicável</H3>
+        <H3>1.8 Dos Planos, da Assinatura e do Pagamento</H3>
         <P>
-          Estes Termos regem-se integralmente pela legislação da República Federativa do Brasil. Fica
-          eleito o foro da comarca do Rio de Janeiro/RJ, domicílio da desenvolvedora, para dirimir
-          quaisquer controvérsias oriundas deste instrumento, sem prejuízo da aplicação de normas de
-          ordem pública que estabeleçam foros diversos.
+          O acesso ao conteúdo é organizado em planos por trilha (Acadêmico, Técnico,
+          Técnico-Estudante e Enfermeiro). Os preços vigentes são os exibidos na página de venda do
+          respectivo plano no momento da contratação. O processamento do pagamento é realizado por
+          plataforma parceira especializada (Cakto), que opera como intermediadora financeira; a
+          Academia da Enfermagem não armazena dados de cartão de crédito. A liberação do acesso
+          ocorre após a confirmação do pagamento e o cadastro do usuário com o mesmo e-mail
+          utilizado na compra. Havendo cobrança recorrente, a renovação segue a periodicidade
+          informada no checkout e permanece ativa até o cancelamento pelo usuário. Em caso de
+          inadimplência ou de falha na renovação, o acesso é suspenso automaticamente até a
+          regularização, sem prejuízo do direito de nova contratação.
+        </P>
+
+        <H3>1.9 Do Período de Teste Gratuito</H3>
+        <P>
+          A plataforma poderá oferecer período de teste gratuito de <strong>15 (quinze) dias
+          corridos</strong>, contados do cadastro, com as seguintes condições: (a) o teste é
+          limitado a <strong>1 (uma) trilha por usuário</strong>, sendo vedado o acesso simultâneo a
+          mais de um aplicativo durante a gratuidade; (b) o teste é pessoal, intransferível e
+          concedido <strong>uma única vez por pessoa, dispositivo, e-mail e telefone</strong>; (c)
+          ao término do 15º dia o acesso é <strong>bloqueado automaticamente</strong>, permanecendo
+          a conta ativa apenas para contratação de um plano; (d) o usuário recebe avisos na própria
+          plataforma quando faltarem 5 (cinco) dias e no último dia do período; (e) o usuário que
+          adquirir o acesso pago diretamente não faz jus ao período de teste, pois já dispõe do
+          acesso integral contratado; (f) quem contratar as quatro trilhas terá acesso simultâneo às
+          quatro. Tentativas de burlar o limite de gratuidade mediante múltiplos cadastros poderão
+          resultar em bloqueio, conforme a cláusula 1.11.
+        </P>
+
+        <H3>1.10 Do Arrependimento, do Cancelamento e do Reembolso</H3>
+        <P>
+          Nos termos do <strong>art. 49 do Código de Defesa do Consumidor</strong>, o usuário pode
+          desistir da contratação no prazo de <strong>7 (sete) dias corridos</strong> contados da
+          data da compra, com <strong>devolução integral</strong> do valor pago, bastando solicitar
+          por e-mail para{" "}
+          <a className="font-semibold text-primary underline" href="mailto:academiadaenfermagem26@gmail.com">
+            academiadaenfermagem26@gmail.com
+          </a>
+          . O estorno é processado pela plataforma de pagamento, observados os prazos da
+          administradora do cartão ou da instituição financeira. Após o prazo de 7 dias, não há
+          reembolso do período já contratado, podendo o usuário cancelar a renovação a qualquer
+          tempo e manter o acesso até o fim do período vigente já pago. O cancelamento pode ser
+          solicitado pelo mesmo e-mail de contato.
+        </P>
+
+        <H3>1.11 Da Conta Individual e do Uso Indevido</H3>
+        <P>
+          A conta é <strong>pessoal e intransferível</strong>. É vedado compartilhar login e senha,
+          ceder acesso a terceiros, bem como copiar, imprimir, fotografar, gravar tela, extrair,
+          reproduzir ou redistribuir, total ou parcialmente, o conteúdo da plataforma. A plataforma
+          adota medidas técnicas de proteção do conteúdo; a tentativa de contorná-las constitui
+          infração contratual. Constatado o uso indevido, a desenvolvedora poderá suspender ou
+          encerrar o acesso, sem reembolso do período em curso, sem prejuízo das medidas cíveis e
+          criminais cabíveis (Lei nº 9.610/98).
+        </P>
+
+        <H3>1.12 Da Idade Mínima e das Comunicações</H3>
+        <P>
+          O uso é destinado a maiores de 18 anos; menores de 18 anos somente poderão utilizar a
+          plataforma assistidos ou representados por seus responsáveis legais. Ao se cadastrar, o
+          usuário concorda em receber comunicações operacionais (acesso, cobrança, avisos de prazo)
+          e, quando autorizado, comunicações informativas por e-mail e WhatsApp, incluindo o grupo
+          VIP, podendo solicitar o descadastramento dessas comunicações a qualquer momento pelo
+          e-mail de contato, sem prejuízo das mensagens estritamente operacionais.
+        </P>
+
+        <H3>1.13 Da Disponibilidade, do Suporte e das Atualizações Técnicas</H3>
+        <P>
+          A plataforma é fornecida em regime de melhores esforços, podendo haver indisponibilidades
+          temporárias decorrentes de manutenção programada, atualização de conteúdo, falhas de
+          terceiros (hospedagem, conectividade) ou eventos de força maior, sem que isso configure
+          descumprimento contratual. O suporte é prestado por e-mail em dias úteis. Funcionalidades
+          e módulos podem ser aprimorados, substituídos ou reorganizados ao longo do tempo,
+          preservando-se o escopo essencial do plano contratado.
+        </P>
+
+        <H3>1.14 Do Foro e Legislação Aplicável</H3>
+        <P>
+          Estes Termos regem-se integralmente pela legislação da República Federativa do Brasil.
+          Sendo o usuário consumidor, fica assegurado o direito de ajuizar eventual demanda no foro
+          de seu próprio domicílio, nos termos do art. 101, I, do Código de Defesa do Consumidor.
+          Nas demais hipóteses, fica eleito o foro da comarca do Rio de Janeiro/RJ, domicílio da
+          desenvolvedora, sem prejuízo da aplicação de normas de ordem pública que estabeleçam foros
+          diversos.
         </P>
       </Card>
 
