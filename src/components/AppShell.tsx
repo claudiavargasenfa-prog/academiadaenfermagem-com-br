@@ -15,6 +15,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { ReferencesFooter } from "./References";
 import { AuthGate, signOut } from "./AuthGate";
 import { TrialCountdownBanner } from "./TrialCountdownBanner";
+import { LegalConsentGate } from "./LegalConsentGate";
 import { useAuthReady, useIsAdmin } from "@/lib/access";
 import { useText } from "@/lib/app-texts";
 import logoAsset from "@/assets/logo.png.asset.json";
