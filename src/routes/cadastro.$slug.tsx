@@ -1,7 +1,7 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 
-import { AuthScreen } from "@/components/AuthGate";
-import { WelcomePanel } from "@/components/cadastro/WelcomePanel";
+import { WelcomeAuthScreen } from "@/components/AuthGate";
+
 
 const ALLOWED = new Set(["academico", "tecnico", "tecnico-estudante", "enfermeiro"]);
 
