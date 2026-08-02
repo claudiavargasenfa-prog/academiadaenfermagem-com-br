@@ -35,12 +35,5 @@ export const Route = createFileRoute("/cadastro/$slug")({
 
 function CadastroPage() {
   const { slug } = Route.useParams();
-  return (
-    <div className="mx-auto grid max-w-6xl gap-6 px-4 py-8 md:grid-cols-2 md:items-start">
-      <WelcomePanel slug={slug} />
-      <div>
-        <AuthScreen cadastroSlug={slug} />
-      </div>
-    </div>
-  );
+  return <WelcomeAuthScreen slug={slug} />;
 }
