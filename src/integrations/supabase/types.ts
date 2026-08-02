@@ -240,6 +240,45 @@ export type Database = {
           },
         ]
       }
+      legal_acceptances: {
+        Row: {
+          accepted_at: string
+          device_id: string | null
+          doc_date: string
+          doc_version: string
+          id: string
+          privacy_version: string
+          scope: string
+          terms_version: string
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          accepted_at?: string
+          device_id?: string | null
+          doc_date: string
+          doc_version: string
+          id?: string
+          privacy_version: string
+          scope?: string
+          terms_version: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          accepted_at?: string
+          device_id?: string | null
+          doc_date?: string
+          doc_version?: string
+          id?: string
+          privacy_version?: string
+          scope?: string
+          terms_version?: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       mini_app_placements: {
         Row: {
           app_id: string
