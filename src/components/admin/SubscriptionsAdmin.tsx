@@ -207,6 +207,7 @@ function PlanForm({ plan, onClose }: { plan: SubscriptionPlan; onClose: () => vo
     price_promo_migracao: centsToReais((plan as any).price_promo_migracao_cents),
     cakto_link_novo: (plan as any).cakto_link_novo ?? plan.cakto_checkout_url ?? "",
     cakto_link_migracao: (plan as any).cakto_link_migracao ?? "",
+    cakto_product_id: (plan as any).cakto_product_id ?? "",
     is_active: plan.is_active,
     sort_order: (plan as any).sort_order ?? 0,
   });
