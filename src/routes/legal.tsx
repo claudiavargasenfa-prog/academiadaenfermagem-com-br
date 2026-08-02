@@ -380,12 +380,14 @@ function LegalPage() {
 
         <H3>4.2 Da Declaração do Usuário</H3>
         <P>
-          “Declaro que li e compreendi integralmente os Termos de Uso, o Aviso Legal e a Política de
-          Privacidade do aplicativo Academia da Enfermagem, na versão {LEGAL_DOC_VERSION} datada de 02
-          de agosto de 2026, e que estou plenamente ciente de que o aplicativo é uma ferramenta de
-          apoio à decisão clínica, não substituindo, em hipótese alguma, o meu julgamento técnico como
-          profissional de enfermagem. Consinto livremente com o tratamento dos meus dados pessoais
-          para as finalidades e condições indicadas na Política de Privacidade.”
+          “Declaro que li e compreendi integralmente os Termos de Uso — inclusive as condições de
+          assinatura, do período de teste gratuito, de arrependimento e cancelamento —, o Aviso Legal
+          e a Política de Privacidade do aplicativo Academia da Enfermagem, na versão{" "}
+          {LEGAL_DOC_VERSION} datada de 02 de agosto de 2026, e que estou plenamente ciente de que o
+          aplicativo é uma ferramenta de apoio à decisão clínica, não substituindo, em hipótese
+          alguma, o meu julgamento técnico como profissional de enfermagem. Declaro ainda que minha
+          conta é pessoal e intransferível. Consinto livremente com o tratamento dos meus dados
+          pessoais para as finalidades e condições indicadas na Política de Privacidade.”
         </P>
 
         <H3>4.3 Do Consentimento para Dados de Saúde</H3>
