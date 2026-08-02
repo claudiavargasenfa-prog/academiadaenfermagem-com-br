@@ -282,16 +282,29 @@ function LegalPage() {
 
         <H3>3.2 Dos Dados Coletados e Finalidades</H3>
         <P>
-          (a) <strong>Dados de cadastro:</strong> nome completo, e-mail, categoria profissional e,
-          quando aplicável, número de registro no COREN, com a finalidade de identificação do usuário,
-          criação de conta individualizada, controle de acesso e segurança da plataforma e confecção
-          de certificado. (b) <strong>Dados de uso:</strong> logs de acesso, versão do aplicativo
-          utilizada, data e hora das interações, com a finalidade de garantir a segurança do sistema,
-          diagnóstico de falhas técnicas e melhoria contínua dos serviços. (c){" "}
-          <strong>Dados de saúde:</strong> o aplicativo NÃO coleta dados de saúde de pacientes em sua
-          funcionalidade atual. Caso funcionalidades futuras venham a envolver a coleta de dados de
-          saúde, será exigido consentimento específico, livre, informado e destacado do titular, nos
-          termos do art. 11 da LGPD.
+          (a) <strong>Dados de cadastro:</strong> nome completo, e-mail, telefone, categoria
+          profissional e, quando aplicável, número de registro no COREN, com a finalidade de
+          identificação do usuário, criação de conta individualizada, controle de acesso e segurança
+          da plataforma e confecção de certificado. (b) <strong>Dados de uso:</strong> logs de
+          acesso, versão do aplicativo utilizada, data e hora das interações, com a finalidade de
+          garantir a segurança do sistema, diagnóstico de falhas técnicas e melhoria contínua dos
+          serviços. (c) <strong>Dados técnicos de prevenção à fraude:</strong> identificador técnico
+          do dispositivo (fingerprint), endereço IP, navegador e sistema operacional, tratados
+          exclusivamente para verificar a elegibilidade ao período de teste gratuito, impedir
+          cadastros duplicados e proteger a plataforma contra abusos, com base no legítimo interesse
+          (art. 7º, IX, da LGPD) e na prevenção à fraude (art. 11, II, "g"). (d){" "}
+          <strong>Dados de transação:</strong> e-mail, identificador do pedido, plano contratado,
+          status e data de vencimento, recebidos da plataforma de pagamento para liberação e
+          manutenção do acesso — <strong>não recebemos nem armazenamos dados de cartão de
+          crédito</strong>. (e) <strong>Registros de aceite legal:</strong> data, hora, versão dos
+          documentos aceitos, identificador do usuário e do dispositivo, como prova do consentimento.
+          (f) <strong>Dados de saúde:</strong> o aplicativo NÃO coleta dados de saúde de pacientes.
+          Anotações clínicas eventualmente digitadas pelo usuário em módulos assistenciais são
+          armazenadas <strong>localmente no próprio dispositivo</strong> e não são enviadas aos nossos
+          servidores; o usuário não deve inserir dados que identifiquem pacientes. Caso
+          funcionalidades futuras venham a envolver a coleta de dados de saúde, será exigido
+          consentimento específico, livre, informado e destacado do titular, nos termos do art. 11 da
+          LGPD.
         </P>
 
         <H3>3.3 Das Bases Legais</H3>
@@ -299,35 +312,57 @@ function LegalPage() {
           O tratamento de dados fundamenta-se nas seguintes bases legais da Lei nº 13.709/2018:
           Consentimento (art. 7º, I, e art. 11, I); Execução de contrato ou procedimentos preliminares
           (art. 7º, V); Cumprimento de obrigação legal ou regulatória (art. 7º, II); e Legítimo
-          interesse da controladora para fins de segurança e aprimoramento tecnológico (art. 7º, IX).
+          interesse da controladora para fins de segurança, prevenção à fraude e aprimoramento
+          tecnológico (art. 7º, IX).
         </P>
 
-        <H3>3.4 Do Compartilhamento</H3>
+        <H3>3.4 Do Compartilhamento e dos Operadores</H3>
         <P>
-          Os dados pessoais coletados não são compartilhados com terceiros, exceto nas seguintes
-          hipóteses: (a) por estrito cumprimento de obrigação legal ou ordem judicial; (b) com
-          provedores de infraestrutura tecnológica e serviços de hospedagem, mediante contratos que
-          assegurem níveis de proteção de dados equivalentes aos previstos nesta política; (c)
+          Os dados pessoais não são vendidos nem cedidos para fins publicitários de terceiros. O
+          compartilhamento ocorre apenas nas seguintes hipóteses: (a) por estrito cumprimento de
+          obrigação legal ou ordem judicial; (b) com a <strong>plataforma de pagamento Cakto</strong>,
+          responsável pelo processamento das compras, cobranças e estornos; (c) com{" "}
+          <strong>provedores de infraestrutura tecnológica, banco de dados, autenticação e
+          hospedagem</strong> (incluindo Lovable Cloud/Supabase e provedores de rede de distribuição
+          de conteúdo), que atuam como operadores mediante contratos que asseguram níveis de proteção
+          equivalentes aos desta política; (d) com provedores de envio de e-mail transacional; (e)
           mediante consentimento prévio e expresso do titular para finalidades específicas.
         </P>
 
-        <H3>3.5 Do Armazenamento e Segurança</H3>
+        <H3>3.5 Da Transferência Internacional de Dados</H3>
+        <P>
+          Parte da infraestrutura tecnológica utilizada pode estar localizada fora do território
+          nacional. Nessas hipóteses, a transferência internacional observa o art. 33 da LGPD,
+          realizando-se para países ou fornecedores que assegurem grau de proteção adequado ou
+          mediante cláusulas contratuais específicas de proteção de dados firmadas com os operadores.
+        </P>
+
+        <H3>3.6 Do Armazenamento, da Retenção e da Segurança</H3>
         <P>
           São adotadas medidas técnicas e administrativas de segurança aptas a proteger os dados
           pessoais de acessos não autorizados e de situações acidentais ou ilícitas de destruição,
-          perda, alteração ou difusão, incluindo o uso de criptografia em trânsito e rígidos controles
-          de acesso. Os dados são retidos apenas pelo tempo necessário para atingir as finalidades
-          descritas ou pelos prazos exigidos por lei, sendo posteriormente eliminados ou anonimizados.
+          perda, alteração ou difusão, incluindo criptografia em trânsito, controle de acesso por
+          perfil e regras de segurança em nível de registro no banco de dados. Prazos de retenção:
+          (a) dados de cadastro e de acesso, enquanto a conta existir e por até{" "}
+          <strong>5 (cinco) anos</strong> após o encerramento, para exercício regular de direitos
+          (art. 16, II e III, da LGPD); (b) registros de transação e de aceite legal, por{" "}
+          <strong>5 (cinco) anos</strong>, por dever legal e como prova de consentimento; (c) dados
+          técnicos antifraude, por até <strong>24 (vinte e quatro) meses</strong>; (d) logs de acesso,
+          por <strong>6 (seis) meses</strong>, conforme o Marco Civil da Internet. Findos os prazos,
+          os dados são eliminados ou anonimizados.
         </P>
 
-        <H3>3.6 Dos Direitos do Titular</H3>
+        <H3>3.7 Dos Direitos do Titular e da Exclusão da Conta</H3>
         <P>
           Em conformidade com o art. 18 da LGPD, o usuário possui o direito de obter, a qualquer
           momento e mediante requisição: confirmação da existência de tratamento; acesso aos dados;
           correção de dados incompletos ou inexatos; anonimização, bloqueio ou eliminação de dados
           desnecessários; portabilidade; informação sobre compartilhamento; revogação do consentimento
-          e eliminação dos dados tratados sob tal base legal. Tais direitos podem ser exercidos via
-          e-mail direcionado ao Encarregado de Dados (academiadaenfermagem26@gmail.com).
+          e eliminação dos dados tratados sob tal base legal. A exclusão da conta pode ser solicitada
+          a qualquer momento por e-mail ao Encarregado de Dados
+          (academiadaenfermagem26@gmail.com), sendo atendida em até 15 (quinze) dias, ressalvados os
+          dados cuja guarda seja obrigatória por lei. O titular pode ainda peticionar perante a
+          Autoridade Nacional de Proteção de Dados (ANPD).
         </P>
       </Card>
 
