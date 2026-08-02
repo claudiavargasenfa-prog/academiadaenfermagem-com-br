@@ -61,7 +61,7 @@ function LegalPage() {
       <PageHeader
         eyebrow="Documentos legais"
         title="Termos de Uso, Aviso Legal, Política de Privacidade e Termo de Aceite"
-        description="Academia da Enfermagem · Claudia Vargas · Versão 1.0 — 02 de agosto de 2026"
+        description={`Academia da Enfermagem · Claudia Vargas · Versão ${LEGAL_DOC_VERSION} — 02 de agosto de 2026`}
       />
 
       <Card className="mb-4 border-emerald-900/20 bg-emerald-50/60">
