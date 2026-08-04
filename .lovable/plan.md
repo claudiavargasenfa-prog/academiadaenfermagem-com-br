@@ -22,31 +22,41 @@ Hoje cada app tem só um plano mensal (`subscription_plans`: Enfermeiro R$ 39,99
 Estrutura proposta: mesma tabela ganha planos por **período** (mensal, semestral, anual) para cada app — preço = mensal × 6 e × 12, sem desconto, mas com **entregas exclusivas** que justificam o compromisso:
 
 **Semestral (6 meses)**
-- Acesso liberado sem risco de bloqueio por atraso de renovação (paga uma vez, usa 6 meses).
-- Certificado digital de participação/atualização contínua com carga horária, emitido pelo app.
-- Biblioteca de PDFs para download (escalas, protocolos, tabelas de aprazamento) — exclusiva de quem é semestral/anual.
-- Prioridade no grupo VIP do WhatsApp para dúvidas clínicas.
+- Acesso liberado por 6 meses de uma vez, sem risco de bloqueio por atraso de renovação.
+- **2 certificados digitais de 10h** cada, de atualização contínua. O aluno escolhe quais mini apps quer certificar; o certificado sai com nome, mini app, carga horária, data e código de validação.
+- **Biblioteca de PDFs para download** (escalas, protocolos, tabelas de aprazamento) — exclusiva de semestral/anual.
+- **Plantão de dúvidas no Grupo VIP exclusivo do WhatsApp, 1x por semana**, em horário marcado com o enfermeiro de suporte.
 
 **Anual (12 meses)**
 - Tudo do semestral, mais:
-- Acesso a **um segundo app** da Academia à escolha (o maior valor percebido, sem mexer no preço).
-- Cota ampliada de geração de relatórios/PDF (hoje há limite por uso na tabela `relatorio_uses`).
-- Selo "Turma Fundadora" no perfil e garantia de preço travado na renovação.
-- Participação nas aulas/lives mensais e acesso ao acervo gravado.
+- **Acesso a um 2º aplicativo completo da Academia, à escolha** (ex.: quem assina o Acadêmico leva também o Enfermeiro ou o Técnico). É o maior valor percebido e não mexe no preço.
+- **Cota ampliada do Relatório de Estágio ABNT** (hoje são 5 gerações por compra; o anual passa a ter cota maior).
+- **4 certificados de 10h** no ano (em vez de 2).
+- Plantão de dúvidas semanal no Grupo VIP durante os 12 meses.
+
+Removidos conforme sua decisão: selo "Turma Fundadora"/preço travado e lives mensais.
 
 Nenhum desconto é aplicado — o ganho é escopo e benefício, não preço.
 
+## Respostas às suas perguntas
+
+- **A biblioteca de PDFs: você terá que fazer?** Não. Eu gero os PDFs a partir do conteúdo que já existe nos mini apps (escalas Braden/Morse/Glasgow/NEWS2, tabela de aprazamento, bundles de dispositivos, checklists de procedimentos). Você só revisa e aprova.
+- **Qual é o "2º app"?** Não é um mini app isolado — é um dos 4 aplicativos completos (Enfermeiro, Acadêmico, Técnico, Estudante) à escolha do aluno. A SAE Automatizada continua dentro dos apps onde já está; ela é o argumento de venda, não um brinde solto. Assim quem é Acadêmico anual pode abrir o Enfermeiro (onde estão SAE, gerenciamento, UTI) e vice-versa.
+- **O Relatório de Estágio ABNT foi tirado?** Não — a rota `/relatorio-abnt` continua ativa e hoje libera 5 gerações por compra. É essa cota que o plano anual amplia.
+
 ## Detalhes técnicos
 
-- `subscription_plans`: adicionar colunas `billing_period` ('mensal' | 'semestral' | 'anual') e `period_days` (30/180/365), além de `perks` (jsonb) para os benefícios listados na página do plano. Cada período vira uma linha com seu próprio `cakto_product_id` e link de checkout (você cria os 8 produtos novos na Cakto e cola os IDs no admin).
-- `src/routes/api/public/cakto-webhook.ts`: usar `period_days` do plano para calcular o vencimento em vez de assumir 30 dias.
-- `src/routes/planos.$slug.tsx`: seletor Mensal / Semestral / Anual com os benefícios de cada faixa e o CTA apontando para o checkout correto.
-- `minha-conta` e o banner de renovação passam a exibir a data de vencimento conforme o período contratado.
-- Admin ganha os campos de período/benefícios na tela de Assinaturas.
+- `subscription_plans`: adicionar `billing_period` ('mensal' | 'semestral' | 'anual'), `period_days` (30/180/365) e `perks` (jsonb) com os benefícios exibidos na página do plano. Cada período vira uma linha com seu próprio `cakto_product_id` e link de checkout (você cria os produtos novos na Cakto e cola os IDs no admin).
+- `src/routes/api/public/cakto-webhook.ts`: calcular o vencimento por `period_days` em vez de assumir 30 dias; para o anual, gravar também o direito ao 2º app e a cota maior de relatório.
+- `src/routes/planos.$slug.tsx`: seletor Mensal / Semestral / Anual, com a lista de benefícios de cada faixa e CTA no checkout correto.
+- `minha-conta` e o banner de renovação: mostram a data de vencimento conforme o período contratado.
+- Admin (Assinaturas): campos de período, preço e benefícios por plano.
+- Novas telas de benefício (etapas seguintes): escolha do 2º app no anual, emissão de certificado de 10h por mini app e biblioteca de PDFs restrita a semestral/anual.
 
 ## Ordem de execução
 
 1. Logo + ícones (rápido, visual).
-2. Migração de banco dos períodos + webhook.
-3. UI de escolha de plano e benefícios.
-4. Depois: entregar os benefícios (certificado, biblioteca PDF, segundo app) — cada um é um passo à parte.
+2. Migração de banco dos períodos + webhook + página de planos com as 3 opções.
+3. Escolha do 2º app (anual) e cota ampliada do relatório.
+4. Emissão dos certificados de 10h.
+5. Biblioteca de PDFs.
