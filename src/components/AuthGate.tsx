@@ -1,3 +1,4 @@
+import { isFreeTrialOpen, TRIAL_FREE_UNTIL_LABEL } from "@/lib/trial-window";
 import { useEffect, useState, type ReactNode } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
@@ -260,9 +261,17 @@ export function AuthScreen({ cadastroSlug: forcedCadastroSlug }: { cadastroSlug?
           </div>
 
           {mode === "signup" && (
-            <div className="mb-3 rounded-lg bg-emerald-500/10 px-3 py-2 text-xs font-semibold text-emerald-800">
-              🎁 Cadastro novo ganha <strong>15 dias grátis</strong> do seu aplicativo — sem cartão.
-            </div>
+            isFreeTrialOpen() ? (
+              <div className="mb-3 rounded-lg bg-emerald-500/10 px-3 py-2 text-xs font-semibold text-emerald-800">
+                🎁 Cadastro novo ganha <strong>15 dias grátis</strong> do seu aplicativo — sem cartão.
+              </div>
+            ) : (
+              <div className="mb-3 rounded-lg border border-orange-500/40 bg-orange-500/10 px-3 py-2 text-xs font-semibold text-orange-900">
+                ⚠️ <strong>Período gratuito encerrado</strong> (válido até {TRIAL_FREE_UNTIL_LABEL}).
+                Você pode criar sua conta, mas o acesso ao conteúdo só é liberado após a assinatura
+                do plano da sua categoria.
+              </div>
+            )
           )}
 
           <form onSubmit={handleSubmit} className="space-y-3">
@@ -387,7 +396,9 @@ export function AuthScreen({ cadastroSlug: forcedCadastroSlug }: { cadastroSlug?
               {busy
                 ? "Aguarde..."
                 : mode === "signup"
-                ? "Criar conta com 15 dias grátis"
+                ? isFreeTrialOpen()
+                  ? "Criar conta com 15 dias grátis"
+                  : "Criar minha conta"
                 : mode === "forgot"
                 ? "Enviar link de redefinição"
                 : "Entrar"}
