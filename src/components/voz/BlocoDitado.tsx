@@ -383,5 +383,6 @@ export default function BlocoDitado({ draftKey, acoes = ACOES_PADRAO, onInserir 
         </button>
       </div>
     </div>
+    </>
   );
 }
