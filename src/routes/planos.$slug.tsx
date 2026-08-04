@@ -294,16 +294,16 @@ function PlanoPage() {
           ))}
         </section>
 
-        {/* MINI APPS */}
+        {/* MINI APPS — prévia parcial */}
         <section className="mt-8">
           <h2 className="font-display text-xl font-extrabold">{miniAppsTitle}</h2>
           <p className="mt-1 text-sm text-muted-foreground">
             {miniApps.length > 0
-              ? `${miniApps.length} mini apps prontos para o seu dia a dia:`
-              : "Carregando mini apps..."}
+              ? `${miniApps.length} módulos dentro deste aplicativo — veja uma amostra:`
+              : "Carregando módulos..."}
           </p>
           <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {miniApps.map((m) => (
+            {miniApps.slice(0, 6).map((m) => (
               <div key={m.id} className="rounded-2xl border border-white/60 bg-white/80 p-4 shadow-sm backdrop-blur">
                 <div className="flex items-center gap-2">
                   <span className="text-xl">{m.icon ?? "•"}</span>
@@ -315,7 +315,39 @@ function PlanoPage() {
               </div>
             ))}
           </div>
+
+          {miniApps.length > 6 && (
+            <div className="relative mt-3 overflow-hidden rounded-2xl">
+              <div
+                aria-hidden
+                className="grid select-none gap-3 blur-[6px] sm:grid-cols-2 lg:grid-cols-3"
+              >
+                {miniApps.slice(6, 12).map((m) => (
+                  <div key={m.id} className="rounded-2xl border border-white/60 bg-white/70 p-4">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xl">{m.icon ?? "•"}</span>
+                      <h3 className="font-display text-sm font-extrabold leading-tight">{m.name}</h3>
+                    </div>
+                    <p className="mt-1.5 line-clamp-2 text-xs text-muted-foreground">
+                      {m.description ?? "Conteúdo exclusivo para assinantes."}
+                    </p>
+                  </div>
+                ))}
+              </div>
+              <div className="absolute inset-0 grid place-items-center bg-gradient-to-t from-white/95 via-white/70 to-white/30 p-4 text-center">
+                <div>
+                  <p className="font-display text-base font-extrabold text-emerald-900">
+                    🔒 + {miniApps.length - 6} módulos liberados após o cadastro
+                  </p>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Descubra tudo com {TRIAL_DAYS} dias grátis, sem cartão.
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
         </section>
+
 
         {/* FAQ */}
         <section className="mt-8">
