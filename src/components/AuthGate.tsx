@@ -101,6 +101,8 @@ export function AuthScreen({ cadastroSlug: forcedCadastroSlug }: { cadastroSlug?
   const [msg, setMsg] = useState<{ type: "error" | "info"; text: string } | null>(null);
   const checkTrial = useServerFn(checkTrialEligibility);
   const recordTrial = useServerFn(recordTrialFingerprint);
+  const navigate = useNavigate();
+
 
 
 
