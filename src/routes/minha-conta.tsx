@@ -41,10 +41,16 @@ function MinhaContaPage() {
   const appsQ = useQuery({ queryKey: ["mini_apps"], queryFn: fetchMiniApps });
   const subQ = useQuery({ queryKey: ["my_basic_sub"], queryFn: fetchMyBasicSubscription });
   const extrasQ = useQuery({ queryKey: ["my_extras"], queryFn: fetchMyExtraAccess });
+  const mySubsQ = useQuery({ queryKey: ["my_subs"], queryFn: fetchMyActiveSubscriptions });
+  const plansQ = useQuery({ queryKey: ["subscription_plans"], queryFn: fetchSubscriptionPlans });
 
   const apps = appsQ.data ?? [];
   const access = summarizeAccess(subQ.data ?? null, extrasQ.data ?? []);
   const basico = apps.find((a) => a.kind === "basico");
+  const mySubs = [...(mySubsQ.data ?? [])].sort(
+    (a, b) => new Date(a.expires_at).getTime() - new Date(b.expires_at).getTime(),
+  );
+  const plans = plansQ.data ?? [];
 
   return (
     <AppShell>
@@ -53,6 +59,52 @@ function MinhaContaPage() {
         title="Minha Conta"
         description="Veja suas assinaturas e os mini apps que você comprou."
       />
+
+      {mySubs.length > 0 && (
+        <section className="mb-6">
+          <h2 className="mb-3 font-display text-lg font-bold">Status da sua assinatura</h2>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {mySubs.map((s) => {
+              const track = TRACKS.find((t) => t.slug === (s.plan_slug as TrackSlug));
+              const plan = plans.find((p) => p.slug === s.plan_slug);
+              const url = plan?.cakto_link_novo || plan?.cakto_checkout_url || "";
+              const days = daysUntil(s.expires_at);
+              const isTrial = s.status === "trial";
+              const soon = days <= 5;
+              return (
+                <div
+                  key={s.id}
+                  className={`glass rounded-2xl p-4 ${soon ? "ring-2 ring-orange-400" : ""}`}
+                >
+                  <p className="font-display text-base font-bold">
+                    {track?.label ?? s.plan_slug}
+                  </p>
+                  <p className="mt-1 text-sm font-semibold">
+                    {isTrial ? "Período gratuito" : "Assinatura ativa"}
+                  </p>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    {isTrial ? "Termina em " : "Vence em "}
+                    {new Date(s.expires_at).toLocaleDateString("pt-BR")} ({days}{" "}
+                    {days === 1 ? "dia" : "dias"})
+                  </p>
+                  {url && soon && (
+                    <a
+                      href={url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="mt-3 inline-block rounded-xl gold-gradient px-4 py-2 text-sm font-bold"
+                    >
+                      {isTrial ? "Associe-se agora" : "Renovar assinatura"}
+                    </a>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </section>
+      )}
+
+
 
       <div className="grid gap-4 md:grid-cols-2">
         <Card>
