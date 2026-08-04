@@ -1467,8 +1467,15 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
     } else {
       root.insertBefore(div, root.firstChild);
     }
+    console.log("[ditado-debug] inserido", div.isConnected);
+    const mo = new MutationObserver(() => {
+      if (!div.isConnected) console.log("[ditado-debug] REMOVIDO");
+    });
+    mo.observe(root, { childList: true, subtree: true });
     setAnchorColeta(div);
     return () => {
+      console.log("[ditado-debug] cleanup");
+      mo.disconnect();
       div.remove();
       setAnchorColeta(null);
     };
