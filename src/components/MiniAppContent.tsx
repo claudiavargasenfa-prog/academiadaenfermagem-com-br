@@ -1456,18 +1456,29 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
     }
     const root = ref.current;
     if (!root) return;
-    const botoes = Array.from(root.querySelectorAll<HTMLButtonElement>("button"));
-    const btn = botoes.find((b) => /gerar\s+anota/i.test((b.textContent || "").trim()));
     const div = document.createElement("div");
     div.id = "adec-ditado-anchor";
-    if (btn) {
-      const alvo = btn.parentElement && btn.parentElement !== root ? btn.parentElement : btn;
-      alvo.parentElement?.insertBefore(div, alvo);
-    } else {
-      root.insertBefore(div, root.firstChild);
-    }
+    const posicionar = () => {
+      const r = ref.current;
+      if (!r || div.isConnected) return;
+      const btn = Array.from(r.querySelectorAll<HTMLButtonElement>("button")).find((b) =>
+        /gerar\s+anota/i.test((b.textContent || "").trim()),
+      );
+      if (btn) {
+        const alvo = btn.parentElement && btn.parentElement !== r ? btn.parentElement : btn;
+        alvo.parentElement?.insertBefore(div, alvo);
+      } else {
+        r.insertBefore(div, r.firstChild);
+      }
+    };
+    posicionar();
+    // O React pode recriar o HTML bruto do mini app (autosave, troca de aba);
+    // se a âncora sumir, reposicionamos automaticamente.
+    const mo = new MutationObserver(() => posicionar());
+    mo.observe(root, { childList: true, subtree: true });
     setAnchorColeta(div);
     return () => {
+      mo.disconnect();
       div.remove();
       setAnchorColeta(null);
     };
