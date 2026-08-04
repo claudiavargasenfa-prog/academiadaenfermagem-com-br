@@ -14,6 +14,8 @@ import {
   TRACKS,
   type TrackSlug,
 } from "@/lib/access";
+import BeneficiosPlano from "@/components/conta/BeneficiosPlano";
+
 
 
 export const Route = createFileRoute("/minha-conta")({
