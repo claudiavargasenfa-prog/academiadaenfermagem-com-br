@@ -7,9 +7,14 @@ import {
   fetchMiniApps,
   fetchMyBasicSubscription,
   fetchMyExtraAccess,
+  fetchMyActiveSubscriptions,
+  fetchSubscriptionPlans,
   summarizeAccess,
   daysUntil,
+  TRACKS,
+  type TrackSlug,
 } from "@/lib/access";
+
 
 export const Route = createFileRoute("/minha-conta")({
   head: () => ({
