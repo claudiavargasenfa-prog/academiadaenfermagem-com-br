@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import {
+  AlertTriangle,
   BellRing,
   CheckCircle2,
   Clock,
@@ -23,6 +24,11 @@ import {
   useAuthReady,
 } from "@/lib/access";
 import { useText } from "@/lib/app-texts";
+import {
+  isFreeTrialOpen,
+  TRIAL_FREE_START_LABEL,
+  TRIAL_FREE_UNTIL_LABEL,
+} from "@/lib/trial-window";
 
 const LABELS: Record<string, string> = {
   academico: "Acadêmico",
@@ -94,6 +100,7 @@ export function WelcomePanel({ slug }: { slug: string }) {
   const checkoutUrl = plan?.cakto_link_novo || plan?.cakto_checkout_url || "";
   const firstName = (profileQ.data?.full_name || "").split(" ")[0];
   const logged = isReady && !!user;
+  const freeOpen = isFreeTrialOpen();
 
   return (
     <aside className="relative overflow-hidden rounded-3xl border border-border/60 bg-background/70 shadow-[var(--shadow-glass)] backdrop-blur-xl">
