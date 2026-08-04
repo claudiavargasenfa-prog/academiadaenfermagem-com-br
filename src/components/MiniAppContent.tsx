@@ -4,6 +4,8 @@ import { Video, Headphones } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/AppShell";
 import { useAuthReady } from "@/lib/access";
+import BlocoDitado from "@/components/voz/BlocoDitado";
+
 import { renderContent } from "@/lib/markdown";
 import { useLocal } from "@/lib/storage";
 import {
@@ -1544,9 +1546,34 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
         </>
       )}
 
+      {isSae && (
+        <BlocoDitado
+          draftKey={sae.ativoId || "sae"}
+          onInserir={(alvo, texto) => {
+            const root = ref.current;
+            if (!root || !texto.trim()) return;
+            const sel =
+              alvo === "sintomas"
+                ? "#txt-sinais-sintomas-consolidados"
+                : "#txt-evolucao-clinica-mestre";
+            const ta = root.querySelector<HTMLTextAreaElement>(sel);
+            if (!ta) {
+              alert("Abra a seção correspondente do mini app antes de enviar o texto ditado.");
+              return;
+            }
+            ta.value = ta.value.trim() ? `${ta.value.trim()}\n${texto.trim()}` : texto.trim();
+            ta.dispatchEvent(new Event("input", { bubbles: true }));
+            ta.dispatchEvent(new Event("change", { bubbles: true }));
+            ta.scrollIntoView({ behavior: "smooth", block: "center" });
+            ta.focus();
+          }}
+        />
+      )}
+
       <div ref={ref} className="prose-sm max-w-none">
         {isSae ? <RawHtmlHost html={html} /> : renderContent(html)}
       </div>
+
 
 
       {isColeta && ativoPaciente && (
