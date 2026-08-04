@@ -124,9 +124,13 @@ export function WelcomePanel({ slug }: { slug: string }) {
           )}
         </h2>
         <p className="mt-2 text-sm text-muted-foreground md:text-base">
-          Você está entrando na <b>Academia do {label}</b>. {slogan} Aqui a teoria vira prática,
+          Você está entrando na <b>Academia da Enfermagem</b>. {slogan} Aqui a teoria vira prática,
           e o plantão fica mais leve. 💚
         </p>
+        <p className="mt-3 text-sm font-extrabold text-foreground md:text-base">
+          Atenção: No período gratuito você tem direito a cadastrar-se em um app.
+        </p>
+
 
         {logged ? (
           <div className="mt-6 space-y-4">
