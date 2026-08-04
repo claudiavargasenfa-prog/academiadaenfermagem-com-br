@@ -222,7 +222,7 @@ export function AuthScreen({ cadastroSlug: forcedCadastroSlug }: { cadastroSlug?
           <img
             src={logoAsset.url}
             alt="Academia da Enfermagem"
-            className="h-20 w-20 rounded-2xl bg-white/10 object-contain p-1 ring-1 ring-gold/40"
+            className="h-24 w-24 rounded-2xl object-contain sm:h-28 sm:w-28"
           />
           <h1 className="mt-3 font-display text-2xl font-extrabold text-gold">
             Academia da Enfermagem
