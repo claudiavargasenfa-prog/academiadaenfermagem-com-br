@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import { useEffect, useState, type ReactNode } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { ReferencesFooter } from "./References";
+import { BackBar } from "./BackBar";
 import { AuthGate, signOut } from "./AuthGate";
 import { TrialCountdownBanner } from "./TrialCountdownBanner";
 import { LegalConsentGate } from "./LegalConsentGate";
