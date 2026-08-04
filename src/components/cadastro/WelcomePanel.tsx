@@ -130,6 +130,9 @@ export function WelcomePanel({ slug }: { slug: string }) {
         <p className="mt-3 text-sm font-extrabold text-foreground md:text-base">
           Atenção: No período gratuito você tem direito a cadastrar-se em um app.
         </p>
+        <p className="mt-1 text-sm font-extrabold text-foreground md:text-base">
+          O período gratuito de teste é de 10/08/2026 a 10/09/2026.
+        </p>
 
 
         {logged ? (
