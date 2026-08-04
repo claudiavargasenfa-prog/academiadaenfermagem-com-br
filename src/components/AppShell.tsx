@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import { useEffect, useState, type ReactNode } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { ReferencesFooter } from "./References";
+import { BackBar } from "./BackBar";
 import { AuthGate, signOut } from "./AuthGate";
 import { TrialCountdownBanner } from "./TrialCountdownBanner";
 import { LegalConsentGate } from "./LegalConsentGate";
@@ -216,6 +217,7 @@ export function AppShell({
       </header>
 
       <main className="mx-auto max-w-5xl px-4 pb-28 pt-6 page-enter md:pb-10">
+        <BackBar />
         {children}
         {!hideReferences && <ReferencesFooter compact />}
         {pathname !== "/legal" && (
