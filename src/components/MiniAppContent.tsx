@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/AppShell";
 import { useAuthReady } from "@/lib/access";
 import BlocoDitado from "@/components/voz/BlocoDitado";
+import GuiaColetaTurno from "@/components/GuiaColetaTurno";
 
 import { renderContent } from "@/lib/markdown";
 import { useLocal } from "@/lib/storage";
@@ -1509,6 +1510,7 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
     <div>
       {isColeta && (
         <>
+          <GuiaColetaTurno />
           <div className="mb-3 flex flex-wrap items-center gap-2 rounded-xl border border-primary/20 bg-primary/5 p-2">
             {coleta.pacientes.map((p, i) => (
               <button
