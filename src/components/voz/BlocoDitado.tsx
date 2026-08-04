@@ -140,6 +140,138 @@ export default function BlocoDitado({ draftKey, acoes = ACOES_PADRAO, onInserir 
   if (suportado === null) return null;
 
   return (
+    <>
+    <details className="mb-3 rounded-2xl border border-emerald-200 bg-white/80 p-3 shadow-sm backdrop-blur">
+      <summary className="cursor-pointer list-none text-sm font-bold text-emerald-900">
+        ❓ Como utilizar o sistema de ditado
+      </summary>
+      <div className="mt-3 space-y-3 text-xs leading-relaxed text-slate-700">
+        <p className="font-semibold text-emerald-900">
+          Como usar o Ditado por Voz — passo a passo (antes de começar o seu procedimento)
+        </p>
+
+        <div>
+          <p className="font-semibold text-emerald-800">1. Navegadores</p>
+          <ul className="ml-4 list-disc space-y-1">
+            <li>1.1 Chrome (Android/PC).</li>
+            <li>1.2 Safari (iPhone/iPad).</li>
+            <li>
+              1.3 Na primeira vez, o celular vai pedir permissão do microfone: toque em{" "}
+              <b>Permitir</b>. Se negar sem querer, vá em Configurações do navegador → Site →
+              Microfone → Permitir.
+            </li>
+            <li>
+              1.4 Deixe o celular em um local próximo (bolso do jaleco, suporte na maca). Não
+              precisa segurar.
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <p className="font-semibold text-emerald-800">2. Onde encontrar o bloco de ditado</p>
+          <ul className="ml-4 list-disc space-y-1">
+            <li>
+              Academia do Enfermeiro → SAE Descomplicada e Automatizada → o card “Bloco de Ditado
+              por Voz”.
+            </li>
+            <li>
+              Academia do Técnico → Coleta de Dados + Admissão de Turno → o bloco está antes do
+              botão <b>Gerar Anotação</b>.
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <p className="font-semibold text-emerald-800">3. Passo a passo do uso</p>
+          <ul className="ml-4 list-disc space-y-1">
+            <li>
+              3.1 Antes de se paramentar, abra a sua plataforma e toque em{" "}
+              <b>🎙️ Iniciar ditado</b>. O botão fica vermelho piscando = está ouvindo.
+            </li>
+            <li>3.2 Faça o procedimento normalmente. Fale em voz clara e pausada o que observar:</li>
+            <li>3.3 “Paciente refere dor abdominal em cólica, intensidade 7.”</li>
+            <li>3.4 “Ferida operatória com secreção serosa, sem sinais flogísticos.”</li>
+            <li>3.5 “Saturação 92 por cento em ar ambiente.”</li>
+          </ul>
+        </div>
+
+        <div>
+          <p className="font-semibold text-emerald-800">4. Comandos de voz úteis</p>
+          <ul className="ml-4 list-disc space-y-1">
+            <li>4.2 “nova linha” → quebra a linha e começa outro registro;</li>
+            <li>4.3 “vírgula”, “ponto”, “dois pontos” → pontuação;</li>
+            <li>4.4 “finalizar ditado” → encerra a gravação sem tocar na tela.</li>
+          </ul>
+        </div>
+
+        <ul className="ml-4 list-disc space-y-1">
+          <li>
+            5. O texto vai aparecendo sozinho dentro da caixa do bloco, já com correção automática
+            de termos de enfermagem (dispneia, SatO₂, PA, FC, hipocorado, etc.).
+          </li>
+          <li>6. Ao terminar, toque em ⏹️ Parar (ou diga “finalizar ditado”).</li>
+          <li>
+            7. Revise o texto. Você pode editar direto na caixa, corrigir palavras, apagar trechos.
+          </li>
+          <li>
+            8. Envie para o lugar certo usando os botões abaixo da caixa:
+            <ul className="ml-4 list-[circle] space-y-1">
+              <li>8.2 Na SAE: Enviar para Sinais e Sintomas ou Enviar para Evolução;</li>
+              <li>
+                8.3 No app do Técnico: Enviar para Observações do turno ou Enviar para a Anotação
+                Final;
+              </li>
+              <li>8.4 Ou toque em Copiar e cole manualmente onde quiser.</li>
+            </ul>
+          </li>
+          <li>
+            9. Gere o documento normalmente (Gerar Anotação / Gerar Prescrição / PDF). O que foi
+            ditado já entra no texto final.
+          </li>
+        </ul>
+
+        <div>
+          <p className="font-semibold text-emerald-800">10. Boas práticas</p>
+          <ul className="ml-4 list-disc space-y-1">
+            <li>
+              O rascunho é salvo automaticamente por paciente: se a tela apagar ou o app fechar, o
+              texto continua lá quando voltar.
+            </li>
+            <li>
+              Fale nomes de medicamentos devagar e confira depois — nome comercial pode sair grafado
+              errado.
+            </li>
+            <li>
+              Nunca dite dados que identifiquem o paciente (nome completo, CPF, prontuário) em
+              ambiente com terceiros — LGPD. Respeite a proteção de dados e não se comprometa.
+            </li>
+            <li>
+              Se o ambiente estiver muito barulhento, aproxime o celular ou dite frases curtas com
+              pausas.
+            </li>
+            <li>
+              Se o navegador não suportar, o bloco avisa e você pode digitar normalmente — nada
+              trava.
+            </li>
+          </ul>
+        </div>
+
+        <div className="rounded-lg border border-amber-200 bg-amber-50 p-2 text-amber-900">
+          <p className="font-semibold">Atenção — Se não funcionar</p>
+          <ul className="ml-4 list-disc space-y-1">
+            <li>Botão não inicia → permissão de microfone bloqueada.</li>
+            <li>
+              Nada é transcrito → verifique se o idioma do navegador está em Português (Brasil).
+            </li>
+            <li>
+              Parou sozinho após alguns segundos → é comportamento do celular ao bloquear a tela;
+              toque em Iniciar de novo (o texto anterior é mantido).
+            </li>
+          </ul>
+        </div>
+      </div>
+    </details>
+
     <div className="mb-4 rounded-2xl border border-emerald-200 bg-gradient-to-br from-emerald-50/90 to-teal-50/70 p-4 shadow-sm backdrop-blur">
       <div className="mb-2 flex flex-wrap items-center gap-2">
         <h4 className="text-sm font-bold text-emerald-900">🎙️ Ditado de Plantão (voz)</h4>
@@ -251,5 +383,6 @@ export default function BlocoDitado({ draftKey, acoes = ACOES_PADRAO, onInserir 
         </button>
       </div>
     </div>
+    </>
   );
 }
