@@ -1,0 +1,2 @@
+ALTER TABLE public.plan_offers DROP CONSTRAINT IF EXISTS plan_offers_billing_period_check;
+ALTER TABLE public.plan_offers ADD CONSTRAINT plan_offers_billing_period_check CHECK (billing_period IN ('mensal','trimestral','semestral','anual'));
