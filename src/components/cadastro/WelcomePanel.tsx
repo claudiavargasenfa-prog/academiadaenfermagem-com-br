@@ -289,10 +289,16 @@ export function WelcomePanel({ slug }: { slug: string }) {
         </div>
 
         {/* Aviso legal */}
-        <p className="mt-4 rounded-2xl border border-emerald-900/20 bg-emerald-900/5 p-3 text-[11px] leading-relaxed text-emerald-900 dark:text-emerald-300">
-          <strong>Aviso Legal:</strong> Ferramenta de apoio à decisão, não substitui o julgamento
-          técnico do profissional nem as fontes oficiais.
-        </p>
+        <div className="mt-5 rounded-2xl border-2 border-emerald-900/40 bg-emerald-900/10 p-4 text-emerald-900 shadow-sm dark:text-emerald-200">
+          <p className="text-sm font-extrabold uppercase tracking-wide">⚠️ Aviso Legal</p>
+          <p className="mt-1.5 text-xs font-semibold leading-relaxed md:text-sm">
+            Ferramenta de apoio à decisão clínica. Não substitui o julgamento técnico do
+            profissional, o exame do paciente nem as fontes oficiais (COFEN, COREN, Ministério da
+            Saúde, ANVISA) e os protocolos institucionais. A responsabilidade pela conduta é sempre
+            do profissional habilitado.
+          </p>
+        </div>
+
       </div>
     </aside>
   );
