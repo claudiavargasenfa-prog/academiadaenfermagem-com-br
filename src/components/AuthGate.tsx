@@ -1,4 +1,5 @@
 import { useEffect, useState, type ReactNode } from "react";
+import { useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import type { Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
@@ -100,6 +101,8 @@ export function AuthScreen({ cadastroSlug: forcedCadastroSlug }: { cadastroSlug?
   const [msg, setMsg] = useState<{ type: "error" | "info"; text: string } | null>(null);
   const checkTrial = useServerFn(checkTrialEligibility);
   const recordTrial = useServerFn(recordTrialFingerprint);
+  const navigate = useNavigate();
+
 
 
 
@@ -141,7 +144,7 @@ export function AuthScreen({ cadastroSlug: forcedCadastroSlug }: { cadastroSlug?
           email,
           password,
           options: {
-            emailRedirectTo: window.location.origin,
+            emailRedirectTo: `${window.location.origin}/trilha/${categoria}`,
             data: {
               full_name: nome.trim(),
               phone: phoneDigits,
@@ -166,10 +169,14 @@ export function AuthScreen({ cadastroSlug: forcedCadastroSlug }: { cadastroSlug?
         if (!data.session) {
           setMsg({
             type: "info",
-            text: "Cadastro criado! Verifique seu e-mail para confirmar e depois faça login.",
+            text: "Cadastro criado! Verifique seu e-mail para confirmar — o link já leva direto para o seu app.",
           });
           setMode("signin");
+        } else {
+          navigate({ to: "/trilha/$slug", params: { slug: categoria } });
         }
+
+
 
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
