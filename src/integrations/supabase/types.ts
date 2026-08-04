@@ -978,6 +978,7 @@ export type Database = {
           updated_at: string
         }[]
       }
+      set_bonus_app: { Args: { _bonus_slug: string }; Returns: string }
     }
     Enums: {
       app_role: "admin" | "aluno"
