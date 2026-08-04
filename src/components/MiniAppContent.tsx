@@ -7,6 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/AppShell";
 import { useAuthReady } from "@/lib/access";
 import BlocoDitado from "@/components/voz/BlocoDitado";
+import GuiaColetaTurno from "@/components/GuiaColetaTurno";
 
 import { renderContent } from "@/lib/markdown";
 import { useLocal } from "@/lib/storage";
