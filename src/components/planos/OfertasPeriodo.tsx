@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 type Offer = {
   id: string;
   plan_slug: string;
-  billing_period: "mensal" | "semestral" | "anual";
+  billing_period: "mensal" | "trimestral" | "semestral" | "anual";
   period_days: number;
   price_cents: number;
   cakto_checkout_url: string | null;
@@ -18,6 +18,7 @@ type Offer = {
 
 const LABELS: Record<Offer["billing_period"], { title: string; tag?: string; months: number }> = {
   mensal: { title: "Mensal", months: 1 },
+  trimestral: { title: "Trimestral", tag: "1 certificado", months: 3 },
   semestral: { title: "Semestral", tag: "Mais benefícios", months: 6 },
   anual: { title: "Anual", tag: "Melhor pacote", months: 12 },
 };
