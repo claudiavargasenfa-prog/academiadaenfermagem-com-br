@@ -152,22 +152,22 @@ function StoreHomeContent() {
         <p className="mt-2 max-w-2xl text-sm text-muted-foreground md:text-base"><RichText>{homeDesc}</RichText></p>
       </div>
 
-      <Carousel />
-
       <div className="mb-8 flex justify-center">
         <img
           src={mascotesAsset.url}
           alt="Mascotes Academia da Enfermagem — Time contra as IRAS"
-          className="h-56 w-auto object-contain sm:h-72 md:h-96 [animation:pulse_3s_ease-in-out_infinite]"
+          className="h-40 w-auto object-contain sm:h-52 md:h-60 [animation:pulse_3s_ease-in-out_infinite]"
         />
       </div>
 
-
-      {/* 2) Cards dos aplicativos — sem preço, só apresentação + botão "Conhecer" */}
+      {/* 4 portas — cada aplicativo tem a sua própria página */}
       {activePlans.length > 0 && (
         <section id="aplicativos" className="mb-8 scroll-mt-20">
-          <h2 className="mb-3 font-display text-lg font-bold"><RichText>{ctaSection}</RichText></h2>
-          <div className="grid gap-3 sm:grid-cols-3">
+          <h2 className="mb-1 font-display text-lg font-bold"><RichText>{ctaSection}</RichText></h2>
+          <p className="mb-4 text-sm text-muted-foreground">
+            Escolha a sua porta. O conteúdo de cada aplicativo só é revelado dentro da página dele.
+          </p>
+          <div className="grid gap-3 sm:grid-cols-2">
             {activePlans.map((plan) => {
               const appRow = appBySlug.get(plan.slug);
               const sub = mySubs.find((s) => s.plan_slug === plan.slug);
@@ -182,20 +182,21 @@ function StoreHomeContent() {
               return (
                 <div
                   key={plan.id}
-                  className="flex flex-col rounded-2xl border border-white/40 p-4 shadow-sm"
+                  className="relative flex flex-col overflow-hidden rounded-2xl border border-white/40 p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
                   style={cardStyle}
                   data-app={slug}
                 >
+                  <div className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-white/30 blur-2xl" />
                   <div className="mb-2 flex items-center gap-2">
-                    <span className="text-2xl">{appRow?.emoji ?? "📱"}</span>
+                    <span className="text-3xl">{appRow?.emoji ?? "🚪"}</span>
                     <h3 className="font-display text-base font-extrabold">{plan.name}</h3>
                   </div>
                   <PlanSlogan slug={slug} />
-                  {plan.description && (
-                    <p className="text-xs opacity-80"><RichText>{plan.description}</RichText></p>
-                  )}
+                  <p className="text-xs font-semibold opacity-80">
+                    🔒 Conteúdo exclusivo — módulos revelados na página do aplicativo.
+                  </p>
 
-                  <div className="mt-auto space-y-2 pt-4">
+                  <div className="mt-auto space-y-2 pt-5">
                     {subscribed ? (
                       <>
                         <Link
@@ -203,7 +204,7 @@ function StoreHomeContent() {
                           params={{ slug }}
                           className="block w-full rounded-xl bg-foreground py-2.5 text-center text-sm font-extrabold text-background shadow hover:opacity-90"
                         >
-                          Ver mini apps →
+                          Entrar no aplicativo →
                         </Link>
                         <span className="block w-full rounded-xl bg-white/40 py-2 text-center text-xs font-bold">
                           {inTrial
@@ -217,7 +218,7 @@ function StoreHomeContent() {
                         params={{ slug }}
                         className="block w-full rounded-xl bg-foreground py-2.5 text-center text-sm font-extrabold text-background shadow hover:opacity-90"
                       >
-                        Conhecer este aplicativo →
+                        Descobrir o que tem dentro →
                       </Link>
                     )}
 
@@ -231,6 +232,7 @@ function StoreHomeContent() {
           </div>
         </section>
       )}
+
 
 
 
