@@ -1458,6 +1458,7 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
     if (!root) return;
     const botoes = Array.from(root.querySelectorAll<HTMLButtonElement>("button"));
     const btn = botoes.find((b) => /gerar\s+anota/i.test((b.textContent || "").trim()));
+    console.log("[ditado-debug]", { isColeta, botoes: botoes.length, btn: !!btn });
     const div = document.createElement("div");
     div.id = "adec-ditado-anchor";
     if (btn) {
