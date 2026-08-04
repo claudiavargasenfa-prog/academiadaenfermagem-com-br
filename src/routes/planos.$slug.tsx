@@ -318,6 +318,8 @@ function PlanoPage() {
         </section>
 
 
+        <OfertasPeriodo slug={slug} isLoggedIn={isLoggedIn} subscribed={subscribed} />
+
 
         {/* FAQ */}
         <section className="mt-8">
