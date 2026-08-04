@@ -1625,6 +1625,29 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
         {isSae ? <RawHtmlHost html={html} /> : renderContent(html)}
       </div>
 
+      {isColeta &&
+        anchorColeta &&
+        createPortal(
+          <BlocoDitado
+            draftKey={`coleta-${coleta.ativoId || "1"}`}
+            acoes={[
+              {
+                id: "obs",
+                label: "➜ Enviar para Observações do turno",
+                className: "bg-emerald-600",
+              },
+              {
+                id: "anotacao",
+                label: "➜ Enviar para a Anotação Final",
+                className: "bg-teal-600",
+              },
+            ]}
+            onInserir={inserirDitadoColeta}
+          />,
+          anchorColeta,
+        )}
+
+
 
 
       {isColeta && ativoPaciente && (
