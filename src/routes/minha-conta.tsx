@@ -14,6 +14,8 @@ import {
   TRACKS,
   type TrackSlug,
 } from "@/lib/access";
+import BeneficiosPlano from "@/components/conta/BeneficiosPlano";
+
 
 
 export const Route = createFileRoute("/minha-conta")({
@@ -153,7 +155,10 @@ function MinhaContaPage() {
         </Card>
       </div>
 
+      <BeneficiosPlano />
+
       <section className="mt-6">
+
         <h2 className="mb-3 font-display text-lg font-bold">Meus mini apps extras</h2>
         {Object.keys(access.extraAccessByApp).length === 0 ? (
           <Card>

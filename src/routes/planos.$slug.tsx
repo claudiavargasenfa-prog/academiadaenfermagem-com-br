@@ -11,6 +11,8 @@ import {
   formatPriceBRL,
 } from "@/lib/access";
 import { fetchAppBySlug, fetchPlacementsForApp } from "@/lib/apps";
+import OfertasPeriodo from "@/components/planos/OfertasPeriodo";
+
 import { useAppTexts } from "@/lib/app-texts";
 import { supabase } from "@/integrations/supabase/client";
 import { signOut } from "@/components/AuthGate";
@@ -317,6 +319,8 @@ function PlanoPage() {
           </div>
         </section>
 
+
+        <OfertasPeriodo slug={slug} isLoggedIn={isLoggedIn} subscribed={subscribed} />
 
 
         {/* FAQ */}

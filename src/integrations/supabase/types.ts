@@ -504,6 +504,60 @@ export type Database = {
         }
         Relationships: []
       }
+      plan_offers: {
+        Row: {
+          billing_period: string
+          bonus_app_included: boolean
+          cakto_checkout_url: string | null
+          cakto_product_id: string | null
+          certificates_included: number
+          created_at: string
+          id: string
+          is_active: boolean
+          period_days: number
+          perks: Json
+          plan_slug: string
+          price_cents: number
+          report_quota: number
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          billing_period: string
+          bonus_app_included?: boolean
+          cakto_checkout_url?: string | null
+          cakto_product_id?: string | null
+          certificates_included?: number
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          period_days: number
+          perks?: Json
+          plan_slug: string
+          price_cents: number
+          report_quota?: number
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          billing_period?: string
+          bonus_app_included?: boolean
+          cakto_checkout_url?: string | null
+          cakto_product_id?: string | null
+          certificates_included?: number
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          period_days?: number
+          perks?: Json
+          plan_slug?: string
+          price_cents?: number
+          report_quota?: number
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           categoria: string | null
@@ -753,6 +807,47 @@ export type Database = {
           },
         ]
       }
+      user_certificates: {
+        Row: {
+          code: string
+          hours: number
+          id: string
+          issued_at: string
+          mini_app_id: string
+          mini_app_name: string
+          student_name: string
+          user_id: string
+        }
+        Insert: {
+          code: string
+          hours?: number
+          id?: string
+          issued_at?: string
+          mini_app_id: string
+          mini_app_name: string
+          student_name: string
+          user_id: string
+        }
+        Update: {
+          code?: string
+          hours?: number
+          id?: string
+          issued_at?: string
+          mini_app_id?: string
+          mini_app_name?: string
+          student_name?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_certificates_mini_app_id_fkey"
+            columns: ["mini_app_id"]
+            isOneToOne: false
+            referencedRelation: "mini_apps"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -776,11 +871,15 @@ export type Database = {
       }
       user_subscriptions: {
         Row: {
+          billing_period: string
+          bonus_app_slug: string | null
+          certificates_allowed: number
           created_at: string
           expires_at: string
           id: string
           notes: string | null
           plan_slug: string
+          report_quota: number
           started_at: string
           status: string
           updated_at: string
@@ -788,11 +887,15 @@ export type Database = {
           was_trial: boolean
         }
         Insert: {
+          billing_period?: string
+          bonus_app_slug?: string | null
+          certificates_allowed?: number
           created_at?: string
           expires_at: string
           id?: string
           notes?: string | null
           plan_slug: string
+          report_quota?: number
           started_at?: string
           status?: string
           updated_at?: string
@@ -800,11 +903,15 @@ export type Database = {
           was_trial?: boolean
         }
         Update: {
+          billing_period?: string
+          bonus_app_slug?: string | null
+          certificates_allowed?: number
           created_at?: string
           expires_at?: string
           id?: string
           notes?: string | null
           plan_slug?: string
+          report_quota?: number
           started_at?: string
           status?: string
           updated_at?: string
@@ -834,6 +941,16 @@ export type Database = {
         }
         Returns: boolean
       }
+      issue_certificate: {
+        Args: { _mini_app_id: string }
+        Returns: {
+          code: string
+          hours: number
+          issued_at: string
+          mini_app_name: string
+          student_name: string
+        }[]
+      }
       list_mini_apps_catalog: {
         Args: never
         Returns: {
@@ -861,6 +978,7 @@ export type Database = {
           updated_at: string
         }[]
       }
+      set_bonus_app: { Args: { _bonus_slug: string }; Returns: string }
     }
     Enums: {
       app_role: "admin" | "aluno"

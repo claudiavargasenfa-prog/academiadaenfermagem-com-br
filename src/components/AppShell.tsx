@@ -111,8 +111,9 @@ export function AppShell({
             <img
               src={logoUrl}
               alt="Logotipo Academia da Enfermagem"
-              className="h-11 w-11 shrink-0 rounded-xl object-contain bg-white/10 p-1 ring-1 ring-gold/40"
+              className="h-12 w-12 shrink-0 rounded-xl object-contain sm:h-14 sm:w-14"
             />
+
             <div className="min-w-0 leading-tight">
               <p
                 className="truncate font-display font-extrabold tracking-tight text-gold"

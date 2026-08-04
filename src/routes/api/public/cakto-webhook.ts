@@ -77,11 +77,23 @@ export const Route = createFileRoute("/api/public/cakto-webhook")({
           .maybeSingle();
 
         // 1b) Assinatura de app inteiro (plano)? Libera acesso pago e encerra gratuidade.
-        const { data: plan } = await supabaseAdmin
-          .from("subscription_plans")
-          .select("slug")
+        // Primeiro procura uma oferta por período (mensal/semestral/anual).
+        const { data: offer } = await supabaseAdmin
+          .from("plan_offers")
+          .select(
+            "plan_slug, billing_period, period_days, certificates_included, report_quota, bonus_app_included",
+          )
           .eq("cakto_product_id", productId)
+          .eq("is_active", true)
           .maybeSingle();
+
+        const { data: plan } = offer
+          ? { data: { slug: offer.plan_slug } }
+          : await supabaseAdmin
+              .from("subscription_plans")
+              .select("slug")
+              .eq("cakto_product_id", productId)
+              .maybeSingle();
 
         if (plan) {
           const approved =
@@ -96,7 +108,11 @@ export const Route = createFileRoute("/api/public/cakto-webhook")({
             });
           }
 
-          const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
+          const periodDays = offer?.period_days ?? 30;
+          const billingPeriod = offer?.billing_period ?? "mensal";
+          const certificates = offer?.certificates_included ?? 0;
+          const reportQuota = offer?.report_quota ?? 0;
+          const expiresAt = new Date(Date.now() + periodDays * 24 * 60 * 60 * 1000).toISOString();
 
           if (!profile) {
             // Comprou antes de criar conta: guarda para liberar no cadastro.
@@ -134,7 +150,12 @@ export const Route = createFileRoute("/api/public/cakto-webhook")({
           if (existing) {
             await supabaseAdmin
               .from("user_subscriptions")
-              .update({ expires_at: expiresAt })
+              .update({
+                expires_at: expiresAt,
+                billing_period: billingPeriod,
+                certificates_allowed: certificates,
+                report_quota: reportQuota,
+              } as never)
               .eq("id", existing.id);
           } else {
             await supabaseAdmin.from("user_subscriptions").insert({
@@ -143,9 +164,13 @@ export const Route = createFileRoute("/api/public/cakto-webhook")({
               status: "active",
               started_at: new Date().toISOString(),
               expires_at: expiresAt,
-              notes: `Compra Cakto ${payload.data?.order_id ?? ""}`.trim(),
+              billing_period: billingPeriod,
+              certificates_allowed: certificates,
+              report_quota: reportQuota,
+              notes: `Compra Cakto ${billingPeriod} ${payload.data?.order_id ?? ""}`.trim(),
             } as never);
           }
+
 
           return new Response(JSON.stringify({ ok: true, note: "plan_access_granted" }), {
             status: 200,
