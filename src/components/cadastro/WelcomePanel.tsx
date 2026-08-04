@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import {
+  AlertTriangle,
   BellRing,
   CheckCircle2,
   Clock,
@@ -23,6 +24,11 @@ import {
   useAuthReady,
 } from "@/lib/access";
 import { useText } from "@/lib/app-texts";
+import {
+  isFreeTrialOpen,
+  TRIAL_FREE_START_LABEL,
+  TRIAL_FREE_UNTIL_LABEL,
+} from "@/lib/trial-window";
 
 const LABELS: Record<string, string> = {
   academico: "Acadêmico",
@@ -94,6 +100,7 @@ export function WelcomePanel({ slug }: { slug: string }) {
   const checkoutUrl = plan?.cakto_link_novo || plan?.cakto_checkout_url || "";
   const firstName = (profileQ.data?.full_name || "").split(" ")[0];
   const logged = isReady && !!user;
+  const freeOpen = isFreeTrialOpen();
 
   return (
     <aside className="relative overflow-hidden rounded-3xl border border-border/60 bg-background/70 shadow-[var(--shadow-glass)] backdrop-blur-xl">
@@ -127,12 +134,42 @@ export function WelcomePanel({ slug }: { slug: string }) {
           Você está entrando na <b>Academia da Enfermagem</b>. {slogan} Aqui a teoria vira prática,
           e o plantão fica mais leve. 💚
         </p>
-        <p className="mt-3 text-sm font-extrabold text-foreground md:text-base">
-          Atenção: No período gratuito você tem direito a cadastrar-se em um app.
-        </p>
-        <p className="mt-1 text-sm font-extrabold text-foreground md:text-base">
-          O período gratuito de teste é de 10/08/2026 a 10/09/2026.
-        </p>
+        {freeOpen ? (
+          <>
+            <p className="mt-3 text-sm font-extrabold text-foreground md:text-base">
+              Atenção: No período gratuito você tem direito a cadastrar-se em um app.
+            </p>
+            <p className="mt-1 text-sm font-extrabold text-foreground md:text-base">
+              O período gratuito de teste é de {TRIAL_FREE_START_LABEL} a {TRIAL_FREE_UNTIL_LABEL}.
+            </p>
+          </>
+        ) : (
+          <div className="mt-4 rounded-2xl border-2 border-orange-500/50 bg-orange-500/10 p-4">
+            <div className="flex items-center gap-2">
+              <AlertTriangle className="h-4 w-4 text-orange-600" />
+              <span className="text-sm font-extrabold text-orange-900">
+                Período gratuito encerrado
+              </span>
+            </div>
+            <p className="mt-2 text-sm text-foreground/80">
+              A degustação de 15 dias foi válida até <b>{TRIAL_FREE_UNTIL_LABEL}</b>. Novos cadastros
+              não recebem mais acesso gratuito — para entrar no app é preciso{" "}
+              <b>assinar o plano da sua categoria</b>. Você pode criar sua conta normalmente e
+              liberar o conteúdo logo após a assinatura.
+            </p>
+            {checkoutUrl ? (
+              <a
+                href={checkoutUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="mt-3 inline-flex items-center gap-1 rounded-xl bg-primary px-4 py-2 text-sm font-extrabold text-primary-foreground"
+              >
+                Assinar agora <CreditCard className="h-4 w-4" />
+              </a>
+            ) : null}
+          </div>
+        )}
+
 
 
         {logged ? (
