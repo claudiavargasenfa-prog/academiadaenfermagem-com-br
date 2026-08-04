@@ -107,8 +107,8 @@ function PlanoPage() {
 
   const placedIds = new Set((placementsQ.data ?? []).map((p) => p.mini_app_id));
   const miniApps = (miniAppsQ.data ?? [])
-    .filter((m) => placedIds.has(m.id) && m.is_active !== false)
-    .slice(0, 24);
+    .filter((m) => placedIds.has(m.id) && m.is_active !== false);
+
 
   const slogan = t("slogan", DEFAULTS[slug]?.slogan ?? "");
   const promoTitle = t("promo_title", "🎁 Promoção de lançamento");
