@@ -16,6 +16,10 @@ function daysLeft(expiresAt: string): number {
   return Math.ceil(ms / 86400000);
 }
 
+function todayKey() {
+  return new Date().toISOString().slice(0, 10);
+}
+
 export function TrialCountdownBanner() {
   const profileQ = useQuery({ queryKey: ["my_profile"], queryFn: fetchMyProfile });
   const subsQ = useQuery({ queryKey: ["my_subs"], queryFn: fetchMyActiveSubscriptions });
@@ -31,52 +35,85 @@ export function TrialCountdownBanner() {
 
   const profile = profileQ.data;
   const subs = subsQ.data ?? [];
-  const trial = subs.find((s) => s.status === "trial");
-  if (!trial) return null;
 
-  const days = daysLeft(trial.expires_at);
+  // Assinatura mais próxima do vencimento (trial ou paga)
+  const target = [...subs]
+    .filter((s) => s.status === "trial" || s.status === "active")
+    .sort((a, b) => new Date(a.expires_at).getTime() - new Date(b.expires_at).getTime())[0];
+  if (!target) return null;
+
+  const isTrial = target.status === "trial";
+  const days = daysLeft(target.expires_at);
   let stage: Stage = null;
   if (days <= 1) stage = "red";
   else if (days <= 3) stage = "orange";
   else if (days <= 5) stage = "blue";
-  if (!stage || dismissed) return null;
+  if (!stage) return null;
 
-  const track = TRACKS.find((t) => t.slug === trial.plan_slug as TrackSlug);
-  const plan = (plansQ.data ?? []).find((p) => p.slug === trial.plan_slug);
+  // "Fechado" vale só para o dia atual (reaparece no dia seguinte / nova sessão)
+  const dismissKey = `adec_banner_dismiss_${target.id ?? target.plan_slug}_${todayKey()}`;
+  const alreadyDismissed =
+    typeof window !== "undefined" && window.sessionStorage.getItem(dismissKey) === "1";
+  if (dismissed || alreadyDismissed) return null;
+
+  const track = TRACKS.find((t) => t.slug === (target.plan_slug as TrackSlug));
+  const plan = (plansQ.data ?? []).find((p) => p.slug === target.plan_slug);
   const checkoutUrl = plan?.cakto_link_novo || plan?.cakto_checkout_url || "";
   const firstName = (profile?.full_name || "aluno(a)").split(" ")[0];
+  const dateLabel = new Date(target.expires_at).toLocaleDateString("pt-BR");
 
   const priceLabel = ((plan?.price_novo_cents ?? plan?.price_cents ?? 2499) / 100)
     .toFixed(2)
     .replace(".", ",");
 
-  const styles: Record<NonNullable<Stage>, { bg: string; fg: string; title: string; body: string; cta: string }> = {
+  const dayWord = days === 1 ? "dia" : "dias";
+
+  const trialStyles: Record<NonNullable<Stage>, { bg: string; title: string; body: string; cta: string }> = {
     blue: {
       bg: "bg-sky-500",
-      fg: "text-white",
       title: "⏳ Seu tempo grátis termina em 5 dias",
-      body: `Olá, ${firstName}! Seu período gratuito${track ? ` na ${track.label}` : ""} termina em ${days} ${days === 1 ? "dia" : "dias"}. Para continuar com todo o conteúdo, associe-se por R$ ${priceLabel}/mês.`,
+      body: `Olá, ${firstName}! Seu período gratuito${track ? ` na ${track.label}` : ""} termina em ${days} ${dayWord} (${dateLabel}). Para continuar com todo o conteúdo, associe-se por R$ ${priceLabel}/mês.`,
       cta: "🔐 GARANTIR ACESSO",
     },
     orange: {
       bg: "bg-orange-500",
-      fg: "text-white",
       title: "⚠️ Seu tempo grátis termina em 3 dias",
       body: `${firstName}, para continuar acessando todos os conteúdos, acesse o link e seja um associado por R$ ${priceLabel}/mês.`,
       cta: "🔐 SER ASSOCIADO",
     },
     red: {
       bg: "bg-red-600",
-      fg: "text-white",
       title: "🚨 Seu prazo de gratuidade é até amanhã",
       body: `${firstName}, passando para lembrar que sua gratuidade termina amanhã. Não perca todo esse conteúdo e os demais que estão por vir — acesse o link e associe-se.`,
       cta: "🔐 ASSOCIE-SE AGORA",
     },
   };
-  const s = styles[stage];
+
+  const paidStyles: Record<NonNullable<Stage>, { bg: string; title: string; body: string; cta: string }> = {
+    blue: {
+      bg: "bg-sky-500",
+      title: `⏳ Sua mensalidade vence em ${days} ${dayWord}`,
+      body: `Olá, ${firstName}! Sua assinatura${track ? ` da ${track.label}` : ""} vence em ${dateLabel}. Renove para não perder o acesso aos conteúdos e às atualizações.`,
+      cta: "🔁 RENOVAR ASSINATURA",
+    },
+    orange: {
+      bg: "bg-orange-500",
+      title: "⚠️ Sua mensalidade vence em 3 dias",
+      body: `${firstName}, sua assinatura vence em ${dateLabel}. Renove por R$ ${priceLabel}/mês e mantenha tudo liberado sem interrupção.`,
+      cta: "🔁 RENOVAR AGORA",
+    },
+    red: {
+      bg: "bg-red-600",
+      title: "🚨 Sua mensalidade vence amanhã",
+      body: `${firstName}, sua assinatura vence em ${dateLabel}. Renove hoje para não perder o acesso ao conteúdo do seu app.`,
+      cta: "🔁 RENOVAR HOJE",
+    },
+  };
+
+  const s = (isTrial ? trialStyles : paidStyles)[stage];
 
   return (
-    <div className={`relative ${s.bg} ${s.fg} trial-pulse`}>
+    <div className={`relative ${s.bg} text-white trial-pulse`}>
       <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-2.5">
         <div className="min-w-0 flex-1">
           <p className="text-sm font-extrabold leading-tight">{s.title}</p>
@@ -95,13 +132,19 @@ export function TrialCountdownBanner() {
         {stage !== "red" ? (
           <button
             aria-label="Fechar aviso"
-            onClick={() => setDismissed(true)}
+            onClick={() => {
+              try {
+                window.sessionStorage.setItem(dismissKey, "1");
+              } catch {
+                /* ignore */
+              }
+              setDismissed(true);
+            }}
             className="shrink-0 rounded-full p-1 hover:bg-white/15"
           >
             <X className="h-4 w-4" />
           </button>
         ) : null}
-
       </div>
     </div>
   );
