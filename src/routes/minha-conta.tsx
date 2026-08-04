@@ -68,8 +68,9 @@ function MinhaContaPage() {
               const track = TRACKS.find((t) => t.slug === (s.plan_slug as TrackSlug));
               const plan = plans.find((p) => p.slug === s.plan_slug);
               const url = plan?.cakto_link_novo || plan?.cakto_checkout_url || "";
-              const days = daysUntil(s.expires_at);
+              const days = daysUntil(s.expires_at) ?? 0;
               const isTrial = s.status === "trial";
+
               const soon = days <= 5;
               return (
                 <div
