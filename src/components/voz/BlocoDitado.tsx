@@ -2,12 +2,26 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { corrigirTermos, detectarComando } from "@/lib/voz/dicionario";
 import { iniciarDitado, suporteVoz, type DitadoSessao } from "@/lib/voz/speech";
 
+export type AcaoDitado = {
+  /** Identificador do alvo (ex.: "sintomas", "evolucao", "obs", "anotacao") */
+  id: string;
+  label: string;
+  className?: string;
+};
+
 type Props = {
   /** Chave de rascunho (por paciente) no localStorage */
   draftKey: string;
+  /** Botões de destino do texto ditado */
+  acoes?: AcaoDitado[];
   /** Envia o texto para um campo do mini app */
-  onInserir: (alvo: "sintomas" | "evolucao", texto: string) => void;
+  onInserir: (alvo: string, texto: string) => void;
 };
+
+const ACOES_PADRAO: AcaoDitado[] = [
+  { id: "sintomas", label: "➜ Enviar para Sinais e Sintomas", className: "bg-emerald-600" },
+  { id: "evolucao", label: "➜ Enviar para Evolução", className: "bg-teal-600" },
+];
 
 const AVISO_KEY = "adec-ditado-aviso-lgpd";
 
@@ -15,7 +29,8 @@ function agora(): string {
   return new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
 }
 
-export default function BlocoDitado({ draftKey, onInserir }: Props) {
+export default function BlocoDitado({ draftKey, acoes = ACOES_PADRAO, onInserir }: Props) {
+
   const [suportado, setSuportado] = useState<boolean | null>(null);
   const [ouvindo, setOuvindo] = useState(false);
   const [parcial, setParcial] = useState("");
@@ -210,22 +225,20 @@ export default function BlocoDitado({ draftKey, onInserir }: Props) {
         >
           {copiado ? "✓ Copiado" : "📋 Copiar tudo"}
         </button>
-        <button
-          type="button"
-          onClick={() => onInserir("sintomas", texto)}
-          disabled={!texto.trim()}
-          className="rounded-lg bg-emerald-600 px-3 py-2 text-sm font-semibold text-white disabled:opacity-40"
-        >
-          ➜ Enviar para Sinais e Sintomas
-        </button>
-        <button
-          type="button"
-          onClick={() => onInserir("evolucao", texto)}
-          disabled={!texto.trim()}
-          className="rounded-lg bg-teal-600 px-3 py-2 text-sm font-semibold text-white disabled:opacity-40"
-        >
-          ➜ Enviar para Evolução
-        </button>
+        {acoes.map((a) => (
+          <button
+            key={a.id}
+            type="button"
+            onClick={() => onInserir(a.id, texto)}
+            disabled={!texto.trim()}
+            className={`rounded-lg px-3 py-2 text-sm font-semibold text-white disabled:opacity-40 ${
+              a.className ?? "bg-emerald-600"
+            }`}
+          >
+            {a.label}
+          </button>
+        ))}
+
         <button
           type="button"
           onClick={() => {

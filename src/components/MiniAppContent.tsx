@@ -1,5 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-import { memo, useEffect, useMemo, useRef } from "react";
+import { memo, useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
+
 import { Video, Headphones } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/AppShell";
@@ -1443,6 +1445,55 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
     };
   }, [html]);
 
+  // ===== COLETA (Técnico): âncora do bloco de ditado, logo acima do botão
+  // "Gerar Anotação". Inserida imperativamente no HTML bruto e preenchida via
+  // portal, para não reinjetar o DOM do mini app.
+  const [anchorColeta, setAnchorColeta] = useState<HTMLElement | null>(null);
+  useEffect(() => {
+    if (!isColeta) {
+      setAnchorColeta(null);
+      return;
+    }
+    const root = ref.current;
+    if (!root) return;
+    const botoes = Array.from(root.querySelectorAll<HTMLButtonElement>("button"));
+    const btn = botoes.find((b) => /gerar\s+anota/i.test((b.textContent || "").trim()));
+    const div = document.createElement("div");
+    div.id = "adec-ditado-anchor";
+    if (btn) {
+      const alvo = btn.parentElement && btn.parentElement !== root ? btn.parentElement : btn;
+      alvo.parentElement?.insertBefore(div, alvo);
+    } else {
+      root.insertBefore(div, root.firstChild);
+    }
+    setAnchorColeta(div);
+    return () => {
+      div.remove();
+      setAnchorColeta(null);
+    };
+  }, [isColeta, html]);
+
+  const inserirDitadoColeta = (alvo: string, texto: string) => {
+    const root = ref.current;
+    if (!root || !texto.trim()) return;
+    const sel = alvo === "anotacao" ? "#anotacao_final_painel" : "#obs_queixas";
+    const campo = root.querySelector<HTMLTextAreaElement | HTMLInputElement>(sel);
+    if (!campo) {
+      alert(
+        alvo === "anotacao"
+          ? "Gere a anotação primeiro para poder acrescentar o texto ditado."
+          : "Abra a seção de observações do turno antes de enviar o texto ditado.",
+      );
+      return;
+    }
+    const atual = campo.value.trim();
+    campo.value = atual ? `${atual}\n${texto.trim()}` : texto.trim();
+    campo.dispatchEvent(new Event("input", { bubbles: true }));
+    campo.dispatchEvent(new Event("change", { bubbles: true }));
+    campo.scrollIntoView({ behavior: "smooth", block: "center" });
+  };
+
+
   return (
     <div>
       {isColeta && (
@@ -1573,6 +1624,29 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
       <div ref={ref} className="prose-sm max-w-none">
         {isSae ? <RawHtmlHost html={html} /> : renderContent(html)}
       </div>
+
+      {isColeta &&
+        anchorColeta &&
+        createPortal(
+          <BlocoDitado
+            draftKey={`coleta-${coleta.ativoId || "1"}`}
+            acoes={[
+              {
+                id: "obs",
+                label: "➜ Enviar para Observações do turno",
+                className: "bg-emerald-600",
+              },
+              {
+                id: "anotacao",
+                label: "➜ Enviar para a Anotação Final",
+                className: "bg-teal-600",
+              },
+            ]}
+            onInserir={inserirDitadoColeta}
+          />,
+          anchorColeta,
+        )}
+
 
 
 
