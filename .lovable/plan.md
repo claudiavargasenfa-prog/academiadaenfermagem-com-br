@@ -1,36 +1,40 @@
-# Ditado por voz para o enfermeiro paramentado
+# Bloco de Ditado por Voz (gratuito) na SAE Descomplicada
 
-Hoje não existe nada de voz no app (nenhum microfone, gravação ou transcrição no código). Este é o plano para criar o recurso.
+Hoje não existe nenhum recurso de voz no app. Este plano cria um **espaço próprio de ditado** dentro do mini app SAE Descomplicada e Automatizada, sem custo de IA.
 
-## Como vai funcionar na prática
+## Por que um bloco próprio (e não ditar direto no campo)
 
-1. Antes de paramentar (ou com o celular no suporte/bolso), o enfermeiro abre o mini app e toca uma vez em **“Ditar”**.
-2. O app entra em **Modo Plantão Mãos-Livres**: tela grande, escura, com um indicador de que está ouvindo. O microfone fica aberto de forma contínua.
-3. O enfermeiro fala normalmente durante o procedimento. Cada pausa de silêncio fecha um trecho, que é transcrito e vai aparecendo na tela como uma lista de falas com horário (ex.: `14:32 — paciente refere dor abdominal intensa`).
-4. Nada precisa ser tocado durante o procedimento. Comandos ditos em voz alta controlam o app:
-   - “nova linha” / “parágrafo”
-   - “apagar última” (remove o último trecho)
-   - “pausar ditado” e “continuar ditado”
-   - “finalizar ditado” (encerra a sessão)
-5. Ao desparamentar, o enfermeiro revisa o texto: pode editar, apagar trechos e então **inserir no campo** de destino (Sinais e Sintomas, Anamnese, Exame Físico, Evolução ou Anotação de Enfermagem).
-6. O texto ditado alimenta os motores já existentes: ao inserir em “Sinais e Sintomas”, os diagnósticos ADEC são pesquisados automaticamente como já acontece hoje com o texto digitado.
-7. Tudo fica salvo em rascunho local por paciente (mesmo mecanismo de autosave já usado), então uma queda de conexão ou tela apagada não perde o ditado.
+Durante o procedimento o enfermeiro está paramentado, a tela apaga, ele troca de aba ou de paciente — se o texto fosse direto para um campo, ele se perderia ou cairia no lugar errado. Um bloco único e independente recebe tudo, guarda em rascunho e só depois o profissional decide onde colar.
 
-## Segurança e limites (importante deixar claro ao aluno)
+## Como vai funcionar
 
-- A gravação de áudio **não é armazenada** — o áudio é enviado, transcrito e descartado; só o texto fica.
-- Aviso de LGPD na primeira vez: não citar nomes completos nem dados identificáveis do paciente em voz alta; o texto passa por revisão do enfermeiro antes de entrar no prontuário.
-- Recurso disponível apenas para quem tem acesso ativo (trial ou pago), pelas mesmas regras dos demais módulos.
+1. No topo da SAE aparece um cartão **“Ditado de Plantão (voz)”**, no mesmo padrão visual verde/glass do mini app.
+2. Um botão grande **“Iniciar ditado”**. Ao tocar, o cartão fica em modo ouvindo (indicador pulsando) e o microfone permanece aberto.
+3. O enfermeiro fala; o texto aparece linha a linha com horário, ex.: `14:32 — paciente refere dor abdominal intensa`.
+4. Comandos falados, sem tocar na tela: “nova linha”, “apagar última”, “pausar ditado”, “continuar ditado”, “finalizar ditado”.
+5. Ao desparamentar, ele revisa e edita o texto livremente na caixa.
+6. Botões de saída:
+   - **Copiar tudo** (para colar onde quiser)
+   - **Enviar para Sinais e Sintomas** (dispara a busca automática de diagnósticos ADEC já existente)
+   - **Enviar para Evolução**
+   - **Limpar**
+7. Tudo salvo em rascunho local por paciente, junto do autosave atual — apagar a tela ou cair a internet não perde o ditado.
+
+## Custo: zero
+
+Usa o reconhecimento de voz **do próprio celular** (Web Speech API — a mesma engine do teclado com microfone). O áudio não passa pelo nosso servidor e **não consome crédito de IA**, hoje nem no futuro.
+
+- Funciona em Android/Chrome e iPhone/Safari (iOS 14.5+). Em navegadores sem suporte o cartão mostra um aviso curto em vez do botão.
+- Precisa de internet; nenhum áudio é gravado ou armazenado.
+- Um **dicionário de correção automática** de termos de enfermagem melhora a precisão (“dispineia” → dispneia, “sat 92” → SatO₂ 92%, “fc 110” → FC 110 bpm), e pode ser ampliado depois.
+- Aviso de LGPD na primeira vez: não falar nome completo nem dados identificáveis; o texto passa por revisão antes de ir ao prontuário.
 
 ## Detalhes técnicos
 
-- **Captura:** `MediaRecorder` no navegador (webm/opus), com detector de silêncio via `AnalyserNode` para cortar os trechos automaticamente (VAD simples, ~1,2 s de silêncio).
-- **Transcrição:** server function `createServerFn` chamando o Lovable AI Gateway em `/v1/audio/transcriptions` com `openai/gpt-4o-mini-transcribe`, forçando português. Chave nunca vai ao navegador.
-- **Comandos de voz:** interpretados no texto já transcrito (comparação normalizada), não exigem modelo extra.
-- **Componentes novos:** `src/components/voz/DitadoProvider.tsx` (sessão, VAD, fila de envio), `src/components/voz/BotaoDitar.tsx` (botão + modal mãos-livres), `src/lib/voz/transcribe.functions.ts` (server function).
-- **Integração:** botão “Ditar” ao lado dos campos de texto livre da SAE Descomplicada e do mini app de Coleta de Dados/Anotações, inserindo no `RawHtmlHost` sem quebrar o autosave atual.
-- **PWA:** o app pede permissão de microfone uma única vez; funciona em Android/Chrome e iOS/Safari com a tela ligada (mantida acesa via Wake Lock quando suportado).
-
-## Onde entra primeiro
-
-Começar pela **SAE Descomplicada e Automatizada** (campo Sinais e Sintomas + Evolução). Depois replicar no mini app de **Coleta de Dados + Admissão de Turno**.
+- `src/lib/voz/speech.ts`: wrapper do `webkitSpeechRecognition`/`SpeechRecognition` com `continuous`, `interimResults`, `lang: "pt-BR"`, reinício automático em `onend`, detecção de suporte e Wake Lock quando disponível.
+- `src/lib/voz/dicionario.ts`: normalização e correção dos termos técnicos + interpretação dos comandos de voz sobre o texto já transcrito.
+- `src/components/voz/BlocoDitado.tsx`: cartão React com estado de sessão, lista de trechos, textarea editável e botões de saída.
+- Integração em `src/components/MiniAppContent.tsx`: o cartão é renderizado **fora** do `RawHtmlHost` (acima do HTML bruto), então não interfere no autosave nem provoca reinjeção do DOM. Os botões “Enviar para…” escrevem no `textarea` alvo dentro do host via `ref` + disparo de evento `input`, exatamente como já é feito hoje pelos chips de sintomas.
+- Rascunho no mesmo `localStorage` por paciente usado pelo autosave da SAE.
+- Renderizado só no cliente (checagem de suporte em `useEffect`), sem tocar em SSR.
+- Nenhuma mudança no conteúdo cadastrado no banco, no design existente ou no motor `sae-engine.ts`.
