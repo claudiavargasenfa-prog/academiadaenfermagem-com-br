@@ -216,6 +216,7 @@ export function AppShell({
       </header>
 
       <main className="mx-auto max-w-5xl px-4 pb-28 pt-6 page-enter md:pb-10">
+        <BackBar />
         {children}
         {!hideReferences && <ReferencesFooter compact />}
         {pathname !== "/legal" && (
