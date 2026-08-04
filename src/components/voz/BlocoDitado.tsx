@@ -225,22 +225,20 @@ export default function BlocoDitado({ draftKey, acoes = ACOES_PADRAO, onInserir 
         >
           {copiado ? "✓ Copiado" : "📋 Copiar tudo"}
         </button>
-        <button
-          type="button"
-          onClick={() => onInserir("sintomas", texto)}
-          disabled={!texto.trim()}
-          className="rounded-lg bg-emerald-600 px-3 py-2 text-sm font-semibold text-white disabled:opacity-40"
-        >
-          ➜ Enviar para Sinais e Sintomas
-        </button>
-        <button
-          type="button"
-          onClick={() => onInserir("evolucao", texto)}
-          disabled={!texto.trim()}
-          className="rounded-lg bg-teal-600 px-3 py-2 text-sm font-semibold text-white disabled:opacity-40"
-        >
-          ➜ Enviar para Evolução
-        </button>
+        {acoes.map((a) => (
+          <button
+            key={a.id}
+            type="button"
+            onClick={() => onInserir(a.id, texto)}
+            disabled={!texto.trim()}
+            className={`rounded-lg px-3 py-2 text-sm font-semibold text-white disabled:opacity-40 ${
+              a.className ?? "bg-emerald-600"
+            }`}
+          >
+            {a.label}
+          </button>
+        ))}
+
         <button
           type="button"
           onClick={() => {
