@@ -229,56 +229,80 @@ function AdminContent() {
       <div className="mb-4 flex flex-wrap gap-2 rounded-xl bg-foreground/5 p-1 text-sm font-semibold">
         <button
           type="button"
-          onClick={() => setTab("apps")}
+          onClick={() => {
+            setTab("apps");
+            setSelectedAppId(null);
+          }}
           className={`flex-1 rounded-lg px-3 py-2 ${tab === "apps" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
         >
           Mini apps
         </button>
         <button
           type="button"
-          onClick={() => setTab("organize")}
+          onClick={() => {
+            setTab("organize");
+            setSelectedAppId(null);
+          }}
           className={`flex-1 rounded-lg px-3 py-2 ${tab === "organize" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
         >
           Apps & Organização
         </button>
         <button
           type="button"
-          onClick={() => setTab("subs")}
+          onClick={() => {
+            setTab("subs");
+            setSelectedAppId(null);
+          }}
           className={`flex-1 rounded-lg px-3 py-2 ${tab === "subs" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
         >
           Planos / Pagamentos
         </button>
         <button
           type="button"
-          onClick={() => setTab("users")}
+          onClick={() => {
+            setTab("users");
+            setSelectedAppId(null);
+          }}
           className={`flex-1 rounded-lg px-3 py-2 ${tab === "users" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
         >
           Usuários
         </button>
         <button
           type="button"
-          onClick={() => setTab("texts")}
+          onClick={() => {
+            setTab("texts");
+            setSelectedAppId(null);
+          }}
           className={`flex-1 rounded-lg px-3 py-2 ${tab === "texts" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
         >
           Textos do App
         </button>
         <button
           type="button"
-          onClick={() => setTab("feedbacks")}
+          onClick={() => {
+            setTab("feedbacks");
+            setSelectedAppId(null);
+          }}
           className={`flex-1 rounded-lg px-3 py-2 ${tab === "feedbacks" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
         >
           Feedbacks
         </button>
         <button
           type="button"
-          onClick={() => setTab("pix")}
+          onClick={() => {
+            setTab("pix");
+            setSelectedAppId(null);
+          }}
           className={`flex-1 rounded-lg px-3 py-2 ${tab === "pix" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
         >
           Pix / Webhooks
         </button>
         <button
           type="button"
-          onClick={() => setTab("payments")}
+          onClick={() => {
+            setTab("payments");
+            setSelectedAppId(null);
+          }}
           className={`flex-1 rounded-lg px-3 py-2 ${tab === "payments" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
         >
           💳 Vendas / Pedidos
