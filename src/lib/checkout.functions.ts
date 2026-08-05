@@ -20,16 +20,14 @@ export const createOrder = createServerFn({ method: "POST" })
       throw new Error("Unauthorized");
     }
 
-    // Em uma implementação real com Mercado Pago ou Stripe, aqui você chamaria a API deles.
-    // Para este MVP, vamos simular a criação de um pedido com dados de PIX fakes
-    // e retornar para o frontend mostrar.
-
+    // No Mercado Pago, o external_reference é usado para identificar o pedido no nosso banco.
     const orderData = {
       user_id: user.id,
       plan_slug: data.planSlug,
       amount_cents: data.amountCents,
       payment_method: data.paymentMethod,
       status: "pending",
+      external_id: `mp_${Math.random().toString(36).substring(2, 9)}`, // Simulado para o MP
       pix_copy_paste:
         data.paymentMethod === "pix"
           ? "00020126580014BR.GOV.BCB.PIX0136ADEC-PIX-KEY-FAKE-1234-5678-90125204000053039865405" +
@@ -40,7 +38,11 @@ export const createOrder = createServerFn({ method: "POST" })
         data.paymentMethod === "pix"
           ? "https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=PIX-FAKE-PAYMENT"
           : null,
-      metadata: { simulated: true },
+      metadata: { 
+        simulated: true,
+        full_name: user.user_metadata?.full_name,
+        email: user.email 
+      },
     };
 
     const { data: order, error } = await supabase

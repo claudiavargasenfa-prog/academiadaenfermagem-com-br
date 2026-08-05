@@ -210,7 +210,7 @@ export function PaymentsAdmin() {
                   </div>
 
                   <div className="flex items-center gap-3 text-[10px] text-muted-foreground">
-                    <span className="flex items-center gap-1"><Clock className="h-3 w-3" /> {new Date(order.created_at).toLocaleString("pt-BR")}</span>
+                    <span className="flex items-center gap-1"><Clock className="h-3 w-3" /> {new Date(order.created_at || "").toLocaleString("pt-BR")}</span>
                     <span className="font-bold text-foreground">{formatPriceBRL(order.amount_cents)}</span>
                     <span className="uppercase">{order.payment_method}</span>
                   </div>
@@ -219,7 +219,7 @@ export function PaymentsAdmin() {
                 <div className="flex items-center gap-2">
                   {order.status !== 'paid' && (
                     <button
-                      onClick={() => handleManualApprove(order.id, order.user_id, order.plan_slug)}
+                      onClick={() => handleManualApprove(order.id, order.user_id || "", order.plan_slug)}
                       className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-bold text-white hover:bg-emerald-700 transition-all"
                     >
                       <CheckCircle2 className="h-3.5 w-3.5" /> Aprovar Manual
@@ -228,7 +228,7 @@ export function PaymentsAdmin() {
                   {order.status === 'pending' && order.pix_copy_paste && (
                     <button
                       onClick={() => {
-                        navigator.clipboard.writeText(order.pix_copy_paste);
+                        navigator.clipboard.writeText(order.pix_copy_paste || "");
                         toast.success("Link do Pix copiado!");
                       }}
                       className="rounded-lg bg-foreground/5 p-1.5 text-muted-foreground hover:bg-foreground/10"
