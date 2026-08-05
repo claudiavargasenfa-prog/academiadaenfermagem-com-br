@@ -468,6 +468,81 @@ export type Database = {
         }
         Relationships: []
       }
+      orders: {
+        Row: {
+          amount_cents: number
+          created_at: string | null
+          currency: string | null
+          external_id: string | null
+          id: string
+          metadata: Json | null
+          payment_method: string | null
+          pix_copy_paste: string | null
+          pix_qr_code: string | null
+          plan_slug: string
+          status: string
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          amount_cents: number
+          created_at?: string | null
+          currency?: string | null
+          external_id?: string | null
+          id?: string
+          metadata?: Json | null
+          payment_method?: string | null
+          pix_copy_paste?: string | null
+          pix_qr_code?: string | null
+          plan_slug: string
+          status?: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          amount_cents?: number
+          created_at?: string | null
+          currency?: string | null
+          external_id?: string | null
+          id?: string
+          metadata?: Json | null
+          payment_method?: string | null
+          pix_copy_paste?: string | null
+          pix_qr_code?: string | null
+          plan_slug?: string
+          status?: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      payment_webhooks: {
+        Row: {
+          created_at: string | null
+          error_message: string | null
+          id: string
+          payload: Json
+          processed: boolean | null
+          provider: string
+        }
+        Insert: {
+          created_at?: string | null
+          error_message?: string | null
+          id?: string
+          payload: Json
+          processed?: boolean | null
+          provider: string
+        }
+        Update: {
+          created_at?: string | null
+          error_message?: string | null
+          id?: string
+          payload?: Json
+          processed?: boolean | null
+          provider?: string
+        }
+        Relationships: []
+      }
       pending_purchases: {
         Row: {
           consumed_at: string | null
