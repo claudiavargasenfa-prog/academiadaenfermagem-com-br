@@ -7,7 +7,10 @@ import {
   User,
   Shield,
   BookOpen,
+  Crown,
+  Trophy,
   Share2,
+
 } from "lucide-react";
 import { toast } from "sonner";
 import { useEffect, useState, type ReactNode } from "react";
@@ -56,9 +59,12 @@ export function AppShell({
   const compartilharLabel = useText("menu.compartilhar", "Compartilhar");
   const baseNav = [
     { to: "/" as const, label: lojaLabel, icon: Store },
+    { to: "/vip" as const, label: "Área VIP", icon: Crown },
+    { to: "/simulador" as const, label: "Simulador", icon: Trophy },
     { to: "/minha-conta" as const, label: minhaContaLabel, icon: User },
     { to: "/minha-historia" as const, label: historiaLabel, icon: BookOpen },
   ];
+
   const navItems = admin
     ? [...baseNav, { to: "/admin" as const, label: adminLabel, icon: Shield }]
     : baseNav;

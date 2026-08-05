@@ -713,6 +713,45 @@ export type Database = {
           },
         ]
       }
+      simulado_attempts: {
+        Row: {
+          category: string | null
+          created_at: string
+          display_name: string
+          duration_seconds: number
+          id: string
+          quiz_slug: string
+          quiz_title: string
+          score: number
+          total: number
+          user_id: string
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          display_name?: string
+          duration_seconds?: number
+          id?: string
+          quiz_slug: string
+          quiz_title: string
+          score: number
+          total: number
+          user_id: string
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          display_name?: string
+          duration_seconds?: number
+          id?: string
+          quiz_slug?: string
+          quiz_title?: string
+          score?: number
+          total?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       student_comments: {
         Row: {
           category: string | null
@@ -1073,6 +1112,118 @@ export type Database = {
         }
         Relationships: []
       }
+      vip_comments: {
+        Row: {
+          author_name: string
+          body: string
+          created_at: string
+          id: string
+          is_official: boolean
+          post_id: string
+          user_id: string
+        }
+        Insert: {
+          author_name?: string
+          body: string
+          created_at?: string
+          id?: string
+          is_official?: boolean
+          post_id: string
+          user_id: string
+        }
+        Update: {
+          author_name?: string
+          body?: string
+          created_at?: string
+          id?: string
+          is_official?: boolean
+          post_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vip_comments_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "vip_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vip_post_likes: {
+        Row: {
+          created_at: string
+          post_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          post_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          post_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vip_post_likes_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "vip_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vip_posts: {
+        Row: {
+          author_name: string
+          body: string
+          category: string
+          comments_count: number
+          created_at: string
+          id: string
+          is_official: boolean
+          is_pinned: boolean
+          likes_count: number
+          title: string
+          track: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          author_name?: string
+          body: string
+          category?: string
+          comments_count?: number
+          created_at?: string
+          id?: string
+          is_official?: boolean
+          is_pinned?: boolean
+          likes_count?: number
+          title: string
+          track?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          author_name?: string
+          body?: string
+          category?: string
+          comments_count?: number
+          created_at?: string
+          id?: string
+          is_official?: boolean
+          is_pinned?: boolean
+          likes_count?: number
+          title?: string
+          track?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       webhook_events: {
         Row: {
           created_at: string | null
@@ -1168,6 +1319,16 @@ export type Database = {
         }[]
       }
       set_bonus_app: { Args: { _bonus_slug: string }; Returns: string }
+      simulado_ranking: {
+        Args: { _limit?: number }
+        Returns: {
+          accuracy: number
+          attempts: number
+          display_name: string
+          total_points: number
+          user_id: string
+        }[]
+      }
     }
     Enums: {
       app_role: "admin" | "aluno"

@@ -9,12 +9,14 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as VipRouteImport } from './routes/vip'
 import { Route as VendasRouteImport } from './routes/vendas'
 import { Route as UtiRouteImport } from './routes/uti'
 import { Route as SvPediatricoRouteImport } from './routes/sv-pediatrico'
 import { Route as SvGestanteRouteImport } from './routes/sv-gestante'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SinaisVitaisRouteImport } from './routes/sinais-vitais'
+import { Route as SimuladorRouteImport } from './routes/simulador'
 import { Route as SimulacoesReaisRouteImport } from './routes/simulacoes-reais'
 import { Route as SegurancaRouteImport } from './routes/seguranca'
 import { Route as SbvRouteImport } from './routes/sbv'
@@ -54,6 +56,11 @@ import { Route as AppSlugIndexRouteImport } from './routes/app.$slug.index'
 import { Route as AppSlugSubtopicRouteImport } from './routes/app.$slug.$subtopic'
 import { Route as ApiPublicPaymentsRouteImport } from './routes/api/public/payments'
 
+const VipRoute = VipRouteImport.update({
+  id: '/vip',
+  path: '/vip',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const VendasRoute = VendasRouteImport.update({
   id: '/vendas',
   path: '/vendas',
@@ -82,6 +89,11 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
 const SinaisVitaisRoute = SinaisVitaisRouteImport.update({
   id: '/sinais-vitais',
   path: '/sinais-vitais',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SimuladorRoute = SimuladorRouteImport.update({
+  id: '/simulador',
+  path: '/simulador',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SimulacoesReaisRoute = SimulacoesReaisRouteImport.update({
@@ -306,12 +318,14 @@ export interface FileRoutesByFullPath {
   '/sbv': typeof SbvRoute
   '/seguranca': typeof SegurancaRoute
   '/simulacoes-reais': typeof SimulacoesReaisRoute
+  '/simulador': typeof SimuladorRoute
   '/sinais-vitais': typeof SinaisVitaisRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sv-gestante': typeof SvGestanteRoute
   '/sv-pediatrico': typeof SvPediatricoRoute
   '/uti': typeof UtiRoute
   '/vendas': typeof VendasRoute
+  '/vip': typeof VipRoute
   '/app/$slug': typeof AppSlugRouteWithChildren
   '/cadastro/$slug': typeof CadastroSlugRoute
   '/planos/$slug': typeof PlanosSlugRoute
@@ -352,12 +366,14 @@ export interface FileRoutesByTo {
   '/sbv': typeof SbvRoute
   '/seguranca': typeof SegurancaRoute
   '/simulacoes-reais': typeof SimulacoesReaisRoute
+  '/simulador': typeof SimuladorRoute
   '/sinais-vitais': typeof SinaisVitaisRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sv-gestante': typeof SvGestanteRoute
   '/sv-pediatrico': typeof SvPediatricoRoute
   '/uti': typeof UtiRoute
   '/vendas': typeof VendasRoute
+  '/vip': typeof VipRoute
   '/cadastro/$slug': typeof CadastroSlugRoute
   '/planos/$slug': typeof PlanosSlugRoute
   '/quizzes/$slug': typeof QuizzesSlugRoute
@@ -398,12 +414,14 @@ export interface FileRoutesById {
   '/sbv': typeof SbvRoute
   '/seguranca': typeof SegurancaRoute
   '/simulacoes-reais': typeof SimulacoesReaisRoute
+  '/simulador': typeof SimuladorRoute
   '/sinais-vitais': typeof SinaisVitaisRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/sv-gestante': typeof SvGestanteRoute
   '/sv-pediatrico': typeof SvPediatricoRoute
   '/uti': typeof UtiRoute
   '/vendas': typeof VendasRoute
+  '/vip': typeof VipRoute
   '/app/$slug': typeof AppSlugRouteWithChildren
   '/cadastro/$slug': typeof CadastroSlugRoute
   '/planos/$slug': typeof PlanosSlugRoute
@@ -446,12 +464,14 @@ export interface FileRouteTypes {
     | '/sbv'
     | '/seguranca'
     | '/simulacoes-reais'
+    | '/simulador'
     | '/sinais-vitais'
     | '/sitemap.xml'
     | '/sv-gestante'
     | '/sv-pediatrico'
     | '/uti'
     | '/vendas'
+    | '/vip'
     | '/app/$slug'
     | '/cadastro/$slug'
     | '/planos/$slug'
@@ -492,12 +512,14 @@ export interface FileRouteTypes {
     | '/sbv'
     | '/seguranca'
     | '/simulacoes-reais'
+    | '/simulador'
     | '/sinais-vitais'
     | '/sitemap.xml'
     | '/sv-gestante'
     | '/sv-pediatrico'
     | '/uti'
     | '/vendas'
+    | '/vip'
     | '/cadastro/$slug'
     | '/planos/$slug'
     | '/quizzes/$slug'
@@ -537,12 +559,14 @@ export interface FileRouteTypes {
     | '/sbv'
     | '/seguranca'
     | '/simulacoes-reais'
+    | '/simulador'
     | '/sinais-vitais'
     | '/sitemap.xml'
     | '/sv-gestante'
     | '/sv-pediatrico'
     | '/uti'
     | '/vendas'
+    | '/vip'
     | '/app/$slug'
     | '/cadastro/$slug'
     | '/planos/$slug'
@@ -584,12 +608,14 @@ export interface RootRouteChildren {
   SbvRoute: typeof SbvRoute
   SegurancaRoute: typeof SegurancaRoute
   SimulacoesReaisRoute: typeof SimulacoesReaisRoute
+  SimuladorRoute: typeof SimuladorRoute
   SinaisVitaisRoute: typeof SinaisVitaisRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   SvGestanteRoute: typeof SvGestanteRoute
   SvPediatricoRoute: typeof SvPediatricoRoute
   UtiRoute: typeof UtiRoute
   VendasRoute: typeof VendasRoute
+  VipRoute: typeof VipRoute
   AppSlugRoute: typeof AppSlugRouteWithChildren
   CadastroSlugRoute: typeof CadastroSlugRoute
   PlanosSlugRoute: typeof PlanosSlugRoute
@@ -599,6 +625,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/vip': {
+      id: '/vip'
+      path: '/vip'
+      fullPath: '/vip'
+      preLoaderRoute: typeof VipRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/vendas': {
       id: '/vendas'
       path: '/vendas'
@@ -639,6 +672,13 @@ declare module '@tanstack/react-router' {
       path: '/sinais-vitais'
       fullPath: '/sinais-vitais'
       preLoaderRoute: typeof SinaisVitaisRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/simulador': {
+      id: '/simulador'
+      path: '/simulador'
+      fullPath: '/simulador'
+      preLoaderRoute: typeof SimuladorRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/simulacoes-reais': {
@@ -965,12 +1005,14 @@ const rootRouteChildren: RootRouteChildren = {
   SbvRoute: SbvRoute,
   SegurancaRoute: SegurancaRoute,
   SimulacoesReaisRoute: SimulacoesReaisRoute,
+  SimuladorRoute: SimuladorRoute,
   SinaisVitaisRoute: SinaisVitaisRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   SvGestanteRoute: SvGestanteRoute,
   SvPediatricoRoute: SvPediatricoRoute,
   UtiRoute: UtiRoute,
   VendasRoute: VendasRoute,
+  VipRoute: VipRoute,
   AppSlugRoute: AppSlugRouteWithChildren,
   CadastroSlugRoute: CadastroSlugRoute,
   PlanosSlugRoute: PlanosSlugRoute,
