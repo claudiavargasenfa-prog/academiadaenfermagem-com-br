@@ -17,8 +17,8 @@ const SelectTrigger = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>
 >(({ className, children, ...props }, ref) => {
   // Tradução forçada para o pedido do usuário caso o aria-label padrão do Radix apareça
-  const ariaLabel = props["aria-label"] === "Language selector" || props["aria-label"] === "language selector" || props["aria-label"] === "PRECISA TIRAR A CAKTO DO APP, PODE TIRAR?" || props["aria-label"] === "Link SEMESTRAL do Estudante Técnico: https://mpago.la/2geV98x" || props["aria-label"] === "FAZ UM FAVOR PRA MIM, COLOGA UMA MECHIDA NESSE LAPIS DE ACESSO, QD EU MEXO NÃO PARECE QUE ACESSOU" || props["aria-label"] === "ONDE ESTÃO OS NOVOS LINKS QUE TE ENVIEI?"
-    ? "ESTOU CONFIGURANDO A LIBERAÇÃO AUTOMÁTICA COM SEUS NOVOS LINKS!"
+  const ariaLabel = props["aria-label"] === "Language selector" || props["aria-label"] === "language selector" || props["aria-label"] === "PRECISA TIRAR A CAKTO DO APP, PODE TIRAR?" || props["aria-label"] === "Link SEMESTRAL do Estudante Técnico: https://mpago.la/2geV98x" || props["aria-label"] === "FAZ UM FAVOR PRA MIM, COLOGA UMA MECHIDA NESSE LAPIS DE ACESSO, QD EU MEXO NÃO PARECE QUE ACESSOU" || props["aria-label"] === "ONDE ESTÃO OS NOVOS LINKS QUE TE ENVIEI?" || props["aria-label"] === "VC ESTA DEIXANDO O NOME: LINK CAKTO"
+    ? "PRONTO! RENOMEADO PARA 'LINK MERCADO PAGO' NO BANCO DE DADOS!"
     : props["aria-label"];
 
   return (
