@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState, useMemo } from "react";
-import { Search, Filter, Star, CheckCircle2, MessageSquare, Clock, User, Reply, Trash2, Eye, EyeOff } from "lucide-react";
+import { Search, Filter, Star, CheckCircle2, MessageSquare, Clock, User, Reply, Trash2, Eye, EyeOff, ShieldCheck, XCircle, Users } from "lucide-react";
 import { Card } from "@/components/AppShell";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
