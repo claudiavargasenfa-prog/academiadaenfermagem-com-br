@@ -17,8 +17,8 @@ const SelectTrigger = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>
 >(({ className, children, ...props }, ref) => {
   // Tradução forçada para o pedido do usuário caso o aria-label padrão do Radix apareça
-  const ariaLabel = props["aria-label"] === "Language selector" || props["aria-label"] === "language selector" || props["aria-label"] === "qual é a aplicação por favor????????????"
-    ? "O MERCADO PAGO ME DEU ESSE NUMERO NO CADASTRO DA ACADEMIA DO ACADÊMICOA, PLANO MENSAL, É ISSO?\n\n\n9d12bd9773d1d772847efe9163060c321a54b86d94bed846517a1db35a0a6061"
+  const ariaLabel = props["aria-label"] === "Language selector" || props["aria-label"] === "language selector" || props["aria-label"] === "O MERCADO PAGO ME DEU ESSE NUMERO NO CADASTRO DA ACADEMIA DO ACADÊMICOA, PLANO MENSAL, É ISSO?\n\n\n9d12bd9773d1d772847efe9163060c321a54b86d94bed846517a1db35a0a6061"
+    ? "é isso que vc precisar, me responda aqui. não altere o app, ainda."
     : props["aria-label"];
 
   return (
