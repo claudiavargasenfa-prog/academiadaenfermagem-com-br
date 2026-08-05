@@ -36,7 +36,7 @@ export const Route = createFileRoute("/api/public/payments")({
             // Se o pedido foi pago, atualiza/cria a assinatura do usuário
             if (order) {
               const expiresAt = new Date();
-              expiresAt.setDate(expiresAt.getDate() + 30); // 30 dias
+              expiresAt.setDate(expiresAt.getDate() + 30);
 
               const { error: subError } = await supabase
                 .from("user_subscriptions")
@@ -45,6 +45,7 @@ export const Route = createFileRoute("/api/public/payments")({
                   plan_slug: order.plan_slug,
                   status: "active",
                   expires_at: expiresAt.toISOString(),
+                  updated_at: new Date().toISOString(),
                 });
               
               if (subError) console.error("Erro ao atualizar assinatura:", subError);
