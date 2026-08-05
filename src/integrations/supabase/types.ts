@@ -747,12 +747,12 @@ export type Database = {
         Row: {
           cakto_checkout_url: string | null
           cakto_link_migracao: string | null
-          cakto_link_novo: string | null
           cakto_product_id: string | null
           created_at: string
           description: string | null
           id: string
           is_active: boolean
+          mp_link: string | null
           name: string
           price_cents: number
           price_novo_cents: number | null
@@ -765,12 +765,12 @@ export type Database = {
         Insert: {
           cakto_checkout_url?: string | null
           cakto_link_migracao?: string | null
-          cakto_link_novo?: string | null
           cakto_product_id?: string | null
           created_at?: string
           description?: string | null
           id?: string
           is_active?: boolean
+          mp_link?: string | null
           name: string
           price_cents?: number
           price_novo_cents?: number | null
@@ -783,12 +783,12 @@ export type Database = {
         Update: {
           cakto_checkout_url?: string | null
           cakto_link_migracao?: string | null
-          cakto_link_novo?: string | null
           cakto_product_id?: string | null
           created_at?: string
           description?: string | null
           id?: string
           is_active?: boolean
+          mp_link?: string | null
           name?: string
           price_cents?: number
           price_novo_cents?: number | null

@@ -98,7 +98,7 @@ export function WelcomePanel({ slug }: { slug: string }) {
   const subs = subsQ.data ?? [];
   const sub = subs.find((s) => s.plan_slug === slug) ?? subs[0] ?? null;
   const plan = (plansQ.data ?? []).find((p) => p.slug === slug);
-  const checkoutUrl = plan?.cakto_link_novo || plan?.cakto_checkout_url || "";
+  const checkoutUrl = (plan as any)?.mp_link || (plan as any)?.cakto_link_novo || plan?.cakto_checkout_url || "";
   const firstName = (profileQ.data?.full_name || "").split(" ")[0];
   const logged = isReady && !!user;
   const freeOpen = isFreeTrialOpen();

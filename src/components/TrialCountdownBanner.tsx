@@ -58,7 +58,7 @@ export function TrialCountdownBanner() {
 
   const track = TRACKS.find((t) => t.slug === (target.plan_slug as TrackSlug));
   const plan = (plansQ.data ?? []).find((p) => p.slug === target.plan_slug);
-  const checkoutUrl = plan?.cakto_link_novo || plan?.cakto_checkout_url || "";
+  const checkoutUrl = (plan as any)?.mp_link || (plan as any)?.cakto_link_novo || plan?.cakto_checkout_url || "";
   const firstName = (profile?.full_name || "aluno(a)").split(" ")[0];
   const dateLabel = new Date(target.expires_at).toLocaleDateString("pt-BR");
 
