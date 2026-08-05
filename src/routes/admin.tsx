@@ -221,7 +221,7 @@ function AdminContent() {
       <PageHeader
         eyebrow="Admin"
         title="Academia da Enfermagem"
-        description="Implementar uma sincronização de status e invalidação de cache para que mudanças no admin sejam refletidas no app imediatamente para todos os usuários."
+        description="Gerencie os mini apps e conteúdos técnicos de cada aplicativo separadamente."
       />
 
       <div className="mb-4 flex flex-wrap gap-2 rounded-xl bg-foreground/5 p-1 text-sm font-semibold">
