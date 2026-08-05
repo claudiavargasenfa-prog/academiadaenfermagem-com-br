@@ -192,6 +192,11 @@ function MinhaContaPage() {
           </div>
         )}
       </section>
+
+      <section className="mt-8">
+        <h2 className="mb-3 font-display text-lg font-bold">Dúvidas sobre Certificados?</h2>
+        <CertificadoFAQ />
+      </section>
     </AppShell>
   );
 }
