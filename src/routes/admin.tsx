@@ -435,12 +435,8 @@ function AdminContent() {
           .slice()
           .sort((a, b) => a.ordem - b.ordem || (a.name ?? "").localeCompare(b.name ?? "", "pt-BR"));
         const appBySlug = new Map(availableApps.map((a) => [a.slug, a]));
-        const placementsByMiniApp = new Map<string, Set<string>>();
-        for (const p of placementsAllQ.data ?? []) {
-          const set = placementsByMiniApp.get(p.mini_app_id) ?? new Set<string>();
-          set.add(p.app_id);
-          placementsByMiniApp.set(p.mini_app_id, set);
-        }
+        // placementsByMiniApp já foi declarado acima
+
         const appIdsForMiniApp = (miniApp: MiniApp) => {
           const ids = new Set(placementsByMiniApp.get(miniApp.id) ?? []);
           const legacy = miniApp as any;
