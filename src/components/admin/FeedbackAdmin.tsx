@@ -14,6 +14,8 @@ export function FeedbackAdmin() {
   const [categoryFilter, setCategoryFilter] = useState("todos");
   const [ratingFilter, setRatingFilter] = useState("todos");
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
+  const [moderating, setModerating] = useState<string | null>(null);
+  const [moderationReason, setModerationReason] = useState("");
   const [replyText, setReplyText] = useState("");
 
   const { data: feedbacks, isLoading } = useQuery({
