@@ -419,6 +419,17 @@ function AdminContent() {
           ? allRaw 
           : allRaw.filter(ma => {
               const appIds = placementsByMiniApp.get(ma.id) || new Set();
+              
+              // Legado: se não tem placements mas tem as flags track_X marcadas, considera no app
+              const appObj = availableAppsQ.data?.find(a => a.id === selectedAppId);
+              if (appObj) {
+                const legacy = ma as any;
+                if (appObj.slug === "academico" && legacy.track_academico) return true;
+                if (appObj.slug === "tecnico" && legacy.track_tecnico) return true;
+                if (appObj.slug === "enfermeiro" && legacy.track_enfermeiro) return true;
+                if (appObj.slug === "obstetricia" && legacy.track_obstetricia) return true;
+              }
+
               return appIds.has(selectedAppId!);
             });
 
