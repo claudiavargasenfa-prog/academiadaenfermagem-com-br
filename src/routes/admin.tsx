@@ -279,9 +279,68 @@ function AdminContent() {
         <SubscriptionsAdmin />
       ) : tab === "organize" ? (
         <AppsAdmin />
+      ) : !selectedAppId ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
+          {(availableAppsQ.data ?? []).filter(a => a.is_active).map((app) => (
+            <button
+              key={app.id}
+              onClick={() => setSelectedAppId(app.id)}
+              className="group relative overflow-hidden rounded-3xl border border-foreground/10 bg-background p-6 text-left transition-all hover:border-gold/50 hover:shadow-2xl hover:shadow-gold/10"
+            >
+              <div className="absolute inset-0 bg-gold/5 opacity-0 transition-opacity group-hover:opacity-100" />
+              <div className="relative z-10">
+                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-foreground/5 text-2xl transition-transform group-hover:scale-110">
+                  {app.emoji || "📱"}
+                </div>
+                <h3 className="mb-1 font-display text-lg font-black uppercase tracking-tight text-foreground">
+                  {app.name}
+                </h3>
+                <p className="text-xs text-muted-foreground line-clamp-2">
+                  {app.description || "Gerencie o conteúdo deste aplicativo."}
+                </p>
+                <div className="mt-4 flex items-center gap-2 text-[10px] font-bold uppercase text-gold-dark">
+                  <span>Acessar Módulos</span>
+                  <Plus className="h-3 w-3" />
+                </div>
+              </div>
+            </button>
+          ))}
+          
+          <button
+            onClick={() => setSelectedAppId("all")}
+            className="group relative overflow-hidden rounded-3xl border border-dashed border-foreground/20 bg-foreground/5 p-6 text-left transition-all hover:border-foreground/40 hover:bg-foreground/10"
+          >
+            <div className="relative z-10 flex h-full flex-col justify-center text-center">
+              <LayoutGrid className="mx-auto mb-3 h-8 w-8 text-muted-foreground/50" />
+              <h3 className="font-display text-sm font-bold uppercase tracking-tight text-muted-foreground">
+                Ver Todos os Mini Apps
+              </h3>
+              <p className="mt-1 text-[10px] text-muted-foreground/70">
+                Acesso global a todos os módulos sem filtro de app.
+              </p>
+            </div>
+          </button>
+        </div>
       ) : (
         <>
+          <div className="mb-6 flex items-center justify-between">
+            <button
+              onClick={() => setSelectedAppId(null)}
+              className="group flex items-center gap-2 rounded-xl bg-foreground/5 px-4 py-2 text-xs font-bold uppercase transition-all hover:bg-foreground/10"
+            >
+              <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
+              Voltar para Apps
+            </button>
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-black uppercase text-muted-foreground">Filtro Ativo:</span>
+              <span className="rounded-full bg-gold/20 px-3 py-1 text-[10px] font-black uppercase text-gold-dark border border-gold/30">
+                {selectedAppId === "all" ? "Todos os Módulos" : availableAppsQ.data?.find(a => a.id === selectedAppId)?.name}
+              </span>
+            </div>
+          </div>
+
       <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+
         <input
           type="search"
           value={search}
