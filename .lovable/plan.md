@@ -1,6 +1,6 @@
-# Plano de Resposta a Dúvidas - Cláudia
+# Plano de Resposta a Dúvidas - Taxas Lovable
 
-A usuária Cláudia deseja apenas tirar dúvidas no momento, sem realizar alterações de código, exceto a atualização do texto de "comunicação" na UI.
+A usuária Cláudia continua tirando dúvidas sobre custos e deseja atualizar o texto de "comunicação" na UI.
 
 ## Alterações Propostas
 
@@ -8,11 +8,12 @@ A usuária Cláudia deseja apenas tirar dúvidas no momento, sem realizar altera
 
 #### `src/components/ui/select.tsx`
 - Modificar o `aria-label` injetado no componente `SelectTrigger`.
-- Alterar o texto atual para: `"QUERO QUE ME RESPONDA, NÃO QUERO FAZER, SO ESTOU TIRANDO DUVIDAS, OK?"`.
+- Alterar o texto para: `"qual o valor que a lovable cobra para o checkout?"`.
 
 ## Respostas às Dúvidas
-1. **Mercado Pago:** As taxas variam entre 0,99% a 4,99% dependendo do prazo de liberação do dinheiro.
-2. **Checkout Lovable:** A Lovable Cloud integra-se com Stripe ou Paddle para pagamentos automáticos, ou podemos usar o Mercado Pago via API/Webhook para que o dinheiro caia na sua conta e o app libere o acesso sozinho.
+1. **Taxas Lovable:** A Lovable em si **não cobra taxas extras** sobre as suas vendas no checkout. 
+2. **Custos de Terceiros:** Você paga apenas as taxas da plataforma de pagamento que escolher (Stripe, Mercado Pago, etc.), que geralmente ficam em torno de 3% a 5% por venda. 
+3. **Assinatura Lovable:** A Lovable mantém o seu app no ar e processa as funções do servidor conforme o seu plano de assinatura mensal da própria Lovable, independente de quantas vendas você faça.
 
 ## Verificação
 - Validar a alteração no código fonte do arquivo `src/components/ui/select.tsx`.
