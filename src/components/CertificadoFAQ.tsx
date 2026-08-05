@@ -14,7 +14,7 @@ export function CertificadoFAQ() {
     },
     {
       q: "O processo de liberação é automático?",
-      a: "Para assinantes, a liberação é 100% instantânea. Para emissões avulsas de R$ 10,00, utilizaremos uma integração de PIX automático (via Gateway de Pagamentos). Assim que o aluno paga o QR Code gerado pelo app, o sistema reconhece o crédito em sua conta em segundos e libera o certificado com assinatura eletrônica e QR Code de validação imediatamente, sem que você precise intervir manualmente, mesmo com centenas de alunos simultâneos."
+      a: "Para assinantes, a liberação é instantânea. Para emissões avulsas de R$ 10,00, o sistema utiliza uma integração de PIX automático. Assim que o pagamento é reconhecido, o certificado é liberado em segundos. Importante: Você NÃO precisa pagar taxas de API ou contratar serviços externos; o custo da integração já está incluso na manutenção da plataforma Academia da Enfermagem."
     },
     {
       q: "Qual o modelo e validade do certificado?",
