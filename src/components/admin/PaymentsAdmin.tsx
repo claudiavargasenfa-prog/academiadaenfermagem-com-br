@@ -106,6 +106,19 @@ export function PaymentsAdmin() {
 
   return (
     <div className="space-y-6">
+      {/* Banner de Status Informativo */}
+      <Card className="bg-primary/5 border-primary/20 p-4 flex items-start gap-3">
+        <AlertCircle className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+        <div className="space-y-1">
+          <p className="text-sm font-bold text-primary">Acompanhamento de Status</p>
+          <p className="text-xs text-muted-foreground leading-relaxed">
+            Neste painel você pode acompanhar se o pagamento de cada compra foi <strong>concluído (Pago)</strong>, 
+            está <strong>pendente</strong> ou se foi <strong>cancelado</strong>. Utilize os filtros abaixo para agilizar sua busca.
+          </p>
+        </div>
+      </Card>
+
+      <div className="space-y-6">
       {/* Dashboard de Vendas */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Card className="flex flex-col justify-between p-4 bg-emerald-50 border-emerald-100">
