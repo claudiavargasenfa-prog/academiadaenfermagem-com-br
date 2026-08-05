@@ -570,10 +570,11 @@ function AdminContent() {
                       window.scrollTo({ top: 0, behavior: "smooth" });
                     }
                   }}
-                  className="rounded-lg bg-primary/10 p-2 text-primary hover:bg-primary/20"
+                  className="rounded-lg bg-primary/10 p-2 text-primary hover:bg-primary/20 transition-all hover:scale-125 hover:rotate-12 active:scale-95 active:bg-primary/30 active:rotate-0"
                   aria-label="Editar"
+                  title="Editar este mini app"
                 >
-                  <Pencil className="h-4 w-4" />
+                  <Pencil className="h-4 w-4 transition-transform group-hover:rotate-12" />
                 </button>
                 <button
                   type="button"
