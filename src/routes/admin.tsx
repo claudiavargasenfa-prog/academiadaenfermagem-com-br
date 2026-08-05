@@ -14,6 +14,7 @@ import { SubtopicsAdmin } from "@/components/admin/SubtopicsAdmin";
 import { AppsAdmin } from "@/components/admin/AppsAdmin";
 import { fetchApps } from "@/lib/apps";
 import { FeedbackAdmin } from "@/components/admin/FeedbackAdmin";
+import { PixMonitor } from "@/components/admin/PixMonitor";
 import { QUIZZES } from "@/data/quizzes";
 
 export const Route = createFileRoute("/admin")({
