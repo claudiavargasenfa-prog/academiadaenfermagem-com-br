@@ -13,8 +13,8 @@ export function CertificadoFAQ() {
       a: "Os certificados são gerados automaticamente pelo sistema com assinatura eletrônica e registro de validação. Cada documento possui um código único e QR Code, tornando-o rastreável e autêntico sem a necessidade de plataformas externas de pagamento de taxas por emissão."
     },
     {
-      q: "Como é feito o pagamento da taxa de R$ 10,00?",
-      a: "Para certificados avulsos (fora do plano), o pagamento de R$ 10,00 é realizado via PIX direto para a conta da Academia da Enfermagem. Após o envio do comprovante no sistema, a assinatura eletrônica e o código único de validação são liberados automaticamente. Dessa forma, garantimos que o valor integral da taxa seja destinado à manutenção dos serviços, sem descontos de plataformas externas."
+      q: "Como é feito o pagamento e a liberação?",
+      a: "O aluno realiza o PIX e anexa o comprovante diretamente no app. Na sua Área Administrativa, você verá uma lista de 'Certificados Pendentes'. Com um único clique em 'Confirmar Recebimento', o sistema libera instantaneamente o PDF oficial com o QR Code e a assinatura eletrônica para o aluno baixar na área dele. É um processo manual de conferência rápida para garantir que você receba o valor integral."
     },
     {
       q: "Qual o modelo e validade do certificado?",
