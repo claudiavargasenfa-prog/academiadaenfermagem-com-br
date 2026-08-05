@@ -333,6 +333,8 @@ function AdminContent() {
 
       {tab === "dashboard" ? (
         <DashboardAdmin />
+      ) : tab === "test_links" ? (
+        <PaymentTester />
       ) : tab === "payments" ? (
         <PaymentsAdmin />
       ) : tab === "pix" ? (
