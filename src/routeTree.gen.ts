@@ -52,6 +52,7 @@ import { Route as CadastroSlugRouteImport } from './routes/cadastro.$slug'
 import { Route as AppSlugRouteImport } from './routes/app.$slug'
 import { Route as AppSlugIndexRouteImport } from './routes/app.$slug.index'
 import { Route as AppSlugSubtopicRouteImport } from './routes/app.$slug.$subtopic'
+import { Route as ApiPublicPaymentsRouteImport } from './routes/api/public/payments'
 import { Route as ApiPublicCaktoWebhookRouteImport } from './routes/api/public/cakto-webhook'
 
 const VendasRoute = VendasRouteImport.update({
@@ -269,6 +270,11 @@ const AppSlugSubtopicRoute = AppSlugSubtopicRouteImport.update({
   path: '/$subtopic',
   getParentRoute: () => AppSlugRoute,
 } as any)
+const ApiPublicPaymentsRoute = ApiPublicPaymentsRouteImport.update({
+  id: '/api/public/payments',
+  path: '/api/public/payments',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicCaktoWebhookRoute = ApiPublicCaktoWebhookRouteImport.update({
   id: '/api/public/cakto-webhook',
   path: '/api/public/cakto-webhook',
@@ -318,6 +324,7 @@ export interface FileRoutesByFullPath {
   '/quizzes/$slug': typeof QuizzesSlugRoute
   '/trilha/$slug': typeof TrilhaSlugRoute
   '/api/public/cakto-webhook': typeof ApiPublicCaktoWebhookRoute
+  '/api/public/payments': typeof ApiPublicPaymentsRoute
   '/app/$slug/$subtopic': typeof AppSlugSubtopicRoute
   '/app/$slug/': typeof AppSlugIndexRoute
 }
@@ -363,6 +370,7 @@ export interface FileRoutesByTo {
   '/quizzes/$slug': typeof QuizzesSlugRoute
   '/trilha/$slug': typeof TrilhaSlugRoute
   '/api/public/cakto-webhook': typeof ApiPublicCaktoWebhookRoute
+  '/api/public/payments': typeof ApiPublicPaymentsRoute
   '/app/$slug/$subtopic': typeof AppSlugSubtopicRoute
   '/app/$slug': typeof AppSlugIndexRoute
 }
@@ -410,6 +418,7 @@ export interface FileRoutesById {
   '/quizzes/$slug': typeof QuizzesSlugRoute
   '/trilha/$slug': typeof TrilhaSlugRoute
   '/api/public/cakto-webhook': typeof ApiPublicCaktoWebhookRoute
+  '/api/public/payments': typeof ApiPublicPaymentsRoute
   '/app/$slug/$subtopic': typeof AppSlugSubtopicRoute
   '/app/$slug/': typeof AppSlugIndexRoute
 }
@@ -458,6 +467,7 @@ export interface FileRouteTypes {
     | '/quizzes/$slug'
     | '/trilha/$slug'
     | '/api/public/cakto-webhook'
+    | '/api/public/payments'
     | '/app/$slug/$subtopic'
     | '/app/$slug/'
   fileRoutesByTo: FileRoutesByTo
@@ -503,6 +513,7 @@ export interface FileRouteTypes {
     | '/quizzes/$slug'
     | '/trilha/$slug'
     | '/api/public/cakto-webhook'
+    | '/api/public/payments'
     | '/app/$slug/$subtopic'
     | '/app/$slug'
   id:
@@ -549,6 +560,7 @@ export interface FileRouteTypes {
     | '/quizzes/$slug'
     | '/trilha/$slug'
     | '/api/public/cakto-webhook'
+    | '/api/public/payments'
     | '/app/$slug/$subtopic'
     | '/app/$slug/'
   fileRoutesById: FileRoutesById
@@ -595,6 +607,7 @@ export interface RootRouteChildren {
   PlanosSlugRoute: typeof PlanosSlugRoute
   TrilhaSlugRoute: typeof TrilhaSlugRoute
   ApiPublicCaktoWebhookRoute: typeof ApiPublicCaktoWebhookRoute
+  ApiPublicPaymentsRoute: typeof ApiPublicPaymentsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -900,6 +913,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSlugSubtopicRouteImport
       parentRoute: typeof AppSlugRoute
     }
+    '/api/public/payments': {
+      id: '/api/public/payments'
+      path: '/api/public/payments'
+      fullPath: '/api/public/payments'
+      preLoaderRoute: typeof ApiPublicPaymentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/cakto-webhook': {
       id: '/api/public/cakto-webhook'
       path: '/api/public/cakto-webhook'
@@ -976,6 +996,7 @@ const rootRouteChildren: RootRouteChildren = {
   PlanosSlugRoute: PlanosSlugRoute,
   TrilhaSlugRoute: TrilhaSlugRoute,
   ApiPublicCaktoWebhookRoute: ApiPublicCaktoWebhookRoute,
+  ApiPublicPaymentsRoute: ApiPublicPaymentsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -41,7 +41,7 @@ export const Route = createFileRoute("/api/public/payments")({
               const { error: subError } = await supabase
                 .from("user_subscriptions")
                 .upsert({
-                  user_id: order.user_id,
+                  user_id: order.user_id!,
                   plan_slug: order.plan_slug,
                   status: "active",
                   expires_at: expiresAt.toISOString(),
