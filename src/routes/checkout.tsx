@@ -68,9 +68,11 @@ function CheckoutPage() {
   const handleCreateOrder = (method: "pix" | "credit_card") => {
     if (!plan) return;
     createOrderMutation.mutate({
-      planSlug: plan.slug,
-      amountCents: (plan as any).price_cents || 2990,
-      paymentMethod: method,
+      data: {
+        planSlug: plan.slug,
+        amountCents: (plan as any).price_cents || 2990,
+        paymentMethod: method,
+      },
     });
   };
 

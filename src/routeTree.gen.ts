@@ -39,6 +39,7 @@ import { Route as DiarioRouteImport } from './routes/diario'
 import { Route as DiagnosticosAedeRouteImport } from './routes/diagnosticos-aede'
 import { Route as CurativosRouteImport } from './routes/curativos'
 import { Route as ConfiancaRouteImport } from './routes/confianca'
+import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as CalculadoraRouteImport } from './routes/calculadora'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AdecRouteImport } from './routes/adec'
@@ -203,6 +204,11 @@ const ConfiancaRoute = ConfiancaRouteImport.update({
   path: '/confianca',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CheckoutRoute = CheckoutRouteImport.update({
+  id: '/checkout',
+  path: '/checkout',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CalculadoraRoute = CalculadoraRouteImport.update({
   id: '/calculadora',
   path: '/calculadora',
@@ -275,6 +281,7 @@ export interface FileRoutesByFullPath {
   '/adec': typeof AdecRoute
   '/admin': typeof AdminRoute
   '/calculadora': typeof CalculadoraRoute
+  '/checkout': typeof CheckoutRoute
   '/confianca': typeof ConfiancaRoute
   '/curativos': typeof CurativosRoute
   '/diagnosticos-aede': typeof DiagnosticosAedeRoute
@@ -320,6 +327,7 @@ export interface FileRoutesByTo {
   '/adec': typeof AdecRoute
   '/admin': typeof AdminRoute
   '/calculadora': typeof CalculadoraRoute
+  '/checkout': typeof CheckoutRoute
   '/confianca': typeof ConfiancaRoute
   '/curativos': typeof CurativosRoute
   '/diagnosticos-aede': typeof DiagnosticosAedeRoute
@@ -365,6 +373,7 @@ export interface FileRoutesById {
   '/adec': typeof AdecRoute
   '/admin': typeof AdminRoute
   '/calculadora': typeof CalculadoraRoute
+  '/checkout': typeof CheckoutRoute
   '/confianca': typeof ConfiancaRoute
   '/curativos': typeof CurativosRoute
   '/diagnosticos-aede': typeof DiagnosticosAedeRoute
@@ -412,6 +421,7 @@ export interface FileRouteTypes {
     | '/adec'
     | '/admin'
     | '/calculadora'
+    | '/checkout'
     | '/confianca'
     | '/curativos'
     | '/diagnosticos-aede'
@@ -457,6 +467,7 @@ export interface FileRouteTypes {
     | '/adec'
     | '/admin'
     | '/calculadora'
+    | '/checkout'
     | '/confianca'
     | '/curativos'
     | '/diagnosticos-aede'
@@ -501,6 +512,7 @@ export interface FileRouteTypes {
     | '/adec'
     | '/admin'
     | '/calculadora'
+    | '/checkout'
     | '/confianca'
     | '/curativos'
     | '/diagnosticos-aede'
@@ -547,6 +559,7 @@ export interface RootRouteChildren {
   AdecRoute: typeof AdecRoute
   AdminRoute: typeof AdminRoute
   CalculadoraRoute: typeof CalculadoraRoute
+  CheckoutRoute: typeof CheckoutRoute
   ConfiancaRoute: typeof ConfiancaRoute
   CurativosRoute: typeof CurativosRoute
   DiagnosticosAedeRoute: typeof DiagnosticosAedeRoute
@@ -796,6 +809,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ConfiancaRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/checkout': {
+      id: '/checkout'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof CheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/calculadora': {
       id: '/calculadora'
       path: '/calculadora'
@@ -920,6 +940,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdecRoute: AdecRoute,
   AdminRoute: AdminRoute,
   CalculadoraRoute: CalculadoraRoute,
+  CheckoutRoute: CheckoutRoute,
   ConfiancaRoute: ConfiancaRoute,
   CurativosRoute: CurativosRoute,
   DiagnosticosAedeRoute: DiagnosticosAedeRoute,
