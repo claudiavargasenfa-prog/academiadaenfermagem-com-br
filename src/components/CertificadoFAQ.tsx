@@ -52,12 +52,24 @@ export function CertificadoFAQ() {
         ))}
       </div>
 
-      <div className="mt-6 rounded-xl bg-[#b8912f]/10 p-4 text-[11px] text-[#8a6d24]">
-        <div className="flex gap-2">
-          <CheckCircle2 className="h-4 w-4 shrink-0" />
-          <p>
-            <strong>Nota Técnica:</strong> Todos os certificados são assinados eletronicamente e possuem validação digital via QR Code ou código alfanumérico único.
-          </p>
+      <div className="mt-6 space-y-3">
+        <div className="rounded-xl bg-[#b8912f]/10 p-4 text-[11px] text-[#8a6d24]">
+          <div className="flex gap-2">
+            <CheckCircle2 className="h-4 w-4 shrink-0" />
+            <p>
+              <strong>Emissão Gratuita:</strong> Certificados incluídos nos pacotes de assinatura são gratuitos. 
+              Para conteúdos avulsos ou extras, há uma taxa de <strong>R$ 10,00</strong> para processamento da assinatura eletrônica.
+            </p>
+          </div>
+        </div>
+        <div className="rounded-xl bg-[#0f4c35]/5 p-4 text-[11px] text-[#0f4c35]">
+          <div className="flex gap-2">
+            <FileText className="h-4 w-4 shrink-0" />
+            <p>
+              <strong>Validação Técnica:</strong> O certificado contém o selo ADEC, carga horária de 10h, 
+              sua identificação profissional e código de autenticidade rastreável.
+            </p>
+          </div>
         </div>
       </div>
     </Card>
