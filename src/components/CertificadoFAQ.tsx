@@ -13,8 +13,8 @@ export function CertificadoFAQ() {
       a: "Os certificados são gerados automaticamente pelo sistema com assinatura eletrônica e registro de validação. Cada documento possui um código único e QR Code, tornando-o rastreável e autêntico sem a necessidade de plataformas externas de pagamento de taxas por emissão."
     },
     {
-      q: "O processo de liberação é automático?",
-      a: "Para assinantes, a liberação é instantânea. Para emissões avulsas de R$ 10,00, o sistema utiliza uma integração de PIX automático. Assim que o pagamento é reconhecido, o certificado é liberado em segundos. Importante: Você NÃO precisa pagar taxas de API ou contratar serviços externos; o custo da integração já está incluso na manutenção da plataforma Academia da Enfermagem."
+      q: "Preciso pagar taxas de API para o PIX?",
+      a: "Não. O sistema utiliza uma integração de PIX automático de baixo custo e alta eficiência que já está inclusa na sua plataforma. Você não precisará contratar APIs externas nem pagar mensalidades de gateways de pagamento para que os certificados sejam liberados automaticamente após o pagamento dos alunos."
     },
     {
       q: "Qual o modelo e validade do certificado?",

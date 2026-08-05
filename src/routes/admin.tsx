@@ -221,7 +221,7 @@ function AdminContent() {
       <PageHeader
         eyebrow="Admin"
         title="Academia da Enfermagem"
-        description="Implementar uma sincronização de status e invalidação de cache para que mudanças no admin sejam refletidas no app imediatamente para todos os usuários."
+        description="Gerencie os mini apps e conteúdos técnicos de cada aplicativo separadamente."
       />
 
       <div className="mb-4 flex flex-wrap gap-2 rounded-xl bg-foreground/5 p-1 text-sm font-semibold">
@@ -454,6 +454,7 @@ function AdminContent() {
           if (legacy.track_academico && appBySlug.get("academico")) ids.add(appBySlug.get("academico")!.id);
           if (legacy.track_tecnico && appBySlug.get("tecnico")) ids.add(appBySlug.get("tecnico")!.id);
           if (legacy.track_enfermeiro && appBySlug.get("enfermeiro")) ids.add(appBySlug.get("enfermeiro")!.id);
+          if (legacy.track_obstetricia && appBySlug.get("obstetricia")) ids.add(appBySlug.get("obstetricia")!.id);
           return ids;
         };
         const appLabelsForMiniApp = (miniApp: MiniApp) => {
@@ -561,7 +562,7 @@ function AdminContent() {
                 .slice()
                 .sort((a: any, b: any) => (a.name ?? "").localeCompare(b.name ?? "", "pt-BR"));
               return (
-                <section key={sec.title}>
+                <section key={sec.id}>
                   <h2 className="mb-2 flex items-center gap-2 border-b border-foreground/10 pb-1 font-display text-lg font-bold">
                     <span>{sec.emoji}</span> {sec.title}
                     <span className="text-xs font-normal text-muted-foreground">({items.length})</span>
@@ -649,6 +650,7 @@ function MiniAppForm({
     track_academico: (app as any)?.track_academico ?? false,
     track_tecnico: (app as any)?.track_tecnico ?? false,
     track_enfermeiro: (app as any)?.track_enfermeiro ?? false,
+    track_obstetricia: (app as any)?.track_obstetricia ?? false,
   });
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
@@ -698,6 +700,7 @@ function MiniAppForm({
     if (slug === "academico") setForm((f) => ({ ...f, track_academico: checked }));
     else if (slug === "tecnico") setForm((f) => ({ ...f, track_tecnico: checked }));
     else if (slug === "enfermeiro") setForm((f) => ({ ...f, track_enfermeiro: checked }));
+    else if (slug === "obstetricia") setForm((f) => ({ ...f, track_obstetricia: checked }));
   };
 
   async function handleSave(e: React.FormEvent) {
