@@ -9,6 +9,7 @@ import {
 } from "@/lib/access";
 import { useApps } from "@/lib/apps";
 import { RichText, useText } from "@/lib/app-texts";
+import { TestimonialsSection } from "@/components/TestimonialsSection";
 
 
 
@@ -159,6 +160,8 @@ function StoreHomeContent() {
           </div>
         </section>
       )}
+
+      <TestimonialsSection />
 
 
 
