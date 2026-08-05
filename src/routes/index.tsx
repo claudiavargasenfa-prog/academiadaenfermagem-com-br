@@ -9,7 +9,7 @@ import {
 } from "@/lib/access";
 import { useApps } from "@/lib/apps";
 import { RichText, useText } from "@/lib/app-texts";
-import { LaunchCountdown } from "@/components/LaunchCountdown";
+import { FeedbackCollector } from "@/components/FeedbackCollector";
 import { TestimonialsSection } from "@/components/TestimonialsSection";
 
 
@@ -71,7 +71,6 @@ function StoreHomeContent() {
 
   return (
     <AppShell hideReferences publicRoute>
-      <LaunchCountdown />
       <div className="mb-6">
         <p className="mb-1 text-xs font-semibold uppercase tracking-widest text-gold">Loja</p>
         <h1 className="font-display text-3xl font-bold text-foreground md:text-4xl"><RichText>{homeTitle}</RichText></h1>
@@ -163,8 +162,7 @@ function StoreHomeContent() {
         </section>
       )}
 
-      {/* Seção de depoimentos comentada durante a fase de lançamento inicial */}
-      {/* <TestimonialsSection /> */}
+      <FeedbackCollector />
 
 
 

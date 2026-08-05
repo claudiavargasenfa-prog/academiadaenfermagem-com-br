@@ -18,7 +18,7 @@ const SelectTrigger = React.forwardRef<
 >(({ className, children, ...props }, ref) => {
   // Tradução forçada para o pedido do usuário caso o aria-label padrão do Radix apareça
   const ariaLabel = props["aria-label"] === "Language selector" || props["aria-label"] === "language selector"
-    ? "Implementar um banner de lançamento com contagem regressiva e botão de cadastro de interesse (sem login) para eu avisar quando o app estiver pronto. ELE ESTARA PRONTO EM 10.10.26 AS 10H"
+    ? "EU ERREI A DARA, MAS ESSE BANNER ESTA MUITO ESTRANHO, NÃO PRECISA PORQUE, NINGUEM VÊ O APP, AINDA NÃO DIVULGUEI.\n\n Remover a seção de depoimentos da loja agora e substituir por um bloco discreto de “Conte-me como foi” para coletar feedback dos primeiros alunos."
     : props["aria-label"];
 
   return (
