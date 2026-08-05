@@ -35,17 +35,18 @@ export function FeedbackAdmin() {
 
   const updateMutation = useMutation({
     mutationFn: async (vars: any) => {
-      const { id, status, admin_response, is_public, moderation_reason } = vars;
+      const dataToUpdate: any = { 
+        updated_at: new Date().toISOString() 
+      };
+      if (vars.status !== undefined) dataToUpdate.status = vars.status;
+      if (vars.admin_response !== undefined) dataToUpdate.admin_response = vars.admin_response;
+      if (vars.is_public !== undefined) dataToUpdate.is_public = vars.is_public;
+      if (vars.moderation_reason !== undefined) dataToUpdate.moderation_reason = vars.moderation_reason;
+
       const { error } = await supabase
         .from("user_feedbacks")
-        .update({ 
-          status, 
-          admin_response, 
-          is_public, 
-          moderation_reason,
-          updated_at: new Date().toISOString() 
-        })
-        .eq("id", id);
+        .update(dataToUpdate)
+        .eq("id", vars.id);
       if (error) throw error;
     },
     onSuccess: () => {
