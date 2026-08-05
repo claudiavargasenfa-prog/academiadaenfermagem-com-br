@@ -102,7 +102,7 @@ export default function OfertasPeriodo({
                   <span className="block rounded-xl bg-emerald-50 px-4 py-3 text-center text-xs font-extrabold text-emerald-800">
                     Você já tem acesso ativo
                   </span>
-                ) : (
+                ) : isLoggedIn ? (
                   <Link
                     to="/checkout"
                     search={{ plan: slug }}
@@ -110,10 +110,6 @@ export default function OfertasPeriodo({
                   >
                     Assinar {meta.title.toLowerCase()} <ExternalLink className="h-4 w-4" />
                   </Link>
-                ) : isLoggedIn ? (
-                  <span className="block rounded-xl border border-dashed border-primary/40 px-4 py-3 text-center text-xs font-bold text-muted-foreground">
-                    Checkout em configuração — disponível em breve
-                  </span>
                 ) : (
                   <a
                     href={`/cadastro/${slug}`}
