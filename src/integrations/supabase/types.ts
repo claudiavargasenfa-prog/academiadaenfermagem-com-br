@@ -565,6 +565,8 @@ export type Database = {
           email: string | null
           full_name: string | null
           id: string
+          is_online: boolean | null
+          last_seen_at: string | null
           phone: string | null
           updated_at: string
         }
@@ -574,6 +576,8 @@ export type Database = {
           email?: string | null
           full_name?: string | null
           id: string
+          is_online?: boolean | null
+          last_seen_at?: string | null
           phone?: string | null
           updated_at?: string
         }
@@ -583,6 +587,8 @@ export type Database = {
           email?: string | null
           full_name?: string | null
           id?: string
+          is_online?: boolean | null
+          last_seen_at?: string | null
           phone?: string | null
           updated_at?: string
         }
@@ -847,6 +853,45 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      user_feedbacks: {
+        Row: {
+          admin_response: string | null
+          category: string
+          created_at: string
+          id: string
+          improvement_suggestion: string | null
+          message: string
+          rating: number
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          admin_response?: string | null
+          category: string
+          created_at?: string
+          id?: string
+          improvement_suggestion?: string | null
+          message: string
+          rating: number
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          admin_response?: string | null
+          category?: string
+          created_at?: string
+          id?: string
+          improvement_suggestion?: string | null
+          message?: string
+          rating?: number
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       user_roles: {
         Row: {
