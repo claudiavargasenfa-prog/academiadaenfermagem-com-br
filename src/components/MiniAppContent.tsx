@@ -8,6 +8,7 @@ import { Card } from "@/components/AppShell";
 import { useAuthReady } from "@/lib/access";
 import BlocoDitado from "@/components/voz/BlocoDitado";
 import GuiaColetaTurno from "@/components/GuiaColetaTurno";
+import { CertificadoFAQ } from "@/components/CertificadoFAQ";
 
 import { renderContent } from "@/lib/markdown";
 import { useLocal } from "@/lib/storage";
@@ -153,6 +154,8 @@ export function MiniAppContent({ slug }: { slug: string }) {
           <MiniAppHtmlContent html={content_md} />
         </Card>
       )}
+
+      <CertificadoFAQ />
     </div>
   );
 }
