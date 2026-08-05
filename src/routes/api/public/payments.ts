@@ -8,22 +8,31 @@ export const Route = createFileRoute("/api/public/payments")({
         try {
           const payload = await request.json();
           
-          // Log do webhook
+          // Log do webhook do Mercado Pago ou Genérico
+          const provider = payload.provider || (payload.type ? "mercadopago" : "generic");
+          
           const { error: logError } = await supabase
             .from("payment_webhooks")
             .insert({
-              provider: payload.provider || "generic",
+              provider: provider,
               payload: payload,
             });
 
           if (logError) console.error("Erro ao logar webhook:", logError);
 
-          // Lógica de atualização de pedido para o MVP
-          // Em produção, isso verificaria a assinatura do webhook (Stripe/MP)
-          const orderId = payload.order_id || payload.id;
-          const status = payload.status || "paid";
+          // Lógica Mercado Pago: O MP envia notificações de diferentes tipos.
+          // Geralmente 'payment' ou 'merchant_order'.
+          let orderId = payload.order_id || payload.id;
+          let status = payload.status || "paid";
 
-          if (orderId && status === "paid") {
+          // Se for Mercado Pago genuíno:
+          if (payload.action === "payment.created" || payload.type === "payment") {
+            const mpId = payload.data?.id || payload.id;
+            // Aqui faríamos um fetch na API do MP com o ID para pegar o status real e external_reference
+            console.log("Processando pagamento MP:", mpId);
+          }
+
+          if (orderId && (status === "paid" || status === "approved")) {
             const { data: order, error: orderError } = await supabase
               .from("orders")
               .update({ status: "paid" })

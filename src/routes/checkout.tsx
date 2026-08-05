@@ -148,8 +148,16 @@ function CheckoutPage() {
                         <div className="rounded-lg border-2 border-dashed p-8 text-center">
                           <CreditCard className="mx-auto mb-2 h-8 w-8 text-muted-foreground opacity-50" />
                           <p className="text-sm text-muted-foreground">
-                            Checkout Seguro via Mercado Pago / Stripe
+                            Checkout Seguro via Mercado Pago
                           </p>
+                          <div className="mt-4 space-y-2">
+                            <p className="text-[10px] text-muted-foreground uppercase font-bold">Aceitamos:</p>
+                            <div className="flex justify-center gap-3 opacity-70 grayscale">
+                              <img src="https://logodownload.org/wp-content/uploads/2014/07/visa-logo-1.png" className="h-4" alt="Visa" />
+                              <img src="https://logodownload.org/wp-content/uploads/2014/07/mastercard-logo.png" className="h-4" alt="Mastercard" />
+                              <img src="https://logodownload.org/wp-content/uploads/2019/06/mercado-pago-logo-0.png" className="h-4" alt="Mercado Pago" />
+                            </div>
+                          </div>
                           <Button
                             variant="outline"
                             className="mt-4 w-full"
@@ -173,7 +181,7 @@ function CheckoutPage() {
                         </div>
                         <div>
                           <CardTitle className="text-2xl text-emerald-700">Pagamento Confirmado!</CardTitle>
-                          <CardDescription>Estamos preparando seu acesso...</CardDescription>
+                          <CardDescription>Parabéns! Seu acesso foi liberado. Redirecionando...</CardDescription>
                         </div>
                       </div>
                     ) : (
