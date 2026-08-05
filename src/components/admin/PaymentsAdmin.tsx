@@ -10,9 +10,10 @@ import {
   RefreshCw,
   TrendingUp,
   DollarSign,
-  Users
+  Users,
+  AlertCircle
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Card } from "@/components/AppShell";
 import { supabase } from "@/integrations/supabase/client";
 import { formatPriceBRL } from "@/lib/access";
