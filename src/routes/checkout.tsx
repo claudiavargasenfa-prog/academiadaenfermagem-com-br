@@ -188,42 +188,34 @@ function CheckoutPage() {
                   </CardHeader>
                   {order?.status !== "paid" && (
                     <CardContent className="space-y-6">
-                      <div className="flex justify-center rounded-xl bg-white p-4 shadow-inner">
-                        {order?.pix_qr_code && (
-                          <img
-                            src={order.pix_qr_code}
-                            alt="QR Code PIX"
-                            className="h-48 w-48"
-                          />
-                        )}
-                      </div>
-                      <div className="space-y-2">
-                        <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                          PIX Copia e Cola
-                        </label>
-                        <div className="relative">
-                          <input
-                            readOnly
-                            value={order?.pix_copy_paste || ""}
-                            className="w-full rounded-lg border bg-muted/50 px-3 py-3 pr-12 text-xs font-mono"
-                          />
-                          <Button
-                            size="icon"
-                            variant="ghost"
-                            className="absolute right-1 top-1 h-10 w-10"
-                            onClick={copyPix}
-                          >
-                            {copied ? (
-                              <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                      <div className="space-y-4">
+                        <div className="rounded-xl bg-white p-6 text-center shadow-inner ring-1 ring-black/5">
+                          <p className="mb-2 text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Escaneie o QR Code PIX</p>
+                          <div className="mx-auto mb-4 flex aspect-square w-48 items-center justify-center rounded-lg bg-gray-50 border-2 border-dashed border-gray-200">
+                            {order?.pix_qr_code ? (
+                              <img src={order.pix_qr_code} alt="QR Code PIX" className="h-40 w-40" />
                             ) : (
-                              <Copy className="h-4 w-4" />
+                              <div className="h-32 w-32 bg-slate-800 opacity-10 blur-[1px]" />
                             )}
-                          </Button>
+                          </div>
+                          <button 
+                            onClick={copyPix}
+                            className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-emerald-600/20 transition-all hover:bg-emerald-700 active:scale-95"
+                          >
+                            <Copy className="h-4 w-4" />
+                            Copiar Código PIX
+                          </button>
                         </div>
-                      </div>
-                      <div className="rounded-lg bg-amber-50 p-4 text-center text-xs text-amber-800">
-                        <p>O QR Code expira em 30 minutos.</p>
-                        <p>Após pagar, não feche esta página.</p>
+                        
+                        <div className="flex items-center gap-3 rounded-2xl bg-amber-50 p-4 text-amber-800 ring-1 ring-amber-200">
+                          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-amber-200">
+                            <span className="animate-pulse text-xl">⏳</span>
+                          </div>
+                          <p className="text-xs font-medium leading-relaxed">
+                            <strong>Aguardando seu pagamento...</strong><br />
+                            Assim que o PIX for feito, o sistema libera seu acesso automaticamente em até 10 segundos.
+                          </p>
+                        </div>
                       </div>
                     </CardContent>
                   )}
