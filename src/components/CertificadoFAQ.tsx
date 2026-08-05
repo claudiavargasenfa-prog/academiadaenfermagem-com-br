@@ -13,8 +13,8 @@ export function CertificadoFAQ() {
       a: "Os certificados são gerados automaticamente pelo sistema com assinatura eletrônica e registro de validação. Cada documento possui um código único e QR Code, tornando-o rastreável e autêntico sem a necessidade de plataformas externas de pagamento de taxas por emissão."
     },
     {
-      q: "Como cadastrar meu PIX para receber os pagamentos?",
-      a: "O cadastro do PIX é realizado diretamente no painel administrativo, onde você configura sua chave e integra o sistema de recebimento. Implementar logs de segurança e trilha de auditoria para registrar ações críticas, como liberação manual/automática e alterações de modalidade."
+      q: "Como receberei os valores dos certificados via PIX?",
+      a: "Sim, você cadastrará sua chave PIX no painel administrativo. O sistema gera a cobrança para o aluno e, assim que o pagamento é confirmado pela integração (webhook), o valor cai diretamente na sua conta, sem intermediários retendo o dinheiro. Tudo é organizado para que a liberação seja automática e segura."
     },
     {
       q: "Qual o modelo e validade do certificado?",
