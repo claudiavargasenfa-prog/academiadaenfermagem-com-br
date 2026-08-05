@@ -16,6 +16,7 @@ import {
 } from "@/lib/access";
 import BeneficiosPlano from "@/components/conta/BeneficiosPlano";
 import ComparativoUpgrade from "@/components/conta/ComparativoUpgrade";
+import { CertificadoFAQ } from "@/components/CertificadoFAQ";
 
 
 
