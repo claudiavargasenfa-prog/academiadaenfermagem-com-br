@@ -130,7 +130,7 @@ export function DashboardAdmin() {
               "Para um app de sucesso, observe quais módulos os alunos mais acessam e crie novos conteúdos baseados neles!"
             </p>
           </div>
-        </div>
+        </section>
       </div>
     </div>
   );
