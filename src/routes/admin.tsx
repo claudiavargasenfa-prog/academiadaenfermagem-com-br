@@ -566,26 +566,38 @@ function AdminContent() {
 
         return (
           <div className="mt-4 space-y-6">
-            {sections.map((sec) => {
-              const items = all
-                .filter(sec.filter)
-                .slice()
-                .sort((a: any, b: any) => (a.name ?? "").localeCompare(b.name ?? "", "pt-BR"));
-              return (
-                <section key={sec.id}>
-                  <h2 className="mb-2 flex items-center gap-2 border-b border-foreground/10 pb-1 font-display text-lg font-bold">
-                    <span>{sec.emoji}</span> {sec.title}
-                    <span className="text-xs font-normal text-muted-foreground">({items.length})</span>
-                  </h2>
-                  {items.length === 0 ? (
-                    <p className="text-xs text-muted-foreground">Nenhum mini app neste aplicativo.</p>
-                  ) : (
-                    <div className="space-y-3">{items.map(renderCard)}</div>
-                  )}
-                </section>
-              );
-            })}
-            {semApp.length > 0 && (
+            {selectedAppId === "all" ? (
+              sections.map((sec) => {
+                const items = all
+                  .filter(sec.filter)
+                  .slice()
+                  .sort((a: any, b: any) => (a.name ?? "").localeCompare(b.name ?? "", "pt-BR"));
+                return (
+                  <section key={sec.id}>
+                    <h2 className="mb-2 flex items-center gap-2 border-b border-foreground/10 pb-1 font-display text-lg font-bold">
+                      <span>{sec.emoji}</span> {sec.title}
+                      <span className="text-xs font-normal text-muted-foreground">({items.length})</span>
+                    </h2>
+                    {items.length === 0 ? (
+                      <p className="text-xs text-muted-foreground">Nenhum mini app neste aplicativo.</p>
+                    ) : (
+                      <div className="space-y-3">{items.map(renderCard)}</div>
+                    )}
+                  </section>
+                );
+              })
+            ) : (
+              <section>
+                <div className="space-y-3">
+                  {all
+                    .slice()
+                    .sort((a: any, b: any) => (a.name ?? "").localeCompare(b.name ?? "", "pt-BR"))
+                    .map(renderCard)}
+                </div>
+              </section>
+            )}
+            
+            {selectedAppId === "all" && semApp.length > 0 && (
               <section>
                 <h2 className="mb-2 flex items-center gap-2 border-b border-foreground/10 pb-1 font-display text-lg font-bold">
                   <span>⚠️</span> Sem aplicativo
