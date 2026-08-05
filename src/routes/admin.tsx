@@ -246,7 +246,7 @@ function AdminContent() {
           onClick={() => setTab("subs")}
           className={`flex-1 rounded-lg px-3 py-2 ${tab === "subs" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
         >
-          Planos / Cakto
+          Planos / Pagamentos
         </button>
         <button
           type="button"

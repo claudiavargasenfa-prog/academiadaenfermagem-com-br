@@ -222,7 +222,7 @@ export function WelcomePanel({ slug }: { slug: string }) {
                 </div>
                 <p className="mt-2 text-sm text-muted-foreground">
                   Próximo passo: associe-se e libere todo o conteúdo da Academia do {label}. Se
-                  você já comprou na Cakto, use o mesmo e-mail da compra.
+                  você já comprou, use o mesmo e-mail da compra.
                 </p>
                 {checkoutUrl ? (
                   <a
@@ -243,7 +243,7 @@ export function WelcomePanel({ slug }: { slug: string }) {
               {
                 icon: UserPlus,
                 t: "1. Crie sua conta em 1 minuto",
-                d: "Use o mesmo e-mail da compra na Cakto, se já comprou.",
+                d: "Use o mesmo e-mail da compra, se já comprou.",
               },
               {
                 icon: Mail,
