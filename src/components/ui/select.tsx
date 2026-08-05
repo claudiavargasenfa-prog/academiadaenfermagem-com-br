@@ -18,7 +18,7 @@ const SelectTrigger = React.forwardRef<
 >(({ className, children, ...props }, ref) => {
   // Tradução forçada para o pedido do usuário caso o aria-label padrão do Radix apareça
   const ariaLabel = props["aria-label"] === "Language selector" || props["aria-label"] === "language selector"
-    ? "é para vc escrever aqui pra eu colocar no cadastro do mercado pago."
+    ? "o mercado pago esta pedindo uma aplicação"
     : props["aria-label"];
 
   return (
