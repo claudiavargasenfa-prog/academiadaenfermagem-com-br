@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as VipRouteImport } from './routes/vip'
 import { Route as VendasRouteImport } from './routes/vendas'
 import { Route as UtiRouteImport } from './routes/uti'
 import { Route as SvPediatricoRouteImport } from './routes/sv-pediatrico'
@@ -54,6 +55,11 @@ import { Route as AppSlugIndexRouteImport } from './routes/app.$slug.index'
 import { Route as AppSlugSubtopicRouteImport } from './routes/app.$slug.$subtopic'
 import { Route as ApiPublicPaymentsRouteImport } from './routes/api/public/payments'
 
+const VipRoute = VipRouteImport.update({
+  id: '/vip',
+  path: '/vip',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const VendasRoute = VendasRouteImport.update({
   id: '/vendas',
   path: '/vendas',
@@ -312,6 +318,7 @@ export interface FileRoutesByFullPath {
   '/sv-pediatrico': typeof SvPediatricoRoute
   '/uti': typeof UtiRoute
   '/vendas': typeof VendasRoute
+  '/vip': typeof VipRoute
   '/app/$slug': typeof AppSlugRouteWithChildren
   '/cadastro/$slug': typeof CadastroSlugRoute
   '/planos/$slug': typeof PlanosSlugRoute
@@ -358,6 +365,7 @@ export interface FileRoutesByTo {
   '/sv-pediatrico': typeof SvPediatricoRoute
   '/uti': typeof UtiRoute
   '/vendas': typeof VendasRoute
+  '/vip': typeof VipRoute
   '/cadastro/$slug': typeof CadastroSlugRoute
   '/planos/$slug': typeof PlanosSlugRoute
   '/quizzes/$slug': typeof QuizzesSlugRoute
@@ -404,6 +412,7 @@ export interface FileRoutesById {
   '/sv-pediatrico': typeof SvPediatricoRoute
   '/uti': typeof UtiRoute
   '/vendas': typeof VendasRoute
+  '/vip': typeof VipRoute
   '/app/$slug': typeof AppSlugRouteWithChildren
   '/cadastro/$slug': typeof CadastroSlugRoute
   '/planos/$slug': typeof PlanosSlugRoute
@@ -452,6 +461,7 @@ export interface FileRouteTypes {
     | '/sv-pediatrico'
     | '/uti'
     | '/vendas'
+    | '/vip'
     | '/app/$slug'
     | '/cadastro/$slug'
     | '/planos/$slug'
@@ -498,6 +508,7 @@ export interface FileRouteTypes {
     | '/sv-pediatrico'
     | '/uti'
     | '/vendas'
+    | '/vip'
     | '/cadastro/$slug'
     | '/planos/$slug'
     | '/quizzes/$slug'
@@ -543,6 +554,7 @@ export interface FileRouteTypes {
     | '/sv-pediatrico'
     | '/uti'
     | '/vendas'
+    | '/vip'
     | '/app/$slug'
     | '/cadastro/$slug'
     | '/planos/$slug'
@@ -590,6 +602,7 @@ export interface RootRouteChildren {
   SvPediatricoRoute: typeof SvPediatricoRoute
   UtiRoute: typeof UtiRoute
   VendasRoute: typeof VendasRoute
+  VipRoute: typeof VipRoute
   AppSlugRoute: typeof AppSlugRouteWithChildren
   CadastroSlugRoute: typeof CadastroSlugRoute
   PlanosSlugRoute: typeof PlanosSlugRoute
@@ -599,6 +612,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/vip': {
+      id: '/vip'
+      path: '/vip'
+      fullPath: '/vip'
+      preLoaderRoute: typeof VipRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/vendas': {
       id: '/vendas'
       path: '/vendas'
@@ -971,6 +991,7 @@ const rootRouteChildren: RootRouteChildren = {
   SvPediatricoRoute: SvPediatricoRoute,
   UtiRoute: UtiRoute,
   VendasRoute: VendasRoute,
+  VipRoute: VipRoute,
   AppSlugRoute: AppSlugRouteWithChildren,
   CadastroSlugRoute: CadastroSlugRoute,
   PlanosSlugRoute: PlanosSlugRoute,
