@@ -53,7 +53,6 @@ import { Route as AppSlugRouteImport } from './routes/app.$slug'
 import { Route as AppSlugIndexRouteImport } from './routes/app.$slug.index'
 import { Route as AppSlugSubtopicRouteImport } from './routes/app.$slug.$subtopic'
 import { Route as ApiPublicPaymentsRouteImport } from './routes/api/public/payments'
-import { Route as ApiPublicCaktoWebhookRouteImport } from './routes/api/public/cakto-webhook'
 
 const VendasRoute = VendasRouteImport.update({
   id: '/vendas',
@@ -275,11 +274,6 @@ const ApiPublicPaymentsRoute = ApiPublicPaymentsRouteImport.update({
   path: '/api/public/payments',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiPublicCaktoWebhookRoute = ApiPublicCaktoWebhookRouteImport.update({
-  id: '/api/public/cakto-webhook',
-  path: '/api/public/cakto-webhook',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -323,7 +317,6 @@ export interface FileRoutesByFullPath {
   '/planos/$slug': typeof PlanosSlugRoute
   '/quizzes/$slug': typeof QuizzesSlugRoute
   '/trilha/$slug': typeof TrilhaSlugRoute
-  '/api/public/cakto-webhook': typeof ApiPublicCaktoWebhookRoute
   '/api/public/payments': typeof ApiPublicPaymentsRoute
   '/app/$slug/$subtopic': typeof AppSlugSubtopicRoute
   '/app/$slug/': typeof AppSlugIndexRoute
@@ -369,7 +362,6 @@ export interface FileRoutesByTo {
   '/planos/$slug': typeof PlanosSlugRoute
   '/quizzes/$slug': typeof QuizzesSlugRoute
   '/trilha/$slug': typeof TrilhaSlugRoute
-  '/api/public/cakto-webhook': typeof ApiPublicCaktoWebhookRoute
   '/api/public/payments': typeof ApiPublicPaymentsRoute
   '/app/$slug/$subtopic': typeof AppSlugSubtopicRoute
   '/app/$slug': typeof AppSlugIndexRoute
@@ -417,7 +409,6 @@ export interface FileRoutesById {
   '/planos/$slug': typeof PlanosSlugRoute
   '/quizzes/$slug': typeof QuizzesSlugRoute
   '/trilha/$slug': typeof TrilhaSlugRoute
-  '/api/public/cakto-webhook': typeof ApiPublicCaktoWebhookRoute
   '/api/public/payments': typeof ApiPublicPaymentsRoute
   '/app/$slug/$subtopic': typeof AppSlugSubtopicRoute
   '/app/$slug/': typeof AppSlugIndexRoute
@@ -466,7 +457,6 @@ export interface FileRouteTypes {
     | '/planos/$slug'
     | '/quizzes/$slug'
     | '/trilha/$slug'
-    | '/api/public/cakto-webhook'
     | '/api/public/payments'
     | '/app/$slug/$subtopic'
     | '/app/$slug/'
@@ -512,7 +502,6 @@ export interface FileRouteTypes {
     | '/planos/$slug'
     | '/quizzes/$slug'
     | '/trilha/$slug'
-    | '/api/public/cakto-webhook'
     | '/api/public/payments'
     | '/app/$slug/$subtopic'
     | '/app/$slug'
@@ -559,7 +548,6 @@ export interface FileRouteTypes {
     | '/planos/$slug'
     | '/quizzes/$slug'
     | '/trilha/$slug'
-    | '/api/public/cakto-webhook'
     | '/api/public/payments'
     | '/app/$slug/$subtopic'
     | '/app/$slug/'
@@ -606,7 +594,6 @@ export interface RootRouteChildren {
   CadastroSlugRoute: typeof CadastroSlugRoute
   PlanosSlugRoute: typeof PlanosSlugRoute
   TrilhaSlugRoute: typeof TrilhaSlugRoute
-  ApiPublicCaktoWebhookRoute: typeof ApiPublicCaktoWebhookRoute
   ApiPublicPaymentsRoute: typeof ApiPublicPaymentsRoute
 }
 
@@ -920,13 +907,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicPaymentsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/cakto-webhook': {
-      id: '/api/public/cakto-webhook'
-      path: '/api/public/cakto-webhook'
-      fullPath: '/api/public/cakto-webhook'
-      preLoaderRoute: typeof ApiPublicCaktoWebhookRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
@@ -995,19 +975,8 @@ const rootRouteChildren: RootRouteChildren = {
   CadastroSlugRoute: CadastroSlugRoute,
   PlanosSlugRoute: PlanosSlugRoute,
   TrilhaSlugRoute: TrilhaSlugRoute,
-  ApiPublicCaktoWebhookRoute: ApiPublicCaktoWebhookRoute,
   ApiPublicPaymentsRoute: ApiPublicPaymentsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
