@@ -25,7 +25,7 @@ export const Route = createFileRoute("/simulador")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: SimuladorPage;
+  component: SimuladorPage,
 });
 
 type Item = Question & { origem: string };
