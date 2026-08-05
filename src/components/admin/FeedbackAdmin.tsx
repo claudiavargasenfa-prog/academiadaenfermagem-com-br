@@ -34,16 +34,24 @@ export function FeedbackAdmin() {
   });
 
   const updateMutation = useMutation({
-    mutationFn: async ({ id, status, admin_response, is_public }: any) => {
+    mutationFn: async ({ id, status, admin_response, is_public, moderation_reason }: any) => {
       const { error } = await supabase
         .from("user_feedbacks")
-        .update({ status, admin_response, is_public, updated_at: new Date().toISOString() })
+        .update({ 
+          status, 
+          admin_response, 
+          is_public, 
+          moderation_reason,
+          updated_at: new Date().toISOString() 
+        })
         .eq("id", id);
       if (error) throw error;
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["admin-feedbacks"] });
       setReplyingTo(null);
+      setModerating(null);
+      setModerationReason("");
       setReplyText("");
       toast.success("Feedback atualizado!");
     }
