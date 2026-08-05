@@ -9,6 +9,7 @@ export type MiniApp = Database["public"]["Tables"]["mini_apps"]["Row"];
 export type Subscription = Database["public"]["Tables"]["subscriptions"]["Row"];
 export type UserAppAccess = Database["public"]["Tables"]["user_app_access"]["Row"];
 export type SubscriptionPlan = Database["public"]["Tables"]["subscription_plans"]["Row"];
+export type PlanOffer = Database["public"]["Tables"]["plan_offers"]["Row"];
 export type UserSubscription = Database["public"]["Tables"]["user_subscriptions"]["Row"];
 
 export type TrackSlug = "academico" | "tecnico" | "enfermeiro";
@@ -57,6 +58,15 @@ export function useAuthReady() {
 export async function fetchSubscriptionPlans(): Promise<SubscriptionPlan[]> {
   const { data, error } = await supabase
     .from("subscription_plans")
+    .select("*")
+    .order("sort_order", { ascending: true });
+  if (error) throw error;
+  return data ?? [];
+}
+
+export async function fetchPlanOffers(): Promise<PlanOffer[]> {
+  const { data, error } = await supabase
+    .from("plan_offers")
     .select("*")
     .order("sort_order", { ascending: true });
   if (error) throw error;

@@ -1,18 +1,18 @@
 import { Award, Check, CreditCard, Sparkles, Star, TrendingUp, Zap } from "lucide-react";
-import { fetchSubscriptionPlans, formatPriceBRL, type SubscriptionPlan, TRACKS, type TrackSlug } from "@/lib/access";
+import { fetchPlanOffers, formatPriceBRL, type PlanOffer, TRACKS, type TrackSlug } from "@/lib/access";
 import { useQuery } from "@tanstack/react-query";
 import { Card } from "@/components/AppShell";
 
 export default function ComparativoUpgrade() {
-  const plansQ = useQuery({ queryKey: ["subscription_plans"], queryFn: fetchSubscriptionPlans });
-  const plans = plansQ.data ?? [];
+  const offersQ = useQuery({ queryKey: ["plan_offers"], queryFn: fetchPlanOffers });
+  const offers = offersQ.data ?? [];
 
-  if (plans.length === 0) return null;
+  if (offers.length === 0) return null;
 
-  // Group plans by track to show comparisons
+  // Group offers by track to show comparisons
   const tracks = TRACKS.map(track => {
-    const trackPlans = plans.filter(p => p.slug === track.slug || p.slug?.startsWith(track.slug));
-    return { track, plans: trackPlans };
+    const trackOffers = offers.filter(o => o.plan_slug === track.slug);
+    return { track, offers: trackOffers };
   });
 
   return (
@@ -28,18 +28,8 @@ export default function ComparativoUpgrade() {
       </p>
 
       <div className="space-y-8">
-        {tracks.map(({ track, plans: trackPlans }) => {
-          if (trackPlans.length === 0) return null;
-
-          // Define typical benefits based on duration
-          const getBenefits = (p: SubscriptionPlan) => {
-            const period = p.billing_period?.toLowerCase() || "";
-            if (period === "mensal") return ["Acesso completo ao App", "Atualizações constantes", "Suporte técnico"];
-            if (period === "trimestral") return ["Tudo do Mensal", "1 Certificado de 10h incluso", "Economia real"];
-            if (period === "semestral") return ["Tudo do Trimestral", "2 Certificados de 10h", "Selo aluno destaque"];
-            if (period === "anual") return ["Tudo do Semestral", "LIBERAÇÃO DE 2º APP GRÁTIS", "Melhor custo-benefício"];
-            return [];
-          };
+        {tracks.map(({ track, offers: trackOffers }) => {
+          if (trackOffers.length === 0) return null;
 
           return (
             <div key={track.slug} className="space-y-4">
@@ -48,13 +38,13 @@ export default function ComparativoUpgrade() {
               </h3>
               
               <div className="grid gap-4 overflow-x-auto pb-2 sm:grid-cols-2 lg:grid-cols-4">
-                {trackPlans.sort((a,b) => (a.price_cents || 0) - (b.price_cents || 0)).map((p) => {
-                  const isBestValue = p.billing_period === "anual";
-                  const benefits = getBenefits(p);
+                {trackOffers.sort((a,b) => (a.price_cents || 0) - (b.price_cents || 0)).map((o) => {
+                  const isBestValue = o.billing_period === "anual";
+                  const perks = o.perks as string[] ?? [];
 
                   return (
                     <div 
-                      key={p.id} 
+                      key={o.id} 
                       className={`relative flex flex-col rounded-2xl border p-5 transition-all hover:shadow-lg ${
                         isBestValue 
                         ? "border-primary/50 bg-primary/5 ring-1 ring-primary/20 shadow-md" 
@@ -69,41 +59,31 @@ export default function ComparativoUpgrade() {
 
                       <div className="mb-4">
                         <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-                          {p.billing_period}
+                          {o.billing_period}
                         </span>
                         <h4 className="mt-1 font-display text-lg font-bold capitalize">
-                          Plano {p.billing_period}
+                          Plano {o.billing_period}
                         </h4>
                       </div>
 
                       <div className="mb-6">
                         <span className="text-2xl font-black text-primary">
-                          {formatPriceBRL(p.price_cents || 0)}
+                          {formatPriceBRL(o.price_cents || 0)}
                         </span>
-                        {p.price_original_cents && p.price_original_cents > (p.price_cents || 0) && (
-                          <div className="flex items-center gap-2">
-                            <span className="text-xs text-muted-foreground line-through">
-                              {formatPriceBRL(p.price_original_cents)}
-                            </span>
-                            <span className="text-[10px] font-bold text-emerald-600">
-                              -{Math.round(100 - ((p.price_cents || 0) * 100 / p.price_original_cents))}%
-                            </span>
-                          </div>
-                        )}
                       </div>
 
                       <ul className="mb-6 flex-1 space-y-2.5">
-                        {benefits.map((b, i) => (
+                        {perks.slice(0, 4).map((p, i) => (
                           <li key={i} className="flex items-start gap-2 text-xs leading-tight">
                             <Check className={`mt-0.5 h-3 w-3 shrink-0 ${isBestValue ? "text-primary" : "text-emerald-500"}`} />
-                            <span className={b.includes("GRÁTIS") ? "font-bold text-primary" : ""}>{b}</span>
+                            <span className={p.includes("GRÁTIS") || p.includes("2º") ? "font-bold text-primary" : ""}>{p}</span>
                           </li>
                         ))}
                       </ul>
 
-                      {p.cakto_link_novo || p.cakto_checkout_url ? (
+                      {o.cakto_checkout_url ? (
                         <a
-                          href={p.cakto_link_novo || p.cakto_checkout_url || ""}
+                          href={o.cakto_checkout_url}
                           target="_blank"
                           rel="noreferrer"
                           className={`mt-auto flex w-full items-center justify-center gap-2 rounded-xl py-2.5 text-xs font-black transition-all ${
@@ -117,7 +97,7 @@ export default function ComparativoUpgrade() {
                         </a>
                       ) : (
                         <div className="mt-auto rounded-xl bg-muted/50 py-2 text-center text-[10px] font-bold text-muted-foreground">
-                          Em breve
+                          Checkout em configuração
                         </div>
                       )}
                     </div>
