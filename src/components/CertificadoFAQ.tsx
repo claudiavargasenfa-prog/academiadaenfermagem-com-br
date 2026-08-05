@@ -13,8 +13,8 @@ export function CertificadoFAQ() {
       a: "Os certificados são gerados automaticamente pelo sistema com assinatura eletrônica e registro de validação. Cada documento possui um código único e QR Code, tornando-o rastreável e autêntico sem a necessidade de plataformas externas de pagamento de taxas por emissão."
     },
     {
-      q: "Preciso pagar taxas de API para o PIX?",
-      a: "Não. O sistema utiliza uma integração de PIX automático de baixo custo e alta eficiência que já está inclusa na sua plataforma. Verificar a implementação do PIX para garantir que a liberação do certificado só ocorra após validação correta de status e assinatura/webhook."
+      q: "Como cadastrar meu PIX para receber os pagamentos?",
+      a: "O cadastro do PIX é realizado diretamente no painel administrativo, onde você configura sua chave e integra o sistema de recebimento. Implementar logs de segurança e trilha de auditoria para registrar ações críticas, como liberação manual/automática e alterações de modalidade."
     },
     {
       q: "Qual o modelo e validade do certificado?",
