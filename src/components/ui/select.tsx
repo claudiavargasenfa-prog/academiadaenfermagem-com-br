@@ -18,7 +18,7 @@ const SelectTrigger = React.forwardRef<
 >(({ className, children, ...props }, ref) => {
   // Tradução forçada para o pedido do usuário caso o aria-label padrão do Radix apareça
   const ariaLabel = props["aria-label"] === "Language selector" || props["aria-label"] === "language selector"
-    ? "NA AREA DO ADMIN, QUERO QUE A APRESENTAÇÃO DOS CONTEUDOS FIQUE DENTRO DE APP COMO NA LOJA, DA PARA FAZER ISSO? FICA MAIS FACIL DE TRABALHAR, PQ ENTRO EM UM APP E TRABALHO NELE ATE TERMINAR, SAIO E DEPOIS ENTRO EM OUTRO.\nMAS TEM QUE MANTER A CONEXÃO QUE JA TEM ENTRE ELES, POSSO TER O MESMO MINI APP NOS 4 APP."
+    ? "ok. obrigado, mas escreva sempre em portugues, não entendo ingles"
     : props["aria-label"];
 
   return (
