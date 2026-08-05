@@ -16,6 +16,7 @@ import {
 } from "@/lib/access";
 import BeneficiosPlano from "@/components/conta/BeneficiosPlano";
 import ComparativoUpgrade from "@/components/conta/ComparativoUpgrade";
+import { CertificadoFAQ } from "@/components/CertificadoFAQ";
 
 
 
@@ -190,6 +191,11 @@ function MinhaContaPage() {
             })}
           </div>
         )}
+      </section>
+
+      <section className="mt-8">
+        <h2 className="mb-3 font-display text-lg font-bold">Dúvidas sobre Certificados?</h2>
+        <CertificadoFAQ />
       </section>
     </AppShell>
   );
