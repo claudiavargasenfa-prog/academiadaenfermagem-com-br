@@ -311,9 +311,15 @@ function PlanForm({ plan, onClose }: { plan: SubscriptionPlan; onClose: () => vo
 }
 
 const ALL_PLANS = [
-  { slug: "academico", label: "Acadêmico" },
-  { slug: "tecnico", label: "Técnico" },
-  { slug: "enfermeiro", label: "Enfermeiro" },
+  { slug: "academico", label: "Acadêmico (Mensal)" },
+  { slug: "tecnico", label: "Técnico (Mensal)" },
+  { slug: "enfermeiro", label: "Enfermeiro (Mensal)" },
+  { slug: "tecnico-estudante", label: "Estudante Técnico (Mensal)" },
+  { slug: "enfermeiro-trimestral", label: "Enfermeiro (Trimestral)" },
+  { slug: "enfermeiro-semestral", label: "Enfermeiro (Semestral)" },
+  { slug: "enfermeiro-anual", label: "Enfermeiro (Anual)" },
+  { slug: "tecnico-trimestral", label: "Estudante Técnico (Trimestral)" },
+  { slug: "tecnico-semestral", label: "Estudante Técnico (Semestral)" },
 ] as const;
 
 function GrantForm({ onClose }: { onClose: () => void }) {
