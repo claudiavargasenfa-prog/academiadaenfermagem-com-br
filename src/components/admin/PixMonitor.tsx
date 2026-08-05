@@ -106,7 +106,7 @@ export function PixMonitor() {
                     ID Externo: {event.external_id || "N/A"}
                   </p>
                   <p className="text-xs font-semibold">
-                    Data: {new Date(event.created_at).toLocaleString("pt-BR")}
+                    Data: {new Date(event.created_at || Date.now()).toLocaleString("pt-BR")}
                   </p>
                   {event.error_message && (
                     <p className="mt-2 rounded bg-destructive/5 p-2 text-[10px] font-medium text-destructive">
