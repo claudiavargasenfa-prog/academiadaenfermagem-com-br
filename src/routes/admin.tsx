@@ -299,7 +299,7 @@ function AdminContent() {
         <SubscriptionsAdmin />
       ) : tab === "organize" ? (
         <AppsAdmin />
-      ) : !selectedAppId ? (
+      ) : tab === "apps" && !selectedAppId ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
           {(availableAppsQ.data ?? []).filter(a => a.is_active).map((app) => (
             <button
@@ -341,7 +341,7 @@ function AdminContent() {
             </div>
           </button>
         </div>
-      ) : (
+      ) : tab === "apps" && selectedAppId ? (
         <>
           <div className="mb-6 flex items-center justify-between">
             <button
@@ -359,22 +359,22 @@ function AdminContent() {
             </div>
           </div>
 
-      <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <input
+              type="search"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="🔍 Buscar mini app por nome, slug ou descrição..."
+              className="w-full rounded-xl border border-foreground/15 bg-background px-3 py-2 text-sm sm:max-w-sm"
+            />
+            <button
+              onClick={() => setCreating(true)}
+              className="inline-flex items-center justify-center gap-1.5 rounded-xl gold-gradient px-4 py-2 text-sm font-bold"
+            >
+              <Plus className="h-4 w-4" /> Novo mini app
+            </button>
+          </div>
 
-        <input
-          type="search"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="🔍 Buscar mini app por nome, slug ou descrição..."
-          className="w-full rounded-xl border border-foreground/15 bg-background px-3 py-2 text-sm sm:max-w-sm"
-        />
-        <button
-          onClick={() => setCreating(true)}
-          className="inline-flex items-center justify-center gap-1.5 rounded-xl gold-gradient px-4 py-2 text-sm font-bold"
-        >
-          <Plus className="h-4 w-4" /> Novo mini app
-        </button>
-      </div>
 
       {selected.size > 0 && (
         <div className="sticky top-2 z-20 mb-3 flex flex-wrap items-center justify-between gap-2 rounded-xl border border-primary/40 bg-primary/10 px-3 py-2 text-sm">
@@ -633,7 +633,7 @@ function AdminContent() {
         );
       })()}
         </>
-      )}
+      ) : null}
     </AppShell>
   );
 }
