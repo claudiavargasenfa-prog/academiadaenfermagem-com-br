@@ -129,9 +129,9 @@ export function PixMonitor() {
                 <summary className="cursor-pointer text-[10px] font-bold uppercase text-muted-foreground hover:text-foreground">
                   Ver Payload JSON
                 </summary>
-                <pre className="mt-2 max-h-40 overflow-auto rounded bg-foreground/5 p-2 text-[10px]">
-                  {JSON.stringify(event.payload, null, 2)}
-                </pre>
+                  <pre className="mt-2 max-h-40 overflow-auto rounded bg-foreground/5 p-2 text-[10px]">
+                    {JSON.stringify(event.payload, null, 2)}
+                  </pre>
               </details>
             </Card>
           ))
