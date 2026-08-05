@@ -1,19 +1,30 @@
-# Plano de Resposta a Dúvidas - Taxas Lovable
+# Plano de Implementação: Checkout Nativo e Comunicação UI
 
-A usuária Cláudia continua tirando dúvidas sobre custos e deseja atualizar o texto de "comunicação" na UI.
+A usuária Cláudia solicitou a implementação de uma tela de checkout nativa com suporte a PIX/Cartão e status em tempo real, além de atualizar o texto de "comunicação" na UI.
 
 ## Alterações Propostas
 
-### Frontend
-
+### 1. Comunicação UI (Imediato)
 #### `src/components/ui/select.tsx`
-- Modificar o `aria-label` injetado no componente `SelectTrigger`.
-- Alterar o texto para: `"qual o valor que a lovable cobra para o checkout?"`.
+- Atualizar o `aria-label` para: `"Adicione uma tela de checkout com PIX/Cartão e status de pagamento em tempo real no meu app."`
 
-## Respostas às Dúvidas
-1. **Taxas Lovable:** A Lovable em si **não cobra taxas extras** sobre as suas vendas no checkout. 
-2. **Custos de Terceiros:** Você paga apenas as taxas da plataforma de pagamento que escolher (Stripe, Mercado Pago, etc.), que geralmente ficam em torno de 3% a 5% por venda. 
-3. **Assinatura Lovable:** A Lovable mantém o seu app no ar e processa as funções do servidor conforme o seu plano de assinatura mensal da própria Lovable, independente de quantas vendas você faça.
+### 2. Infraestrutura de Pagamentos (Backend & Frontend)
+#### Configuração de Provedor
+- Recomendar e configurar **Stripe** ou **Mercado Pago** via `payments--recommend_payment_provider`.
+- Adicionar segredos de API (chaves públicas/privadas) via `secrets--add_secret`.
+
+#### Banco de Dados (Supabase)
+- Criar tabela `orders` para rastrear transações, status (pending, paid, failed) e métodos de pagamento.
+- Habilitar RLS e permissões para usuários autenticados.
+
+#### Checkout e Webhooks
+- Criar rota de checkout (`src/routes/checkout.tsx`) com opções de PIX e Cartão.
+- Implementar webhook em `src/routes/api/public/payments.ts` para atualização de status em tempo real.
+
+### 3. Feedback em Tempo Real
+- Utilizar Supabase Realtime ou polling otimizado para mostrar ao aluno a confirmação do pagamento sem recarregar a página.
 
 ## Verificação
-- Validar a alteração no código fonte do arquivo `src/components/ui/select.tsx`.
+- Testar fluxo de criação de pedido.
+- Simular webhook de confirmação.
+- Validar atualização de UI no `aria-label`.
