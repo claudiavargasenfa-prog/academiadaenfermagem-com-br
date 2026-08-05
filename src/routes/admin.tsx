@@ -319,6 +319,16 @@ function AdminContent() {
         >
           💳 Vendas / Pedidos
         </button>
+        <button
+          type="button"
+          onClick={() => {
+            setTab("test_links");
+            setSelectedAppId(null);
+          }}
+          className={`flex-1 rounded-lg px-3 py-2 ${tab === "test_links" ? "bg-amber-600 text-white shadow-lg shadow-amber-600/20" : "text-muted-foreground hover:bg-amber-50"}`}
+        >
+          🧪 Testar Links MP
+        </button>
       </div>
 
       {tab === "dashboard" ? (
