@@ -161,7 +161,8 @@ function StoreHomeContent() {
         </section>
       )}
 
-      <TestimonialsSection />
+      {/* Seção de depoimentos comentada durante a fase de lançamento inicial */}
+      {/* <TestimonialsSection /> */}
 
 
 
