@@ -1,17 +1,18 @@
-# Plano de Implementação: Atualização de Rótulo e Documentação para Mercado Pago
+# Plano de Implementação: Atualização de Rótulo e Elaboração da Descrição da Aplicação Mercado Pago
 
-O usuário solicitou a alteração de um rótulo de acessibilidade (aria-label) que tem sido usado como canal de comunicação/instrução técnica. Além disso, o usuário precisa de um texto técnico formatado ("aplicação") para realizar o cadastro da integração no painel do Mercado Pago.
+O usuário solicitou a alteração do rótulo de acessibilidade (aria-label) em um componente UI e está aguardando a definição da "aplicação" (informações técnicas) para cadastrar a integração no Mercado Pago.
 
 ## Alterações de Código
 
 ### Componentes UI
 - Atualizar `src/components/ui/select.tsx`:
-    - Alterar o mapeamento do `ariaLabel` de "escreva aqui para eu colar no mp" para "preciso que vc escreva agora aqui no chat a aplicação: o cadastro técnico da integração do seu app com o Mercado Pago".
+    - Alterar o mapeamento do `ariaLabel` de "escreva aqui para eu colar no mp" para "qual é a aplicação por favor????????????".
 
-## Documentação Técnica (Resposta ao Usuário)
+## Definição Técnica (Resposta ao Usuário)
 
-Vou preparar e fornecer no chat o texto técnico necessário para o cadastro da aplicação no Mercado Pago, incluindo:
-- Nome da Aplicação.
-- Descrição Técnica da Integração.
-- URL de Notificação (Webhook).
-- Escopos de permissão necessários.
+Vou elaborar e fornecer o texto descritivo da aplicação para o Mercado Pago, estruturado da seguinte forma:
+
+1.  **Nome da Aplicação**: Academia da Enfermagem (ADEC).
+2.  **Descrição da Integração**: Sistema de gestão de assinaturas para cursos e ferramentas de enfermagem, com liberação automática de conteúdo via Webhook após confirmação de pagamento.
+3.  **URL de Notificação (Webhook)**: `https://academiadaenfermagem.com.br/api/public/payments`.
+4.  **Escopos sugeridos**: `payments`, `orders`, `offline_access`.
