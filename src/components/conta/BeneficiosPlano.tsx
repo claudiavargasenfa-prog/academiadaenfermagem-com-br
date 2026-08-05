@@ -169,9 +169,12 @@ export default function BeneficiosPlano() {
       )}
 
       {allowed > 0 && (
-        <div className="glass rounded-2xl p-4">
-          <p className="flex items-center gap-2 font-display text-base font-bold">
-            <Award className="h-4 w-4 text-primary" /> Certificados de 10h
+        <div className="relative overflow-hidden rounded-2xl border-2 border-[#b8912f]/30 bg-gradient-to-br from-[#fbf8f1] to-[#f7f2e8] p-5 shadow-sm">
+          <div className="absolute -right-4 -top-4 opacity-10">
+            <Award className="h-24 w-24 text-[#b8912f]" />
+          </div>
+          <p className="flex items-center gap-2 font-display text-lg font-black text-[#8a6d24]">
+            <Award className="h-5 w-5 text-[#b8912f]" /> CERTIFICADOS DE 10 HORAS
           </p>
           <p className="mt-1 text-sm text-muted-foreground">
             Você tem <strong>{restantes}</strong> de {allowed} certificados disponíveis. Escolha o mini app estudado.
@@ -204,14 +207,14 @@ export default function BeneficiosPlano() {
           {certs.length > 0 && (
             <ul className="mt-4 space-y-2">
               {certs.map((c) => (
-                <li key={c.id} className="flex flex-wrap items-center justify-between gap-2 rounded-xl bg-white/70 px-3 py-2 text-xs">
+                <li key={c.id} className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-[#b8912f]/20 bg-white/80 p-3 text-xs shadow-sm">
                   <span>
                     <strong>{c.mini_app_name}</strong> · {c.hours}h · código {c.code}
                   </span>
                   <button
                     type="button"
                     onClick={() => abrirCertificado(c)}
-                    className="rounded-lg border border-primary/40 px-3 py-1 font-bold text-primary"
+                    className="rounded-lg bg-[#b8912f] px-3 py-1 font-bold text-white transition-colors hover:bg-[#8a6d24]"
                   >
                     Abrir / salvar PDF
                   </button>
