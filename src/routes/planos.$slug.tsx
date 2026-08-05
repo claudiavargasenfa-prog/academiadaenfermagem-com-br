@@ -60,6 +60,7 @@ export const Route = createFileRoute("/planos/$slug")({
   },
   beforeLoad: ({ params }) => {
     if (!ALLOWED.has(params.slug)) throw notFound();
+    return undefined as never;
   },
   component: PlanoPage,
 });
