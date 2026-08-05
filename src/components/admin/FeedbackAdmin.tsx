@@ -262,6 +262,54 @@ export function FeedbackAdmin() {
                   </div>
                 </div>
               )}
+              
+              {moderating === f.id && (
+                <div className="mt-2 p-3 bg-amber-50 rounded-xl border border-amber-200 space-y-3 animate-in fade-in zoom-in-95 duration-200">
+                  <div className="flex items-center gap-2 mb-1">
+                    <ShieldCheck className="h-4 w-4 text-amber-600" />
+                    <h5 className="text-[10px] font-black uppercase text-amber-700">Painel de Moderação</h5>
+                  </div>
+                  
+                  <div className="space-y-1">
+                    <label className="text-[9px] font-bold text-amber-800 uppercase ml-1">Motivo da Moderação / Observação Interna:</label>
+                    <textarea
+                      className={`${input} border-amber-200 focus:ring-amber-500/30 text-xs`}
+                      rows={2}
+                      placeholder="Ex: Contém dados sensíveis, Linguagem imprópria, Elogio técnico aprovado..."
+                      value={moderationReason}
+                      onChange={(e) => setModerationReason(e.target.value)}
+                    />
+                  </div>
+
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="flex gap-2">
+                      <button 
+                        onClick={() => updateMutation.mutate({ 
+                          id: f.id, 
+                          is_public: false, 
+                          moderation_reason: moderationReason,
+                          status: 'lido' 
+                        })}
+                        className="flex items-center gap-1.5 px-4 py-2 bg-red-500 text-white rounded-lg text-[10px] font-black uppercase hover:bg-red-600 transition-colors shadow-sm"
+                      >
+                        <XCircle className="h-3 w-3" /> Bloquear
+                      </button>
+                      <button 
+                        onClick={() => updateMutation.mutate({ 
+                          id: f.id, 
+                          is_public: true, 
+                          moderation_reason: moderationReason,
+                          status: 'lido' 
+                        })}
+                        className="flex items-center gap-1.5 px-4 py-2 bg-emerald-600 text-white rounded-lg text-[10px] font-black uppercase hover:bg-emerald-700 transition-colors shadow-sm"
+                      >
+                        <ShieldCheck className="h-3 w-3" /> Aprovar Publicação
+                      </button>
+                    </div>
+                    <button onClick={() => setModerating(null)} className="text-[9px] font-bold text-amber-700 uppercase hover:underline">Fechar</button>
+                  </div>
+                </div>
+              )}
             </div>
           </Card>
         ))}
