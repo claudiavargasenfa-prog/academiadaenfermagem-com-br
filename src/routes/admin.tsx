@@ -633,7 +633,7 @@ function AdminContent() {
         );
       })()}
         </>
-      )}
+      ) : null}
     </AppShell>
   );
 }
