@@ -118,7 +118,7 @@ export function PaymentsAdmin() {
         </div>
       </Card>
 
-      <div className="space-y-6">
+      
       {/* Dashboard de Vendas */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Card className="flex flex-col justify-between p-4 bg-emerald-50 border-emerald-100">
