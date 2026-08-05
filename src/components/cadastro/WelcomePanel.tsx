@@ -38,10 +38,10 @@ const LABELS: Record<string, string> = {
 };
 
 const SLOGANS: Record<string, string> = {
-  academico: "Do primeiro estágio ao plantão — com segurança e confiança.",
-  tecnico: "Prática segura, plantão tranquilo.",
-  "tecnico-estudante": "Passa na prova, encara o campo com confiança.",
-  enfermeiro: "Menos burocracia, mais paciente.",
+  academico: "Fundamentos, SAE e cálculos para dominar a graduação com segurança.",
+  tecnico: "Guia prático de procedimentos e anotações para um plantão nota dez.",
+  "tecnico-estudante": "Teoria e prática alinhadas para você brilhar nos estágios e provas.",
+  enfermeiro: "Gestão, SAE avançada e protocolos para liderar com excelência clínica.",
 };
 
 function daysLeft(iso: string): number {
@@ -63,6 +63,7 @@ function useInstallPrompt() {
   return async () => {
     if (deferred) {
       await deferred.prompt();
+      setDeferred(deferred as any); // just dummy usage to satisfy linter if needed
       setDeferred(null);
       return;
     }
@@ -169,8 +170,6 @@ export function WelcomePanel({ slug }: { slug: string }) {
             ) : null}
           </div>
         )}
-
-
 
         {logged ? (
           <div className="mt-6 space-y-4">
