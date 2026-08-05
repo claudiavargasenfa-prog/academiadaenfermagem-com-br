@@ -14,7 +14,7 @@ export function CertificadoFAQ() {
     },
     {
       q: "Preciso pagar taxas de API para o PIX?",
-      a: "Não. O sistema utiliza uma integração de PIX automático de baixo custo e alta eficiência que já está inclusa na sua plataforma. Você não precisará contratar APIs externas nem pagar mensalidades de gateways de pagamento para que os certificados sejam liberados automaticamente após o pagamento dos alunos."
+      a: "Não. O sistema utiliza uma integração de PIX automático de baixo custo e alta eficiência que já está inclusa na sua plataforma. Verificar a implementação do PIX para garantir que a liberação do certificado só ocorra após validação correta de status e assinatura/webhook."
     },
     {
       q: "Qual o modelo e validade do certificado?",
