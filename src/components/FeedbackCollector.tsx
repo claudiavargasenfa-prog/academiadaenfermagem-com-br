@@ -26,8 +26,8 @@ export function FeedbackCollector() {
               </div>
             </div>
             <div className="space-y-1">
-              <h3 className="font-display text-base font-bold text-foreground">Conte-me como foi sua experiência</h3>
-              <p className="text-xs text-muted-foreground">Sua opinião é fundamental para construirmos a melhor Academia juntos.</p>
+              <h3 className="font-display text-base font-bold text-foreground">CONTE-ME COMO ESTÁ SENDO A SUA EXPERIÊNCIA</h3>
+              <p className="text-xs text-muted-foreground font-bold text-primary uppercase tracking-wider">FAÇA PARTE DA PROXIMA ATUALIZAÇÃO</p>
             </div>
             <form onSubmit={handleSubmit} className="mx-auto max-w-lg space-y-3">
               <textarea
