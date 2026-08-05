@@ -15,6 +15,7 @@ import { AppsAdmin } from "@/components/admin/AppsAdmin";
 import { fetchApps } from "@/lib/apps";
 import { FeedbackAdmin } from "@/components/admin/FeedbackAdmin";
 import { PixMonitor } from "@/components/admin/PixMonitor";
+import { PaymentsAdmin } from "@/components/admin/PaymentsAdmin";
 import { QUIZZES } from "@/data/quizzes";
 
 export const Route = createFileRoute("/admin")({
@@ -55,7 +56,7 @@ function AdminPage() {
 
 function AdminContent() {
   const qc = useQueryClient();
-  const [tab, setTab] = useState<"apps" | "organize" | "subs" | "users" | "texts" | "feedbacks" | "pix">("apps");
+  const [tab, setTab] = useState<"apps" | "organize" | "subs" | "users" | "texts" | "feedbacks" | "pix" | "payments">("apps");
   const [selectedAppId, setSelectedAppId] = useState<string | null>(null);
   const [editing, setEditing] = useState<MiniApp | null>(null);
   const [creating, setCreating] = useState(false);
@@ -275,9 +276,18 @@ function AdminContent() {
         >
           Pix / Webhooks
         </button>
+        <button
+          type="button"
+          onClick={() => setTab("payments")}
+          className={`flex-1 rounded-lg px-3 py-2 ${tab === "payments" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
+        >
+          💳 Vendas / Pedidos
+        </button>
       </div>
 
-      {tab === "pix" ? (
+      {tab === "payments" ? (
+        <PaymentsAdmin />
+      ) : tab === "pix" ? (
         <PixMonitor />
       ) : tab === "feedbacks" ? (
         <FeedbackAdmin />
