@@ -199,7 +199,7 @@ export function FeedbackAdmin() {
               )}
 
               <div className="flex items-center justify-between pt-2">
-                <div className="flex gap-1.5">
+                <div className="flex gap-1.5 flex-wrap">
                   <button
                     onClick={() => updateMutation.mutate({ id: f.id, status: f.status === 'pendente' ? 'lido' : f.status })}
                     className={`flex items-center gap-1 rounded-full px-3 py-1 text-[9px] font-bold uppercase transition-all ${
@@ -208,14 +208,18 @@ export function FeedbackAdmin() {
                   >
                     <CheckCircle2 className="h-3 w-3" /> {f.status}
                   </button>
+                  
                   <button
-                    onClick={() => updateMutation.mutate({ id: f.id, is_public: !f.is_public })}
+                    onClick={() => {
+                      setModerating(moderating === f.id ? null : f.id);
+                      setModerationReason(f.moderation_reason || "");
+                    }}
                     className={`flex items-center gap-1 rounded-full px-3 py-1 text-[9px] font-bold uppercase transition-all ${
-                      f.is_public ? 'bg-primary text-white' : 'bg-foreground/5 text-muted-foreground'
+                      f.is_public ? 'bg-emerald-500 text-white shadow-sm' : 'bg-amber-500 text-white shadow-sm'
                     }`}
                   >
-                    {f.is_public ? <Eye className="h-3 w-3" /> : <EyeOff className="h-3 w-3" />}
-                    {f.is_public ? "Público" : "Privado"}
+                    <ShieldCheck className="h-3 w-3" />
+                    {f.is_public ? "APROVADO NA ÁREA DO ALUNO" : "BLOQUEADO / EM ANÁLISE"}
                   </button>
                 </div>
 
