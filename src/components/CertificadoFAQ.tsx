@@ -66,8 +66,8 @@ export function CertificadoFAQ() {
           <div className="flex gap-2">
             <FileText className="h-4 w-4 shrink-0" />
             <p>
-              <strong>Validação Técnica:</strong> O certificado contém o selo ADEC, carga horária de 10h, 
-              sua identificação profissional e <strong>QR Code de Autenticidade</strong> para verificação imediata de veracidade por instituições e empresas.
+              <strong>Validação Técnica:</strong> O certificado contém o <strong>Selo da ADEC</strong>, carga horária de 10h, 
+              sua identificação profissional e <strong>QR Code de Autenticidade</strong> para verificação imediata de veracidade.
             </p>
           </div>
         </div>
