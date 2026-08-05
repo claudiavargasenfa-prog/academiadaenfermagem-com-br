@@ -39,6 +39,7 @@ import { Route as DiarioRouteImport } from './routes/diario'
 import { Route as DiagnosticosAedeRouteImport } from './routes/diagnosticos-aede'
 import { Route as CurativosRouteImport } from './routes/curativos'
 import { Route as ConfiancaRouteImport } from './routes/confianca'
+import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as CalculadoraRouteImport } from './routes/calculadora'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AdecRouteImport } from './routes/adec'
@@ -51,6 +52,7 @@ import { Route as CadastroSlugRouteImport } from './routes/cadastro.$slug'
 import { Route as AppSlugRouteImport } from './routes/app.$slug'
 import { Route as AppSlugIndexRouteImport } from './routes/app.$slug.index'
 import { Route as AppSlugSubtopicRouteImport } from './routes/app.$slug.$subtopic'
+import { Route as ApiPublicPaymentsRouteImport } from './routes/api/public/payments'
 import { Route as ApiPublicCaktoWebhookRouteImport } from './routes/api/public/cakto-webhook'
 
 const VendasRoute = VendasRouteImport.update({
@@ -203,6 +205,11 @@ const ConfiancaRoute = ConfiancaRouteImport.update({
   path: '/confianca',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CheckoutRoute = CheckoutRouteImport.update({
+  id: '/checkout',
+  path: '/checkout',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CalculadoraRoute = CalculadoraRouteImport.update({
   id: '/calculadora',
   path: '/calculadora',
@@ -263,6 +270,11 @@ const AppSlugSubtopicRoute = AppSlugSubtopicRouteImport.update({
   path: '/$subtopic',
   getParentRoute: () => AppSlugRoute,
 } as any)
+const ApiPublicPaymentsRoute = ApiPublicPaymentsRouteImport.update({
+  id: '/api/public/payments',
+  path: '/api/public/payments',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicCaktoWebhookRoute = ApiPublicCaktoWebhookRouteImport.update({
   id: '/api/public/cakto-webhook',
   path: '/api/public/cakto-webhook',
@@ -275,6 +287,7 @@ export interface FileRoutesByFullPath {
   '/adec': typeof AdecRoute
   '/admin': typeof AdminRoute
   '/calculadora': typeof CalculadoraRoute
+  '/checkout': typeof CheckoutRoute
   '/confianca': typeof ConfiancaRoute
   '/curativos': typeof CurativosRoute
   '/diagnosticos-aede': typeof DiagnosticosAedeRoute
@@ -311,6 +324,7 @@ export interface FileRoutesByFullPath {
   '/quizzes/$slug': typeof QuizzesSlugRoute
   '/trilha/$slug': typeof TrilhaSlugRoute
   '/api/public/cakto-webhook': typeof ApiPublicCaktoWebhookRoute
+  '/api/public/payments': typeof ApiPublicPaymentsRoute
   '/app/$slug/$subtopic': typeof AppSlugSubtopicRoute
   '/app/$slug/': typeof AppSlugIndexRoute
 }
@@ -320,6 +334,7 @@ export interface FileRoutesByTo {
   '/adec': typeof AdecRoute
   '/admin': typeof AdminRoute
   '/calculadora': typeof CalculadoraRoute
+  '/checkout': typeof CheckoutRoute
   '/confianca': typeof ConfiancaRoute
   '/curativos': typeof CurativosRoute
   '/diagnosticos-aede': typeof DiagnosticosAedeRoute
@@ -355,6 +370,7 @@ export interface FileRoutesByTo {
   '/quizzes/$slug': typeof QuizzesSlugRoute
   '/trilha/$slug': typeof TrilhaSlugRoute
   '/api/public/cakto-webhook': typeof ApiPublicCaktoWebhookRoute
+  '/api/public/payments': typeof ApiPublicPaymentsRoute
   '/app/$slug/$subtopic': typeof AppSlugSubtopicRoute
   '/app/$slug': typeof AppSlugIndexRoute
 }
@@ -365,6 +381,7 @@ export interface FileRoutesById {
   '/adec': typeof AdecRoute
   '/admin': typeof AdminRoute
   '/calculadora': typeof CalculadoraRoute
+  '/checkout': typeof CheckoutRoute
   '/confianca': typeof ConfiancaRoute
   '/curativos': typeof CurativosRoute
   '/diagnosticos-aede': typeof DiagnosticosAedeRoute
@@ -401,6 +418,7 @@ export interface FileRoutesById {
   '/quizzes/$slug': typeof QuizzesSlugRoute
   '/trilha/$slug': typeof TrilhaSlugRoute
   '/api/public/cakto-webhook': typeof ApiPublicCaktoWebhookRoute
+  '/api/public/payments': typeof ApiPublicPaymentsRoute
   '/app/$slug/$subtopic': typeof AppSlugSubtopicRoute
   '/app/$slug/': typeof AppSlugIndexRoute
 }
@@ -412,6 +430,7 @@ export interface FileRouteTypes {
     | '/adec'
     | '/admin'
     | '/calculadora'
+    | '/checkout'
     | '/confianca'
     | '/curativos'
     | '/diagnosticos-aede'
@@ -448,6 +467,7 @@ export interface FileRouteTypes {
     | '/quizzes/$slug'
     | '/trilha/$slug'
     | '/api/public/cakto-webhook'
+    | '/api/public/payments'
     | '/app/$slug/$subtopic'
     | '/app/$slug/'
   fileRoutesByTo: FileRoutesByTo
@@ -457,6 +477,7 @@ export interface FileRouteTypes {
     | '/adec'
     | '/admin'
     | '/calculadora'
+    | '/checkout'
     | '/confianca'
     | '/curativos'
     | '/diagnosticos-aede'
@@ -492,6 +513,7 @@ export interface FileRouteTypes {
     | '/quizzes/$slug'
     | '/trilha/$slug'
     | '/api/public/cakto-webhook'
+    | '/api/public/payments'
     | '/app/$slug/$subtopic'
     | '/app/$slug'
   id:
@@ -501,6 +523,7 @@ export interface FileRouteTypes {
     | '/adec'
     | '/admin'
     | '/calculadora'
+    | '/checkout'
     | '/confianca'
     | '/curativos'
     | '/diagnosticos-aede'
@@ -537,6 +560,7 @@ export interface FileRouteTypes {
     | '/quizzes/$slug'
     | '/trilha/$slug'
     | '/api/public/cakto-webhook'
+    | '/api/public/payments'
     | '/app/$slug/$subtopic'
     | '/app/$slug/'
   fileRoutesById: FileRoutesById
@@ -547,6 +571,7 @@ export interface RootRouteChildren {
   AdecRoute: typeof AdecRoute
   AdminRoute: typeof AdminRoute
   CalculadoraRoute: typeof CalculadoraRoute
+  CheckoutRoute: typeof CheckoutRoute
   ConfiancaRoute: typeof ConfiancaRoute
   CurativosRoute: typeof CurativosRoute
   DiagnosticosAedeRoute: typeof DiagnosticosAedeRoute
@@ -582,6 +607,7 @@ export interface RootRouteChildren {
   PlanosSlugRoute: typeof PlanosSlugRoute
   TrilhaSlugRoute: typeof TrilhaSlugRoute
   ApiPublicCaktoWebhookRoute: typeof ApiPublicCaktoWebhookRoute
+  ApiPublicPaymentsRoute: typeof ApiPublicPaymentsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -796,6 +822,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ConfiancaRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/checkout': {
+      id: '/checkout'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof CheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/calculadora': {
       id: '/calculadora'
       path: '/calculadora'
@@ -880,6 +913,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSlugSubtopicRouteImport
       parentRoute: typeof AppSlugRoute
     }
+    '/api/public/payments': {
+      id: '/api/public/payments'
+      path: '/api/public/payments'
+      fullPath: '/api/public/payments'
+      preLoaderRoute: typeof ApiPublicPaymentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/cakto-webhook': {
       id: '/api/public/cakto-webhook'
       path: '/api/public/cakto-webhook'
@@ -920,6 +960,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdecRoute: AdecRoute,
   AdminRoute: AdminRoute,
   CalculadoraRoute: CalculadoraRoute,
+  CheckoutRoute: CheckoutRoute,
   ConfiancaRoute: ConfiancaRoute,
   CurativosRoute: CurativosRoute,
   DiagnosticosAedeRoute: DiagnosticosAedeRoute,
@@ -955,17 +996,8 @@ const rootRouteChildren: RootRouteChildren = {
   PlanosSlugRoute: PlanosSlugRoute,
   TrilhaSlugRoute: TrilhaSlugRoute,
   ApiPublicCaktoWebhookRoute: ApiPublicCaktoWebhookRoute,
+  ApiPublicPaymentsRoute: ApiPublicPaymentsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

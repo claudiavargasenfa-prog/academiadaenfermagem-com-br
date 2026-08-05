@@ -60,6 +60,7 @@ export const Route = createFileRoute("/planos/$slug")({
   },
   beforeLoad: ({ params }) => {
     if (!ALLOWED.has(params.slug)) throw notFound();
+    return undefined as never;
   },
   component: PlanoPage,
 });
@@ -203,18 +204,15 @@ function PlanoPage() {
                 </Link>
               ) : isLoggedIn ? (
                 <>
-                  {checkoutUrl && (
-                    <a
-                      href={checkoutUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="group inline-flex items-center gap-2 rounded-2xl bg-primary px-6 py-3.5 text-sm font-extrabold text-primary-foreground shadow-lg transition hover:-translate-y-0.5 hover:opacity-90 hover:shadow-xl"
-                    >
-                      <Sparkles className="h-4 w-4" />
-                      Assinar agora
-                      <ExternalLink className="h-4 w-4" />
-                    </a>
-                  )}
+                  <Link
+                    to="/checkout"
+                    search={{ plan: slug }}
+                    className="group inline-flex items-center gap-2 rounded-2xl bg-primary px-6 py-3.5 text-sm font-extrabold text-primary-foreground shadow-lg transition hover:-translate-y-0.5 hover:opacity-90 hover:shadow-xl"
+                  >
+                    <Sparkles className="h-4 w-4" />
+                    Assinar agora
+                    <span className="transition group-hover:translate-x-0.5">→</span>
+                  </Link>
                 </>
               ) : (
                 <>
@@ -226,16 +224,13 @@ function PlanoPage() {
                     Começar meus {TRIAL_DAYS} dias grátis
                     <span className="transition group-hover:translate-x-0.5">→</span>
                   </a>
-                  {checkoutUrl && (
-                    <a
-                      href={checkoutUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center gap-1.5 rounded-2xl border-2 border-white/70 bg-white/70 px-6 py-3.5 text-sm font-extrabold backdrop-blur transition hover:bg-white"
-                    >
-                      Já quero assinar <ExternalLink className="h-4 w-4" />
-                    </a>
-                  )}
+                  <Link
+                    to="/checkout"
+                    search={{ plan: slug }}
+                    className="inline-flex items-center gap-1.5 rounded-2xl border-2 border-white/70 bg-white/70 px-6 py-3.5 text-sm font-extrabold backdrop-blur transition hover:bg-white"
+                  >
+                    Já quero assinar <span className="ml-1">→</span>
+                  </Link>
                 </>
               )}
             </div>
@@ -361,16 +356,13 @@ function PlanoPage() {
                 Acessar mini apps →
               </Link>
             ) : isLoggedIn ? (
-              checkoutUrl && (
-                <a
-                  href={checkoutUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-1.5 rounded-xl bg-primary px-6 py-3 text-sm font-extrabold text-primary-foreground shadow hover:opacity-90"
-                >
-                  Assinar agora <ExternalLink className="h-4 w-4" />
-                </a>
-              )
+              <Link
+                to="/checkout"
+                search={{ plan: slug }}
+                className="inline-flex items-center gap-1.5 rounded-xl bg-primary px-6 py-3 text-sm font-extrabold text-primary-foreground shadow hover:opacity-90"
+              >
+                Assinar agora <span className="ml-1">→</span>
+              </Link>
             ) : (
               <>
                 <a
@@ -380,16 +372,13 @@ function PlanoPage() {
                   <Sparkles className="h-4 w-4" />
                   Começar meus {TRIAL_DAYS} dias grátis
                 </a>
-                {checkoutUrl && (
-                  <a
-                    href={checkoutUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-1.5 rounded-xl border-2 border-white/60 bg-white/90 px-6 py-3 text-sm font-extrabold hover:bg-white"
-                  >
-                    Assinar agora <ExternalLink className="h-4 w-4" />
-                  </a>
-                )}
+                <Link
+                  to="/checkout"
+                  search={{ plan: slug }}
+                  className="inline-flex items-center gap-1.5 rounded-xl border-2 border-white/60 bg-white/90 px-6 py-3 text-sm font-extrabold hover:bg-white"
+                >
+                  Assinar agora <span className="ml-1">→</span>
+                </Link>
               </>
             )}
           </div>
