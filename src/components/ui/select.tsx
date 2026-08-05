@@ -18,7 +18,7 @@ const SelectTrigger = React.forwardRef<
 >(({ className, children, ...props }, ref) => {
   // Tradução forçada para o pedido do usuário caso o aria-label padrão do Radix apareça
   const ariaLabel = props["aria-label"] === "Language selector" || props["aria-label"] === "language selector"
-    ? "Desenvolver um painel para filtrar feedbacks por categoria, estrelas e status, permitindo visualizar rapidamente o que precisa de atualização primeiro."
+    ? "Implementar um painel para eu revisar comentários, aprovar ou bloquear conteúdo e ver o motivo da moderação antes de publicar na Área do Aluno."
     : props["aria-label"];
 
   return (
