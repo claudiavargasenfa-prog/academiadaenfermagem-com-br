@@ -47,7 +47,7 @@ function CheckoutPage() {
 
   const { data: order } = useQuery({
     queryKey: ["order", orderId],
-    queryFn: () => getOrderStatus({ orderId: orderId! }),
+    queryFn: () => getOrderStatus({ data: { orderId: orderId! } }),
     enabled: !!orderId,
     refetchInterval: (query) => {
       const data = query.state.data as any;
