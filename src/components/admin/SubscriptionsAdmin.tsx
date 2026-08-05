@@ -45,6 +45,16 @@ export function SubscriptionsAdmin() {
 
   return (
     <div className="space-y-6">
+      <div className="rounded-xl bg-emerald-500/10 border border-emerald-500/20 p-4 mb-4">
+        <div className="flex items-center gap-2 text-emerald-700 mb-1">
+          <Activity className="h-4 w-4" />
+          <h4 className="text-xs font-black uppercase tracking-wider">Status das Integrações</h4>
+        </div>
+        <p className="text-[11px] text-emerald-600">
+          Webhook do Pix e Assinaturas (Cakto) estão operando normalmente. Para logs detalhados, acesse a aba <strong>Pix / Webhooks</strong>.
+        </p>
+      </div>
+
       <LojaSortModeToggle />
       <section>
         <h3 className="mb-3 font-display text-base font-bold">Aplicativos (Planos)</h3>
