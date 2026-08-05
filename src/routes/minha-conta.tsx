@@ -125,7 +125,7 @@ function MinhaContaPage() {
         </Card>
 
         <Card>
-          <h3 className="font-display text-base font-bold">App Básico</h3>
+          <h3 className="font-display text-base font-bold">Acesso Premium ADEC</h3>
           {access.basicActive ? (
             <>
               <p className="mt-2 text-sm font-semibold text-emerald-700">Assinatura ativa</p>
@@ -138,7 +138,7 @@ function MinhaContaPage() {
           ) : (
             <>
               <p className="mt-2 text-sm text-muted-foreground">
-                Você ainda não tem o App Básico ativo.
+                Você ainda não tem o Acesso Premium ativo.
               </p>
               {basico?.cakto_checkout_url && (
                 <a
