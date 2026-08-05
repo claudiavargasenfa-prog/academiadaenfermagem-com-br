@@ -128,9 +128,9 @@ export default function OfertasPeriodo({
         })}
       </div>
 
-      <p className="mt-3 text-[11px] text-muted-foreground">
-        Certificados digitais de 10h são emitidos dentro do app, no mini app que você escolher. O 2º aplicativo do
-        plano anual é escolhido em <strong>Minha Conta</strong> após a ativação.
+      <p className="mt-3 text-[11px] text-muted-foreground leading-relaxed">
+        Certificados digitais de 10h são emitidos dentro do app, no <strong>Conteúdo Técnico</strong> que você escolher. 
+        O 2º aplicativo do plano anual é ativado diretamente através da sua área de <strong>Minha Conta</strong>.
       </p>
     </section>
   );
