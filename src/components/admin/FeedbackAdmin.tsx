@@ -9,6 +9,7 @@ const input = "w-full rounded-lg border border-border bg-background px-3 py-2 te
 
 export function FeedbackAdmin() {
   const qc = useQueryClient();
+  const [activeTab, setActiveTab] = useState<"feedbacks" | "comentarios">("feedbacks");
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("todos");
   const [categoryFilter, setCategoryFilter] = useState("todos");
@@ -102,7 +103,25 @@ export function FeedbackAdmin() {
 
   return (
     <div className="space-y-4">
-      {/* Moderation Queue Header */}
+      {/* Tab Selector */}
+      <div className="flex gap-2 p-1 bg-foreground/5 rounded-xl border border-foreground/10 w-fit">
+        <button 
+          onClick={() => setActiveTab("feedbacks")}
+          className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${activeTab === 'feedbacks' ? 'bg-primary text-white shadow-sm' : 'text-muted-foreground hover:bg-foreground/5'}`}
+        >
+          FEEDBACKS DO APP
+        </button>
+        <button 
+          onClick={() => setActiveTab("comentarios")}
+          className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${activeTab === 'comentarios' ? 'bg-primary text-white shadow-sm' : 'text-muted-foreground hover:bg-foreground/5'}`}
+        >
+          ÁREA DO ALUNO
+        </button>
+      </div>
+
+      {activeTab === "feedbacks" ? (
+        <>
+          {/* Moderation Queue Header */}
       <div className="flex items-center justify-between bg-black p-4 rounded-2xl shadow-xl border border-gold/30">
         <div className="flex items-center gap-3">
           <div className="bg-gold/20 p-2 rounded-xl border border-gold/40 animate-pulse">
@@ -339,6 +358,169 @@ export function FeedbackAdmin() {
           <div className="text-center py-12 bg-foreground/5 rounded-2xl border border-dashed border-foreground/10">
             <MessageSquare className="h-8 w-8 mx-auto text-muted-foreground/30 mb-2" />
             <p className="text-xs text-muted-foreground font-bold uppercase">Nenhum feedback encontrado com estes filtros.</p>
+          </div>
+        )}
+      </div>
+      </>
+      ) : (
+        <StudentModeration />
+      )}
+    </div>
+  );
+}
+
+function StudentModeration() {
+  const qc = useQueryClient();
+  const [search, setSearch] = useState("");
+  const [filter, setFilter] = useState<"todos" | "pendente" | "aprovado">("todos");
+
+  const { data: comments, isLoading } = useQuery({
+    queryKey: ["admin-student-comments"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("student_comments")
+        .select(`
+          *,
+          profiles:user_id (full_name, email)
+        `)
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data;
+    }
+  });
+
+  const moderateMutation = useMutation({
+    mutationFn: async ({ id, approved }: { id: string, approved: boolean }) => {
+      const { error } = await supabase
+        .from("student_comments")
+        .update({ is_approved: approved, updated_at: new Date().toISOString() })
+        .eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["admin-student-comments"] });
+      qc.invalidateQueries({ queryKey: ["student-comments"] });
+      toast.success("Moderação concluída!");
+    }
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("student_comments").delete().eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["admin-student-comments"] });
+      toast.success("Comentário removido.");
+    }
+  });
+
+  const filtered = useMemo(() => {
+    if (!comments) return [];
+    return comments.filter((c: any) => {
+      const q = search.toLowerCase();
+      const matchesSearch = !search || 
+        c.content.toLowerCase().includes(q) || 
+        c.profiles?.full_name?.toLowerCase().includes(q);
+      
+      const matchesFilter = filter === "todos" || 
+        (filter === "pendente" && c.is_approved === null) ||
+        (filter === "aprovado" && c.is_approved === true);
+
+      return matchesSearch && matchesFilter;
+    });
+  }, [comments, search, filter]);
+
+  if (isLoading) return <Card><p className="text-sm text-muted-foreground">Carregando comentários...</p></Card>;
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center justify-between bg-black p-4 rounded-2xl shadow-xl border border-gold/30">
+        <div className="flex items-center gap-3">
+          <div className="bg-gold/20 p-2 rounded-xl border border-gold/40">
+            <Users className="h-6 w-6 text-gold" />
+          </div>
+          <div>
+            <h2 className="text-lg font-black text-white uppercase tracking-tighter">Área do Aluno</h2>
+            <p className="text-[10px] text-gold/70 font-bold uppercase">Moderação de Conteúdo</p>
+          </div>
+        </div>
+      </div>
+
+      <Card className="p-4 space-y-3">
+        <div className="flex flex-col gap-2 sm:flex-row">
+          <div className="relative flex-1">
+            <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+            <input
+              className={input}
+              placeholder="Buscar por aluno ou conteúdo..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </div>
+          <select className={`${input} w-[140px]`} value={filter} onChange={(e: any) => setFilter(e.target.value)}>
+            <option value="todos">Todos</option>
+            <option value="pendente">⏳ Pendentes</option>
+            <option value="aprovado">✅ Aprovados</option>
+          </select>
+        </div>
+      </Card>
+
+      <div className="space-y-3">
+        {filtered.map((c: any) => (
+          <Card key={c.id} className={`border-l-4 ${c.is_approved === null ? 'border-l-amber-500' : c.is_approved ? 'border-l-emerald-500' : 'border-l-red-500'}`}>
+            <div className="space-y-3">
+              <div className="flex items-start justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center">
+                    <User className="h-4 w-4 text-primary" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold leading-none">{c.profiles?.full_name || "Aluno da Academia"}</h4>
+                    <p className="text-[10px] text-muted-foreground mt-1">{new Date(c.created_at).toLocaleString()}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-foreground/5 p-3 rounded-lg">
+                <p className="text-xs text-foreground leading-relaxed italic">"{c.content}"</p>
+              </div>
+
+              <div className="flex items-center justify-between pt-1">
+                <div className="flex gap-2">
+                  {c.is_approved !== true && (
+                    <button 
+                      onClick={() => moderateMutation.mutate({ id: c.id, approved: true })}
+                      className="flex items-center gap-1 bg-emerald-600 text-white px-3 py-1.5 rounded-lg text-[10px] font-black uppercase hover:bg-emerald-700 transition-all"
+                    >
+                      <CheckCircle2 className="h-3 w-3" /> Aprovar
+                    </button>
+                  )}
+                  {c.is_approved !== false && (
+                    <button 
+                      onClick={() => moderateMutation.mutate({ id: c.id, approved: false })}
+                      className="flex items-center gap-1 bg-amber-500 text-white px-3 py-1.5 rounded-lg text-[10px] font-black uppercase hover:bg-amber-600 transition-all"
+                    >
+                      <EyeOff className="h-3 w-3" /> Bloquear
+                    </button>
+                  )}
+                </div>
+                
+                <button 
+                  onClick={() => { if(confirm("Apagar comentário permanentemente?")) deleteMutation.mutate(c.id); }}
+                  className="text-destructive hover:bg-destructive/10 p-2 rounded-lg transition-all"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </button>
+              </div>
+            </div>
+          </Card>
+        ))}
+
+        {filtered.length === 0 && (
+          <div className="text-center py-12 bg-foreground/5 rounded-2xl border border-dashed border-foreground/10">
+            <Users className="h-8 w-8 mx-auto text-muted-foreground/30 mb-2" />
+            <p className="text-xs text-muted-foreground font-bold uppercase">Nenhum comentário para moderar.</p>
           </div>
         )}
       </div>
