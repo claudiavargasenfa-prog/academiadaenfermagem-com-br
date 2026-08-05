@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { MessageSquareText, Send, CheckCircle2, Star } from "lucide-react";
+import { MessageSquareText, Send, CheckCircle2, Star, Lightbulb } from "lucide-react";
 
 const CATEGORIES = [
   "Conteúdo Técnico",
@@ -11,6 +11,7 @@ const CATEGORIES = [
 
 export function FeedbackCollector() {
   const [feedback, setFeedback] = useState("");
+  const [improvement, setImprovement] = useState("");
   const [rating, setRating] = useState(0);
   const [category, setCategory] = useState("");
   const [hover, setHover] = useState(0);
@@ -20,8 +21,9 @@ export function FeedbackCollector() {
     e.preventDefault();
     if (feedback.trim() && rating > 0 && category) {
       setSubmitted(true);
-      console.log("Feedback enviado:", { feedback, rating, category });
+      console.log("Feedback enviado:", { feedback, rating, category, improvement });
       setFeedback("");
+      setImprovement("");
       setRating(0);
       setCategory("");
     }
@@ -84,13 +86,29 @@ export function FeedbackCollector() {
                 </div>
               </div>
 
-              <textarea
-                value={feedback}
-                onChange={(e) => setFeedback(e.target.value)}
-                placeholder="Escreva aqui sua experiência ou sugestão..."
-                className="min-h-[100px] w-full rounded-xl border-white/50 bg-white/50 p-4 text-sm focus:ring-primary"
-                required
-              />
+              <div className="space-y-2 text-left">
+                <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground text-center">Sua mensagem</p>
+                <textarea
+                  value={feedback}
+                  onChange={(e) => setFeedback(e.target.value)}
+                  placeholder="Escreva aqui sua experiência ou sugestão..."
+                  className="min-h-[80px] w-full rounded-xl border-white/50 bg-white/50 p-4 text-sm focus:ring-primary shadow-sm"
+                  required
+                />
+              </div>
+
+              <div className="space-y-2 text-left">
+                <div className="flex items-center justify-center gap-1.5 mb-1">
+                  <Lightbulb className="h-3 w-3 text-gold" />
+                  <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Como posso melhorar?</p>
+                </div>
+                <textarea
+                  value={improvement}
+                  onChange={(e) => setImprovement(e.target.value)}
+                  placeholder="O que você mudaria para tornar o app ainda melhor?"
+                  className="min-h-[80px] w-full rounded-xl border-gold/20 bg-gold/5 p-4 text-sm focus:ring-gold shadow-sm placeholder:text-muted-foreground/50"
+                />
+              </div>
               <button
                 type="submit"
                 disabled={!category || rating === 0}
