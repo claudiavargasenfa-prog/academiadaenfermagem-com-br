@@ -28,9 +28,9 @@ export function PixMonitor() {
   });
 
   const filteredEvents = events?.filter(e => 
-    e.provider.toLowerCase().includes(search.toLowerCase()) ||
-    e.event_type.toLowerCase().includes(search.toLowerCase()) ||
-    e.external_id?.toLowerCase().includes(search.toLowerCase())
+    (e.provider?.toLowerCase() || "").includes(search.toLowerCase()) ||
+    (e.event_type?.toLowerCase() || "").includes(search.toLowerCase()) ||
+    (e.external_id?.toLowerCase() || "").includes(search.toLowerCase())
   );
 
   async function handleReprocess(id: string) {
