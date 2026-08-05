@@ -10,11 +10,11 @@ export function CertificadoFAQ() {
   const faqs = [
     {
       q: "Como funciona a emissão dos certificados?",
-      a: "Os certificados de 10 horas são emitidos diretamente no app após a conclusão do estudo de um conteúdo técnico. Eles possuem um código de validação único e podem ser salvos em PDF ou impressos."
+      a: "Os certificados são gerados automaticamente pelo sistema com assinatura eletrônica e registro de validação. Cada documento possui um código único e QR Code, tornando-o rastreável e autêntico sem a necessidade de plataformas externas de pagamento de taxas por emissão."
     },
     {
       q: "Os certificados são gratuitos?",
-      a: "Os certificados incluídos nos pacotes (assinaturas) são 100% gratuitos. Para conteúdos avulsos fora do seu plano, existe uma taxa de emissão de R$ 10,00 referente à assinatura eletrônica e processamento digital."
+      a: "Certificados de pacotes de assinatura são 100% gratuitos. Para conteúdos avulsos, há uma taxa de R$ 10,00 para a assinatura eletrônica e registro de validação. Importante: Você NÃO precisa cadastrar certificados na Cakto ou pagar taxas externas; nosso sistema gera o código único rastreável e a assinatura digital automaticamente, sem custos adicionais para você além da manutenção do app."
     },
     {
       q: "Qual o modelo e validade do certificado?",
