@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { Pencil, UserPlus, Trash2 } from "lucide-react";
+import { Pencil, UserPlus, Trash2, Activity } from "lucide-react";
 import { Card } from "@/components/AppShell";
 import { supabase } from "@/integrations/supabase/client";
 import {
