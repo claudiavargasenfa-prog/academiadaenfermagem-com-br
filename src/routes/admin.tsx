@@ -650,6 +650,7 @@ function MiniAppForm({
     track_academico: (app as any)?.track_academico ?? false,
     track_tecnico: (app as any)?.track_tecnico ?? false,
     track_enfermeiro: (app as any)?.track_enfermeiro ?? false,
+    track_obstetricia: (app as any)?.track_obstetricia ?? false,
   });
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
