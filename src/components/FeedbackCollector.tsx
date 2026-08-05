@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { MessageSquareText, Send, CheckCircle2, Star, Lightbulb, History, User, Circle } from "lucide-react";
+import { MessageSquareText, Send, CheckCircle2, Star, Lightbulb, History, User, Circle, Users, ShieldCheck, Clock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -23,6 +23,8 @@ export function FeedbackCollector() {
   const [hover, setHover] = useState(0);
   const [submitted, setSubmitted] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
+  const [activeTab, setActiveTab] = useState<"feedback" | "comunidade">("feedback");
+  const [newComment, setNewComment] = useState("");
 
   // Load draft from localStorage on mount
   useEffect(() => {
@@ -106,8 +108,28 @@ export function FeedbackCollector() {
 
   return (
     <section className="mb-12 mt-8 px-4 sm:px-0">
+      <div className="flex flex-col gap-4 mb-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex gap-2 p-1 bg-white/50 rounded-full border border-primary/10 w-fit">
+          <button 
+            onClick={() => setActiveTab("feedback")}
+            className={`px-4 py-1.5 rounded-full text-[10px] font-bold transition-all ${activeTab === 'feedback' ? 'bg-primary text-white shadow-sm' : 'text-muted-foreground hover:bg-white'}`}
+          >
+            MEU FEEDBACK
+          </button>
+          <button 
+            onClick={() => setActiveTab("comunidade")}
+            className={`px-4 py-1.5 rounded-full text-[10px] font-bold transition-all ${activeTab === 'comunidade' ? 'bg-primary text-white shadow-sm' : 'text-muted-foreground hover:bg-white'}`}
+          >
+            ÁREA DO ALUNO
+          </button>
+        </div>
+      </div>
+
       <div className="rounded-2xl border border-dashed border-primary/30 bg-primary/5 p-6 shadow-sm">
-        <div className="flex items-center justify-between mb-6">
+
+        {activeTab === "feedback" ? (
+          <>
+            <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-2">
             <div className="relative">
               <Circle className="h-3 w-3 fill-emerald-500 text-emerald-500 animate-pulse" />
@@ -276,7 +298,116 @@ export function FeedbackCollector() {
             </button>
           </div>
         )}
+          </>
+        ) : (
+          <StudentArea />
+        )}
       </div>
     </section>
+  );
+}
+
+function StudentArea() {
+  const [comment, setComment] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const queryClient = useQueryClient();
+
+  const { data: comments } = useQuery({
+    queryKey: ["student-comments"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("student_comments")
+        .select(`
+          *,
+          profiles:user_id (full_name)
+        `)
+        .eq("is_approved", true)
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data;
+    }
+  });
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!comment.trim()) return;
+
+    setIsSubmitting(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error("Não logado");
+
+      const { error } = await supabase
+        .from("student_comments")
+        .insert({ user_id: user.id, content: comment });
+
+      if (error) throw error;
+      
+      toast.success("Comentário enviado!", {
+        description: "Ele passará por uma análise técnica antes de ser publicado."
+      });
+      setComment("");
+    } catch (err) {
+      toast.error("Erro ao enviar comentário");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="space-y-6 animate-in fade-in duration-500">
+      <div className="text-center space-y-2">
+        <div className="flex justify-center mb-2">
+          <div className="rounded-full bg-primary/10 p-3">
+            <Users className="h-6 w-6 text-primary" />
+          </div>
+        </div>
+        <h3 className="font-display text-base font-bold text-foreground">ÁREA DE CONVIVÊNCIA DOS ALUNOS</h3>
+        <p className="text-[10px] text-muted-foreground uppercase tracking-widest px-4">Troque experiências e tire dúvidas com a comunidade</p>
+      </div>
+
+      <form onSubmit={handleSubmit} className="space-y-3 bg-white/40 p-4 rounded-xl border border-white/60">
+        <textarea
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+          placeholder="O que você está achando da Academia? Compartilhe aqui..."
+          className="w-full min-h-[80px] rounded-lg border-primary/10 bg-white/80 p-3 text-sm focus:ring-primary shadow-inner"
+        />
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center gap-1.5 text-[9px] text-amber-600 font-bold">
+            <ShieldCheck className="h-3.5 w-3.5" />
+            MODERAÇÃO ATIVA: TODO CONTEÚDO É AVALIADO
+          </div>
+          <button
+            disabled={!comment.trim() || isSubmitting}
+            className="rounded-full bg-primary px-6 py-2 text-[10px] font-bold text-white transition-all hover:shadow-md disabled:opacity-50"
+          >
+            {isSubmitting ? "ENVIANDO..." : "PUBLICAR"}
+          </button>
+        </div>
+      </form>
+
+      <div className="space-y-4">
+        <h4 className="text-[10px] font-black text-muted-foreground uppercase tracking-widest border-b border-primary/10 pb-2">Comentários Recentes</h4>
+        <div className="space-y-3 max-h-[400px] overflow-y-auto pr-1 scrollbar-hide">
+          {comments && comments.length > 0 ? (
+            comments.map((c: any) => (
+              <div key={c.id} className="bg-white/30 rounded-lg p-3 border border-white/40 shadow-sm transition-all hover:bg-white/50">
+                <div className="flex items-center justify-between mb-1.5">
+                  <span className="text-[10px] font-bold text-primary">{c.profiles?.full_name || "Aluno da Academia"}</span>
+                  <span className="text-[8px] text-muted-foreground">{new Date(c.created_at).toLocaleDateString()}</span>
+                </div>
+                <p className="text-xs text-foreground leading-relaxed">{c.content}</p>
+              </div>
+            ))
+          ) : (
+            <div className="text-center py-8 space-y-2 opacity-50">
+              <Clock className="h-5 w-5 mx-auto text-muted-foreground" />
+              <p className="text-[10px] font-bold uppercase">Nenhum comentário público ainda</p>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
   );
 }

@@ -638,6 +638,36 @@ export type Database = {
           },
         ]
       }
+      student_comments: {
+        Row: {
+          category: string | null
+          content: string
+          created_at: string
+          id: string
+          is_approved: boolean | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category?: string | null
+          content: string
+          created_at?: string
+          id?: string
+          is_approved?: boolean | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          category?: string | null
+          content?: string
+          created_at?: string
+          id?: string
+          is_approved?: boolean | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       subscription_plans: {
         Row: {
           cakto_checkout_url: string | null
@@ -861,6 +891,7 @@ export type Database = {
           created_at: string
           id: string
           improvement_suggestion: string | null
+          is_public: boolean | null
           message: string
           rating: number
           status: string
@@ -873,6 +904,7 @@ export type Database = {
           created_at?: string
           id?: string
           improvement_suggestion?: string | null
+          is_public?: boolean | null
           message: string
           rating: number
           status?: string
@@ -885,6 +917,7 @@ export type Database = {
           created_at?: string
           id?: string
           improvement_suggestion?: string | null
+          is_public?: boolean | null
           message?: string
           rating?: number
           status?: string
