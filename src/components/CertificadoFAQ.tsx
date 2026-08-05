@@ -18,7 +18,7 @@ export function CertificadoFAQ() {
     },
     {
       q: "Qual o modelo e validade do certificado?",
-      a: "O certificado segue um modelo técnico elegante com selo da Academia da Enfermagem (ADEC), contendo seu nome completo, o tema estudado, carga horária de 10h e data de emissão. A validade é garantida por um QR Code e código de autenticidade rastreável. Ao escanear o QR Code, a escola ou empresa poderá confirmar a veracidade do documento em nosso portal oficial, visualizando nome, conteúdo, data e horas concluídas."
+      a: "O certificado segue um modelo técnico elegante com Selo da Academia da Enfermagem (ADEC), contendo seu nome completo, o tema estudado, carga horária de 10h e data de emissão. A validade é garantida por um QR Code e código de autenticidade rastreável, permitindo a confirmação imediata da veracidade do documento."
     },
     {
       q: "Como solicitar o certificado de um conteúdo técnico?",
@@ -66,8 +66,8 @@ export function CertificadoFAQ() {
           <div className="flex gap-2">
             <FileText className="h-4 w-4 shrink-0" />
             <p>
-              <strong>Validação Técnica:</strong> O certificado contém o selo ADEC, carga horária de 10h, 
-              sua identificação profissional e <strong>QR Code de Autenticidade</strong> para verificação imediata de veracidade por instituições e empresas.
+              <strong>Validação Técnica:</strong> O certificado contém o <strong>Selo da ADEC</strong>, carga horária de 10h, 
+              sua identificação profissional e <strong>QR Code de Autenticidade</strong> para verificação imediata de veracidade.
             </p>
           </div>
         </div>
