@@ -1,6 +1,6 @@
 
 import { useQuery } from "@tanstack/react-query";
-import { HelpCircle, ChevronDown, Award, FileText, CheckCircle2 } from "lucide-react";
+import { HelpCircle, ChevronDown, Award, FileText, CheckCircle2, Eye } from "lucide-react";
 import { Card } from "@/components/AppShell";
 import { useState } from "react";
 
@@ -22,7 +22,7 @@ export function CertificadoFAQ() {
     },
     {
       q: "Como solicitar o certificado de um conteúdo técnico?",
-      a: "Basta acessar a área 'Minha Conta', selecionar o conteúdo técnico estudado na seção de certificados e clicar em 'Emitir'. Se o certificado não fizer parte do seu plano, o sistema gerará a taxa de emissão automaticamente."
+      a: "Basta acessar a área 'Minha Conta', selecionar o conteúdo técnico estudado na seção de certificados e clicar em 'Emitir'. O sistema gera um PDF oficial com Selo da ADEC e QR Code de autenticidade pronto para download. Você também poderá ver uma pré-visualização do documento com uma tarja 'MODELO' antes de finalizar a emissão."
     }
   ];
 
@@ -68,6 +68,14 @@ export function CertificadoFAQ() {
             <p>
               <strong>Validação Técnica:</strong> O certificado contém o <strong>Selo da ADEC</strong>, carga horária de 10h, 
               sua identificação profissional e <strong>QR Code de Autenticidade</strong> para verificação imediata de veracidade.
+            </p>
+          </div>
+        </div>
+        <div className="rounded-xl bg-blue-500/5 p-4 text-[11px] text-blue-700">
+          <div className="flex gap-2">
+            <Eye className="h-4 w-4 shrink-0" />
+            <p>
+              <strong>Pré-visualização:</strong> Visualize o layout do seu certificado com uma tarja de <strong>MODELO</strong> antes de realizar o download do PDF oficial.
             </p>
           </div>
         </div>
