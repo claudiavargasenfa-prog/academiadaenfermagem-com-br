@@ -159,11 +159,11 @@ function MinhaContaPage() {
 
       <section className="mt-6">
 
-        <h2 className="mb-3 font-display text-lg font-bold">Meus mini apps extras</h2>
+        <h2 className="mb-3 font-display text-lg font-bold">Módulos Especializados Adquiridos</h2>
         {Object.keys(access.extraAccessByApp).length === 0 ? (
           <Card>
             <p className="text-sm text-muted-foreground">
-              Você ainda não comprou nenhum mini app extra.{" "}
+              Você ainda não adquiriu nenhum módulo de especialização extra.{" "}
               <Link to="/loja" className="font-semibold text-primary hover:underline">
                 Ver loja
               </Link>
