@@ -407,13 +407,29 @@ function AdminContent() {
       {(() => {
         const allRaw = appsQ.data ?? [];
         const q = search.trim().toLowerCase();
+        
+        const placementsByMiniApp = new Map<string, Set<string>>();
+        for (const p of placementsAllQ.data ?? []) {
+          const set = placementsByMiniApp.get(p.mini_app_id) ?? new Set<string>();
+          set.add(p.app_id);
+          placementsByMiniApp.set(p.mini_app_id, set);
+        }
+
+        const filteredByApp = selectedAppId === "all" 
+          ? allRaw 
+          : allRaw.filter(ma => {
+              const appIds = placementsByMiniApp.get(ma.id) || new Set();
+              return appIds.has(selectedAppId!);
+            });
+
         const all = q
-          ? allRaw.filter((a: any) =>
+          ? filteredByApp.filter((a: any) =>
               [a.name, a.slug, a.description, a.kind]
                 .filter(Boolean)
                 .some((v: string) => v.toLowerCase().includes(q)),
             )
-          : allRaw;
+          : filteredByApp;
+
         const availableApps = (availableAppsQ.data ?? [])
           .filter((a) => a.is_active)
           .slice()
