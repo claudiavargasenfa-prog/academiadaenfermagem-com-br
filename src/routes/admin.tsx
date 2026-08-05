@@ -454,6 +454,7 @@ function AdminContent() {
           if (legacy.track_academico && appBySlug.get("academico")) ids.add(appBySlug.get("academico")!.id);
           if (legacy.track_tecnico && appBySlug.get("tecnico")) ids.add(appBySlug.get("tecnico")!.id);
           if (legacy.track_enfermeiro && appBySlug.get("enfermeiro")) ids.add(appBySlug.get("enfermeiro")!.id);
+          if (legacy.track_obstetricia && appBySlug.get("obstetricia")) ids.add(appBySlug.get("obstetricia")!.id);
           return ids;
         };
         const appLabelsForMiniApp = (miniApp: MiniApp) => {
