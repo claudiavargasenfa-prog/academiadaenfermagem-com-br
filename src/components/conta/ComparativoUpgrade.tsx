@@ -1,5 +1,6 @@
 import { Award, Check, CreditCard, Sparkles, Star, TrendingUp, Zap } from "lucide-react";
 import { fetchPlanOffers, formatPriceBRL, type PlanOffer, TRACKS, type TrackSlug } from "@/lib/access";
+import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { Card } from "@/components/AppShell";
 
@@ -81,25 +82,18 @@ export default function ComparativoUpgrade() {
                         ))}
                       </ul>
 
-                      {o.cakto_checkout_url ? (
-                        <a
-                          href={o.cakto_checkout_url}
-                          target="_blank"
-                          rel="noreferrer"
-                          className={`mt-auto flex w-full items-center justify-center gap-2 rounded-xl py-2.5 text-xs font-black transition-all ${
-                            isBestValue 
-                            ? "gold-gradient text-white shadow-md hover:scale-[1.02]" 
-                            : "bg-primary/10 text-primary hover:bg-primary/20"
-                          }`}
-                        >
-                          <Zap className="h-3 w-3" />
-                          {isBestValue ? "UPGRADE AGORA" : "ADQUIRIR"}
-                        </a>
-                      ) : (
-                        <div className="mt-auto rounded-xl bg-muted/50 py-2 text-center text-[10px] font-bold text-muted-foreground">
-                          Checkout em configuração
-                        </div>
-                      )}
+                      <Link
+                        to="/checkout"
+                        search={{ plan: track.slug }}
+                        className={`mt-auto flex w-full items-center justify-center gap-2 rounded-xl py-2.5 text-xs font-black transition-all ${
+                          isBestValue 
+                          ? "gold-gradient text-white shadow-md hover:scale-[1.02]" 
+                          : "bg-primary/10 text-primary hover:bg-primary/20"
+                        }`}
+                      >
+                        <Zap className="h-3 w-3" />
+                        {isBestValue ? "UPGRADE AGORA" : "ADQUIRIR"}
+                      </Link>
                     </div>
                   );
                 })}

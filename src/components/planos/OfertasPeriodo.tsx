@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { ExternalLink, Sparkles } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { Link } from "@tanstack/react-router";
 
 type Offer = {
   id: string;
@@ -101,15 +102,14 @@ export default function OfertasPeriodo({
                   <span className="block rounded-xl bg-emerald-50 px-4 py-3 text-center text-xs font-extrabold text-emerald-800">
                     Você já tem acesso ativo
                   </span>
-                ) : o.cakto_checkout_url ? (
-                  <a
-                    href={o.cakto_checkout_url}
-                    target="_blank"
-                    rel="noreferrer"
+                ) : (
+                  <Link
+                    to="/checkout"
+                    search={{ plan: slug }}
                     className="inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-primary px-4 py-3 text-sm font-extrabold text-primary-foreground shadow transition hover:opacity-90"
                   >
                     Assinar {meta.title.toLowerCase()} <ExternalLink className="h-4 w-4" />
-                  </a>
+                  </Link>
                 ) : isLoggedIn ? (
                   <span className="block rounded-xl border border-dashed border-primary/40 px-4 py-3 text-center text-xs font-bold text-muted-foreground">
                     Checkout em configuração — disponível em breve
