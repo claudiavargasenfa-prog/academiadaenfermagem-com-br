@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState, useMemo } from "react";
-import { Pencil, Plus, Trash2, ArrowLeft, LayoutGrid } from "lucide-react";
+import { Pencil, Plus, Trash2, ArrowLeft, LayoutGrid, FlaskConical } from "lucide-react";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
 import { MiniAppHtmlContent } from "@/components/MiniAppContent";
 import { supabase } from "@/integrations/supabase/client";
@@ -17,6 +17,7 @@ import { FeedbackAdmin } from "@/components/admin/FeedbackAdmin";
 import { PixMonitor } from "@/components/admin/PixMonitor";
 import { PaymentsAdmin } from "@/components/admin/PaymentsAdmin";
 import { DashboardAdmin } from "@/components/admin/DashboardAdmin";
+import { PaymentTester } from "@/components/admin/PaymentTester";
 import { QUIZZES } from "@/data/quizzes";
 
 export const Route = createFileRoute("/admin")({
@@ -57,7 +58,7 @@ function AdminPage() {
 
 function AdminContent() {
   const qc = useQueryClient();
-  const [tab, setTab] = useState<"dashboard" | "apps" | "organize" | "subs" | "users" | "texts" | "feedbacks" | "pix" | "payments">("dashboard");
+  const [tab, setTab] = useState<"dashboard" | "apps" | "organize" | "subs" | "users" | "texts" | "feedbacks" | "pix" | "payments" | "test_links">("dashboard");
   const [selectedAppId, setSelectedAppId] = useState<string | null>(null);
   const [editing, setEditing] = useState<MiniApp | null>(null);
   const [creating, setCreating] = useState(false);
@@ -318,10 +319,22 @@ function AdminContent() {
         >
           💳 Vendas / Pedidos
         </button>
+        <button
+          type="button"
+          onClick={() => {
+            setTab("test_links");
+            setSelectedAppId(null);
+          }}
+          className={`flex-1 rounded-lg px-3 py-2 ${tab === "test_links" ? "bg-amber-600 text-white shadow-lg shadow-amber-600/20" : "text-muted-foreground hover:bg-amber-50"}`}
+        >
+          🧪 Testar Links MP
+        </button>
       </div>
 
       {tab === "dashboard" ? (
         <DashboardAdmin />
+      ) : tab === "test_links" ? (
+        <PaymentTester />
       ) : tab === "payments" ? (
         <PaymentsAdmin />
       ) : tab === "pix" ? (
