@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState, useMemo } from "react";
-import { Search, Filter, Star, CheckCircle2, MessageSquare, Clock, User, Reply, Trash2, Eye, EyeOff, ShieldCheck, XCircle, Users } from "lucide-react";
+import { Search, Filter, Star, CheckCircle2, MessageSquare, Clock, User, Reply, Trash2, Eye, EyeOff, ShieldCheck, XCircle, Users, Bell, ListTodo } from "lucide-react";
 import { Card } from "@/components/AppShell";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -55,7 +55,7 @@ export function FeedbackAdmin() {
       setModerating(null);
       setModerationReason("");
       setReplyText("");
-      toast.success("Feedback atualizado!");
+      toast.success("Feedback atualizado e aluno notificado!");
     }
   });
 
@@ -102,6 +102,22 @@ export function FeedbackAdmin() {
 
   return (
     <div className="space-y-4">
+      {/* Moderation Queue Header */}
+      <div className="flex items-center justify-between bg-black p-4 rounded-2xl shadow-xl border border-gold/30">
+        <div className="flex items-center gap-3">
+          <div className="bg-gold/20 p-2 rounded-xl border border-gold/40 animate-pulse">
+            <ListTodo className="h-6 w-6 text-gold" />
+          </div>
+          <div>
+            <h2 className="text-lg font-black text-white uppercase tracking-tighter">Fila de Moderação</h2>
+            <p className="text-[10px] text-gold/70 font-bold uppercase">Gestão Ativa de Comunidade</p>
+          </div>
+        </div>
+        <div className="flex flex-col items-end">
+          <span className="bg-gold px-2 py-0.5 rounded text-[10px] font-black text-black">ADMINISTRAÇÃO ADEC</span>
+        </div>
+      </div>
+
       {/* Stats Row */}
       <div className="grid grid-cols-3 gap-3">
         <div className="rounded-xl bg-amber-500/10 p-3 border border-amber-500/20 text-center">
@@ -273,7 +289,10 @@ export function FeedbackAdmin() {
                   </div>
                   
                   <div className="space-y-1">
-                    <label className="text-[9px] font-bold text-amber-800 uppercase ml-1">Motivo da Moderação / Observação Interna:</label>
+                    <label className="text-[9px] font-bold text-amber-800 uppercase ml-1 flex items-center gap-1">
+                      <Bell className="h-3 w-3" /> Motivo da Decisão (Será enviado ao aluno):
+                    </label>
+
                     <textarea
                       className={`${input} border-amber-200 focus:ring-amber-500/30 text-xs`}
                       rows={2}
