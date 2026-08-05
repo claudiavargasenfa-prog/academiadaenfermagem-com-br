@@ -299,7 +299,7 @@ function AdminContent() {
         <SubscriptionsAdmin />
       ) : tab === "organize" ? (
         <AppsAdmin />
-      ) : !selectedAppId ? (
+      ) : !selectedAppId && tab === "apps" ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
           {(availableAppsQ.data ?? []).filter(a => a.is_active).map((app) => (
             <button
@@ -341,7 +341,7 @@ function AdminContent() {
             </div>
           </button>
         </div>
-      ) : (
+      ) : tab === "apps" && selectedAppId ? (
         <>
           <div className="mb-6 flex items-center justify-between">
             <button
