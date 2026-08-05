@@ -562,7 +562,7 @@ function AdminContent() {
                 .slice()
                 .sort((a: any, b: any) => (a.name ?? "").localeCompare(b.name ?? "", "pt-BR"));
               return (
-                <section key={sec.title}>
+                <section key={sec.id}>
                   <h2 className="mb-2 flex items-center gap-2 border-b border-foreground/10 pb-1 font-display text-lg font-bold">
                     <span>{sec.emoji}</span> {sec.title}
                     <span className="text-xs font-normal text-muted-foreground">({items.length})</span>
@@ -700,6 +700,7 @@ function MiniAppForm({
     if (slug === "academico") setForm((f) => ({ ...f, track_academico: checked }));
     else if (slug === "tecnico") setForm((f) => ({ ...f, track_tecnico: checked }));
     else if (slug === "enfermeiro") setForm((f) => ({ ...f, track_enfermeiro: checked }));
+    else if (slug === "obstetricia") setForm((f) => ({ ...f, track_obstetricia: checked }));
   };
 
   async function handleSave(e: React.FormEvent) {
