@@ -105,29 +105,33 @@ function StoreHomeContent() {
               return (
                 <div
                   key={plan.id}
-                  className="relative flex flex-col overflow-hidden rounded-2xl border border-white/40 p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+                  className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/40 p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
                   style={cardStyle}
                   data-app={slug}
                 >
+                  <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
                   <div className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-white/30 blur-2xl" />
-                  <div className="mb-2 flex items-center gap-2">
-                    <span className="text-3xl">{appRow?.emoji ?? "🚪"}</span>
-                    <h3 className="font-display text-base font-extrabold">{plan.name}</h3>
+                  <div className="relative mb-3 flex items-center gap-3">
+                    <span className="text-4xl transition-transform duration-500 group-hover:scale-110">{appRow?.emoji ?? "🚪"}</span>
+                    <h3 className="font-display text-lg font-black tracking-tight">{plan.name}</h3>
                   </div>
                   <PlanSlogan slug={slug} />
-                  <p className="text-xs font-semibold opacity-80">
-                    🔒 Conteúdo exclusivo — módulos revelados na página do aplicativo.
-                  </p>
+                  <div className="relative mb-4 flex items-start gap-2 rounded-xl bg-black/5 p-2">
+                    <span className="mt-0.5">🔒</span>
+                    <p className="text-[10px] font-bold leading-tight opacity-80">
+                      CONTEÚDO PREMIUM EXCLUSIVO: Os módulos só podem ser visualizados por assinantes ou após clicar em descobrir.
+                    </p>
+                  </div>
 
-                  <div className="mt-auto space-y-2 pt-5">
+                  <div className="relative mt-auto space-y-2 pt-4">
                     {subscribed ? (
                       <>
                         <Link
                           to="/trilha/$slug"
                           params={{ slug }}
-                          className="block w-full rounded-xl bg-foreground py-2.5 text-center text-sm font-extrabold text-background shadow hover:opacity-90"
+                          className="block w-full scale-100 rounded-xl bg-foreground py-3 text-center text-sm font-black uppercase tracking-wider text-background shadow-lg transition-transform active:scale-95 hover:scale-[1.02]"
                         >
-                          Entrar no aplicativo →
+                          Acessar Agora →
                         </Link>
                         <span className="block w-full rounded-xl bg-white/40 py-2 text-center text-xs font-bold">
                           {inTrial
@@ -139,9 +143,9 @@ function StoreHomeContent() {
                       <Link
                         to="/planos/$slug"
                         params={{ slug }}
-                        className="block w-full rounded-xl bg-foreground py-2.5 text-center text-sm font-extrabold text-background shadow hover:opacity-90"
+                        className="group/btn block w-full scale-100 rounded-xl bg-foreground py-3 text-center text-sm font-black uppercase tracking-wider text-background shadow-lg transition-all active:scale-95 hover:scale-[1.02] hover:shadow-black/20"
                       >
-                        Descobrir o que tem dentro →
+                        <span className="inline-block transition-transform group-hover/btn:translate-x-1">Descobrir Conteúdo →</span>
                       </Link>
                     )}
 
