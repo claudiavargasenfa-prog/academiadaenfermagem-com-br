@@ -13,8 +13,8 @@ export function CertificadoFAQ() {
       a: "Os certificados são gerados automaticamente pelo sistema com assinatura eletrônica e registro de validação. Cada documento possui um código único e QR Code, tornando-o rastreável e autêntico sem a necessidade de plataformas externas de pagamento de taxas por emissão."
     },
     {
-      q: "Os certificados são gratuitos?",
-      a: "Certificados de pacotes de assinatura são 100% gratuitos. Para conteúdos avulsos, há uma taxa de R$ 10,00 para a assinatura eletrônica e registro de validação. Importante: Você NÃO precisa cadastrar certificados na Cakto ou pagar taxas externas; nosso sistema gera o código único rastreável e a assinatura digital automaticamente, sem custos adicionais para você além da manutenção do app."
+      q: "Como é feito o pagamento da taxa de R$ 10,00?",
+      a: "Para certificados avulsos (fora do plano), o pagamento de R$ 10,00 é realizado via PIX direto para a conta da Academia da Enfermagem. Após o envio do comprovante no sistema, a assinatura eletrônica e o código único de validação são liberados automaticamente. Dessa forma, garantimos que o valor integral da taxa seja destinado à manutenção dos serviços, sem descontos de plataformas externas."
     },
     {
       q: "Qual o modelo e validade do certificado?",
