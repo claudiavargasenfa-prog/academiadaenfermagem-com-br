@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState, useMemo } from "react";
-import { Search, Filter, Star, CheckCircle2, MessageSquare, Clock, User, Reply, Trash2, Eye, EyeOff } from "lucide-react";
+import { Search, Filter, Star, CheckCircle2, MessageSquare, Clock, User, Reply, Trash2, Eye, EyeOff, ShieldCheck, XCircle, Users } from "lucide-react";
 import { Card } from "@/components/AppShell";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -14,6 +14,8 @@ export function FeedbackAdmin() {
   const [categoryFilter, setCategoryFilter] = useState("todos");
   const [ratingFilter, setRatingFilter] = useState("todos");
   const [replyingTo, setReplyingTo] = useState<string | null>(null);
+  const [moderating, setModerating] = useState<string | null>(null);
+  const [moderationReason, setModerationReason] = useState("");
   const [replyText, setReplyText] = useState("");
 
   const { data: feedbacks, isLoading } = useQuery({
@@ -32,16 +34,26 @@ export function FeedbackAdmin() {
   });
 
   const updateMutation = useMutation({
-    mutationFn: async ({ id, status, admin_response, is_public }: any) => {
+    mutationFn: async (vars: any) => {
+      const dataToUpdate: any = { 
+        updated_at: new Date().toISOString() 
+      };
+      if (vars.status !== undefined) dataToUpdate.status = vars.status;
+      if (vars.admin_response !== undefined) dataToUpdate.admin_response = vars.admin_response;
+      if (vars.is_public !== undefined) dataToUpdate.is_public = vars.is_public;
+      if (vars.moderation_reason !== undefined) dataToUpdate.moderation_reason = vars.moderation_reason;
+
       const { error } = await supabase
         .from("user_feedbacks")
-        .update({ status, admin_response, is_public, updated_at: new Date().toISOString() })
-        .eq("id", id);
+        .update(dataToUpdate)
+        .eq("id", vars.id);
       if (error) throw error;
     },
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["admin-feedbacks"] });
       setReplyingTo(null);
+      setModerating(null);
+      setModerationReason("");
       setReplyText("");
       toast.success("Feedback atualizado!");
     }
@@ -189,7 +201,7 @@ export function FeedbackAdmin() {
               )}
 
               <div className="flex items-center justify-between pt-2">
-                <div className="flex gap-1.5">
+                <div className="flex gap-1.5 flex-wrap">
                   <button
                     onClick={() => updateMutation.mutate({ id: f.id, status: f.status === 'pendente' ? 'lido' : f.status })}
                     className={`flex items-center gap-1 rounded-full px-3 py-1 text-[9px] font-bold uppercase transition-all ${
@@ -198,14 +210,18 @@ export function FeedbackAdmin() {
                   >
                     <CheckCircle2 className="h-3 w-3" /> {f.status}
                   </button>
+                  
                   <button
-                    onClick={() => updateMutation.mutate({ id: f.id, is_public: !f.is_public })}
+                    onClick={() => {
+                      setModerating(moderating === f.id ? null : f.id);
+                      setModerationReason(f.moderation_reason || "");
+                    }}
                     className={`flex items-center gap-1 rounded-full px-3 py-1 text-[9px] font-bold uppercase transition-all ${
-                      f.is_public ? 'bg-primary text-white' : 'bg-foreground/5 text-muted-foreground'
+                      f.is_public ? 'bg-emerald-500 text-white shadow-sm' : 'bg-amber-500 text-white shadow-sm'
                     }`}
                   >
-                    {f.is_public ? <Eye className="h-3 w-3" /> : <EyeOff className="h-3 w-3" />}
-                    {f.is_public ? "Público" : "Privado"}
+                    <ShieldCheck className="h-3 w-3" />
+                    {f.is_public ? "APROVADO NA ÁREA DO ALUNO" : "BLOQUEADO / EM ANÁLISE"}
                   </button>
                 </div>
 
@@ -245,6 +261,54 @@ export function FeedbackAdmin() {
                     >
                       Enviar Resposta
                     </button>
+                  </div>
+                </div>
+              )}
+              
+              {moderating === f.id && (
+                <div className="mt-2 p-3 bg-amber-50 rounded-xl border border-amber-200 space-y-3 animate-in fade-in zoom-in-95 duration-200">
+                  <div className="flex items-center gap-2 mb-1">
+                    <ShieldCheck className="h-4 w-4 text-amber-600" />
+                    <h5 className="text-[10px] font-black uppercase text-amber-700">Painel de Moderação</h5>
+                  </div>
+                  
+                  <div className="space-y-1">
+                    <label className="text-[9px] font-bold text-amber-800 uppercase ml-1">Motivo da Moderação / Observação Interna:</label>
+                    <textarea
+                      className={`${input} border-amber-200 focus:ring-amber-500/30 text-xs`}
+                      rows={2}
+                      placeholder="Ex: Contém dados sensíveis, Linguagem imprópria, Elogio técnico aprovado..."
+                      value={moderationReason}
+                      onChange={(e) => setModerationReason(e.target.value)}
+                    />
+                  </div>
+
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="flex gap-2">
+                      <button 
+                        onClick={() => updateMutation.mutate({ 
+                          id: f.id, 
+                          is_public: false, 
+                          moderation_reason: moderationReason,
+                          status: 'lido' 
+                        })}
+                        className="flex items-center gap-1.5 px-4 py-2 bg-red-500 text-white rounded-lg text-[10px] font-black uppercase hover:bg-red-600 transition-colors shadow-sm"
+                      >
+                        <XCircle className="h-3 w-3" /> Bloquear
+                      </button>
+                      <button 
+                        onClick={() => updateMutation.mutate({ 
+                          id: f.id, 
+                          is_public: true, 
+                          moderation_reason: moderationReason,
+                          status: 'lido' 
+                        })}
+                        className="flex items-center gap-1.5 px-4 py-2 bg-emerald-600 text-white rounded-lg text-[10px] font-black uppercase hover:bg-emerald-700 transition-colors shadow-sm"
+                      >
+                        <ShieldCheck className="h-3 w-3" /> Aprovar Publicação
+                      </button>
+                    </div>
+                    <button onClick={() => setModerating(null)} className="text-[9px] font-bold text-amber-700 uppercase hover:underline">Fechar</button>
                   </div>
                 </div>
               )}
