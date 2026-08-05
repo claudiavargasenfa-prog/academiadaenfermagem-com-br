@@ -15,6 +15,7 @@ import {
   type TrackSlug,
 } from "@/lib/access";
 import BeneficiosPlano from "@/components/conta/BeneficiosPlano";
+import ComparativoUpgrade from "@/components/conta/ComparativoUpgrade";
 
 
 
@@ -156,6 +157,8 @@ function MinhaContaPage() {
       </div>
 
       <BeneficiosPlano />
+      
+      <ComparativoUpgrade />
 
       <section className="mt-6">
 
