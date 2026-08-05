@@ -13,6 +13,7 @@ import { BadgesEditor } from "@/components/admin/BadgesEditor";
 import { SubtopicsAdmin } from "@/components/admin/SubtopicsAdmin";
 import { AppsAdmin } from "@/components/admin/AppsAdmin";
 import { fetchApps } from "@/lib/apps";
+import { FeedbackAdmin } from "@/components/admin/FeedbackAdmin";
 import { QUIZZES } from "@/data/quizzes";
 
 export const Route = createFileRoute("/admin")({
@@ -53,7 +54,7 @@ function AdminPage() {
 
 function AdminContent() {
   const qc = useQueryClient();
-  const [tab, setTab] = useState<"apps" | "organize" | "subs" | "users" | "texts">("apps");
+  const [tab, setTab] = useState<"apps" | "organize" | "subs" | "users" | "texts" | "feedbacks">("apps");
   const [editing, setEditing] = useState<MiniApp | null>(null);
   const [creating, setCreating] = useState(false);
   const [search, setSearch] = useState("");
@@ -258,9 +259,18 @@ function AdminContent() {
         >
           Textos do App
         </button>
+        <button
+          type="button"
+          onClick={() => setTab("feedbacks")}
+          className={`flex-1 rounded-lg px-3 py-2 ${tab === "feedbacks" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
+        >
+          Feedbacks
+        </button>
       </div>
 
-      {tab === "texts" ? (
+      {tab === "feedbacks" ? (
+        <FeedbackAdmin />
+      ) : tab === "texts" ? (
         <TextsAdmin />
       ) : tab === "users" ? (
         <UsersAdmin />
