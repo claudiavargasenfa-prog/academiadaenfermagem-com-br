@@ -268,9 +268,18 @@ function AdminContent() {
         >
           Feedbacks
         </button>
+        <button
+          type="button"
+          onClick={() => setTab("pix")}
+          className={`flex-1 rounded-lg px-3 py-2 ${tab === "pix" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
+        >
+          Pix / Webhooks
+        </button>
       </div>
 
-      {tab === "feedbacks" ? (
+      {tab === "pix" ? (
+        <PixMonitor />
+      ) : tab === "feedbacks" ? (
         <FeedbackAdmin />
       ) : tab === "texts" ? (
         <TextsAdmin />
