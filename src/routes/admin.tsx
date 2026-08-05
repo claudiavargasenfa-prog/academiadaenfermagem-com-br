@@ -16,6 +16,7 @@ import { fetchApps } from "@/lib/apps";
 import { FeedbackAdmin } from "@/components/admin/FeedbackAdmin";
 import { PixMonitor } from "@/components/admin/PixMonitor";
 import { PaymentsAdmin } from "@/components/admin/PaymentsAdmin";
+import { DashboardAdmin } from "@/components/admin/DashboardAdmin";
 import { QUIZZES } from "@/data/quizzes";
 
 export const Route = createFileRoute("/admin")({
@@ -56,7 +57,7 @@ function AdminPage() {
 
 function AdminContent() {
   const qc = useQueryClient();
-  const [tab, setTab] = useState<"apps" | "organize" | "subs" | "users" | "texts" | "feedbacks" | "pix" | "payments">("apps");
+  const [tab, setTab] = useState<"dashboard" | "apps" | "organize" | "subs" | "users" | "texts" | "feedbacks" | "pix" | "payments">("dashboard");
   const [selectedAppId, setSelectedAppId] = useState<string | null>(null);
   const [editing, setEditing] = useState<MiniApp | null>(null);
   const [creating, setCreating] = useState(false);
@@ -230,6 +231,16 @@ function AdminContent() {
         <button
           type="button"
           onClick={() => {
+            setTab("dashboard");
+            setSelectedAppId(null);
+          }}
+          className={`flex-1 rounded-lg px-3 py-2 ${tab === "dashboard" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
+        >
+          Painel ADEC
+        </button>
+        <button
+          type="button"
+          onClick={() => {
             setTab("apps");
             setSelectedAppId(null);
           }}
@@ -309,7 +320,9 @@ function AdminContent() {
         </button>
       </div>
 
-      {tab === "payments" ? (
+      {tab === "dashboard" ? (
+        <DashboardAdmin />
+      ) : tab === "payments" ? (
         <PaymentsAdmin />
       ) : tab === "pix" ? (
         <PixMonitor />
