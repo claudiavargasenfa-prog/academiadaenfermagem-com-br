@@ -19,18 +19,19 @@ import { TestimonialsSection } from "@/components/TestimonialsSection";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Loja — Academia da Enfermagem" },
+      { title: "Loja — Academia da Enfermagem | SAE e PE automatizados" },
       {
         name: "description",
         content:
-          "Academia da Enfermagem: 4 aplicativos de guias clínicos para acadêmicos, estudantes de técnico, técnicos e enfermeiros. 15 dias grátis.",
+          "Academia da Enfermagem: SAE e PE automatizados e 4 aplicativos de guias clínicos para acadêmicos, estudantes de técnico, técnicos e enfermeiros. 15 dias grátis.",
       },
-      { property: "og:title", content: "Loja — Academia da Enfermagem" },
+      { property: "og:title", content: "Loja — Academia da Enfermagem | SAE e PE automatizados" },
       {
         property: "og:description",
         content:
-          "Conheça os 4 aplicativos da Academia da Enfermagem antes de iniciar seus 15 dias grátis.",
+          "Conheça os 4 aplicativos da Academia da Enfermagem, com SAE e PE automatizados, antes de iniciar seus 15 dias grátis.",
       },
+
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://academiadaenfermagem.com.br/" },
       { name: "twitter:card", content: "summary_large_image" },
