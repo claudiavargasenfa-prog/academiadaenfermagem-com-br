@@ -16,11 +16,12 @@ export default defineConfig({
         injectRegister: null,
         devOptions: { enabled: false },
         filename: "sw.js",
-        manifest: false, // usamos public/manifest.webmanifest existente
+        manifest: false,
         workbox: {
           cleanupOutdatedCaches: true,
           skipWaiting: true,
           clientsClaim: true,
+          // Garante que TODOS os arquivos essenciais sejam cacheados para uso offline
           globPatterns: ["**/*.{js,css,html,ico,png,svg,webp,woff2,json}"],
           manifestTransforms: [
             (entries) => ({
@@ -32,19 +33,23 @@ export default defineConfig({
             }),
           ],
           navigateFallback: "/",
-          navigateFallbackDenylist: [
-            /^\/api\//,
-            /^\/~oauth/,
-            /^\/_server/,
-          ],
+          navigateFallbackDenylist: [/^\/api\//, /^\/~oauth/, /^\/_server/],
           runtimeCaching: [
             {
+              // Modo Offline Completo: Cache First para as rotas do App
               urlPattern: ({ request, url }) =>
                 request.mode === "navigate" &&
-                (url.pathname === "/" ||
-                  url.pathname.startsWith("/planos/") ||
-                  url.searchParams.has("cadastro")),
-              handler: "NetworkOnly",
+                !url.pathname.startsWith("/api/") &&
+                !url.pathname.startsWith("/admin") &&
+                !url.pathname.startsWith("/planos/"),
+              handler: "CacheFirst", // Prioriza o cache para funcionar offline
+              options: {
+                cacheName: "app-pages-offline",
+                expiration: {
+                  maxEntries: 100,
+                  maxAgeSeconds: 60 * 60 * 24 * 30, // 30 dias
+                },
+              },
             },
             {
               urlPattern: ({ request }) => request.mode === "navigate",
@@ -61,7 +66,7 @@ export default defineConfig({
               handler: "CacheFirst",
               options: {
                 cacheName: "static-assets",
-                expiration: { maxEntries: 200, maxAgeSeconds: 60 * 60 * 24 * 30 },
+                expiration: { maxEntries: 500, maxAgeSeconds: 60 * 60 * 24 * 60 },
               },
             },
             {
@@ -70,6 +75,18 @@ export default defineConfig({
               options: {
                 cacheName: "google-fonts",
                 expiration: { maxEntries: 30, maxAgeSeconds: 60 * 60 * 24 * 365 },
+              },
+            },
+            {
+              // Cache para as imagens do Supabase/Lovable Uploads
+              urlPattern: /.*(?:lovable-uploads|supabase).*\/storage\/v1\/object\/public\/.*/,
+              handler: "CacheFirst",
+              options: {
+                cacheName: "supabase-storage",
+                expiration: {
+                  maxEntries: 300,
+                  maxAgeSeconds: 60 * 60 * 24 * 30,
+                },
               },
             },
           ],
