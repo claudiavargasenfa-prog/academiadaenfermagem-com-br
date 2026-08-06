@@ -36,9 +36,9 @@ function ProcedimentosPage() {
   return (
     <AppShell>
       <PageHeader
-        eyebrow="Guia clínico exclusivo"
-        title="Punção Venosa Periférica e Prevenção de Flebite"
-        description="PUNÇÃO VENOSA PERIFÉRICA E PREVENÇÃO DE FLEBITE: Animações 2D passo a passo, materiais, indicações, complicações e escala de flebite."
+        eyebrow="Técnica e Prevenção Baseada em Evidências"
+        title="Punção Venosa e Flebite"
+        description="PUNÇÃO VENOSA PERIFÉRICA E PREVENÇÃO DE FLEBITE: 12 fotos reais da técnica passo a passo, escala de flebite Maddox e materiais essenciais."
       />
 
       {proc ? (

@@ -28,7 +28,7 @@ export function ProcedimentoPlayer({ cenas }: { cenas: Cena[] }) {
   return (
     <div className="overflow-hidden rounded-2xl border border-gold/30 bg-card shadow-[var(--shadow-soft)]">
       {/* Palco da animação */}
-      <div className="relative aspect-[4/3] w-full bg-gradient-to-br from-sky-50 to-slate-100">
+      <div className="relative aspect-[4/3] w-full bg-slate-900 overflow-hidden ring-4 ring-primary/20">
         {cena.imagem ? (
           <img
             key={cena.ordem}
@@ -64,8 +64,8 @@ export function ProcedimentoPlayer({ cenas }: { cenas: Cena[] }) {
         ))}
 
         {/* Indicador de etapa */}
-        <div className="absolute left-3 top-3 rounded-full bg-primary/90 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-primary-foreground">
-          Etapa {cena.ordem} / {cenas.length}
+        <div className="absolute left-3 top-3 rounded-lg bg-black/60 backdrop-blur-md px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-white border border-white/20">
+          ETAPA {cena.ordem} DE {cenas.length}
         </div>
 
         {/* Barra de progresso */}
