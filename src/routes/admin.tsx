@@ -792,7 +792,9 @@ function MiniAppForm({
     setBusy(true);
     setErr(null);
     setOk(null);
-    const { price_reais, price_original_reais, ...rest } = form;
+    // `track_obstetricia` não existe na tabela — o vínculo com o app de
+    // Obstetrícia é feito por mini_app_placements logo abaixo.
+    const { price_reais, price_original_reais, track_obstetricia: _obst, ...rest } = form;
     const priceOriginalCents = reaisToCents(price_original_reais);
     const payload = {
       ...rest,
