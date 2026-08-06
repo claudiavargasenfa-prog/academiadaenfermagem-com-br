@@ -38,7 +38,7 @@ export default function ComparativoUpgrade() {
                 <span>{track.emoji}</span> {track.label}
               </h3>
               
-              <div className="grid gap-4 overflow-x-auto pb-2 sm:grid-cols-2 lg:grid-cols-4">
+              <div className="grid gap-4 px-1 pb-2 pt-5 sm:grid-cols-2 lg:grid-cols-4">
                 {trackOffers.sort((a,b) => (a.price_cents || 0) - (b.price_cents || 0)).map((o) => {
                   const isBestValue = o.billing_period === "anual";
                   const perks = o.perks as string[] ?? [];
@@ -53,7 +53,7 @@ export default function ComparativoUpgrade() {
                       }`}
                     >
                       {isBestValue && (
-                        <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full gold-gradient px-3 py-1 text-[10px] font-black uppercase tracking-wider text-white shadow-sm">
+                        <div className="absolute -top-3 left-1/2 z-10 w-max -translate-x-1/2 whitespace-nowrap rounded-full gold-gradient px-3 py-1 text-[10px] font-black uppercase leading-none tracking-wider text-white shadow-sm">
                           Melhor Escolha
                         </div>
                       )}
