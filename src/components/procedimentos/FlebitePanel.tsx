@@ -100,6 +100,25 @@ export function FlebitePanel() {
                 A inflamação progrediu. Nesta imagem, o eritema está mais intenso e se estende por uma área maior ao redor do local da punção. O paciente relata dor ou desconforto, e a área pode apresentar edema (inchaço).
               </p>
             </div>
+            <div className="rounded-xl bg-white/40 p-3 border border-sky-100">
+              <h4 className="font-bold text-sky-900 flex items-center gap-2">
+                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-sky-500 text-[10px] text-white">3</span>
+                Flebite Grau 3
+              </h4>
+              <p className="mt-1 text-xs">
+                Este é um estágio avançado de inflamação. A imagem mostra eritema e edema evidentes. Além disso, uma linha vermelha endurecida (o "cordão venoso") é visível e palpável ao longo do trajeto da veia.
+              </p>
+            </div>
+
+            <div className="rounded-xl bg-white/40 p-3 border border-sky-100">
+              <h4 className="font-bold text-sky-900 flex items-center gap-2">
+                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-sky-500 text-[10px] text-white">4</span>
+                Flebite Grau 4
+              </h4>
+              <p className="mt-1 text-xs">
+                Este é o estágio mais grave. A imagem revela eritema e edema extensos. O cordão venoso está endurecido e muito doloroso, e há presença de secreção purulenta (pus) no local de inserção do cateter, indicando infecção.
+              </p>
+            </div>
           </div>
         </div>
       </Bloco>
