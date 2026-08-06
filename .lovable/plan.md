@@ -35,7 +35,6 @@ Com isso os 16 links avulsos deixam de ser obrigatórios: eles ficam apenas como
 ## Do seu lado (rápido)
 
 - Confirmar se posso usar a mesma conta Mercado Pago do token já cadastrado.
-- Me enviar o link/valor correto do **trimestral do Estudante de Técnico** (hoje está repetido com o mensal).
 - Opcional, mas recomendado: cadastrar um `MP_WEBHOOK_SECRET` no Mercado Pago para a validação de assinatura ficar 100%.
 
 ## Detalhes técnicos
