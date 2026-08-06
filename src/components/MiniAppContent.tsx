@@ -196,7 +196,7 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
   // Mini app SAE traz <script> embutido; renderizamos o HTML bruto (sem
   // sanitização) pois o conteúdo é escrito pelo admin e precisamos preservar
   // os <script> — DOMPurify remove todos por padrão.
-  const isSae = /lavoble-sae-descomplicada/.test(html);
+  const isSae = /lavoble-sae-descomplicada/.test(html) || /<script[\s>]/i.test(html);
 
   // Detecta o mini app COLETA DE DADOS + ADMISSÃO DE TURNO pelos IDs
   // característicos do formulário (não depende de slug — resiste a duplicações).
