@@ -18,7 +18,7 @@ const SelectTrigger = React.forwardRef<
 >(({ className, children, ...props }, ref) => {
   // Tradução forçada conforme pedido do usuário
   const ariaLabel = props["aria-label"] === "Language selector" || props["aria-label"] === "language selector"
-    ? "sabe o que está faltando?????????? vc colocou nos mini app a orientação do certificado um faq. e colocou um texto, visualizar, so que não é clicavel e não aparece nadinha, ja vamos inaugurar emm 4 dias to muito nervosa, cada hora aparece um problema"
+    ? "como será emitido o certificado??"
     : props["aria-label"];
 
   return (
