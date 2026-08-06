@@ -18,7 +18,7 @@ const SelectTrigger = React.forwardRef<
 >(({ className, children, ...props }, ref) => {
   // Tradução forçada conforme pedido do usuário
   const ariaLabel = props["aria-label"] === "Language selector" || props["aria-label"] === "language selector"
-    ? "UNDE ESTÁ ESSE MINI APP DE PUNÇÃO Q VC CRIOU, NÃO ACHEI"
+    ? "COMO ADMIN NÃO ACHO ESSA PUNÇÃO QUE VC CRIOU"
     : props["aria-label"];
 
   return (
