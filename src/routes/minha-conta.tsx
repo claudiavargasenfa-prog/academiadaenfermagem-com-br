@@ -61,7 +61,7 @@ function MinhaContaPage() {
       <PageHeader
         eyebrow="Sua conta"
         title="Minha Conta"
-        description="Veja suas assinaturas e os mini apps que você comprou."
+        description="Veja suas assinaturas e os guias clínicos que você comprou."
       />
 
       {mySubs.length > 0 && (

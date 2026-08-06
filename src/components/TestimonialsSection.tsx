@@ -11,7 +11,7 @@ const TESTIMONIALS = [
   {
     name: "Ricardo Oliveira",
     role: "Estudante de Enfermagem",
-    text: "Os mini apps são perfeitos para consulta rápida na beira do leito. Os cálculos de medicação me dão a confiança que eu precisava no estágio.",
+    text: "Os guias clínicos são perfeitos para consulta rápida na beira do leito. Os cálculos de medicação me dão a confiança que eu precisava no estágio.",
     rating: 5,
     avatar: "RO"
   },

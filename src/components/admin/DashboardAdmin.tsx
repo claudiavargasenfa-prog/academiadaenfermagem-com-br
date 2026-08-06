@@ -27,7 +27,7 @@ export function DashboardAdmin() {
       
       if (userError) throw userError;
 
-      // Mini apps "mais acessados" (simulado por enquanto via mini_apps mais recentes ou ativos)
+      // Guias clínicos "mais acessados" (simulado por enquanto via mini_apps mais recentes ou ativos)
       const { data: miniApps, error: miniError } = await supabase
         .from("mini_apps")
         .select("name, slug, kind, gratuitidade:gratuito")
@@ -98,7 +98,7 @@ export function DashboardAdmin() {
         <section className="space-y-3">
           <div className="flex items-center gap-2 mb-2">
             <TrendingUp className="h-5 w-5 text-gold" />
-            <h3 className="text-sm font-black uppercase tracking-tight">Mini Apps Mais Relevantes</h3>
+            <h3 className="text-sm font-black uppercase tracking-tight">Guias Clínicos Mais Relevantes</h3>
           </div>
           <div className="space-y-2">
             {stats?.topMiniApps.map((m, i) => (

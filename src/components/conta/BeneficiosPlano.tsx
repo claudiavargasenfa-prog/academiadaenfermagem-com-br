@@ -176,7 +176,7 @@ export default function BeneficiosPlano() {
           </p>
           {allowed > 0 ? (
             <p className="mt-1 text-sm text-muted-foreground">
-              Você tem <strong>{restantes}</strong> de {allowed} certificados disponíveis. Escolha o mini app estudado.
+              Você tem <strong>{restantes}</strong> de {allowed} certificados disponíveis. Escolha o guia clínico estudado.
             </p>
           ) : (
             <p className="mt-1 text-sm text-muted-foreground">
@@ -192,7 +192,7 @@ export default function BeneficiosPlano() {
                 onChange={(e) => setMiniAppId(e.target.value)}
                 className="max-w-full rounded-xl border px-3 py-2 text-sm"
               >
-                <option value="">Selecione o mini app…</option>
+                <option value="">Selecione o guia clínico…</option>
                 {(miniQ.data ?? []).map((m) => (
                   <option key={m.id} value={m.id}>
                     {m.name}

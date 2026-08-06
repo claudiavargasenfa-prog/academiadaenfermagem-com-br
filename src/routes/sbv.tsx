@@ -42,7 +42,7 @@ function SBVPage() {
   return (
     <AppShell>
       <PageHeader
-        eyebrow="Mini app exclusivo"
+        eyebrow="Guia clínico exclusivo"
         title="Suporte Básico de Vida (SBV)"
         description="Reconhecimento da PCR, RCP de alta qualidade, uso do DEA e desobstrução de vias aéreas — adulto, pediátrico e lactente, conforme diretrizes AHA."
       />

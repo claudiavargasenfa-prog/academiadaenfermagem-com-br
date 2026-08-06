@@ -206,7 +206,7 @@ export function summarizeAccess(
   };
 }
 
-/** Hook: estado de acesso do usuário atual a um mini app (por slug). */
+/** Hook: estado de acesso do usuário atual a um guia clínico (por slug). */
 export function useAppAccess(slug: string) {
   const { isReady, user } = useAuthReady();
 
@@ -250,7 +250,7 @@ export function useAppAccess(slug: string) {
         return { app, granted: true, expiresAt: acc.expires_at, viaAdmin: false };
       }
 
-      // Acesso via assinatura de qualquer app que contenha este mini app
+      // Acesso via assinatura de qualquer app que contenha este guia clínico
       const { data: placements } = await supabase
         .from("mini_app_placements")
         .select("app_id, apps:app_id (slug)")

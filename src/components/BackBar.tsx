@@ -11,7 +11,7 @@ const HIDE_EXACT = new Set([
 ]);
 
 /**
- * Barra "Voltar" global exibida em todas as páginas internas (mini apps).
+ * Barra "Voltar" global exibida em todas as páginas internas (guias clínicos).
  * Volta para a última trilha (app) visitada; se não houver, volta para a loja.
  */
 export function BackBar() {

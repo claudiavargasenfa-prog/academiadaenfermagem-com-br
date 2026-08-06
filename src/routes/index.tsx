@@ -23,7 +23,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Academia da Enfermagem: 4 aplicativos de mini apps para acadêmicos, estudantes de técnico, técnicos e enfermeiros. 15 dias grátis.",
+          "Academia da Enfermagem: 4 aplicativos de guias clínicos para acadêmicos, estudantes de técnico, técnicos e enfermeiros. 15 dias grátis.",
       },
       { property: "og:title", content: "Loja — Academia da Enfermagem" },
       {

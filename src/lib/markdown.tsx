@@ -7,7 +7,7 @@ function looksLikeHtml(src: string): boolean {
 }
 
 /**
- * Renderiza conteúdo do mini app: aceita HTML colado (Word, Docs, sites)
+ * Renderiza conteúdo do guia clínico: aceita HTML colado (Word, Docs, sites)
  * OU markdown simples. Se for HTML, sanitiza com DOMPurify antes de renderizar.
  */
 export function renderContent(src: string): ReactNode {

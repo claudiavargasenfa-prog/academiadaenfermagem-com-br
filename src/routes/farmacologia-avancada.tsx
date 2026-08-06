@@ -17,7 +17,7 @@ export const Route = createFileRoute("/farmacologia-avancada")({
 function Page() {
   return (
     <AppShell>
-      <PageHeader eyebrow="Mini app" title="Farmacologia Avançada" description="Aminas vasoativas, antibióticos, sedativos e diluições críticas." />
+      <PageHeader eyebrow="Guia clínico" title="Farmacologia Avançada" description="Aminas vasoativas, antibióticos, sedativos e diluições críticas." />
       <AppAccessGate slug="farmacologia-avancada">
         <MiniAppContent slug="farmacologia-avancada" />
         <Card>

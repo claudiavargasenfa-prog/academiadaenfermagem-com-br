@@ -36,7 +36,7 @@ function ProcedimentosPage() {
   return (
     <AppShell>
       <PageHeader
-        eyebrow="Mini app exclusivo"
+        eyebrow="Guia clínico exclusivo"
         title="Procedimentos de Enfermagem"
         description="Animações 2D passo a passo, com materiais, indicações, contraindicações, complicações e checklist."
       />

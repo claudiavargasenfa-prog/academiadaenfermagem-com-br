@@ -14,7 +14,7 @@ type Props = {
   draftKey: string;
   /** Botões de destino do texto ditado */
   acoes?: AcaoDitado[];
-  /** Envia o texto para um campo do mini app */
+  /** Envia o texto para um campo do guia clínico */
   onInserir: (alvo: string, texto: string) => void;
 };
 
