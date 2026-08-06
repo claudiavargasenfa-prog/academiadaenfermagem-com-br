@@ -178,6 +178,16 @@ export function AppShell({
               <Share2 className="h-3.5 w-3.5" />
               {compartilharLabel}
             </button>
+            {/* Botão de Emergência para Admin (visível apenas para admins no banco) */}
+            {admin && (
+               <Link 
+                 to="/admin" 
+                 className="ml-2 flex items-center gap-1 rounded-lg border border-gold/50 bg-gold/10 px-2.5 py-1.5 text-[10px] font-black uppercase text-gold hover:bg-gold/20"
+               >
+                 <Shield className="h-3 w-3" />
+                 Painel Admin
+               </Link>
+            )}
           </nav>
         </div>
         {open && (
