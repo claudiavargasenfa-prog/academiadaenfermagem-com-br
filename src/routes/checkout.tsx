@@ -58,11 +58,15 @@ async function fetchOffers(slug: string): Promise<Offer[]> {
 }
 
 export const Route = createFileRoute("/checkout")({
-  validateSearch: (search: Record<string, unknown>) => ({
-    plan: typeof search["plan"] === "string" ? (search["plan"] as string) : undefined,
-    period: typeof search["period"] === "string" ? (search["period"] as string) : undefined,
-    status: typeof search["status"] === "string" ? (search["status"] as string) : undefined,
-  }),
+  validateSearch: (
+    search: Record<string, unknown>,
+  ): { plan?: string; period?: string; status?: string } => {
+    const out: { plan?: string; period?: string; status?: string } = {};
+    if (typeof search["plan"] === "string") out.plan = search["plan"];
+    if (typeof search["period"] === "string") out.period = search["period"];
+    if (typeof search["status"] === "string") out.status = search["status"];
+    return out;
+  },
   head: () => ({
     meta: [
       { title: "Finalizar assinatura — Academia da Enfermagem" },
