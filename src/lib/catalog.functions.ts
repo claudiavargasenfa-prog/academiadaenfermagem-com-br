@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 
 /**
- * Catálogo público de mini apps.
+ * Catálogo público de guias clínicos.
  * Retorna APENAS colunas não sensíveis (sem content_md/video_url/audio_url).
  * Executa no servidor para que visitantes não autenticados não precisem de
  * acesso direto ao banco (nenhuma função SECURITY DEFINER exposta ao anon).

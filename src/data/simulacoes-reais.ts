@@ -1,5 +1,5 @@
 /**
- * Casos clínicos do mini app "Simulações Reais".
+ * Casos clínicos do guia clínico "Simulações Reais".
  * Para adicionar novos casos, basta acrescentar um objeto no array `CASOS`.
  */
 

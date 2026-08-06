@@ -22,7 +22,7 @@ import {
   type SaeDiagnostico,
 } from "@/lib/sae-engine";
 
-// ===== Tipos e helpers do mini app COLETA DE DADOS + ADMISSÃO DE TURNO =====
+// ===== Tipos e helpers do guia clínico COLETA DE DADOS + ADMISSÃO DE TURNO =====
 // Multi-paciente com persistência local (localStorage) — sem custo de banco.
 type FormSnap = Record<string, string | boolean>;
 type HistItem = { id: string; hora: string; texto: string };
@@ -88,7 +88,7 @@ function restoreFormSnap(root: HTMLElement, snap: FormSnap) {
 
 
 /**
- * Renderiza o conteúdo editável do mini app (vindo do Admin):
+ * Renderiza o conteúdo editável do guia clínico (vindo do Admin):
  * - content_md (texto/markdown)
  * - video_url (YouTube / Vimeo / mp4)
  * - audio_url
@@ -116,7 +116,7 @@ export function MiniAppContent({ slug }: { slug: string }) {
   if (!isReady || q.isLoading) {
     return (
       <Card className="mb-6 border-primary/30 bg-primary/5 text-sm text-muted-foreground">
-        Carregando conteúdo do mini app…
+        Carregando conteúdo do guia clínico…
       </Card>
     );
   }
@@ -161,16 +161,16 @@ export function MiniAppContent({ slug }: { slug: string }) {
 }
 
 /**
- * Renderiza HTML/markdown do mini app e ativa comportamentos interativos
+ * Renderiza HTML/markdown do guia clínico e ativa comportamentos interativos
  * embutidos que o React não executa sozinho (ex.: botões "Salvar Prescrição"
- * e "Salvar Evolução" do mini app FUNDAMENTOS DOS DIAGNÓSTICOS — download
+ * e "Salvar Evolução" do guia clínico FUNDAMENTOS DOS DIAGNÓSTICOS — download
  * .doc 100% no navegador, sem backend, sem custo).
  */
 /**
  * Host de HTML bruto isolado do ciclo de render do React.
  * O HTML é injetado imperativamente UMA vez (e só de novo se o conteúdo mudar),
  * de modo que atualizações de estado do componente pai (autosave, abas de
- * paciente, histórico) nunca destroem o DOM vivo do mini app — campos digitados,
+ * paciente, histórico) nunca destroem o DOM vivo do guia clínico — campos digitados,
  * sanfonas abertas, diagnósticos gerados e tabela de prescrição são preservados.
  */
 const RawHtmlHost = memo(function RawHtmlHost({ html }: { html: string }) {
@@ -193,12 +193,12 @@ const RawHtmlHost = memo(function RawHtmlHost({ html }: { html: string }) {
 
 export function MiniAppHtmlContent({ html }: { html: string }) {
   const ref = useRef<HTMLDivElement>(null);
-  // Mini app SAE traz <script> embutido; renderizamos o HTML bruto (sem
+  // Guia clínico SAE traz <script> embutido; renderizamos o HTML bruto (sem
   // sanitização) pois o conteúdo é escrito pelo admin e precisamos preservar
   // os <script> — DOMPurify remove todos por padrão.
   const isSae = /lavoble-sae-descomplicada/.test(html) || /<script[\s>]/i.test(html);
 
-  // Detecta o mini app COLETA DE DADOS + ADMISSÃO DE TURNO pelos IDs
+  // Detecta o guia clínico COLETA DE DADOS + ADMISSÃO DE TURNO pelos IDs
   // característicos do formulário (não depende de slug — resiste a duplicações).
   const isColeta =
     /id=["']anotacao_final_painel["']/.test(html) &&
@@ -1459,7 +1459,7 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
 
   // ===== COLETA (Técnico): âncora do bloco de ditado, logo acima do botão
   // "Gerar Anotação". Inserida imperativamente no HTML bruto e preenchida via
-  // portal, para não reinjetar o DOM do mini app.
+  // portal, para não reinjetar o DOM do guia clínico.
   const [anchorColeta, setAnchorColeta] = useState<HTMLElement | null>(null);
   useEffect(() => {
     if (!isColeta) {
@@ -1484,7 +1484,7 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
       }
     };
     posicionar();
-    // O React pode recriar o HTML bruto do mini app (autosave, troca de aba);
+    // O React pode recriar o HTML bruto do guia clínico (autosave, troca de aba);
     // se a âncora sumir, reposicionamos automaticamente.
     const mo = new MutationObserver(() => posicionar());
     mo.observe(root, { childList: true, subtree: true });
@@ -1633,7 +1633,7 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
                 : "#txt-evolucao-clinica-mestre";
             const ta = root.querySelector<HTMLTextAreaElement>(sel);
             if (!ta) {
-              alert("Abra a seção correspondente do mini app antes de enviar o texto ditado.");
+              alert("Abra a seção correspondente do guia clínico antes de enviar o texto ditado.");
               return;
             }
             ta.value = ta.value.trim() ? `${ta.value.trim()}\n${texto.trim()}` : texto.trim();
@@ -1823,7 +1823,7 @@ function VideoEmbed({ url }: { url: string }) {
         <div className="aspect-video w-full overflow-hidden rounded-xl">
           <iframe
             src={embed}
-            title="Vídeo do mini app"
+            title="Vídeo do guia clínico"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
             className="h-full w-full"

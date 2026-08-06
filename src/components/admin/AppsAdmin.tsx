@@ -40,7 +40,7 @@ export function AppsAdmin() {
   const selected = apps.find((a) => a.id === selectedAppId) ?? apps[0];
 
   async function handleDeleteApp(id: string) {
-    if (!confirm("Excluir este app? Os mini apps continuam existindo, só perdem o vínculo com este app.")) return;
+    if (!confirm("Excluir este app? Os guias clínicos continuam existindo, só perdem o vínculo com este app.")) return;
     const { error } = await supabase.from("apps").delete().eq("id", id);
     if (error) return alert(error.message);
     qc.invalidateQueries({ queryKey: ["apps"] });
@@ -238,7 +238,7 @@ function AppForm({ app, onClose }: { app: AppRow | null; onClose: () => void }) 
 }
 
 // ----------------------------------------------------------------------------
-// Conteúdo do app: seções + mini apps arrastáveis
+// Conteúdo do app: seções + guias clínicos arrastáveis
 // ----------------------------------------------------------------------------
 
 function AppContent({ app }: { app: AppRow }) {
@@ -400,7 +400,7 @@ function AppContent({ app }: { app: AppRow }) {
   }
 
   async function removePlacement(id: string) {
-    if (!confirm("Remover este mini app deste app? Ele continua existindo, só sai daqui.")) return;
+    if (!confirm("Remover este guia clínico deste app? Ele continua existindo, só sai daqui.")) return;
     const placement = placements.find((p) => p.id === id);
     if (placement) {
       const legacyOff =
@@ -510,7 +510,7 @@ function AppContent({ app }: { app: AppRow }) {
   return (
     <div className="space-y-5">
       <div className="flex flex-wrap items-center gap-2 rounded-xl border border-primary/30 bg-primary/5 px-3 py-2 text-sm">
-        <span className="font-semibold">Ordem dos mini apps neste app:</span>
+        <span className="font-semibold">Ordem dos guias clínicos neste app:</span>
         <button
           type="button"
           onClick={() => setSortMode("numeric")}
@@ -571,10 +571,10 @@ function AppContent({ app }: { app: AppRow }) {
         </DndContext>
         <aside className="space-y-2">
           <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-            Mini apps fora deste app ({available.length})
+            Guias clínicos fora deste app ({available.length})
           </h4>
           <p className="text-[10px] text-muted-foreground">
-            Inativos e arquivados aparecem aqui. Use <strong>Reativar em ▾</strong> para colocar em qualquer app (Acadêmico, Estudante Técnico, Técnico ou Enfermeiro) — o mini app é reativado automaticamente.
+            Inativos e arquivados aparecem aqui. Use <strong>Reativar em ▾</strong> para colocar em qualquer app (Acadêmico, Estudante Técnico, Técnico ou Enfermeiro) — o guia clínico é reativado automaticamente.
           </p>
           <div className="max-h-[480px] overflow-y-auto rounded-xl border border-foreground/10 p-2 text-xs">
             {available.length === 0 ? (
@@ -655,7 +655,7 @@ function SectionsManager({ appId, sections }: { appId: string; sections: AppSect
     qc.invalidateQueries({ queryKey: ["app_sections", appId] });
   }
   async function remove(s: AppSection) {
-    if (!confirm(`Excluir seção "${s.title}"? Mini apps dentro voltam para "Sem seção".`)) return;
+    if (!confirm(`Excluir seção "${s.title}"? Guias clínicos dentro voltam para "Sem seção".`)) return;
     await supabase.from("app_sections").delete().eq("id", s.id);
     qc.invalidateQueries({ queryKey: ["app_sections", appId] });
     qc.invalidateQueries({ queryKey: ["app_placements", appId] });
@@ -682,7 +682,7 @@ function SectionsManager({ appId, sections }: { appId: string; sections: AppSect
         </button>
       </div>
       {sections.length === 0 ? (
-        <p className="text-xs text-muted-foreground">Nenhuma seção. Adicione uma para agrupar os mini apps.</p>
+        <p className="text-xs text-muted-foreground">Nenhuma seção. Adicione uma para agrupar os guias clínicos.</p>
       ) : (
         <ul className="space-y-1">
           {[...sections].sort((a, b) => a.ordem - b.ordem).map((s) => (
@@ -765,7 +765,7 @@ function Container({
         <ul data-container-id={container.id} className="min-h-[40px] space-y-1 rounded-md bg-foreground/3 p-1">
           {container.items.length === 0 && (
             <li className="rounded-md border border-dashed border-foreground/15 px-2 py-3 text-center text-[11px] text-muted-foreground">
-              Arraste mini apps para cá
+              Arraste guias clínicos para cá
             </li>
           )}
           {container.items.map((p, idx) => {

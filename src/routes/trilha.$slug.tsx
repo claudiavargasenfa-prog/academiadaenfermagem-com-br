@@ -21,7 +21,7 @@ export const Route = createFileRoute("/trilha/$slug")({
   head: ({ params }) => ({
     meta: [
       { title: `${params.slug} — Academia da Enfermagem` },
-      { name: "description", content: `Mini apps do aplicativo ${params.slug} da Academia da Enfermagem.` },
+      { name: "description", content: `Guias clínicos do aplicativo ${params.slug} da Academia da Enfermagem.` },
     ],
   }),
   component: TrilhaPage,
@@ -143,7 +143,7 @@ function TrilhaPage() {
 
       {grouped.length === 0 ? (
         <Card>
-          <p className="text-sm text-muted-foreground">Nenhum mini app neste aplicativo ainda. Use o Admin → Apps para arrastar mini apps para dentro.</p>
+          <p className="text-sm text-muted-foreground">Nenhum guia clínico neste aplicativo ainda. Use o Admin → Apps para arrastar guias clínicos para dentro.</p>
         </Card>
       ) : (
         grouped.map((g, idx) => (
@@ -223,7 +223,7 @@ function TrackAppCard({ app, unlocked, extraExpiresAt, isAdmin }: { app: MiniApp
 }
 
 function TrilhaHeader({ slug, count }: { slug: string; count: number }) {
-  const title = useText(`trilha.${slug}.title`, `${count} mini apps neste aplicativo`);
+  const title = useText(`trilha.${slug}.title`, `${count} guias clínicos neste aplicativo`);
   const desc = useText(`trilha.${slug}.description`, "Apps grátis liberam para qualquer pessoa. Os demais exigem assinatura deste aplicativo.");
   const rendered = title.replace(/\{count\}/g, String(count));
   return (

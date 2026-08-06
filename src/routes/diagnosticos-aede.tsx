@@ -273,7 +273,7 @@ function DiagnosticosAedePage() {
     <AppShell>
       <ContentProtection allowPrint>
       <PageHeader
-        eyebrow="Mini App"
+        eyebrow="Guia Clínico"
         title="Diagnósticos e Prescrição AE/DE"
         description="Wizard de 5 passos: em 2 minutos você monta anamnese, exame físico, sinais/sintomas, escolhe diagnósticos e imprime a prescrição."
       />

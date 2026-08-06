@@ -10,7 +10,7 @@ export const Route = createFileRoute("/app/$slug/")({
   head: ({ params }) => ({
     meta: [
       { title: `${params.slug} — Academia da Enfermagem` },
-      { name: "description", content: `Mini app ${params.slug} da Academia da Enfermagem.` },
+      { name: "description", content: `Guia clínico ${params.slug} da Academia da Enfermagem.` },
     ],
   }),
   component: Page,
@@ -24,7 +24,7 @@ export const Route = createFileRoute("/app/$slug/")({
   notFoundComponent: () => (
     <AppShell>
       <Card>
-        <p className="text-sm text-muted-foreground">Mini app não encontrado.</p>
+        <p className="text-sm text-muted-foreground">Guia clínico não encontrado.</p>
       </Card>
     </AppShell>
   ),
@@ -78,7 +78,7 @@ function Page() {
       <Link to="/" className="mb-3 inline-flex items-center gap-1 text-sm font-semibold text-muted-foreground hover:text-foreground">
         <ArrowLeft className="h-4 w-4" /> Voltar
       </Link>
-      <PageHeader eyebrow="Mini app" title={app.name} description={app.description ?? undefined} />
+      <PageHeader eyebrow="Guia clínico" title={app.name} description={app.description ?? undefined} />
       <AppAccessGate slug={slug}>
         <MiniAppContent slug={slug} />
 
@@ -113,8 +113,8 @@ function Page() {
               <h2 className="font-display text-lg font-bold text-foreground">{app.name}</h2>
             </div>
             <p className="text-sm text-muted-foreground">
-              Use o painel Admin → Mini apps para adicionar texto, vídeo, áudio ou dividir este
-              mini app em sub-tópicos. O conteúdo aparecerá automaticamente acima deste bloco.
+              Use o painel Admin → Guias clínicos para adicionar texto, vídeo, áudio ou dividir este
+              guia clínico em sub-tópicos. O conteúdo aparecerá automaticamente acima deste bloco.
             </p>
           </Card>
         )}

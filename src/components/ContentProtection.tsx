@@ -147,7 +147,7 @@ export function AppAccessGate({
         </div>
         <h2 className="font-display text-xl font-bold">{app.name}</h2>
         <p className="mt-2 text-sm text-muted-foreground">
-          Este mini app é pago. Após a compra, você terá acesso por{" "}
+          Este guia clínico é pago. Após a compra, você terá acesso por{" "}
           <strong>150 dias</strong>.
         </p>
         <div className="mt-3 space-y-1">

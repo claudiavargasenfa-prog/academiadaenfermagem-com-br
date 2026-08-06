@@ -125,7 +125,7 @@ function AdminContent() {
         emoji: "🗄️",
         bg_color: "#E5E7EB",
         fg_color: "#374151",
-        description: "Reserva de mini apps para um 2º projeto. Oculto dos alunos.",
+        description: "Reserva de guias clínicos para um 2º projeto. Oculto dos alunos.",
         ordem: 999,
         is_active: false,
       })
@@ -139,7 +139,7 @@ function AdminContent() {
     if (selected.size === 0) return;
     if (
       !confirm(
-        `Arquivar ${selected.size} mini app(s)?\n\n` +
+        `Arquivar ${selected.size} guia(s) clínico(s)?\n\n` +
           `• Vão pro app "🗄️ Arquivo — 2º Projeto" (oculto dos alunos)\n` +
           `• Ficam desativados na loja\n` +
           `• Todo o conteúdo é preservado\n` +
@@ -210,7 +210,7 @@ function AdminContent() {
   });
 
   async function handleDelete(id: string) {
-    if (!confirm("Apagar este mini app? Esta ação não pode ser desfeita.")) return;
+    if (!confirm("Apagar este guia clínico? Esta ação não pode ser desfeita.")) return;
     const { error } = await supabase.from("mini_apps").delete().eq("id", id);
     if (error) {
       alert("Erro ao apagar: " + error.message);
@@ -225,7 +225,7 @@ function AdminContent() {
       <PageHeader
         eyebrow="Admin"
         title="Academia da Enfermagem"
-        description="Gerencie os mini apps e conteúdos técnicos de cada aplicativo separadamente."
+        description="Gerencie os guias clínicos e conteúdos técnicos de cada aplicativo separadamente."
       />
 
       <div className="mb-4 flex flex-wrap gap-2 rounded-xl bg-foreground/5 p-1 text-sm font-semibold">
@@ -247,7 +247,7 @@ function AdminContent() {
           }}
           className={`flex-1 rounded-lg px-3 py-2 ${tab === "apps" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
         >
-          Mini apps
+          Guias clínicos
         </button>
         <button
           type="button"
@@ -383,7 +383,7 @@ function AdminContent() {
             <div className="relative z-10 flex h-full flex-col justify-center text-center">
               <LayoutGrid className="mx-auto mb-3 h-8 w-8 text-muted-foreground/50" />
               <h3 className="font-display text-sm font-bold uppercase tracking-tight text-muted-foreground">
-                Ver Todos os Mini Apps
+                Ver Todos os Guias Clínicos
               </h3>
               <p className="mt-1 text-[10px] text-muted-foreground/70">
                 Acesso global a todos os módulos sem filtro de app.
@@ -414,14 +414,14 @@ function AdminContent() {
               type="search"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="🔍 Buscar mini app por nome, slug ou descrição..."
+              placeholder="🔍 Buscar guia clínico por nome, slug ou descrição..."
               className="w-full rounded-xl border border-foreground/15 bg-background px-3 py-2 text-sm sm:max-w-sm"
             />
             <button
               onClick={() => setCreating(true)}
               className="inline-flex items-center justify-center gap-1.5 rounded-xl gold-gradient px-4 py-2 text-sm font-bold"
             >
-              <Plus className="h-4 w-4" /> Novo mini app
+              <Plus className="h-4 w-4" /> Novo guia clínico
             </button>
           </div>
 
@@ -583,7 +583,7 @@ function AdminContent() {
                     disabled={reactivating === app.id}
                     className="rounded-lg bg-emerald-500/10 p-2 text-emerald-600 hover:bg-emerald-500/20 disabled:opacity-50"
                     aria-label="Reativar"
-                    title="Reativar mini app"
+                    title="Reativar guia clínico"
                   >
                     <span className="text-xs font-bold">↩</span>
                   </button>
@@ -598,7 +598,7 @@ function AdminContent() {
                   }}
                   className="rounded-lg bg-primary/10 p-2 text-primary hover:bg-primary/20 transition-all hover:scale-125 hover:rotate-12 active:scale-95 active:bg-primary/30 active:rotate-0"
                   aria-label="Editar"
-                  title="Editar este mini app"
+                  title="Editar este guia clínico"
                 >
                   <Pencil className="h-4 w-4 transition-transform group-hover:rotate-12" />
                 </button>
@@ -640,7 +640,7 @@ function AdminContent() {
                       <span className="text-xs font-normal text-muted-foreground">({items.length})</span>
                     </h2>
                     {items.length === 0 ? (
-                      <p className="text-xs text-muted-foreground">Nenhum mini app neste aplicativo.</p>
+                      <p className="text-xs text-muted-foreground">Nenhum guia clínico neste aplicativo.</p>
                     ) : (
                       <div className="space-y-3">{items.map(renderCard)}</div>
                     )}
@@ -676,7 +676,7 @@ function AdminContent() {
             {all.length === 0 && (
               <Card>
                 <p className="text-sm text-muted-foreground">
-                  Nenhum mini app cadastrado. Clique em "Novo mini app" pra começar.
+                  Nenhum guia clínico cadastrado. Clique em "Novo guia clínico" pra começar.
                 </p>
               </Card>
             )}
@@ -741,7 +741,7 @@ function MiniAppForm({
   const normalizedSlug = form.slug.trim().toLowerCase();
   const isQuizzesMiniApp = normalizedSlug === "quizzes";
 
-  // Apps disponíveis (dinâmico, vem da tabela `apps`) + placements atuais deste mini app.
+  // Apps disponíveis (dinâmico, vem da tabela `apps`) + placements atuais deste guia clínico.
   const appsQ = useQuery({ queryKey: ["apps"], queryFn: fetchApps });
   const allApps = appsQ.data ?? [];
   const placementsQ = useQuery({
@@ -863,7 +863,7 @@ function MiniAppForm({
     <Card className="border-primary/40">
       <form onSubmit={handleSave} className="space-y-3 text-sm">
         <h3 className="font-display text-base font-bold">
-          {app ? "Editar mini app" : "Novo mini app"}
+          {app ? "Editar guia clínico" : "Novo guia clínico"}
         </h3>
         <div className="grid gap-3 sm:grid-cols-2">
           <Field label="Nome">
@@ -1023,7 +1023,7 @@ function MiniAppForm({
             </div>
           )}
           <p className="mt-2 text-[11px] text-muted-foreground">
-            Marque em quais aplicativos este mini app deve aparecer. Novos aplicativos criados no Admin → Aplicativos aparecerão aqui automaticamente.
+            Marque em quais aplicativos este guia clínico deve aparecer. Novos aplicativos criados no Admin → Aplicativos aparecerão aqui automaticamente.
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-4">
@@ -1121,7 +1121,7 @@ function QuizzesDynamicContentNotice({
         <div>
           <p className="font-display text-base font-bold">Conteúdo dinâmico dos Quizzes preservado</p>
           <p className="mt-1 text-xs leading-relaxed">
-            Este mini app não usa o campo “Conteúdo / Markdown” para guardar os quizzes. Clique abaixo para abrir a tela real dos quizzes ou testar um quiz individual.
+            Este guia clínico não usa o campo “Conteúdo / Markdown” para guardar os quizzes. Clique abaixo para abrir a tela real dos quizzes ou testar um quiz individual.
           </p>
           <div className="mt-3 flex flex-wrap gap-2">
             <Link
