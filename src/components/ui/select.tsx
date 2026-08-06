@@ -18,7 +18,7 @@ const SelectTrigger = React.forwardRef<
 >(({ className, children, ...props }, ref) => {
   // Tradução forçada conforme pedido do usuário
   const ariaLabel = props["aria-label"] === "Language selector" || props["aria-label"] === "language selector"
-    ? "Salvar cada acionamento do Code Stroke em um histórico local com data, BEFAST, last known well e glicemia capilar."
+    ? "Histórico local de acionamentos do Code Stroke implementado com sucesso."
     : props["aria-label"];
 
   return (
