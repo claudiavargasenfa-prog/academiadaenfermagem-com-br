@@ -98,22 +98,22 @@ function ProcedimentosLista({ onSelect }: { onSelect: (slug: string) => void }) 
         <button
           key={p.slug}
           onClick={() => onSelect(p.slug)}
-          className="flex w-full items-center gap-3 rounded-2xl border border-gold/30 bg-card p-3 text-left shadow-sm transition hover:border-primary hover:shadow-md"
+          className="flex w-full items-center gap-3 rounded-2xl border border-gold/30 bg-card p-3 text-left shadow-sm transition hover:border-primary hover:shadow-md relative overflow-hidden"
         >
+          {p.emProducao && (
+            <div className="absolute top-0 right-0 bg-amber-500 text-white text-[8px] font-bold px-2 py-0.5 rounded-bl-lg uppercase tracking-tighter">
+              Em Breve
+            </div>
+          )}
           <div className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-foreground/5 text-2xl">
             {p.icon}
           </div>
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2">
               <h4 className="truncate font-display text-sm font-bold">{p.titulo}</h4>
-              {p.emProducao && (
-                <span className="rounded-full bg-amber-100 px-1.5 py-0.5 text-[9px] font-bold uppercase text-amber-700">
-                  Em breve
-                </span>
-              )}
             </div>
             <p className="truncate text-xs text-muted-foreground">{p.subtitulo}</p>
-            <p className="mt-0.5 text-[11px] text-foreground/50">{p.publico}</p>
+            <p className="mt-0.5 text-[11px] text-foreground/50">{p.publico} {p.cenas.length > 0 ? "· ✓ Com Imagens" : "· (Sem imagens ainda)"}</p>
           </div>
           <ChevronRight className="h-4 w-4 shrink-0 text-foreground/40" />
         </button>
@@ -144,14 +144,17 @@ function ProcedimentoDetalhe({ proc, onVoltar }: { proc: Procedimento; onVoltar:
           <ProcedimentoPlayer cenas={proc.cenas} />
         </div>
       ) : (
-        <Card className="mb-4 border-amber-300/60 bg-amber-50 p-4">
-          <div className="flex items-start gap-2">
-            <Hourglass className="mt-0.5 h-4 w-4 shrink-0 text-amber-700" />
-            <div className="text-sm text-amber-900">
-              <strong>Animação em produção.</strong> As ilustrações deste procedimento ainda
-              estão sendo geradas. Por enquanto, consulte abaixo materiais, indicações,
-              contraindicações, complicações e o checklist completo.
-            </div>
+        <Card className="mb-4 border-amber-300 bg-amber-50 p-6 text-center">
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-amber-100 text-amber-600">
+            <Hourglass className="h-8 w-8 animate-pulse" />
+          </div>
+          <h3 className="mb-2 font-display text-lg font-bold text-amber-900">Ilustrações em Produção</h3>
+          <p className="mx-auto max-w-sm text-sm text-amber-800">
+            Estamos gerando as fotos reais e animações deste procedimento específico. 
+            <strong> Por enquanto, as imagens não estão disponíveis.</strong>
+          </p>
+          <div className="mt-4 inline-block rounded-full bg-amber-200 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-amber-900">
+            Disponível apenas em texto
           </div>
         </Card>
       )}
