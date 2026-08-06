@@ -74,12 +74,34 @@ export function FlebitePanel() {
         </div>
       </div>
 
-      <Bloco titulo="O que é flebite" cor="border-sky-200 bg-sky-50" aberto>
-        <p>
-          Inflamação aguda da veia, com edema, dor, eritema ao redor da punção e “cordão” palpável ao longo
-          do trajeto venoso. É um dos principais eventos adversos da terapia intravenosa — a INS Brasil
-          considera aceitável um índice institucional de <strong>5% ou menos</strong>.
-        </p>
+      <Bloco titulo="Graus de Flebite" cor="border-sky-200 bg-sky-50" aberto>
+        <div className="space-y-4">
+          <p className="font-semibold text-sky-900">
+            As imagens a seguir descrevem a progressão da flebite, uma complicação comum da terapia intravenosa.
+          </p>
+          
+          <div className="space-y-3">
+            <div className="rounded-xl bg-white/40 p-3 border border-sky-100">
+              <h4 className="font-bold text-sky-900 flex items-center gap-2">
+                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-sky-500 text-[10px] text-white">1</span>
+                Flebite Grau 1
+              </h4>
+              <p className="mt-1 text-xs">
+                Esta imagem mostra o braço do paciente com o cateter IV. Há um eritema (vermelhidão) inicial e localizado ao redor do local de inserção. É o primeiro sinal de inflamação.
+              </p>
+            </div>
+
+            <div className="rounded-xl bg-white/40 p-3 border border-sky-100">
+              <h4 className="font-bold text-sky-900 flex items-center gap-2">
+                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-sky-500 text-[10px] text-white">2</span>
+                Flebite Grau 2
+              </h4>
+              <p className="mt-1 text-xs">
+                A inflamação progrediu. Nesta imagem, o eritema está mais intenso e se estende por uma área maior ao redor do local da punção. O paciente relata dor ou desconforto, e a área pode apresentar edema (inchaço).
+              </p>
+            </div>
+          </div>
+        </div>
       </Bloco>
 
       <Bloco titulo="Classificação quanto ao tipo" cor="border-violet-200 bg-violet-50">
