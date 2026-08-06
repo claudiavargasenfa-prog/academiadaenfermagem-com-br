@@ -43,13 +43,19 @@ export function ProcedimentoPlayer({ cenas }: { cenas: Cena[] }) {
       <div className="relative aspect-[4/3] w-full bg-slate-900 overflow-hidden ring-4 ring-primary/20 flex items-center justify-center">
         {cena.imagem ? (
           <img
-            key={cena.ordem}
+            key={cena.imagem} // Use a URL como chave para garantir que o React troque o elemento se a imagem mudar
             src={cena.imagem}
             alt={cena.titulo}
             className="h-full w-full object-contain"
             loading="eager"
-            width={1280}
-            height={960}
+            decoding="async"
+            onLoad={(e) => {
+              (e.target as HTMLImageElement).classList.add("opacity-100");
+            }}
+            onError={(e) => {
+              console.error("Erro ao carregar imagem da cena:", cena.imagem);
+              (e.target as HTMLImageElement).src = "https://via.placeholder.com/800x600?text=Erro+ao+carregar+imagem";
+            }}
           />
         ) : (
           <div className="grid h-full w-full place-items-center text-foreground/40">
