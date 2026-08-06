@@ -53,7 +53,7 @@ function StoreHomeContent() {
 
   const lojaSortMode = useText("ordenacao.loja", "numeric");
   const activePlans = (plansQ.data ?? [])
-    .filter((p) => p.is_active)
+    .filter((p) => p.is_active && isBasePlanSlug(p.slug))
     .slice()
     .sort((a, b) => {
       if (lojaSortMode === "alpha") return a.name.localeCompare(b.name, "pt-BR");
