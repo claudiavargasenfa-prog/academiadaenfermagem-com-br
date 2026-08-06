@@ -80,7 +80,7 @@ export default function OfertasPeriodo({
   const savings = Math.max(baseMonthly * meta.months - selected.price_cents, 0);
 
   const perks = Array.isArray(selected.perks) ? selected.perks : [];
-  const checkoutUrl = selected.cakto_checkout_url ?? "";
+  
 
   function discountFor(o: Offer) {
     const m = META[o.billing_period].months;
