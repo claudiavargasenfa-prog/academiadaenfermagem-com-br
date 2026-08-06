@@ -90,7 +90,7 @@ export function FlebitePanel() {
                 <span className="flex h-5 w-5 items-center justify-center rounded-full bg-sky-500 text-[10px] text-white">1</span>
                 Flebite Grau 1
               </h4>
-              <img src={imgG1.url} alt="Flebite Grau 1" className="w-full h-32 object-cover rounded-lg mb-2 shadow-sm" />
+              <img src={imgG1.url} alt="Flebite Grau 1" className="w-full aspect-video object-cover rounded-lg mb-2 shadow-sm border border-sky-200" loading="eager" />
               <p className="mt-1 text-xs">
                 Esta imagem mostra o braço do paciente com o cateter IV. Há um eritema (vermelhidão) inicial e localizado ao redor do local de inserção. É o primeiro sinal de inflamação.
               </p>
@@ -104,7 +104,7 @@ export function FlebitePanel() {
                 <span className="flex h-5 w-5 items-center justify-center rounded-full bg-sky-500 text-[10px] text-white">2</span>
                 Flebite Grau 2
               </h4>
-              <img src={imgG2.url} alt="Flebite Grau 2" className="w-full h-32 object-cover rounded-lg mb-2 shadow-sm" />
+              <img src={imgG2.url} alt="Flebite Grau 2" className="w-full aspect-video object-cover rounded-lg mb-2 shadow-sm border border-sky-200" loading="eager" />
               <p className="mt-1 text-xs">
                 A inflamação progrediu. Nesta imagem, o eritema está mais intenso e se estende por uma área maior ao redor do local da punção. O paciente relata dor ou desconforto, e a área pode apresentar edema (inchaço).
               </p>
@@ -118,7 +118,7 @@ export function FlebitePanel() {
                 <span className="flex h-5 w-5 items-center justify-center rounded-full bg-sky-500 text-[10px] text-white">3</span>
                 Flebite Grau 3
               </h4>
-              <img src={imgG3.url} alt="Flebite Grau 3" className="w-full h-32 object-cover rounded-lg mb-2 shadow-sm" />
+              <img src={imgG3.url} alt="Flebite Grau 3" className="w-full aspect-video object-cover rounded-lg mb-2 shadow-sm border border-sky-200" loading="eager" />
               <p className="mt-1 text-xs">
                 Este é um estágio avançado de inflamação. A imagem mostra eritema e edema evidentes. Além disso, uma linha vermelha endurecida (o "cordão venoso") é visível e palpável ao longo do trajeto da veia.
               </p>
@@ -132,7 +132,7 @@ export function FlebitePanel() {
                 <span className="flex h-5 w-5 items-center justify-center rounded-full bg-sky-500 text-[10px] text-white">4</span>
                 Flebite Grau 4
               </h4>
-              <img src={imgG4.url} alt="Flebite Grau 4" className="w-full h-32 object-cover rounded-lg mb-2 shadow-sm" />
+              <img src={imgG4.url} alt="Flebite Grau 4" className="w-full aspect-video object-cover rounded-lg mb-2 shadow-sm border border-sky-200" loading="eager" />
               <p className="mt-1 text-xs">
                 Este é o estágio mais grave. A imagem revela eritema e edema extensos. O cordão venoso está endurecido e muito doloroso, e há presença de secreção purulenta (pus) no local de inserção do cateter, indicando infecção.
               </p>

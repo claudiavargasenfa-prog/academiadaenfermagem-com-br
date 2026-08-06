@@ -23,7 +23,6 @@ export const Route = createFileRoute("/procedimentos-enfermagem")({
   }),
   component: () => (
     <AppAccessGate slug="procedimentos-enfermagem">
-        <MiniAppContent slug="procedimentos-enfermagem" />
       <ProcedimentosPage />
     </AppAccessGate>
   ),
