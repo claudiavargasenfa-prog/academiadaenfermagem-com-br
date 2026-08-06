@@ -19,7 +19,15 @@ export const Route = createFileRoute("/seguranca")({
         content:
           "As 6 Metas Internacionais de Segurança do Paciente (OMS/ANVISA) e cultura não punitiva.",
       },
+      { property: "og:title", content: "Segurança do Paciente — Academia da Enfermagem" },
+      { property: "og:description", content: "As 6 Metas Internacionais de Segurança do Paciente (OMS/ANVISA) e cultura não punitiva." },
+      { property: "og:url", content: "https://academiadaenfermagem.com.br/seguranca" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: "Segurança do Paciente — Academia da Enfermagem" },
+      { name: "twitter:description", content: "As 6 Metas Internacionais de Segurança do Paciente (OMS/ANVISA) e cultura não punitiva." },
     ],
+    links: [{ rel: "canonical", href: "https://academiadaenfermagem.com.br/seguranca" }],
   }),
   component: SegurancaPage,
 });

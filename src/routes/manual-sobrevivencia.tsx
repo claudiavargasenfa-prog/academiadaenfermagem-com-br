@@ -13,7 +13,15 @@ export const Route = createFileRoute("/manual-sobrevivencia")({
         content:
           "Conteúdo gratuito: primeiros passos no estágio, checklist da mochila, postura no campo e comunicação com preceptor.",
       },
+      { property: "og:title", content: "Manual de Sobrevivência do Estágio — Academia da Enfermagem" },
+      { property: "og:description", content: "Conteúdo gratuito: primeiros passos no estágio, checklist da mochila, postura no campo e comunicação com preceptor." },
+      { property: "og:url", content: "https://academiadaenfermagem.com.br/manual-sobrevivencia" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: "Manual de Sobrevivência do Estágio — Academia da Enfermagem" },
+      { name: "twitter:description", content: "Conteúdo gratuito: primeiros passos no estágio, checklist da mochila, postura no campo e comunicação com preceptor." },
     ],
+    links: [{ rel: "canonical", href: "https://academiadaenfermagem.com.br/manual-sobrevivencia" }],
   }),
   component: Page,
 });
