@@ -1,0 +1,1 @@
+UPDATE public.app_texts SET value = replace(value, 'mini apps', 'guias clínicos') WHERE value ILIKE '%mini apps%';
