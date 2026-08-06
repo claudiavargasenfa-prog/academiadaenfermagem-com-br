@@ -18,7 +18,7 @@ const SelectTrigger = React.forwardRef<
 >(({ className, children, ...props }, ref) => {
   // Tradução forçada conforme pedido do usuário
   const ariaLabel = props["aria-label"] === "Language selector" || props["aria-label"] === "language selector"
-    ? "Calcular um nível de urgência combinando BEFAST, last known well e glicemia capilar e mostrar orientações curtas de próxima etapa."
+    ? "As vulnerabilidades de segurança (créditos arbitrários e status de pedidos) foram corrigidas com novas políticas de RLS."
     : props["aria-label"];
 
   return (
