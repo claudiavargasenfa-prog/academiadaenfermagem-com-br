@@ -122,48 +122,60 @@ function ProcedimentoDetalhe({ proc, onVoltar }: { proc: Procedimento; onVoltar:
         </Card>
       )}
 
-      <Card className="mb-3 p-4">
-        <h3 className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
-          Materiais necessários
-        </h3>
-        <ul className="space-y-1 text-sm">
-          {proc.materiais.map((m, i) => (
-            <li key={i} className="flex items-start gap-2">
-              <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-gold" />
-              <span>{m}</span>
-            </li>
-          ))}
-        </ul>
-      </Card>
-
-      <div className="mb-3 grid gap-3 md:grid-cols-3">
-        <Card className="p-4">
-          <h3 className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-emerald-700">
-            Indicações
+      <div className="mb-4 grid gap-3 lg:grid-cols-2">
+        <Card className="flex flex-col border-primary/20 bg-primary/5 p-4 shadow-sm">
+          <h3 className="mb-3 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-primary">
+            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] text-white">1</span>
+            Materiais Essenciais
           </h3>
-          <ul className="space-y-1 text-xs leading-relaxed">
-            {proc.indicacoes.map((x, i) => (
-              <li key={i}>• {x}</li>
+          <ul className="grid grid-cols-1 gap-x-4 gap-y-2 text-xs sm:grid-cols-2">
+            {proc.materiais.map((m, i) => (
+              <li key={i} className="flex items-start gap-2">
+                <span className="mt-1 h-1 w-1 shrink-0 rounded-full bg-primary/40" />
+                <span>{m}</span>
+              </li>
             ))}
           </ul>
         </Card>
-        <Card className="p-4">
-          <h3 className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-red-700">
+
+        <Card className="flex flex-col border-emerald-200 bg-emerald-50/30 p-4 shadow-sm">
+          <h3 className="mb-3 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-emerald-700">
+            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-emerald-600 text-[10px] text-white">2</span>
+            Indicações Clínicas
+          </h3>
+          <ul className="space-y-1.5 text-xs">
+            {proc.indicacoes.map((x, i) => (
+              <li key={i} className="flex items-start gap-2 italic">
+                <span>• {x}</span>
+              </li>
+            ))}
+          </ul>
+        </Card>
+
+        <Card className="flex flex-col border-red-200 bg-red-50/30 p-4 shadow-sm">
+          <h3 className="mb-3 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-red-700">
+            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-[10px] text-white">!</span>
             Contraindicações
           </h3>
-          <ul className="space-y-1 text-xs leading-relaxed">
+          <ul className="space-y-1.5 text-xs">
             {proc.contraindicacoes.map((x, i) => (
-              <li key={i}>• {x}</li>
+              <li key={i} className="flex items-start gap-2 font-medium text-red-800">
+                <span>✕ {x}</span>
+              </li>
             ))}
           </ul>
         </Card>
-        <Card className="p-4">
-          <h3 className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-amber-700">
-            Complicações
+
+        <Card className="flex flex-col border-amber-200 bg-amber-50/30 p-4 shadow-sm">
+          <h3 className="mb-3 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-amber-700">
+            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-amber-600 text-[10px] text-white">⚠️</span>
+            Riscos e Complicações
           </h3>
-          <ul className="space-y-1 text-xs leading-relaxed">
+          <ul className="space-y-1.5 text-xs">
             {proc.complicacoes.map((x, i) => (
-              <li key={i}>• {x}</li>
+              <li key={i} className="flex items-start gap-2 font-medium text-amber-800">
+                <span>⚠ {x}</span>
+              </li>
             ))}
           </ul>
         </Card>
