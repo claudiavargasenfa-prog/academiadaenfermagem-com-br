@@ -16,7 +16,9 @@ export const Route = createFileRoute("/confianca")({
         content:
           "Como a Academia da Enfermagem cuida dos seus dados, do seu acesso e da sua privacidade.",
       },
+      { property: "og:url", content: "https://academiadaenfermagem.com.br/confianca" },
     ],
+    links: [{ rel: "canonical", href: "https://academiadaenfermagem.com.br/confianca" }],
   }),
   component: TrustPage,
 });

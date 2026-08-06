@@ -20,7 +20,9 @@ export const Route = createFileRoute("/minha-historia")({
         content:
           "Da beira do leito para a tecnologia: a trajetória de quem dedicou 35 anos à arte de cuidar.",
       },
+      { property: "og:url", content: "https://academiadaenfermagem.com.br/minha-historia" },
     ],
+    links: [{ rel: "canonical", href: "https://academiadaenfermagem.com.br/minha-historia" }],
   }),
   component: MinhaHistoriaPage,
 });

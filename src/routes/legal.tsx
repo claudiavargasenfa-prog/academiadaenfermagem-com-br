@@ -22,6 +22,7 @@ export const Route = createFileRoute("/legal")({
       { property: "og:description", content: DESC },
       { property: "og:type", content: "article" },
       { name: "twitter:card", content: "summary" },
+      { property: "og:url", content: "https://academiadaenfermagem.com.br/legal" },
     ],
     links: [{ rel: "canonical", href: "https://academiadaenfermagem.com.br/legal" }],
   }),

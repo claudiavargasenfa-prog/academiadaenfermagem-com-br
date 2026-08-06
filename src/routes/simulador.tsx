@@ -23,7 +23,9 @@ export const Route = createFileRoute("/simulador")({
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:url", content: "https://academiadaenfermagem.com.br/simulador" },
     ],
+    links: [{ rel: "canonical", href: "https://academiadaenfermagem.com.br/simulador" }],
   }),
   component: SimuladorPage,
 });
