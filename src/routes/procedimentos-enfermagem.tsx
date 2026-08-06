@@ -71,7 +71,7 @@ function ProcedimentosPage() {
     <AppShell>
       <PageHeader
         eyebrow="Técnica e Prevenção Baseada em Evidências"
-        title="Punção Venosa e Flebite"
+        title="Punção Venosa e Flebite 💉"
         description="PUNÇÃO VENOSA PERIFÉRICA E PREVENÇÃO DE FLEBITE: 12 fotos reais da técnica passo a passo, escala de flebite Maddox e materiais essenciais."
       />
 
