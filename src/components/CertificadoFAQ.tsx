@@ -86,36 +86,46 @@ export function CertificadoFAQ() {
                         width: 800px; height: 560px; padding: 40px; border: 20px solid #b8912f; background: white; position: relative; text-align: center;
                         box-shadow: 0 20px 50px rgba(0,0,0,0.1);
                       }
+                      .header-adec {
+                        display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 20px;
+                      }
+                      .logo-adec { width: 60px; height: 60px; object-fit: contain; }
+                      .header-text { text-align: left; }
+                      .header-title { color: #0f4c35; font-size: 18px; font-weight: 800; margin: 0; }
+                      .header-subtitle { color: #333; font-size: 12px; margin: 0; font-weight: 500; }
                       .watermark { 
                         position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg);
                         font-size: 120px; color: rgba(0,0,0,0.05); font-weight: bold; pointer-events: none; text-transform: uppercase;
                       }
-                      h1 { color: #0f4c35; font-size: 48px; margin-bottom: 10px; }
-                      h2 { color: #b8912f; font-size: 24px; margin-bottom: 40px; }
-                      .content { font-size: 20px; line-height: 1.6; color: #333; }
-                      .name { font-size: 32px; font-weight: bold; color: #000; border-bottom: 2px solid #eee; display: inline-block; margin: 20px 0; padding: 0 40px; }
-                      .footer { margin-top: 60px; display: flex; justify-content: space-between; align-items: flex-end; }
+                      h1 { color: #0f4c35; font-size: 44px; margin: 0; }
+                      .content { font-size: 18px; line-height: 1.4; color: #333; margin: 20px 0; }
+                      .name { font-size: 28px; font-weight: bold; color: #000; border-bottom: 2px solid #eee; display: inline-block; margin: 10px 0; padding: 0 40px; }
+                      .footer { margin-top: 40px; display: flex; justify-content: space-between; align-items: flex-end; }
                       .seal { 
-                        width: 120px; height: 120px; 
+                        width: 100px; height: 100px; 
                         background: radial-gradient(circle, #f5e6ab 0%, #b8912f 100%); 
-                        border: 4px double #0f4c35;
+                        border: 3px double #0f4c35;
                         border-radius: 50%; 
                         display: flex; flex-direction: column; align-items: center; justify-content: center; 
-                        color: #0f4c35; font-weight: 900; font-size: 11px; text-align: center;
-                        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+                        color: #0f4c35; font-weight: 900; font-size: 9px; text-align: center;
+                        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
                         text-transform: uppercase;
-                        line-height: 1.1;
                       }
-                      .seal-star { color: #0f4c35; font-size: 16px; margin-bottom: 2px; }
-                      .qr { width: 80px; height: 80px; background: #eee; border: 1px solid #ccc; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #666; }
+                      .qr { width: 70px; height: 70px; background: #eee; border: 1px solid #ccc; display: flex; align-items: center; justify-content: center; font-size: 9px; color: #666; }
                     </style>
                   </head>
                   <body>
                     <div class="certificate">
                       <div class="watermark">MODELO</div>
-                      <h2 style="letter-spacing: 5px;">ACADEMIA DA ENFERMAGEM</h2>
-                      <h1 style="margin-top: 0;">CERTIFICADO</h1>
-                      <p class="content" style="margin-top: 40px;">Certificamos para os devidos fins que</p>
+                      <div class="header-adec">
+                        <img class="logo-adec" src="${"/__l5e/assets-v1/e5edd1d1-9529-4274-9856-669b45b6454a/logo-adec.png"}" alt="Logo ADEC">
+                        <div class="header-text">
+                          <p class="header-title">ADEC - Avaliação Diagnóstica em Enfermagem Clínica</p>
+                          <p class="header-subtitle">Sistema Brasileiro de Hipótese Diagnóstica em Enfermagem</p>
+                        </div>
+                      </div>
+                      <h1>CERTIFICADO</h1>
+                      <p class="content">Certificamos para os devidos fins que</p>
                       <div class="name">NOME DO ALUNO EXEMPLO</div>
                       <p class="content">
                         concluiu com êxito o módulo técnico de especialização em<br>
@@ -125,11 +135,11 @@ export function CertificadoFAQ() {
                       <div class="footer">
                         <div class="qr">QR CODE<br>VALIDAÇÃO</div>
                         <div style="text-align:center; flex: 1;">
-                          <div style="width:200px; border-top: 2px solid #0f4c35; margin: 0 auto 5px;"></div>
-                          <span style="font-size:14px; font-weight: bold; color: #0f4c35;">Assinatura Digital ADEC</span>
+                          <div style="width:180px; border-top: 2px solid #0f4c35; margin: 0 auto 5px;"></div>
+                          <span style="font-size:12px; font-weight: bold; color: #0f4c35;">Assinatura Digital ADEC</span>
                         </div>
                         <div class="seal">
-                          <span class="seal-star">★ ★ ★</span>
+                          <span style="font-size:12px;">★ ★ ★</span>
                           QUALIDADE<br>PREMIUM<br>ADEC
                         </div>
                       </div>
