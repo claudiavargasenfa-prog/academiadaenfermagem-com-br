@@ -16,18 +16,16 @@ async function updateAVCChecklist() {
 
   let content = guia.content_md;
 
-  // 1. Injeta o estilo para o checklist
   const style = `
 <style>
   .stroke-checklist { margin-top: 20px; padding: 15px; background: #fffde7; border-radius: 8px; border: 1px solid #fbc02d; display: none; }
   .stroke-checklist h4 { margin: 0 0 10px 0; color: #f57f17; display: flex; align-items: center; gap: 8px; }
   .checklist-item { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; font-size: 0.9rem; }
   .checklist-item input { margin-top: 3px; }
-  .checklist-item label { color: #5d4037; }
+  .checklist-item label { color: #5d4037; cursor: pointer; }
 </style>
 `;
 
-  // 2. HTML do Checklist (inicialmente oculto)
   const checklistHtml = \`
 \${style}
 <div id="checklist-porta-agulha" class="stroke-checklist">
@@ -41,12 +39,11 @@ async function updateAVCChecklist() {
 </div>
 \`;
 
-  // 3. Modifica a função acionarCodeStroke para exibir o checklist
-  const scriptMatch = content.match(/<script>([\\s\\S]*?)<\\/script>/);
+  const scriptMatch = content.match(/<script>([\s\S]*?)<\/script>/);
   if (scriptMatch) {
     let scriptContent = scriptMatch[1];
     
-    if (!scriptContent.includes('document.getElementById(\\'checklist-porta-agulha\\')')) {
+    if (!scriptContent.includes('checklist-porta-agulha')) {
       scriptContent = scriptContent.replace(
         'renderizarHistorico();',
         \`renderizarHistorico();
@@ -60,7 +57,6 @@ async function updateAVCChecklist() {
     }
   }
 
-  // 4. Adiciona o checklist antes do histórico
   if (!content.includes('checklist-porta-agulha')) {
     if (content.includes('<div class="stroke-history">')) {
         content = content.replace('<div class="stroke-history">', \`\${checklistHtml}<div class="stroke-history">\`);
@@ -77,7 +73,7 @@ async function updateAVCChecklist() {
   if (updateError) {
     console.error('Erro ao atualizar guia:', updateError);
   } else {
-    console.log(' Checklist porta-agulha implementado com sucesso!');
+    console.log('Checklist porta-agulha implementado com sucesso!');
   }
 }
 
