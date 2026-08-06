@@ -46,13 +46,9 @@ export function ProcedimentoPlayer({ cenas }: { cenas: Cena[] }) {
             key={cena.imagem}
             src={cena.imagem}
             alt={cena.titulo}
-            className="h-full w-full object-contain transition-opacity duration-300 opacity-0"
-            style={{ display: 'block', minHeight: '200px' }}
+            className="h-full w-full object-contain"
+            style={{ display: 'block', minHeight: '300px' }}
             loading="eager"
-            onLoad={(e) => {
-              (e.target as HTMLImageElement).classList.remove("opacity-0");
-              (e.target as HTMLImageElement).classList.add("opacity-100");
-            }}
             onError={(e) => {
               console.error("Erro ao carregar imagem da cena:", cena.imagem);
               (e.target as HTMLImageElement).src = "https://via.placeholder.com/800x600?text=Erro+ao+carregar+imagem";

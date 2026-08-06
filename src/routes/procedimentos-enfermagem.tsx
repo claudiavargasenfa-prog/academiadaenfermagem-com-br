@@ -143,11 +143,13 @@ function ProcedimentoDetalhe({ proc, onVoltar }: { proc: Procedimento; onVoltar:
         </p>
       </div>
 
-      {proc.cenas.length > 0 ? (
+      {proc.cenas.length > 0 && (
         <div className="mb-4">
           <ProcedimentoPlayer cenas={proc.cenas} />
         </div>
-      ) : (
+      )}
+
+      {!proc.cenas.length && (
         <Card className="mb-4 border-amber-300 bg-amber-50 p-6 text-center">
           <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-amber-100 text-amber-600">
             <Hourglass className="h-8 w-8 animate-pulse" />
