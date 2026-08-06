@@ -179,16 +179,24 @@ const RawHtmlHost = memo(function RawHtmlHost({ html }: { html: string }) {
     const el = hostRef.current;
     if (!el) return;
     el.innerHTML = html;
+    // <script> inserido via innerHTML não executa: recriamos cada um.
+    el.querySelectorAll("script").forEach((old) => {
+      const s = document.createElement("script");
+      for (const a of Array.from(old.attributes)) s.setAttribute(a.name, a.value);
+      s.textContent = old.textContent;
+      old.replaceWith(s);
+    });
   }, [html]);
   return <div ref={hostRef} className="mini-app-html" />;
 });
+
 
 export function MiniAppHtmlContent({ html }: { html: string }) {
   const ref = useRef<HTMLDivElement>(null);
   // Mini app SAE traz <script> embutido; renderizamos o HTML bruto (sem
   // sanitização) pois o conteúdo é escrito pelo admin e precisamos preservar
   // os <script> — DOMPurify remove todos por padrão.
-  const isSae = /lavoble-sae-descomplicada/.test(html);
+  const isSae = /lavoble-sae-descomplicada/.test(html) || /<script[\s>]/i.test(html);
 
   // Detecta o mini app COLETA DE DADOS + ADMISSÃO DE TURNO pelos IDs
   // característicos do formulário (não depende de slug — resiste a duplicações).

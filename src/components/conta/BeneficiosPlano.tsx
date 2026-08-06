@@ -87,8 +87,6 @@ export default function BeneficiosPlano() {
   const allowed = subs.reduce((m, s) => Math.max(m, s.certificates_allowed ?? 0), 0);
   const restantes = Math.max(0, allowed - certs.length);
 
-  if (subs.length === 0) return null;
-  if (!anual && allowed === 0) return null;
 
   async function escolherBonus() {
     if (!bonus) return;
@@ -168,20 +166,28 @@ export default function BeneficiosPlano() {
         </div>
       )}
 
-      {allowed > 0 && (
-        <div className="relative overflow-hidden rounded-2xl border-2 border-[#b8912f]/30 bg-gradient-to-br from-[#fbf8f1] to-[#f7f2e8] p-5 shadow-sm">
+      {(
+        <div id="certificados" className="relative overflow-hidden rounded-2xl border-2 border-[#b8912f]/30 bg-gradient-to-br from-[#fbf8f1] to-[#f7f2e8] p-5 shadow-sm">
           <div className="absolute -right-4 -top-4 opacity-10">
             <Award className="h-24 w-24 text-[#b8912f]" />
           </div>
           <p className="flex items-center gap-2 font-display text-lg font-black text-[#8a6d24]">
             <Award className="h-5 w-5 text-[#b8912f]" /> CERTIFICADOS DE 10 HORAS
           </p>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Você tem <strong>{restantes}</strong> de {allowed} certificados disponíveis. Escolha o mini app estudado.
-          </p>
-          {restantes > 0 && (
+          {allowed > 0 ? (
+            <p className="mt-1 text-sm text-muted-foreground">
+              Você tem <strong>{restantes}</strong> de {allowed} certificados disponíveis. Escolha o mini app estudado.
+            </p>
+          ) : (
+            <p className="mt-1 text-sm text-muted-foreground">
+              Seu plano atual ainda não inclui certificados. Os planos trimestral, semestral e anual liberam de 1 a 4
+              certificados de 10 horas por ano. Você também pode emitir avulso pelo checkout.
+            </p>
+          )}
+          {allowed > 0 && restantes > 0 && (
             <div className="mt-3 flex flex-wrap gap-2">
               <select
+
                 value={miniAppId}
                 onChange={(e) => setMiniAppId(e.target.value)}
                 className="max-w-full rounded-xl border px-3 py-2 text-sm"
