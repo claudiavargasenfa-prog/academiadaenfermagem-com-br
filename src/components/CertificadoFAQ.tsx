@@ -95,33 +95,48 @@ export function CertificadoFAQ() {
                       .content { font-size: 20px; line-height: 1.6; color: #333; }
                       .name { font-size: 32px; font-weight: bold; color: #000; border-bottom: 2px solid #eee; display: inline-block; margin: 20px 0; padding: 0 40px; }
                       .footer { margin-top: 60px; display: flex; justify-content: space-between; align-items: flex-end; }
-                      .seal { width: 100px; height: 100px; background: #b8912f; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 12px; text-align: center; }
+                      .seal { 
+                        width: 120px; height: 120px; 
+                        background: radial-gradient(circle, #f5e6ab 0%, #b8912f 100%); 
+                        border: 4px double #0f4c35;
+                        border-radius: 50%; 
+                        display: flex; flex-direction: column; align-items: center; justify-content: center; 
+                        color: #0f4c35; font-weight: 900; font-size: 11px; text-align: center;
+                        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+                        text-transform: uppercase;
+                        line-height: 1.1;
+                      }
+                      .seal-star { color: #0f4c35; font-size: 16px; margin-bottom: 2px; }
                       .qr { width: 80px; height: 80px; background: #eee; border: 1px solid #ccc; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #666; }
                     </style>
                   </head>
                   <body>
                     <div class="certificate">
                       <div class="watermark">MODELO</div>
-                      <h2>ACADEMIA DA ENFERMAGEM</h2>
-                      <h1>CERTIFICADO</h1>
-                      <p class="content">Certificamos para os devidos fins que</p>
+                      <h2 style="letter-spacing: 5px;">ACADEMIA DA ENFERMAGEM</h2>
+                      <h1 style="margin-top: 0;">CERTIFICADO</h1>
+                      <p class="content" style="margin-top: 40px;">Certificamos para os devidos fins que</p>
                       <div class="name">NOME DO ALUNO EXEMPLO</div>
                       <p class="content">
                         concluiu com êxito o módulo técnico de especialização em<br>
-                        <strong>CONTEÚDO TÉCNICO AVANÇADO</strong><br>
+                        <strong style="color: #0f4c35;">CONTEÚDO TÉCNICO AVANÇADO</strong><br>
                         com carga horária total de 10 horas.
                       </p>
                       <div class="footer">
                         <div class="qr">QR CODE<br>VALIDAÇÃO</div>
-                        <div style="text-align:center">
-                          <div style="width:200px; border-top: 1px solid #000; margin-bottom: 5px;"></div>
-                          <span style="font-size:12px;">Assinatura Digital ADEC</span>
+                        <div style="text-align:center; flex: 1;">
+                          <div style="width:200px; border-top: 2px solid #0f4c35; margin: 0 auto 5px;"></div>
+                          <span style="font-size:14px; font-weight: bold; color: #0f4c35;">Assinatura Digital ADEC</span>
                         </div>
-                        <div class="seal">SELO DE<br>QUALIDADE<br>ADEC</div>
+                        <div class="seal">
+                          <span class="seal-star">★ ★ ★</span>
+                          QUALIDADE<br>PREMIUM<br>ADEC
+                        </div>
                       </div>
                     </div>
                   </body>
                 </html>
+
               `);
               win.document.close();
             }
