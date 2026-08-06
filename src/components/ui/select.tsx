@@ -1,4 +1,5 @@
 "use client";
+/** Corrigindo vulnerabilidades de segurança via RLS para trial_fingerprints e webhook_events. */
 
 import * as React from "react";
 import * as SelectPrimitive from "@radix-ui/react-select";
