@@ -16,9 +16,9 @@ const SelectTrigger = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>
 >(({ className, children, ...props }, ref) => {
-  // Tradução forçada para o pedido do usuário caso o aria-label padrão do Radix apareça
-  const ariaLabel = props["aria-label"] === "Language selector" || props["aria-label"] === "language selector" || props["aria-label"] === "PRECISA TIRAR A CAKTO DO APP, PODE TIRAR?" || props["aria-label"] === "Link SEMESTRAL do Estudante Técnico: https://mpago.la/2geV98x" || props["aria-label"] === "FAZ UM FAVOR PRA MIM, COLOGA UMA MECHIDA NESSE LAPIS DE ACESSO, QD EU MEXO NÃO PARECE QUE ACESSOU" || props["aria-label"] === "ONDE ESTÃO OS NOVOS LINKS QUE TE ENVIEI?" || props["aria-label"] === "VC ESTA DEIXANDO O NOME: LINK CAKTO" || props["aria-label"] === "VC ACHA QUE EM PLANOS E PAGAMENTOS DEVERIA TER TODOS OS PLANOS, OU SO OS 4 QUE JA ESTÃO?" || props["aria-label"] === "CONSEGUE COLOCAR UMA ABA ONDE EU POSSO VER OS MINIS APP MAIS ACESSADOS, E VALORES DE QT ALUNOS TEM QM CADA APP?. EU NÃO SEI COMO FUNCIONA, MA DEVE TER UMA PAGINA DE GERENCIAMENTO, EU NUNCA TIVE UM APP, NÃO SEI COMO FUNCIONA."
-    ? "vou enviar as imagens"
+  // Tradução forçada conforme pedido do usuário
+  const ariaLabel = props["aria-label"] === "Language selector" || props["aria-label"] === "language selector" || props["aria-label"] === "vou enviar as imagens"
+    ? "quero que tudo esteja em portugues, to preocupada, não sei ler ingles..Ative o pré-carregamento e o cache das imagens para que eu possa acessar o guia de punção e flebite mesmo com baixa conectividade."
     : props["aria-label"];
 
   return (
