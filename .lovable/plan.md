@@ -7,7 +7,7 @@
 3. Os links reais do Mercado Pago existem e estão certos em `plan_offers` (4 períodos × 4 trilhas = 16 links `mpago.la`), mas a tela de checkout **nunca usa** esses links.
 4. O webhook de pagamento (`/api/public/payments`) já está pronto e correto: confere o pagamento direto na API do Mercado Pago e libera o acesso.
 
-Observação: você confirmou que o trimestral do Estudante de Técnico usa o link https://mpago.la/1WYrvma (o mesmo do mensal) — já é o que está cadastrado, então nada a mudar aí. Com o checkout próprio isso deixa de importar, porque o valor passa a ser gerado na hora.
+Correção que você enviou (Estudante de Técnico): mensal = https://mpago.la/2r77Fze e trimestral = https://mpago.la/1WYrvma. Hoje o cadastro está com o link do trimestral também no mensal — vou corrigir o mensal para o link novo.
 
 ## O que eu proponho (mantém a sua tela, que você gostou)
 
