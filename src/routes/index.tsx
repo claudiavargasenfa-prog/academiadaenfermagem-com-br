@@ -8,6 +8,7 @@ import {
   fetchMyActiveSubscriptions,
 } from "@/lib/access";
 import { useApps } from "@/lib/apps";
+import { isBasePlanSlug } from "@/lib/plan-slugs";
 import { RichText, useText } from "@/lib/app-texts";
 import { FeedbackCollector } from "@/components/FeedbackCollector";
 import { TestimonialsSection } from "@/components/TestimonialsSection";
@@ -53,7 +54,7 @@ function StoreHomeContent() {
 
   const lojaSortMode = useText("ordenacao.loja", "numeric");
   const activePlans = (plansQ.data ?? [])
-    .filter((p) => p.is_active)
+    .filter((p) => p.is_active && isBasePlanSlug(p.slug))
     .slice()
     .sort((a, b) => {
       if (lojaSortMode === "alpha") return a.name.localeCompare(b.name, "pt-BR");
