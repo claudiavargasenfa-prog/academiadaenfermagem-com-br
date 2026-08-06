@@ -28,16 +28,16 @@ export function ProcedimentoPlayer({ cenas }: { cenas: Cena[] }) {
   return (
     <div className="overflow-hidden rounded-2xl border border-gold/30 bg-card shadow-[var(--shadow-soft)]">
       {/* Palco da animação */}
-      <div className="relative aspect-[4/3] w-full bg-slate-900 overflow-hidden ring-4 ring-primary/20">
+      <div className="relative aspect-[4/3] w-full bg-slate-900 overflow-hidden ring-4 ring-primary/20 flex items-center justify-center">
         {cena.imagem ? (
           <img
             key={cena.ordem}
             src={cena.imagem}
             alt={cena.titulo}
-            className="absolute inset-0 h-full w-full animate-fade-in object-contain"
-            loading="lazy"
-            width={1024}
-            height={768}
+            className="h-full w-full object-contain"
+            loading="eager"
+            width={1280}
+            height={960}
           />
         ) : (
           <div className="grid h-full w-full place-items-center text-foreground/40">
