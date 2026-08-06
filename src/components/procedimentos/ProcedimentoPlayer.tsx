@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { Pause, Play, SkipBack, SkipForward, AlertTriangle } from "lucide-react";
 import type { Cena } from "@/data/procedimentos";
 
@@ -11,6 +11,18 @@ const COR_OVERLAY: Record<string, string> = {
 export function ProcedimentoPlayer({ cenas }: { cenas: Cena[] }) {
   const [idx, setIdx] = useState(0);
   const [tocando, setTocando] = useState(false);
+
+  // Pré-carregamento de imagens para acesso offline/baixa conectividade
+  useMemo(() => {
+    if (typeof window !== "undefined") {
+      cenas.forEach((cena) => {
+        if (cena.imagem) {
+          const img = new Image();
+          img.src = cena.imagem;
+        }
+      });
+    }
+  }, [cenas]);
 
   const cena = cenas[idx];
   const duracao = cena?.duracaoMs ?? 5000;
