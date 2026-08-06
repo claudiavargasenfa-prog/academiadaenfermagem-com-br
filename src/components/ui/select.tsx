@@ -18,7 +18,7 @@ const SelectTrigger = React.forwardRef<
 >(({ className, children, ...props }, ref) => {
   // Tradução forçada conforme pedido do usuário
   const ariaLabel = props["aria-label"] === "Language selector" || props["aria-label"] === "language selector"
-    ? "como será emitido o certificado??"
+    ? "o selo está horrivel faz um lindo em dourado e verdinho"
     : props["aria-label"];
 
   return (
