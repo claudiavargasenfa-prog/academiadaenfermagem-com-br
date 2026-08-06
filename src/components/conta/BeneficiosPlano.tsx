@@ -87,8 +87,6 @@ export default function BeneficiosPlano() {
   const allowed = subs.reduce((m, s) => Math.max(m, s.certificates_allowed ?? 0), 0);
   const restantes = Math.max(0, allowed - certs.length);
 
-  if (subs.length === 0) return null;
-  if (!anual && allowed === 0) return null;
 
   async function escolherBonus() {
     if (!bonus) return;
