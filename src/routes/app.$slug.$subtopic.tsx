@@ -7,11 +7,26 @@ import { supabase } from "@/integrations/supabase/client";
 import { renderContent } from "@/lib/markdown";
 
 export const Route = createFileRoute("/app/$slug/$subtopic")({
-  head: ({ params }) => ({
-    meta: [
-      { title: `${params.subtopic} — ${params.slug} — Academia da Enfermagem` },
-    ],
-  }),
+  head: ({ params }) => {
+    const title = `${params.subtopic} — ${params.slug} — Academia da Enfermagem`;
+    const desc = `Conteúdo clínico de ${params.subtopic} no guia ${params.slug} da Academia da Enfermagem: SAE e PE automatizados na prática.`;
+    const url = `https://academiadaenfermagem.com.br/app/${params.slug}/${params.subtopic}`;
+    return {
+      meta: [
+        { title },
+        { name: "description", content: desc },
+        { property: "og:title", content: title },
+        { property: "og:description", content: desc },
+        { property: "og:url", content: url },
+        { property: "og:type", content: "article" },
+        { name: "twitter:card", content: "summary" },
+        { name: "twitter:title", content: title },
+        { name: "twitter:description", content: desc },
+      ],
+      links: [{ rel: "canonical", href: url }],
+    };
+  },
+
   component: Page,
   notFoundComponent: () => (
     <AppShell>
