@@ -2,8 +2,8 @@ import type { Procedimento } from "./index";
 
 export const PROC_PUNCAO_SEGURANCA: Procedimento = {
   slug: "puncao-seguranca",
-  titulo: "Punção Venosa Periférica com Dispositivo de Segurança",
-  subtitulo: "Técnica baseada em evidências — NR-32 e prevenção de flebite",
+  titulo: "Punção Venosa e Flebite (Disp. Segurança)",
+  subtitulo: "NR-32, escala de flebite Maddox e prevenção",
   icon: "💉",
   cor: "text-rose-600",
   publico: "Adulto",
