@@ -180,24 +180,13 @@ export default function OfertasPeriodo({
               Você já tem acesso ativo
             </span>
           ) : isLoggedIn ? (
-            checkoutUrl ? (
-              <a
-                href={checkoutUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-primary px-4 py-4 text-sm font-black uppercase tracking-wide text-primary-foreground shadow-lg transition hover:opacity-90 active:scale-[0.99]"
-              >
-                Assinar {meta.title.toLowerCase()} <ExternalLink className="h-4 w-4" />
-              </a>
-            ) : (
-              <Link
-                to="/checkout"
-                search={{ plan: slug }}
-                className="inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-primary px-4 py-4 text-sm font-black uppercase tracking-wide text-primary-foreground shadow-lg transition hover:opacity-90 active:scale-[0.99]"
-              >
-                Assinar {meta.title.toLowerCase()}
-              </Link>
-            )
+            <Link
+              to="/checkout"
+              search={{ plan: slug, period: selected.billing_period }}
+              className="inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-primary px-4 py-4 text-sm font-black uppercase tracking-wide text-primary-foreground shadow-lg transition hover:opacity-90 active:scale-[0.99]"
+            >
+              Assinar {meta.title.toLowerCase()} <ExternalLink className="h-4 w-4" />
+            </Link>
           ) : (
             <a
               href={`/cadastro/${slug}`}
