@@ -84,7 +84,7 @@ export default function ComparativoUpgrade() {
 
                       <Link
                         to="/checkout"
-                        search={{ plan: track.slug }}
+                        search={{ plan: track.slug, period: o.billing_period }}
                         className={`mt-auto flex w-full items-center justify-center gap-2 rounded-xl py-2.5 text-xs font-black transition-all ${
                           isBestValue 
                           ? "gold-gradient text-white shadow-md hover:scale-[1.02]" 
