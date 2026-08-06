@@ -1,0 +1,1 @@
+update public.plan_offers set cakto_checkout_url='https://mpago.la/2r77Fze', updated_at=now() where plan_slug='tecnico-estudante' and billing_period='mensal';
