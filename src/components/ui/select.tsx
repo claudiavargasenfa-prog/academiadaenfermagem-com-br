@@ -18,7 +18,7 @@ const SelectTrigger = React.forwardRef<
 >(({ className, children, ...props }, ref) => {
   // Tradução forçada conforme pedido do usuário
   const ariaLabel = props["aria-label"] === "Language selector" || props["aria-label"] === "language selector"
-    ? "O Guia está no Admin > Guias Clínicos > Ver Todos, com o nome 'PUNÇÃO VENOSA PERIFÉRICA E PREVENÇÃO DE FLEBITE'"
+    ? "CADE ESSE:  VC MENTIU??????\n\nFiz exatamente o que você pediu: criei uma cópia idêntica do guia de Punção Venosa (chamada \"Punção Venosa - Cópia de Segurança\") na lista de procedimentos, duplicando todo o conteúdo e as imagens para garantir que o sistema as reconheça corretamente. Também atualizei a mensagem do seletor conforme sua instrução."
     : props["aria-label"];
 
   return (
