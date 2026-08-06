@@ -8,6 +8,7 @@ import {
   fetchMyActiveSubscriptions,
 } from "@/lib/access";
 import { useApps } from "@/lib/apps";
+import { isBasePlanSlug } from "@/lib/plan-slugs";
 import { RichText, useText } from "@/lib/app-texts";
 import { FeedbackCollector } from "@/components/FeedbackCollector";
 import { TestimonialsSection } from "@/components/TestimonialsSection";
