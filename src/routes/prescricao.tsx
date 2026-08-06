@@ -12,7 +12,15 @@ export const Route = createFileRoute("/prescricao")({
         content:
           "Monte e imprima/salve em PDF a prescrição de enfermagem direto do seu navegador.",
       },
+      { property: "og:title", content: "Prescrição — Academia da Enfermagem" },
+      { property: "og:description", content: "Monte e imprima/salve em PDF a prescrição de enfermagem direto do seu navegador." },
+      { property: "og:url", content: "https://academiadaenfermagem.com.br/prescricao" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: "Prescrição — Academia da Enfermagem" },
+      { name: "twitter:description", content: "Monte e imprima/salve em PDF a prescrição de enfermagem direto do seu navegador." },
     ],
+    links: [{ rel: "canonical", href: "https://academiadaenfermagem.com.br/prescricao" }],
   }),
   component: PrescricaoPage,
 });

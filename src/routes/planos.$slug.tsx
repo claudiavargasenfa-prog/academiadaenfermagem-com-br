@@ -55,7 +55,9 @@ export const Route = createFileRoute("/planos/$slug")({
         { property: "og:description", content: desc },
         { property: "og:type", content: "website" },
         { name: "twitter:card", content: "summary_large_image" },
+        { property: "og:url", content: `https://academiadaenfermagem.com.br/planos/${params.slug}` },
       ],
+      links: [{ rel: "canonical", href: `https://academiadaenfermagem.com.br/planos/${params.slug}` }],
     };
   },
   beforeLoad: ({ params }) => {

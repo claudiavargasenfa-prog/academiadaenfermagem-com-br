@@ -21,7 +21,14 @@ import { PaymentTester } from "@/components/admin/PaymentTester";
 import { QUIZZES } from "@/data/quizzes";
 
 export const Route = createFileRoute("/admin")({
-  head: () => ({ meta: [{ title: "Admin — Academia da Enfermagem" }] }),
+  head: () => ({
+    meta: [
+      { title: "Admin — Academia da Enfermagem" },
+      { name: "description", content: "Painel administrativo da Academia da Enfermagem." },
+      { name: "robots", content: "noindex, nofollow" },
+    ],
+  }),
+
   component: AdminPage,
 });
 

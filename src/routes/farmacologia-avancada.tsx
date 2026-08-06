@@ -9,7 +9,15 @@ export const Route = createFileRoute("/farmacologia-avancada")({
     meta: [
       { title: "Farmacologia Avançada — Academia da Enfermagem" },
       { name: "description", content: "Aminas vasoativas, antibióticos, sedativos e diluições críticas." },
+      { property: "og:title", content: "Farmacologia Avançada — Academia da Enfermagem" },
+      { property: "og:description", content: "Aminas vasoativas, antibióticos, sedativos e diluições críticas." },
+      { property: "og:url", content: "https://academiadaenfermagem.com.br/farmacologia-avancada" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: "Farmacologia Avançada — Academia da Enfermagem" },
+      { name: "twitter:description", content: "Aminas vasoativas, antibióticos, sedativos e diluições críticas." },
     ],
+    links: [{ rel: "canonical", href: "https://academiadaenfermagem.com.br/farmacologia-avancada" }],
   }),
   component: Page,
 });

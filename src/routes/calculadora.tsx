@@ -10,7 +10,15 @@ export const Route = createFileRoute("/calculadora")({
     meta: [
       { title: "Cálculo de Medicamentos — Enfermagem em Foco" },
       { name: "description", content: "Calculadoras de diluição, regra de três e gotejamento para enfermagem." },
+      { property: "og:title", content: "Cálculo de Medicamentos — Enfermagem em Foco" },
+      { property: "og:description", content: "Calculadoras de diluição, regra de três e gotejamento para enfermagem." },
+      { property: "og:url", content: "https://academiadaenfermagem.com.br/calculadora" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: "Cálculo de Medicamentos — Enfermagem em Foco" },
+      { name: "twitter:description", content: "Calculadoras de diluição, regra de três e gotejamento para enfermagem." },
     ],
+    links: [{ rel: "canonical", href: "https://academiadaenfermagem.com.br/calculadora" }],
   }),
   component: CalcPage,
 });

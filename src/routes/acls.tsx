@@ -9,7 +9,15 @@ export const Route = createFileRoute("/acls")({
     meta: [
       { title: "ACLS — Suporte Avançado de Vida — Academia da Enfermagem" },
       { name: "description", content: "Algoritmos de PCR, ritmos chocáveis e não chocáveis, drogas." },
+      { property: "og:title", content: "ACLS — Suporte Avançado de Vida — Academia da Enfermagem" },
+      { property: "og:description", content: "Algoritmos de PCR, ritmos chocáveis e não chocáveis, drogas." },
+      { property: "og:url", content: "https://academiadaenfermagem.com.br/acls" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: "ACLS — Suporte Avançado de Vida — Academia da Enfermagem" },
+      { name: "twitter:description", content: "Algoritmos de PCR, ritmos chocáveis e não chocáveis, drogas." },
     ],
+    links: [{ rel: "canonical", href: "https://academiadaenfermagem.com.br/acls" }],
   }),
   component: Page,
 });

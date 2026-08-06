@@ -19,7 +19,15 @@ export const Route = createFileRoute("/postura-etica")({
         content:
           "Manual de conduta no estágio: postura, biossegurança, ética COFEN e red flags clínicas.",
       },
+      { property: "og:title", content: "Postura e Ética Profissional — Academia da Enfermagem" },
+      { property: "og:description", content: "Manual de conduta no estágio: postura, biossegurança, ética COFEN e red flags clínicas." },
+      { property: "og:url", content: "https://academiadaenfermagem.com.br/postura-etica" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: "Postura e Ética Profissional — Academia da Enfermagem" },
+      { name: "twitter:description", content: "Manual de conduta no estágio: postura, biossegurança, ética COFEN e red flags clínicas." },
     ],
+    links: [{ rel: "canonical", href: "https://academiadaenfermagem.com.br/postura-etica" }],
   }),
   component: PosturaEticaPage,
 });

@@ -8,7 +8,15 @@ export const Route = createFileRoute("/sinais-vitais")({
     meta: [
       { title: "Sinais Vitais — Enfermagem em Foco" },
       { name: "description", content: "Valores de referência de PA, FC, FR, SatO₂ e temperatura." },
+      { property: "og:title", content: "Sinais Vitais — Enfermagem em Foco" },
+      { property: "og:description", content: "Valores de referência de PA, FC, FR, SatO₂ e temperatura." },
+      { property: "og:url", content: "https://academiadaenfermagem.com.br/sinais-vitais" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: "Sinais Vitais — Enfermagem em Foco" },
+      { name: "twitter:description", content: "Valores de referência de PA, FC, FR, SatO₂ e temperatura." },
     ],
+    links: [{ rel: "canonical", href: "https://academiadaenfermagem.com.br/sinais-vitais" }],
   }),
   component: SV,
 });

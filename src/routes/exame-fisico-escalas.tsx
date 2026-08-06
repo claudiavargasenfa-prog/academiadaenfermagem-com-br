@@ -35,7 +35,15 @@ export const Route = createFileRoute("/exame-fisico-escalas")({
         content:
           "Exame físico cefalocaudal com explicações por região e principais escalas clínicas (Glasgow, Braden, Morse, Fugulin, RASS).",
       },
+      { property: "og:title", content: "Exame Físico e Escalas de Avaliação — Academia da Enfermagem" },
+      { property: "og:description", content: "Exame físico cefalocaudal com explicações por região e principais escalas clínicas (Glasgow, Braden, Morse, Fugulin, RASS)." },
+      { property: "og:url", content: "https://academiadaenfermagem.com.br/exame-fisico-escalas" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: "Exame Físico e Escalas de Avaliação — Academia da Enfermagem" },
+      { name: "twitter:description", content: "Exame físico cefalocaudal com explicações por região e principais escalas clínicas (Glasgow, Braden, Morse, Fugulin, RASS)." },
     ],
+    links: [{ rel: "canonical", href: "https://academiadaenfermagem.com.br/exame-fisico-escalas" }],
   }),
   component: Page,
 });

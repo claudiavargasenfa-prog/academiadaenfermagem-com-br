@@ -82,7 +82,9 @@ export const Route = createFileRoute("/checkout")({
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
+      { property: "og:url", content: "https://academiadaenfermagem.com.br/checkout" },
     ],
+    links: [{ rel: "canonical", href: "https://academiadaenfermagem.com.br/checkout" }],
   }),
   component: CheckoutPage,
 });

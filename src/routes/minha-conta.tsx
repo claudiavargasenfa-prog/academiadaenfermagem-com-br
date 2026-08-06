@@ -22,8 +22,13 @@ import { CertificadoFAQ } from "@/components/CertificadoFAQ";
 
 export const Route = createFileRoute("/minha-conta")({
   head: () => ({
-    meta: [{ title: "Minha Conta — Academia da Enfermagem" }],
+    meta: [
+      { title: "Minha Conta — Academia da Enfermagem" },
+      { name: "description", content: "Seus acessos, assinaturas e certificados na Academia da Enfermagem." },
+      { name: "robots", content: "noindex, nofollow" },
+    ],
   }),
+
   component: MinhaContaPage,
 });
 

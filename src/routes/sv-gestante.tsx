@@ -9,7 +9,15 @@ export const Route = createFileRoute("/sv-gestante")({
     meta: [
       { title: "Sinais Vitais — Gestante — Academia da Enfermagem" },
       { name: "description", content: "Valores de referência de PA, FC, FR e SpO₂ na gestação." },
+      { property: "og:title", content: "Sinais Vitais — Gestante — Academia da Enfermagem" },
+      { property: "og:description", content: "Valores de referência de PA, FC, FR e SpO₂ na gestação." },
+      { property: "og:url", content: "https://academiadaenfermagem.com.br/sv-gestante" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: "Sinais Vitais — Gestante — Academia da Enfermagem" },
+      { name: "twitter:description", content: "Valores de referência de PA, FC, FR e SpO₂ na gestação." },
     ],
+    links: [{ rel: "canonical", href: "https://academiadaenfermagem.com.br/sv-gestante" }],
   }),
   component: SVGest,
 });

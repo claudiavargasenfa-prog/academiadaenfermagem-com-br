@@ -43,7 +43,9 @@ export const Route = createFileRoute("/vip")({
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:url", content: "https://academiadaenfermagem.com.br/vip" },
     ],
+    links: [{ rel: "canonical", href: "https://academiadaenfermagem.com.br/vip" }],
   }),
   component: VipPage,
 });

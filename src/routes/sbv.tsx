@@ -14,7 +14,15 @@ export const Route = createFileRoute("/sbv")({
         content:
           "Suporte Básico de Vida: cadeia de sobrevivência, RCP de alta qualidade, uso do DEA e OVACE — adulto, pediátrico e lactente, conforme AHA 2020/2025.",
       },
+      { property: "og:title", content: "Suporte Básico de Vida (SBV) — Academia da Enfermagem" },
+      { property: "og:description", content: "Suporte Básico de Vida: cadeia de sobrevivência, RCP de alta qualidade, uso do DEA e OVACE — adulto, pediátrico e lactente, conforme AHA 2020/2025." },
+      { property: "og:url", content: "https://academiadaenfermagem.com.br/sbv" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: "Suporte Básico de Vida (SBV) — Academia da Enfermagem" },
+      { name: "twitter:description", content: "Suporte Básico de Vida: cadeia de sobrevivência, RCP de alta qualidade, uso do DEA e OVACE — adulto, pediátrico e lactente, conforme AHA 2020/2025." },
     ],
+    links: [{ rel: "canonical", href: "https://academiadaenfermagem.com.br/sbv" }],
   }),
   component: () => (
     <AppAccessGate slug="sbv">

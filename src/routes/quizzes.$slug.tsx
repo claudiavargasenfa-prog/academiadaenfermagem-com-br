@@ -8,13 +8,25 @@ import { ArrowLeft, Check, X, RotateCcw } from "lucide-react";
 export const Route = createFileRoute("/quizzes/$slug")({
   head: ({ params }) => {
     const q = QUIZZES.find((x) => x.slug === params.slug);
+    const title = q ? `${q.title} — Quiz` : "Quiz — Academia da Enfermagem";
+    const desc = q?.description ?? "Quiz de enfermagem.";
+    const url = `https://academiadaenfermagem.com.br/quizzes/${params.slug}`;
     return {
       meta: [
-        { title: q ? `${q.title} — Quiz` : "Quiz — Academia da Enfermagem" },
-        { name: "description", content: q?.description ?? "Quiz de enfermagem." },
+        { title },
+        { name: "description", content: desc },
+        { property: "og:title", content: title },
+        { property: "og:description", content: desc },
+        { property: "og:url", content: url },
+        { property: "og:type", content: "article" },
+        { name: "twitter:card", content: "summary" },
+        { name: "twitter:title", content: title },
+        { name: "twitter:description", content: desc },
       ],
+      links: [{ rel: "canonical", href: url }],
     };
   },
+
   loader: ({ params }) => {
     const quiz = QUIZZES.find((q) => q.slug === params.slug);
     if (!quiz) throw notFound();

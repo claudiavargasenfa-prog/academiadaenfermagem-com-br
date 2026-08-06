@@ -9,7 +9,15 @@ export const Route = createFileRoute("/curativos")({
     meta: [
       { title: "Curativos e Lesões de Pele — Academia da Enfermagem" },
       { name: "description", content: "Tipos de feridas, coberturas e técnica asséptica." },
+      { property: "og:title", content: "Curativos e Lesões de Pele — Academia da Enfermagem" },
+      { property: "og:description", content: "Tipos de feridas, coberturas e técnica asséptica." },
+      { property: "og:url", content: "https://academiadaenfermagem.com.br/curativos" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: "Curativos e Lesões de Pele — Academia da Enfermagem" },
+      { name: "twitter:description", content: "Tipos de feridas, coberturas e técnica asséptica." },
     ],
+    links: [{ rel: "canonical", href: "https://academiadaenfermagem.com.br/curativos" }],
   }),
   component: Page,
 });

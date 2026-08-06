@@ -38,7 +38,9 @@ export const Route = createFileRoute("/iras")({
       },
       { property: "og:type", content: "article" },
       { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:url", content: "https://academiadaenfermagem.com.br/iras" },
     ],
+    links: [{ rel: "canonical", href: "https://academiadaenfermagem.com.br/iras" }],
   }),
   component: IRASPage,
 });

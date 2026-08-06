@@ -10,7 +10,15 @@ export const Route = createFileRoute("/quizzes")({
     meta: [
       { title: "Quizzes de Enfermagem — Academia da Enfermagem" },
       { name: "description", content: "50 quizzes de enfermagem para acadêmicos e enfermeiros: UTI, ACLS, farmacologia, sinais vitais e mais." },
+      { property: "og:title", content: "Quizzes de Enfermagem — Academia da Enfermagem" },
+      { property: "og:description", content: "50 quizzes de enfermagem para acadêmicos e enfermeiros: UTI, ACLS, farmacologia, sinais vitais e mais." },
+      { property: "og:url", content: "https://academiadaenfermagem.com.br/quizzes" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: "Quizzes de Enfermagem — Academia da Enfermagem" },
+      { name: "twitter:description", content: "50 quizzes de enfermagem para acadêmicos e enfermeiros: UTI, ACLS, farmacologia, sinais vitais e mais." },
     ],
+    links: [{ rel: "canonical", href: "https://academiadaenfermagem.com.br/quizzes" }],
   }),
   component: QuizzesLayout,
 });

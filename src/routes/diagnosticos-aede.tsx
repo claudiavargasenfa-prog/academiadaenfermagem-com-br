@@ -28,7 +28,15 @@ export const Route = createFileRoute("/diagnosticos-aede")({
         content:
           "Monte anamnese, exame físico, sinais/sintomas, escolha diagnósticos com Condutas (CDE), Meta (MM), Raciocínio Clínico (RC) e gere a prescrição de enfermagem em 5 passos.",
       },
+      { property: "og:title", content: "Diagnósticos e Prescrição AE/DE — Academia da Enfermagem" },
+      { property: "og:description", content: "Monte anamnese, exame físico, sinais/sintomas, escolha diagnósticos com Condutas (CDE), Meta (MM), Raciocínio Clínico (RC) e gere a prescrição de enfermagem em 5 passos." },
+      { property: "og:url", content: "https://academiadaenfermagem.com.br/diagnosticos-aede" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: "Diagnósticos e Prescrição AE/DE — Academia da Enfermagem" },
+      { name: "twitter:description", content: "Monte anamnese, exame físico, sinais/sintomas, escolha diagnósticos com Condutas (CDE), Meta (MM), Raciocínio Clínico (RC) e gere a prescrição de enfermagem em 5 passos." },
     ],
+    links: [{ rel: "canonical", href: "https://academiadaenfermagem.com.br/diagnosticos-aede" }],
   }),
   component: DiagnosticosAedePage,
 });

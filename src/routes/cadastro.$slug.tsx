@@ -27,7 +27,9 @@ export const Route = createFileRoute("/cadastro/$slug")({
         { property: "og:description", content: desc },
         { property: "og:type", content: "website" },
         { name: "twitter:card", content: "summary" },
+        { property: "og:url", content: `https://academiadaenfermagem.com.br/cadastro/${params.slug}` },
       ],
+      links: [{ rel: "canonical", href: `https://academiadaenfermagem.com.br/cadastro/${params.slug}` }],
     };
   },
   component: CadastroPage,
