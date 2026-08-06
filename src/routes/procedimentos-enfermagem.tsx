@@ -13,11 +13,11 @@ import { ChevronRight, ArrowLeft, Hourglass } from "lucide-react";
 export const Route = createFileRoute("/procedimentos-enfermagem")({
   head: () => ({
     meta: [
-      { title: "Procedimentos de Enfermagem — Academia da Enfermagem" },
+      { title: "Punção Venosa Periférica e Prevenção de Flebite — ADEC" },
       {
         name: "description",
         content:
-          "Procedimentos de enfermagem animados passo a passo: SNG/SNE, SVD, SVA, punção venosa periférica e jugular externa.",
+          "PUNÇÃO VENOSA PERIFÉRICA E PREVENÇÃO DE FLEBITE: Guia clínico com animações, checklist e prevenção baseada em evidências.",
       },
     ],
   }),
@@ -37,8 +37,8 @@ function ProcedimentosPage() {
     <AppShell>
       <PageHeader
         eyebrow="Guia clínico exclusivo"
-        title="Procedimentos de Enfermagem"
-        description="Animações 2D passo a passo, com materiais, indicações, contraindicações, complicações e checklist."
+        title="Punção Venosa Periférica e Prevenção de Flebite"
+        description="PUNÇÃO VENOSA PERIFÉRICA E PREVENÇÃO DE FLEBITE: Animações 2D passo a passo, materiais, indicações, complicações e escala de flebite."
       />
 
       {proc ? (

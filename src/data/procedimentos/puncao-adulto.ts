@@ -14,8 +14,8 @@ import img12 from "@/assets/procedimentos/pva-12-registro.jpg";
 
 export const PROC_PUNCAO_ADULTO: Procedimento = {
   slug: "puncao-venosa-adulto",
-  titulo: "Punção Venosa Periférica — Adulto",
-  subtitulo: "Acesso venoso periférico em membro superior",
+  titulo: "Punção Venosa Periférica e Prevenção de Flebite",
+  subtitulo: "Acesso venoso periférico com escala de flebite Maddox",
   icon: "💉",
   cor: "text-red-600",
   publico: "Adulto",
