@@ -78,7 +78,11 @@ function ProcedimentosPage() {
       {proc ? (
         <ProcedimentoDetalhe proc={proc} onVoltar={() => setSlug(null)} />
       ) : (
-        <ProcedimentosLista onSelect={setSlug} />
+        <ProcedimentosLista onSelect={(s) => {
+          console.log("Selecionado:", s);
+          setSlug(s);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }} />
       )}
 
       <p className="mt-4 text-center text-[11px] text-muted-foreground">

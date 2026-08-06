@@ -43,13 +43,14 @@ export function ProcedimentoPlayer({ cenas }: { cenas: Cena[] }) {
       <div className="relative aspect-[4/3] w-full bg-slate-900 overflow-hidden ring-4 ring-primary/20 flex items-center justify-center">
         {cena.imagem ? (
           <img
-            key={cena.imagem} // Use a URL como chave para garantir que o React troque o elemento se a imagem mudar
+            key={cena.imagem}
             src={cena.imagem}
             alt={cena.titulo}
-            className="h-full w-full object-contain"
+            className="h-full w-full object-contain transition-opacity duration-300 opacity-0"
+            style={{ display: 'block', minHeight: '200px' }}
             loading="eager"
-            decoding="async"
             onLoad={(e) => {
+              (e.target as HTMLImageElement).classList.remove("opacity-0");
               (e.target as HTMLImageElement).classList.add("opacity-100");
             }}
             onError={(e) => {
@@ -160,7 +161,7 @@ export function ProcedimentoPlayer({ cenas }: { cenas: Cena[] }) {
       </div>
 
       {/* Mini-thumbnails */}
-      <div className="flex gap-1 overflow-x-auto border-t border-foreground/10 p-2">
+      <div className="flex gap-2 overflow-x-auto border-t border-foreground/10 p-3 bg-foreground/5 scrollbar-hide">
         {cenas.map((c, i) => (
           <button
             key={c.ordem}
@@ -168,14 +169,21 @@ export function ProcedimentoPlayer({ cenas }: { cenas: Cena[] }) {
               setTocando(false);
               setIdx(i);
             }}
-            className={`h-9 w-9 shrink-0 rounded-md border text-[10px] font-bold transition ${
+            className={`relative h-14 w-14 shrink-0 overflow-hidden rounded-lg border-2 transition-all ${
               i === idx
-                ? "border-gold bg-gold/20 text-foreground"
-                : "border-foreground/15 bg-card text-foreground/50 hover:border-primary"
+                ? "border-gold ring-2 ring-gold/20 scale-105"
+                : "border-foreground/10 grayscale hover:grayscale-0 hover:border-primary"
             }`}
             aria-label={`Ir para etapa ${c.ordem}`}
           >
-            {c.ordem}
+            {c.imagem ? (
+              <img src={c.imagem} alt="" className="h-full w-full object-cover" />
+            ) : (
+              <div className="grid h-full w-full place-items-center bg-muted text-[10px]">{c.ordem}</div>
+            )}
+            <div className="absolute bottom-0 right-0 bg-black/60 px-1 text-[8px] font-bold text-white">
+              {c.ordem}
+            </div>
           </button>
         ))}
       </div>
