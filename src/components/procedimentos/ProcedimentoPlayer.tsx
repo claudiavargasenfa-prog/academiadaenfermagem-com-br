@@ -82,14 +82,18 @@ export function ProcedimentoPlayer({ cenas }: { cenas: Cena[] }) {
       </div>
 
       {/* Conteúdo da cena */}
-      <div className="space-y-2 p-4">
-        <h4 className="font-display text-base font-bold">{cena.titulo}</h4>
-        <p className="text-sm leading-relaxed text-foreground/85">{cena.descricao}</p>
+      <div className="grid gap-4 p-4 md:grid-cols-2">
+        <div className="space-y-2">
+          <h4 className="font-display text-base font-bold text-primary">{cena.titulo}</h4>
+          <p className="text-sm leading-relaxed text-foreground/85">{cena.descricao}</p>
+        </div>
+        
         {cena.atencao && (
-          <div className="flex items-start gap-2 rounded-xl border border-amber-300/60 bg-amber-50 px-3 py-2 text-[12px] leading-relaxed text-amber-900">
+          <div className="flex h-fit items-start gap-2 rounded-xl border border-amber-300/60 bg-amber-50 px-3 py-2 text-[12px] leading-relaxed text-amber-900 shadow-sm">
             <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
             <span>
-              <strong>Atenção:</strong> {cena.atencao}
+              <strong className="uppercase tracking-wider">Atenção Técnica:</strong><br />
+              {cena.atencao}
             </span>
           </div>
         )}
