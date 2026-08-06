@@ -1,4 +1,8 @@
-import { AlertTriangle } from "lucide-react";
+import { AlertTriangle, ExternalLink } from "lucide-react";
+import imgG1 from "@/assets/procedimentos/flebite-g1.png.asset.json";
+import imgG2 from "@/assets/procedimentos/flebite-g2.png.asset.json";
+import imgG3 from "@/assets/procedimentos/flebite-g3.png.asset.json";
+import imgG4 from "@/assets/procedimentos/flebite-g4.png.asset.json";
 
 const GRAUS = [
   { g: "0", sinais: "Sítio íntegro, sem sinais clínicos", diag: "Não há sinal de flebite", acao: "Observar evolução", cor: "bg-emerald-50 border-emerald-200 text-emerald-900" },
@@ -81,45 +85,65 @@ export function FlebitePanel() {
           </p>
           
           <div className="space-y-3">
-            <div className="rounded-xl bg-white/40 p-3 border border-sky-100">
-              <h4 className="font-bold text-sky-900 flex items-center gap-2">
+            <div className="rounded-xl bg-white/40 p-3 border border-sky-100 overflow-hidden">
+              <h4 className="font-bold text-sky-900 flex items-center gap-2 mb-2">
                 <span className="flex h-5 w-5 items-center justify-center rounded-full bg-sky-500 text-[10px] text-white">1</span>
                 Flebite Grau 1
               </h4>
+              <img src={imgG1.url} alt="Flebite Grau 1" className="w-full h-32 object-cover rounded-lg mb-2 shadow-sm" />
               <p className="mt-1 text-xs">
                 Esta imagem mostra o braço do paciente com o cateter IV. Há um eritema (vermelhidão) inicial e localizado ao redor do local de inserção. É o primeiro sinal de inflamação.
               </p>
+              <a href={imgG1.url} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex items-center gap-1 text-[10px] text-sky-600 hover:underline">
+                <ExternalLink className="h-2.5 w-2.5" /> Abre em uma nova janela
+              </a>
             </div>
 
-            <div className="rounded-xl bg-white/40 p-3 border border-sky-100">
-              <h4 className="font-bold text-sky-900 flex items-center gap-2">
+            <div className="rounded-xl bg-white/40 p-3 border border-sky-100 overflow-hidden">
+              <h4 className="font-bold text-sky-900 flex items-center gap-2 mb-2">
                 <span className="flex h-5 w-5 items-center justify-center rounded-full bg-sky-500 text-[10px] text-white">2</span>
                 Flebite Grau 2
               </h4>
+              <img src={imgG2.url} alt="Flebite Grau 2" className="w-full h-32 object-cover rounded-lg mb-2 shadow-sm" />
               <p className="mt-1 text-xs">
                 A inflamação progrediu. Nesta imagem, o eritema está mais intenso e se estende por uma área maior ao redor do local da punção. O paciente relata dor ou desconforto, e a área pode apresentar edema (inchaço).
               </p>
+              <a href={imgG2.url} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex items-center gap-1 text-[10px] text-sky-600 hover:underline">
+                <ExternalLink className="h-2.5 w-2.5" /> Abre em uma nova janela
+              </a>
             </div>
-            <div className="rounded-xl bg-white/40 p-3 border border-sky-100">
-              <h4 className="font-bold text-sky-900 flex items-center gap-2">
+
+            <div className="rounded-xl bg-white/40 p-3 border border-sky-100 overflow-hidden">
+              <h4 className="font-bold text-sky-900 flex items-center gap-2 mb-2">
                 <span className="flex h-5 w-5 items-center justify-center rounded-full bg-sky-500 text-[10px] text-white">3</span>
                 Flebite Grau 3
               </h4>
+              <img src={imgG3.url} alt="Flebite Grau 3" className="w-full h-32 object-cover rounded-lg mb-2 shadow-sm" />
               <p className="mt-1 text-xs">
                 Este é um estágio avançado de inflamação. A imagem mostra eritema e edema evidentes. Além disso, uma linha vermelha endurecida (o "cordão venoso") é visível e palpável ao longo do trajeto da veia.
               </p>
+              <a href={imgG3.url} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex items-center gap-1 text-[10px] text-sky-600 hover:underline">
+                <ExternalLink className="h-2.5 w-2.5" /> Abre em uma nova janela
+              </a>
             </div>
 
-            <div className="rounded-xl bg-white/40 p-3 border border-sky-100">
-              <h4 className="font-bold text-sky-900 flex items-center gap-2">
+            <div className="rounded-xl bg-white/40 p-3 border border-sky-100 overflow-hidden">
+              <h4 className="font-bold text-sky-900 flex items-center gap-2 mb-2">
                 <span className="flex h-5 w-5 items-center justify-center rounded-full bg-sky-500 text-[10px] text-white">4</span>
                 Flebite Grau 4
               </h4>
+              <img src={imgG4.url} alt="Flebite Grau 4" className="w-full h-32 object-cover rounded-lg mb-2 shadow-sm" />
               <p className="mt-1 text-xs">
                 Este é o estágio mais grave. A imagem revela eritema e edema extensos. O cordão venoso está endurecido e muito doloroso, e há presença de secreção purulenta (pus) no local de inserção do cateter, indicando infecção.
               </p>
+              <a href={imgG4.url} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex items-center gap-1 text-[10px] text-sky-600 hover:underline">
+                <ExternalLink className="h-2.5 w-2.5" /> Abre em uma nova janela
+              </a>
             </div>
           </div>
+          <p className="text-[10px] text-sky-700/60 text-center font-medium mt-2">
+            Espero que essas imagens sejam úteis para o seu trabalho. Se precisar de mais alguma coisa, conte comigo!
+          </p>
         </div>
       </Bloco>
 
