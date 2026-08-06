@@ -1,16 +1,11 @@
 import type { Procedimento } from "./index";
-import img01 from "@/assets/procedimentos/pva-01-preparo.jpg";
-import img02 from "@/assets/procedimentos/pva-02-maos.jpg";
-import img03 from "@/assets/procedimentos/pva-03-posicao.jpg";
-import img04 from "@/assets/procedimentos/pva-04-garrote.jpg";
-import img05 from "@/assets/procedimentos/pva-05-calibre.jpg";
-import img06 from "@/assets/procedimentos/pva-06-antissepsia.jpg";
-import img07 from "@/assets/procedimentos/pva-07-puncao.jpg";
-import img08 from "@/assets/procedimentos/pva-08-refluxo.jpg";
-import img09 from "@/assets/procedimentos/pva-09-conexao.jpg";
-import img10 from "@/assets/procedimentos/pva-10-salinizacao.jpg";
-import img11 from "@/assets/procedimentos/pva-11-fixacao.jpg";
-import img12 from "@/assets/procedimentos/pva-12-registro.jpg";
+import pvaGarroteando from "@/assets/procedimentos/pva-garroteando.png.asset.json";
+import pvaTateando from "@/assets/procedimentos/pva-tateando.png.asset.json";
+import pvaAssepsia from "@/assets/procedimentos/pva-assepsia.png.asset.json";
+import pvaPuncionando1 from "@/assets/procedimentos/pva-puncionando-1.png.asset.json";
+import pvaPuncionando2 from "@/assets/procedimentos/pva-puncionando-2.png.asset.json";
+import pvaRetirandoAgulha from "@/assets/procedimentos/pva-retirando-agulha.png.asset.json";
+import pvaIdentificacao from "@/assets/procedimentos/pva-identificacao.png.asset.json";
 
 export const PROC_PUNCAO_ADULTO: Procedimento = {
   slug: "puncao-venosa-adulto",
@@ -47,101 +42,59 @@ export const PROC_PUNCAO_ADULTO: Procedimento = {
   cenas: [
     {
       ordem: 1,
-      imagem: img01,
-      titulo: "Checagem e preparo",
+      imagem: pvaGarroteando.url,
+      titulo: "Garroteando",
       descricao:
-        "Confira a prescrição, identifique o paciente com dois identificadores, explique o procedimento e obtenha o consentimento. Separe todo o material em bandeja limpa e verifique validade e integridade das embalagens.",
-      atencao: "Nunca inicie sem checar alergias (látex, clorexidina, adesivos).",
+        "Aplique o garrote 10–15 cm acima do sítio escolhido para favorecer o ingurgitamento venoso. Peça ao paciente para abrir e fechar a mão se necessário.",
+      atencao: "O garrote não deve permanecer por mais de 2 minutos para evitar hemoconcentração.",
     },
     {
       ordem: 2,
-      imagem: img02,
-      titulo: "Higienização das mãos",
+      imagem: pvaTateando.url,
+      titulo: "Tateando o vaso",
       descricao:
-        "Higienize as mãos com água e sabão ou álcool gel 70%, seguindo os 5 momentos da OMS. Calce luvas de procedimento após a antissepsia das mãos.",
-      atencao: "A higiene das mãos é a medida isolada mais eficaz contra infecção de corrente sanguínea.",
+        "Palpe a veia para avaliar o trajeto, profundidade, calibre e elasticidade. Escolha um segmento retilíneo e evite válvulas ou áreas de bifurcação.",
+      atencao: "Sempre avalie a rede venosa antes de iniciar a antissepsia.",
     },
     {
       ordem: 3,
-      imagem: img03,
-      titulo: "Posicionamento e escolha do membro",
+      imagem: pvaAssepsia.url,
+      titulo: "Assepsia",
       descricao:
-        "Posicione o braço apoiado, abaixo do nível do coração. Prefira o membro não dominante e evite membro com fístula, mastectomia, plegia, edema ou lesão de pele.",
-      atencao: "Evite áreas de flexão (fossa cubital e punho) como primeira escolha.",
+        "Realize a antissepsia da pele com clorexidina alcoólica 0,5% em movimento único ou circular, do centro para a periferia.",
+      atencao: "Aguarde a secagem espontânea por cerca de 30 segundos antes de puncionar.",
     },
     {
       ordem: 4,
-      imagem: img04,
-      titulo: "Garroteamento e seleção da veia",
+      imagem: pvaPuncionando1.url,
+      titulo: "Puncionando (Início)",
       descricao:
-        "Aplique o garrote 10–15 cm acima do sítio escolhido. Selecione veia calibrosa, retilínea e palpável — preferencialmente antebraço, progredindo distal para proximal.",
-      atencao: "O garrote não deve permanecer mais de 1 a 2 minutos; solte e reaplique se necessário.",
-      overlays: [{ tipo: "pulse", x: 0.5, y: 0.45, cor: "gold" }],
+        "Introduza o cateter com o bisel voltado para cima, em um ângulo de 15° a 30°, estabilizando a veia com a mão não dominante.",
+      atencao: "Mantenha a pele tracionada para evitar o deslizamento da veia.",
     },
     {
       ordem: 5,
-      imagem: img05,
-      titulo: "Escolha do calibre",
+      imagem: pvaPuncionando2.url,
+      titulo: "Puncionando (Refluxo)",
       descricao:
-        "Selecione o menor calibre capaz de atender à terapia: 22–24 G para infusões de rotina e idosos, 20 G para maioria dos adultos, 18 G ou maior para hemoterapia e reposição volêmica rápida.",
-      atencao: "Cateter muito calibroso para a veia aumenta o risco de flebite mecânica.",
+        "Ao visualizar o refluxo de sangue na câmara, reduza o ângulo de inserção e avance o cateter alguns milímetros para garantir que a ponta esteja no lúmen do vaso.",
+      atencao: "Visualize o sangue preenchendo o canhão do cateter.",
     },
     {
       ordem: 6,
-      imagem: img06,
-      titulo: "Antissepsia da pele",
+      imagem: pvaRetirandoAgulha.url,
+      titulo: "Retirando a agulha",
       descricao:
-        "Realize antissepsia com clorexidina alcoólica 0,5% em movimento único ou circular do centro para a periferia, e aguarde a secagem espontânea (cerca de 30 segundos).",
-      atencao: "Não abane, não sopre e não repalpe a veia após a antissepsia sem luva estéril.",
+        "Pressione levemente o vaso acima da ponta do cateter para evitar refluxo, retire o guia metálico e conecte o sistema de infusão ou conector valvulado.",
+      atencao: "Descarte a agulha imediatamente em coletor de perfurocortantes.",
     },
     {
       ordem: 7,
-      imagem: img07,
-      titulo: "Punção",
+      imagem: pvaIdentificacao.url,
+      titulo: "Identificação",
       descricao:
-        "Tracione a pele abaixo do sítio para estabilizar a veia e introduza o cateter com o bisel para cima, em ângulo de 15° a 30°, com movimento firme e contínuo.",
-      atencao: "Máximo de duas tentativas por profissional; após isso, acione outro colega.",
-      overlays: [{ tipo: "pulse", x: 0.45, y: 0.5, cor: "danger" }],
-    },
-    {
-      ordem: 8,
-      imagem: img08,
-      titulo: "Refluxo e progressão do cateter",
-      descricao:
-        "Ao visualizar o refluxo sanguíneo na câmara, reduza o ângulo, avance mais 2–3 mm, recue a agulha-guia e progrida somente o cateter até o canhão.",
-      atencao: "Jamais reintroduza a agulha dentro do cateter — risco de embolia por fragmento.",
-    },
-    {
-      ordem: 9,
-      imagem: img09,
-      titulo: "Soltar o garrote e conectar",
-      descricao:
-        "Solte o garrote, faça compressão digital acima da ponta do cateter, retire a agulha em dispositivo de segurança e conecte o extensor/conector valvulado previamente preenchido com SF 0,9%.",
-      atencao: "Descarte a agulha imediatamente em recipiente rígido (NR-32).",
-    },
-    {
-      ordem: 10,
-      imagem: img10,
-      titulo: "Salinização e teste de permeabilidade",
-      descricao:
-        "Realize flushing com 10 mL de SF 0,9% em seringa de 10 ou 20 mL, com fluxo turbilhonar, observando ausência de dor, resistência, edema ou palidez local.",
-      atencao: "Dor, resistência ou abaulamento indicam mau posicionamento — retire o dispositivo.",
-    },
-    {
-      ordem: 11,
-      imagem: img11,
-      titulo: "Fixação e identificação",
-      descricao:
-        "Fixe com filme transparente estéril, mantendo o sítio visível. Identifique com data, hora, calibre do cateter e nome do profissional.",
-      atencao: "Curativo úmido, sujo ou solto deve ser trocado imediatamente.",
-    },
-    {
-      ordem: 12,
-      imagem: img12,
-      titulo: "Registro e monitoramento",
-      descricao:
-        "Descarte os resíduos, higienize as mãos e registre no prontuário: sítio, calibre, número de tentativas, intercorrências e aceitação do paciente. Avalie o sítio a cada plantão.",
-      atencao: "Rodízio do acesso em até 96 h ou conforme avaliação clínica e protocolo institucional.",
+        "Fixe o acesso com cobertura transparente estéril e identifique com data, hora, calibre do cateter e nome do profissional responsável.",
+      atencao: "A identificação deve estar clara e sem obstruir a visualização do sítio de inserção.",
     },
   ],
   checklist: [
