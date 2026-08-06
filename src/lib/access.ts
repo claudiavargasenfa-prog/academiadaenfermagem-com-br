@@ -12,11 +12,12 @@ export type SubscriptionPlan = Database["public"]["Tables"]["subscription_plans"
 export type PlanOffer = Database["public"]["Tables"]["plan_offers"]["Row"];
 export type UserSubscription = Database["public"]["Tables"]["user_subscriptions"]["Row"];
 
-export type TrackSlug = "academico" | "tecnico" | "enfermeiro";
+export type TrackSlug = "academico" | "tecnico" | "tecnico-estudante" | "enfermeiro";
 
 export const TRACKS: { slug: TrackSlug; label: string; short: string; emoji: string }[] = [
   { slug: "academico", label: "Academia do Acadêmico", short: "Acadêmico", emoji: "🎓" },
   { slug: "tecnico", label: "Academia do Técnico", short: "Técnico", emoji: "🩺" },
+  { slug: "tecnico-estudante", label: "Academia do Estudante de Técnico", short: "Estudante de Técnico", emoji: "📗" },
   { slug: "enfermeiro", label: "Academia do Enfermeiro", short: "Enfermeiro", emoji: "👩‍⚕️" },
 ];
 
