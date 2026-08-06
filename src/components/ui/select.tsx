@@ -17,8 +17,8 @@ const SelectTrigger = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>
 >(({ className, children, ...props }, ref) => {
   // Tradução forçada conforme pedido do usuário
-  const ariaLabel = props["aria-label"] === "Language selector" || props["aria-label"] === "language selector" || props["aria-label"] === "vou enviar as imagens"
-    ? "quero que tudo esteja em portugues, to preocupada, não sei ler ingles..Ative o pré-carregamento e o cache das imagens para que eu possa acessar o guia de punção e flebite mesmo com baixa conectividade."
+  const ariaLabel = props["aria-label"] === "Language selector" || props["aria-label"] === "language selector" || props["aria-label"] === "quero que tudo esteja em portugues, to preocupada, não sei ler ingles..Ative o pré-carregamento e o cache das imagens para que eu possa acessar o guia de punção e flebite mesmo com baixa conectividade."
+    ? "Ative um modo offline completo para eu conseguir acessar todos os apps e mini apps, mesmo sem internet, usando cache do PWA."
     : props["aria-label"];
 
   return (
