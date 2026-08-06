@@ -71,11 +71,66 @@ export function CertificadoFAQ() {
             </p>
           </div>
         </div>
-        <div className="rounded-xl bg-blue-500/5 p-4 text-[11px] text-blue-700">
+        <div 
+          className="group rounded-xl bg-blue-500/5 p-4 text-[11px] text-blue-700 cursor-pointer hover:bg-blue-500/10 transition-colors border border-transparent hover:border-blue-500/20"
+          onClick={() => {
+            const win = window.open('', '_blank');
+            if (win) {
+              win.document.write(`
+                <html>
+                  <head>
+                    <title>Modelo de Certificado - ADEC</title>
+                    <style>
+                      body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background: #f0f4f8; }
+                      .certificate { 
+                        width: 800px; height: 560px; padding: 40px; border: 20px solid #b8912f; background: white; position: relative; text-align: center;
+                        box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+                      }
+                      .watermark { 
+                        position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg);
+                        font-size: 120px; color: rgba(0,0,0,0.05); font-weight: bold; pointer-events: none; text-transform: uppercase;
+                      }
+                      h1 { color: #0f4c35; font-size: 48px; margin-bottom: 10px; }
+                      h2 { color: #b8912f; font-size: 24px; margin-bottom: 40px; }
+                      .content { font-size: 20px; line-height: 1.6; color: #333; }
+                      .name { font-size: 32px; font-weight: bold; color: #000; border-bottom: 2px solid #eee; display: inline-block; margin: 20px 0; padding: 0 40px; }
+                      .footer { margin-top: 60px; display: flex; justify-content: space-between; align-items: flex-end; }
+                      .seal { width: 100px; height: 100px; background: #b8912f; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 12px; text-align: center; }
+                      .qr { width: 80px; height: 80px; background: #eee; border: 1px solid #ccc; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #666; }
+                    </style>
+                  </head>
+                  <body>
+                    <div class="certificate">
+                      <div class="watermark">MODELO</div>
+                      <h2>ACADEMIA DA ENFERMAGEM</h2>
+                      <h1>CERTIFICADO</h1>
+                      <p class="content">Certificamos para os devidos fins que</p>
+                      <div class="name">NOME DO ALUNO EXEMPLO</div>
+                      <p class="content">
+                        concluiu com êxito o módulo técnico de especialização em<br>
+                        <strong>CONTEÚDO TÉCNICO AVANÇADO</strong><br>
+                        com carga horária total de 10 horas.
+                      </p>
+                      <div class="footer">
+                        <div class="qr">QR CODE<br>VALIDAÇÃO</div>
+                        <div style="text-align:center">
+                          <div style="width:200px; border-top: 1px solid #000; margin-bottom: 5px;"></div>
+                          <span style="font-size:12px;">Assinatura Digital ADEC</span>
+                        </div>
+                        <div class="seal">SELO DE<br>QUALIDADE<br>ADEC</div>
+                      </div>
+                    </div>
+                  </body>
+                </html>
+              `);
+              win.document.close();
+            }
+          }}
+        >
           <div className="flex gap-2">
             <Eye className="h-4 w-4 shrink-0" />
             <p>
-              <strong>Pré-visualização:</strong> Visualize o layout do seu certificado com uma tarja de <strong>MODELO</strong> antes de realizar o download do PDF oficial.
+              <strong>Pré-visualização:</strong> <span className="underline decoration-dotted font-bold">Clique aqui para visualizar</span> o layout do seu certificado com uma tarja de <strong>MODELO</strong> antes de realizar o download do PDF oficial.
             </p>
           </div>
         </div>
