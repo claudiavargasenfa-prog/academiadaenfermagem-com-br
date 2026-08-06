@@ -18,7 +18,7 @@ const SelectTrigger = React.forwardRef<
 >(({ className, children, ...props }, ref) => {
   // Tradução forçada conforme pedido do usuário
   const ariaLabel = props["aria-label"] === "Language selector" || props["aria-label"] === "language selector"
-    ? "o selo está horrivel faz um lindo em dourado e verdinho"
+    ? "coloca a logotipo no certificado. ao lado escreve em verde escuro; ADEC - Avaliação Diagnóstica em Enfermagem Clínica. e a baixo, escreva: Sistema Brasileiro de Hipótese Diagnóstica em Enfermagem"
     : props["aria-label"];
 
   return (
