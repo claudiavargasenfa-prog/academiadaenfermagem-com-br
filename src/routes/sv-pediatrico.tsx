@@ -12,7 +12,15 @@ export const Route = createFileRoute("/sv-pediatrico")({
     meta: [
       { title: "Sinais Vitais Pediátricos — Academia da Enfermagem" },
       { name: "description", content: "Valores de FC, FR e PA por faixa etária pediátrica e neonatal." },
+      { property: "og:title", content: "Sinais Vitais Pediátricos — Academia da Enfermagem" },
+      { property: "og:description", content: "Valores de FC, FR e PA por faixa etária pediátrica e neonatal." },
+      { property: "og:url", content: "https://academiadaenfermagem.com.br/sv-pediatrico" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: "Sinais Vitais Pediátricos — Academia da Enfermagem" },
+      { name: "twitter:description", content: "Valores de FC, FR e PA por faixa etária pediátrica e neonatal." },
     ],
+    links: [{ rel: "canonical", href: "https://academiadaenfermagem.com.br/sv-pediatrico" }],
   }),
   component: SVPed,
 });

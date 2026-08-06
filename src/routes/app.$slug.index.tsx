@@ -11,7 +11,15 @@ export const Route = createFileRoute("/app/$slug/")({
     meta: [
       { title: `${params.slug} — Academia da Enfermagem` },
       { name: "description", content: `Guia clínico ${params.slug} da Academia da Enfermagem.` },
+      { property: "og:title", content: `${params.slug} — Academia da Enfermagem` },
+      { property: "og:description", content: `Guia clínico ${params.slug} da Academia da Enfermagem.` },
+      { property: "og:url", content: `https://academiadaenfermagem.com.br/app/${params.slug}` },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: `${params.slug} — Academia da Enfermagem` },
+      { name: "twitter:description", content: `Guia clínico ${params.slug} da Academia da Enfermagem.` },
     ],
+    links: [{ rel: "canonical", href: `https://academiadaenfermagem.com.br/app/${params.slug}` }],
   }),
   component: Page,
   errorComponent: ({ error }) => (

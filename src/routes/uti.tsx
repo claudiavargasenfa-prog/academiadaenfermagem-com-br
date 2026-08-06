@@ -9,7 +9,15 @@ export const Route = createFileRoute("/uti")({
     meta: [
       { title: "Enfermagem em UTI — Academia da Enfermagem" },
       { name: "description", content: "Monitorização, VM, sedoanalgesia e prevenção de eventos." },
+      { property: "og:title", content: "Enfermagem em UTI — Academia da Enfermagem" },
+      { property: "og:description", content: "Monitorização, VM, sedoanalgesia e prevenção de eventos." },
+      { property: "og:url", content: "https://academiadaenfermagem.com.br/uti" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: "Enfermagem em UTI — Academia da Enfermagem" },
+      { name: "twitter:description", content: "Monitorização, VM, sedoanalgesia e prevenção de eventos." },
     ],
+    links: [{ rel: "canonical", href: "https://academiadaenfermagem.com.br/uti" }],
   }),
   component: Page,
 });

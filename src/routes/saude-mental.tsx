@@ -8,7 +8,15 @@ export const Route = createFileRoute("/saude-mental")({
     meta: [
       { title: "Saúde Mental e Cuidado Psiquiátrico — Academia da Enfermagem" },
       { name: "description", content: "Manejo da crise, comunicação terapêutica, contenção e medicações." },
+      { property: "og:title", content: "Saúde Mental e Cuidado Psiquiátrico — Academia da Enfermagem" },
+      { property: "og:description", content: "Manejo da crise, comunicação terapêutica, contenção e medicações." },
+      { property: "og:url", content: "https://academiadaenfermagem.com.br/saude-mental" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: "Saúde Mental e Cuidado Psiquiátrico — Academia da Enfermagem" },
+      { name: "twitter:description", content: "Manejo da crise, comunicação terapêutica, contenção e medicações." },
     ],
+    links: [{ rel: "canonical", href: "https://academiadaenfermagem.com.br/saude-mental" }],
   }),
   component: Page,
 });

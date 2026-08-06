@@ -22,7 +22,15 @@ export const Route = createFileRoute("/trilha/$slug")({
     meta: [
       { title: `${params.slug} — Academia da Enfermagem` },
       { name: "description", content: `Guias clínicos do aplicativo ${params.slug} da Academia da Enfermagem.` },
+      { property: "og:title", content: `${params.slug} — Academia da Enfermagem` },
+      { property: "og:description", content: `Guias clínicos do aplicativo ${params.slug} da Academia da Enfermagem.` },
+      { property: "og:url", content: `https://academiadaenfermagem.com.br/trilha/${params.slug}` },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: `${params.slug} — Academia da Enfermagem` },
+      { name: "twitter:description", content: `Guias clínicos do aplicativo ${params.slug} da Academia da Enfermagem.` },
     ],
+    links: [{ rel: "canonical", href: `https://academiadaenfermagem.com.br/trilha/${params.slug}` }],
   }),
   component: TrilhaPage,
 });
