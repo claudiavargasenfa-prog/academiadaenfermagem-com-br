@@ -1270,6 +1270,7 @@ export type Database = {
         Returns: number
       }
       expire_finished_trials: { Args: never; Returns: number }
+      has_active_membership: { Args: { _user_id: string }; Returns: boolean }
       has_app_access: {
         Args: { _mini_app_id: string; _user_id: string }
         Returns: boolean
