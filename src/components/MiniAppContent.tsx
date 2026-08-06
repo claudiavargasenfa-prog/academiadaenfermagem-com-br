@@ -179,9 +179,17 @@ const RawHtmlHost = memo(function RawHtmlHost({ html }: { html: string }) {
     const el = hostRef.current;
     if (!el) return;
     el.innerHTML = html;
+    // <script> inserido via innerHTML não executa: recriamos cada um.
+    el.querySelectorAll("script").forEach((old) => {
+      const s = document.createElement("script");
+      for (const a of Array.from(old.attributes)) s.setAttribute(a.name, a.value);
+      s.textContent = old.textContent;
+      old.replaceWith(s);
+    });
   }, [html]);
   return <div ref={hostRef} className="mini-app-html" />;
 });
+
 
 export function MiniAppHtmlContent({ html }: { html: string }) {
   const ref = useRef<HTMLDivElement>(null);
