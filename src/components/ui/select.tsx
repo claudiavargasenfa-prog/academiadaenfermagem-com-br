@@ -18,7 +18,7 @@ const SelectTrigger = React.forwardRef<
 >(({ className, children, ...props }, ref) => {
   // Tradução forçada conforme pedido do usuário
   const ariaLabel = props["aria-label"] === "Language selector" || props["aria-label"] === "language selector"
-    ? "O Guia de Punção está na trilha Acadêmico com o nome 'PUNÇÃO VENOSA PERIFÉRICA E PREVENÇÃO DE FLEBITE'"
+    ? "O Guia está na trilha ACADÊMICO com o nome 'PUNÇÃO VENOSA PERIFÉRICA E PREVENÇÃO DE FLEBITE' (botão ACESSAR)"
     : props["aria-label"];
 
   return (
