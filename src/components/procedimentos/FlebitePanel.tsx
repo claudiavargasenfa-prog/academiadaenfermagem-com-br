@@ -61,13 +61,17 @@ function Bloco({
 
 export function FlebitePanel() {
   return (
-    <div className="space-y-2">
-      <div className="mb-1">
-        <h3 className="font-display text-base font-extrabold">Identificação e Manejo da Flebite</h3>
-        <p className="text-xs text-muted-foreground">
-          Complemento da punção venosa periférica — baseado no POP-ENF-0002 (SUBHUE/SMS-Rio), INS Brasil e
-          Parecer COREN-SP nº 007/2023.
-        </p>
+    <div className="space-y-3">
+      <div className="mb-2 flex items-center justify-between border-b border-foreground/5 pb-2">
+        <div>
+          <h3 className="font-display text-base font-extrabold text-primary">Prevenção de Flebite e Complicações</h3>
+          <p className="text-[10px] text-muted-foreground uppercase tracking-widest">
+            Protocolo INS Brasil 2024 & COREN-SP
+          </p>
+        </div>
+        <div className="hidden h-10 w-10 items-center justify-center rounded-full bg-red-50 text-red-600 sm:flex">
+          <AlertTriangle className="h-5 w-5" />
+        </div>
       </div>
 
       <Bloco titulo="O que é flebite" cor="border-sky-200 bg-sky-50" aberto>
