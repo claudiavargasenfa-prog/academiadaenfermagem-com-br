@@ -1,4 +1,5 @@
 import type { Procedimento } from "./index";
+// Fotos enviadas pela professora (sequência real do procedimento)
 import pvaGarroteando from "@/assets/procedimentos/pva-garroteando.png.asset.json";
 import pvaTateando from "@/assets/procedimentos/pva-tateando.png.asset.json";
 import pvaAssepsia from "@/assets/procedimentos/pva-assepsia.png.asset.json";
@@ -6,111 +7,178 @@ import pvaPuncionando1 from "@/assets/procedimentos/pva-puncionando-1.png.asset.
 import pvaPuncionando2 from "@/assets/procedimentos/pva-puncionando-2.png.asset.json";
 import pvaRetirandoAgulha from "@/assets/procedimentos/pva-retirando-agulha.png.asset.json";
 import pvaIdentificacao from "@/assets/procedimentos/pva-identificacao.png.asset.json";
+// Imagens complementares das etapas de preparo e finalização
+import pvaPreparo from "@/assets/procedimentos/pva-01-preparo.jpg";
+import pvaMaos from "@/assets/procedimentos/pva-02-maos.jpg";
+import pvaPosicao from "@/assets/procedimentos/pva-03-posicao.jpg";
+import pvaCalibre from "@/assets/procedimentos/pva-05-calibre.jpg";
+import pvaConexao from "@/assets/procedimentos/pva-09-conexao.jpg";
+import pvaSalinizacao from "@/assets/procedimentos/pva-10-salinizacao.jpg";
 
 export const PROC_PUNCAO_ADULTO: Procedimento = {
   slug: "puncao-venosa-adulto",
   titulo: "Punção Venosa Periférica e Prevenção de Flebite",
-  subtitulo: "Acesso venoso periférico com escala de flebite Maddox",
+  subtitulo: "Passo a passo ilustrado (13 etapas) + escala de flebite",
   icon: "💉",
   cor: "text-red-600",
   publico: "Adulto",
-  
+
   materiais: [
-    "Cateter venoso periférico (Jelco/Abbocath) — calibre conforme indicação (geralmente 18–22 G)",
+    "Bandeja higienizada com álcool 70%",
+    "Cateter venoso periférico com dispositivo de segurança — 18 a 22 G conforme a veia e a terapia",
     "Garrote",
-    "Antisséptico (clorexidina alcoólica 0,5% preferencial)",
-    "Algodão ou gaze",
-    "Polifix/extensor, conector valvulado, salinização com SF 0,9%",
-    "Filme transparente estéril para fixação, esparadrapo",
-    "Luvas de procedimento",
+    "Clorexidina alcoólica 0,5% (preferencial) ou álcool 70%",
+    "Gaze ou algodão",
+    "Extensor/polifix e conector valvulado preenchidos com SF 0,9%",
+    "Duas seringas de 10 mL com SF 0,9% (flush)",
+    "Cobertura transparente estéril e fita para identificação",
+    "Luvas de procedimento e coletor de perfurocortantes",
   ],
   indicacoes: [
     "Administração de medicamentos e fluidos endovenosos",
+    "Hidratação e reposição volêmica",
     "Hemoterapia",
-    "Coleta de sangue (eventual)",
+    "Coleta de sangue eventual e urgência/emergência",
   ],
   contraindicacoes: [
-    "Membro com fístula arteriovenosa, mastectomia ipsilateral, paresia/plegia, infecção local",
+    "Membro com fístula arteriovenosa",
+    "Membro homolateral a esvaziamento axilar/mastectomia",
+    "Membro com paresia, plegia ou déficit neurológico",
+    "Pele com lesão, hematoma, infecção ou área de flebite prévia",
     "Áreas de flexão como primeira escolha",
   ],
   complicacoes: [
-    "Flebite mecânica, química ou infecciosa",
-    "Infiltração / extravasamento",
-    "Hematoma",
+    "Flebite mecânica, química, bacteriana ou pós-infusional",
+    "Infiltração e extravasamento",
+    "Hematoma e punção arterial acidental",
+    "Obstrução do cateter",
     "Infecção de corrente sanguínea associada ao cateter",
   ],
   cenas: [
     {
       ordem: 1,
-      imagem: pvaGarroteando.url,
-      titulo: "Garroteando",
+      imagem: pvaPreparo,
+      titulo: "Preparo do material",
       descricao:
-        "Aplique o garrote 10–15 cm acima do sítio escolhido para favorecer o ingurgitamento venoso. Peça ao paciente para abrir e fechar a mão se necessário.",
-      atencao: "O garrote não deve permanecer por mais de 2 minutos para evitar hemoconcentração.",
+        "Confira a prescrição, higienize a bandeja com álcool 70% e reúna todo o material: cateter, garrote, antisséptico, gaze, extensor preenchido com SF 0,9%, cobertura transparente e coletor de perfurocortantes.",
+      atencao: "Cheque validade e integridade das embalagens antes de levar ao leito.",
     },
     {
       ordem: 2,
-      imagem: pvaTateando.url,
-      titulo: "Tateando o vaso",
+      imagem: pvaMaos,
+      titulo: "Higiene das mãos",
       descricao:
-        "Palpe a veia para avaliar o trajeto, profundidade, calibre e elasticidade. Escolha um segmento retilíneo e evite válvulas ou áreas de bifurcação.",
-      atencao: "Sempre avalie a rede venosa antes de iniciar a antissepsia.",
+        "Higienize as mãos conforme os 5 momentos da OMS (fricção com álcool gel por 20–30 s ou água e sabão por 40–60 s) e calce as luvas de procedimento.",
+      atencao: "A higiene das mãos é a medida isolada mais eficaz na prevenção de infecção relacionada ao cateter.",
     },
     {
       ordem: 3,
-      imagem: pvaAssepsia.url,
-      titulo: "Assepsia",
+      imagem: pvaPosicao,
+      titulo: "Identificação e posicionamento",
       descricao:
-        "Realize a antissepsia da pele com clorexidina alcoólica 0,5% em movimento único ou circular, do centro para a periferia.",
-      atencao: "Aguarde a secagem espontânea por cerca de 30 segundos antes de puncionar.",
+        "Identifique o paciente com dois identificadores (Meta 1), explique o procedimento, obtenha consentimento e posicione o membro apoiado, com o braço levemente abaixo do nível do coração.",
+      atencao: "Pergunte sobre alergias (látex, clorexidina) e experiências anteriores de punção.",
     },
     {
       ordem: 4,
-      imagem: pvaPuncionando1.url,
-      titulo: "Puncionando (Início)",
+      imagem: pvaCalibre,
+      titulo: "Escolha do calibre e do sítio",
       descricao:
-        "Introduza o cateter com o bisel voltado para cima, em um ângulo de 15° a 30°, estabilizando a veia com a mão não dominante.",
-      atencao: "Mantenha a pele tracionada para evitar o deslizamento da veia.",
+        "Selecione o menor calibre que atenda à terapia (20–22 G na maioria dos adultos) e prefira o antebraço, sempre da região distal para a proximal. Evite dorso da mão em idosos e áreas de flexão.",
+      atencao: "Calibre maior que o vaso é a principal causa de flebite mecânica.",
     },
     {
       ordem: 5,
-      imagem: pvaPuncionando2.url,
-      titulo: "Puncionando (Refluxo)",
+      imagem: pvaGarroteando.url,
+      titulo: "Garroteando",
       descricao:
-        "Ao visualizar o refluxo de sangue na câmara, reduza o ângulo de inserção e avance o cateter alguns milímetros para garantir que a ponta esteja no lúmen do vaso.",
-      atencao: "Visualize o sangue preenchendo o canhão do cateter.",
+        "Aplique o garrote 10–15 cm acima do sítio escolhido para favorecer o ingurgitamento venoso. Peça ao paciente para abrir e fechar a mão, se necessário.",
+      atencao: "O garrote não deve permanecer por mais de 2 minutos, para evitar hemoconcentração.",
     },
     {
       ordem: 6,
-      imagem: pvaRetirandoAgulha.url,
-      titulo: "Retirando a agulha",
+      imagem: pvaTateando.url,
+      titulo: "Tateando o vaso",
       descricao:
-        "Pressione levemente o vaso acima da ponta do cateter para evitar refluxo, retire o guia metálico e conecte o sistema de infusão ou conector valvulado.",
-      atencao: "Descarte a agulha imediatamente em coletor de perfurocortantes.",
+        "Palpe a veia avaliando trajeto, profundidade, calibre e elasticidade. Escolha um segmento retilíneo, sem válvulas nem bifurcações.",
+      atencao: "Veia boa é palpável e elástica — não escolha apenas pela visualização.",
     },
     {
       ordem: 7,
-      imagem: pvaIdentificacao.url,
-      titulo: "Identificação",
+      imagem: pvaAssepsia.url,
+      titulo: "Antissepsia da pele",
       descricao:
-        "Fixe o acesso com cobertura transparente estéril e identifique com data, hora, calibre do cateter e nome do profissional responsável.",
-      atencao: "A identificação deve estar clara e sem obstruir a visualização do sítio de inserção.",
+        "Faça a antissepsia com clorexidina alcoólica 0,5% em movimento único ou circular, do centro para a periferia, cobrindo uma área maior que a do curativo.",
+      atencao: "Aguarde a secagem espontânea (~30 s). Não abane, não sopre e não repalpe o local após a antissepsia.",
+    },
+    {
+      ordem: 8,
+      imagem: pvaPuncionando1.url,
+      titulo: "Punção — inserção",
+      descricao:
+        "Tracione a pele com a mão não dominante para estabilizar a veia e introduza o cateter com o bisel voltado para cima, em ângulo de 15° a 30°.",
+      atencao: "Máximo de 2 tentativas por profissional; após isso, acione outro colega.",
+    },
+    {
+      ordem: 9,
+      imagem: pvaPuncionando2.url,
+      titulo: "Refluxo e progressão",
+      descricao:
+        "Ao visualizar o refluxo de sangue na câmara, reduza o ângulo, avance mais 2–3 mm e progrida somente o cateter sobre a agulha até o canhão tocar a pele.",
+      atencao: "Nunca reintroduza a agulha guia dentro do cateter — risco de embolia por fragmento.",
+    },
+    {
+      ordem: 10,
+      imagem: pvaRetirandoAgulha.url,
+      titulo: "Retirada da agulha guia",
+      descricao:
+        "Solte o garrote, faça compressão digital do vaso acima da ponta do cateter para evitar refluxo, retire a agulha acionando o dispositivo de segurança e descarte-a imediatamente.",
+      atencao: "Descarte em coletor de perfurocortantes, sem reencapar (NR-32).",
+    },
+    {
+      ordem: 11,
+      imagem: pvaConexao,
+      titulo: "Conexão do sistema",
+      descricao:
+        "Conecte o extensor/polifix com conector valvulado já preenchido com SF 0,9%, mantendo técnica asséptica e sem tocar as conexões.",
+      atencao: "Friccione o conector com álcool 70% por 15 segundos antes de cada acesso (“scrub the hub”).",
+    },
+    {
+      ordem: 12,
+      imagem: pvaSalinizacao,
+      titulo: "Teste de permeabilidade e salinização",
+      descricao:
+        "Infunda 10 mL de SF 0,9% em seringa de 10 mL, com turbilhonamento, observando ausência de dor, resistência, edema ou palidez local.",
+      atencao: "Dor, resistência ou edema durante o flush = cateter mal posicionado; retire e puncione outro sítio.",
+    },
+    {
+      ordem: 13,
+      imagem: pvaIdentificacao.url,
+      titulo: "Fixação, identificação e registro",
+      descricao:
+        "Fixe com cobertura transparente estéril, sem tracionar o cateter, e identifique com data, hora, calibre e nome do profissional. Registre no prontuário o sítio, o número de tentativas e as intercorrências.",
+      atencao: "A cobertura deve permitir a inspeção do sítio; troque se estiver úmida, suja ou solta.",
     },
   ],
   checklist: [
+    "Conferi a prescrição e higienizei a bandeja",
     "Higienizei as mãos e calcei luvas",
-    "Selecionei veia adequada (preferir antebraço, distal para proximal)",
-    "Apliquei garrote 10–15 cm acima do sítio",
-    "Realizei antissepsia em movimento único, deixando secar",
-    "Puncionei com bisel para cima em ângulo 15–30°",
-    "Observei refluxo, recuei a agulha e progredi o cateter",
-    "Soltei o garrote, conectei extensor e salinizei",
-    "Fixei com filme transparente e datei",
-    "Registrei calibre, sítio, número de tentativas e intercorrências",
+    "Identifiquei o paciente com dois identificadores e expliquei o procedimento",
+    "Escolhi o menor calibre adequado, no antebraço, distal para proximal",
+    "Apliquei o garrote 10–15 cm acima do sítio, por menos de 2 minutos",
+    "Palpei a veia antes da antissepsia",
+    "Fiz antissepsia com clorexidina alcoólica e aguardei secar",
+    "Puncionei com bisel para cima em 15–30° (máximo 2 tentativas)",
+    "Observei refluxo, progredi só o cateter e acionei o dispositivo de segurança",
+    "Soltei o garrote, conectei o extensor e testei a permeabilidade com 10 mL de SF 0,9%",
+    "Fixei com cobertura transparente e identifiquei data, hora, calibre e profissional",
+    "Registrei no prontuário e orientei o paciente sobre sinais de flebite",
   ],
   referencias: [
-    "INS. Infusion Therapy Standards of Practice, 2021.",
-    "ANVISA. Medidas de prevenção de infecção relacionada à assistência à saúde, 2017.",
-    "COFEN. Resolução nº 258/2001 — Cateterismo venoso central por enfermeiro (referência correlata).",
+    "INS. Infusion Therapy Standards of Practice, 2024.",
+    "ANVISA. Medidas de prevenção de infecção relacionada à assistência à saúde, caderno 4.",
+    "ANVISA. RDC nº 36/2013 — Segurança do paciente em serviços de saúde.",
+    "BRASIL. NR-32 — Segurança e saúde no trabalho em serviços de saúde.",
+    "COFEN. Resolução nº 736/2024 — Processo de Enfermagem.",
   ],
 };

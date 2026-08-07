@@ -48,7 +48,6 @@ import { PROC_SVD_MASC } from "./svd-masc";
 import { PROC_SVD_FEM } from "./svd-fem";
 import { PROC_SVA } from "./sva";
 import { PROC_PUNCAO_ADULTO } from "./puncao-adulto";
-import { PROC_PUNCAO_ADULTO_V2 } from "./puncao-adulto-v2";
 import { PROC_PUNCAO_PEDIATRIA } from "./puncao-pediatria";
 import { PROC_PUNCAO_JUGULAR } from "./puncao-jugular-externa";
 import { PROC_PUNCAO_SEGURANCA } from "./puncao-seguranca";
@@ -62,7 +61,6 @@ export const PROCEDIMENTOS: Procedimento[] = [
   PROC_SVD_ESTERIL,
   PROC_SVA,
   PROC_PUNCAO_ADULTO,
-  PROC_PUNCAO_ADULTO_V2,
   PROC_PUNCAO_SEGURANCA,
   PROC_PUNCAO_PEDIATRIA,
   PROC_PUNCAO_JUGULAR,
