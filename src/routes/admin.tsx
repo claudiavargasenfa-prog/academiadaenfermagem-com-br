@@ -5,7 +5,7 @@ import { Pencil, Plus, Trash2, ArrowLeft, LayoutGrid, FlaskConical } from "lucid
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
 import { MiniAppHtmlContent } from "@/components/MiniAppContent";
 import { supabase } from "@/integrations/supabase/client";
-import { fetchMiniApps, formatPriceBRL, useIsAdmin, type MiniApp } from "@/lib/access";
+import { fetchMiniApps, formatPriceBRL, useIsAdmin, useAuthReady, type MiniApp } from "@/lib/access";
 import { SubscriptionsAdmin } from "@/components/admin/SubscriptionsAdmin";
 import { UsersAdmin } from "@/components/admin/UsersAdmin";
 import { TextsAdmin } from "@/components/admin/TextsAdmin";
@@ -34,6 +34,9 @@ export const Route = createFileRoute("/admin")({
 
 function AdminPage() {
   const adminQ = useIsAdmin();
+  const auth = useAuthReady();
+  const authEmail = auth.user?.email;
+  const isAdminHardcoded = authEmail === "enfa.contato@gmail.com";
 
   if (adminQ.isLoading || adminQ.isFetching) {
     return (
@@ -43,7 +46,7 @@ function AdminPage() {
     );
   }
 
-  if (!adminQ.data) {
+  if (!adminQ.data && !isAdminHardcoded) {
     return (
       <AppShell>
         <PageHeader title="Acesso restrito" />
