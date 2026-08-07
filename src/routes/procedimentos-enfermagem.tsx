@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
 import { AppAccessGate } from "@/components/ContentProtection";
 import { MiniAppContent } from "@/components/MiniAppContent";
@@ -39,33 +39,6 @@ export const Route = createFileRoute("/procedimentos-enfermagem")({
 function ProcedimentosPage() {
   const [slug, setSlug] = useState<string | null>(null);
   const proc = slug ? PROCEDIMENTOS.find((p) => p.slug === slug) : null;
-
-  // Pré-carregamento agressivo de imagens de flebite ao entrar na página
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const imagesToPreload = [
-        "/lovable-uploads/483be99f-72f1-460d-8524-766b17c2be6d.png", // Flebite G1
-        "/lovable-uploads/f73752e0-2f22-4217-9104-517789437191.png", // Flebite G2
-        "/lovable-uploads/a76d8ba9-0118-4770-b186-b4520977876a.png", // Flebite G3
-        "/lovable-uploads/5201d4b6-a44b-44f2-9844-48dbf37803f3.png", // Flebite G4
-      ];
-      
-      imagesToPreload.forEach(src => {
-        const img = new Image();
-        img.src = src;
-      });
-
-      // Também pré-carregar as imagens de todas as cenas de todos os procedimentos
-      PROCEDIMENTOS.forEach(p => {
-        p.cenas.forEach(cena => {
-          if (cena.imagem) {
-            const img = new Image();
-            img.src = cena.imagem;
-          }
-        });
-      });
-    }
-  }, []);
 
   return (
     <AppShell>
@@ -145,7 +118,10 @@ function ProcedimentoDetalhe({ proc, onVoltar }: { proc: Procedimento; onVoltar:
 
       {proc.cenas.length > 0 && (
         <div className="mb-4">
-          <ProcedimentoPlayer cenas={proc.cenas} />
+          <ProcedimentoPlayer
+            cenas={proc.cenas}
+            mostrarSequencia={proc.slug === "puncao-venosa-adulto"}
+          />
         </div>
       )}
 
