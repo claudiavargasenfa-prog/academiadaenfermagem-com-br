@@ -1,14 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
 import { AppAccessGate } from "@/components/ContentProtection";
-import { MiniAppContent } from "@/components/MiniAppContent";
-import { PROCEDIMENTOS, type Procedimento } from "@/data/procedimentos";
+import { PROC_PUNCAO_ADULTO } from "@/data/procedimentos/puncao-adulto";
+import type { Procedimento } from "@/data/procedimentos";
 import { ProcedimentoPlayer } from "@/components/procedimentos/ProcedimentoPlayer";
 import { FlebitePanel } from "@/components/procedimentos/FlebitePanel";
 import { ComparativoSVDPanel } from "@/components/procedimentos/ComparativoSVDPanel";
 import { ProcedimentoChecklist } from "@/components/procedimentos/ProcedimentoChecklist";
-import { ChevronRight, ArrowLeft, Hourglass } from "lucide-react";
+import { Hourglass } from "lucide-react";
 
 export const Route = createFileRoute("/procedimentos-enfermagem")({
   head: () => ({
@@ -37,9 +36,6 @@ export const Route = createFileRoute("/procedimentos-enfermagem")({
 });
 
 function ProcedimentosPage() {
-  const [slug, setSlug] = useState<string | null>(null);
-  const proc = slug ? PROCEDIMENTOS.find((p) => p.slug === slug) : null;
-
   return (
     <AppShell>
       <PageHeader
@@ -48,15 +44,7 @@ function ProcedimentosPage() {
         description="PUNÇÃO VENOSA PERIFÉRICA E PREVENÇÃO DE FLEBITE: 12 fotos reais da técnica passo a passo, escala de flebite Maddox e materiais essenciais."
       />
 
-      {proc ? (
-        <ProcedimentoDetalhe proc={proc} onVoltar={() => setSlug(null)} />
-      ) : (
-        <ProcedimentosLista onSelect={(s) => {
-          console.log("Selecionado:", s);
-          setSlug(s);
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }} />
-      )}
+      <ProcedimentoDetalhe proc={PROC_PUNCAO_ADULTO} />
 
       <p className="mt-4 text-center text-[11px] text-muted-foreground">
         Conteúdo educacional. Sempre siga os protocolos da sua instituição.
@@ -65,50 +53,9 @@ function ProcedimentosPage() {
   );
 }
 
-function ProcedimentosLista({ onSelect }: { onSelect: (slug: string) => void }) {
-  return (
-    <div className="space-y-2">
-      <p className="mb-2 text-sm text-foreground/70">
-        Escolha o procedimento. Cada um abre uma animação 2D passo a passo, com checklist e referências.
-      </p>
-      {PROCEDIMENTOS.map((p) => (
-        <button
-          key={p.slug}
-          onClick={() => onSelect(p.slug)}
-          className="flex w-full items-center gap-3 rounded-2xl border border-gold/30 bg-card p-3 text-left shadow-sm transition hover:border-primary hover:shadow-md relative overflow-hidden"
-        >
-          {p.emProducao && (
-            <div className="absolute top-0 right-0 bg-amber-500 text-white text-[8px] font-bold px-2 py-0.5 rounded-bl-lg uppercase tracking-tighter">
-              Em Breve
-            </div>
-          )}
-          <div className="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-foreground/5 text-2xl">
-            {p.icon}
-          </div>
-          <div className="min-w-0 flex-1">
-            <div className="flex items-center gap-2">
-              <h4 className="truncate font-display text-sm font-bold">{p.titulo}</h4>
-            </div>
-            <p className="truncate text-xs text-muted-foreground">{p.subtitulo}</p>
-            <p className="mt-0.5 text-[11px] text-foreground/50">{p.publico} {p.cenas.length > 0 ? "· ✓ Com Imagens" : "· (Sem imagens ainda)"}</p>
-          </div>
-          <ChevronRight className="h-4 w-4 shrink-0 text-foreground/40" />
-        </button>
-      ))}
-    </div>
-  );
-}
-
-function ProcedimentoDetalhe({ proc, onVoltar }: { proc: Procedimento; onVoltar: () => void }) {
+function ProcedimentoDetalhe({ proc }: { proc: Procedimento }) {
   return (
     <div>
-      <button
-        onClick={onVoltar}
-        className="mb-3 inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline"
-      >
-        <ArrowLeft className="h-3.5 w-3.5" /> Voltar aos procedimentos
-      </button>
-
       <div className="mb-3">
         <h2 className="font-display text-lg font-extrabold leading-tight">{proc.titulo}</h2>
         <p className="text-xs text-muted-foreground">

@@ -10,14 +10,14 @@ export const Route = createFileRoute("/app/$slug/")({
   head: ({ params }) => ({
     meta: [
       { title: `${params.slug} — Academia da Enfermagem` },
-      { name: "description", content: `Guia clínico ${params.slug} da Academia da Enfermagem.` },
+      { name: "description", content: `Mini App ${params.slug} da Academia da Enfermagem.` },
       { property: "og:title", content: `${params.slug} — Academia da Enfermagem` },
-      { property: "og:description", content: `Guia clínico ${params.slug} da Academia da Enfermagem.` },
+      { property: "og:description", content: `Mini App ${params.slug} da Academia da Enfermagem.` },
       { property: "og:url", content: `https://academiadaenfermagem.com.br/app/${params.slug}` },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:title", content: `${params.slug} — Academia da Enfermagem` },
-      { name: "twitter:description", content: `Guia clínico ${params.slug} da Academia da Enfermagem.` },
+      { name: "twitter:description", content: `Mini App ${params.slug} da Academia da Enfermagem.` },
     ],
     links: [{ rel: "canonical", href: `https://academiadaenfermagem.com.br/app/${params.slug}` }],
   }),
@@ -32,7 +32,7 @@ export const Route = createFileRoute("/app/$slug/")({
   notFoundComponent: () => (
     <AppShell>
       <Card>
-        <p className="text-sm text-muted-foreground">Guia clínico não encontrado.</p>
+        <p className="text-sm text-muted-foreground">Mini App não encontrado.</p>
       </Card>
     </AppShell>
   ),
@@ -86,7 +86,7 @@ function Page() {
       <Link to="/" className="mb-3 inline-flex items-center gap-1 text-sm font-semibold text-muted-foreground hover:text-foreground">
         <ArrowLeft className="h-4 w-4" /> Voltar
       </Link>
-      <PageHeader eyebrow="Guia clínico" title={app.name} description={app.description ?? undefined} />
+      <PageHeader eyebrow="Mini App" title={app.name} description={app.description ?? undefined} />
       <AppAccessGate slug={slug}>
         <MiniAppContent slug={slug} />
 
@@ -121,8 +121,8 @@ function Page() {
               <h2 className="font-display text-lg font-bold text-foreground">{app.name}</h2>
             </div>
             <p className="text-sm text-muted-foreground">
-              Use o painel Admin → Guias clínicos para adicionar texto, vídeo, áudio ou dividir este
-              guia clínico em sub-tópicos. O conteúdo aparecerá automaticamente acima deste bloco.
+              Use o painel Admin → Mini Apps para adicionar texto, vídeo, áudio ou dividir este
+              Mini App em subtópicos. O conteúdo aparecerá automaticamente acima deste bloco.
             </p>
           </Card>
         )}
