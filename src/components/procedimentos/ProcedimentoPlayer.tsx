@@ -8,7 +8,7 @@ const COR_OVERLAY: Record<string, string> = {
   success: "ring-emerald-500/70 bg-emerald-500/30",
 };
 
-export function ProcedimentoPlayer({ cenas }: { cenas: Cena[] }) {
+export function ProcedimentoPlayer({ cenas, mostrarSequencia = false }: { cenas: Cena[]; mostrarSequencia?: boolean }) {
   const [idx, setIdx] = useState(0);
   const [tocando, setTocando] = useState(false);
 
@@ -38,6 +38,7 @@ export function ProcedimentoPlayer({ cenas }: { cenas: Cena[] }) {
   if (!cena) return null;
 
   return (
+    <div className="space-y-5">
     <div className="overflow-hidden rounded-2xl border border-gold/30 bg-card shadow-[var(--shadow-soft)]">
       {/* Palco da animação */}
       <div className="relative aspect-[4/3] w-full bg-slate-900 overflow-hidden ring-4 ring-primary/20 flex items-center justify-center">
@@ -183,6 +184,53 @@ export function ProcedimentoPlayer({ cenas }: { cenas: Cena[] }) {
           </button>
         ))}
       </div>
+    </div>
+
+    {mostrarSequencia && (
+      <section aria-labelledby="sequencia-puncao" className="space-y-4">
+        <div className="border-b border-border pb-3">
+          <p className="text-xs font-bold uppercase text-primary">Técnica completa ilustrada</p>
+          <h3 id="sequencia-puncao" className="mt-1 font-display text-xl font-extrabold text-foreground">
+            Punção venosa: passo a passo
+          </h3>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Veja todas as etapas e imagens em sequência, sem precisar usar as setas.
+          </p>
+        </div>
+
+        {cenas.map((item) => (
+          <article key={`sequencia-${item.ordem}`} className="overflow-hidden rounded-lg border border-border bg-card">
+            {item.imagem && (
+              <div className="flex min-h-56 w-full items-center justify-center bg-muted sm:min-h-80">
+                <img
+                  src={item.imagem}
+                  alt={`${item.ordem}. ${item.titulo}`}
+                  className="max-h-[34rem] w-full object-contain"
+                  loading="eager"
+                />
+              </div>
+            )}
+            <div className="p-4 sm:p-5">
+              <div className="flex items-start gap-3">
+                <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-primary text-sm font-extrabold text-primary-foreground">
+                  {item.ordem}
+                </span>
+                <div className="min-w-0">
+                  <h4 className="font-display text-base font-bold text-foreground">{item.titulo}</h4>
+                  <p className="mt-2 text-sm leading-relaxed text-foreground/85">{item.descricao}</p>
+                </div>
+              </div>
+              {item.atencao && (
+                <div className="mt-4 flex items-start gap-2 rounded-lg border border-amber-300 bg-amber-50 p-3 text-sm leading-relaxed text-amber-950">
+                  <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
+                  <p><strong>Atenção técnica:</strong> {item.atencao}</p>
+                </div>
+              )}
+            </div>
+          </article>
+        ))}
+      </section>
+    )}
     </div>
   );
 }
