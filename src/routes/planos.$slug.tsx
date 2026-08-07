@@ -46,7 +46,7 @@ const TRIAL_DAYS = 15;
 export const Route = createFileRoute("/planos/$slug")({
   head: ({ params }) => {
     const label = LABELS[params.slug] ?? "Academia da Enfermagem";
-    const desc = `Conheça a ${label}: guias clínicos, escalas clínicas, SAE automatizada, quizzes e muito mais. ${TRIAL_DAYS} dias grátis + Grupo VIP no WhatsApp.`;
+    const desc = `Conheça a ${label}: Mini Apps, escalas clínicas, SAE automatizada, quizzes e muito mais. ${TRIAL_DAYS} dias grátis + Grupo VIP no WhatsApp.`;
     return {
       meta: [
         { title: `${label} — Planos | Academia da Enfermagem` },
@@ -202,7 +202,7 @@ function PlanoPage() {
                   params={{ slug }}
                   className="inline-flex items-center gap-1.5 rounded-2xl bg-white px-6 py-3.5 text-sm font-extrabold shadow-md transition hover:-translate-y-0.5 hover:shadow-lg"
                 >
-                  ✓ Acessar meus guias clínicos →
+                  ✓ Acessar meus Mini Apps →
                 </Link>
               ) : isLoggedIn ? (
                 <>
@@ -293,7 +293,7 @@ function PlanoPage() {
           ))}
         </section>
 
-        {/* GUIAS CLÍNICOS — lista completa */}
+        {/* MINI APPS — lista completa */}
         <section className="mt-8">
           <h2 className="font-display text-xl font-extrabold">{miniAppsTitle}</h2>
           <p className="mt-1 text-sm text-muted-foreground">
@@ -355,7 +355,7 @@ function PlanoPage() {
                 params={{ slug }}
                 className="inline-flex items-center gap-1.5 rounded-xl bg-primary px-6 py-3 text-sm font-extrabold text-primary-foreground shadow hover:opacity-90"
               >
-                Acessar guias clínicos →
+                Acessar Mini Apps →
               </Link>
             ) : isLoggedIn ? (
               <Link
