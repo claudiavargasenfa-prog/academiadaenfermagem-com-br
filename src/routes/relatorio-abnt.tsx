@@ -205,7 +205,7 @@ function RelatorioPage() {
     return (
       <AppShell>
         <PageHeader
-          eyebrow="Guia clínico pago"
+          eyebrow="Mini App pago"
           title="Relatório de Estágio (ABNT)"
           description="Este recurso ainda não foi cadastrado pela administração."
         />
@@ -225,7 +225,7 @@ function RelatorioPage() {
   return (
     <AppShell>
       <PageHeader
-        eyebrow="Guia clínico pago · ABNT"
+        eyebrow="Mini App pago · ABNT"
         title="Relatório de Estágio em ABNT"
         description="Gera automaticamente o relatório com os dados do seu Diário de Bordo, na estrutura ABNT, pronto para imprimir."
       />

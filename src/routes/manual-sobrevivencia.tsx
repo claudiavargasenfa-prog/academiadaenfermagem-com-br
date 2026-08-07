@@ -89,7 +89,7 @@ function Page() {
             <li>Registre o que fez (e o que não fez) — checklist é cuidado.</li>
           </ol>
           <p className="mt-4 rounded-xl bg-primary/10 px-4 py-2 text-xs text-muted-foreground">
-            Quer aprofundar? O guia clínico <strong>Postura e Ética Profissional</strong> traz casos clínicos,
+            Quer aprofundar? O Mini App <strong>Postura e Ética Profissional</strong> traz casos clínicos,
             COFEN comentado e roteiro de comunicação terapêutica.
           </p>
         </Card>

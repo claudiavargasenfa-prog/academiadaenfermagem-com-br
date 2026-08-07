@@ -23,7 +23,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Academia da Enfermagem: SAE e PE automatizados e 4 aplicativos de guias clínicos para acadêmicos, estudantes de técnico, técnicos e enfermeiros. 15 dias grátis.",
+          "Academia da Enfermagem: SAE e PE automatizados e 4 aplicativos com Mini Apps para acadêmicos, estudantes de técnico, técnicos e enfermeiros. 15 dias grátis.",
       },
       { property: "og:title", content: "Loja — Academia da Enfermagem | SAE e PE automatizados" },
       {

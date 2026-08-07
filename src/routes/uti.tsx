@@ -25,7 +25,7 @@ export const Route = createFileRoute("/uti")({
 function Page() {
   return (
     <AppShell>
-      <PageHeader eyebrow="Guia clínico" title="Enfermagem em UTI" description="Monitorização, ventilação mecânica, sedoanalgesia e prevenção de eventos." />
+      <PageHeader eyebrow="Mini App" title="Enfermagem em UTI" description="Monitorização, ventilação mecânica, sedoanalgesia e prevenção de eventos." />
       <AppAccessGate slug="uti">
         <MiniAppContent slug="uti" />
         <Card>

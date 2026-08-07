@@ -21,14 +21,14 @@ export const Route = createFileRoute("/trilha/$slug")({
   head: ({ params }) => ({
     meta: [
       { title: `${params.slug} — Academia da Enfermagem` },
-      { name: "description", content: `Guias clínicos do aplicativo ${params.slug} da Academia da Enfermagem.` },
+      { name: "description", content: `Mini Apps do aplicativo ${params.slug} da Academia da Enfermagem.` },
       { property: "og:title", content: `${params.slug} — Academia da Enfermagem` },
-      { property: "og:description", content: `Guias clínicos do aplicativo ${params.slug} da Academia da Enfermagem.` },
+      { property: "og:description", content: `Mini Apps do aplicativo ${params.slug} da Academia da Enfermagem.` },
       { property: "og:url", content: `https://academiadaenfermagem.com.br/trilha/${params.slug}` },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:title", content: `${params.slug} — Academia da Enfermagem` },
-      { name: "twitter:description", content: `Guias clínicos do aplicativo ${params.slug} da Academia da Enfermagem.` },
+      { name: "twitter:description", content: `Mini Apps do aplicativo ${params.slug} da Academia da Enfermagem.` },
     ],
     links: [{ rel: "canonical", href: `https://academiadaenfermagem.com.br/trilha/${params.slug}` }],
   }),
@@ -151,7 +151,7 @@ function TrilhaPage() {
 
       {grouped.length === 0 ? (
         <Card>
-          <p className="text-sm text-muted-foreground">Nenhum guia clínico neste aplicativo ainda. Use o Admin → Apps para arrastar guias clínicos para dentro.</p>
+          <p className="text-sm text-muted-foreground">Nenhum Mini App neste aplicativo ainda. Use o Admin → Apps para arrastar Mini Apps para dentro.</p>
         </Card>
       ) : (
         grouped.map((g, idx) => (
@@ -231,7 +231,7 @@ function TrackAppCard({ app, unlocked, extraExpiresAt, isAdmin }: { app: MiniApp
 }
 
 function TrilhaHeader({ slug, count }: { slug: string; count: number }) {
-  const title = useText(`trilha.${slug}.title`, `${count} guias clínicos neste aplicativo`);
+  const title = useText(`trilha.${slug}.title`, `${count} Mini Apps neste aplicativo`);
   const desc = useText(`trilha.${slug}.description`, "Apps grátis liberam para qualquer pessoa. Os demais exigem assinatura deste aplicativo.");
   const rendered = title.replace(/\{count\}/g, String(count));
   return (

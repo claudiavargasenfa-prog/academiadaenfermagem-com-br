@@ -25,7 +25,7 @@ export const Route = createFileRoute("/acls")({
 function Page() {
   return (
     <AppShell>
-      <PageHeader eyebrow="Guia clínico" title="ACLS — Suporte Avançado de Vida" description="Algoritmos de PCR adulto, ritmos chocáveis e não chocáveis, drogas." />
+      <PageHeader eyebrow="Mini App" title="ACLS — Suporte Avançado de Vida" description="Algoritmos de PCR adulto, ritmos chocáveis e não chocáveis, drogas." />
       <AppAccessGate slug="acls">
         <MiniAppContent slug="acls" />
         <Card>
