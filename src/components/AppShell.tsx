@@ -252,14 +252,14 @@ export function AppShell({
       {/* Mobile bottom tab nav */}
       <nav className="fixed bottom-3 left-1/2 z-40 -translate-x-1/2 md:hidden">
         <div className="flex items-center gap-1 rounded-2xl border border-gold/40 bg-primary/95 px-2 py-2 text-primary-foreground shadow-[var(--shadow-glass)] backdrop-blur">
-          {navItems.slice(0, 5).map((n) => {
+          {navItems.slice(0, 6).map((n) => {
             const Icon = n.icon;
             const active = pathname === n.to;
             return (
               <Link
                 key={n.to}
                 to={n.to}
-                className={`flex min-w-14 flex-col items-center gap-0.5 rounded-xl px-2 py-1.5 text-[10px] font-semibold ${
+                className={`flex min-w-12 flex-col items-center gap-0.5 rounded-xl px-1.5 py-1 text-[9px] font-semibold ${
                   active ? "gold-gradient" : "text-primary-foreground/80"
                 }`}
                 aria-label={n.label}
