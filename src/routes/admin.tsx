@@ -5,7 +5,7 @@ import { Pencil, Plus, Trash2, ArrowLeft, LayoutGrid, FlaskConical } from "lucid
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
 import { MiniAppHtmlContent } from "@/components/MiniAppContent";
 import { supabase } from "@/integrations/supabase/client";
-import { fetchMiniApps, formatPriceBRL, useIsAdmin, type MiniApp } from "@/lib/access";
+import { fetchMiniApps, formatPriceBRL, useIsAdmin, useAuthReady, type MiniApp } from "@/lib/access";
 import { SubscriptionsAdmin } from "@/components/admin/SubscriptionsAdmin";
 import { UsersAdmin } from "@/components/admin/UsersAdmin";
 import { TextsAdmin } from "@/components/admin/TextsAdmin";
