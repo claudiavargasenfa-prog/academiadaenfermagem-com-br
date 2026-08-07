@@ -31,7 +31,7 @@ function QuizzesLayout() {
   return (
     <AppShell>
       <PageHeader
-        eyebrow="Guia clínico"
+        eyebrow="Mini App"
         title="Quizzes de Enfermagem"
         description="50 quizzes para revisar todos os principais temas. Escolha um e teste seus conhecimentos."
       />

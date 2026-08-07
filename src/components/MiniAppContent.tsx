@@ -116,7 +116,7 @@ export function MiniAppContent({ slug }: { slug: string }) {
   if (!isReady || q.isLoading) {
     return (
       <Card className="mb-6 border-primary/30 bg-primary/5 text-sm text-muted-foreground">
-        Carregando conteúdo do guia clínico…
+        Carregando conteúdo do Mini App…
       </Card>
     );
   }
@@ -1633,7 +1633,7 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
                 : "#txt-evolucao-clinica-mestre";
             const ta = root.querySelector<HTMLTextAreaElement>(sel);
             if (!ta) {
-              alert("Abra a seção correspondente do guia clínico antes de enviar o texto ditado.");
+              alert("Abra a seção correspondente do Mini App antes de enviar o texto ditado.");
               return;
             }
             ta.value = ta.value.trim() ? `${ta.value.trim()}\n${texto.trim()}` : texto.trim();
@@ -1823,7 +1823,7 @@ function VideoEmbed({ url }: { url: string }) {
         <div className="aspect-video w-full overflow-hidden rounded-xl">
           <iframe
             src={embed}
-            title="Vídeo do guia clínico"
+            title="Vídeo do Mini App"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
             className="h-full w-full"

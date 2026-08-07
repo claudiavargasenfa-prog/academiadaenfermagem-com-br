@@ -24,7 +24,7 @@ export const Route = createFileRoute("/saude-mental")({
 function Page() {
   return (
     <AppShell>
-      <PageHeader eyebrow="Guia clínico" title="Saúde Mental e Cuidado Psiquiátrico" description="Manejo da crise, comunicação terapêutica, contenção e medicações." />
+      <PageHeader eyebrow="Mini App" title="Saúde Mental e Cuidado Psiquiátrico" description="Manejo da crise, comunicação terapêutica, contenção e medicações." />
       <AppAccessGate slug="saude-mental">
         <MiniAppContent slug="saude-mental" />
       

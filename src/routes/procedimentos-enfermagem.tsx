@@ -16,15 +16,15 @@ export const Route = createFileRoute("/procedimentos-enfermagem")({
       {
         name: "description",
         content:
-          "PUNÇÃO VENOSA PERIFÉRICA E PREVENÇÃO DE FLEBITE: Guia clínico com animações, checklist e prevenção baseada em evidências.",
+          "PUNÇÃO VENOSA PERIFÉRICA E PREVENÇÃO DE FLEBITE: Mini App com fotos, checklist e prevenção baseada em evidências.",
       },
       { property: "og:title", content: "Punção Venosa Periférica e Prevenção de Flebite — ADEC" },
-      { property: "og:description", content: "PUNÇÃO VENOSA PERIFÉRICA E PREVENÇÃO DE FLEBITE: Guia clínico com animações, checklist e prevenção baseada em evidências." },
+      { property: "og:description", content: "PUNÇÃO VENOSA PERIFÉRICA E PREVENÇÃO DE FLEBITE: Mini App com fotos, checklist e prevenção baseada em evidências." },
       { property: "og:url", content: "https://academiadaenfermagem.com.br/procedimentos-enfermagem" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:title", content: "Punção Venosa Periférica e Prevenção de Flebite — ADEC" },
-      { name: "twitter:description", content: "PUNÇÃO VENOSA PERIFÉRICA E PREVENÇÃO DE FLEBITE: Guia clínico com animações, checklist e prevenção baseada em evidências." },
+      { name: "twitter:description", content: "PUNÇÃO VENOSA PERIFÉRICA E PREVENÇÃO DE FLEBITE: Mini App com fotos, checklist e prevenção baseada em evidências." },
     ],
     links: [{ rel: "canonical", href: "https://academiadaenfermagem.com.br/procedimentos-enfermagem" }],
   }),

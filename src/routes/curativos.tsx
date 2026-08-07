@@ -25,7 +25,7 @@ export const Route = createFileRoute("/curativos")({
 function Page() {
   return (
     <AppShell>
-      <PageHeader eyebrow="Guia clínico" title="Curativos e Lesões de Pele" description="Tipos de feridas, coberturas, técnica asséptica e troca." />
+      <PageHeader eyebrow="Mini App" title="Curativos e Lesões de Pele" description="Tipos de feridas, coberturas, técnica asséptica e troca." />
       <AppAccessGate slug="curativos">
         <MiniAppContent slug="curativos" />
         <Card>
@@ -34,7 +34,7 @@ function Page() {
             <h2 className="font-display text-lg font-bold text-foreground">Conteúdo em construção</h2>
           </div>
           <p className="text-sm text-muted-foreground">
-            Este guia clínico está com a estrutura pronta. O conteúdo didático completo (classificação de feridas,
+            Este Mini App está com a estrutura pronta. O conteúdo didático completo (classificação de feridas,
             coberturas primárias e secundárias, passo a passo de troca, registro e fotografia clínica) será
             publicado em breve.
           </p>

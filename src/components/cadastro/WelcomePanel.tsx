@@ -315,7 +315,7 @@ export function WelcomePanel({ slug }: { slug: string }) {
           </div>
           <ul className="mt-2 space-y-1.5 text-xs text-muted-foreground">
             {[
-              "Novos guias clínicos e conteúdos publicados toda semana",
+              "Novos Mini Apps e conteúdos publicados toda semana",
               "Protocolos revisados conforme COFEN, ANVISA e Ministério da Saúde",
               "Melhorias sugeridas pelos alunos do Grupo VIP",
             ].map((i) => (

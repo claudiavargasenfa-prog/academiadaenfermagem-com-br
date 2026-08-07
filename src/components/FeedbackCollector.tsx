@@ -8,7 +8,7 @@ const CATEGORIES = [
   "Conteúdo Técnico",
   "Usabilidade do App",
   "Sistema de Voz/Ditado",
-  "Sugestão de Novo Guia Clínico",
+  "Sugestão de Novo Mini App",
   "Outros"
 ];
 
