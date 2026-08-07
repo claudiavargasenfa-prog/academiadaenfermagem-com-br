@@ -60,7 +60,7 @@ function TrustPage() {
       <Section title="Dados que coletamos">
         <ul className="list-disc space-y-1 pl-5">
           <li>Cadastro: nome, e-mail, telefone, categoria (acadêmico, técnico ou enfermeiro).</li>
-          <li>Uso do app: assinaturas ativas, guias clínicos liberados, acessos a relatórios e progresso de estudo.</li>
+          <li>Uso do app: assinaturas ativas, Mini Apps liberados, acessos a relatórios e progresso de estudo.</li>
           <li>Conteúdos pessoais que você escolhe salvar (ex.: anotações de diário de estágio) ficam ligados à sua conta.</li>
         </ul>
       </Section>
@@ -90,7 +90,7 @@ function TrustPage() {
         <ul className="list-disc space-y-1 pl-5">
           <li><strong>Lovable Cloud</strong> — hospedagem do app, banco de dados, autenticação e armazenamento.</li>
           <li><strong>Google</strong> — opcional, para login com a conta Google.</li>
-          <li><strong>Cakto</strong> — processamento de pagamento de assinaturas e guias clínicos.</li>
+          <li><strong>Cakto</strong> — processamento de pagamento de assinaturas e Mini Apps.</li>
         </ul>
       </Section>
 
