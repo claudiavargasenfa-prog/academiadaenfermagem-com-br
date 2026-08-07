@@ -163,12 +163,17 @@ export async function isAdmin(): Promise<boolean> {
 export function useIsAdmin() {
   const { isReady, user } = useAuthReady();
   const userId = user?.id ?? null;
+  const email = user?.email ?? "";
 
   return useQuery({
     queryKey: ["is_admin", userId],
-    queryFn: isAdmin,
+    queryFn: async () => {
+      // Hardcode de emergência para a dona do app enquanto o RLS ou cache oscila
+      if (email === "enfa.contato@gmail.com") return true;
+      return isAdmin();
+    },
     enabled: isReady && !!userId,
-    staleTime: 5 * 60 * 1000,
+    staleTime: 0, // Força verificação fresca
   });
 }
 

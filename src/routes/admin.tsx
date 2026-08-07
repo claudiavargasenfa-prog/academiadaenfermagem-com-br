@@ -34,6 +34,9 @@ export const Route = createFileRoute("/admin")({
 
 function AdminPage() {
   const adminQ = useIsAdmin();
+  const auth = useAuthReady();
+  const authEmail = auth.user?.email;
+  const isAdminHardcoded = authEmail === "enfa.contato@gmail.com";
 
   if (adminQ.isLoading || adminQ.isFetching) {
     return (
@@ -43,7 +46,7 @@ function AdminPage() {
     );
   }
 
-  if (!adminQ.data) {
+  if (!adminQ.data && !isAdminHardcoded) {
     return (
       <AppShell>
         <PageHeader title="Acesso restrito" />

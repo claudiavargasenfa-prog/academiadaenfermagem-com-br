@@ -43,7 +43,8 @@ export function AppShell({
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const auth = useAuthReady();
   const adminQ = useIsAdmin();
-  const admin = !!adminQ.data;
+  const authEmail = auth.user?.email;
+  const admin = !!adminQ.data || authEmail === "enfa.contato@gmail.com";
   const isSignedIn = !!auth.user;
 
   const lojaLabel = useText("menu.loja", "Loja");
