@@ -19,7 +19,7 @@ const SelectTrigger = React.forwardRef<
 >(({ className, children, ...props }, ref) => {
   // Tradução forçada conforme pedido do usuário
   const ariaLabel = props["aria-label"] === "Language selector" || props["aria-label"] === "language selector"
-    ? "CONTINUO SEM MINHA AREA DE ADMIN, RESOLVE LOGO ISSO, FAZ UMA ANALISE PROFUNDA E RESOLVA, PARA QUE ISSO NÃO ACONTEÇA MAIS"
+    ? "visualizar senha"
     : props["aria-label"];
 
   return (
