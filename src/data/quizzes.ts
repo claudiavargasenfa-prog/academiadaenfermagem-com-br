@@ -518,15 +518,6 @@ export const QUIZZES: Quiz[] = [
     ],
   },
   {
-    slug: "avc",
-    title: "AVC — Acidente Vascular Cerebral",
-    category: "Neurologia",
-    description: "Reconhecimento e janela terapêutica.",
-    questions: [
-      { q: "Acrônimo SAMU (público) para reconhecer AVC:", opts: ["SAMU", "FAST/SAMU (face, braço, fala, tempo)", "ABCDE", "OPQRST"], a: 1 },
-    ],
-  },
-  {
     slug: "icc",
     title: "Insuficiência Cardíaca",
     category: "Cardiologia",
