@@ -95,10 +95,10 @@ export function FlebitePanel() {
             </div>
 
             <div className="rounded-xl bg-white/40 p-3 border border-sky-100 overflow-hidden">
-              <h4 className="font-bold text-sky-900 mb-2 text-xs">GRAU 4: Cordão > 1 cm e Secreção</h4>
+              <h4 className="font-bold text-sky-900 mb-2 text-xs">GRAU 4: Cordão {'>'} 1 cm e Secreção</h4>
               <img src={imgG4.url} alt="Flebite Grau 4" className="w-full rounded-lg mb-2 shadow-sm border border-sky-200" />
               <p className="text-[11px] leading-snug">
-                Estágio grave com cordão venoso extenso (> 1 cm), dor intensa e presença de secreção purulenta (pus).
+                Estágio grave com cordão venoso extenso ({'>'} 1 cm), dor intensa e presença de secreção purulenta (pus).
               </p>
             </div>
           </div>
