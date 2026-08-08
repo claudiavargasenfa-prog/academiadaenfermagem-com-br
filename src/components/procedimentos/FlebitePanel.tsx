@@ -1,4 +1,5 @@
-import { AlertTriangle, ExternalLink } from "lucide-react";
+import { AlertTriangle, ExternalLink, ChevronDown, ChevronRight } from "lucide-react";
+import { useState } from "react";
 import imgG1 from "@/assets/procedimentos/flebite-g1.png.asset.json";
 import imgG2 from "@/assets/procedimentos/flebite-g2.png.asset.json";
 import imgG3 from "@/assets/procedimentos/flebite-g3.png.asset.json";
@@ -6,60 +7,48 @@ import imgG4 from "@/assets/procedimentos/flebite-g4.png.asset.json";
 
 const GRAUS = [
   { g: "0", sinais: "Sítio íntegro, sem sinais clínicos", diag: "Não há sinal de flebite", acao: "Observar evolução", cor: "bg-emerald-50 border-emerald-200 text-emerald-900" },
-  { g: "1", sinais: "Dor OU rubor (1 critério já conta)", diag: "Possível início de flebite", acao: "Manter cuidados conforme protocolo", cor: "bg-lime-50 border-lime-200 text-lime-900" },
-  { g: "2", sinais: "Dor, rubor e edema (2 critérios presentes)", diag: "Início da flebite", acao: "Monitorar com frequência, considerar troca e notificar evento adverso", cor: "bg-amber-50 border-amber-200 text-amber-900" },
-  { g: "3", sinais: "Dor, rubor e edema (todos presentes)", diag: "Flebite em evolução", acao: "Remover, registrar, nova punção e notificar evento adverso", cor: "bg-orange-50 border-orange-200 text-orange-900" },
-  { g: "4", sinais: "Dor intensa, rubor, edema e cordão venoso palpável", diag: "Início de tromboflebite", acao: "Remover, registrar, nova punção, iniciar tratamento local e notificar", cor: "bg-rose-50 border-rose-200 text-rose-900" },
-  { g: "5", sinais: "Dor, rubor, edema, cordão venoso e drenagem purulenta", diag: "Tromboflebite em evolução", acao: "Remover, registrar, nova punção, tratar local, comunicar o médico e notificar", cor: "bg-red-50 border-red-300 text-red-900" },
+  { g: "1", sinais: "Eritema no local da inserção com ou sem dor", diag: "Início de flebite", acao: "Observar e avaliar com maior frequência", cor: "bg-lime-50 border-lime-200 text-lime-900" },
+  { g: "2", sinais: "Dor no local da inserção com eritema e/ou edema", diag: "Flebite instalada", acao: "Retirar o dispositivo e notificar", cor: "bg-amber-50 border-amber-200 text-amber-900" },
+  { g: "3", sinais: "Dor no local da inserção com eritema, edema e cordão venoso palpável", diag: "Flebite moderada", acao: "Retirar, notificar e aplicar compressas", cor: "bg-orange-50 border-orange-200 text-orange-900" },
+  { g: "4", sinais: "Dor no local da inserção com eritema, edema, cordão venoso > 1 cm e drenagem purulenta", diag: "Flebite grave", acao: "Retirar, notificar, tratar local e comunicar médico", cor: "bg-rose-50 border-rose-200 text-rose-900" },
 ];
 
 const TIPOS = [
-  { t: "Mecânica", d: "Inserção traumática do vaso ou calibre do dispositivo inadequado para a veia escolhida.", cor: "from-sky-50 to-sky-100 border-sky-200" },
-  { t: "Química", d: "Agressividade dos componentes da medicação (pH, osmolaridade) sobre o endotélio.", cor: "from-violet-50 to-violet-100 border-violet-200" },
-  { t: "Bacteriana", d: "Tempo de permanência do dispositivo, quebra de técnica asséptica, curativo úmido ou sujo.", cor: "from-amber-50 to-amber-100 border-amber-200" },
-  { t: "Pós-infusional", d: "Inflamação da veia sem cateter in situ, entre 48 e 96 h após a retirada do dispositivo.", cor: "from-teal-50 to-teal-100 border-teal-200" },
+  { t: "Mecânica", d: "Relacionada ao tamanho do cateter, local de inserção e fixação inadequada.", cor: "bg-sky-50 border-sky-200 text-sky-900" },
+  { t: "Química", d: "Relacionada ao pH e osmolaridade da solução ou medicação infundida.", cor: "bg-violet-50 border-violet-200 text-violet-900" },
+  { t: "Bacteriana", d: "Relacionada à quebra de técnica asséptica e contaminação do dispositivo.", cor: "bg-amber-50 border-amber-200 text-amber-900" },
 ];
 
-const PREVENCAO = [
-  "Higienizar as mãos antes e após o preparo de medicações e a cada manipulação do dispositivo",
-  "Técnica asséptica na inserção e em toda manipulação do cateter",
-  "“Scrub the hub”: friccionar conector/dânula com antisséptico alcoólico por 15 segundos antes de cada infusão",
-  "Flushing com 10 mL de SF 0,9% antes e após cada medicação, usando seringas de 10 ou 20 mL",
-  "Turbilhonamento ao final da infusão, mantendo ~1 mm residual para evitar obstrução",
-  "Manter pressão positiva: clampear o polifix antes do fim da infusão e desacoplar a seringa em seguida",
-  "Fixação correta, limpa e seca, permitindo inspeção contínua do sítio",
-  "Selecionar o dispositivo conforme a terapia prescrita e o calibre do vaso",
-  "Conhecer diluente, volume e tempo de infusão de cada medicamento",
-];
-
-const AVALIACAO = [
-  "Higienizar as mãos e separar todo o material da avaliação",
-  "Higienizar as mãos novamente antes de adentrar o leito",
-  "Inspecionar óstio e trajeto venoso em busca de sinais flogísticos e cordão fibroso (película transparente permite ver sem retirar)",
-  "Com fita adesiva/esparadrapo: remover com gaze úmida, sem traumatizar a pele nem tracionar o cateter; refazer o curativo após a avaliação",
-  "Descartar materiais e higienizar as mãos",
-  "Registrar no prontuário a avaliação de flebite e a conduta adotada",
-];
-
-function Bloco({
+function Sanfona({
   titulo,
   cor,
   children,
-  aberto,
+  defaultAberto = false,
 }: {
   titulo: string;
   cor: string;
   children: React.ReactNode;
-  aberto?: boolean;
+  defaultAberto?: boolean;
 }) {
+  const [aberto, setAberto] = useState(defaultAberto);
+
   return (
-    <details open={aberto} className={`group overflow-hidden rounded-2xl border ${cor}`}>
-      <summary className="cursor-pointer list-none px-4 py-3 text-sm font-bold tracking-tight marker:hidden">
-        <span className="mr-2 inline-block transition group-open:rotate-90">▸</span>
-        {titulo}
-      </summary>
-      <div className="border-t border-black/5 bg-white/60 px-4 py-3 text-sm leading-relaxed">{children}</div>
-    </details>
+    <div className={`overflow-hidden rounded-2xl border ${cor} transition-all`}>
+      <button
+        onClick={() => setAberto(!aberto)}
+        className="flex w-full items-center justify-between px-4 py-3 text-left text-sm font-bold tracking-tight"
+      >
+        <span className="flex items-center gap-2">
+          {aberto ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+          {titulo}
+        </span>
+      </button>
+      {aberto && (
+        <div className="border-t border-black/5 bg-white/60 px-4 py-4 text-sm leading-relaxed animate-in fade-in slide-in-from-top-1 duration-200">
+          {children}
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -68,195 +57,88 @@ export function FlebitePanel() {
     <div className="space-y-3">
       <div className="mb-2 flex items-center justify-between border-b border-foreground/5 pb-2">
         <div>
-          <h3 className="font-display text-base font-extrabold text-primary">Prevenção de Flebite e Complicações</h3>
+          <h3 className="font-display text-base font-extrabold text-primary">Graus de Flebite e Condutas</h3>
           <p className="text-[10px] text-muted-foreground uppercase tracking-widest">
-            Protocolo INS Brasil 2024 & COREN-SP
+            Escala Maddox & Protocolo ANVISA 2025
           </p>
         </div>
-        <div className="hidden h-10 w-10 items-center justify-center rounded-full bg-red-50 text-red-600 sm:flex">
-          <AlertTriangle className="h-5 w-5" />
+        <div className="h-8 w-8 items-center justify-center rounded-full bg-red-50 text-red-600 flex">
+          <AlertTriangle className="h-4 w-4" />
         </div>
       </div>
 
-      <Bloco titulo="Graus de Flebite" cor="border-sky-200 bg-sky-50" aberto>
-        <div className="space-y-4">
-          <p className="font-semibold text-sky-900">
-            As imagens a seguir descrevem a progressão da flebite, uma complicação comum da terapia intravenosa.
-          </p>
-          
-          <div className="space-y-3">
+      <Sanfona titulo="Graus de Flebite (Ilustrado)" cor="border-sky-200 bg-sky-50" defaultAberto>
+        <div className="space-y-6">
+          <div className="space-y-4">
             <div className="rounded-xl bg-white/40 p-3 border border-sky-100 overflow-hidden">
-              <h4 className="font-bold text-sky-900 flex items-center gap-2 mb-2">
-                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-sky-500 text-[10px] text-white">1</span>
-                Flebite Grau 1
-              </h4>
-              <img src={imgG1.url} alt="Flebite Grau 1" className="w-full aspect-video object-cover rounded-lg mb-2 shadow-sm border border-sky-200" loading="eager" />
-              <p className="mt-1 text-xs">
-                Esta imagem mostra o braço do paciente com o cateter IV. Há um eritema (vermelhidão) inicial e localizado ao redor do local de inserção. É o primeiro sinal de inflamação.
+              <h4 className="font-bold text-sky-900 mb-2 text-xs">GRAU 1: Eritema e Dor inicial</h4>
+              <img src={imgG1.url} alt="Flebite Grau 1" className="w-full rounded-lg mb-2 shadow-sm border border-sky-200" />
+              <p className="text-[11px] leading-snug">
+                Presença de eritema (vermelhidão) no local da inserção do cateter, com ou sem dor ao toque.
               </p>
-              <a href={imgG1.url} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex items-center gap-1 text-[10px] text-sky-600 hover:underline">
-                <ExternalLink className="h-2.5 w-2.5" /> Abre em uma nova janela
-              </a>
             </div>
 
             <div className="rounded-xl bg-white/40 p-3 border border-sky-100 overflow-hidden">
-              <h4 className="font-bold text-sky-900 flex items-center gap-2 mb-2">
-                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-sky-500 text-[10px] text-white">2</span>
-                Flebite Grau 2
-              </h4>
-              <img src={imgG2.url} alt="Flebite Grau 2" className="w-full aspect-video object-cover rounded-lg mb-2 shadow-sm border border-sky-200" loading="eager" />
-              <p className="mt-1 text-xs">
-                A inflamação progrediu. Nesta imagem, o eritema está mais intenso e se estende por uma área maior ao redor do local da punção. O paciente relata dor ou desconforto, e a área pode apresentar edema (inchaço).
+              <h4 className="font-bold text-sky-900 mb-2 text-xs">GRAU 2: Dor com Eritema e Edema</h4>
+              <img src={imgG2.url} alt="Flebite Grau 2" className="w-full rounded-lg mb-2 shadow-sm border border-sky-200" />
+              <p className="text-[11px] leading-snug">
+                Aumento da dor, acompanhada de eritema visível e edema (inchaço) na região da punção.
               </p>
-              <a href={imgG2.url} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex items-center gap-1 text-[10px] text-sky-600 hover:underline">
-                <ExternalLink className="h-2.5 w-2.5" /> Abre em uma nova janela
-              </a>
             </div>
 
             <div className="rounded-xl bg-white/40 p-3 border border-sky-100 overflow-hidden">
-              <h4 className="font-bold text-sky-900 flex items-center gap-2 mb-2">
-                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-sky-500 text-[10px] text-white">3</span>
-                Flebite Grau 3
-              </h4>
-              <img src={imgG3.url} alt="Flebite Grau 3" className="w-full aspect-video object-cover rounded-lg mb-2 shadow-sm border border-sky-200" loading="eager" />
-              <p className="mt-1 text-xs">
-                Este é um estágio avançado de inflamação. A imagem mostra eritema e edema evidentes. Além disso, uma linha vermelha endurecida (o "cordão venoso") é visível e palpável ao longo do trajeto da veia.
+              <h4 className="font-bold text-sky-900 mb-2 text-xs">GRAU 3: Cordão Venoso Palpável</h4>
+              <img src={imgG3.url} alt="Flebite Grau 3" className="w-full rounded-lg mb-2 shadow-sm border border-sky-200" />
+              <p className="text-[11px] leading-snug">
+                Além da dor, eritema e edema, nota-se a formação de um cordão venoso palpável no trajeto da veia.
               </p>
-              <a href={imgG3.url} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex items-center gap-1 text-[10px] text-sky-600 hover:underline">
-                <ExternalLink className="h-2.5 w-2.5" /> Abre em uma nova janela
-              </a>
             </div>
 
             <div className="rounded-xl bg-white/40 p-3 border border-sky-100 overflow-hidden">
-              <h4 className="font-bold text-sky-900 flex items-center gap-2 mb-2">
-                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-sky-500 text-[10px] text-white">4</span>
-                Flebite Grau 4
-              </h4>
-              <img src={imgG4.url} alt="Flebite Grau 4" className="w-full aspect-video object-cover rounded-lg mb-2 shadow-sm border border-sky-200" loading="eager" />
-              <p className="mt-1 text-xs">
-                Este é o estágio mais grave. A imagem revela eritema e edema extensos. O cordão venoso está endurecido e muito doloroso, e há presença de secreção purulenta (pus) no local de inserção do cateter, indicando infecção.
+              <h4 className="font-bold text-sky-900 mb-2 text-xs">GRAU 4: Cordão > 1 cm e Secreção</h4>
+              <img src={imgG4.url} alt="Flebite Grau 4" className="w-full rounded-lg mb-2 shadow-sm border border-sky-200" />
+              <p className="text-[11px] leading-snug">
+                Estágio grave com cordão venoso extenso (> 1 cm), dor intensa e presença de secreção purulenta (pus).
               </p>
-              <a href={imgG4.url} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex items-center gap-1 text-[10px] text-sky-600 hover:underline">
-                <ExternalLink className="h-2.5 w-2.5" /> Abre em uma nova janela
-              </a>
             </div>
           </div>
-          <p className="text-[10px] text-sky-700/60 text-center font-medium mt-2">
-            Espero que essas imagens sejam úteis para o seu trabalho. Se precisar de mais alguma coisa, conte comigo!
-          </p>
         </div>
-      </Bloco>
+      </Sanfona>
 
-      <Bloco titulo="Classificação quanto ao tipo" cor="border-violet-200 bg-violet-50">
-        <div className="grid gap-2 sm:grid-cols-2">
-          {TIPOS.map((t) => (
-            <div key={t.t} className={`rounded-xl border bg-gradient-to-br p-3 ${t.cor}`}>
-              <p className="text-xs font-bold uppercase tracking-wide">{t.t}</p>
-              <p className="mt-1 text-xs leading-relaxed text-foreground/80">{t.d}</p>
-            </div>
-          ))}
-        </div>
-      </Bloco>
-
-      <Bloco titulo="Escala de Maddox — graus, diagnóstico e conduta" cor="border-rose-200 bg-rose-50">
+      <Sanfona titulo="Escala de Maddox e Condutas" cor="border-rose-200 bg-rose-50">
         <div className="space-y-2">
           {GRAUS.map((g) => (
             <div key={g.g} className={`flex gap-3 rounded-xl border p-3 ${g.cor}`}>
               <div className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-white/80 text-sm font-extrabold">
                 {g.g}
               </div>
-              <div className="min-w-0 text-xs leading-relaxed">
-                <p className="font-semibold">{g.sinais}</p>
-                <p className="opacity-80">Diagnóstico: {g.diag}</p>
-                <p className="mt-1 font-bold">Ação: {g.acao}</p>
+              <div className="min-w-0 text-[11px] leading-tight">
+                <p className="font-bold">{g.sinais}</p>
+                <p className="opacity-80 italic">{g.diag}</p>
+                <p className="mt-1 font-bold text-black/70">Ação: {g.acao}</p>
               </div>
             </div>
           ))}
         </div>
-        <p className="mt-3 text-[11px] text-muted-foreground">
-          Graus clínicos correlatos: 1 rubor isolado · 2 dois sinais · 3 acrescenta cordão fibroso palpável ·
-          4 endurecimento e cordão ≥ 1 cm com drenagem purulenta.
-        </p>
-      </Bloco>
+      </Sanfona>
 
-      <Bloco titulo="Ações preventivas (boas práticas da terapia infusional)" cor="border-emerald-200 bg-emerald-50">
-        <ul className="space-y-1">
-          {PREVENCAO.map((p, i) => (
-            <li key={i} className="flex items-start gap-2 text-xs">
-              <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500" />
-              <span>{p}</span>
-            </li>
+      <Sanfona titulo="Tipos de Flebite" cor="border-violet-200 bg-violet-50">
+        <div className="grid gap-2">
+          {TIPOS.map((t) => (
+            <div key={t.t} className={`rounded-xl border p-3 ${t.cor}`}>
+              <p className="text-xs font-bold uppercase">{t.t}</p>
+              <p className="mt-1 text-[11px] leading-relaxed">{t.d}</p>
+            </div>
           ))}
-        </ul>
-      </Bloco>
-
-      <Bloco titulo="Processo de avaliação diária do sítio" cor="border-teal-200 bg-teal-50">
-        <ol className="space-y-1 pl-4 text-xs">
-          {AVALIACAO.map((a, i) => (
-            <li key={i} className="list-decimal">
-              {a}
-            </li>
-          ))}
-        </ol>
-        <div className="mt-3 rounded-xl border border-amber-300/60 bg-amber-50 px-3 py-2 text-[12px] text-amber-900">
-          <div className="flex items-start gap-2">
-            <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
-            <span>
-              Filme transparente: trocar em caso de sujidade, umidade ou perda de aderência. Fita adesiva:
-              usar tira nova a cada avaliação. Rodízio de punção em até <strong>96 horas</strong> (em
-              crianças, avaliar diariamente e individualizar).
-            </span>
-          </div>
         </div>
-      </Bloco>
+      </Sanfona>
 
-      <Bloco titulo="Definições essenciais" cor="border-indigo-200 bg-indigo-50">
-        <dl className="space-y-2 text-xs">
-          <div>
-            <dt className="font-bold">Scrub the hub</dt>
-            <dd>Friccionar canhões, dânulas e conectores com antisséptico alcoólico por 15 segundos antes de infundir.</dd>
-          </div>
-          <div>
-            <dt className="font-bold">Dânula (“torneirinha”)</dt>
-            <dd>Dispositivo de 3 vias que permite controlar o fluxo e administrar soluções de forma simultânea ou alternada.</dd>
-          </div>
-          <div>
-            <dt className="font-bold">Fluxo turbilhonar</dt>
-            <dd>SF 0,9% em bolus com movimento adequado do êmbolo, deixando ~1 mm residual; usar apenas seringas de 10 ou 20 mL.</dd>
-          </div>
-        </dl>
-      </Bloco>
-
-      <Bloco titulo="Responsabilidades (COREN-SP nº 007/2023)" cor="border-slate-200 bg-slate-50">
-        <p className="text-xs">
-          <strong>Enfermeiro:</strong> gestão do cuidado na terapia intravenosa — avaliação clínica, escolha do
-          dispositivo e do sítio, tecnologia de assertividade da punção, forma de administração
-          (reconstituição/diluição) e monitoramento dos efeitos do fármaco.
+      <div className="rounded-xl bg-amber-50 p-3 border border-amber-200">
+        <p className="text-[10px] text-amber-900 leading-tight">
+          <strong>Lembre-se:</strong> A notificação de eventos adversos deve ser feita a partir do Grau 2. 
+          Siga sempre o protocolo da sua instituição.
         </p>
-        <p className="mt-2 text-xs">
-          <strong>Técnico e auxiliar:</strong> manutenção dos dispositivos (punção, fixação, permeabilização e
-          observação) e infusão do fármaco, sempre com base na prescrição de enfermagem e no protocolo
-          institucional.
-        </p>
-        <p className="mt-2 text-xs">
-          Notificação de evento adverso é obrigatória a partir do grau 2 da escala, com registro em prontuário.
-        </p>
-      </Bloco>
-
-      <Bloco titulo="Referências" cor="border-stone-200 bg-stone-50">
-        <ol className="space-y-1 pl-4 text-[11px] text-foreground/70">
-          <li className="list-decimal">SMS-Rio/SUBHUE. POP-ENF-0002 — Identificação e manejo da flebite, rev. 2025.</li>
-          <li className="list-decimal">INS Brasil. Diretrizes práticas para a terapia infusional, 3ª ed., 2018.</li>
-          <li className="list-decimal">Infusion Therapy Standards of Practice, 9th ed., 2024.</li>
-          <li className="list-decimal">Urbanetto JS et al. Incidência de flebite e flebite pós-infusional em adultos hospitalizados. Rev Gaúcha Enferm, 2017.</li>
-          <li className="list-decimal">Danski MTR et al. Complicações relacionadas ao uso do cateter venoso periférico. Acta Paul Enferm, 2016.</li>
-          <li className="list-decimal">Parecer COREN-SP nº 007/2023 — Atuação da equipe de enfermagem na terapia intravenosa.</li>
-        </ol>
-      </Bloco>
-
-      <p className="text-center text-[11px] text-muted-foreground">
-        Material de apoio: sempre siga o POP vigente da sua instituição.
-      </p>
+      </div>
     </div>
   );
 }
