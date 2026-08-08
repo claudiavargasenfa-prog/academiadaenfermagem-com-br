@@ -196,6 +196,19 @@ export const CASOS: CasoClinico[] = [
       "HERDMAN, T. H.; KAMITSURU, S. (Org.). Diagnósticos de Enfermagem da NANDA-I: Definições e Classificação 2021-2023. Porto Alegre: Artmed, 2021.",
     ],
   },
+  {
+    id: "04-edema-agudo-pulmao",
+    titulo: "Edema Agudo de Pulmão (EAP) e Crise Hipertensiva",
+    setor: "Emergência — Sala Vermelha",
+    paciente: {
+      nome: "Sra. Benedita",
+      idade: 72,
+      leito: "SV-02",
+      avatar: "👵",
+      diagnostico: "Insuficiência Cardíaca Congestiva (ICC) descompensada — EAP",
+      queixa:
+        "Dispneia súbita e intensa em repouso, ansiedade extrema, sudorese fria e tosse com secreção rósea. Uso de musculatura acessória evidente.",
+      status: "critico",
     },
     vitais: {
       paSistolica: 210,
