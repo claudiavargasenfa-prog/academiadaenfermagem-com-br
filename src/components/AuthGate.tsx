@@ -5,7 +5,7 @@ import { useServerFn } from "@tanstack/react-start";
 import type { Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
-import { Loader2 } from "lucide-react";
+import { Loader2, Eye, EyeOff } from "lucide-react";
 import logoAsset from "@/assets/logo.png.asset.json";
 import { getDeviceId } from "@/lib/device-fingerprint";
 import { checkTrialEligibility, recordTrialFingerprint } from "@/lib/trial-guard.functions";
@@ -95,6 +95,7 @@ export function AuthScreen({ cadastroSlug: forcedCadastroSlug }: { cadastroSlug?
   const [mode, setMode] = useState<"signin" | "signup" | "forgot">(cadastroSlug ? "signup" : "signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [nome, setNome] = useState("");
   const [phone, setPhone] = useState("");
   const [categoria, setCategoria] = useState<"academico" | "tecnico-estudante" | "tecnico" | "enfermeiro" | "">(initialCategoria);
@@ -351,16 +352,30 @@ export function AuthScreen({ cadastroSlug: forcedCadastroSlug }: { cadastroSlug?
             {mode !== "forgot" && (
               <div>
                 <label className={label}>Senha *</label>
-                <input
-                  type="password"
-                  required
-                  minLength={6}
-                  autoComplete={mode === "signup" ? "new-password" : "current-password"}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className={input}
-                  placeholder="Mínimo 6 caracteres"
-                />
+                <div className="relative">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    required
+                    minLength={6}
+                    autoComplete={mode === "signup" ? "new-password" : "current-password"}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className={`${input} pr-10`}
+                    placeholder="Mínimo 6 caracteres"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
+                    title={showPassword ? "Ocultar senha" : "Ver senha"}
+                  >
+                    {showPassword ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
+                  </button>
+                </div>
                 {mode === "signin" && (
                   <button
                     type="button"
