@@ -1,0 +1,1 @@
+DELETE FROM public.mini_apps WHERE slug IN ('protocolo-avc-sala-vermelha', 'AVC');
