@@ -524,10 +524,6 @@ export const QUIZZES: Quiz[] = [
     description: "Reconhecimento e janela terapêutica.",
     questions: [
       { q: "Acrônimo SAMU (público) para reconhecer AVC:", opts: ["SAMU", "FAST/SAMU (face, braço, fala, tempo)", "ABCDE", "OPQRST"], a: 1 },
-      { q: "Janela para trombólise EV no AVC isquêmico:", opts: ["Até 4,5 h", "Até 12 h", "Até 24 h sempre", "Sem janela"], a: 0 },
-      { q: "Exame inicial obrigatório:", opts: ["RNM com contraste", "TC de crânio sem contraste", "EEG", "Angiografia direta"], a: 1 },
-      { q: "PA tolerada para trombólise:", opts: ["<140/90", "<185/110", "<220/120 sempre", "Sem limite"], a: 1 },
-      { q: "Escala NIHSS avalia:", opts: ["Dor", "Gravidade do AVC", "Risco de queda", "Coma profundo apenas"], a: 1 },
     ],
   },
   {

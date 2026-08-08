@@ -161,7 +161,7 @@ const regioes: Regiao[] = [
       { nome: "Coloração", oque: "Corada / pálida / cianótica / ictérica / pletórica. Avalie em luz natural quando possível." },
       { nome: "Turgor", oque: "Pince a pele do dorso da mão. Retorno lento = desidratação. Em idosos, prefira região esternal." },
       { nome: "Lesões (avaliar Braden)", oque: "Procure proeminências ósseas (sacro, calcâneo, occipital, trocânter). Use a Escala de Braden para risco de LPP." },
-      { nome: "Dispositivos invasivos", oque: "Inspecione AVP, AVC, SVD, SNG/SNE, drenos. Observe sinais flogísticos, fixação e data de troca." },
+      { nome: "Dispositivos invasivos", oque: "Inspecione AVP, SVD, SNG/SNE, drenos. Observe sinais flogísticos, fixação e data de troca." },
     ],
   },
 ];

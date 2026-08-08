@@ -197,19 +197,6 @@ export const CASOS: CasoClinico[] = [
     ],
   },
   {
-    id: "03-avc-isquemico-trombolise",
-    titulo: "Suspeita de AVC Isquêmico na Janela de Trombólise",
-    setor: "Unidade de Emergência — Sala de AVC",
-    paciente: {
-      nome: "Sr. Benedito",
-      idade: 72,
-      leito: "EM-07",
-      avatar: "👴",
-      diagnostico: "Suspeita de AVC Isquêmico — janela 90 min",
-      queixa:
-        "Perda súbita de força em hemicorpo direito e disartria severa há 90 minutos. Cincinnati positivo nos 3 componentes (desvio de rima, queda de MSD, fala arrastada). HAS em uso irregular de medicação.",
-      status: "critico",
-    },
     vitais: {
       paSistolica: 170,
       paDiastolica: 95,
