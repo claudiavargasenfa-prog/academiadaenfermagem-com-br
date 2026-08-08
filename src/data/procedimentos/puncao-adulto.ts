@@ -5,15 +5,13 @@ import pvaTateando from "@/assets/procedimentos/pva-tateando.png.asset.json";
 import pvaAssepsia from "@/assets/procedimentos/pva-assepsia.png.asset.json";
 import pvaPuncionando1 from "@/assets/procedimentos/pva-puncionando-1.png.asset.json";
 import pvaPuncionando2 from "@/assets/procedimentos/pva-puncionando-2.png.asset.json";
-import pvaRetirandoAgulha from "@/assets/procedimentos/pva-retirando-agulha.png.asset.json";
+import pvaFixacao from "@/assets/procedimentos/pva-retirando-agulha.png.asset.json";
 import pvaIdentificacao from "@/assets/procedimentos/pva-identificacao.png.asset.json";
+
 // Imagens complementares das etapas de preparo e finalização
 import pvaPreparo from "@/assets/procedimentos/pva-01-preparo.jpg";
 import pvaMaos from "@/assets/procedimentos/pva-02-maos.jpg";
-import pvaPosicao from "@/assets/procedimentos/pva-03-posicao.jpg";
 import pvaCalibre from "@/assets/procedimentos/pva-05-calibre.jpg";
-import pvaConexao from "@/assets/procedimentos/pva-09-conexao.jpg";
-import pvaSalinizacao from "@/assets/procedimentos/pva-10-salinizacao.jpg";
 
 export const PROC_PUNCAO_ADULTO: Procedimento = {
   slug: "puncao-venosa-adulto",
