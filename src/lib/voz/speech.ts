@@ -105,6 +105,7 @@ export function iniciarDitado(h: DitadoHandlers): DitadoSessao | null {
     };
     r.onend = () => {
       if (!ativo) return;
+      processados = 0;
       try {
         r.start();
       } catch {
