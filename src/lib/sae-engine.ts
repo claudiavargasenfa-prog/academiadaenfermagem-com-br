@@ -256,3 +256,45 @@ export function buildEvolucao(params: {
     .filter((l) => l !== null && l !== undefined)
     .join("\n");
 }
+
+// ---------- Captação automática de SINAIS E SINTOMAS ----------
+// Varre o texto ditado/digitado e devolve os sinais e sintomas reconhecidos
+// no BANCO DE DADOS MESTRE (TAB. 4 — Evidências Clínicas + TAB. 13 — Palavras-chave).
+
+const SINAIS_FRASES: { chave: string; original: string }[] = (() => {
+  const mapa = new Map<string, string>();
+  for (const d of SAE_BANCO) {
+    for (const raw of (d.sinais || "").split(/[;.,]/)) {
+      const original = raw.trim();
+      if (original.length < 6) continue;
+      const chave = norm(original);
+      if (!mapa.has(chave)) mapa.set(chave, original);
+    }
+    for (const c of d.condutas) {
+      for (const raw of (c.palavras || "").split(/[;.,]/)) {
+        const original = raw.trim();
+        if (original.length < 5) continue;
+        const chave = norm(original);
+        if (!mapa.has(chave)) mapa.set(chave, original);
+      }
+    }
+  }
+  return Array.from(mapa, ([chave, original]) => ({ chave, original })).sort(
+    (a, b) => b.chave.length - a.chave.length,
+  );
+})();
+
+export function extrairSinaisSintomas(textoRaw: string, max = 40): string[] {
+  const corpus = norm(textoRaw || "");
+  if (!corpus.trim()) return [];
+  const achados: string[] = [];
+  const usados: string[] = [];
+  for (const { chave, original } of SINAIS_FRASES) {
+    if (!corpus.includes(chave)) continue;
+    if (usados.some((u) => u.includes(chave))) continue; // já coberto por frase maior
+    usados.push(chave);
+    achados.push(original);
+    if (achados.length >= max) break;
+  }
+  return achados;
+}
