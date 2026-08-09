@@ -18,6 +18,8 @@ import {
   renderPrescricaoRow,
   buildEvolucao,
   APRAZAMENTO_MAP,
+  extrairSinaisSintomas,
+
 
   type SaeDiagnostico,
 } from "@/lib/sae-engine";
