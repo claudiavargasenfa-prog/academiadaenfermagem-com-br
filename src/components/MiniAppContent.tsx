@@ -1622,28 +1622,105 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
       )}
 
       {isSae && (
-        <BlocoDitado
-          draftKey={sae.ativoId || "sae"}
-          onInserir={(alvo, texto) => {
-            const root = ref.current;
-            if (!root || !texto.trim()) return;
-            const sel =
-              alvo === "sintomas"
-                ? "#txt-sinais-sintomas-consolidados"
-                : "#txt-evolucao-clinica-mestre";
-            const ta = root.querySelector<HTMLTextAreaElement>(sel);
-            if (!ta) {
-              alert("Abra a seção correspondente do Mini App antes de enviar o texto ditado.");
-              return;
-            }
-            ta.value = ta.value.trim() ? `${ta.value.trim()}\n${texto.trim()}` : texto.trim();
-            ta.dispatchEvent(new Event("input", { bubbles: true }));
-            ta.dispatchEvent(new Event("change", { bubbles: true }));
-            ta.scrollIntoView({ behavior: "smooth", block: "center" });
-            ta.focus();
-          }}
-        />
+        <>
+          <BlocoDitado
+            draftKey={sae.ativoId || "sae"}
+            onInserir={(alvo, texto) => {
+              const root = ref.current;
+              const conteudo = texto.trim();
+              if (!conteudo) return;
+
+              if (alvo === "sintomas") {
+                const achados = extrairSinaisSintomas(conteudo);
+                setSintomasCaptados((prev) => {
+                  const juntos = [...prev];
+                  for (const a of achados) if (!juntos.includes(a)) juntos.push(a);
+                  return juntos;
+                });
+                const alvoSint = root?.querySelector<HTMLTextAreaElement>(
+                  "#txt-sinais-sintomas-consolidados, #txt-sinais-sintomas, textarea[id*='sintoma'], textarea[placeholder*='sintoma' i]",
+                );
+                if (alvoSint) {
+                  const bloco = achados.length ? achados.join("; ") : conteudo;
+                  alvoSint.value = alvoSint.value.trim()
+                    ? `${alvoSint.value.trim()}\n${bloco}`
+                    : bloco;
+                  alvoSint.dispatchEvent(new Event("input", { bubbles: true }));
+                  alvoSint.dispatchEvent(new Event("change", { bubbles: true }));
+                }
+                window.setTimeout(() => {
+                  document
+                    .getElementById("adec-sinais-sintomas-captados")
+                    ?.scrollIntoView({ behavior: "smooth", block: "center" });
+                }, 50);
+                return;
+              }
+
+              const ta = root?.querySelector<HTMLTextAreaElement>(
+                "#txt-evolucao-clinica-mestre, #txt-evolucao-lavoble, textarea[id*='evolucao'], textarea[placeholder*='evolu' i]",
+              );
+              if (!ta) {
+                alert("Abra a seção de Evolução do Mini App antes de enviar o texto ditado.");
+                return;
+              }
+              ta.value = ta.value.trim() ? `${ta.value.trim()}\n${conteudo}` : conteudo;
+              ta.dispatchEvent(new Event("input", { bubbles: true }));
+              ta.dispatchEvent(new Event("change", { bubbles: true }));
+              ta.scrollIntoView({ behavior: "smooth", block: "center" });
+              ta.focus();
+            }}
+          />
+
+          <div
+            id="adec-sinais-sintomas-captados"
+            className="mb-4 rounded-2xl border border-emerald-200 bg-white/80 p-4 shadow-sm backdrop-blur"
+          >
+            <div className="mb-2 flex flex-wrap items-center gap-2">
+              <h4 className="text-sm font-bold text-emerald-900">🩺 Sinais e Sintomas</h4>
+              <span className="rounded-full bg-emerald-600/10 px-2 py-0.5 text-[11px] font-semibold text-emerald-800">
+                captados automaticamente do ditado
+              </span>
+            </div>
+            {sintomasCaptados.length === 0 ? (
+              <p className="text-xs text-emerald-900/70">
+                Dite ou escreva no bloco acima e clique em <b>Enviar para Sinais e Sintomas</b>. O
+                sistema reconhece os sinais e sintomas do banco oficial e lista aqui.
+              </p>
+            ) : (
+              <>
+                <ul className="mb-2 flex flex-wrap gap-2">
+                  {sintomasCaptados.map((s) => (
+                    <li
+                      key={s}
+                      className="flex items-center gap-1 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-900"
+                    >
+                      {s}
+                      <button
+                        type="button"
+                        aria-label={`Remover ${s}`}
+                        onClick={() =>
+                          setSintomasCaptados((prev) => prev.filter((x) => x !== s))
+                        }
+                        className="text-red-600"
+                      >
+                        ✕
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+                <button
+                  type="button"
+                  onClick={() => setSintomasCaptados([])}
+                  className="rounded-lg bg-red-100 px-3 py-1.5 text-xs font-semibold text-red-700"
+                >
+                  Limpar lista
+                </button>
+              </>
+            )}
+          </div>
+        </>
       )}
+
 
       <div ref={ref} className="prose-sm max-w-none">
         {isSae ? <RawHtmlHost html={html} /> : renderContent(html)}
