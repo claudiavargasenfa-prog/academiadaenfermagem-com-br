@@ -59,19 +59,37 @@ export function iniciarDitado(h: DitadoHandlers): DitadoSessao | null {
   };
   void pedirWakeLock();
 
+  // No Android o navegador reenvia os mesmos trechos finais várias vezes.
+  // Guardamos quais índices já foram aproveitados e o último texto aceito
+  // para nunca repetir a mesma frase.
+  let processados = 0;
+  let ultimoFinal = "";
+  let ultimoFinalEm = 0;
+
   const criar = () => {
     const r = new C();
     r.lang = "pt-BR";
     r.continuous = true;
     r.interimResults = true;
     r.maxAlternatives = 1;
+    processados = 0;
     r.onresult = (e: any) => {
       let parcial = "";
-      for (let i = e.resultIndex; i < e.results.length; i++) {
+      const inicio = Math.max(e.resultIndex ?? 0, processados);
+      for (let i = inicio; i < e.results.length; i++) {
         const res = e.results[i];
-        const txt = String(res[0]?.transcript ?? "");
-        if (res.isFinal) h.onFinal(txt);
-        else parcial += txt;
+        const txt = String(res[0]?.transcript ?? "").trim();
+        if (res.isFinal) {
+          processados = i + 1;
+          if (!txt) continue;
+          const agora = Date.now();
+          if (txt === ultimoFinal && agora - ultimoFinalEm < 4000) continue;
+          ultimoFinal = txt;
+          ultimoFinalEm = agora;
+          h.onFinal(txt);
+        } else {
+          parcial += txt;
+        }
       }
       h.onParcial(parcial);
     };
@@ -87,6 +105,7 @@ export function iniciarDitado(h: DitadoHandlers): DitadoSessao | null {
     };
     r.onend = () => {
       if (!ativo) return;
+      processados = 0;
       try {
         r.start();
       } catch {
