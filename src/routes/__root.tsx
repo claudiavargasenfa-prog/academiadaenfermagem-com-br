@@ -10,6 +10,8 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
+import ogImageAsset from "../assets/og-adec.png.asset.json";
+
 import { InstallAppButton } from "../components/InstallAppButton";
 import { Toaster } from "../components/ui/sonner";
 import { reportLovableError } from "../lib/lovable-error-reporting";
