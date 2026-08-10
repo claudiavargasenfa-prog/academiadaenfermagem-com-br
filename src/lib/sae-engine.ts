@@ -296,9 +296,9 @@ export function renderDiagnosticoCard(m: SaeMatch, idx: number): string {
         : { bg: "#f3f4f6", br: "#e5e7eb", tx: "#4b5563" };
   const confChip = `<span style="font-size:10.5px;background:${confCor.bg};border:1px solid ${confCor.br};color:${confCor.tx};padding:2px 8px;border-radius:999px;font-weight:700;">Correspondência ${esc(conf)}</span>`;
   const achadosHtml = m.hits.length
-    ? `<p style="margin:0 0 6px 0;font-size:12px;color:#166534;"><strong style="color:#166534;">Achados do paciente que geraram esta sugestão:</strong> ${esc(
+    ? `<p style="margin:0 0 6px 0;font-size:12px;color:#15803d;"><strong style="color:#15803d;">Achados do paciente que geraram esta sugestão:</strong> <span style="color:#15803d;font-weight:600;">${esc(
         Array.from(new Set(m.hits)).slice(0, 8).join(" • "),
-      )}</p>`
+      )}</span></p>`
     : "";
   return `
 <div class="sae-diag-card" data-diag-id="${esc(d.id)}" style="background:#f0fdf4;border-radius:10px;padding:14px;border:1px solid #bbf7d0;border-left:5px solid #ca8a04;display:flex;align-items:flex-start;justify-content:space-between;gap:15px;">
@@ -311,9 +311,10 @@ export function renderDiagnosticoCard(m: SaeMatch, idx: number): string {
       ${confChip}
       ${matrizChip}
     </div>
+    <p style="margin:0 0 2px 0;font-size:11px;font-weight:700;color:#15803d;text-transform:uppercase;letter-spacing:.3px;">Hipótese Diagnóstica ADEC</p>
     <h4 style="margin:0 0 6px 0;font-size:14px;color:#14532d;font-weight:bold;line-height:1.4;">${esc(d.diagnostico)}</h4>
     ${achadosHtml}
-    <p style="margin:0 0 4px 0;font-size:12px;color:#4b5563;"><strong style="color:#166534;">Evidências Clínicas:</strong> ${esc(d.sinais)}</p>
+    <p style="margin:0 0 4px 0;font-size:12px;color:#4b5563;"><strong style="color:#166534;">Evidências Clínicas / Sinais e Sintomas:</strong> ${esc(d.sinais)}</p>
 
     ${d.criteriosEssenciais ? `<p style="margin:0 0 4px 0;font-size:12px;color:#4b5563;"><strong style="color:#166534;">Critérios essenciais:</strong> ${esc(d.criteriosEssenciais)}</p>` : ""}
     ${d.criteriosAssociados ? `<p style="margin:0 0 6px 0;font-size:12px;color:#4b5563;"><strong style="color:#166534;">Critérios associados:</strong> ${esc(d.criteriosAssociados)}</p>` : ""}
@@ -322,11 +323,12 @@ export function renderDiagnosticoCard(m: SaeMatch, idx: number): string {
       <div style="margin-top:6px;font-size:12px;color:#4b5563;">
         <p style="margin:0 0 4px 0;"><strong style="color:#166534;">Intervenções assistenciais:</strong></p>
         <ul style="margin:0 0 8px 18px;padding:0;">${condutasHtml}</ul>
-        ${objetivos.length ? `<p style="margin:0 0 4px 0;"><strong style="color:#166534;">Objetivos:</strong> ${esc(objetivos.join(" • "))}</p>` : ""}
+        ${objetivos.length ? `<p style="margin:0 0 4px 0;"><strong style="color:#166534;">Objetivos assistenciais:</strong> ${esc(objetivos.join(" • "))}</p>` : ""}
         ${prioridade ? `<p style="margin:0 0 4px 0;"><strong style="color:#166534;">Prioridade clínica:</strong> ${esc(prioridade)}</p>` : ""}
         ${observ.length ? `<p style="margin:0;"><strong style="color:#166534;">Observações:</strong> ${esc(observ.join(" • "))}</p>` : ""}
       </div>
     </details>
+
   </div>
   <div style="text-align:center;flex-shrink:0;">
     <label style="display:block;font-size:10.5px;font-weight:bold;color:#166534;margin-bottom:4px;">Prioridade:</label>
