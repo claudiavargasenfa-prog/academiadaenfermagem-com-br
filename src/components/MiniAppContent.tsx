@@ -198,6 +198,8 @@ const RawHtmlHost = memo(function RawHtmlHost({ html }: { html: string }) {
 export function MiniAppHtmlContent({ html }: { html: string }) {
   const ref = useRef<HTMLDivElement>(null);
   const [sintomasCaptados, setSintomasCaptados] = useState<string[]>([]);
+  const [textoNaoReconhecido, setTextoNaoReconhecido] = useState<string[]>([]);
+
 
   // Guia clínico SAE traz <script> embutido; renderizamos o HTML bruto (sem
   // sanitização) pois o conteúdo é escrito pelo admin e precisamos preservar
