@@ -33,7 +33,7 @@ import fotoFundadora from "@/assets/foto-fundadora.jpeg.asset.json";
 import {
   fetchSubscriptionPlans,
   fetchMyActiveSubscriptions,
-  formatPriceBRL,
+
 } from "@/lib/access";
 import { useAppTexts } from "@/lib/app-texts";
 import { supabase } from "@/integrations/supabase/client";
@@ -262,7 +262,6 @@ function AdecPage() {
   const textsQ = useAppTexts();
   const t = (k: string, fb: string) => textsQ.data?.[`vendas.${k}`] ?? fb;
 
-  const getPlan = (slug: string) => (plansQ.data ?? []).find((p) => p.slug === slug);
   const isSubscribed = (slug: string) => {
     const s = (subsQ.data ?? []).find((x) => x.plan_slug === slug);
     return !!s && (s.status === "active" || s.status === "trial");
@@ -688,8 +687,6 @@ function AdecPage() {
 
           <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
             {PLANOS.map((p, i) => {
-              const plan = getPlan(p.slug);
-              const price = (plan as any)?.price_novo_cents ?? (plan as any)?.price_cents ?? 0;
               const subscribed = isSubscribed(p.slug);
               const destacado = i === 3;
 
@@ -734,18 +731,15 @@ function AdecPage() {
                     </p>
 
                     <div className="mt-4">
-                      {price > 0 ? (
-                        <div className="flex items-baseline gap-1">
-                          <span className="font-display text-3xl font-extrabold" style={{ color: C.ink }}>
-                            {formatPriceBRL(price)}
-                          </span>
-                          <span className="text-xs font-bold" style={{ color: C.inkSoft }}>
-                            /mês
-                          </span>
-                        </div>
-                      ) : (
-                        <div className="h-9 animate-pulse rounded" style={{ background: "rgba(13,59,46,0.08)" }} />
-                      )}
+                      <div className="flex items-baseline gap-1">
+                        <span className="font-display text-3xl font-extrabold" style={{ color: C.ink }}>
+                          R$ 0,00
+                        </span>
+                        <span className="text-xs font-bold" style={{ color: C.inkSoft }}>
+                          /mês
+                        </span>
+                      </div>
+
                       <p
                         className="mt-1 inline-flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wide"
                         style={{ color: C.orange }}
