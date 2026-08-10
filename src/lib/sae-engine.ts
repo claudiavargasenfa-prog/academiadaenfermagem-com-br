@@ -127,6 +127,9 @@ function peso(t: string): number {
 }
 
 const PESO_MAX = Math.log(1 + TOTAL_D);
+// Termo é "âncora" quando aparece em no máximo 3% dos diagnósticos (achado específico).
+const PESO_ANCORA = Math.log(1 + TOTAL_D / Math.max(1, Math.round(TOTAL_D * 0.03)));
+
 
 function achouTermo(corpus: string, t: string): boolean {
   return new RegExp(`(^|[^a-z0-9])${t}([^a-z0-9]|$)`).test(corpus);
