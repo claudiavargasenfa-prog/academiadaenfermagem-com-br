@@ -151,6 +151,72 @@ const COM_ADEC = [
 
 const SELOS = ["COFEN", "CORENs", "ANVISA", "Ministério da Saúde", "OMS", "PCDT atualizados"];
 
+/** Mini cards: título do conteúdo + uma linha do que se faz nele. */
+const CONTEUDOS_MINI_APPS: { t: string; d: string }[] = [
+  { t: "Anamnese", d: "Roteiro de entrevista para colher a história do paciente sem esquecer nada." },
+  { t: "Exame Físico", d: "Avaliação cefalocaudal passo a passo, com o que registrar em cada segmento." },
+  { t: "Diagnósticos de Enfermagem", d: "Dos sinais e sintomas marcados ao diagnóstico correto, com base científica." },
+  { t: "Evolução de Enfermagem", d: "Modelo pronto para descrever o turno de forma técnica e segura." },
+  { t: "Cálculos de Medicamentos", d: "Dose, diluição, gotejamento e bomba de infusão conferidos na hora." },
+  { t: "Farmacologia Clínica", d: "Catálogo A-Z com indicação, cuidados de enfermagem e sinais de alerta." },
+  { t: "Sinais Vitais", d: "Valores normais de adulto, idoso, criança e gestante — e quando é alerta." },
+  { t: "Escalas Clínicas", d: "22+ escalas (Braden, Glasgow, Morse, dor) prontas para pontuar offline." },
+  { t: "Punção Venosa e Flebite", d: "Punção ilustrada passo a passo e os graus de flebite com fotos reais." },
+  { t: "Cateterismo Vesical", d: "SVD/SVA feminino e masculino com técnica estéril imagem por imagem." },
+  { t: "SNG e Dispositivos", d: "Sonda enteral, TQT, CVC, PICC e dreno: fixação, higiene e complicações." },
+  { t: "Curativos e Feridas", d: "Escolha da cobertura certa e a técnica correta para cada tipo de lesão." },
+  { t: "IRAS e Precauções", d: "Isolamentos, paramentação e bundles para não levar infecção ao paciente." },
+  { t: "Segurança do Paciente", d: "As metas internacionais aplicadas à rotina, sem teoria solta." },
+  { t: "Sepse e Deterioração", d: "Triagem NEWS2, pacote da 1ª hora e o que o enfermeiro faz em cada passo." },
+  { t: "Sala de PCR e Carro de Emergência", d: "Conferência da sala, checklist do carro e sua função na parada." },
+  { t: "Simulações Clínicas", d: "Casos reais para treinar raciocínio clínico antes de encarar o leito." },
+  { t: "Quizzes e Simulados", d: "Questões por tema com correção na hora e ranking nacional." },
+  { t: "Obstetrícia, Saúde Mental e Idoso", d: "Cuidados específicos de cada público explicados de forma prática." },
+  { t: "Manual de Sobrevivência no Estágio", d: "Mochila, postura e comunicação com o preceptor desde o 1º dia." },
+  { t: "Certificados", d: "Emissão de certificado ao concluir as trilhas dos módulos." },
+];
+
+/** Os três recursos que geram documento pronto automaticamente. */
+const AUTOMATICOS = [
+  {
+    Icon: Brain,
+    title: "SAE Descomplicada e Automatizada",
+    para: "Acadêmico e Enfermeiro",
+    como:
+      "Você marca os sinais e sintomas do paciente (ou dita por voz) e o app cruza tudo com o banco autoral da ADEC, devolvendo o Processo de Enfermagem completo.",
+    passos: [
+      "Marque ou dite as evidências clínicas do paciente",
+      "O app sugere diagnósticos com o mecanismo científico por trás",
+      "Prescrição, aprazamento e prioridade clínica saem prontos em PDF/DOC",
+    ],
+  },
+  {
+    Icon: ClipboardList,
+    title: "Anotação de Enfermagem Automatizada",
+    para: "Técnico e Estudante de Técnico",
+    como:
+      "Durante o plantão você vai marcando o que fez em cada paciente, em abas separadas. No fim, a anotação técnica já está escrita.",
+    passos: [
+      "Um paciente por aba, sem misturar informação",
+      "Tudo que você marca vira rascunho salvo no aparelho",
+      "Clique em gerar e a anotação sai pronta para copiar ou baixar",
+    ],
+  },
+  {
+    Icon: BookOpen,
+    title: "Diário de Bordo → Relatório em ABNT",
+    para: "Acadêmico em estágio",
+    como:
+      "Você registra o dia de estágio em poucas linhas e o app transforma esses registros no relatório formatado nas normas ABNT.",
+    passos: [
+      "Anote o que viu e fez a cada dia de estágio",
+      "O app organiza por data, campo e competência",
+      "Gere o relatório final em ABNT sem virar a madrugada",
+    ],
+  },
+];
+
+
 export const Route = createFileRoute("/adec")({
   head: () => {
     const title = "Inauguração da ADEC — Academia da Enfermagem | 15 dias grátis";
