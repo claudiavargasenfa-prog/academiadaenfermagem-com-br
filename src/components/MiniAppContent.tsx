@@ -1739,7 +1739,16 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
                 </button>
               </>
             )}
+            {textoNaoReconhecido.length > 0 && (
+              <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 p-3">
+                <p className="mb-1 text-[11px] font-bold text-amber-900">
+                  Não reconhecido como evidência clínica (guardado para você conferir):
+                </p>
+                <p className="text-xs text-amber-900/80">{textoNaoReconhecido.join(" · ")}</p>
+              </div>
+            )}
           </div>
+
         </>
       )}
 
