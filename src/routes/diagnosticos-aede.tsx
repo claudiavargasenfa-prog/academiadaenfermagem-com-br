@@ -1,67 +1,65 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { ContentProtection } from "@/components/ContentProtection";
 import { useEffect, useMemo, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
-import { MiniAppContent } from "@/components/MiniAppContent";
-import { supabase } from "@/integrations/supabase/client";
-import { useAuthReady } from "@/lib/access";
+import {
+  TreinamentoFeedback,
+  type CriticaTreino,
+} from "@/components/sae/TreinamentoFeedback";
+import {
+  matchDiagnosticos,
+  separarSinaisSintomas,
+  type SaeMatch,
+  type SaeDiagnostico,
+} from "@/lib/sae-engine";
 import {
   ClipboardList,
   Stethoscope,
   Activity,
   ListChecks,
   FileText,
+  NotebookPen,
   Printer,
   Copy,
+  Download,
   ArrowRight,
   ArrowLeft,
-  CheckCircle2,
+  Sparkles,
+  RotateCcw,
+  GraduationCap,
 } from "lucide-react";
 
 export const Route = createFileRoute("/diagnosticos-aede")({
   head: () => ({
     meta: [
-      { title: "Diagnósticos e Prescrição AE/DE — Academia da Enfermagem" },
+      { title: "Treinamento: Anamnese, Diagnósticos, Prescrição e Evolução — ADEC" },
       {
         name: "description",
         content:
-          "Monte anamnese, exame físico, sinais/sintomas, escolha diagnósticos com Condutas (CDE), Meta (MM), Raciocínio Clínico (RC) e gere a prescrição de enfermagem em 5 passos.",
+          "Treinamento clínico em 6 passos: anamnese, exame físico, evidências clínicas, diagnósticos com crítica pedagógica, prescrição de enfermagem e evolução gerada automaticamente.",
       },
-      { property: "og:title", content: "Diagnósticos e Prescrição AE/DE — Academia da Enfermagem" },
-      { property: "og:description", content: "Monte anamnese, exame físico, sinais/sintomas, escolha diagnósticos com Condutas (CDE), Meta (MM), Raciocínio Clínico (RC) e gere a prescrição de enfermagem em 5 passos." },
+      { property: "og:title", content: "Treinamento: Anamnese, Diagnósticos, Prescrição e Evolução — ADEC" },
+      {
+        property: "og:description",
+        content:
+          "Treine o raciocínio clínico: marque ou escreva os achados, receba as hipóteses da base ADEC com crítica, monte a prescrição e gere a evolução.",
+      },
       { property: "og:url", content: "https://academiadaenfermagem.com.br/diagnosticos-aede" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
-      { name: "twitter:title", content: "Diagnósticos e Prescrição AE/DE — Academia da Enfermagem" },
-      { name: "twitter:description", content: "Monte anamnese, exame físico, sinais/sintomas, escolha diagnósticos com Condutas (CDE), Meta (MM), Raciocínio Clínico (RC) e gere a prescrição de enfermagem em 5 passos." },
+      { name: "twitter:title", content: "Treinamento: Anamnese, Diagnósticos, Prescrição e Evolução — ADEC" },
+      {
+        name: "twitter:description",
+        content:
+          "Treine o raciocínio clínico: marque ou escreva os achados, receba as hipóteses da base ADEC com crítica, monte a prescrição e gere a evolução.",
+      },
     ],
     links: [{ rel: "canonical", href: "https://academiadaenfermagem.com.br/diagnosticos-aede" }],
   }),
   component: DiagnosticosAedePage,
 });
 
-type Diag = {
-  id: string;
-  id_gatilho: string;
-  bloco: string;
-  bloco_label: string;
-  titulo: string;
-  sinais_sintomas: string[];
-  meta_mm: string | null;
-  raciocinio_rc: string | null;
-  ordem: number;
-};
-
-type Conduta = {
-  id: string;
-  diagnostico_id: string;
-  ordem: number;
-  conduta_cde: string;
-  aprazamento: string | null;
-  horario_padrao: string | null;
-};
-
+// ---------------- tipos ----------------
 type Anamnese = {
   paciente: string;
   idade: string;
@@ -85,333 +83,488 @@ type Exame = {
   chips: string[];
 };
 
-type QuickCase = {
+type LinhaPresc = {
+  key: string;
+  diagId: string;
+  diagnostico: string;
+  conduta: string;
+  horario: string;
+  aprazamento: string;
+  prioridade: string;
+  incluida: boolean;
+};
+
+type CasoTreino = {
   title: string;
   subtitle: string;
   anamnese: Partial<Anamnese>;
   exame: Partial<Exame>;
-  sintomas: string[];
 };
 
-// chips do exame físico (por sistema) → também alimentam os sinais/sintomas do passo 3
+// ---------------- dados de apoio ----------------
 const EXAME_CHIPS: Record<string, string[]> = {
-  "Neurológico": ["Sonolência", "Rebaixamento do nível de consciência", "Agitação psicomotora", "Desorientação", "Pupilas anisocóricas"],
-  "Cardiovascular": ["Hipertensão", "Hipotensão", "Taquicardia", "Bradicardia", "Edema", "Má perfusão"],
-  "Respiratório": ["Dispneia", "Taquipneia", "Uso de musculatura acessória", "Cianose", "Sibilos", "Estertores", "Baixa SatO₂"],
-  "Gastrointestinal": ["Náusea", "Vômito", "Distensão abdominal", "Dor abdominal", "Diarreia", "Constipação"],
-  "Urinário": ["Oligúria", "Anúria", "Disúria", "Urina turva", "Hematúria"],
-  "Pele e Mucosas": ["Palidez", "Icterícia", "Ressecamento", "Lesão de pele", "Ferida operatória", "Hiperemia"],
-  "Segurança / Mobilidade": ["Risco de queda", "Restrição no leito", "Dispositivos invasivos", "Dor à movimentação"],
-  "Sinais gerais": ["Febre", "Hipotermia", "Sudorese", "Dor referida", "Ansiedade", "Sangramento"],
+  "Neurológico": ["Sonolência", "Rebaixamento do nível de consciência", "Agitação psicomotora", "Desorientação", "Pupilas anisocóricas", "Confusão mental"],
+  "Cardiovascular": ["Hipertensão", "Hipotensão", "Taquicardia", "Bradicardia", "Edema de membros inferiores", "Má perfusão periférica", "Dor torácica"],
+  "Respiratório": ["Dispneia", "Taquipneia", "Uso de musculatura acessória", "Cianose", "Sibilos", "Estertores", "Tosse produtiva", "Baixa saturação de oxigênio"],
+  "Gastrointestinal": ["Náusea", "Vômito", "Distensão abdominal", "Dor abdominal", "Diarreia", "Constipação", "Inapetência"],
+  "Urinário": ["Oligúria", "Anúria", "Disúria", "Urina turva", "Hematúria", "Incontinência urinária"],
+  "Pele e Mucosas": ["Palidez cutânea", "Icterícia", "Ressecamento de pele", "Lesão por pressão", "Ferida operatória", "Hiperemia", "Flebite"],
+  "Segurança / Mobilidade": ["Risco de queda", "Mobilidade prejudicada", "Restrição no leito", "Dispositivos invasivos", "Dor à movimentação"],
+  "Sinais gerais": ["Febre", "Hipotermia", "Sudorese", "Dor", "Ansiedade", "Sangramento", "Desidratação"],
 };
 
-const QUICK_CASES: QuickCase[] = [
+const CASOS: CasoTreino[] = [
   {
-    title: "Respiratório agudo",
-    subtitle: "Dispneia, taquipneia, baixa SatO₂ e cianose",
-    anamnese: { queixa: "Falta de ar e desconforto respiratório", clinica: "Clínica médica" },
-    exame: { fr: "28", sato2: "89", chips: ["Dispneia", "Taquipneia", "Baixa SatO₂", "Cianose"] },
-    sintomas: ["Dispneia", "Taquipneia", "Baixa SatO₂", "Cianose"],
+    title: "Caso 1 — Respiratório agudo",
+    subtitle: "Dispneia, taquipneia, baixa saturação e cianose",
+    anamnese: {
+      paciente: "Paciente do treinamento",
+      idade: "68",
+      sexo: "Feminino",
+      leito: "204-B",
+      clinica: "Clínica médica",
+      queixa: "Falta de ar e desconforto respiratório há 2 horas",
+      hda: "Iniciou com tosse produtiva, evoluindo com dispneia progressiva, taquipneia e queda de saturação.",
+      antecedentes: "HAS e DM. Nega alergias.",
+    },
+    exame: {
+      pa: "140x90", fc: "104", fr: "28", sato2: "89", temp: "37.8", glasgow: "15", pupilas: "isocóricas",
+      observacoes: "Uso de musculatura acessória, ansiosa, cianose discreta de extremidades.",
+      chips: ["Dispneia", "Taquipneia", "Baixa saturação de oxigênio", "Cianose", "Uso de musculatura acessória", "Febre"],
+    },
   },
   {
-    title: "Hemodinâmico",
+    title: "Caso 2 — Instabilidade hemodinâmica",
     subtitle: "Hipotensão, taquicardia, má perfusão e oligúria",
-    anamnese: { queixa: "Fraqueza intensa e tontura", clinica: "Urgência" },
-    exame: { pa: "85x50", fc: "122", chips: ["Hipotensão", "Taquicardia", "Má perfusão", "Oligúria"] },
-    sintomas: ["Hipotensão", "Taquicardia", "Má perfusão", "Oligúria"],
+    anamnese: {
+      paciente: "Paciente do treinamento",
+      idade: "72",
+      sexo: "Masculino",
+      leito: "Emergência 03",
+      clinica: "Urgência e emergência",
+      queixa: "Fraqueza intensa, tontura e redução do volume urinário",
+      hda: "Quadro de vômitos e diarreia há 3 dias, com ingesta hídrica reduzida.",
+      antecedentes: "Insuficiência cardíaca em acompanhamento.",
+    },
+    exame: {
+      pa: "85x50", fc: "122", fr: "22", sato2: "94", temp: "36.2", glasgow: "14", pupilas: "isocóricas",
+      observacoes: "Extremidades frias, tempo de enchimento capilar lentificado, mucosas secas.",
+      chips: ["Hipotensão", "Taquicardia", "Má perfusão periférica", "Oligúria", "Desidratação", "Palidez cutânea"],
+    },
   },
   {
-    title: "Neurológico",
+    title: "Caso 3 — Neurológico e segurança",
     subtitle: "Sonolência, desorientação e risco de queda",
-    anamnese: { queixa: "Confusão mental e sonolência", clinica: "Observação" },
-    exame: { glasgow: "13", pupilas: "isocóricas", chips: ["Sonolência", "Desorientação", "Risco de queda"] },
-    sintomas: ["Sonolência", "Desorientação", "Risco de queda"],
+    anamnese: {
+      paciente: "Paciente do treinamento",
+      idade: "80",
+      sexo: "Feminino",
+      leito: "112-A",
+      clinica: "Clínica médica",
+      queixa: "Confusão mental e sonolência desde a manhã",
+      hda: "Familiar refere piora do estado de consciência e episódios de desorientação.",
+      antecedentes: "Demência, HAS, uso de benzodiazepínico.",
+    },
+    exame: {
+      pa: "150x85", fc: "88", fr: "18", sato2: "95", temp: "36.5", glasgow: "13", pupilas: "isocóricas",
+      observacoes: "Agitação intermitente, tentativa de sair do leito sem auxílio.",
+      chips: ["Sonolência", "Desorientação", "Confusão mental", "Risco de queda", "Mobilidade prejudicada"],
+    },
+  },
+  {
+    title: "Caso 4 — Pele e dispositivos",
+    subtitle: "Lesão por pressão, flebite e imobilidade",
+    anamnese: {
+      paciente: "Paciente do treinamento",
+      idade: "65",
+      sexo: "Masculino",
+      leito: "UTI 05",
+      clinica: "Unidade de terapia intensiva",
+      queixa: "Paciente acamado, com lesão em região sacral",
+      hda: "Internado há 12 dias, restrito ao leito, em uso de acesso venoso periférico há 4 dias.",
+      antecedentes: "Diabetes mellitus, obesidade.",
+    },
+    exame: {
+      pa: "130x80", fc: "92", fr: "20", sato2: "96", temp: "37.2", glasgow: "15", pupilas: "isocóricas",
+      observacoes: "Hiperemia e dor no trajeto venoso do antebraço direito; lesão sacral com perda parcial de espessura.",
+      chips: ["Lesão por pressão", "Flebite", "Hiperemia", "Restrição no leito", "Mobilidade prejudicada", "Dor"],
+    },
   },
 ];
 
-const DEFAULT_ANAMNESE: Anamnese = {
-  paciente: "Paciente exemplo",
-  idade: "68",
-  sexo: "Feminino",
-  leito: "204-B",
-  clinica: "Clínica médica",
-  queixa: "Falta de ar e desconforto respiratório",
-  hda: "Início há 2 horas, evoluindo com dispneia, taquipneia e queda de saturação.",
-  antecedentes: "HAS e DM. Alergias negadas. Em uso de medicação anti-hipertensiva.",
+const ANAMNESE_VAZIA: Anamnese = {
+  paciente: "", idade: "", sexo: "", leito: "", clinica: "", queixa: "", hda: "", antecedentes: "",
+};
+const EXAME_VAZIO: Exame = {
+  glasgow: "", pupilas: "", pa: "", fc: "", fr: "", sato2: "", temp: "", observacoes: "", chips: [],
 };
 
-const DEFAULT_EXAME: Exame = {
-  glasgow: "15",
-  pupilas: "isocóricas",
-  pa: "140x90",
-  fc: "104",
-  fr: "28",
-  sato2: "89",
-  temp: "36.6",
-  observacoes: "Paciente ansiosa, com uso de musculatura acessória e cianose discreta.",
-  chips: ["Dispneia", "Taquipneia", "Baixa SatO₂", "Cianose"],
-};
+const STORAGE_KEY = "adec-treino-aede-v1";
 
-const DEFAULT_SINTOMAS = ["Dispneia", "Taquipneia", "Baixa SatO₂", "Cianose"];
+const PASSOS = [
+  { n: 1, l: "Anamnese", I: ClipboardList },
+  { n: 2, l: "Exame Físico", I: Stethoscope },
+  { n: 3, l: "Evidências", I: Activity },
+  { n: 4, l: "Diagnósticos", I: ListChecks },
+  { n: 5, l: "Prescrição", I: FileText },
+  { n: 6, l: "Evolução", I: NotebookPen },
+];
 
-function normalize(s: string) {
-  return s
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9\s]/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
+function norm(s: string) {
+  return (s || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
 }
 
+// ---------------- página ----------------
 function DiagnosticosAedePage() {
   const [step, setStep] = useState(1);
-  const [anamnese, setAnamnese] = useState<Anamnese>(DEFAULT_ANAMNESE);
-  const [exame, setExame] = useState<Exame>(DEFAULT_EXAME);
-  const [sintomas, setSintomas] = useState<string[]>(DEFAULT_SINTOMAS);
-  const [outroSintoma, setOutroSintoma] = useState("");
+  const [anamnese, setAnamnese] = useState<Anamnese>(ANAMNESE_VAZIA);
+  const [exame, setExame] = useState<Exame>(EXAME_VAZIO);
+  const [textoLivre, setTextoLivre] = useState("");
+  const [excluidas, setExcluidas] = useState<string[]>([]);
+  const [escolhas, setEscolhas] = useState<string[]>([]);
+  const [revelado, setRevelado] = useState(false);
   const [selecionados, setSelecionados] = useState<string[]>([]);
-  const [autoSeededDiag, setAutoSeededDiag] = useState(false);
-  const [filtroBloco, setFiltroBloco] = useState<string>("");
+  const [linhas, setLinhas] = useState<LinhaPresc[]>([]);
+  const [criticaPresc, setCriticaPresc] = useState<CriticaTreino | null>(null);
 
-  const { isReady } = useAuthReady();
+  // ---- persistência local ----
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      const s = JSON.parse(raw);
+      if (s.anamnese) setAnamnese({ ...ANAMNESE_VAZIA, ...s.anamnese });
+      if (s.exame) setExame({ ...EXAME_VAZIO, ...s.exame });
+      if (typeof s.textoLivre === "string") setTextoLivre(s.textoLivre);
+      if (Array.isArray(s.excluidas)) setExcluidas(s.excluidas);
+    } catch {
+      /* ignora */
+    }
+  }, []);
 
-  const diagsQ = useQuery({
-    queryKey: ["diag_aede_all"],
-    enabled: isReady,
-    staleTime: 5 * 60_000,
-    queryFn: async () => {
-      const [{ data: d, error: e1 }, { data: c, error: e2 }] = await Promise.all([
-        supabase.from("diagnosticos_aede").select("*").order("bloco").order("ordem"),
-        supabase.from("diagnosticos_condutas").select("*").order("ordem"),
-      ]);
-      if (e1) throw e1;
-      if (e2) throw e2;
-      return { diags: (d ?? []) as Diag[], condutas: (c ?? []) as Conduta[] };
-    },
-  });
+  useEffect(() => {
+    try {
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({ anamnese, exame, textoLivre, excluidas }),
+      );
+    } catch {
+      /* ignora */
+    }
+  }, [anamnese, exame, textoLivre, excluidas]);
 
-  // sintomas globais (chips do passo 3), a partir da base
-  const sintomasBase = useMemo(() => {
-    const set = new Map<string, string>(); // norm → display
-    (diagsQ.data?.diags ?? []).forEach((d) => {
-      d.sinais_sintomas.forEach((s) => {
-        const k = normalize(s);
-        if (k && !set.has(k)) set.set(k, s);
-      });
-    });
-    return Array.from(set.values()).sort((a, b) => a.localeCompare(b, "pt-BR"));
-  }, [diagsQ.data]);
+  // ---- evidências clínicas geradas automaticamente ----
+  const textoBruto = useMemo(() => {
+    const sv: string[] = [];
+    if (exame.pa) sv.push(`PA ${exame.pa} mmHg`);
+    if (exame.fc) sv.push(`FC ${exame.fc} bpm`);
+    if (exame.fr) sv.push(`FR ${exame.fr} irpm`);
+    if (exame.sato2) sv.push(`Saturação de oxigênio ${exame.sato2}%`);
+    if (exame.temp) sv.push(`Temperatura ${exame.temp} °C`);
+    if (exame.glasgow) sv.push(`Escala de coma de Glasgow ${exame.glasgow}`);
+    if (exame.pupilas) sv.push(`Pupilas ${exame.pupilas}`);
+    return [
+      anamnese.queixa,
+      anamnese.hda,
+      anamnese.antecedentes,
+      sv.join(". "),
+      exame.chips.join(". "),
+      exame.observacoes,
+      textoLivre,
+    ]
+      .filter((t) => (t || "").trim())
+      .join(". ");
+  }, [anamnese, exame, textoLivre]);
 
-  const blocos = useMemo(() => {
-    const m = new Map<string, string>();
-    (diagsQ.data?.diags ?? []).forEach((d) => m.set(d.bloco, d.bloco_label));
-    return Array.from(m.entries()).map(([bloco, label]) => ({ bloco, label }));
-  }, [diagsQ.data]);
+  const separadas = useMemo(() => separarSinaisSintomas(textoBruto), [textoBruto]);
 
-  // ranking dos diagnósticos que combinam
-  const ranked = useMemo(() => {
-    if (!diagsQ.data) return [];
-    const selNorm = new Set(
-      [...sintomas, ...exame.chips, ...outroSintoma.split(/[,;]/).map((x) => x.trim()).filter(Boolean)]
-        .map(normalize)
-        .filter(Boolean)
-    );
-    if (selNorm.size === 0) return [];
-    return diagsQ.data.diags
-      .filter((d) => !filtroBloco || d.bloco === filtroBloco)
-      .map((d) => {
-        const hits = d.sinais_sintomas
-          .map((s) => normalize(s))
-          .filter((s) => {
-            for (const q of selNorm) {
-              if (!q) continue;
-              if (s.includes(q) || q.includes(s)) return true;
-            }
-            return false;
-          });
-        return { d, score: hits.length };
-      })
-      .filter((r) => r.score > 0)
-      .sort((a, b) => b.score - a.score);
-  }, [diagsQ.data, sintomas, exame.chips, outroSintoma, filtroBloco]);
+  const evidenciasAtivas = useMemo(
+    () =>
+      [...separadas.reconhecidos, ...separadas.restante].filter(
+        (e) => !excluidas.includes(norm(e)),
+      ),
+    [separadas, excluidas],
+  );
 
-  const toggle = (list: string[], setList: (v: string[]) => void, v: string) => {
-    setList(list.includes(v) ? list.filter((x) => x !== v) : [...list, v]);
+  const toggleEvidencia = (e: string) => {
+    const k = norm(e);
+    setExcluidas((prev) => (prev.includes(k) ? prev.filter((x) => x !== k) : [...prev, k]));
   };
 
-  const stepOk = {
-    1: true, // anamnese opcional
-    2: true,
-    3: sintomas.length > 0 || exame.chips.length > 0 || outroSintoma.trim().length > 0,
-    4: selecionados.length > 0,
-    5: true,
-  } as Record<number, boolean>;
+  // ---- busca na planilha mestre (col. 5 > 7 > 8 > 10) ----
+  const matches: SaeMatch[] = useMemo(() => {
+    const corpus = evidenciasAtivas.join(". ");
+    if (!corpus.trim()) return [];
+    return matchDiagnosticos(corpus, 12, {
+      idade: anamnese.idade,
+      sexo: anamnese.sexo,
+      setor: anamnese.clinica,
+    });
+  }, [evidenciasAtivas, anamnese.idade, anamnese.sexo, anamnese.clinica]);
+
+  // gabarito: hipóteses de alta correspondência (mínimo 2, máximo 5)
+  const gabarito = useMemo(() => {
+    const altas = matches.filter((m) => m.confianca === "Alta");
+    const base = altas.length >= 2 ? altas : matches.slice(0, Math.min(3, matches.length));
+    return base.slice(0, 5);
+  }, [matches]);
+
+  const criticaDiag: CriticaTreino | null = useMemo(() => {
+    if (!revelado) return null;
+    const ids = new Set(gabarito.map((m) => m.diag.id));
+    const nome = (id: string) =>
+      matches.find((m) => m.diag.id === id)?.diag.diagnostico ?? id;
+    const acertos = escolhas.filter((id) => ids.has(id)).map(nome);
+    const faltaram = gabarito.filter((m) => !escolhas.includes(m.diag.id)).map((m) => m.diag.diagnostico);
+    const extras = escolhas.filter((id) => !ids.has(id)).map(nome);
+    const total = gabarito.length || 1;
+    const pct = Math.max(
+      0,
+      Math.round(((acertos.length - extras.length * 0.5) / total) * 100),
+    );
+    return { acertos, faltaram, extras, pct: Math.min(100, pct) };
+  }, [revelado, gabarito, escolhas, matches]);
+
+  const diagsSelecionados: SaeDiagnostico[] = useMemo(
+    () => matches.filter((m) => selecionados.includes(m.diag.id)).map((m) => m.diag),
+    [matches, selecionados],
+  );
+
+  // monta a prescrição a partir da COL. 8 dos diagnósticos escolhidos
+  useEffect(() => {
+    setLinhas((prev) => {
+      const antigas = new Map(prev.map((l) => [l.key, l]));
+      const novas: LinhaPresc[] = [];
+      diagsSelecionados.forEach((d) => {
+        d.condutas.forEach((c, i) => {
+          const key = `${d.id}-${i}`;
+          novas.push(
+            antigas.get(key) ?? {
+              key,
+              diagId: d.id,
+              diagnostico: d.diagnostico,
+              conduta: c.conduta,
+              horario: c.horario || "Rotina",
+              aprazamento: c.aprazamento || "",
+              prioridade: c.prioridade || "—",
+              incluida: true,
+            },
+          );
+        });
+      });
+      return novas;
+    });
+    setCriticaPresc(null);
+  }, [diagsSelecionados]);
+
+  const evolucao = useMemo(
+    () =>
+      montarEvolucao({
+        anamnese,
+        exame,
+        evidencias: evidenciasAtivas,
+        diags: diagsSelecionados,
+        linhas: linhas.filter((l) => l.incluida),
+      }),
+    [anamnese, exame, evidenciasAtivas, diagsSelecionados, linhas],
+  );
 
   const go = (n: number) => {
-    if (n === 3 && sintomas.length === 0) {
-      // pré-popula chips do exame como sintomas
-      setSintomas(exame.chips.slice());
-    }
     setStep(n);
     setTimeout(() => window.scrollTo({ top: 0, behavior: "smooth" }), 0);
   };
 
-  const useQuickCase = (quick: QuickCase) => {
-    setAnamnese({ ...anamnese, ...quick.anamnese });
-    setExame({ ...exame, ...quick.exame, chips: quick.exame.chips ?? quick.sintomas });
-    setSintomas(quick.sintomas);
+  const usarCaso = (c: CasoTreino) => {
+    setAnamnese({ ...ANAMNESE_VAZIA, ...c.anamnese });
+    setExame({ ...EXAME_VAZIO, ...c.exame });
+    setTextoLivre("");
+    setExcluidas([]);
+    setEscolhas([]);
+    setRevelado(false);
     setSelecionados([]);
-    setAutoSeededDiag(false);
-    setStep(4);
-    setTimeout(() => window.scrollTo({ top: 0, behavior: "smooth" }), 0);
+    setCriticaPresc(null);
+    go(2);
   };
 
-  const condutasDe = (id: string) =>
-    (diagsQ.data?.condutas ?? []).filter((c) => c.diagnostico_id === id);
+  const reiniciar = () => {
+    setAnamnese(ANAMNESE_VAZIA);
+    setExame(EXAME_VAZIO);
+    setTextoLivre("");
+    setExcluidas([]);
+    setEscolhas([]);
+    setRevelado(false);
+    setSelecionados([]);
+    setLinhas([]);
+    setCriticaPresc(null);
+    go(1);
+  };
 
-  useEffect(() => {
-    if (!autoSeededDiag && ranked.length > 0) {
-      setSelecionados([ranked[0].d.id]);
-      setAutoSeededDiag(true);
-    }
-  }, [autoSeededDiag, ranked]);
+  const confirmarEscolhas = () => {
+    setRevelado(true);
+    const uniao = Array.from(new Set([...escolhas, ...gabarito.map((m) => m.diag.id)]));
+    setSelecionados(uniao);
+  };
+
+  const conferirPrescricao = () => {
+    const incluidas = linhas.filter((l) => l.incluida);
+    const fora = linhas.filter((l) => !l.incluida);
+    const pct = linhas.length
+      ? Math.round((incluidas.length / linhas.length) * 100)
+      : 0;
+    setCriticaPresc({
+      acertos: incluidas.slice(0, 12).map((l) => l.conduta),
+      faltaram: fora.map((l) => l.conduta),
+      extras: [],
+      pct,
+    });
+  };
 
   return (
     <AppShell>
       <ContentProtection allowPrint>
-      <PageHeader
-        eyebrow="Mini App"
-        title="Diagnósticos e Prescrição AE/DE"
-        description="Wizard de 5 passos: em 2 minutos você monta anamnese, exame físico, sinais/sintomas, escolhe diagnósticos e imprime a prescrição."
-      />
+        <PageHeader
+          eyebrow="Mini App · Treinamento"
+          title="Anamnese, Exame Físico, Diagnósticos, Prescrição e Evolução"
+          description="Treinamento clínico em 6 passos: tudo que você marcar ou escrever vira evidência clínica, a base ADEC sugere as hipóteses, você recebe a crítica pedagógica, monta a prescrição e a evolução sai pronta."
+        />
 
-
-
-
-      {/* Instruções */}
-      <Card className="mb-5 border-gold/40 bg-gradient-to-br from-primary/5 to-gold/10">
-        <div className="flex items-start gap-3">
-          <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl gold-gradient">
-            <ClipboardList className="h-5 w-5" />
+        <Card className="mb-5 border-gold/40 bg-gradient-to-br from-primary/5 to-gold/10">
+          <div className="flex items-start gap-3">
+            <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl gold-gradient">
+              <GraduationCap className="h-5 w-5" />
+            </div>
+            <div className="text-sm text-foreground/90">
+              <p className="mb-2 font-display text-base font-bold">Como funciona o treinamento</p>
+              <ol className="list-decimal space-y-1 pl-5">
+                <li><strong>Anamnese e Exame Físico</strong> — marque ou escreva; nada se perde.</li>
+                <li><strong>Evidências clínicas / sinais e sintomas</strong> — captadas automaticamente do que você registrou.</li>
+                <li><strong>Diagnósticos</strong> — primeiro você escolhe, depois o app revela as hipóteses da base ADEC e mostra onde você acertou e o que faltou.</li>
+                <li><strong>Prescrição</strong> — intervenções da base, com horário, aprazamento e prioridade clínica.</li>
+                <li><strong>Evolução</strong> — texto final pronto para copiar, imprimir ou baixar.</li>
+              </ol>
+            </div>
           </div>
-          <div className="text-sm text-foreground/90">
-            <p className="mb-2 font-display text-base font-bold">Como usar em 2 minutos</p>
-            <ol className="list-decimal space-y-1 pl-5">
-              <li><strong>Anamnese</strong> — dados do paciente e queixa principal.</li>
-              <li><strong>Exame Físico</strong> — o que você observou (por sistema).</li>
-              <li><strong>Sinais e Sintomas</strong> — marque os chips do quadro.</li>
-              <li><strong>Diagnósticos</strong> — o app mostra os que combinam com Condutas (CDE), Meta (MM) e Raciocínio (RC). Selecione os que se aplicam.</li>
-              <li><strong>Prescrição</strong> — tabela pronta com Nº, Diagnóstico, Horário e Aprazamento. Imprima ou salve em PDF.</li>
-            </ol>
-          </div>
+        </Card>
+
+        {/* Stepper */}
+        <div className="mb-5 flex flex-wrap items-center gap-2">
+          {PASSOS.map(({ n, l, I }) => {
+            const active = step === n;
+            const done = step > n;
+            return (
+              <button
+                key={n}
+                onClick={() => go(n)}
+                className={`flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold transition-colors ${
+                  active
+                    ? "gold-gradient shadow-[var(--shadow-soft)]"
+                    : done
+                      ? "bg-primary/10 text-primary hover:bg-primary/20"
+                      : "bg-muted text-muted-foreground hover:bg-muted/80"
+                }`}
+              >
+                <I className="h-3.5 w-3.5" />
+                <span className="hidden sm:inline">{n}. {l}</span>
+                <span className="sm:hidden">{n}</span>
+              </button>
+            );
+          })}
+          <button
+            onClick={reiniciar}
+            className="ml-auto inline-flex items-center gap-1.5 rounded-xl border border-border bg-background px-3 py-1.5 text-xs font-semibold hover:bg-muted"
+          >
+            <RotateCcw className="h-3.5 w-3.5" /> Novo treino
+          </button>
         </div>
-      </Card>
 
-      <ClinicalOverview
-        step={step}
-        onStep={go}
-        anamnese={anamnese}
-        exame={exame}
-        sintomas={sintomas}
-        diagnosticosCount={ranked.length}
-        prescricoesCount={selecionados.length}
-      />
+        {step === 1 && (
+          <StepAnamnese
+            anamnese={anamnese}
+            setAnamnese={setAnamnese}
+            onNext={() => go(2)}
+            onCaso={usarCaso}
+          />
+        )}
 
-      {/* Stepper */}
-      <div className="mb-5 flex flex-wrap items-center gap-2">
-        {[
-          { n: 1, l: "Anamnese", I: ClipboardList },
-          { n: 2, l: "Exame Físico", I: Stethoscope },
-          { n: 3, l: "Sinais/Sintomas", I: Activity },
-          { n: 4, l: "Diagnósticos", I: ListChecks },
-          { n: 5, l: "Prescrição", I: FileText },
-        ].map(({ n, l, I }) => {
-          const active = step === n;
-          const done = step > n;
-          return (
-            <button
-              key={n}
-              onClick={() => go(n)}
-              className={`flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-semibold transition-colors ${
-                active
-                  ? "gold-gradient shadow-[var(--shadow-soft)]"
-                  : done
-                  ? "bg-primary/10 text-primary hover:bg-primary/20"
-                  : "bg-muted text-muted-foreground hover:bg-muted/80"
-              }`}
-            >
-              <I className="h-3.5 w-3.5" />
-              <span className="hidden sm:inline">{n}. {l}</span>
-              <span className="sm:hidden">{n}</span>
-            </button>
-          );
-        })}
-      </div>
+        {step === 2 && (
+          <StepExame
+            exame={exame}
+            setExame={setExame}
+            onBack={() => go(1)}
+            onNext={() => go(3)}
+          />
+        )}
 
-      {step === 1 && (
-        <StepAnamnese anamnese={anamnese} setAnamnese={setAnamnese} onNext={() => go(2)} onUseCase={useQuickCase} />
-      )}
-      {step === 2 && (
-        <StepExame
-          exame={exame}
-          setExame={setExame}
-          onBack={() => go(1)}
-          onNext={() => go(3)}
-          toggle={(v) => toggle(exame.chips, (x) => setExame({ ...exame, chips: x }), v)}
-        />
-      )}
-      {step === 3 && (
-        <StepSintomas
-          sintomasBase={sintomasBase}
-          sintomas={sintomas}
-          setSintomas={setSintomas}
-          outroSintoma={outroSintoma}
-          setOutroSintoma={setOutroSintoma}
-          blocos={blocos}
-          filtroBloco={filtroBloco}
-          setFiltroBloco={setFiltroBloco}
-          onBack={() => go(2)}
-          onNext={() => go(4)}
-          canNext={stepOk[3]}
-        />
-      )}
-      {step === 4 && (
-        <StepDiagnosticos
-          loading={diagsQ.isLoading}
-          ranked={ranked}
-          condutasDe={condutasDe}
-          sintomas={sintomas}
-          exameChips={exame.chips}
-          selecionados={selecionados}
-          setSelecionados={setSelecionados}
-          onBack={() => go(3)}
-          onNext={() => go(5)}
-        />
-      )}
-      {step === 5 && diagsQ.data && (
-        <StepPrescricao
-          anamnese={anamnese}
-          diagsSelecionados={diagsQ.data.diags.filter((d) => selecionados.includes(d.id))}
-          condutas={diagsQ.data.condutas.filter((c) => selecionados.includes(c.diagnostico_id))}
-          onBack={() => go(4)}
-        />
-      )}
-    </ContentProtection>
+        {step === 3 && (
+          <StepEvidencias
+            reconhecidos={separadas.reconhecidos}
+            restante={separadas.restante}
+            excluidas={excluidas}
+            toggle={toggleEvidencia}
+            textoLivre={textoLivre}
+            setTextoLivre={setTextoLivre}
+            total={evidenciasAtivas.length}
+            onBack={() => go(2)}
+            onNext={() => go(4)}
+          />
+        )}
+
+        {step === 4 && (
+          <StepDiagnosticos
+            matches={matches}
+            gabarito={gabarito}
+            escolhas={escolhas}
+            setEscolhas={setEscolhas}
+            revelado={revelado}
+            critica={criticaDiag}
+            selecionados={selecionados}
+            setSelecionados={setSelecionados}
+            onConfirmar={confirmarEscolhas}
+            onBack={() => go(3)}
+            onNext={() => go(5)}
+          />
+        )}
+
+        {step === 5 && (
+          <StepPrescricao
+            anamnese={anamnese}
+            linhas={linhas}
+            setLinhas={setLinhas}
+            critica={criticaPresc}
+            onConferir={conferirPrescricao}
+            onBack={() => go(4)}
+            onNext={() => go(6)}
+          />
+        )}
+
+        {step === 6 && (
+          <StepEvolucao
+            texto={evolucao}
+            criticaDiag={criticaDiag}
+            criticaPresc={criticaPresc}
+            onBack={() => go(5)}
+            onReiniciar={reiniciar}
+          />
+        )}
+      </ContentProtection>
     </AppShell>
   );
 }
 
 // ============ STEP 1 ============
 function StepAnamnese({
-  anamnese, setAnamnese, onNext, onUseCase,
+  anamnese, setAnamnese, onNext, onCaso,
 }: {
   anamnese: Anamnese;
   setAnamnese: (a: Anamnese) => void;
   onNext: () => void;
-  onUseCase: (quick: QuickCase) => void;
+  onCaso: (c: CasoTreino) => void;
 }) {
-  const F = (k: keyof Anamnese, label: string, opts: { textarea?: boolean; type?: string; placeholder?: string } = {}) => (
+  const F = (
+    k: keyof Anamnese,
+    label: string,
+    opts: { textarea?: boolean; type?: string; placeholder?: string } = {},
+  ) => (
     <label className="block text-sm font-semibold">
       {label}
       {opts.textarea ? (
@@ -436,17 +589,21 @@ function StepAnamnese({
 
   return (
     <Card>
-      <SectionTitle icon={ClipboardList} title="1. Anamnese" subtitle="Todos os campos são opcionais — preencha o que quiser." />
+      <SectionTitle
+        icon={ClipboardList}
+        title="1. Anamnese"
+        subtitle="Escolha um caso de treino ou digite o seu paciente. Tudo que for escrito aqui vira evidência clínica no passo 3."
+      />
 
-      <div className="mb-4 grid gap-2 md:grid-cols-3">
-        {QUICK_CASES.map((quick) => (
+      <div className="mb-4 grid gap-2 md:grid-cols-2">
+        {CASOS.map((c) => (
           <button
-            key={quick.title}
-            onClick={() => onUseCase(quick)}
+            key={c.title}
+            onClick={() => onCaso(c)}
             className="rounded-xl border border-gold/40 bg-gold/10 p-3 text-left transition-colors hover:border-gold hover:bg-gold/20"
           >
-            <span className="block font-display text-sm font-bold text-foreground">{quick.title}</span>
-            <span className="mt-1 block text-xs leading-relaxed text-muted-foreground">{quick.subtitle}</span>
+            <span className="block font-display text-sm font-bold text-foreground">{c.title}</span>
+            <span className="mt-1 block text-xs leading-relaxed text-muted-foreground">{c.subtitle}</span>
           </button>
         ))}
       </div>
@@ -470,14 +627,19 @@ function StepAnamnese({
 
 // ============ STEP 2 ============
 function StepExame({
-  exame, setExame, onBack, onNext, toggle,
+  exame, setExame, onBack, onNext,
 }: {
   exame: Exame;
   setExame: (e: Exame) => void;
   onBack: () => void;
   onNext: () => void;
-  toggle: (v: string) => void;
 }) {
+  const toggle = (v: string) =>
+    setExame({
+      ...exame,
+      chips: exame.chips.includes(v) ? exame.chips.filter((x) => x !== v) : [...exame.chips, v],
+    });
+
   const N = (k: keyof Exame, label: string, ph?: string) => (
     <label className="block text-xs font-semibold">
       {label}
@@ -492,7 +654,11 @@ function StepExame({
 
   return (
     <Card>
-      <SectionTitle icon={Stethoscope} title="2. Exame Físico" subtitle="Registre valores e marque os achados observados." />
+      <SectionTitle
+        icon={Stethoscope}
+        title="2. Exame Físico"
+        subtitle="Registre os valores e marque os achados. Cada marcação alimenta as evidências clínicas."
+      />
 
       <div className="mb-4 grid grid-cols-2 gap-2 md:grid-cols-4">
         {N("pa", "PA (mmHg)", "120x80")}
@@ -532,7 +698,7 @@ function StepExame({
 
       <div className="mt-3">
         <label className="block text-xs font-semibold">
-          Observações
+          Observações do exame
           <textarea
             rows={2}
             value={exame.observacoes}
@@ -542,212 +708,250 @@ function StepExame({
         </label>
       </div>
 
-      <NavRow onBack={onBack} onNext={onNext} nextLabel="Avançar para Sinais e Sintomas" />
+      <NavRow onBack={onBack} onNext={onNext} nextLabel="Ver evidências clínicas" />
     </Card>
   );
 }
 
 // ============ STEP 3 ============
-function StepSintomas({
-  sintomasBase, sintomas, setSintomas, outroSintoma, setOutroSintoma,
-  blocos, filtroBloco, setFiltroBloco, onBack, onNext, canNext,
+function StepEvidencias({
+  reconhecidos, restante, excluidas, toggle, textoLivre, setTextoLivre, total, onBack, onNext,
 }: {
-  sintomasBase: string[];
-  sintomas: string[];
-  setSintomas: (v: string[]) => void;
-  outroSintoma: string;
-  setOutroSintoma: (v: string) => void;
-  blocos: { bloco: string; label: string }[];
-  filtroBloco: string;
-  setFiltroBloco: (v: string) => void;
+  reconhecidos: string[];
+  restante: string[];
+  excluidas: string[];
+  toggle: (e: string) => void;
+  textoLivre: string;
+  setTextoLivre: (v: string) => void;
+  total: number;
   onBack: () => void;
   onNext: () => void;
-  canNext: boolean;
 }) {
-  const toggle = (v: string) =>
-    setSintomas(sintomas.includes(v) ? sintomas.filter((x) => x !== v) : [...sintomas, v]);
+  const Item = ({ e, destaque }: { e: string; destaque: boolean }) => {
+    const ativo = !excluidas.includes(norm(e));
+    return (
+      <button
+        onClick={() => toggle(e)}
+        className={`rounded-full border px-3 py-1 text-left text-xs font-medium transition-colors ${
+          ativo
+            ? destaque
+              ? "gold-gradient border-transparent"
+              : "border-primary/40 bg-primary/10 text-primary"
+            : "border-border bg-background text-muted-foreground line-through"
+        }`}
+      >
+        {e}
+      </button>
+    );
+  };
 
   return (
     <Card>
-      <SectionTitle icon={Activity} title="3. Sinais e Sintomas" subtitle="Marque os chips do quadro do paciente. Você pode filtrar por sistema." />
+      <SectionTitle
+        icon={Activity}
+        title="3. Evidências clínicas / Sinais e sintomas"
+        subtitle="Captadas automaticamente de tudo que você marcou ou escreveu. Clique para incluir ou excluir um item."
+      />
 
-      <div className="mb-3 flex flex-wrap items-center gap-2">
-        <label className="text-xs font-semibold">
-          Sistema / Clínica
-          <select
-            value={filtroBloco}
-            onChange={(e) => setFiltroBloco(e.target.value)}
-            className="ml-2 rounded-lg border border-border bg-background px-2 py-1 text-sm"
-          >
-            <option value="">Todos</option>
-            {blocos.map((b) => (
-              <option key={b.bloco} value={b.bloco}>{b.label}</option>
-            ))}
-          </select>
-        </label>
-        <span className="text-xs text-muted-foreground">
-          {sintomas.length} selecionado{sintomas.length === 1 ? "" : "s"}
-        </span>
+      <div className="mb-4">
+        <p className="mb-1.5 flex items-center gap-1.5 text-xs font-bold uppercase tracking-wide text-primary">
+          <Sparkles className="h-3.5 w-3.5" /> Reconhecidos pela base ADEC ({reconhecidos.length})
+        </p>
+        {reconhecidos.length ? (
+          <div className="flex flex-wrap gap-1.5">
+            {reconhecidos.map((e) => <Item key={e} e={e} destaque />)}
+          </div>
+        ) : (
+          <p className="text-sm text-muted-foreground">
+            Nada reconhecido ainda — volte e marque achados no exame físico ou escreva abaixo.
+          </p>
+        )}
       </div>
 
-      <div className="flex flex-wrap gap-1.5">
-        {sintomasBase.map((s) => {
-          const active = sintomas.includes(s);
-          return (
-            <button
-              key={s}
-              onClick={() => toggle(s)}
-              className={`rounded-full border px-3 py-1 text-xs font-medium transition-colors ${
-                active
-                  ? "gold-gradient border-transparent"
-                  : "border-border bg-background hover:border-gold/60 hover:text-primary"
-              }`}
-            >
-              {s}
-            </button>
-          );
-        })}
-      </div>
+      {restante.length > 0 && (
+        <div className="mb-4">
+          <p className="mb-1.5 text-xs font-bold uppercase tracking-wide text-muted-foreground">
+            Outros registros do seu texto ({restante.length})
+          </p>
+          <div className="flex flex-wrap gap-1.5">
+            {restante.map((e) => <Item key={e} e={e} destaque={false} />)}
+          </div>
+        </div>
+      )}
 
-      <div className="mt-4">
-        <label className="block text-xs font-semibold">
-          Outro sintoma (separe por vírgula)
-          <input
-            value={outroSintoma}
-            onChange={(e) => setOutroSintoma(e.target.value)}
-            placeholder="Ex.: sudorese fria, tontura súbita"
-            className="mt-1 w-full rounded-lg border border-border bg-background px-2 py-1.5 text-sm font-normal"
-          />
-        </label>
-      </div>
+      <label className="block text-xs font-semibold">
+        Escreva ou dite outros sinais e sintomas
+        <textarea
+          rows={4}
+          value={textoLivre}
+          onChange={(e) => setTextoLivre(e.target.value)}
+          placeholder="Ex.: sudorese fria, tontura súbita, dor em região lombar ao movimentar-se."
+          className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-2 text-sm font-normal"
+        />
+      </label>
 
-      <NavRow onBack={onBack} onNext={onNext} nextLabel="Ver diagnósticos" nextDisabled={!canNext} />
+      <p className="mt-2 text-xs text-muted-foreground">
+        {total} evidência{total === 1 ? "" : "s"} ativa{total === 1 ? "" : "s"} para a busca de diagnósticos.
+      </p>
+
+      <NavRow onBack={onBack} onNext={onNext} nextLabel="Ir para os diagnósticos" nextDisabled={total === 0} />
     </Card>
   );
 }
 
 // ============ STEP 4 ============
 function StepDiagnosticos({
-  loading, ranked, condutasDe, sintomas, exameChips, selecionados, setSelecionados, onBack, onNext,
+  matches, gabarito, escolhas, setEscolhas, revelado, critica,
+  selecionados, setSelecionados, onConfirmar, onBack, onNext,
 }: {
-  loading: boolean;
-  ranked: { d: Diag; score: number }[];
-  condutasDe: (id: string) => Conduta[];
-  sintomas: string[];
-  exameChips: string[];
+  matches: SaeMatch[];
+  gabarito: SaeMatch[];
+  escolhas: string[];
+  setEscolhas: (v: string[]) => void;
+  revelado: boolean;
+  critica: CriticaTreino | null;
   selecionados: string[];
   setSelecionados: (v: string[]) => void;
+  onConfirmar: () => void;
   onBack: () => void;
   onNext: () => void;
 }) {
-  const toggleSel = (id: string) =>
-    setSelecionados(
-      selecionados.includes(id) ? selecionados.filter((x) => x !== id) : [...selecionados, id]
-    );
+  const noGabarito = (id: string) => gabarito.some((m) => m.diag.id === id);
 
-  const selNorm = new Set([...sintomas, ...exameChips].map(normalize));
-  const bateu = (s: string) => {
-    const n = normalize(s);
-    for (const q of selNorm) if (q && (n.includes(q) || q.includes(n))) return true;
-    return false;
+  const toggle = (id: string) => {
+    if (!revelado) {
+      setEscolhas(escolhas.includes(id) ? escolhas.filter((x) => x !== id) : [...escolhas, id]);
+    } else {
+      setSelecionados(
+        selecionados.includes(id) ? selecionados.filter((x) => x !== id) : [...selecionados, id],
+      );
+    }
   };
 
   return (
     <Card>
-      <SectionTitle icon={ListChecks} title="4. Diagnósticos sugeridos" subtitle="Marque os diagnósticos que se aplicam ao seu paciente." />
+      <SectionTitle
+        icon={ListChecks}
+        title="4. Diagnósticos — treino do raciocínio clínico"
+        subtitle={
+          revelado
+            ? "Veja a crítica e confirme quais diagnósticos vão para a prescrição."
+            : "Antes de ver a resposta: marque quais hipóteses você considera corretas para este paciente."
+        }
+      />
 
-      {loading ? (
-        <p className="text-sm text-muted-foreground">Carregando base…</p>
-      ) : ranked.length === 0 ? (
+      {critica && (
+        <TreinamentoFeedback
+          critica={critica}
+          mensagem="Comparação entre a sua escolha e as hipóteses de alta correspondência da base ADEC, considerando os critérios essenciais (col. 5), a hipótese diagnóstica (col. 7), as intervenções (col. 8) e os objetivos (col. 10)."
+        />
+      )}
+
+      {matches.length === 0 ? (
         <div className="rounded-xl border border-warning/40 bg-warning/10 p-4 text-sm">
-          Nenhum diagnóstico da base combinou com os sinais selecionados. Volte e ajuste os sintomas.
+          Nenhuma hipótese combinou com as evidências informadas. Volte ao passo 3 e acrescente achados.
         </div>
       ) : (
         <div className="space-y-4">
-          {ranked.map(({ d, score }) => {
-            const on = selecionados.includes(d.id);
-            const condutas = condutasDe(d.id);
+          {matches.map((m) => {
+            const d = m.diag;
+            const marcado = revelado ? selecionados.includes(d.id) : escolhas.includes(d.id);
+            const certo = revelado && noGabarito(d.id);
+            const objetivos = Array.from(
+              new Set(d.condutas.map((c) => c.objetivo).filter(Boolean) as string[]),
+            );
             return (
               <div
                 key={d.id}
                 className={`rounded-2xl border p-4 transition-colors ${
-                  on ? "border-gold/70 bg-gold/10 shadow-[var(--shadow-soft)]" : "border-border bg-card/70"
+                  revelado && certo
+                    ? "border-success/60 bg-success/5"
+                    : marcado
+                      ? "border-gold/70 bg-gold/10 shadow-[var(--shadow-soft)]"
+                      : "border-border bg-card/70"
                 }`}
               >
                 <div className="mb-2 flex items-start gap-3">
                   <input
                     type="checkbox"
-                    checked={on}
-                    onChange={() => toggleSel(d.id)}
+                    checked={marcado}
+                    onChange={() => toggle(d.id)}
                     className="mt-1 h-5 w-5 accent-primary"
                   />
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
-                      <span className="rounded-md bg-primary/10 px-2 py-0.5 text-[10px] font-semibold uppercase text-primary">
-                        {d.bloco_label}
-                      </span>
-                      <span className="rounded-md bg-muted px-2 py-0.5 text-[10px] font-mono text-muted-foreground">
-                        {d.id_gatilho}
-                      </span>
-                      <span className="text-[10px] text-muted-foreground">
-                        {score === 1 ? "1 sinal" : `${score} sinais`} em comum
-                      </span>
+                      <span className="rounded-md bg-muted px-2 py-0.5 text-[10px] font-mono text-muted-foreground">{d.id}</span>
+                      {d.matriz && (
+                        <span className="rounded-md bg-primary/10 px-2 py-0.5 text-[10px] font-semibold uppercase text-primary">
+                          {d.matriz}{d.eixo ? ` · ${d.eixo}` : ""}
+                        </span>
+                      )}
+                      {revelado && (
+                        <span
+                          className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${
+                            certo ? "bg-success/20 text-success" : "bg-muted text-muted-foreground"
+                          }`}
+                        >
+                          {certo ? "Alta prioridade para este caso" : `Correspondência ${m.confianca}`}
+                        </span>
+                      )}
                     </div>
-                    <h3 className="mt-1 font-display text-base font-bold text-foreground">{d.titulo}</h3>
+                    <p className="mt-1 text-[10px] font-bold uppercase tracking-wide text-primary">
+                      Hipótese diagnóstica ADEC (col. 7)
+                    </p>
+                    <h3 className="font-display text-base font-bold text-foreground">{d.diagnostico}</h3>
                   </div>
                 </div>
 
-                <div className="mb-3 flex flex-wrap gap-1.5">
-                  {d.sinais_sintomas.map((s) => (
-                    <span
-                      key={s}
-                      className={`rounded-full px-2 py-0.5 text-[11px] ${
-                        bateu(s)
-                          ? "gold-gradient font-semibold"
-                          : "bg-muted text-muted-foreground"
-                      }`}
-                    >
-                      {s}
-                    </span>
-                  ))}
-                </div>
-
-                {d.meta_mm && (
-                  <div className="mb-2 rounded-lg border border-success/30 bg-success/10 p-2.5 text-sm">
-                    <p className="mb-0.5 text-[10px] font-bold uppercase tracking-wide text-success">Meta (MM)</p>
-                    {d.meta_mm}
-                  </div>
-                )}
-                {d.raciocinio_rc && (
-                  <div className="mb-2 rounded-lg border border-gold/40 bg-gold/10 p-2.5 text-sm">
-                    <p className="mb-0.5 text-[10px] font-bold uppercase tracking-wide text-gold-foreground">Raciocínio Clínico (RC)</p>
-                    {d.raciocinio_rc}
-                  </div>
+                {m.hits.length > 0 && (
+                  <p className="mb-2 text-xs text-success">
+                    <strong>Achados do paciente que geraram esta hipótese:</strong>{" "}
+                    {Array.from(new Set(m.hits)).slice(0, 8).join(" • ")}
+                  </p>
                 )}
 
-                {condutas.length > 0 && (
-                  <div>
-                    <p className="mb-1.5 text-[10px] font-bold uppercase tracking-wide text-primary">Condutas (CDE) e Aprazamento</p>
-                    <ol className="space-y-1.5">
-                      {condutas.map((c) => (
-                        <li key={c.id} className="flex items-start gap-2 text-sm">
-                          <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full gold-gradient text-[10px] font-bold">
-                            {c.ordem}
-                          </span>
-                          <div className="flex-1">
-                            <p>{c.conduta_cde}</p>
-                            {c.aprazamento && (
+                {revelado && (
+                  <div className="space-y-2 text-sm">
+                    {d.criteriosEssenciais && (
+                      <div className="rounded-lg border border-primary/30 bg-primary/5 p-2.5">
+                        <p className="mb-0.5 text-[10px] font-bold uppercase tracking-wide text-primary">Critérios essenciais (col. 5)</p>
+                        {d.criteriosEssenciais}
+                      </div>
+                    )}
+                    {objetivos.length > 0 && (
+                      <div className="rounded-lg border border-success/30 bg-success/10 p-2.5">
+                        <p className="mb-0.5 text-[10px] font-bold uppercase tracking-wide text-success">Objetivo assistencial (col. 10)</p>
+                        {objetivos.join(" • ")}
+                      </div>
+                    )}
+                    {d.raciocinio && (
+                      <div className="rounded-lg border border-gold/40 bg-gold/10 p-2.5">
+                        <p className="mb-0.5 text-[10px] font-bold uppercase tracking-wide text-gold-foreground">Mecanismo científico — raciocínio clínico</p>
+                        {d.raciocinio}
+                      </div>
+                    )}
+                    <details>
+                      <summary className="cursor-pointer text-xs font-semibold text-primary">
+                        Ver intervenções (col. 8) — {d.condutas.length}
+                      </summary>
+                      <ol className="mt-2 space-y-1.5">
+                        {d.condutas.map((c, i) => (
+                          <li key={i} className="flex items-start gap-2 text-sm">
+                            <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full gold-gradient text-[10px] font-bold">
+                              {i + 1}
+                            </span>
+                            <div>
+                              <p>{c.conduta}</p>
                               <p className="text-xs text-muted-foreground">
-                                <strong>Aprazamento:</strong> {c.aprazamento}
-                                {c.horario_padrao && c.horario_padrao !== c.aprazamento ? (
-                                  <> · <strong>Horários:</strong> {c.horario_padrao}</>
-                                ) : null}
+                                {c.horario && <><strong>Horário:</strong> {c.horario} · </>}
+                                {c.aprazamento && <><strong>Aprazamento:</strong> {c.aprazamento} · </>}
+                                {c.prioridade && <><strong>Prioridade:</strong> {c.prioridade}</>}
                               </p>
-                            )}
-                          </div>
-                        </li>
-                      ))}
-                    </ol>
+                            </div>
+                          </li>
+                        ))}
+                      </ol>
+                    </details>
                   </div>
                 )}
               </div>
@@ -756,72 +960,72 @@ function StepDiagnosticos({
         </div>
       )}
 
-      <NavRow
-        onBack={onBack}
-        onNext={onNext}
-        nextLabel={`Gerar Prescrição (${selecionados.length})`}
-        nextDisabled={selecionados.length === 0}
-      />
+      {!revelado ? (
+        <NavRow
+          onBack={onBack}
+          onNext={onConfirmar}
+          nextLabel={`Confirmar minhas escolhas (${escolhas.length})`}
+          nextDisabled={escolhas.length === 0}
+        />
+      ) : (
+        <NavRow
+          onBack={onBack}
+          onNext={onNext}
+          nextLabel={`Montar prescrição (${selecionados.length})`}
+          nextDisabled={selecionados.length === 0}
+        />
+      )}
     </Card>
   );
 }
 
 // ============ STEP 5 ============
 function StepPrescricao({
-  anamnese, diagsSelecionados, condutas, onBack,
+  anamnese, linhas, setLinhas, critica, onConferir, onBack, onNext,
 }: {
   anamnese: Anamnese;
-  diagsSelecionados: Diag[];
-  condutas: Conduta[];
+  linhas: LinhaPresc[];
+  setLinhas: React.Dispatch<React.SetStateAction<LinhaPresc[]>>;
+  critica: CriticaTreino | null;
+  onConferir: () => void;
   onBack: () => void;
+  onNext: () => void;
 }) {
-  const rows = useMemo(() => {
-    const out: { n: number; diag: string; horario: string; aprazamento: string }[] = [];
-    diagsSelecionados.forEach((d, i) => {
-      const cs = condutas.filter((c) => c.diagnostico_id === d.id).sort((a, b) => a.ordem - b.ordem);
-      cs.forEach((c) => {
-        out.push({
-          n: i + 1,
-          diag: d.titulo,
-          horario: c.horario_padrao || "—",
-          aprazamento: `${c.conduta_cde}${c.aprazamento ? ` — ${c.aprazamento}` : ""}`,
-        });
-      });
-    });
-    return out;
-  }, [diagsSelecionados, condutas]);
-
   const dataExt = new Date().toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" });
 
+  const upd = (key: string, patch: Partial<LinhaPresc>) =>
+    setLinhas((prev) => prev.map((l) => (l.key === key ? { ...l, ...patch } : l)));
+
+  const incluidas = linhas.filter((l) => l.incluida);
+
   const handlePrint = () => {
-    const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;");
-    const header = `
-      <div class="cab">
-        <div><strong>Paciente:</strong> ${esc(anamnese.paciente || "—")}</div>
-        <div><strong>Leito:</strong> ${esc(anamnese.leito || "—")} · <strong>Clínica:</strong> ${esc(anamnese.clinica || "—")}</div>
-        <div><strong>Data:</strong> ${dataExt}</div>
-      </div>`;
-    const body = rows
-      .map((r) => `<tr><td>${r.n}</td><td>${esc(r.diag)}</td><td>${esc(r.horario)}</td><td>${esc(r.aprazamento)}</td></tr>`)
+    const esc = (s: string) => (s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;");
+    const body = incluidas
+      .map(
+        (l, i) =>
+          `<tr><td>${String(i + 1).padStart(2, "0")}</td><td>${esc(l.diagnostico)}</td><td>${esc(l.conduta)}</td><td>${esc(l.horario)}</td><td>${esc(l.aprazamento)}</td><td>${esc(l.prioridade)}</td></tr>`,
+      )
       .join("");
     const html = `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8">
 <title>Prescrição de Enfermagem</title>
 <style>
-  @page { size: A4; margin: 1.8cm 1.5cm; }
-  body { font-family: "Times New Roman", Times, serif; font-size: 11pt; color:#000; }
+  @page { size: A4 landscape; margin: 1.2cm; }
+  body { font-family: "Times New Roman", Times, serif; font-size: 10.5pt; color:#000; }
   h1 { font-size: 14pt; text-transform: uppercase; text-align:center; margin: 0 0 8pt 0; }
-  .cab { font-size: 10.5pt; margin-bottom: 12pt; display:flex; justify-content:space-between; flex-wrap:wrap; gap:6pt; }
+  .cab { font-size: 10pt; margin-bottom: 10pt; display:flex; justify-content:space-between; flex-wrap:wrap; gap:6pt; }
   table { width:100%; border-collapse: collapse; }
-  th, td { border: 1px solid #000; padding: 5pt 6pt; text-align:left; vertical-align: top; }
-  th { background:#e5e5e5; font-size: 10.5pt; }
-  td:nth-child(1) { width: 5%; text-align:center; }
-  td:nth-child(3) { width: 22%; }
-  tbody tr:nth-child(even) td { background:#f7f7f7; }
+  th, td { border: 1px solid #000; padding: 4pt 5pt; text-align:left; vertical-align: top; }
+  th { background:#e5e5e5; }
+  td:nth-child(1) { width: 4%; text-align:center; }
 </style></head><body>
 <h1>Prescrição de Enfermagem</h1>
-${header}
+<div class="cab">
+  <div><strong>Paciente:</strong> ${esc(anamnese.paciente || "—")}</div>
+  <div><strong>Leito:</strong> ${esc(anamnese.leito || "—")} · <strong>Clínica:</strong> ${esc(anamnese.clinica || "—")}</div>
+  <div><strong>Data:</strong> ${dataExt}</div>
+</div>
 <table>
-  <thead><tr><th>Nº</th><th>Diagnóstico</th><th>Horário</th><th>Aprazamento</th></tr></thead>
+  <thead><tr><th>Nº</th><th>Diagnóstico</th><th>Intervenção</th><th>Horário</th><th>Aprazamento</th><th>Prioridade clínica</th></tr></thead>
   <tbody>${body}</tbody>
 </table>
 <script>window.onload=()=>window.print();</script>
@@ -832,20 +1036,21 @@ ${header}
     w.document.close();
   };
 
-  const handleCopy = async () => {
-    const header = ["Nº", "Diagnóstico", "Horário", "Aprazamento"].join("\t");
-    const body = rows.map((r) => [r.n, r.diag, r.horario, r.aprazamento].join("\t")).join("\n");
-    try {
-      await navigator.clipboard.writeText(header + "\n" + body);
-      alert("Tabela copiada!");
-    } catch {
-      alert("Não foi possível copiar.");
-    }
-  };
-
   return (
     <Card>
-      <SectionTitle icon={FileText} title="5. Prescrição gerada" subtitle="Confira, imprima ou salve em PDF." />
+      <SectionTitle
+        icon={FileText}
+        title="5. Prescrição de enfermagem"
+        subtitle="Intervenções da base ADEC (col. 8). Ajuste horário, aprazamento e prioridade — depois confira o que você deixou de fora."
+      />
+
+      {critica && (
+        <TreinamentoFeedback
+          titulo="Crítica da prescrição"
+          critica={critica}
+          mensagem="Intervenções desmarcadas aparecem como pontos de atenção: reveja se a exclusão se sustenta clinicamente."
+        />
+      )}
 
       <div className="mb-4 flex flex-wrap items-center gap-3 rounded-xl border border-border bg-background/80 p-3 text-sm">
         <div><strong>Paciente:</strong> {anamnese.paciente || "—"}</div>
@@ -858,126 +1063,243 @@ ${header}
         <table className="w-full text-sm">
           <thead className="bg-primary text-primary-foreground">
             <tr>
-              <th className="px-3 py-2 text-left w-12">Nº</th>
-              <th className="px-3 py-2 text-left">Diagnóstico</th>
-              <th className="px-3 py-2 text-left w-56">Horário</th>
-              <th className="px-3 py-2 text-left">Aprazamento</th>
+              <th className="w-12 px-2 py-2 text-left">Nº</th>
+              <th className="px-3 py-2 text-left">Diagnóstico / Intervenção</th>
+              <th className="w-36 px-2 py-2 text-left">Horário</th>
+              <th className="w-52 px-2 py-2 text-left">Aprazamento</th>
+              <th className="w-36 px-2 py-2 text-left">Prioridade clínica</th>
             </tr>
           </thead>
           <tbody>
-            {rows.map((r, i) => (
-              <tr key={i} className="border-t border-border/60 align-top">
-                <td className="px-3 py-2 text-center font-semibold">{r.n}</td>
-                <td className="px-3 py-2">{r.diag}</td>
-                <td className="px-3 py-2 whitespace-nowrap font-mono text-xs">{r.horario}</td>
-                <td className="px-3 py-2">{r.aprazamento}</td>
+            {linhas.map((l, i) => (
+              <tr key={l.key} className={`border-t border-border/60 align-top ${l.incluida ? "" : "opacity-45"}`}>
+                <td className="px-2 py-2 text-center">
+                  <input
+                    type="checkbox"
+                    checked={l.incluida}
+                    onChange={() => upd(l.key, { incluida: !l.incluida })}
+                    className="h-4 w-4 accent-primary"
+                  />
+                  <div className="mt-1 text-[10px] font-semibold">{String(i + 1).padStart(2, "0")}</div>
+                </td>
+                <td className="px-3 py-2">
+                  <p className="text-xs font-bold text-primary">{l.diagnostico}</p>
+                  <p>{l.conduta}</p>
+                </td>
+                <td className="px-2 py-2">
+                  <input
+                    value={l.horario}
+                    onChange={(e) => upd(l.key, { horario: e.target.value })}
+                    className="w-full rounded-lg border border-border bg-background px-2 py-1 text-xs"
+                  />
+                </td>
+                <td className="px-2 py-2">
+                  <textarea
+                    rows={2}
+                    value={l.aprazamento}
+                    onChange={(e) => upd(l.key, { aprazamento: e.target.value })}
+                    className="w-full rounded-lg border border-border bg-background px-2 py-1 text-xs"
+                  />
+                </td>
+                <td className="px-2 py-2">
+                  <input
+                    value={l.prioridade}
+                    onChange={(e) => upd(l.key, { prioridade: e.target.value })}
+                    className="w-full rounded-lg border border-border bg-background px-2 py-1 text-center text-xs font-bold"
+                  />
+                </td>
               </tr>
             ))}
+            {linhas.length === 0 && (
+              <tr>
+                <td colSpan={5} className="px-3 py-4 text-center text-sm text-muted-foreground">
+                  Nenhum diagnóstico selecionado no passo 4.
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
 
       <div className="mt-4 flex flex-wrap gap-2">
         <button
+          onClick={onConferir}
+          disabled={linhas.length === 0}
+          className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90 disabled:opacity-40"
+        >
+          <GraduationCap className="h-4 w-4" /> Conferir minha prescrição
+        </button>
+        <button
           onClick={handlePrint}
-          className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90"
+          disabled={incluidas.length === 0}
+          className="inline-flex items-center gap-2 rounded-xl border border-border bg-background px-4 py-2.5 text-sm font-semibold hover:bg-muted disabled:opacity-40"
         >
           <Printer className="h-4 w-4" /> Imprimir / Salvar PDF
         </button>
-        <button
-          onClick={handleCopy}
-          className="inline-flex items-center gap-2 rounded-xl border border-border bg-background px-4 py-2.5 text-sm font-semibold hover:bg-muted"
-        >
-          <Copy className="h-4 w-4" /> Copiar tabela
-        </button>
-        <button
-          onClick={onBack}
-          className="inline-flex items-center gap-2 rounded-xl border border-border bg-background px-4 py-2.5 text-sm font-semibold hover:bg-muted"
-        >
-          <ArrowLeft className="h-4 w-4" /> Voltar aos diagnósticos
-        </button>
       </div>
+
+      <NavRow onBack={onBack} onNext={onNext} nextLabel="Gerar evolução" nextDisabled={incluidas.length === 0} />
     </Card>
   );
 }
 
-function ClinicalOverview({
-  step,
-  onStep,
-  anamnese,
-  exame,
-  sintomas,
-  diagnosticosCount,
-  prescricoesCount,
+// ============ STEP 6 ============
+function StepEvolucao({
+  texto, criticaDiag, criticaPresc, onBack, onReiniciar,
 }: {
-  step: number;
-  onStep: (n: number) => void;
-  anamnese: Anamnese;
-  exame: Exame;
-  sintomas: string[];
-  diagnosticosCount: number;
-  prescricoesCount: number;
+  texto: string;
+  criticaDiag: CriticaTreino | null;
+  criticaPresc: CriticaTreino | null;
+  onBack: () => void;
+  onReiniciar: () => void;
 }) {
-  const items = [
-    {
-      step: 1,
-      title: "Anamnese",
-      icon: ClipboardList,
-      body: `${anamnese.queixa || "Queixa não informada"} · ${anamnese.clinica || "setor em branco"}`,
-    },
-    {
-      step: 2,
-      title: "Exame físico",
-      icon: Stethoscope,
-      body: `PA ${exame.pa || "—"} · FC ${exame.fc || "—"} · FR ${exame.fr || "—"} · SatO₂ ${exame.sato2 || "—"}`,
-    },
-    {
-      step: 4,
-      title: "Diagnósticos",
-      icon: ListChecks,
-      body: `${diagnosticosCount} ${diagnosticosCount === 1 ? "sugestão" : "sugestões"} com base em: ${sintomas.slice(0, 3).join(", ") || "—"}`,
-    },
-    {
-      step: 5,
-      title: "Prescrição",
-      icon: FileText,
-      body: `${prescricoesCount} diagnóstico${prescricoesCount === 1 ? "" : "s"} selecionado${prescricoesCount === 1 ? "" : "s"} para gerar tabela`,
-    },
-  ];
+  const notas = [criticaDiag?.pct, criticaPresc?.pct].filter(
+    (n): n is number => typeof n === "number",
+  );
+  const nota = notas.length ? Math.round(notas.reduce((a, b) => a + b, 0) / notas.length) : null;
+
+  const copiar = async () => {
+    try {
+      await navigator.clipboard.writeText(texto);
+      alert("Evolução copiada!");
+    } catch {
+      alert("Não foi possível copiar.");
+    }
+  };
+
+  const baixar = () => {
+    const blob = new Blob([texto], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "evolucao-enfermagem.txt";
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const imprimir = () => {
+    const w = window.open("", "_blank");
+    if (!w) { alert("Permita pop-ups para imprimir."); return; }
+    w.document.write(
+      `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>Evolução de Enfermagem</title>
+<style>@page{size:A4;margin:2cm}body{font-family:"Times New Roman",Times,serif;font-size:11.5pt;white-space:pre-wrap;line-height:1.5}</style>
+</head><body>${texto.replace(/&/g, "&amp;").replace(/</g, "&lt;")}<script>window.onload=()=>window.print();</script></body></html>`,
+    );
+    w.document.close();
+  };
 
   return (
-    <Card className="mb-5 border-primary/30 bg-primary/5">
-      <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-        <div>
-          <p className="text-xs font-bold uppercase tracking-wide text-primary">Caso clínico pronto para editar</p>
-          <h2 className="font-display text-lg font-bold text-foreground">Anamnese, exame físico, diagnóstico e prescrição</h2>
+    <Card>
+      <SectionTitle
+        icon={NotebookPen}
+        title="6. Evolução de enfermagem"
+        subtitle="Texto final reunindo anamnese, exame físico, evidências, diagnósticos e prescrição."
+      />
+
+      {nota !== null && (
+        <div className="mb-4 rounded-2xl border border-gold/50 bg-gold/10 p-4">
+          <p className="text-xs font-bold uppercase tracking-wide text-gold-foreground">Placar do treinamento</p>
+          <p className="font-display text-3xl font-bold text-foreground">{nota}%</p>
+          <p className="text-sm text-muted-foreground">
+            Diagnósticos: {criticaDiag ? `${criticaDiag.pct}%` : "não conferido"} · Prescrição:{" "}
+            {criticaPresc ? `${criticaPresc.pct}%` : "não conferida"}
+          </p>
         </div>
-        <button
-          onClick={() => onStep(5)}
-          disabled={prescricoesCount === 0}
-          className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-bold text-primary-foreground hover:opacity-90 disabled:opacity-40"
-        >
-          Ver prescrição <ArrowRight className="h-4 w-4" />
+      )}
+
+      <textarea
+        readOnly
+        value={texto}
+        rows={22}
+        className="w-full rounded-xl border border-border bg-background px-3 py-2 font-mono text-xs leading-relaxed"
+      />
+
+      <div className="mt-4 flex flex-wrap gap-2">
+        <button onClick={copiar} className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90">
+          <Copy className="h-4 w-4" /> Copiar evolução
+        </button>
+        <button onClick={imprimir} className="inline-flex items-center gap-2 rounded-xl border border-border bg-background px-4 py-2.5 text-sm font-semibold hover:bg-muted">
+          <Printer className="h-4 w-4" /> Imprimir / PDF
+        </button>
+        <button onClick={baixar} className="inline-flex items-center gap-2 rounded-xl border border-border bg-background px-4 py-2.5 text-sm font-semibold hover:bg-muted">
+          <Download className="h-4 w-4" /> Baixar .txt
+        </button>
+        <button onClick={onReiniciar} className="inline-flex items-center gap-2 rounded-xl border border-gold/50 bg-gold/10 px-4 py-2.5 text-sm font-semibold hover:bg-gold/20">
+          <RotateCcw className="h-4 w-4" /> Treinar outro caso
         </button>
       </div>
-      <div className="grid gap-2 md:grid-cols-4">
-        {items.map(({ step: n, title, icon: Icon, body }) => (
-          <button
-            key={title}
-            onClick={() => onStep(n)}
-            className={`rounded-xl border p-3 text-left transition-colors ${
-              step === n ? "border-gold bg-gold/15" : "border-border bg-background/70 hover:border-gold/60"
-            }`}
-          >
-            <span className="mb-2 flex items-center gap-2 text-sm font-bold text-foreground">
-              <Icon className="h-4 w-4 text-primary" /> {title}
-            </span>
-            <span className="block text-xs leading-relaxed text-muted-foreground">{body}</span>
-          </button>
-        ))}
-      </div>
+
+      <NavRow onBack={onBack} nextLabel="" />
     </Card>
   );
+}
+
+// ============ evolução ============
+function montarEvolucao({
+  anamnese, exame, evidencias, diags, linhas,
+}: {
+  anamnese: Anamnese;
+  exame: Exame;
+  evidencias: string[];
+  diags: SaeDiagnostico[];
+  linhas: LinhaPresc[];
+}): string {
+  const dt = new Date().toLocaleString("pt-BR");
+  const ident = [
+    anamnese.paciente && `Paciente: ${anamnese.paciente}`,
+    anamnese.idade && `Idade: ${anamnese.idade}`,
+    anamnese.sexo && `Sexo: ${anamnese.sexo}`,
+    anamnese.leito && `Leito: ${anamnese.leito}`,
+    anamnese.clinica && `Clínica: ${anamnese.clinica}`,
+  ].filter(Boolean).join(" | ");
+
+  const sv = [
+    exame.pa && `PA ${exame.pa} mmHg`,
+    exame.fc && `FC ${exame.fc} bpm`,
+    exame.fr && `FR ${exame.fr} irpm`,
+    exame.sato2 && `SatO₂ ${exame.sato2}%`,
+    exame.temp && `Tax ${exame.temp} °C`,
+    exame.glasgow && `Glasgow ${exame.glasgow}`,
+    exame.pupilas && `Pupilas ${exame.pupilas}`,
+  ].filter(Boolean).join(" · ");
+
+  return [
+    `EVOLUÇÃO DE ENFERMAGEM — ${dt}`,
+    "---------------------------------------------------------------",
+    ident,
+    "",
+    "ANAMNESE:",
+    anamnese.queixa ? `Queixa principal: ${anamnese.queixa}` : "Queixa principal não informada.",
+    anamnese.hda ? `HDA: ${anamnese.hda}` : "",
+    anamnese.antecedentes ? `Antecedentes: ${anamnese.antecedentes}` : "",
+    "",
+    "EXAME FÍSICO:",
+    sv || "Sinais vitais não informados.",
+    exame.chips.length ? `Achados: ${exame.chips.join("; ")}.` : "",
+    exame.observacoes ? `Observações: ${exame.observacoes}` : "",
+    "",
+    "EVIDÊNCIAS CLÍNICAS / SINAIS E SINTOMAS:",
+    evidencias.length ? evidencias.map((e) => `• ${e}`).join("\n") : "• Nenhuma evidência registrada.",
+    "",
+    "DIAGNÓSTICOS DE ENFERMAGEM (base ADEC):",
+    diags.length
+      ? diags.map((d, i) => `${i + 1}. ${d.diagnostico} (${d.id})${d.meta ? ` — Meta: ${d.meta}` : ""}`).join("\n")
+      : "• Nenhum diagnóstico selecionado.",
+    "",
+    "PRESCRIÇÃO DE ENFERMAGEM:",
+    linhas.length
+      ? linhas
+          .map(
+            (l, i) =>
+              `${String(i + 1).padStart(2, "0")}. ${l.conduta} — Horário: ${l.horario || "—"} | Aprazamento: ${l.aprazamento || "—"} | Prioridade: ${l.prioridade || "—"}`,
+          )
+          .join("\n")
+      : "• Nenhuma intervenção prescrita.",
+    "",
+    "Registro gerado em treinamento clínico no aplicativo Academia da Enfermagem (ADEC).",
+  ]
+    .filter((l) => l !== "")
+    .join("\n");
 }
 
 // ============ helpers UI ============
@@ -1019,13 +1341,12 @@ function NavRow({
           <ArrowLeft className="h-4 w-4" /> Voltar
         </button>
       ) : <span />}
-      {onNext && (
+      {onNext && nextLabel && (
         <button
           onClick={onNext}
           disabled={nextDisabled}
           className="inline-flex items-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90 disabled:opacity-40"
         >
-          {nextDisabled ? <CheckCircle2 className="h-4 w-4 opacity-50" /> : null}
           {nextLabel} <ArrowRight className="h-4 w-4" />
         </button>
       )}
