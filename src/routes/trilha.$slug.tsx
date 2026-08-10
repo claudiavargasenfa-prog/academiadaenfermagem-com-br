@@ -16,6 +16,7 @@ import {
 import { fetchAppBySlug, fetchAppSections, fetchPlacementsForApp } from "@/lib/apps";
 import { useLocal } from "@/lib/storage";
 import { RichText, useText } from "@/lib/app-texts";
+import { isMercadoPagoUrl } from "@/lib/mp-links";
 
 export const Route = createFileRoute("/trilha/$slug")({
   head: ({ params }) => ({
