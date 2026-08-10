@@ -107,7 +107,7 @@ function TrilhaPage() {
   return (
     <AppShell tint={app.bg_color}>
       <Link to="/" className="mb-3 inline-flex items-center gap-1 text-sm font-semibold text-muted-foreground hover:text-foreground">
-        <ArrowLeft className="h-4 w-4" /> Voltar para a loja
+        <ArrowLeft className="h-4 w-4" /> Voltar para os aplicativos
       </Link>
 
       <div className="mb-6 rounded-3xl border border-white/40 p-5 shadow-sm" style={cardStyle}>
