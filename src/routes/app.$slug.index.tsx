@@ -1,4 +1,4 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound, redirect } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, BookOpen, ChevronRight } from "lucide-react";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
@@ -7,6 +7,11 @@ import { MiniAppContent } from "@/components/MiniAppContent";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/app/$slug/")({
+  beforeLoad: ({ params }) => {
+    if (params.slug === "diagnosticos-aede") {
+      throw redirect({ to: "/diagnosticos-aede" });
+    }
+  },
   head: ({ params }) => ({
     meta: [
       { title: `${params.slug} — Academia da Enfermagem` },
