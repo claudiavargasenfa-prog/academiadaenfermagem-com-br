@@ -33,7 +33,7 @@ import fotoFundadora from "@/assets/foto-fundadora.jpeg.asset.json";
 import {
   fetchSubscriptionPlans,
   fetchMyActiveSubscriptions,
-  formatPriceBRL,
+
 } from "@/lib/access";
 import { useAppTexts } from "@/lib/app-texts";
 import { supabase } from "@/integrations/supabase/client";
@@ -689,7 +689,6 @@ function AdecPage() {
           <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
             {PLANOS.map((p, i) => {
               const plan = getPlan(p.slug);
-              const price = (plan as any)?.price_novo_cents ?? (plan as any)?.price_cents ?? 0;
               const subscribed = isSubscribed(p.slug);
               const destacado = i === 3;
 
