@@ -17,6 +17,7 @@ import {
 import BeneficiosPlano from "@/components/conta/BeneficiosPlano";
 import ComparativoUpgrade from "@/components/conta/ComparativoUpgrade";
 import { CertificadoFAQ } from "@/components/CertificadoFAQ";
+import MinhasMensagens from "@/components/conta/MinhasMensagens";
 
 
 
