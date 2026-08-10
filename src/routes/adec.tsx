@@ -688,7 +688,6 @@ function AdecPage() {
 
           <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
             {PLANOS.map((p, i) => {
-              const plan = getPlan(p.slug);
               const subscribed = isSubscribed(p.slug);
               const destacado = i === 3;
 
