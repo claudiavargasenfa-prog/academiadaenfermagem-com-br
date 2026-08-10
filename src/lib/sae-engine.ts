@@ -83,9 +83,33 @@ type Entrada = {
   essenciais: string[]; // TAB. 5 — critérios essenciais (ou TAB. 4 quando vazia)
   temEssenciais: boolean;
   evidencias: string[]; // TAB. 4
-  chaves: string[]; // TAB. 13
+  titulo: string[]; // TAB. 7 — hipótese diagnóstica
+  chaves: string[]; // TAB. 13 + TAB. 8 (intervenções)
+  objetivos: string[]; // TAB. 10 — objetivos assistenciais
   frasesEssenciais: string[];
   frasesEvidencia: string[];
+};
+
+// Pesos por coluna da planilha mestre.
+// Ordem de prioridade pedida: 5 (critérios essenciais) > 7 (hipótese) > 8 (intervenções) > 10 (objetivo).
+export type PesosBusca = {
+  frasesEssenciais: number;
+  essenciais: number;
+  frasesEvidencia: number;
+  evidencias: number;
+  titulo: number;
+  chaves: number;
+  objetivos: number;
+};
+
+export const PESOS_PADRAO: PesosBusca = {
+  frasesEssenciais: 4,
+  essenciais: 3,
+  frasesEvidencia: 2,
+  evidencias: 1.5,
+  titulo: 1.2,
+  chaves: 0.7,
+  objetivos: 0.35,
 };
 
 function frasesDe(texto: string, minLen = 8): string[] {
@@ -100,23 +124,38 @@ const INDEX: Entrada[] = SAE_BANCO.map((d) => {
   const essTxt = (d.criteriosEssenciais || "").trim();
   const essenciais = Array.from(new Set(tokens(essTxt || d.sinais)));
   const chaves = Array.from(
-    new Set(d.condutas.flatMap((c) => tokens(c.palavras || ""))),
+    new Set(
+      d.condutas.flatMap((c) => [...tokens(c.palavras || ""), ...tokens(c.conduta || "")]),
+    ),
+  );
+  const titulo = Array.from(new Set(tokens(d.diagnostico)));
+  const objetivos = Array.from(
+    new Set(d.condutas.flatMap((c) => tokens(c.objetivo || ""))),
   );
   return {
     d,
     essenciais,
     temEssenciais: !!essTxt,
     evidencias,
+    titulo,
     chaves,
+    objetivos,
     frasesEssenciais: frasesDe(essTxt || d.sinais),
     frasesEvidencia: frasesDe(d.sinais),
   };
 });
 
+
 // Peso por especificidade: termo presente em muitos diagnósticos vale pouco.
 const DF = new Map<string, number>();
 for (const e of INDEX) {
-  for (const t of new Set([...e.essenciais, ...e.evidencias, ...e.chaves])) {
+  for (const t of new Set([
+    ...e.essenciais,
+    ...e.evidencias,
+    ...e.titulo,
+    ...e.chaves,
+    ...e.objetivos,
+  ])) {
     DF.set(t, (DF.get(t) || 0) + 1);
   }
 }
@@ -148,7 +187,9 @@ export function matchDiagnosticos(
   corpusRaw: string,
   maxResults = 10,
   perfil?: SaePerfil,
+  pesosParciais?: Partial<PesosBusca>,
 ): SaeMatch[] {
+  const P: PesosBusca = { ...PESOS_PADRAO, ...(pesosParciais || {}) };
   const corpus = removerNegados(norm(corpusRaw));
   if (!corpus.trim()) return [];
 
@@ -161,34 +202,49 @@ export function matchDiagnosticos(
     for (const p of e.frasesEssenciais) {
       if (corpus.includes(p)) {
         ancoras += 2;
-        score += 4 * PESO_MAX;
+        score += P.frasesEssenciais * PESO_MAX;
         hits.push(p);
       }
     }
     for (const t of e.essenciais) {
       if (achouTermo(corpus, t)) {
         if (peso(t) >= PESO_ANCORA) ancoras++;
-        score += 3 * peso(t);
+        score += P.essenciais * peso(t);
         hits.push(t);
       }
     }
     for (const p of e.frasesEvidencia) {
       if (corpus.includes(p) && !hits.includes(p)) {
         ancoras += 2;
-        score += 2 * PESO_MAX;
+        score += P.frasesEvidencia * PESO_MAX;
         hits.push(p);
       }
     }
     for (const t of e.evidencias) {
       if (!hits.includes(t) && achouTermo(corpus, t)) {
         if (peso(t) >= PESO_ANCORA) ancoras++;
-        score += 1.5 * peso(t);
+        score += P.evidencias * peso(t);
         hits.push(t);
       }
     }
+    // COL. 7 — hipótese diagnóstica
+    for (const t of e.titulo) {
+      if (!hits.includes(t) && achouTermo(corpus, t)) {
+        score += P.titulo * peso(t);
+        hits.push(t);
+      }
+    }
+    // COL. 8 / 13 — intervenções e palavras-chave
     for (const t of e.chaves) {
       if (!hits.includes(t) && achouTermo(corpus, t)) {
-        score += 0.5 * peso(t);
+        score += P.chaves * peso(t);
+        hits.push(t);
+      }
+    }
+    // COL. 10 — objetivos assistenciais
+    for (const t of e.objetivos) {
+      if (!hits.includes(t) && achouTermo(corpus, t)) {
+        score += P.objetivos * peso(t);
         hits.push(t);
       }
     }
