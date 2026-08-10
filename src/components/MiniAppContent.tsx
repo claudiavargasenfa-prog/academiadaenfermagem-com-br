@@ -837,7 +837,14 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
       const gerarDiagnosticos = () => {
         if (!dyn) return;
         const corpus = coletarCorpus();
-        const matches = matchDiagnosticos(corpus, 12);
+        const val = (id: string) =>
+          (root.querySelector<HTMLInputElement | HTMLSelectElement>(`#${id}`)?.value ?? "").trim();
+        const perfil = {
+          idade: val("idadePaciente"),
+          sexo: val("sexoPaciente") || val("sexo"),
+          setor: val("setorPaciente") || val("setor") || val("clinica"),
+        };
+        const matches = matchDiagnosticos(corpus, 10, perfil);
         diagnosticosAtivos = matches.map((m) => m.diag);
 
         const painelVazio = root.querySelector<HTMLElement>("#painel-vazio-diagnosticos");
@@ -846,7 +853,8 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
 
         if (matches.length === 0) {
           dyn.innerHTML =
-            '<div style="padding:14px;background:#fef2f2;border:1px solid #fecaca;border-radius:8px;color:#991b1b;font-size:13px;">Nenhum diagnóstico compatível encontrado. Descreva sinais/sintomas com mais detalhes (ex.: "dor no peito", "edema em MMII", "febre e tosse").</div>';
+            '<div style="padding:14px;background:#fef2f2;border:1px solid #fecaca;border-radius:8px;color:#991b1b;font-size:13px;">Nenhuma hipótese com correspondência suficiente para este paciente. Descreva os sinais e sintomas com mais detalhes clínicos (ex.: "dispneia aos mínimos esforços", "edema em MMII 2+/4+", "febre 38,5°C com tosse produtiva").</div>';
+
         } else {
           dyn.innerHTML = matches.map((m, i) => renderDiagnosticoCard(m, i)).join("");
         }
