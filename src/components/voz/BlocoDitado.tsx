@@ -97,7 +97,13 @@ export default function BlocoDitado({ draftKey, acoes = ACOES_PADRAO, onInserir 
     }
     const limpo = corrigirTermos(bruto);
     if (!limpo) return;
-    setTexto((t) => `${t ? `${t}\n` : ""}${agora()} — ${limpo}`);
+    // Pausas naturais do reconhecimento (inclusive para respirar) não criam
+    // uma nova linha. Uma quebra só acontece pelo comando de voz "nova linha".
+    setTexto((t) => {
+      if (!t) return `${agora()} — ${limpo}`;
+      const separador = t.endsWith("\n") || /\s$/.test(t) ? "" : " ";
+      return `${t}${separador}${limpo}`;
+    });
   }, [parar]);
 
   const iniciar = useCallback(() => {
