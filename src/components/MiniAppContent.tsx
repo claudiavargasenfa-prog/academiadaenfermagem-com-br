@@ -713,12 +713,33 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
 
     root.addEventListener("click", onClick);
 
-    // ===== SAE DESCOMPLICADA E AUTOMATIZADA =====
+    // ===== SUPORTE À DECISÃO CLÍNICA / SAE AUTOMATIZADA =====
     // Motor autoral que consulta o BANCO DE DADOS MESTRE (planilha AE/DE)
     // e gera diagnósticos + prescrição + evolução consolidada.
-    const isSaeApp = !!root.querySelector(".lavoble-sae-descomplicada");
+    const isFundamentosApp = !!root.querySelector(".lavoble-guia-fisiopatologia");
+    const isSaeApp =
+      !!root.querySelector(".lavoble-sae-descomplicada") || isFundamentosApp;
     let cleanupSaeListeners: (() => void) | null = null;
     if (isSaeApp) {
+      // O Mini App de Fundamentos tinha apenas quatro exemplos fixos. Monta nele
+      // a área automatizada ligada à planilha ADEC (colunas 4, 7, 8 e 10).
+      if (isFundamentosApp && !root.querySelector("#adec-fundamentos-automatizado")) {
+        const guia = root.querySelector<HTMLElement>(".lavoble-guia-fisiopatologia");
+        const painel = document.createElement("section");
+        painel.id = "adec-fundamentos-automatizado";
+        painel.style.cssText =
+          "margin:0 0 20px;padding:18px;border:1px solid #bbf7d0;border-radius:10px;background:#f0fdf4;box-sizing:border-box;";
+        painel.innerHTML = `
+          <h3 style="margin:0 0 5px;color:#14532d;font-size:17px;font-weight:800;">3. MECANISMOS CIENTÍFICOS – HIPÓTESE DIAGNÓSTICA AUTORAL</h3>
+          <p style="margin:0 0 12px;color:#166534;font-size:12.5px;">Pesquisa automatizada nas linhas ADEC pela Coluna 4 e apresentação vinculada das Colunas 7, 8 e 10.</p>
+          <label for="txt-sinais-sintomas-consolidados" style="display:block;margin-bottom:6px;color:#14532d;font-size:13px;font-weight:800;">Evidências Clínicas / Sinais e Sintomas</label>
+          <textarea id="txt-sinais-sintomas-consolidados" rows="5" placeholder="Digite, cole ou envie aqui os sinais e sintomas identificados no paciente..." style="width:100%;padding:11px;border:1px solid #86efac;border-radius:7px;background:#ffffff;color:#14532d;font:inherit;resize:vertical;box-sizing:border-box;"></textarea>
+          <button id="btn-gerar-diagnosticos" type="button" style="margin-top:10px;padding:10px 15px;border:0;border-radius:7px;background:#166534;color:#ffffff;font-size:13px;font-weight:800;cursor:pointer;">Pesquisar hipóteses diagnósticas ADEC</button>
+          <div id="painel-vazio-diagnosticos" style="margin-top:12px;color:#166534;font-size:12px;">Informe as evidências clínicas e clique no botão para pesquisar.</div>
+          <div id="grade-diagnosticos-prioridade" style="display:none;flex-direction:column;gap:12px;margin-top:14px;width:100%;"></div>`;
+        guia?.prepend(painel);
+      }
+
       // Neutraliza referências inline legadas (oninput/onchange="atualizarEvolucaoAutomatica()")
       // que sobraram no HTML do banco e disparavam ReferenceError a cada clique/digitação.
       const w = window as unknown as Record<string, unknown>;
