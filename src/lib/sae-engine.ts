@@ -149,7 +149,13 @@ const INDEX: Entrada[] = SAE_BANCO.map((d) => {
 // Peso por especificidade: termo presente em muitos diagnósticos vale pouco.
 const DF = new Map<string, number>();
 for (const e of INDEX) {
-  for (const t of new Set([...e.essenciais, ...e.evidencias, ...e.chaves])) {
+  for (const t of new Set([
+    ...e.essenciais,
+    ...e.evidencias,
+    ...e.titulo,
+    ...e.chaves,
+    ...e.objetivos,
+  ])) {
     DF.set(t, (DF.get(t) || 0) + 1);
   }
 }
