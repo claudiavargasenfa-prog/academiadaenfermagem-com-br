@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
+import { useMpLink } from "@/lib/mp-links";
 import {
   AlertTriangle,
   BellRing,
@@ -98,7 +99,8 @@ export function WelcomePanel({ slug }: { slug: string }) {
   const subs = subsQ.data ?? [];
   const sub = subs.find((s) => s.plan_slug === slug) ?? subs[0] ?? null;
   const plan = (plansQ.data ?? []).find((p) => p.slug === slug);
-  const checkoutUrl = (plan as any)?.mp_link || (plan as any)?.cakto_link_novo || plan?.cakto_checkout_url || "";
+  const { url: mpUrl } = useMpLink(slug, "mensal");
+  const checkoutUrl = mpUrl ?? "";
   const firstName = (profileQ.data?.full_name || "").split(" ")[0];
   const logged = isReady && !!user;
   const freeOpen = isFreeTrialOpen();

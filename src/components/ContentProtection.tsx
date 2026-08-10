@@ -1,4 +1,5 @@
 import { useEffect, useState, type ReactNode } from "react";
+import { isMercadoPagoUrl } from "@/lib/mp-links";
 import { Link } from "@tanstack/react-router";
 import { Lock, ExternalLink, Sparkles } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -161,9 +162,9 @@ export function AppAccessGate({
           </p>
         </div>
         <div className="mt-4 flex flex-col gap-2">
-          {app.cakto_checkout_url ? (
+          {isMercadoPagoUrl(app.cakto_checkout_url) ? (
             <a
-              href={app.cakto_checkout_url}
+              href={app.cakto_checkout_url!}
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center justify-center gap-1 rounded-xl gold-gradient py-2.5 text-sm font-bold text-foreground"
