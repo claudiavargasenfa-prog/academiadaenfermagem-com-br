@@ -1,4 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
+import { TRIAL_FREE_UNTIL } from "@/lib/trial-window";
+
 
 // Domínios de e-mail descartáveis conhecidos
 const DISPOSABLE_DOMAINS = new Set([
@@ -38,20 +40,24 @@ export const checkTrialEligibility = createServerFn({ method: "POST" })
       };
     }
 
+    // Durante a campanha (até 10/09/2026) todo mundo recebe os 15 dias grátis
+    if (Date.now() <= TRIAL_FREE_UNTIL.getTime()) {
+      return { allowed: true };
+    }
+
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
-    // Bloqueia se o MESMO celular OU o MESMO device já usou o grátis nos últimos 180 dias
+    // Bloqueia apenas se o MESMO celular já usou o grátis nos últimos 180 dias
+    // (o device_id continua sendo gravado, mas não bloqueia — aparelhos parecidos colidem)
     const sinceDate = new Date(Date.now() - 180 * 86400000).toISOString();
 
-    let query = supabaseAdmin
+    const query = supabaseAdmin
       .from("trial_fingerprints")
-      .select("id, phone_digits, device_id")
+      .select("id, phone_digits")
       .gte("created_at", sinceDate)
+      .eq("phone_digits", data.phone_digits)
       .limit(1);
 
-    const orParts: string[] = [`phone_digits.eq.${data.phone_digits}`];
-    if (data.device_id) orParts.push(`device_id.eq.${data.device_id}`);
-    query = query.or(orParts.join(","));
 
     const { data: existing, error } = await query;
     if (error) {
