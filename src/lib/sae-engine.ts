@@ -270,6 +270,19 @@ export function renderDiagnosticoCard(m: SaeMatch, idx: number): string {
   const matrizChip = d.matriz
     ? `<span style="font-size:10.5px;background:#dcfce7;color:#14532d;padding:2px 8px;border-radius:4px;font-weight:600;">${esc(d.matriz)}${d.eixo ? " · " + esc(d.eixo) : ""}</span>`
     : "";
+  const conf = m.confianca || "Alta";
+  const confCor =
+    conf === "Alta"
+      ? { bg: "#dcfce7", br: "#86efac", tx: "#166534" }
+      : conf === "Média"
+        ? { bg: "#fef9c3", br: "#fde68a", tx: "#854d0e" }
+        : { bg: "#f3f4f6", br: "#e5e7eb", tx: "#4b5563" };
+  const confChip = `<span style="font-size:10.5px;background:${confCor.bg};border:1px solid ${confCor.br};color:${confCor.tx};padding:2px 8px;border-radius:999px;font-weight:700;">Correspondência ${esc(conf)}</span>`;
+  const achadosHtml = m.hits.length
+    ? `<p style="margin:0 0 6px 0;font-size:12px;color:#166534;"><strong style="color:#166534;">Achados do paciente que geraram esta sugestão:</strong> ${esc(
+        Array.from(new Set(m.hits)).slice(0, 8).join(" • "),
+      )}</p>`
+    : "";
   return `
 <div class="sae-diag-card" data-diag-id="${esc(d.id)}" style="background:#f0fdf4;border-radius:10px;padding:14px;border:1px solid #bbf7d0;border-left:5px solid #ca8a04;display:flex;align-items:flex-start;justify-content:space-between;gap:15px;">
   <div style="flex:1;">
@@ -278,10 +291,13 @@ export function renderDiagnosticoCard(m: SaeMatch, idx: number): string {
         <input type="checkbox" class="sae-diag-select" data-diag-id="${esc(d.id)}" style="accent-color:#166534;width:16px;height:16px;"> Selecionar
       </label>
       <span style="font-size:11px;background:#fef08a;color:#854d0e;padding:2px 8px;border-radius:4px;font-weight:bold;">${esc(d.id)}</span>
+      ${confChip}
       ${matrizChip}
     </div>
     <h4 style="margin:0 0 6px 0;font-size:14px;color:#14532d;font-weight:bold;line-height:1.4;">${esc(d.diagnostico)}</h4>
+    ${achadosHtml}
     <p style="margin:0 0 4px 0;font-size:12px;color:#4b5563;"><strong style="color:#166534;">Evidências Clínicas:</strong> ${esc(d.sinais)}</p>
+
     ${d.criteriosEssenciais ? `<p style="margin:0 0 4px 0;font-size:12px;color:#4b5563;"><strong style="color:#166534;">Critérios essenciais:</strong> ${esc(d.criteriosEssenciais)}</p>` : ""}
     ${d.criteriosAssociados ? `<p style="margin:0 0 6px 0;font-size:12px;color:#4b5563;"><strong style="color:#166534;">Critérios associados:</strong> ${esc(d.criteriosAssociados)}</p>` : ""}
     <details style="margin:4px 0;">
