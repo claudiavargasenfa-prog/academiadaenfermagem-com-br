@@ -152,34 +152,33 @@ export function matchDiagnosticos(
   const brutos: SaeMatch[] = [];
   for (const e of INDEX) {
     const hits: string[] = [];
-    let essHits = 0;
+    let ancoras = 0; // achados específicos o bastante para sustentar a hipótese
     let score = 0;
 
     for (const p of e.frasesEssenciais) {
       if (corpus.includes(p)) {
-        essHits++;
+        ancoras += 2;
         score += 4 * PESO_MAX;
         hits.push(p);
       }
     }
     for (const t of e.essenciais) {
       if (achouTermo(corpus, t)) {
-        essHits++;
+        if (peso(t) >= PESO_ANCORA) ancoras++;
         score += 3 * peso(t);
         hits.push(t);
       }
     }
-    // Gate rigoroso: sem critério essencial presente, a hipótese não é sugerida.
-    if (essHits === 0) continue;
-
     for (const p of e.frasesEvidencia) {
       if (corpus.includes(p) && !hits.includes(p)) {
+        ancoras += 2;
         score += 2 * PESO_MAX;
         hits.push(p);
       }
     }
     for (const t of e.evidencias) {
       if (!hits.includes(t) && achouTermo(corpus, t)) {
+        if (peso(t) >= PESO_ANCORA) ancoras++;
         score += 1.5 * peso(t);
         hits.push(t);
       }
@@ -191,12 +190,17 @@ export function matchDiagnosticos(
       }
     }
 
+    // Gate rigoroso: sem nenhum achado específico do paciente, a hipótese cai fora.
+    // Termos genéricos ("dor", "risco", "alteração") não sustentam sozinhos a sugestão.
+    if (ancoras === 0) continue;
+
     // Normaliza pelo tamanho do diagnóstico para não favorecer linhas longas.
     const tamanho = e.essenciais.length + e.evidencias.length + e.chaves.length;
     score = score / Math.log(2 + tamanho);
 
     brutos.push({ diag: e.d, score, hits: Array.from(new Set(hits)) });
   }
+
 
   if (!brutos.length) return [];
 
