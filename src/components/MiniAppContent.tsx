@@ -1643,17 +1643,18 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
               if (!conteudo) return;
 
               if (alvo === "sintomas") {
-                const achados = extrairSinaisSintomas(conteudo);
+                const { reconhecidos, restante } = separarSinaisSintomas(conteudo);
                 setSintomasCaptados((prev) => {
                   const juntos = [...prev];
-                  for (const a of achados) if (!juntos.includes(a)) juntos.push(a);
+                  for (const a of reconhecidos) if (!juntos.includes(a)) juntos.push(a);
                   return juntos;
                 });
+                setTextoNaoReconhecido(restante);
                 const alvoSint = root?.querySelector<HTMLTextAreaElement>(
                   "#txt-sinais-sintomas-consolidados, #txt-sinais-sintomas, textarea[id*='sintoma'], textarea[placeholder*='sintoma' i]",
                 );
                 if (alvoSint) {
-                  const bloco = achados.length ? achados.join("; ") : conteudo;
+                  const bloco = reconhecidos.length ? reconhecidos.join("; ") : conteudo;
                   alvoSint.value = alvoSint.value.trim()
                     ? `${alvoSint.value.trim()}\n${bloco}`
                     : bloco;
@@ -1667,6 +1668,7 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
                 }, 50);
                 return;
               }
+
 
               const ta = root?.querySelector<HTMLTextAreaElement>(
                 "#txt-evolucao-clinica-mestre, #txt-evolucao-lavoble, textarea[id*='evolucao'], textarea[placeholder*='evolu' i]",
