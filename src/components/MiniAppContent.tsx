@@ -730,8 +730,7 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
         painel.style.cssText =
           "margin:0 0 20px;padding:18px;border:1px solid #bbf7d0;border-radius:10px;background:#f0fdf4;box-sizing:border-box;";
         painel.innerHTML = `
-          <h3 style="margin:0 0 5px;color:#14532d;font-size:17px;font-weight:800;">3. MECANISMOS CIENTÍFICOS – HIPÓTESE DIAGNÓSTICA AUTORAL</h3>
-          <p style="margin:0 0 12px;color:#166534;font-size:12.5px;">Pesquisa automatizada nas linhas ADEC pela Coluna 4 e apresentação vinculada das Colunas 7, 8 e 10.</p>
+          <h3 style="margin:0 0 10px;color:#14532d;font-size:17px;font-weight:800;">3. MECANISMOS CIENTÍFICOS – HIPÓTESE DIAGNÓSTICA AUTORAL</h3>
           <label for="txt-sinais-sintomas-consolidados" style="display:block;margin-bottom:6px;color:#14532d;font-size:13px;font-weight:800;">Evidências Clínicas / Sinais e Sintomas</label>
           <textarea id="txt-sinais-sintomas-consolidados" rows="5" placeholder="Digite, cole ou envie aqui os sinais e sintomas identificados no paciente..." style="width:100%;padding:11px;border:1px solid #86efac;border-radius:7px;background:#ffffff;color:#14532d;font:inherit;resize:vertical;box-sizing:border-box;"></textarea>
           <button id="btn-gerar-diagnosticos" type="button" style="margin-top:10px;padding:10px 15px;border:0;border-radius:7px;background:#166534;color:#ffffff;font-size:13px;font-weight:800;cursor:pointer;">Pesquisar hipóteses diagnósticas ADEC</button>
@@ -781,10 +780,18 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
       const IGNORAR_IDS = new Set([
         "txt-sinais-sintomas-consolidados",
         "txt-evolucao-clinica-mestre",
+        "txt-evolucao-lavoble",
         "medicamentos",
         "nomePaciente",
         "leitoPaciente",
       ]);
+
+      // Itens de prescrição/cuidados não são achados do paciente — nunca entram
+      // na área de pesquisa de hipótese diagnóstica.
+      const ehItemDePrescricao = (el: HTMLElement): boolean =>
+        !!el.closest(".item-prescricao-lavoble") ||
+        /^pre\d+$/.test(el.id) ||
+        el.classList.contains("sae-presc-apraz");
 
       const rotuloDe = (el: HTMLElement): string => {
         const own = el.closest("label")?.textContent;
@@ -795,16 +802,175 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
         return (cont?.textContent || "").replace(/\s+/g, " ").trim();
       };
 
+      // ---- Filtro de normalidade: só achados ANORMAIS/ALTERADOS vão para a
+      // área de pesquisa de hipótese diagnóstica. ----
+      const semAcento = (s: string) =>
+        s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+
+      const TERMOS_NORMAIS = [
+        "sem alteracao",
+        "sem alteracoes",
+        "sem anormalidade",
+        "sem queixa",
+        "sem queixas",
+        "sem particularidade",
+        "sem sinais de",
+        "sem alteracao aparente",
+        "nada digno de nota",
+        "ndn",
+        "dentro da normalidade",
+        "dentro dos parametros",
+        "normal",
+        "normais",
+        "normocorad",
+        "normocardic",
+        "normotens",
+        "normocefal",
+        "normoglicemic",
+        "normotermic",
+        "eupneic",
+        "eupneia",
+        "hidratad",
+        "anicteric",
+        "aciantic",
+        "afebril",
+        "lucido",
+        "lucida",
+        "orientad",
+        "consciente e orientad",
+        "ativo e reativo",
+        "integra",
+        "integro",
+        "preservad",
+        "presente e simetric",
+        "ausencia de",
+        "ausente",
+        "negativo",
+        "nega ",
+        "sem dor",
+        "indolor",
+        "fisiologic",
+        "habitual",
+        "espontane",
+        "regular",
+        "adequad",
+        "estavel",
+      ];
+
+      // Palavras que indicam alteração mesmo quando aparecem junto de um termo "normal"
+      const TERMOS_ALTERADOS = [
+        "alterad",
+        "anormal",
+        "diminu",
+        "reduzid",
+        "aumentad",
+        "elevad",
+        "ausencia de peristalse",
+        "dor",
+        "lesao",
+        "ferida",
+        "edema",
+        "dispneia",
+        "taqui",
+        "bradi",
+        "hipo",
+        "hiper",
+        "cianose",
+        "cianotic",
+        "palidez",
+        "ictericia",
+        "confus",
+        "agitad",
+        "sonolent",
+        "torporos",
+        "prostrad",
+        "febre",
+        "febril",
+        "secrecao",
+        "sangramento",
+        "vomito",
+        "nausea",
+        "diarreia",
+        "constipa",
+        "queda",
+        "risco",
+      ];
+
+      // Sinais vitais: faixa de referência (fora dela = anormal)
+      const FAIXAS_VITAIS: { chaves: string[]; min: number; max: number }[] = [
+        { chaves: ["freq cardiaca", "frequencia cardiaca", "fc ", "fc:", "fc(", "f.c", "pulso", "p. (bpm", "bpm"], min: 60, max: 100 },
+        { chaves: ["freq respiratoria", "frequencia respiratoria", "fr ", "fr:", "f.r", "irpm"], min: 12, max: 20 },
+        { chaves: ["temperatura", "tax", "temp ", "t. (", "t.(", "(°c", "° c"], min: 35.5, max: 37.5 },
+        { chaves: ["satura", "spo2", "sato2", "sat o2"], min: 94, max: 100 },
+        { chaves: ["glicem", "hgt", "dextro"], min: 70, max: 140 },
+        { chaves: ["dor"], min: 0, max: 0 },
+      ];
+
+      const primeiroNumero = (s: string): number | null => {
+        const m = s.replace(",", ".").match(/-?\d+(\.\d+)?/);
+        return m ? parseFloat(m[0]) : null;
+      };
+
+      // Pressão arterial (ex.: "120x80", "120/80")
+      const paForaDaFaixa = (rotulo: string, valor: string): boolean | null => {
+        if (!/press|mmhg|\bp\.?\s?a\.?\b|\bpas\b|\bpad\b/.test(rotulo)) return null;
+        const m = valor.replace(",", ".").match(/(\d{2,3})\s*[x/]\s*(\d{2,3})/);
+        if (!m) return null;
+        const sis = parseInt(m[1], 10);
+        const dia = parseInt(m[2], 10);
+        return sis < 90 || sis > 139 || dia < 60 || dia > 89;
+      };
+
+      const ehAnormal = (rotulo: string, valor: string): boolean => {
+        const r = semAcento(rotulo);
+        const v = semAcento(valor);
+        const texto = `${r} ${v}`.trim();
+        if (!texto) return false;
+
+        // Marcadores explícitos de alteração vencem qualquer termo de normalidade
+        if (TERMOS_ALTERADOS.some((t) => v.includes(t))) return true;
+
+        // Pressão arterial
+        const pa = paForaDaFaixa(r, v);
+        if (pa !== null) return pa;
+
+        // Demais sinais vitais numéricos
+        const faixa = FAIXAS_VITAIS.find((f) => f.chaves.some((c) => r.includes(c)));
+        if (faixa) {
+          const n = primeiroNumero(v);
+          if (n !== null) return n < faixa.min || n > faixa.max;
+        }
+
+        // Texto declarando normalidade não vai para a pesquisa
+        if (TERMOS_NORMAIS.some((t) => v.includes(t))) return false;
+
+        return true;
+      };
+
       const coletarAchados = (): string[] => {
         const linhas: string[] = [];
 
-        // 1) Tudo que foi marcado (achados fora da normalidade)
+        // 1) Tudo que foi marcado — apenas os achados fora da normalidade.
+        // O exame físico usa a convenção "<sistema>_n_..." (normal) e
+        // "<sistema>_a_..." (alterado) no id/valor da caixinha.
         root
           .querySelectorAll<HTMLInputElement>('input[type="checkbox"]:checked')
           .forEach((chk) => {
             if (chk.classList.contains("sae-diag-select")) return;
-            const txt = rotuloDe(chk) || chk.value;
-            if (txt) linhas.push(txt);
+            if (ehItemDePrescricao(chk)) return;
+            const chave = `${chk.id} ${chk.value} ${chk.name}`;
+            const txtBruto = rotuloDe(chk) || chk.value;
+            if (!txtBruto) return;
+            const legivel = /_[na]_/.test(chave)
+              ? txtBruto.replace(/^[a-z]+_[na]_/, "").replace(/_/g, " ").trim()
+              : txtBruto;
+            if (/_n_/.test(chave)) return; // achado normal — não vai para a pesquisa
+            if (/_a_/.test(chave)) {
+              linhas.push(legivel);
+              return;
+            }
+            if (!ehAnormal("", legivel)) return;
+            linhas.push(legivel);
           });
 
         // 2) Tudo que foi escrito nos campos de anamnese / exame físico
@@ -815,9 +981,11 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
           .forEach((campo) => {
             if (IGNORAR_IDS.has(campo.id)) return;
             if (campo.classList.contains("sae-diag-prio")) return;
+            if (ehItemDePrescricao(campo)) return;
             const v = (campo.value || "").replace(/\s+/g, " ").trim();
             if (!v) return;
             const rot = rotuloDe(campo).replace(/:\s*$/, "");
+            if (!ehAnormal(rot, v)) return;
             linhas.push(rot ? `${rot}: ${v}` : v);
           });
 
@@ -845,8 +1013,18 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
         window.clearTimeout(syncTimer);
         syncTimer = window.setTimeout(sincronizarAchados, 350);
       };
+      // Marcar/desmarcar caixinha reflete na hora; digitação usa o intervalo curto.
+      const sincronizarNaHora = (e: Event) => {
+        const alvo = e.target as HTMLInputElement | null;
+        if (alvo && alvo.type === "checkbox") {
+          window.clearTimeout(syncTimer);
+          sincronizarAchados();
+          return;
+        }
+        agendarSync();
+      };
       root.addEventListener("input", agendarSync);
-      root.addEventListener("change", agendarSync);
+      root.addEventListener("change", sincronizarNaHora);
       agendarSync();
 
       const coletarCorpus = (): string => {
@@ -1326,7 +1504,7 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
         root.removeEventListener("click", onChip);
         root.removeEventListener("click", onExportClick);
         root.removeEventListener("input", agendarSync);
-        root.removeEventListener("change", agendarSync);
+        root.removeEventListener("change", sincronizarNaHora);
         window.clearTimeout(syncTimer);
         if (hadFn) {
           w.atualizarEvolucaoAutomatica = prevFn;
