@@ -70,6 +70,8 @@ function MinhaContaPage() {
         description="Veja suas assinaturas e os Mini Apps que você comprou."
       />
 
+      <MinhasMensagens />
+
       {mySubs.length > 0 && (
         <section className="mb-6">
           <h2 className="mb-3 font-display text-lg font-bold">Status da sua assinatura</h2>

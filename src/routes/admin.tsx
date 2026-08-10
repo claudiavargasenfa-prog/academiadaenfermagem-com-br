@@ -18,6 +18,7 @@ import { PixMonitor } from "@/components/admin/PixMonitor";
 import { PaymentsAdmin } from "@/components/admin/PaymentsAdmin";
 import { DashboardAdmin } from "@/components/admin/DashboardAdmin";
 import { PaymentTester } from "@/components/admin/PaymentTester";
+import { MessagesAdmin } from "@/components/admin/MessagesAdmin";
 import { QUIZZES } from "@/data/quizzes";
 
 export const Route = createFileRoute("/admin")({
