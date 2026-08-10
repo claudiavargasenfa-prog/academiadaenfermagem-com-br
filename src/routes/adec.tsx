@@ -747,7 +747,15 @@ function AdecPage() {
                         <Sparkles className="h-3 w-3" />
                         {TRIAL_DAYS} dias grátis · sem cartão
                       </p>
+
+                      <p
+                        className="mt-2 rounded-lg px-2 py-1.5 text-[11px] font-bold leading-snug"
+                        style={{ background: "rgba(212,175,55,0.16)", color: C.ink }}
+                      >
+                        Período de teste grátis, 15 dias, para quem acessar entre os dias 10.08.2026 a 10.09.2026
+                      </p>
                     </div>
+
 
                     <ul className="mt-4 space-y-2 border-t pt-4" style={{ borderColor: C.line }}>
                       {p.bullets.map((b) => (
