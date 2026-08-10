@@ -220,7 +220,7 @@ export function matchDiagnosticos(
 // ---------- Filtro por contexto do paciente ----------
 const MARCA_GESTANTE = /(gestant|gravid|obstetric|puerper|parto|pre-?natal|lactant)/;
 const MARCA_NEONATAL = /(neonat|recem-?nascid|\brn\b|prematur)/;
-const MARCA_PEDIATRICA = /(pediatric|criativa|crianc|lactente|escolar|infant|adolescent)/;
+const MARCA_PEDIATRICA = /(pediatric|crianc|lactente|escolar|infant|adolescent)/;
 const MARCA_IDOSO = /(idos|geriatric|senil)/;
 
 export function filtrarPorContexto(matches: SaeMatch[], perfil?: SaePerfil): SaeMatch[] {
