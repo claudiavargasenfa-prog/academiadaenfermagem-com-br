@@ -19,7 +19,7 @@ type Props = {
 };
 
 const ACOES_PADRAO: AcaoDitado[] = [
-  { id: "sintomas", label: "➜ Enviar para Sinais e Sintomas", className: "bg-emerald-600" },
+  { id: "sintomas", label: "➜ Enviar para Evidências Clínicas / Sinais e Sintomas", className: "bg-emerald-600" },
   { id: "evolucao", label: "➜ Enviar para Evolução", className: "bg-teal-600" },
 ];
 
