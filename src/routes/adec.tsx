@@ -593,6 +593,96 @@ function AdecPage() {
           </Reveal>
         </section>
 
+        {/* CONTEÚDOS DOS MINI APPS */}
+        <section className="mt-16">
+          <SectionTitle
+            eyebrow="Conteúdos"
+            title="O que você encontra dentro dos Mini Apps"
+            sub="Cada Mini App é um tema resolvido, direto ao ponto, para usar no plantão, no estágio ou na prova."
+          />
+          <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {CONTEUDOS_MINI_APPS.map((c, i) => (
+              <Reveal key={c.t} delay={(i % 3) * 0.06}>
+                <motion.div
+                  whileHover={{ y: -6 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 22 }}
+                  className="h-full rounded-xl border p-4 backdrop-blur"
+                  style={{ borderColor: C.line, background: C.card }}
+                >
+                  <p className="font-display text-sm font-extrabold leading-tight" style={{ color: C.ink }}>
+                    {c.t}
+                  </p>
+                  <p className="mt-1 text-xs leading-relaxed" style={{ color: C.inkSoft }}>
+                    {c.d}
+                  </p>
+                </motion.div>
+              </Reveal>
+            ))}
+          </div>
+        </section>
+
+        {/* 3 APPS AUTOMÁTICOS */}
+        <section className="mt-16">
+          <SectionTitle
+            eyebrow="Exclusivo ADEC"
+            title="Os 3 automáticos: o app escreve por você"
+            sub="São três ferramentas que transformam o que você marcou em documento pronto — sem digitar tudo de novo."
+          />
+          <div className="mt-8 grid gap-4 lg:grid-cols-3">
+            {AUTOMATICOS.map((a, i) => (
+              <Reveal key={a.title} delay={i * 0.1}>
+                <motion.div
+                  whileHover={{ y: -8 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 22 }}
+                  className="relative h-full overflow-hidden rounded-2xl border-2 p-6 backdrop-blur"
+                  style={{
+                    borderColor: C.goldBright,
+                    background: C.cardStrong,
+                    boxShadow: "0 24px 50px -30px rgba(13,59,46,0.9)",
+                  }}
+                >
+                  <span
+                    className="absolute right-3 top-3 rounded-full px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-widest"
+                    style={{ background: "rgba(212,175,55,0.25)", color: C.gold }}
+                  >
+                    Automático
+                  </span>
+                  <div
+                    className="grid h-12 w-12 place-items-center rounded-xl"
+                    style={{ background: C.cta, color: C.goldBright }}
+                  >
+                    <a.Icon className="h-6 w-6" />
+                  </div>
+                  <p className="mt-3 font-display text-lg font-extrabold leading-tight" style={{ color: C.ink }}>
+                    {a.title}
+                  </p>
+                  <p className="mt-1 text-xs font-bold uppercase tracking-wide" style={{ color: C.gold }}>
+                    {a.para}
+                  </p>
+                  <p className="mt-3 text-sm leading-relaxed" style={{ color: C.inkSoft }}>
+                    {a.como}
+                  </p>
+                  <ol className="mt-4 space-y-2">
+                    {a.passos.map((p, n) => (
+                      <li key={p} className="flex items-start gap-2 text-sm" style={{ color: C.ink }}>
+                        <span
+                          className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full text-[11px] font-extrabold"
+                          style={{ background: "rgba(13,59,46,0.1)", color: C.cta }}
+                        >
+                          {n + 1}
+                        </span>
+                        <span>{p}</span>
+                      </li>
+                    ))}
+                  </ol>
+                </motion.div>
+              </Reveal>
+            ))}
+          </div>
+        </section>
+
+
+
         {/* COMPARATIVO SEM x COM */}
         <section className="mt-16">
           <SectionTitle
