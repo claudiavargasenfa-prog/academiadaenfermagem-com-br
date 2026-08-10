@@ -268,7 +268,6 @@ function DiagnosticosAedePage() {
       anamnese.hda,
       anamnese.antecedentes,
       sv.join(". "),
-      exame.chips.join(". "),
       exame.observacoes,
       textoLivre,
     ]
@@ -278,13 +277,42 @@ function DiagnosticosAedePage() {
 
   const separadas = useMemo(() => separarSinaisSintomas(textoBruto), [textoBruto]);
 
+  const evidenciasReconhecidas = useMemo(() => {
+    const unicas = new Map<string, string>();
+    [...exame.chips, ...separadas.reconhecidos].forEach((e) => {
+      const chave = norm(e);
+      if (chave && !unicas.has(chave)) unicas.set(chave, e);
+    });
+    return Array.from(unicas.values());
+  }, [exame.chips, separadas.reconhecidos]);
+
+  const outrosRegistros = useMemo(() => {
+    const reconhecidas = new Set(evidenciasReconhecidas.map(norm));
+    const unicas = new Map<string, string>();
+    separadas.restante.forEach((e) => {
+      const chave = norm(e);
+      if (chave && !reconhecidas.has(chave) && !unicas.has(chave)) unicas.set(chave, e);
+    });
+    return Array.from(unicas.values());
+  }, [evidenciasReconhecidas, separadas.restante]);
+
   const evidenciasAtivas = useMemo(
     () =>
-      [...separadas.reconhecidos, ...separadas.restante].filter(
+      [...evidenciasReconhecidas, ...outrosRegistros].filter(
         (e) => !excluidas.includes(norm(e)),
       ),
-    [separadas, excluidas],
+    [evidenciasReconhecidas, outrosRegistros, excluidas],
   );
+
+  const evidenciaKey = evidenciasAtivas.map(norm).sort().join("|");
+
+  useEffect(() => {
+    setEscolhas([]);
+    setRevelado(false);
+    setSelecionados([]);
+    setLinhas([]);
+    setCriticaPresc(null);
+  }, [evidenciaKey, anamnese.idade, anamnese.sexo, anamnese.clinica]);
 
   const toggleEvidencia = (e: string) => {
     const k = norm(e);
@@ -497,8 +525,8 @@ function DiagnosticosAedePage() {
 
         {step === 3 && (
           <StepEvidencias
-            reconhecidos={separadas.reconhecidos}
-            restante={separadas.restante}
+            reconhecidos={evidenciasReconhecidas}
+            restante={outrosRegistros}
             excluidas={excluidas}
             toggle={toggleEvidencia}
             textoLivre={textoLivre}
