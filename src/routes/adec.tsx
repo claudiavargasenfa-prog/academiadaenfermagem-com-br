@@ -734,18 +734,15 @@ function AdecPage() {
                     </p>
 
                     <div className="mt-4">
-                      {price > 0 ? (
-                        <div className="flex items-baseline gap-1">
-                          <span className="font-display text-3xl font-extrabold" style={{ color: C.ink }}>
-                            {formatPriceBRL(price)}
-                          </span>
-                          <span className="text-xs font-bold" style={{ color: C.inkSoft }}>
-                            /mês
-                          </span>
-                        </div>
-                      ) : (
-                        <div className="h-9 animate-pulse rounded" style={{ background: "rgba(13,59,46,0.08)" }} />
-                      )}
+                      <div className="flex items-baseline gap-1">
+                        <span className="font-display text-3xl font-extrabold" style={{ color: C.ink }}>
+                          R$ 0,00
+                        </span>
+                        <span className="text-xs font-bold" style={{ color: C.inkSoft }}>
+                          /mês
+                        </span>
+                      </div>
+
                       <p
                         className="mt-1 inline-flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wide"
                         style={{ color: C.orange }}
