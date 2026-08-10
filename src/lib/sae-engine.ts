@@ -200,8 +200,12 @@ export function matchDiagnosticos(
     // Normaliza pelo tamanho do diagnóstico para não favorecer linhas longas.
     const tamanho = e.essenciais.length + e.evidencias.length + e.chaves.length;
     score = score / Math.log(2 + tamanho);
+    // Quanto mais achados específicos do paciente casam com a mesma hipótese,
+    // maior a chance de ela ser realmente daquele paciente.
+    score = score * (1 + 0.6 * (ancoras - 1));
 
     brutos.push({ diag: e.d, score, hits: Array.from(new Set(hits)) });
+
   }
 
 
