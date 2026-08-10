@@ -69,7 +69,7 @@ function AdminPage() {
 
 function AdminContent() {
   const qc = useQueryClient();
-  const [tab, setTab] = useState<"dashboard" | "apps" | "organize" | "subs" | "users" | "texts" | "feedbacks" | "pix" | "payments" | "test_links">("dashboard");
+  const [tab, setTab] = useState<"dashboard" | "apps" | "organize" | "subs" | "users" | "messages" | "texts" | "feedbacks" | "pix" | "payments" | "test_links">("dashboard");
   const [selectedAppId, setSelectedAppId] = useState<string | null>(null);
   const [editing, setEditing] = useState<MiniApp | null>(null);
   const [creating, setCreating] = useState(false);
@@ -289,6 +289,16 @@ function AdminContent() {
           className={`flex-1 rounded-lg px-3 py-2 ${tab === "users" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
         >
           Usuários
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            setTab("messages");
+            setSelectedAppId(null);
+          }}
+          className={`flex-1 rounded-lg px-3 py-2 ${tab === "messages" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
+        >
+          ✉️ Mensagens
         </button>
         <button
           type="button"
