@@ -76,7 +76,7 @@ function MinhaContaPage() {
             {mySubs.map((s) => {
               const track = TRACKS.find((t) => t.slug === (s.plan_slug as TrackSlug));
               const plan = plans.find((p) => p.slug === s.plan_slug);
-              const url = (plan as any)?.mp_link || (plan as any)?.cakto_link_novo || plan?.cakto_checkout_url || "";
+              const planoSlug = TRACKS.some((t) => t.slug === s.plan_slug) ? (s.plan_slug as TrackSlug) : null;
               const days = daysUntil(s.expires_at) ?? 0;
               const isTrial = s.status === "trial";
 
@@ -97,15 +97,14 @@ function MinhaContaPage() {
                     {new Date(s.expires_at).toLocaleDateString("pt-BR")} ({days}{" "}
                     {days === 1 ? "dia" : "dias"})
                   </p>
-                  {url && soon && (
-                    <a
-                      href={url}
-                      target="_blank"
-                      rel="noreferrer"
+                  {planoSlug && soon && (
+                    <Link
+                      to="/planos/$slug"
+                      params={{ slug: planoSlug }}
                       className="mt-3 inline-block rounded-xl gold-gradient px-4 py-2 text-sm font-bold"
                     >
                       {isTrial ? "Associe-se agora" : "Renovar assinatura"}
-                    </a>
+                    </Link>
                   )}
                 </div>
               );
@@ -147,16 +146,12 @@ function MinhaContaPage() {
               <p className="mt-2 text-sm text-muted-foreground">
                 Você ainda não tem o Acesso Premium ativo.
               </p>
-              {basico?.cakto_checkout_url && (
-                <a
-                  href={basico.cakto_checkout_url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mt-3 inline-block rounded-xl gold-gradient px-4 py-2 text-sm font-bold"
-                >
-                  Assinar agora
-                </a>
-              )}
+              <Link
+                to="/"
+                className="mt-3 inline-block rounded-xl gold-gradient px-4 py-2 text-sm font-bold"
+              >
+                Ver planos
+              </Link>
             </>
           )}
         </Card>
