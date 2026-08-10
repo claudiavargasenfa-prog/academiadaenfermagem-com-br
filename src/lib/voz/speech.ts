@@ -59,12 +59,52 @@ export function iniciarDitado(h: DitadoHandlers): DitadoSessao | null {
   };
   void pedirWakeLock();
 
-  // No Android o navegador reenvia os mesmos trechos finais várias vezes.
-  // Guardamos quais índices já foram aproveitados e o último texto aceito
-  // para nunca repetir a mesma frase.
+  // No Android o navegador pode reenviar o mesmo resultado final ou ampliar
+  // um resultado anterior (ex.: "paciente com" → "paciente com dor").
+  // Além dos índices, guardamos um histórico curto e emitimos somente a parte
+  // realmente nova da fala.
   let processados = 0;
   let ultimoFinal = "";
-  let ultimoFinalEm = 0;
+  let finaisRecentes: Array<{ texto: string; em: number }> = [];
+
+  const normalizar = (texto: string) =>
+    texto.toLocaleLowerCase("pt-BR").replace(/[^a-záàâãéèêíïóôõöúç0-9\s]/gi, " ").replace(/\s+/g, " ").trim();
+
+  const somenteTrechoNovo = (texto: string): string => {
+    const agora = Date.now();
+    const atual = normalizar(texto);
+    if (!atual) return "";
+
+    finaisRecentes = finaisRecentes.filter((item) => agora - item.em < 12_000);
+    if (finaisRecentes.some((item) => item.texto === atual)) return "";
+
+    const anterior = normalizar(ultimoFinal);
+    if (anterior) {
+      if (anterior === atual || anterior.startsWith(`${atual} `)) return "";
+      if (atual.startsWith(`${anterior} `)) {
+        const novo = texto.trim().split(/\s+/).slice(anterior.split(" ").length).join(" ");
+        finaisRecentes.push({ texto: atual, em: agora });
+        ultimoFinal = texto;
+        return novo;
+      }
+
+      const palavrasAnteriores = anterior.split(" ");
+      const palavrasAtuais = atual.split(" ");
+      const limite = Math.min(palavrasAnteriores.length, palavrasAtuais.length);
+      for (let tamanho = limite; tamanho >= 2; tamanho--) {
+        if (palavrasAnteriores.slice(-tamanho).join(" ") === palavrasAtuais.slice(0, tamanho).join(" ")) {
+          const novo = texto.trim().split(/\s+/).slice(tamanho).join(" ");
+          finaisRecentes.push({ texto: atual, em: agora });
+          ultimoFinal = texto;
+          return novo;
+        }
+      }
+    }
+
+    finaisRecentes.push({ texto: atual, em: agora });
+    ultimoFinal = texto;
+    return texto.trim();
+  };
 
   const criar = () => {
     const r = new C();
@@ -82,11 +122,8 @@ export function iniciarDitado(h: DitadoHandlers): DitadoSessao | null {
         if (res.isFinal) {
           processados = i + 1;
           if (!txt) continue;
-          const agora = Date.now();
-          if (txt === ultimoFinal && agora - ultimoFinalEm < 4000) continue;
-          ultimoFinal = txt;
-          ultimoFinalEm = agora;
-          h.onFinal(txt);
+          const novo = somenteTrechoNovo(txt);
+          if (novo) h.onFinal(novo);
         } else {
           parcial += txt;
         }
