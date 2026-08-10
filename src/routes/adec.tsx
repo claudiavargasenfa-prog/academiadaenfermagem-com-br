@@ -357,6 +357,15 @@ function AdecPage() {
         color: C.ink,
       }}
     >
+      <noscript>
+        <img
+          height="1"
+          width="1"
+          style={{ display: "none" }}
+          alt=""
+          src="https://www.facebook.com/tr?id=2479743902438109&ev=PageView&noscript=1"
+        />
+      </noscript>
       {/* Camadas de luz em movimento (mesma paleta, só profundidade) */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div
