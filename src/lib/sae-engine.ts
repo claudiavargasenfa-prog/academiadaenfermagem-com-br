@@ -442,9 +442,9 @@ export function buildEvolucao(params: {
     .join("\n");
 }
 
-// ---------- Captação automática de SINAIS E SINTOMAS ----------
-// Varre o texto ditado/digitado e devolve os sinais e sintomas reconhecidos
-// no BANCO DE DADOS MESTRE (TAB. 4 — Evidências Clínicas + TAB. 13 — Palavras-chave).
+// ---------- Captação automática de EVIDÊNCIAS CLÍNICAS / SINAIS E SINTOMAS ----------
+// Varre o texto ditado/digitado e devolve o que é reconhecido como sinal/sintoma
+// no BANCO DE DADOS MESTRE (COL. 4 — Evidências Clínicas + COL. 13 — Palavras-chave).
 
 const SINAIS_FRASES: { chave: string; original: string }[] = (() => {
   const mapa = new Map<string, string>();
@@ -469,17 +469,66 @@ const SINAIS_FRASES: { chave: string; original: string }[] = (() => {
   );
 })();
 
-export function extrairSinaisSintomas(textoRaw: string, max = 40): string[] {
-  const corpus = norm(textoRaw || "");
-  if (!corpus.trim()) return [];
-  const achados: string[] = [];
-  const usados: string[] = [];
-  for (const { chave, original } of SINAIS_FRASES) {
-    if (!corpus.includes(chave)) continue;
-    if (usados.some((u) => u.includes(chave))) continue; // já coberto por frase maior
-    usados.push(chave);
-    achados.push(original);
-    if (achados.length >= max) break;
+// Radical simples para tolerar plural e pequenas variações de escrita.
+function radical(t: string): string {
+  let r = t;
+  if (r.length > 6 && (r.endsWith("oes") || r.endsWith("aes") || r.endsWith("ais"))) {
+    r = r.slice(0, -3);
+  } else if (r.length > 5 && (r.endsWith("es") || r.endsWith("ns"))) {
+    r = r.slice(0, -2);
+  } else if (r.length > 4 && r.endsWith("s")) {
+    r = r.slice(0, -1);
   }
-  return achados;
+  return r;
 }
+
+// Índice de TERMOS clínicos isolados vindos da COL. 4 da planilha.
+const SINAIS_TERMOS: Set<string> = (() => {
+  const set = new Set<string>();
+  for (const d of SAE_BANCO) {
+    for (const t of tokens(d.sinais, 5)) set.add(radical(t));
+  }
+  return set;
+})();
+
+function segmentar(texto: string): string[] {
+  return (texto || "")
+    .split(/[\n;.,]+|(?:\s+e\s+)(?=(?:com|sem|apresenta|refere|queixa))/gi)
+    .map((s) => s.replace(/\s+/g, " ").trim())
+    .filter((s) => s.length >= 3);
+}
+
+function segmentoEhSinal(seg: string): boolean {
+  const alvo = norm(seg);
+  if (!alvo) return false;
+  for (const { chave } of SINAIS_FRASES) {
+    if (chave.length >= 6 && alvo.includes(chave)) return true;
+  }
+  for (const t of tokens(seg, 5)) {
+    if (SINAIS_TERMOS.has(radical(t))) return true;
+  }
+  return false;
+}
+
+/**
+ * Separa o texto ditado/escrito em:
+ *  - reconhecidos: trechos que a planilha (COL. 4) identifica como sinal/sintoma
+ *  - restante: o que não foi reconhecido (não se perde nada do ditado)
+ */
+export function separarSinaisSintomas(textoRaw: string): {
+  reconhecidos: string[];
+  restante: string[];
+} {
+  const reconhecidos: string[] = [];
+  const restante: string[] = [];
+  for (const seg of segmentar(textoRaw)) {
+    const lista = segmentoEhSinal(seg) ? reconhecidos : restante;
+    if (!lista.some((x) => norm(x) === norm(seg))) lista.push(seg);
+  }
+  return { reconhecidos, restante };
+}
+
+export function extrairSinaisSintomas(textoRaw: string, max = 40): string[] {
+  return separarSinaisSintomas(textoRaw).reconhecidos.slice(0, max);
+}
+
