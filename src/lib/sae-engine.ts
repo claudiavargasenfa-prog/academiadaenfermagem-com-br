@@ -83,9 +83,33 @@ type Entrada = {
   essenciais: string[]; // TAB. 5 — critérios essenciais (ou TAB. 4 quando vazia)
   temEssenciais: boolean;
   evidencias: string[]; // TAB. 4
-  chaves: string[]; // TAB. 13
+  titulo: string[]; // TAB. 7 — hipótese diagnóstica
+  chaves: string[]; // TAB. 13 + TAB. 8 (intervenções)
+  objetivos: string[]; // TAB. 10 — objetivos assistenciais
   frasesEssenciais: string[];
   frasesEvidencia: string[];
+};
+
+// Pesos por coluna da planilha mestre.
+// Ordem de prioridade pedida: 5 (critérios essenciais) > 7 (hipótese) > 8 (intervenções) > 10 (objetivo).
+export type PesosBusca = {
+  frasesEssenciais: number;
+  essenciais: number;
+  frasesEvidencia: number;
+  evidencias: number;
+  titulo: number;
+  chaves: number;
+  objetivos: number;
+};
+
+export const PESOS_PADRAO: PesosBusca = {
+  frasesEssenciais: 4,
+  essenciais: 3,
+  frasesEvidencia: 2,
+  evidencias: 1.5,
+  titulo: 1.2,
+  chaves: 0.7,
+  objetivos: 0.35,
 };
 
 function frasesDe(texto: string, minLen = 8): string[] {
@@ -100,18 +124,27 @@ const INDEX: Entrada[] = SAE_BANCO.map((d) => {
   const essTxt = (d.criteriosEssenciais || "").trim();
   const essenciais = Array.from(new Set(tokens(essTxt || d.sinais)));
   const chaves = Array.from(
-    new Set(d.condutas.flatMap((c) => tokens(c.palavras || ""))),
+    new Set(
+      d.condutas.flatMap((c) => [...tokens(c.palavras || ""), ...tokens(c.conduta || "")]),
+    ),
+  );
+  const titulo = Array.from(new Set(tokens(d.diagnostico)));
+  const objetivos = Array.from(
+    new Set(d.condutas.flatMap((c) => tokens(c.objetivo || ""))),
   );
   return {
     d,
     essenciais,
     temEssenciais: !!essTxt,
     evidencias,
+    titulo,
     chaves,
+    objetivos,
     frasesEssenciais: frasesDe(essTxt || d.sinais),
     frasesEvidencia: frasesDe(d.sinais),
   };
 });
+
 
 // Peso por especificidade: termo presente em muitos diagnósticos vale pouco.
 const DF = new Map<string, number>();
