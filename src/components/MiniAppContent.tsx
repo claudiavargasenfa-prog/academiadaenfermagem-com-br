@@ -1694,16 +1694,20 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
             className="mb-4 rounded-2xl border border-emerald-200 bg-white/80 p-4 shadow-sm backdrop-blur"
           >
             <div className="mb-2 flex flex-wrap items-center gap-2">
-              <h4 className="text-sm font-bold text-emerald-900">🩺 Sinais e Sintomas</h4>
+              <h4 className="text-sm font-bold text-emerald-900">
+                🩺 Evidências Clínicas / Sinais e Sintomas
+              </h4>
               <span className="rounded-full bg-emerald-600/10 px-2 py-0.5 text-[11px] font-semibold text-emerald-800">
                 captados automaticamente do ditado
               </span>
             </div>
             {sintomasCaptados.length === 0 ? (
               <p className="text-xs text-emerald-900/70">
-                Dite ou escreva no bloco acima e clique em <b>Enviar para Sinais e Sintomas</b>. O
-                sistema reconhece os sinais e sintomas do banco oficial e lista aqui.
+                Dite ou escreva no bloco acima e clique em{" "}
+                <b>Enviar para Evidências Clínicas / Sinais e Sintomas</b>. O sistema reconhece as
+                evidências clínicas do banco oficial e lista aqui.
               </p>
+
             ) : (
               <>
                 <ul className="mb-2 flex flex-wrap gap-2">
