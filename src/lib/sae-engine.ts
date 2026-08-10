@@ -212,16 +212,22 @@ export function matchDiagnosticos(
 
   filtrados.sort((a, b) => b.score - a.score);
   const melhor = filtrados[0].score;
-  const corte = melhor * 0.6;
+  const corte = melhor * 0.5;
 
-  return filtrados
-    .filter((m) => m.score >= corte)
-    .slice(0, maxResults)
-    .map((m) => ({
-      ...m,
-      confianca:
-        m.score >= melhor * 0.85 ? "Alta" : m.score >= melhor * 0.7 ? "Média" : "Baixa",
-    }));
+  // Mantém as que passam do corte; garante um mínimo de 3 hipóteses fortes
+  // quando existirem, para não deixar o profissional sem apoio.
+  const acimaDoCorte = filtrados.filter((m) => m.score >= corte);
+  const finais = (acimaDoCorte.length >= 3 ? acimaDoCorte : filtrados.slice(0, 3)).slice(
+    0,
+    maxResults,
+  );
+
+  return finais.map((m) => ({
+    ...m,
+    confianca:
+      m.score >= melhor * 0.8 ? "Alta" : m.score >= melhor * 0.6 ? "Média" : "Baixa",
+  }));
+
 }
 
 // ---------- Filtro por contexto do paciente ----------
