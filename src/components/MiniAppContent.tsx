@@ -19,6 +19,8 @@ import {
   buildEvolucao,
   APRAZAMENTO_MAP,
   extrairSinaisSintomas,
+  separarSinaisSintomas,
+
 
 
   type SaeDiagnostico,
