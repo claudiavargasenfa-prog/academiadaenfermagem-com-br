@@ -20,7 +20,7 @@
 
 3. **Garantir que o item 3 receba só o que está fora da normalidade**: toda marcação (caixinhas) e todo texto escrito nos itens anteriores, inclusive dentro das sanfonas fechadas, entram na área de Evidências Clínicas assim que são feitos, e saem quando são desmarcados — **mas apenas os achados alterados**. Tudo que for marcado ou escrito como normal (ex.: "eupneico", "sem alterações", "normocorado", "ausente", "preservado", sinais vitais dentro da faixa de referência) **não vai** para a área de pesquisa de hipótese diagnóstica. O que o usuário digitar direto ali continua preservado.
 
-4. **Testar no navegador** o caminho real: marcar achados normais e alterados, escrever textos, abrir/fechar sanfonas, conferir que o item 3 fica só com o que está fora do normal (sem nenhum texto de exemplo) e que a pesquisa de hipóteses continua funcionando.
+4. **Testar no navegador** o caminho real: marcar achados normais e achados anormais/alterados, escrever textos, abrir/fechar sanfonas, conferir que o item 3 fica só com os achados anormais/alterados (sem nenhum texto de exemplo) e que a pesquisa de hipóteses continua funcionando.
 
 
 ## Detalhes técnicos
