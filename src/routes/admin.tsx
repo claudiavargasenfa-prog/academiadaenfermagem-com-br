@@ -362,6 +362,8 @@ function AdminContent() {
         <PixMonitor />
       ) : tab === "feedbacks" ? (
         <FeedbackAdmin />
+      ) : tab === "messages" ? (
+        <MessagesAdmin />
       ) : tab === "texts" ? (
         <TextsAdmin />
       ) : tab === "users" ? (
