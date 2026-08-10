@@ -87,15 +87,18 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
       { property: "og:title", content: "Academia da Enfermagem — SAE e PE automatizados" },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
+      { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "Academia da Enfermagem — SAE e PE automatizados" },
       { name: "description", content: "Academia da Enfermagem: SAE e PE automatizados, cálculo de medicamentos, exame físico, sinais vitais, escalas clínicas e procedimentos." },
       { property: "og:description", content: "Academia da Enfermagem: SAE e PE automatizados, cálculo de medicamentos, exame físico, sinais vitais, escalas clínicas e procedimentos." },
       { name: "twitter:description", content: "Academia da Enfermagem: SAE e PE automatizados, cálculo de medicamentos, exame físico, sinais vitais, escalas clínicas e procedimentos." },
 
 
-      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/7PxPELOptZPDxG1fCljnAraycx32/social-images/social-1781397482453-LOGO_DO_APP._-_SEM_NOME.webp" },
-      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/7PxPELOptZPDxG1fCljnAraycx32/social-images/social-1781397482453-LOGO_DO_APP._-_SEM_NOME.webp" },
+      { property: "og:image", content: `https://academiadaenfermagem.com.br${ogImageAsset.url}` },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      { name: "twitter:image", content: `https://academiadaenfermagem.com.br${ogImageAsset.url}` },
+
     ],
     links: [
       { rel: "stylesheet", href: appCss },
