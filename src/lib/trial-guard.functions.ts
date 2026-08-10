@@ -1,4 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
+import { TRIAL_FREE_UNTIL } from "@/lib/trial-window";
+
 
 // Domínios de e-mail descartáveis conhecidos
 const DISPOSABLE_DOMAINS = new Set([
