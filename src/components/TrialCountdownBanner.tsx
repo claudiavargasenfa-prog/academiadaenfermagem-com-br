@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { X, ExternalLink } from "lucide-react";
+import { X } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import {
   fetchMyActiveSubscriptions,
@@ -8,6 +9,7 @@ import {
   TRACKS,
   type TrackSlug,
 } from "@/lib/access";
+import { BASE_PLAN_SLUG_SET } from "@/lib/plan-slugs";
 
 type Stage = "blue" | "orange" | "red" | null;
 
@@ -58,7 +60,7 @@ export function TrialCountdownBanner() {
 
   const track = TRACKS.find((t) => t.slug === (target.plan_slug as TrackSlug));
   const plan = (plansQ.data ?? []).find((p) => p.slug === target.plan_slug);
-  const checkoutUrl = (plan as any)?.mp_link || (plan as any)?.cakto_link_novo || plan?.cakto_checkout_url || "";
+  const planoSlug = BASE_PLAN_SLUG_SET.has(target.plan_slug) ? target.plan_slug : null;
   const firstName = (profile?.full_name || "aluno(a)").split(" ")[0];
   const dateLabel = new Date(target.expires_at).toLocaleDateString("pt-BR");
 
