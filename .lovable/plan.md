@@ -25,6 +25,6 @@
 
 ## Detalhes técnicos
 
-- `src/components/MiniAppContent.tsx`: remover a linha do parágrafo descritivo do painel `#adec-fundamentos-automatizado`; revisar `coletarAchados`/`sincronizarAchados` para varrer também campos dentro de `<details>` fechados e reagir a desmarcação imediata.
+- `src/components/MiniAppContent.tsx`: remover a linha do parágrafo descritivo do painel `#adec-fundamentos-automatizado`; revisar `coletarAchados`/`sincronizarAchados` para varrer também campos dentro de `<details>` fechados, reagir a desmarcação imediata e aplicar um **filtro de normalidade** antes de enviar ao item 3 — descarta rótulos/valores com marcadores de normalidade (normal, sem alterações, sem queixas, eupneico, normocorado, hidratado, ausente, preservado, íntegra, negativo, nega...) e sinais vitais dentro das faixas de referência (FC 60–100, FR 12–20, Tax 35,5–37,5, SpO2 ≥ 94, PA sistólica 90–139 / diastólica 60–89, dor 0).
 - Migração de conteúdo do Mini App `DE-FUNDAMENTOS`: retirar as quatro "MATRIZ AUTORAL" fixas e os blocos `#out1..#out5` / regras `input[id="preN"]:checked` associados, mantendo o restante do layout e o design inalterados.
 - Nenhuma alteração em outros Mini Apps, pagamentos, acessos ou design.
