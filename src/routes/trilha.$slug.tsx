@@ -16,6 +16,7 @@ import {
 import { fetchAppBySlug, fetchAppSections, fetchPlacementsForApp } from "@/lib/apps";
 import { useLocal } from "@/lib/storage";
 import { RichText, useText } from "@/lib/app-texts";
+import { isMercadoPagoUrl } from "@/lib/mp-links";
 
 export const Route = createFileRoute("/trilha/$slug")({
   head: ({ params }) => ({
@@ -107,7 +108,7 @@ function TrilhaPage() {
   return (
     <AppShell tint={app.bg_color}>
       <Link to="/" className="mb-3 inline-flex items-center gap-1 text-sm font-semibold text-muted-foreground hover:text-foreground">
-        <ArrowLeft className="h-4 w-4" /> Voltar para a loja
+        <ArrowLeft className="h-4 w-4" /> Voltar para os aplicativos
       </Link>
 
       <div className="mb-6 rounded-3xl border border-white/40 p-5 shadow-sm" style={cardStyle}>
@@ -128,15 +129,13 @@ function TrilhaPage() {
             </span>
           ) : plan ? (
             <>
-              <a
-                href={(plan as any).cakto_link_novo || plan.cakto_checkout_url || "#"}
-                target="_blank"
-                rel="noreferrer"
+              <Link
+                to="/planos/$slug"
+                params={{ slug: app.slug }}
                 className="inline-flex items-center gap-1 rounded-full bg-foreground px-4 py-2 text-sm font-bold text-background"
               >
-                Assinar {formatPriceBRL((plan as any).price_novo_cents ?? plan.price_cents)}/mês
-                <ExternalLink className="h-3.5 w-3.5" />
-              </a>
+                Assinar a partir de {formatPriceBRL((plan as any).price_novo_cents ?? plan.price_cents)}/mês
+              </Link>
               <span className="rounded-full bg-emerald-500/20 px-3 py-1 text-xs font-extrabold uppercase tracking-wide text-emerald-800">
                 🔒 Compra Segura
               </span>
@@ -216,8 +215,8 @@ function TrackAppCard({ app, unlocked, extraExpiresAt, isAdmin }: { app: MiniApp
           <Link to={route} className="block w-full rounded-xl bg-primary py-2 text-center text-sm font-semibold text-primary-foreground">
             Acessar
           </Link>
-        ) : app.cakto_checkout_url ? (
-          <a href={app.cakto_checkout_url} target="_blank" rel="noreferrer" className="flex w-full items-center justify-center gap-1 rounded-xl gold-gradient py-2 text-sm font-bold text-foreground">
+        ) : isMercadoPagoUrl(app.cakto_checkout_url) ? (
+          <a href={app.cakto_checkout_url!} target="_blank" rel="noreferrer" className="flex w-full items-center justify-center gap-1 rounded-xl gold-gradient py-2 text-sm font-bold text-foreground">
             {extraExpiresAt ? "Renovar" : "Comprar avulso"} <ExternalLink className="h-3.5 w-3.5" />
           </a>
         ) : (

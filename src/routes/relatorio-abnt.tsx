@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { isMercadoPagoUrl } from "@/lib/mp-links";
 import { useEffect, useState } from "react";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
 import { MiniAppContent } from "@/components/MiniAppContent";
@@ -263,9 +264,9 @@ function RelatorioPage() {
                 </p>
               </div>
             </div>
-            {app.cakto_checkout_url ? (
+            {isMercadoPagoUrl(app.cakto_checkout_url) ? (
               <a
-                href={app.cakto_checkout_url}
+                href={app.cakto_checkout_url!}
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-3 text-sm font-bold text-primary-foreground hover:opacity-90"

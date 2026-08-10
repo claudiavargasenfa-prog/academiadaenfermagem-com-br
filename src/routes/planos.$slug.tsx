@@ -105,7 +105,6 @@ function PlanoPage() {
   const sub = (subsQ.data ?? []).find((s) => s.plan_slug === slug);
   const subscribed = isAdmin || (!!sub && (sub.status === "active" || sub.status === "trial"));
   const price = (plan as any)?.price_novo_cents ?? (plan as any)?.price_cents ?? 0;
-  const checkoutUrl = (plan as any)?.cakto_link_novo || (plan as any)?.cakto_checkout_url || "";
   const bg = appQ.data?.bg_color ?? "#FEF3C7";
   const fg = appQ.data?.fg_color ?? "#78350F";
   const whatsappUrl = (appQ.data as any)?.whatsapp_group_url as string | undefined;

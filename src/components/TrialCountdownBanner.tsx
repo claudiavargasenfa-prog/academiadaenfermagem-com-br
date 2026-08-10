@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { X, ExternalLink } from "lucide-react";
+import { X } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import {
   fetchMyActiveSubscriptions,
@@ -8,6 +9,7 @@ import {
   TRACKS,
   type TrackSlug,
 } from "@/lib/access";
+import { BASE_PLAN_SLUG_SET } from "@/lib/plan-slugs";
 
 type Stage = "blue" | "orange" | "red" | null;
 
@@ -58,7 +60,7 @@ export function TrialCountdownBanner() {
 
   const track = TRACKS.find((t) => t.slug === (target.plan_slug as TrackSlug));
   const plan = (plansQ.data ?? []).find((p) => p.slug === target.plan_slug);
-  const checkoutUrl = (plan as any)?.mp_link || (plan as any)?.cakto_link_novo || plan?.cakto_checkout_url || "";
+  const planoSlug = BASE_PLAN_SLUG_SET.has(target.plan_slug) ? target.plan_slug : null;
   const firstName = (profile?.full_name || "aluno(a)").split(" ")[0];
   const dateLabel = new Date(target.expires_at).toLocaleDateString("pt-BR");
 
@@ -119,15 +121,14 @@ export function TrialCountdownBanner() {
           <p className="text-sm font-extrabold leading-tight">{s.title}</p>
           <p className="mt-0.5 line-clamp-2 text-xs opacity-95">{s.body}</p>
         </div>
-        {checkoutUrl ? (
-          <a
-            href={checkoutUrl}
-            target="_blank"
-            rel="noreferrer"
+        {planoSlug ? (
+          <Link
+            to="/planos/$slug"
+            params={{ slug: planoSlug }}
             className="shrink-0 inline-flex items-center gap-1 rounded-lg bg-white px-3 py-1.5 text-xs font-extrabold text-foreground shadow hover:brightness-95"
           >
-            {s.cta} <ExternalLink className="h-3 w-3" />
-          </a>
+            {s.cta}
+          </Link>
         ) : null}
         {stage !== "red" ? (
           <button
