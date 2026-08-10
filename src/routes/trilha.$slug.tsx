@@ -128,15 +128,13 @@ function TrilhaPage() {
             </span>
           ) : plan ? (
             <>
-              <a
-                href={(plan as any).cakto_link_novo || plan.cakto_checkout_url || "#"}
-                target="_blank"
-                rel="noreferrer"
+              <Link
+                to="/planos/$slug"
+                params={{ slug: app.slug }}
                 className="inline-flex items-center gap-1 rounded-full bg-foreground px-4 py-2 text-sm font-bold text-background"
               >
-                Assinar {formatPriceBRL((plan as any).price_novo_cents ?? plan.price_cents)}/mês
-                <ExternalLink className="h-3.5 w-3.5" />
-              </a>
+                Assinar a partir de {formatPriceBRL((plan as any).price_novo_cents ?? plan.price_cents)}/mês
+              </Link>
               <span className="rounded-full bg-emerald-500/20 px-3 py-1 text-xs font-extrabold uppercase tracking-wide text-emerald-800">
                 🔒 Compra Segura
               </span>
