@@ -433,6 +433,14 @@ function DiagnosticosAedePage() {
     setSelecionados(uniao);
   };
 
+  const gerarFluxoAutomatico = () => {
+    const ids = gabarito.map((m) => m.diag.id);
+    setEscolhas(ids);
+    setSelecionados(ids);
+    setRevelado(true);
+    go(4);
+  };
+
   const conferirPrescricao = () => {
     const incluidas = linhas.filter((l) => l.incluida);
     const fora = linhas.filter((l) => !l.incluida);
@@ -533,7 +541,7 @@ function DiagnosticosAedePage() {
             setTextoLivre={setTextoLivre}
             total={evidenciasAtivas.length}
             onBack={() => go(2)}
-            onNext={() => go(4)}
+            onNext={gerarFluxoAutomatico}
           />
         )}
 
@@ -822,7 +830,7 @@ function StepEvidencias({
         {total} evidência{total === 1 ? "" : "s"} ativa{total === 1 ? "" : "s"} para a busca de diagnósticos.
       </p>
 
-      <NavRow onBack={onBack} onNext={onNext} nextLabel="Ir para os diagnósticos" nextDisabled={total === 0} />
+      <NavRow onBack={onBack} onNext={onNext} nextLabel="Gerar diagnósticos, prescrição e evolução" nextDisabled={total === 0} />
     </Card>
   );
 }
