@@ -214,8 +214,8 @@ function TrackAppCard({ app, unlocked, extraExpiresAt, isAdmin }: { app: MiniApp
           <Link to={route} className="block w-full rounded-xl bg-primary py-2 text-center text-sm font-semibold text-primary-foreground">
             Acessar
           </Link>
-        ) : app.cakto_checkout_url ? (
-          <a href={app.cakto_checkout_url} target="_blank" rel="noreferrer" className="flex w-full items-center justify-center gap-1 rounded-xl gold-gradient py-2 text-sm font-bold text-foreground">
+        ) : isMercadoPagoUrl(app.cakto_checkout_url) ? (
+          <a href={app.cakto_checkout_url!} target="_blank" rel="noreferrer" className="flex w-full items-center justify-center gap-1 rounded-xl gold-gradient py-2 text-sm font-bold text-foreground">
             {extraExpiresAt ? "Renovar" : "Comprar avulso"} <ExternalLink className="h-3.5 w-3.5" />
           </a>
         ) : (
