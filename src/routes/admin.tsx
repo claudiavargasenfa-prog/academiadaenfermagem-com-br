@@ -18,6 +18,7 @@ import { PixMonitor } from "@/components/admin/PixMonitor";
 import { PaymentsAdmin } from "@/components/admin/PaymentsAdmin";
 import { DashboardAdmin } from "@/components/admin/DashboardAdmin";
 import { PaymentTester } from "@/components/admin/PaymentTester";
+import { MessagesAdmin } from "@/components/admin/MessagesAdmin";
 import { QUIZZES } from "@/data/quizzes";
 
 export const Route = createFileRoute("/admin")({
@@ -68,7 +69,7 @@ function AdminPage() {
 
 function AdminContent() {
   const qc = useQueryClient();
-  const [tab, setTab] = useState<"dashboard" | "apps" | "organize" | "subs" | "users" | "texts" | "feedbacks" | "pix" | "payments" | "test_links">("dashboard");
+  const [tab, setTab] = useState<"dashboard" | "apps" | "organize" | "subs" | "users" | "messages" | "texts" | "feedbacks" | "pix" | "payments" | "test_links">("dashboard");
   const [selectedAppId, setSelectedAppId] = useState<string | null>(null);
   const [editing, setEditing] = useState<MiniApp | null>(null);
   const [creating, setCreating] = useState(false);
@@ -292,6 +293,16 @@ function AdminContent() {
         <button
           type="button"
           onClick={() => {
+            setTab("messages");
+            setSelectedAppId(null);
+          }}
+          className={`flex-1 rounded-lg px-3 py-2 ${tab === "messages" ? "bg-primary text-primary-foreground" : "text-muted-foreground"}`}
+        >
+          ✉️ Mensagens
+        </button>
+        <button
+          type="button"
+          onClick={() => {
             setTab("texts");
             setSelectedAppId(null);
           }}
@@ -351,6 +362,8 @@ function AdminContent() {
         <PixMonitor />
       ) : tab === "feedbacks" ? (
         <FeedbackAdmin />
+      ) : tab === "messages" ? (
+        <MessagesAdmin />
       ) : tab === "texts" ? (
         <TextsAdmin />
       ) : tab === "users" ? (

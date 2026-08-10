@@ -17,6 +17,7 @@ import {
 import BeneficiosPlano from "@/components/conta/BeneficiosPlano";
 import ComparativoUpgrade from "@/components/conta/ComparativoUpgrade";
 import { CertificadoFAQ } from "@/components/CertificadoFAQ";
+import MinhasMensagens from "@/components/conta/MinhasMensagens";
 
 
 
@@ -68,6 +69,8 @@ function MinhaContaPage() {
         title="Minha Conta"
         description="Veja suas assinaturas e os Mini Apps que você comprou."
       />
+
+      <MinhasMensagens />
 
       {mySubs.length > 0 && (
         <section className="mb-6">
