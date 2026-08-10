@@ -187,7 +187,9 @@ export function matchDiagnosticos(
   corpusRaw: string,
   maxResults = 10,
   perfil?: SaePerfil,
+  pesosParciais?: Partial<PesosBusca>,
 ): SaeMatch[] {
+  const P: PesosBusca = { ...PESOS_PADRAO, ...(pesosParciais || {}) };
   const corpus = removerNegados(norm(corpusRaw));
   if (!corpus.trim()) return [];
 
@@ -200,34 +202,49 @@ export function matchDiagnosticos(
     for (const p of e.frasesEssenciais) {
       if (corpus.includes(p)) {
         ancoras += 2;
-        score += 4 * PESO_MAX;
+        score += P.frasesEssenciais * PESO_MAX;
         hits.push(p);
       }
     }
     for (const t of e.essenciais) {
       if (achouTermo(corpus, t)) {
         if (peso(t) >= PESO_ANCORA) ancoras++;
-        score += 3 * peso(t);
+        score += P.essenciais * peso(t);
         hits.push(t);
       }
     }
     for (const p of e.frasesEvidencia) {
       if (corpus.includes(p) && !hits.includes(p)) {
         ancoras += 2;
-        score += 2 * PESO_MAX;
+        score += P.frasesEvidencia * PESO_MAX;
         hits.push(p);
       }
     }
     for (const t of e.evidencias) {
       if (!hits.includes(t) && achouTermo(corpus, t)) {
         if (peso(t) >= PESO_ANCORA) ancoras++;
-        score += 1.5 * peso(t);
+        score += P.evidencias * peso(t);
         hits.push(t);
       }
     }
+    // COL. 7 — hipótese diagnóstica
+    for (const t of e.titulo) {
+      if (!hits.includes(t) && achouTermo(corpus, t)) {
+        score += P.titulo * peso(t);
+        hits.push(t);
+      }
+    }
+    // COL. 8 / 13 — intervenções e palavras-chave
     for (const t of e.chaves) {
       if (!hits.includes(t) && achouTermo(corpus, t)) {
-        score += 0.5 * peso(t);
+        score += P.chaves * peso(t);
+        hits.push(t);
+      }
+    }
+    // COL. 10 — objetivos assistenciais
+    for (const t of e.objetivos) {
+      if (!hits.includes(t) && achouTermo(corpus, t)) {
+        score += P.objetivos * peso(t);
         hits.push(t);
       }
     }
