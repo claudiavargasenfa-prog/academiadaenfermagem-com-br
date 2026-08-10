@@ -19,6 +19,8 @@ import {
   buildEvolucao,
   APRAZAMENTO_MAP,
   extrairSinaisSintomas,
+  separarSinaisSintomas,
+
 
 
   type SaeDiagnostico,
@@ -196,6 +198,8 @@ const RawHtmlHost = memo(function RawHtmlHost({ html }: { html: string }) {
 export function MiniAppHtmlContent({ html }: { html: string }) {
   const ref = useRef<HTMLDivElement>(null);
   const [sintomasCaptados, setSintomasCaptados] = useState<string[]>([]);
+  const [textoNaoReconhecido, setTextoNaoReconhecido] = useState<string[]>([]);
+
 
   // Guia clínico SAE traz <script> embutido; renderizamos o HTML bruto (sem
   // sanitização) pois o conteúdo é escrito pelo admin e precisamos preservar
@@ -1643,17 +1647,18 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
               if (!conteudo) return;
 
               if (alvo === "sintomas") {
-                const achados = extrairSinaisSintomas(conteudo);
+                const { reconhecidos, restante } = separarSinaisSintomas(conteudo);
                 setSintomasCaptados((prev) => {
                   const juntos = [...prev];
-                  for (const a of achados) if (!juntos.includes(a)) juntos.push(a);
+                  for (const a of reconhecidos) if (!juntos.includes(a)) juntos.push(a);
                   return juntos;
                 });
+                setTextoNaoReconhecido(restante);
                 const alvoSint = root?.querySelector<HTMLTextAreaElement>(
                   "#txt-sinais-sintomas-consolidados, #txt-sinais-sintomas, textarea[id*='sintoma'], textarea[placeholder*='sintoma' i]",
                 );
                 if (alvoSint) {
-                  const bloco = achados.length ? achados.join("; ") : conteudo;
+                  const bloco = reconhecidos.length ? reconhecidos.join("; ") : conteudo;
                   alvoSint.value = alvoSint.value.trim()
                     ? `${alvoSint.value.trim()}\n${bloco}`
                     : bloco;
@@ -1667,6 +1672,7 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
                 }, 50);
                 return;
               }
+
 
               const ta = root?.querySelector<HTMLTextAreaElement>(
                 "#txt-evolucao-clinica-mestre, #txt-evolucao-lavoble, textarea[id*='evolucao'], textarea[placeholder*='evolu' i]",
@@ -1688,16 +1694,20 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
             className="mb-4 rounded-2xl border border-emerald-200 bg-white/80 p-4 shadow-sm backdrop-blur"
           >
             <div className="mb-2 flex flex-wrap items-center gap-2">
-              <h4 className="text-sm font-bold text-emerald-900">🩺 Sinais e Sintomas</h4>
+              <h4 className="text-sm font-bold text-emerald-900">
+                🩺 Evidências Clínicas / Sinais e Sintomas
+              </h4>
               <span className="rounded-full bg-emerald-600/10 px-2 py-0.5 text-[11px] font-semibold text-emerald-800">
                 captados automaticamente do ditado
               </span>
             </div>
             {sintomasCaptados.length === 0 ? (
               <p className="text-xs text-emerald-900/70">
-                Dite ou escreva no bloco acima e clique em <b>Enviar para Sinais e Sintomas</b>. O
-                sistema reconhece os sinais e sintomas do banco oficial e lista aqui.
+                Dite ou escreva no bloco acima e clique em{" "}
+                <b>Enviar para Evidências Clínicas / Sinais e Sintomas</b>. O sistema reconhece as
+                evidências clínicas do banco oficial e lista aqui.
               </p>
+
             ) : (
               <>
                 <ul className="mb-2 flex flex-wrap gap-2">
@@ -1729,7 +1739,16 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
                 </button>
               </>
             )}
+            {textoNaoReconhecido.length > 0 && (
+              <div className="mt-3 rounded-xl border border-amber-200 bg-amber-50 p-3">
+                <p className="mb-1 text-[11px] font-bold text-amber-900">
+                  Não reconhecido como evidência clínica (guardado para você conferir):
+                </p>
+                <p className="text-xs text-amber-900/80">{textoNaoReconhecido.join(" · ")}</p>
+              </div>
+            )}
           </div>
+
         </>
       )}
 

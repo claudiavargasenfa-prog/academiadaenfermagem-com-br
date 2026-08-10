@@ -296,9 +296,9 @@ export function renderDiagnosticoCard(m: SaeMatch, idx: number): string {
         : { bg: "#f3f4f6", br: "#e5e7eb", tx: "#4b5563" };
   const confChip = `<span style="font-size:10.5px;background:${confCor.bg};border:1px solid ${confCor.br};color:${confCor.tx};padding:2px 8px;border-radius:999px;font-weight:700;">Correspondência ${esc(conf)}</span>`;
   const achadosHtml = m.hits.length
-    ? `<p style="margin:0 0 6px 0;font-size:12px;color:#166534;"><strong style="color:#166534;">Achados do paciente que geraram esta sugestão:</strong> ${esc(
+    ? `<p style="margin:0 0 6px 0;font-size:12px;color:#15803d;"><strong style="color:#15803d;">Achados do paciente que geraram esta sugestão:</strong> <span style="color:#15803d;font-weight:600;">${esc(
         Array.from(new Set(m.hits)).slice(0, 8).join(" • "),
-      )}</p>`
+      )}</span></p>`
     : "";
   return `
 <div class="sae-diag-card" data-diag-id="${esc(d.id)}" style="background:#f0fdf4;border-radius:10px;padding:14px;border:1px solid #bbf7d0;border-left:5px solid #ca8a04;display:flex;align-items:flex-start;justify-content:space-between;gap:15px;">
@@ -311,9 +311,10 @@ export function renderDiagnosticoCard(m: SaeMatch, idx: number): string {
       ${confChip}
       ${matrizChip}
     </div>
+    <p style="margin:0 0 2px 0;font-size:11px;font-weight:700;color:#15803d;text-transform:uppercase;letter-spacing:.3px;">Hipótese Diagnóstica ADEC</p>
     <h4 style="margin:0 0 6px 0;font-size:14px;color:#14532d;font-weight:bold;line-height:1.4;">${esc(d.diagnostico)}</h4>
     ${achadosHtml}
-    <p style="margin:0 0 4px 0;font-size:12px;color:#4b5563;"><strong style="color:#166534;">Evidências Clínicas:</strong> ${esc(d.sinais)}</p>
+    <p style="margin:0 0 4px 0;font-size:12px;color:#4b5563;"><strong style="color:#166534;">Evidências Clínicas / Sinais e Sintomas:</strong> ${esc(d.sinais)}</p>
 
     ${d.criteriosEssenciais ? `<p style="margin:0 0 4px 0;font-size:12px;color:#4b5563;"><strong style="color:#166534;">Critérios essenciais:</strong> ${esc(d.criteriosEssenciais)}</p>` : ""}
     ${d.criteriosAssociados ? `<p style="margin:0 0 6px 0;font-size:12px;color:#4b5563;"><strong style="color:#166534;">Critérios associados:</strong> ${esc(d.criteriosAssociados)}</p>` : ""}
@@ -322,11 +323,12 @@ export function renderDiagnosticoCard(m: SaeMatch, idx: number): string {
       <div style="margin-top:6px;font-size:12px;color:#4b5563;">
         <p style="margin:0 0 4px 0;"><strong style="color:#166534;">Intervenções assistenciais:</strong></p>
         <ul style="margin:0 0 8px 18px;padding:0;">${condutasHtml}</ul>
-        ${objetivos.length ? `<p style="margin:0 0 4px 0;"><strong style="color:#166534;">Objetivos:</strong> ${esc(objetivos.join(" • "))}</p>` : ""}
+        ${objetivos.length ? `<p style="margin:0 0 4px 0;"><strong style="color:#166534;">Objetivos assistenciais:</strong> ${esc(objetivos.join(" • "))}</p>` : ""}
         ${prioridade ? `<p style="margin:0 0 4px 0;"><strong style="color:#166534;">Prioridade clínica:</strong> ${esc(prioridade)}</p>` : ""}
         ${observ.length ? `<p style="margin:0;"><strong style="color:#166534;">Observações:</strong> ${esc(observ.join(" • "))}</p>` : ""}
       </div>
     </details>
+
   </div>
   <div style="text-align:center;flex-shrink:0;">
     <label style="display:block;font-size:10.5px;font-weight:bold;color:#166534;margin-bottom:4px;">Prioridade:</label>
@@ -442,9 +444,9 @@ export function buildEvolucao(params: {
     .join("\n");
 }
 
-// ---------- Captação automática de SINAIS E SINTOMAS ----------
-// Varre o texto ditado/digitado e devolve os sinais e sintomas reconhecidos
-// no BANCO DE DADOS MESTRE (TAB. 4 — Evidências Clínicas + TAB. 13 — Palavras-chave).
+// ---------- Captação automática de EVIDÊNCIAS CLÍNICAS / SINAIS E SINTOMAS ----------
+// Varre o texto ditado/digitado e devolve o que é reconhecido como sinal/sintoma
+// no BANCO DE DADOS MESTRE (COL. 4 — Evidências Clínicas + COL. 13 — Palavras-chave).
 
 const SINAIS_FRASES: { chave: string; original: string }[] = (() => {
   const mapa = new Map<string, string>();
@@ -469,17 +471,69 @@ const SINAIS_FRASES: { chave: string; original: string }[] = (() => {
   );
 })();
 
-export function extrairSinaisSintomas(textoRaw: string, max = 40): string[] {
-  const corpus = norm(textoRaw || "");
-  if (!corpus.trim()) return [];
-  const achados: string[] = [];
-  const usados: string[] = [];
-  for (const { chave, original } of SINAIS_FRASES) {
-    if (!corpus.includes(chave)) continue;
-    if (usados.some((u) => u.includes(chave))) continue; // já coberto por frase maior
-    usados.push(chave);
-    achados.push(original);
-    if (achados.length >= max) break;
+// Radical simples para tolerar plural e pequenas variações de escrita.
+function radical(t: string): string {
+  let r = t;
+  if (r.length > 6 && (r.endsWith("oes") || r.endsWith("aes") || r.endsWith("ais"))) {
+    r = r.slice(0, -3);
+  } else if (r.length > 5 && (r.endsWith("es") || r.endsWith("ns"))) {
+    r = r.slice(0, -2);
+  } else if (r.length > 4 && r.endsWith("s")) {
+    r = r.slice(0, -1);
   }
-  return achados;
+  return r;
 }
+
+// Índice de TERMOS clínicos isolados vindos da COL. 4 da planilha.
+const SINAIS_TERMOS: Set<string> = (() => {
+  const set = new Set<string>();
+  for (const d of SAE_BANCO) {
+    for (const t of tokens(d.sinais, 5)) set.add(radical(t));
+  }
+  return set;
+})();
+
+function segmentar(texto: string): string[] {
+  // protege decimais (38,5 / 38.5) para não quebrar a frase no meio do número
+  const protegido = (texto || "").replace(/(\d)[.,](\d)/g, "$1\u0001$2");
+  return protegido
+    .split(/[\n;.,]+|(?:\s+e\s+)(?=(?:com|sem|apresenta|refere|queixa))/gi)
+    .map((s) => s.replace(/\u0001/g, ",").replace(/\s+/g, " ").trim())
+    .filter((s) => s.length >= 3);
+}
+
+
+function segmentoEhSinal(seg: string): boolean {
+  const alvo = norm(seg);
+  if (!alvo) return false;
+  for (const { chave } of SINAIS_FRASES) {
+    if (chave.length >= 6 && alvo.includes(chave)) return true;
+  }
+  for (const t of tokens(seg, 5)) {
+    if (SINAIS_TERMOS.has(radical(t))) return true;
+  }
+  return false;
+}
+
+/**
+ * Separa o texto ditado/escrito em:
+ *  - reconhecidos: trechos que a planilha (COL. 4) identifica como sinal/sintoma
+ *  - restante: o que não foi reconhecido (não se perde nada do ditado)
+ */
+export function separarSinaisSintomas(textoRaw: string): {
+  reconhecidos: string[];
+  restante: string[];
+} {
+  const reconhecidos: string[] = [];
+  const restante: string[] = [];
+  for (const seg of segmentar(textoRaw)) {
+    const lista = segmentoEhSinal(seg) ? reconhecidos : restante;
+    if (!lista.some((x) => norm(x) === norm(seg))) lista.push(seg);
+  }
+  return { reconhecidos, restante };
+}
+
+export function extrairSinaisSintomas(textoRaw: string, max = 40): string[] {
+  return separarSinaisSintomas(textoRaw).reconhecidos.slice(0, max);
+}
+

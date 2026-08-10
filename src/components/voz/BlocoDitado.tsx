@@ -19,7 +19,7 @@ type Props = {
 };
 
 const ACOES_PADRAO: AcaoDitado[] = [
-  { id: "sintomas", label: "➜ Enviar para Sinais e Sintomas", className: "bg-emerald-600" },
+  { id: "sintomas", label: "➜ Enviar para Evidências Clínicas / Sinais e Sintomas", className: "bg-emerald-600" },
   { id: "evolucao", label: "➜ Enviar para Evolução", className: "bg-teal-600" },
 ];
 
@@ -222,7 +222,7 @@ export default function BlocoDitado({ draftKey, acoes = ACOES_PADRAO, onInserir 
           <li>
             8. Envie para o lugar certo usando os botões abaixo da caixa:
             <ul className="ml-4 list-[circle] space-y-1">
-              <li>8.2 Na SAE: Enviar para Sinais e Sintomas ou Enviar para Evolução;</li>
+              <li>8.2 Na SAE: Enviar para Evidências Clínicas / Sinais e Sintomas ou Enviar para Evolução;</li>
               <li>
                 8.3 No app do Técnico: Enviar para Observações do turno ou Enviar para a Anotação
                 Final;
