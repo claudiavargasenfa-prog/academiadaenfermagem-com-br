@@ -54,45 +54,214 @@ function tokens(s: string, minLen = 5): string[] {
     .filter((t) => t.length >= minLen && !STOP.has(t));
 }
 
-// Índice pré-calculado: keywords vindas SOMENTE de TAB. 4 (sinais) + TAB. 13 (palavras).
-const INDEX = SAE_BANCO.map((d) => {
-  const kw = new Set<string>();
-  tokens(d.sinais).forEach((t) => kw.add(t));
-  d.condutas.forEach((c) => tokens(c.palavras || "").forEach((t) => kw.add(t)));
-  const phrases = norm(d.sinais)
+// ---------- Remoção de negações ----------
+// "nega dispneia", "sem febre", "ausência de edema" não podem contar a favor.
+const NEG_RE =
+  /\b(nega|negava|sem|ausencia de|ausente|nao apresenta|nao ha|nao refere|nao relata|descartad[oa])\b/g;
+
+function removerNegados(corpus: string): string {
+  let out = corpus;
+  let m: RegExpExecArray | null;
+  NEG_RE.lastIndex = 0;
+  const cortes: [number, number][] = [];
+  while ((m = NEG_RE.exec(corpus))) {
+    const inicio = m.index;
+    // janela de 4 palavras após a negação
+    const resto = corpus.slice(m.index + m[0].length);
+    const janela = resto.split(/\s+/).slice(0, 5).join(" ");
+    cortes.push([inicio, m.index + m[0].length + janela.length]);
+  }
+  for (let i = cortes.length - 1; i >= 0; i--) {
+    out = out.slice(0, cortes[i][0]) + " " + out.slice(cortes[i][1]);
+  }
+  return out;
+}
+
+// ---------- Índice por coluna ----------
+type Entrada = {
+  d: SaeDiagnostico;
+  essenciais: string[]; // TAB. 5 — critérios essenciais (ou TAB. 4 quando vazia)
+  temEssenciais: boolean;
+  evidencias: string[]; // TAB. 4
+  chaves: string[]; // TAB. 13
+  frasesEssenciais: string[];
+  frasesEvidencia: string[];
+};
+
+function frasesDe(texto: string, minLen = 8): string[] {
+  return norm(texto)
     .split(/[;.,]/)
     .map((p) => p.trim())
-    .filter((p) => p.length >= 6);
-  return { d, keywords: Array.from(kw), phrases };
+    .filter((p) => p.length >= minLen);
+}
+
+const INDEX: Entrada[] = SAE_BANCO.map((d) => {
+  const evidencias = Array.from(new Set(tokens(d.sinais)));
+  const essTxt = (d.criteriosEssenciais || "").trim();
+  const essenciais = Array.from(new Set(tokens(essTxt || d.sinais)));
+  const chaves = Array.from(
+    new Set(d.condutas.flatMap((c) => tokens(c.palavras || ""))),
+  );
+  return {
+    d,
+    essenciais,
+    temEssenciais: !!essTxt,
+    evidencias,
+    chaves,
+    frasesEssenciais: frasesDe(essTxt || d.sinais),
+    frasesEvidencia: frasesDe(d.sinais),
+  };
 });
 
-export type SaeMatch = { diag: SaeDiagnostico; score: number; hits: string[] };
+// Peso por especificidade: termo presente em muitos diagnósticos vale pouco.
+const DF = new Map<string, number>();
+for (const e of INDEX) {
+  for (const t of new Set([...e.essenciais, ...e.evidencias, ...e.chaves])) {
+    DF.set(t, (DF.get(t) || 0) + 1);
+  }
+}
+const TOTAL_D = INDEX.length || 1;
+function peso(t: string): number {
+  const df = DF.get(t) || 1;
+  return Math.log(1 + TOTAL_D / df);
+}
 
-export function matchDiagnosticos(corpusRaw: string, maxResults = 15): SaeMatch[] {
-  const corpus = norm(corpusRaw);
+const PESO_MAX = Math.log(1 + TOTAL_D);
+// Termo é "âncora" quando aparece em no máximo 3% dos diagnósticos (achado específico).
+const PESO_ANCORA = Math.log(1 + TOTAL_D / Math.max(1, Math.round(TOTAL_D * 0.03)));
+
+
+function achouTermo(corpus: string, t: string): boolean {
+  return new RegExp(`(^|[^a-z0-9])${t}([^a-z0-9]|$)`).test(corpus);
+}
+
+export type SaeMatch = {
+  diag: SaeDiagnostico;
+  score: number;
+  hits: string[];
+  confianca?: "Alta" | "Média" | "Baixa";
+};
+
+export type SaePerfil = { idade?: string; sexo?: string; setor?: string };
+
+export function matchDiagnosticos(
+  corpusRaw: string,
+  maxResults = 10,
+  perfil?: SaePerfil,
+): SaeMatch[] {
+  const corpus = removerNegados(norm(corpusRaw));
   if (!corpus.trim()) return [];
-  const results: SaeMatch[] = [];
-  for (const { d, keywords, phrases } of INDEX) {
+
+  const brutos: SaeMatch[] = [];
+  for (const e of INDEX) {
     const hits: string[] = [];
+    let ancoras = 0; // achados específicos o bastante para sustentar a hipótese
     let score = 0;
-    for (const p of phrases) {
-      if (p.length >= 8 && corpus.includes(p)) {
-        score += 3;
+
+    for (const p of e.frasesEssenciais) {
+      if (corpus.includes(p)) {
+        ancoras += 2;
+        score += 4 * PESO_MAX;
         hits.push(p);
       }
     }
-    for (const k of keywords) {
-      const re = new RegExp(`(^|[^a-z0-9])${k}([^a-z0-9]|$)`);
-      if (re.test(corpus)) {
-        score += 1;
-        hits.push(k);
+    for (const t of e.essenciais) {
+      if (achouTermo(corpus, t)) {
+        if (peso(t) >= PESO_ANCORA) ancoras++;
+        score += 3 * peso(t);
+        hits.push(t);
       }
     }
-    if (score > 0) results.push({ diag: d, score, hits });
+    for (const p of e.frasesEvidencia) {
+      if (corpus.includes(p) && !hits.includes(p)) {
+        ancoras += 2;
+        score += 2 * PESO_MAX;
+        hits.push(p);
+      }
+    }
+    for (const t of e.evidencias) {
+      if (!hits.includes(t) && achouTermo(corpus, t)) {
+        if (peso(t) >= PESO_ANCORA) ancoras++;
+        score += 1.5 * peso(t);
+        hits.push(t);
+      }
+    }
+    for (const t of e.chaves) {
+      if (!hits.includes(t) && achouTermo(corpus, t)) {
+        score += 0.5 * peso(t);
+        hits.push(t);
+      }
+    }
+
+    // Gate rigoroso: sem nenhum achado específico do paciente, a hipótese cai fora.
+    // Termos genéricos ("dor", "risco", "alteração") não sustentam sozinhos a sugestão.
+    if (ancoras === 0) continue;
+
+    // Normaliza pelo tamanho do diagnóstico para não favorecer linhas longas.
+    const tamanho = e.essenciais.length + e.evidencias.length + e.chaves.length;
+    score = score / Math.log(2 + Math.max(tamanho, 25));
+    // Quanto mais achados específicos do paciente casam com a mesma hipótese,
+    // maior a chance de ela ser realmente daquele paciente.
+    score = score * (1 + 0.6 * (ancoras - 1));
+
+    brutos.push({ diag: e.d, score, hits: Array.from(new Set(hits)) });
+
   }
-  results.sort((a, b) => b.score - a.score);
-  return results.slice(0, maxResults);
+
+
+  if (!brutos.length) return [];
+
+  const filtrados = filtrarPorContexto(brutos, perfil);
+  if (!filtrados.length) return [];
+
+  filtrados.sort((a, b) => b.score - a.score);
+  const melhor = filtrados[0].score;
+  const corte = melhor * 0.5;
+
+  // Mantém as que passam do corte; garante um mínimo de 3 hipóteses fortes
+  // quando existirem, para não deixar o profissional sem apoio.
+  const acimaDoCorte = filtrados.filter((m) => m.score >= corte);
+  const finais = (acimaDoCorte.length >= 3 ? acimaDoCorte : filtrados.slice(0, 3)).slice(
+    0,
+    maxResults,
+  );
+
+  return finais.map((m) => ({
+    ...m,
+    confianca:
+      m.score >= melhor * 0.8 ? "Alta" : m.score >= melhor * 0.6 ? "Média" : "Baixa",
+  }));
+
 }
+
+// ---------- Filtro por contexto do paciente ----------
+const MARCA_GESTANTE = /(gestant|gravid|obstetric|puerper|parto|pre-?natal|lactant)/;
+const MARCA_NEONATAL = /(neonat|recem-?nascid|\brn\b|prematur)/;
+const MARCA_PEDIATRICA = /(pediatric|crianc|lactente|escolar|infant|adolescent)/;
+const MARCA_IDOSO = /(idos|geriatric|senil)/;
+
+export function filtrarPorContexto(matches: SaeMatch[], perfil?: SaePerfil): SaeMatch[] {
+  if (!perfil) return matches;
+  const idadeNum = Number(String(perfil.idade || "").replace(/[^0-9]/g, ""));
+  const idade = Number.isFinite(idadeNum) && idadeNum > 0 ? idadeNum : null;
+  const sexo = norm(perfil.sexo || "");
+  const masculino = /^m/.test(sexo) || sexo.includes("masculin");
+  const setor = norm(perfil.setor || "");
+
+  return matches.filter((m) => {
+    const txt = norm(`${m.diag.diagnostico} ${m.diag.matriz || ""} ${m.diag.eixo || ""}`);
+    if (MARCA_GESTANTE.test(txt)) {
+      if (masculino) return false;
+      if (idade !== null && (idade < 10 || idade > 60)) return false;
+      if (setor && /(uti neonatal|geriatri|pediatri)/.test(setor)) return false;
+    }
+    if (MARCA_NEONATAL.test(txt) && idade !== null && idade > 1) return false;
+    if (MARCA_PEDIATRICA.test(txt) && idade !== null && idade >= 18) return false;
+    if (MARCA_IDOSO.test(txt) && idade !== null && idade < 60) return false;
+    return true;
+  });
+}
+
 
 // ---------- HTML helpers ----------
 
@@ -118,6 +287,19 @@ export function renderDiagnosticoCard(m: SaeMatch, idx: number): string {
   const matrizChip = d.matriz
     ? `<span style="font-size:10.5px;background:#dcfce7;color:#14532d;padding:2px 8px;border-radius:4px;font-weight:600;">${esc(d.matriz)}${d.eixo ? " · " + esc(d.eixo) : ""}</span>`
     : "";
+  const conf = m.confianca || "Alta";
+  const confCor =
+    conf === "Alta"
+      ? { bg: "#dcfce7", br: "#86efac", tx: "#166534" }
+      : conf === "Média"
+        ? { bg: "#fef9c3", br: "#fde68a", tx: "#854d0e" }
+        : { bg: "#f3f4f6", br: "#e5e7eb", tx: "#4b5563" };
+  const confChip = `<span style="font-size:10.5px;background:${confCor.bg};border:1px solid ${confCor.br};color:${confCor.tx};padding:2px 8px;border-radius:999px;font-weight:700;">Correspondência ${esc(conf)}</span>`;
+  const achadosHtml = m.hits.length
+    ? `<p style="margin:0 0 6px 0;font-size:12px;color:#166534;"><strong style="color:#166534;">Achados do paciente que geraram esta sugestão:</strong> ${esc(
+        Array.from(new Set(m.hits)).slice(0, 8).join(" • "),
+      )}</p>`
+    : "";
   return `
 <div class="sae-diag-card" data-diag-id="${esc(d.id)}" style="background:#f0fdf4;border-radius:10px;padding:14px;border:1px solid #bbf7d0;border-left:5px solid #ca8a04;display:flex;align-items:flex-start;justify-content:space-between;gap:15px;">
   <div style="flex:1;">
@@ -126,10 +308,13 @@ export function renderDiagnosticoCard(m: SaeMatch, idx: number): string {
         <input type="checkbox" class="sae-diag-select" data-diag-id="${esc(d.id)}" style="accent-color:#166534;width:16px;height:16px;"> Selecionar
       </label>
       <span style="font-size:11px;background:#fef08a;color:#854d0e;padding:2px 8px;border-radius:4px;font-weight:bold;">${esc(d.id)}</span>
+      ${confChip}
       ${matrizChip}
     </div>
     <h4 style="margin:0 0 6px 0;font-size:14px;color:#14532d;font-weight:bold;line-height:1.4;">${esc(d.diagnostico)}</h4>
+    ${achadosHtml}
     <p style="margin:0 0 4px 0;font-size:12px;color:#4b5563;"><strong style="color:#166534;">Evidências Clínicas:</strong> ${esc(d.sinais)}</p>
+
     ${d.criteriosEssenciais ? `<p style="margin:0 0 4px 0;font-size:12px;color:#4b5563;"><strong style="color:#166534;">Critérios essenciais:</strong> ${esc(d.criteriosEssenciais)}</p>` : ""}
     ${d.criteriosAssociados ? `<p style="margin:0 0 6px 0;font-size:12px;color:#4b5563;"><strong style="color:#166534;">Critérios associados:</strong> ${esc(d.criteriosAssociados)}</p>` : ""}
     <details style="margin:4px 0;">
