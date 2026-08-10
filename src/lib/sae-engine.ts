@@ -54,45 +54,197 @@ function tokens(s: string, minLen = 5): string[] {
     .filter((t) => t.length >= minLen && !STOP.has(t));
 }
 
-// Índice pré-calculado: keywords vindas SOMENTE de TAB. 4 (sinais) + TAB. 13 (palavras).
-const INDEX = SAE_BANCO.map((d) => {
-  const kw = new Set<string>();
-  tokens(d.sinais).forEach((t) => kw.add(t));
-  d.condutas.forEach((c) => tokens(c.palavras || "").forEach((t) => kw.add(t)));
-  const phrases = norm(d.sinais)
+// ---------- Remoção de negações ----------
+// "nega dispneia", "sem febre", "ausência de edema" não podem contar a favor.
+const NEG_RE =
+  /\b(nega|negava|sem|ausencia de|ausente|nao apresenta|nao ha|nao refere|nao relata|descartad[oa])\b/g;
+
+function removerNegados(corpus: string): string {
+  let out = corpus;
+  let m: RegExpExecArray | null;
+  NEG_RE.lastIndex = 0;
+  const cortes: [number, number][] = [];
+  while ((m = NEG_RE.exec(corpus))) {
+    const inicio = m.index;
+    // janela de 4 palavras após a negação
+    const resto = corpus.slice(m.index + m[0].length);
+    const janela = resto.split(/\s+/).slice(0, 5).join(" ");
+    cortes.push([inicio, m.index + m[0].length + janela.length]);
+  }
+  for (let i = cortes.length - 1; i >= 0; i--) {
+    out = out.slice(0, cortes[i][0]) + " " + out.slice(cortes[i][1]);
+  }
+  return out;
+}
+
+// ---------- Índice por coluna ----------
+type Entrada = {
+  d: SaeDiagnostico;
+  essenciais: string[]; // TAB. 5 — critérios essenciais (ou TAB. 4 quando vazia)
+  temEssenciais: boolean;
+  evidencias: string[]; // TAB. 4
+  chaves: string[]; // TAB. 13
+  frasesEssenciais: string[];
+  frasesEvidencia: string[];
+};
+
+function frasesDe(texto: string, minLen = 8): string[] {
+  return norm(texto)
     .split(/[;.,]/)
     .map((p) => p.trim())
-    .filter((p) => p.length >= 6);
-  return { d, keywords: Array.from(kw), phrases };
+    .filter((p) => p.length >= minLen);
+}
+
+const INDEX: Entrada[] = SAE_BANCO.map((d) => {
+  const evidencias = Array.from(new Set(tokens(d.sinais)));
+  const essTxt = (d.criteriosEssenciais || "").trim();
+  const essenciais = Array.from(new Set(tokens(essTxt || d.sinais)));
+  const chaves = Array.from(
+    new Set(d.condutas.flatMap((c) => tokens(c.palavras || ""))),
+  );
+  return {
+    d,
+    essenciais,
+    temEssenciais: !!essTxt,
+    evidencias,
+    chaves,
+    frasesEssenciais: frasesDe(essTxt || d.sinais),
+    frasesEvidencia: frasesDe(d.sinais),
+  };
 });
 
-export type SaeMatch = { diag: SaeDiagnostico; score: number; hits: string[] };
+// Peso por especificidade: termo presente em muitos diagnósticos vale pouco.
+const DF = new Map<string, number>();
+for (const e of INDEX) {
+  for (const t of new Set([...e.essenciais, ...e.evidencias, ...e.chaves])) {
+    DF.set(t, (DF.get(t) || 0) + 1);
+  }
+}
+const TOTAL_D = INDEX.length || 1;
+function peso(t: string): number {
+  const df = DF.get(t) || 1;
+  return Math.log(1 + TOTAL_D / df);
+}
 
-export function matchDiagnosticos(corpusRaw: string, maxResults = 15): SaeMatch[] {
-  const corpus = norm(corpusRaw);
+const PESO_MAX = Math.log(1 + TOTAL_D);
+
+function achouTermo(corpus: string, t: string): boolean {
+  return new RegExp(`(^|[^a-z0-9])${t}([^a-z0-9]|$)`).test(corpus);
+}
+
+export type SaeMatch = {
+  diag: SaeDiagnostico;
+  score: number;
+  hits: string[];
+  confianca?: "Alta" | "Média" | "Baixa";
+};
+
+export type SaePerfil = { idade?: string; sexo?: string; setor?: string };
+
+export function matchDiagnosticos(
+  corpusRaw: string,
+  maxResults = 10,
+  perfil?: SaePerfil,
+): SaeMatch[] {
+  const corpus = removerNegados(norm(corpusRaw));
   if (!corpus.trim()) return [];
-  const results: SaeMatch[] = [];
-  for (const { d, keywords, phrases } of INDEX) {
+
+  const brutos: SaeMatch[] = [];
+  for (const e of INDEX) {
     const hits: string[] = [];
+    let essHits = 0;
     let score = 0;
-    for (const p of phrases) {
-      if (p.length >= 8 && corpus.includes(p)) {
-        score += 3;
+
+    for (const p of e.frasesEssenciais) {
+      if (corpus.includes(p)) {
+        essHits++;
+        score += 4 * PESO_MAX;
         hits.push(p);
       }
     }
-    for (const k of keywords) {
-      const re = new RegExp(`(^|[^a-z0-9])${k}([^a-z0-9]|$)`);
-      if (re.test(corpus)) {
-        score += 1;
-        hits.push(k);
+    for (const t of e.essenciais) {
+      if (achouTermo(corpus, t)) {
+        essHits++;
+        score += 3 * peso(t);
+        hits.push(t);
       }
     }
-    if (score > 0) results.push({ diag: d, score, hits });
+    // Gate rigoroso: sem critério essencial presente, a hipótese não é sugerida.
+    if (essHits === 0) continue;
+
+    for (const p of e.frasesEvidencia) {
+      if (corpus.includes(p) && !hits.includes(p)) {
+        score += 2 * PESO_MAX;
+        hits.push(p);
+      }
+    }
+    for (const t of e.evidencias) {
+      if (!hits.includes(t) && achouTermo(corpus, t)) {
+        score += 1.5 * peso(t);
+        hits.push(t);
+      }
+    }
+    for (const t of e.chaves) {
+      if (!hits.includes(t) && achouTermo(corpus, t)) {
+        score += 0.5 * peso(t);
+        hits.push(t);
+      }
+    }
+
+    // Normaliza pelo tamanho do diagnóstico para não favorecer linhas longas.
+    const tamanho = e.essenciais.length + e.evidencias.length + e.chaves.length;
+    score = score / Math.log(2 + tamanho);
+
+    brutos.push({ diag: e.d, score, hits: Array.from(new Set(hits)) });
   }
-  results.sort((a, b) => b.score - a.score);
-  return results.slice(0, maxResults);
+
+  if (!brutos.length) return [];
+
+  const filtrados = filtrarPorContexto(brutos, perfil);
+  if (!filtrados.length) return [];
+
+  filtrados.sort((a, b) => b.score - a.score);
+  const melhor = filtrados[0].score;
+  const corte = melhor * 0.6;
+
+  return filtrados
+    .filter((m) => m.score >= corte)
+    .slice(0, maxResults)
+    .map((m) => ({
+      ...m,
+      confianca:
+        m.score >= melhor * 0.85 ? "Alta" : m.score >= melhor * 0.7 ? "Média" : "Baixa",
+    }));
 }
+
+// ---------- Filtro por contexto do paciente ----------
+const MARCA_GESTANTE = /(gestant|gravid|obstetric|puerper|parto|pre-?natal|lactant)/;
+const MARCA_NEONATAL = /(neonat|recem-?nascid|\brn\b|prematur)/;
+const MARCA_PEDIATRICA = /(pediatric|criativa|crianc|lactente|escolar|infant|adolescent)/;
+const MARCA_IDOSO = /(idos|geriatric|senil)/;
+
+export function filtrarPorContexto(matches: SaeMatch[], perfil?: SaePerfil): SaeMatch[] {
+  if (!perfil) return matches;
+  const idadeNum = Number(String(perfil.idade || "").replace(/[^0-9]/g, ""));
+  const idade = Number.isFinite(idadeNum) && idadeNum > 0 ? idadeNum : null;
+  const sexo = norm(perfil.sexo || "");
+  const masculino = /^m/.test(sexo) || sexo.includes("masculin");
+  const setor = norm(perfil.setor || "");
+
+  return matches.filter((m) => {
+    const txt = norm(`${m.diag.diagnostico} ${m.diag.matriz || ""} ${m.diag.eixo || ""}`);
+    if (MARCA_GESTANTE.test(txt)) {
+      if (masculino) return false;
+      if (idade !== null && (idade < 10 || idade > 60)) return false;
+      if (setor && /(uti neonatal|geriatri|pediatri)/.test(setor)) return false;
+    }
+    if (MARCA_NEONATAL.test(txt) && idade !== null && idade > 1) return false;
+    if (MARCA_PEDIATRICA.test(txt) && idade !== null && idade >= 18) return false;
+    if (MARCA_IDOSO.test(txt) && idade !== null && idade < 60) return false;
+    return true;
+  });
+}
+
 
 // ---------- HTML helpers ----------
 
