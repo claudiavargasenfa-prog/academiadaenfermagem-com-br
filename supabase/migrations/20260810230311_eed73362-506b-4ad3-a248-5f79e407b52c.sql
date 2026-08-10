@@ -1,0 +1,2 @@
+ALTER TABLE public.profiles DROP CONSTRAINT IF EXISTS profiles_categoria_check;
+ALTER TABLE public.profiles ADD CONSTRAINT profiles_categoria_check CHECK (categoria IS NULL OR categoria = ANY (ARRAY['academico'::text,'tecnico'::text,'tecnico-estudante'::text,'enfermeiro'::text]));
