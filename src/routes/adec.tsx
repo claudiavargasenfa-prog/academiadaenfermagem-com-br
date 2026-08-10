@@ -262,7 +262,6 @@ function AdecPage() {
   const textsQ = useAppTexts();
   const t = (k: string, fb: string) => textsQ.data?.[`vendas.${k}`] ?? fb;
 
-  const getPlan = (slug: string) => (plansQ.data ?? []).find((p) => p.slug === slug);
   const isSubscribed = (slug: string) => {
     const s = (subsQ.data ?? []).find((x) => x.plan_slug === slug);
     return !!s && (s.status === "active" || s.status === "trial");
