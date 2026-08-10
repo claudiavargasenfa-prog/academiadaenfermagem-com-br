@@ -494,11 +494,14 @@ const SINAIS_TERMOS: Set<string> = (() => {
 })();
 
 function segmentar(texto: string): string[] {
-  return (texto || "")
+  // protege decimais (38,5 / 38.5) para não quebrar a frase no meio do número
+  const protegido = (texto || "").replace(/(\d)[.,](\d)/g, "$1\u0001$2");
+  return protegido
     .split(/[\n;.,]+|(?:\s+e\s+)(?=(?:com|sem|apresenta|refere|queixa))/gi)
-    .map((s) => s.replace(/\s+/g, " ").trim())
+    .map((s) => s.replace(/\u0001/g, ",").replace(/\s+/g, " ").trim())
     .filter((s) => s.length >= 3);
 }
+
 
 function segmentoEhSinal(seg: string): boolean {
   const alvo = norm(seg);
