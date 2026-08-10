@@ -119,15 +119,14 @@ export function TrialCountdownBanner() {
           <p className="text-sm font-extrabold leading-tight">{s.title}</p>
           <p className="mt-0.5 line-clamp-2 text-xs opacity-95">{s.body}</p>
         </div>
-        {checkoutUrl ? (
-          <a
-            href={checkoutUrl}
-            target="_blank"
-            rel="noreferrer"
+        {planoSlug ? (
+          <Link
+            to="/planos/$slug"
+            params={{ slug: planoSlug }}
             className="shrink-0 inline-flex items-center gap-1 rounded-lg bg-white px-3 py-1.5 text-xs font-extrabold text-foreground shadow hover:brightness-95"
           >
-            {s.cta} <ExternalLink className="h-3 w-3" />
-          </a>
+            {s.cta}
+          </Link>
         ) : null}
         {stage !== "red" ? (
           <button
