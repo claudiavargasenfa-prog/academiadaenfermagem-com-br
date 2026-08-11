@@ -701,6 +701,7 @@ export type Database = {
           id: string
           is_online: boolean | null
           last_seen_at: string | null
+          meta_cr_sent_at: string | null
           phone: string | null
           updated_at: string
         }
@@ -712,6 +713,7 @@ export type Database = {
           id: string
           is_online?: boolean | null
           last_seen_at?: string | null
+          meta_cr_sent_at?: string | null
           phone?: string | null
           updated_at?: string
         }
@@ -723,6 +725,7 @@ export type Database = {
           id?: string
           is_online?: boolean | null
           last_seen_at?: string | null
+          meta_cr_sent_at?: string | null
           phone?: string | null
           updated_at?: string
         }
