@@ -60,25 +60,63 @@ function TrilhaPage() {
   const adminQ = useIsAdmin();
   const isAdminUser = !!adminQ.data;
 
-  // Meta Pixel: CompleteRegistration só após e-mail confirmado, uma única vez.
+  // Meta Pixel: CompleteRegistration só após e-mail confirmado, uma única vez por conta.
   useEffect(() => {
     let cancelled = false;
-    (async () => {
+    let done = false;
+
+    const tentar = async () => {
+      if (done || cancelled) return;
       const { data, error } = await supabase.auth.getUser();
       if (cancelled || error) return;
       const user = data.user;
       if (!user?.email_confirmed_at) return;
-      const DAY = 24 * 60 * 60 * 1000;
+
       const confirmedAt = new Date(user.email_confirmed_at).getTime();
-      const createdAt = user.created_at ? new Date(user.created_at).getTime() : 0;
-      const recente = Date.now() - Math.max(confirmedAt, createdAt) < DAY;
-      if (!recente) return;
-      trackOnce("CompleteRegistration", `adec_cr_${user.id}`);
-    })();
+      const createdAt = user.created_at ? new Date(user.created_at).getTime() : confirmedAt;
+      // Confirmação real: houve intervalo entre criar a conta e confirmar o e-mail.
+      if (confirmedAt - createdAt < 2000) return;
+      // Janela de 7 dias para evitar conversões falsas de contas antigas.
+      const SEVEN_DAYS = 7 * 24 * 60 * 60 * 1000;
+      if (Date.now() - confirmedAt > SEVEN_DAYS) return;
+
+      // Marca persistente no banco: vale em qualquer navegador/aparelho.
+      const { data: prof } = await supabase
+        .from("profiles")
+        .select("meta_cr_sent_at")
+        .eq("id", user.id)
+        .maybeSingle();
+      if (cancelled) return;
+      if ((prof as { meta_cr_sent_at?: string | null } | null)?.meta_cr_sent_at) {
+        done = true;
+        return;
+      }
+
+      const enviado = trackOnce("CompleteRegistration", `adec_cr_${user.id}`, {
+        eventID: `cr_${user.id}`,
+      });
+      done = true;
+      if (enviado) {
+        await supabase
+          .from("profiles")
+          .update({ meta_cr_sent_at: new Date().toISOString() })
+          .eq("id", user.id);
+      }
+    };
+
+    void tentar();
+    const { data: sub } = supabase.auth.onAuthStateChange((event) => {
+      if (event === "SIGNED_IN" || event === "INITIAL_SESSION" || event === "USER_UPDATED") {
+        void tentar();
+      }
+    });
+
     return () => {
       cancelled = true;
+      sub.subscription.unsubscribe();
     };
   }, []);
+
 
   if (appQ.isPending || appQ.isFetching || !appQ.isFetched) {
     return (
