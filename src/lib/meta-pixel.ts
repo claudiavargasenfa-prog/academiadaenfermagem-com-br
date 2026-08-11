@@ -32,8 +32,9 @@ export function ensurePixel(): void {
   })(window, document, "script", "https://connect.facebook.net/en_US/fbevents.js");
   /* eslint-enable */
 
-  window.fbq?.("init", PIXEL_ID);
-  window.fbq?.("track", "PageView");
+  const fbq = (window as any).fbq as ((...a: unknown[]) => void) | undefined;
+  fbq?.("init", PIXEL_ID);
+  fbq?.("track", "PageView");
 }
 
 /** Dispara um evento apenas uma vez por chave (persistido no navegador). */
@@ -42,7 +43,7 @@ export function trackOnce(event: string, key: string): void {
   try {
     if (localStorage.getItem(key)) return;
     ensurePixel();
-    window.fbq?.("track", event);
+    (window as any).fbq?.("track", event);
     localStorage.setItem(key, new Date().toISOString());
   } catch {
     /* storage indisponível: não dispara para evitar duplicidade */
