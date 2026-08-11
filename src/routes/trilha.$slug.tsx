@@ -1,5 +1,8 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { trackOnce } from "@/lib/meta-pixel";
 import { ExternalLink, Lock, CheckCircle2, Sparkles, ArrowLeft, BookOpen } from "lucide-react";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
 import { BadgeList } from "@/components/Badges";
@@ -56,6 +59,26 @@ function TrilhaPage() {
   const plansQ = useQuery({ queryKey: ["subscription_plans"], queryFn: fetchSubscriptionPlans });
   const adminQ = useIsAdmin();
   const isAdminUser = !!adminQ.data;
+
+  // Meta Pixel: CompleteRegistration só após e-mail confirmado, uma única vez.
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const { data, error } = await supabase.auth.getUser();
+      if (cancelled || error) return;
+      const user = data.user;
+      if (!user?.email_confirmed_at) return;
+      const DAY = 24 * 60 * 60 * 1000;
+      const confirmedAt = new Date(user.email_confirmed_at).getTime();
+      const createdAt = user.created_at ? new Date(user.created_at).getTime() : 0;
+      const recente = Date.now() - Math.max(confirmedAt, createdAt) < DAY;
+      if (!recente) return;
+      trackOnce("CompleteRegistration", `adec_cr_${user.id}`);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   if (appQ.isPending || appQ.isFetching || !appQ.isFetched) {
     return (
