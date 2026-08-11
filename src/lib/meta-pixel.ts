@@ -8,7 +8,7 @@ declare global {
 }
 
 /** Carrega o Meta Pixel uma única vez (não duplica se já existir na página). */
-export function ensurePixel(): void {
+export function ensurePixel(options?: { pageView?: boolean }): void {
   if (typeof window === "undefined") return;
   if (window.fbq) return;
 
@@ -34,18 +34,24 @@ export function ensurePixel(): void {
 
   const fbq = (window as any).fbq as ((...a: unknown[]) => void) | undefined;
   fbq?.("init", PIXEL_ID);
-  fbq?.("track", "PageView");
+  if (options?.pageView !== false) fbq?.("track", "PageView");
 }
 
-/** Dispara um evento apenas uma vez por chave (persistido no navegador). */
-export function trackOnce(event: string, key: string): void {
-  if (typeof window === "undefined") return;
+/** Dispara um evento apenas uma vez por chave (cache local no navegador). */
+export function trackOnce(event: string, key: string, opts?: { eventID?: string }): boolean {
+  if (typeof window === "undefined") return false;
   try {
-    if (localStorage.getItem(key)) return;
-    ensurePixel();
-    (window as any).fbq?.("track", event);
+    if (localStorage.getItem(key)) return false;
+  } catch {
+    /* storage indisponível: segue e tenta disparar */
+  }
+  ensurePixel({ pageView: false });
+  (window as any).fbq?.("track", event, {}, opts?.eventID ? { eventID: opts.eventID } : undefined);
+  try {
     localStorage.setItem(key, new Date().toISOString());
   } catch {
-    /* storage indisponível: não dispara para evitar duplicidade */
+    /* ignora */
   }
+  return true;
 }
+
