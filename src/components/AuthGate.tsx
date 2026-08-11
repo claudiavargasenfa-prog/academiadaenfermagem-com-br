@@ -185,16 +185,8 @@ export function AuthScreen({ cadastroSlug: forcedCadastroSlug }: { cadastroSlug?
         if (error) throw error;
       }
     } catch (err) {
-      const e = err as Error;
-      const friendly =
-        e.message?.includes("Invalid login")
-          ? "E-mail ou senha incorretos."
-          : e.message?.includes("already registered")
-          ? "Este e-mail já está cadastrado. Tente fazer login."
-          : e.message?.includes("at least")
-          ? "A senha deve ter pelo menos 6 caracteres."
-          : e.message || "Não foi possível concluir.";
-      setMsg({ type: "error", text: friendly });
+      setMsg({ type: "error", text: traduzirErro(err) });
+
     } finally {
       setBusy(false);
     }
