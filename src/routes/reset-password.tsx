@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { traduzirErro } from "@/lib/auth-errors";
 import logoAsset from "@/assets/logo.png.asset.json";
 
 export const Route = createFileRoute("/reset-password")({
@@ -61,7 +62,7 @@ function ResetPasswordPage() {
     if (code) {
       supabase.auth.exchangeCodeForSession(code).then(({ data, error }) => {
         if (!error && data.session) finish(true);
-        else if (error) finish(false, error.message);
+        else if (error) finish(false, traduzirErro(error));
       });
     }
 
@@ -95,7 +96,7 @@ function ResetPasswordPage() {
     const { error } = await supabase.auth.updateUser({ password });
     setBusy(false);
     if (error) {
-      setMsg({ type: "error", text: error.message });
+      setMsg({ type: "error", text: traduzirErro(error) });
       return;
     }
     setMsg({ type: "info", text: "Senha redefinida! Redirecionando..." });
@@ -112,7 +113,7 @@ function ResetPasswordPage() {
     });
     setBusy(false);
     if (error) {
-      setMsg({ type: "error", text: error.message });
+      setMsg({ type: "error", text: traduzirErro(error) });
     } else {
       setMsg({
         type: "info",
