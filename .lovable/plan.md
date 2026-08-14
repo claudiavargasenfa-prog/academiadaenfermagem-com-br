@@ -31,8 +31,8 @@ O certificado atual é substituído pelo modelo enviado, mantendo tudo igual: mo
 
 ## Detalhes técnicos
 
-- Migração: coluna `codigo` (2 dígitos) em `apps`; coluna `codigo` (3 dígitos) em `mini_app_placements`, preenchida em ordem alfabética por academia; sequência `certificado_seq` iniciando em 99; alteração de `issue_certificate` para montar o código no novo formato.
-- Função `validar_certificado(_code text)` (security definer) exposta ao papel `anon`, devolvendo apenas nome, módulo, horas, data de emissão e código — sem expor `user_id` nem e-mail. Sem essa função a tabela `user_certificates` continua fechada por RLS.
+- Migração: coluna `codigo` (2 dígitos) em `apps`; coluna `codigo` (3 dígitos) em `mini_app_placements`, com numeração própria por academia; sequência `certificado_seq` iniciando em 99; colunas `app_slug` e `app_name` em `user_certificates` para guardar a academia; alteração de `issue_certificate` para montar o código no novo formato e registrar a academia.
+- Função `validar_certificado(_code text)` (security definer) exposta ao papel `anon`, devolvendo apenas nome, academia, módulo, horas, data de emissão e código — sem expor `user_id` nem e-mail. Sem essa função a tabela `user_certificates` continua fechada por RLS.
 - Nova rota `src/routes/validacao.tsx` com `head()` próprio (título, descrição, og/twitter).
 - Geração do QR Code via biblioteca leve `qrcode` (data URL embutida no HTML do certificado).
 - Ajuste do gerador de certificado em `src/components/conta/BeneficiosPlano.tsx` para o novo layout.
