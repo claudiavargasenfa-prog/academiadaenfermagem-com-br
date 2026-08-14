@@ -97,11 +97,12 @@ export default function BeneficiosPlano() {
       <div className="flex flex-wrap gap-6 items-start">
         <div 
           className="cursor-pointer space-y-2 group"
-          onClick={() => window.open("https://academiadaenfermagem.com.br/modelo-frente.png", "_blank")}
+          onClick={() => window.open("/modelo-frente.png", "_blank")}
         >
           <div className="relative overflow-hidden rounded-xl border-2 border-primary/20 shadow-md transition-transform group-hover:scale-[1.02] w-32 h-20 bg-white">
             <img 
-              src="https://academiadaenfermagem.com.br/modelo-frente.png?v=2" 
+              src="/modelo-frente.png" 
+
               alt="Modelo Frente" 
               className="w-full h-full object-cover"
               loading="eager"
@@ -122,11 +123,12 @@ export default function BeneficiosPlano() {
 
         <div 
           className="cursor-pointer space-y-2 group"
-          onClick={() => window.open("https://academiadaenfermagem.com.br/modelo-verso.png", "_blank")}
+          onClick={() => window.open("/modelo-verso.png", "_blank")}
         >
           <div className="relative overflow-hidden rounded-xl border-2 border-primary/20 shadow-md transition-transform group-hover:scale-[1.02] w-32 h-20 bg-white">
             <img 
-              src="https://academiadaenfermagem.com.br/modelo-verso.png?v=2" 
+              src="/modelo-verso.png" 
+
               alt="Modelo Verso" 
               className="w-full h-full object-cover"
               loading="eager"
