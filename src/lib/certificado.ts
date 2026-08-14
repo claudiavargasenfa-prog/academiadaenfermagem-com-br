@@ -68,7 +68,7 @@ export async function certificadoHtml(c: CertificadoDados) {
   .assin .nomea{font-family:'Great Vibes',cursive;font-size:26px;color:#0f3d28}
   .selo{width:126px;height:126px;border-radius:50%;background:radial-gradient(circle at 30% 25%,#f0d489,#b8912f);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(0,0,0,.18)}
   .selo .in{width:98px;height:98px;border-radius:50%;background:#0f3d28;border:2px solid #e8c874;color:#f0d489;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11px;font-weight:700;letter-spacing:.06em;line-height:1.5}
-  .codigo{position:absolute;left:0;right:0;bottom:16px;text-align:center;font-size:11px;color:#3d5a4b;z-index:5}
+  .codigo{position:absolute;left:50%;transform:translateX(-50%);bottom:16px;width:660px;text-align:center;font-size:11px;color:#3d5a4b;z-index:5}
   @media print{body{background:#fff;padding:0}.folha{box-shadow:none}}
 </style></head><body>
 <div class="folha">
