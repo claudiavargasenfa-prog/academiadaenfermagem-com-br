@@ -155,8 +155,15 @@ export default function BeneficiosPlano() {
           <p className="flex items-center gap-2 font-display text-lg font-black text-[#8a6d24]">
             <Award className="h-5 w-5 text-[#b8912f]" /> CERTIFICADOS 10H
           </p>
-          <div className="mt-2 rounded-lg bg-blue-600 p-3 text-sm font-bold text-white border border-blue-400 shadow-md">
-            🚀 NOVO MODELO DISPONÍVEL! Se você já emitiu, clique em "Abrir / salvar PDF" na lista azul abaixo para ver o novo certificado.
+          <div className="mt-2 flex gap-4 overflow-x-auto pb-2">
+            <div className="relative group cursor-pointer" onClick={() => window.open("https://763be538-2d93-4e4b-9706-e7e0e7a46979.lovable.app/modelo-frente.png", "_blank")}>
+              <img src="https://763be538-2d93-4e4b-9706-e7e0e7a46979.lovable.app/modelo-frente.png" alt="Modelo Frente" className="h-16 w-auto rounded border border-primary/20 shadow-sm" />
+              <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-[8px] text-white font-bold">FRENTE</div>
+            </div>
+            <div className="relative group cursor-pointer" onClick={() => window.open("https://31804b77-ed14-411a-8212-680482b84234.lovable.app/modelo-verso.png", "_blank")}>
+              <img src="https://31804b77-ed14-411a-8212-680482b84234.lovable.app/modelo-verso.png" alt="Modelo Verso" className="h-16 w-auto rounded border border-primary/20 shadow-sm" />
+              <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-[8px] text-white font-bold">VERSO</div>
+            </div>
           </div>
           <div className="mt-2 rounded-lg bg-primary/10 p-3 text-xs font-medium text-primary border border-primary/20">
             Dica: Os certificados emitidos aparecem logo abaixo do botão de emissão.
