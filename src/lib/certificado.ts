@@ -37,12 +37,12 @@ export async function certificadoHtml(c: CertificadoDados) {
   .folha{position:relative;width:1123px;height:794px;background:#eaf1e6;overflow:hidden;box-shadow:0 18px 50px rgba(0,0,0,.25)}
   .onda{position:absolute;width:470px;height:470px;border-radius:50% 50% 46% 54%}
   .o2{top:-300px;left:-210px;background:linear-gradient(135deg,#e8c874,#b8912f)}
-  .o1{top:-312px;left:-232px;background:linear-gradient(135deg,#0f3d28,#1c5c3b)}
+  .o1{top:-312px;left:-232px;background:linear-gradient(135deg,#0f3d28,#1c5c3b);z-index:2}
   .o4{bottom:-300px;right:-210px;background:linear-gradient(135deg,#e8c874,#b8912f)}
-  .o3{bottom:-312px;right:-232px;background:linear-gradient(135deg,#0f3d28,#1c5c3b)}
+  .o3{bottom:-312px;right:-232px;background:linear-gradient(135deg,#0f3d28,#1c5c3b);z-index:2}
   .moldura{position:absolute;inset:26px;border:2px solid #b8912f;z-index:3;pointer-events:none}
   .moldura:after{content:'';position:absolute;inset:9px;border:1px solid rgba(184,145,47,.45)}
-  .conteudo{position:relative;z-index:4;height:100%;padding:58px 90px;text-align:center;display:flex;flex-direction:column;align-items:center}
+  .conteudo{position:relative;z-index:4;height:100%;padding:52px 90px 74px;text-align:center;display:flex;flex-direction:column;align-items:center}
   .topo{display:flex;align-items:center;gap:18px;justify-content:center}
   .topo img{width:86px;height:86px;object-fit:contain}
   .marca{text-align:left;border-left:2px solid rgba(184,145,47,.6);padding-left:16px}
@@ -68,7 +68,7 @@ export async function certificadoHtml(c: CertificadoDados) {
   .assin .nomea{font-family:'Great Vibes',cursive;font-size:26px;color:#0f3d28}
   .selo{width:150px;height:150px;border-radius:50%;background:radial-gradient(circle at 30% 25%,#f0d489,#b8912f);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(0,0,0,.18)}
   .selo .in{width:118px;height:118px;border-radius:50%;background:#0f3d28;border:2px solid #e8c874;color:#f0d489;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11px;font-weight:700;letter-spacing:.06em;line-height:1.5}
-  .codigo{position:absolute;left:0;right:0;bottom:34px;text-align:center;font-size:11px;color:#3d5a4b;z-index:5}
+  .codigo{position:absolute;left:0;right:0;bottom:16px;text-align:center;font-size:11px;color:#3d5a4b;z-index:5}
   @media print{body{background:#fff;padding:0}.folha{box-shadow:none}}
 </style></head><body>
 <div class="folha">
