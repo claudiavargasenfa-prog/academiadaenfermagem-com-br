@@ -164,37 +164,6 @@ function MinhaContaPage() {
       
       <ComparativoUpgrade />
 
-      <section className="mt-6">
-
-        <h2 className="mb-3 font-display text-lg font-bold">Módulos Especializados Adquiridos</h2>
-        {Object.keys(access.extraAccessByApp).length === 0 ? (
-          <Card>
-            <p className="text-sm text-muted-foreground">
-              Você ainda não adquiriu nenhum módulo de especialização extra.{" "}
-              <Link to="/loja" className="font-semibold text-primary hover:underline">
-                Ver loja
-              </Link>
-              .
-            </p>
-          </Card>
-        ) : (
-          <div className="grid gap-3 sm:grid-cols-2">
-            {Object.entries(access.extraAccessByApp).map(([appId, expiresAt]) => {
-              const app = apps.find((a) => a.id === appId);
-              if (!app) return null;
-              const days = daysUntil(expiresAt);
-              return (
-                <div key={appId} className="glass rounded-2xl p-4">
-                  <p className="font-display text-base font-bold">{app.name}</p>
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    Expira em {new Date(expiresAt).toLocaleDateString("pt-BR")} ({days} dias)
-                  </p>
-                </div>
-              );
-            })}
-          </div>
-        )}
-      </section>
 
       <section className="mt-8">
         <h2 className="mb-3 font-display text-lg font-bold">Dúvidas sobre Certificados?</h2>
