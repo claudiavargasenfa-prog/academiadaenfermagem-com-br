@@ -4,6 +4,7 @@ import { Award, Gift } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { TRACKS } from "@/lib/access";
 import { abrirCertificado } from "@/lib/certificado";
+import { listMiniAppsCatalog } from "@/lib/catalog.functions";
 
 
 type Sub = {
@@ -44,8 +45,7 @@ async function fetchCerts(): Promise<Cert[]> {
 }
 
 async function fetchAccessibleMiniApps() {
-  const { data } = await supabase.rpc("list_mini_apps_catalog");
-  return (data ?? []) as { id: string; name: string }[];
+  return listMiniAppsCatalog();
 }
 
 
