@@ -217,7 +217,7 @@ export default function BeneficiosPlano() {
               disabled={!category}
               className="w-full rounded-xl border border-input bg-background px-3 py-2 text-sm focus:ring-2 focus:ring-primary outline-none transition-all disabled:opacity-50"
             >
-              <option value="">{category && themes.length === 0 ? "A ABA DO TEMA ESTÁ VAZIA VC PRECISA ADCIONAR TODOS OS TÍTULOS DOS MINIS APP, NELA" : "Selecione o tema..."}</option>
+              <option value="">{category && themes.length === 0 ? "ESTÁ TUDO COMO ESTAVA, SEM IMAGEM DE CERTIFICADO E SEM TEMAS..TA COMPLICADO VC HJ" : "Selecione o tema..."}</option>
               {themes.map((t) => (
                 <option key={t.id} value={t.name}>{t.name}</option>
               ))}
