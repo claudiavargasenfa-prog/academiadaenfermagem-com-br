@@ -101,7 +101,7 @@ export default function BeneficiosPlano() {
         >
           <div className="relative overflow-hidden rounded-xl border-2 border-primary/20 shadow-md transition-transform group-hover:scale-[1.02] w-32 h-20 bg-white">
             <img 
-              src="https://academiadaenfermagem.com.br/modelo-frente.png" 
+              src="https://academiadaenfermagem.com.br/modelo-frente.png?v=2" 
               alt="Modelo Frente" 
               className="w-full h-full object-cover"
               loading="eager"
