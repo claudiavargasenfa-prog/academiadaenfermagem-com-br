@@ -7,6 +7,17 @@ import { ExternalLink, Lock, CheckCircle2, Sparkles, ArrowLeft, BookOpen } from 
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
 import { BadgeList } from "@/components/Badges";
 import {
+  Award,
+  Sparkles as SparklesIcon,
+  X,
+} from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+  DialogClose,
+} from "@/components/ui/dialog";
+import {
   fetchMiniApps,
   fetchMyExtraAccess,
   fetchMyActiveSubscriptions,
@@ -240,6 +251,84 @@ function TrilhaPage() {
             </div>
           </section>
         ))
+      )}
+      {grouped.length > 0 && (
+        <section className="mt-12 overflow-hidden rounded-[2rem] border-2 border-[#b8912f] bg-white p-6 shadow-xl">
+          <div className="flex flex-col items-center text-center">
+            <div className="inline-flex items-center gap-2 rounded-full bg-[#0d3b2e] px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-[#f0d489]">
+              <Award className="h-4 w-4" /> Certificados reconhecidos
+            </div>
+            <p className="mt-4 max-w-2xl text-sm font-medium text-[#0b3229]/80">
+              Nossos certificados possuem validade em todo território nacional para comprovação de horas complementares e atualização profissional.
+            </p>
+            
+            <div className="mt-8 grid grid-cols-2 gap-4">
+              <div className="group relative">
+                <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-[#b8912f]">Frente (Modelo)</p>
+                <div className="overflow-hidden rounded-xl border border-[#b8912f]/30 shadow-sm transition-all hover:scale-[1.02] hover:shadow-md">
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <button className="relative block w-full outline-none">
+                        <img 
+                          src="https://id-preview--ee1abee9-28d3-4826-82bc-7387b3880d45.lovable.app/lovable-uploads/763be538-348e-4903-888f-013697669d72.png" 
+                          alt="Modelo Frente do Certificado ADEC" 
+                          className="h-auto w-full"
+                        />
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 transition-opacity group-hover:opacity-100">
+                          <SparklesIcon className="h-8 w-8 text-white" />
+                        </div>
+                      </button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-4xl border-none bg-transparent p-0 shadow-none sm:rounded-none">
+                      <div className="relative p-2">
+                        <img 
+                          src="https://id-preview--ee1abee9-28d3-4826-82bc-7387b3880d45.lovable.app/lovable-uploads/763be538-348e-4903-888f-013697669d72.png" 
+                          alt="Modelo Frente do Certificado ADEC" 
+                          className="h-auto w-full rounded-lg shadow-2xl"
+                        />
+                        <DialogClose className="absolute -top-10 right-0 text-white hover:text-white/80">
+                          <X className="h-8 w-8" />
+                        </DialogClose>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
+                </div>
+              </div>
+
+              <div className="group relative">
+                <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-[#b8912f]">Verso (Modelo)</p>
+                <div className="overflow-hidden rounded-xl border border-[#b8912f]/30 shadow-sm transition-all hover:scale-[1.02] hover:shadow-md">
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <button className="relative block w-full outline-none">
+                        <img 
+                          src="https://id-preview--ee1abee9-28d3-4826-82bc-7387b3880d45.lovable.app/lovable-uploads/31804b77-b9c9-4a0b-8d59-3d127c52367d.png" 
+                          alt="Modelo Verso do Certificado ADEC" 
+                          className="h-auto w-full"
+                        />
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 transition-opacity group-hover:opacity-100">
+                          <SparklesIcon className="h-8 w-8 text-white" />
+                        </div>
+                      </button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-4xl border-none bg-transparent p-0 shadow-none sm:rounded-none">
+                      <div className="relative p-2">
+                        <img 
+                          src="https://id-preview--ee1abee9-28d3-4826-82bc-7387b3880d45.lovable.app/lovable-uploads/31804b77-b9c9-4a0b-8d59-3d127c52367d.png" 
+                          alt="Modelo Verso do Certificado ADEC" 
+                          className="h-auto w-full rounded-lg shadow-2xl"
+                        />
+                        <DialogClose className="absolute -top-10 right-0 text-white hover:text-white/80">
+                          <X className="h-8 w-8" />
+                        </DialogClose>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
       )}
     </AppShell>
   );

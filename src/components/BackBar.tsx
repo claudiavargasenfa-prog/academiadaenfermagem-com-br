@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 const HIDE_EXACT = new Set([
   "/",
   "/loja",
-  "/adec",
   "/vendas",
   "/reset-password",
 ]);
