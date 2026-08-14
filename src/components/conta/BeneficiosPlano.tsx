@@ -57,6 +57,8 @@ export default function BeneficiosPlano() {
 
   const [bonus, setBonus] = useState("");
   const [miniAppId, setMiniAppId] = useState("");
+  const [theme, setTheme] = useState("");
+  const [hours, setHours] = useState("10");
   const [msg, setMsg] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
