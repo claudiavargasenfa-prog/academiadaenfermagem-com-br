@@ -42,32 +42,32 @@ export async function certificadoHtml(c: CertificadoDados) {
   .o3{bottom:-312px;right:-232px;background:linear-gradient(135deg,#0f3d28,#1c5c3b);z-index:2}
   .moldura{position:absolute;inset:26px;border:2px solid #b8912f;z-index:3;pointer-events:none}
   .moldura:after{content:'';position:absolute;inset:9px;border:1px solid rgba(184,145,47,.45)}
-  .conteudo{position:relative;z-index:4;height:100%;padding:52px 90px 74px;text-align:center;display:flex;flex-direction:column;align-items:center}
+  .conteudo{position:relative;z-index:4;height:100%;padding:40px 90px 58px;text-align:center;display:flex;flex-direction:column;align-items:center}
   .topo{display:flex;align-items:center;gap:18px;justify-content:center}
-  .topo img{width:86px;height:86px;object-fit:contain}
+  .topo img{width:74px;height:74px;object-fit:contain}
   .marca{text-align:left;border-left:2px solid rgba(184,145,47,.6);padding-left:16px}
   .marca .n{font-family:'Cormorant Garamond',serif;font-size:44px;font-weight:700;letter-spacing:.06em;line-height:1;color:#0f3d28}
   .marca .s{font-size:13px;font-weight:700;color:#0f3d28;line-height:1.25;margin-top:4px}
   .sub{font-size:11px;color:#a9822a;margin-top:10px;letter-spacing:.02em}
   .div{width:520px;height:1px;background:linear-gradient(90deg,transparent,#b8912f,transparent);margin:14px 0 6px}
-  h1{font-family:'Cormorant Garamond',serif;font-size:78px;letter-spacing:.06em;margin:6px 0 2px;color:#0d2e1f}
+  h1{font-family:'Cormorant Garamond',serif;font-size:66px;letter-spacing:.06em;margin:2px 0 0;color:#0d2e1f}
   .cert-linha{font-size:16px;color:#2a4739;margin-top:6px}
-  .nome{font-family:'Great Vibes',cursive;font-size:64px;color:#b8912f;line-height:1.25;margin:6px 0 2px}
+  .nome{font-family:'Great Vibes',cursive;font-size:54px;color:#b8912f;line-height:1.2;margin:2px 0 0}
   .regua{width:640px;height:1px;background:#b8912f;opacity:.6;margin:6px 0 16px;position:relative}
   .regua:after{content:'';position:absolute;left:50%;top:-4px;width:8px;height:8px;background:#b8912f;transform:translateX(-50%) rotate(45deg)}
-  .txt{font-size:17px;line-height:1.9;color:#20402f;max-width:760px}
+  .txt{font-size:16px;line-height:1.75;color:#20402f;max-width:760px}
   .txt strong{color:#0d2e1f}
   .academia{margin-top:6px;font-size:15px;font-weight:700;color:#0f3d28;letter-spacing:.04em;text-transform:uppercase}
-  .rodape{margin-top:auto;width:100%;display:flex;align-items:flex-end;justify-content:space-between}
-  .qr{border:1px solid #b8912f;border-radius:10px;padding:10px;background:#fff;text-align:center;width:150px}
-  .qr img{width:120px;height:120px;display:block;margin:6px auto 0}
+  .rodape{margin-top:auto;margin-bottom:14px;width:100%;display:flex;align-items:flex-end;justify-content:space-between}
+  .qr{border:1px solid #b8912f;border-radius:10px;padding:8px;background:#fff;text-align:center;width:128px}
+  .qr img{width:100px;height:100px;display:block;margin:6px auto 0}
   .qr span{font-size:9.5px;font-weight:700;letter-spacing:.08em;color:#0f3d28}
   .assin{text-align:center}
   .assin .pena{font-size:38px;color:#b8912f;line-height:1}
   .assin .linha{width:300px;height:1px;background:#0f3d28;opacity:.6;margin:8px auto 6px}
   .assin .nomea{font-family:'Great Vibes',cursive;font-size:26px;color:#0f3d28}
-  .selo{width:150px;height:150px;border-radius:50%;background:radial-gradient(circle at 30% 25%,#f0d489,#b8912f);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(0,0,0,.18)}
-  .selo .in{width:118px;height:118px;border-radius:50%;background:#0f3d28;border:2px solid #e8c874;color:#f0d489;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11px;font-weight:700;letter-spacing:.06em;line-height:1.5}
+  .selo{width:126px;height:126px;border-radius:50%;background:radial-gradient(circle at 30% 25%,#f0d489,#b8912f);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(0,0,0,.18)}
+  .selo .in{width:98px;height:98px;border-radius:50%;background:#0f3d28;border:2px solid #e8c874;color:#f0d489;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11px;font-weight:700;letter-spacing:.06em;line-height:1.5}
   .codigo{position:absolute;left:0;right:0;bottom:16px;text-align:center;font-size:11px;color:#3d5a4b;z-index:5}
   @media print{body{background:#fff;padding:0}.folha{box-shadow:none}}
 </style></head><body>
