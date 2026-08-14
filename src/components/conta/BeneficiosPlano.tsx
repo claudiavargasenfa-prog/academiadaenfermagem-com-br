@@ -93,18 +93,18 @@ export default function BeneficiosPlano() {
       <div className="flex flex-wrap gap-6 items-start">
         <div 
           className="cursor-pointer space-y-2 group"
-          onClick={() => window.open("https://763be538-2d93-4e4b-9706-e7e0e7a46979.lovable.app/modelo-frente.png", "_blank")}
+          onClick={() => window.open("https://academiadaenfermagem.com.br/modelo-frente.png", "_blank")}
         >
           <div className="relative overflow-hidden rounded-xl border-2 border-primary/20 shadow-md transition-transform group-hover:scale-[1.02] w-32 h-20 bg-white">
             <img 
-              src="https://763be538-2d93-4e4b-9706-e7e0e7a46979.lovable.app/modelo-frente.png" 
+              src="https://academiadaenfermagem.com.br/modelo-frente.png" 
               alt="Modelo Frente" 
               className="w-full h-full object-cover"
               loading="eager"
               decoding="sync"
               onError={(e) => {
                 const target = e.target as HTMLImageElement;
-                if (target.src.includes('lovable.app')) {
+                if (!target.src.includes('placeholder')) {
                   target.src = '/placeholder.svg';
                 }
               }}
@@ -118,18 +118,18 @@ export default function BeneficiosPlano() {
 
         <div 
           className="cursor-pointer space-y-2 group"
-          onClick={() => window.open("https://31804b77-ed14-411a-8212-680482b84234.lovable.app/modelo-verso.png", "_blank")}
+          onClick={() => window.open("https://academiadaenfermagem.com.br/modelo-verso.png", "_blank")}
         >
           <div className="relative overflow-hidden rounded-xl border-2 border-primary/20 shadow-md transition-transform group-hover:scale-[1.02] w-32 h-20 bg-white">
             <img 
-              src="https://31804b77-ed14-411a-8212-680482b84234.lovable.app/modelo-verso.png" 
+              src="https://academiadaenfermagem.com.br/modelo-verso.png" 
               alt="Modelo Verso" 
               className="w-full h-full object-cover"
               loading="eager"
               decoding="sync"
               onError={(e) => {
                 const target = e.target as HTMLImageElement;
-                if (target.src.includes('lovable.app')) {
+                if (!target.src.includes('placeholder')) {
                   target.src = '/placeholder.svg';
                 }
               }}
