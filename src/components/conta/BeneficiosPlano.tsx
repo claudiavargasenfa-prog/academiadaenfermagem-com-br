@@ -153,7 +153,7 @@ export default function BeneficiosPlano() {
             <Award className="h-24 w-24 text-[#b8912f]" />
           </div>
           <p className="flex items-center gap-2 font-display text-lg font-black text-[#8a6d24]">
-            <Award className="h-5 w-5 text-[#b8912f]" /> CERTIFICADOS DE 10 HORAS
+            <Award className="h-5 w-5 text-[#b8912f]" /> CERTIFICADOS 10H
           </p>
           <div className="mt-2 rounded-lg bg-blue-600 p-3 text-sm font-bold text-white border border-blue-400 shadow-md">
             🚀 NOVO MODELO DISPONÍVEL! Se você já emitiu, clique em "Abrir / salvar PDF" na lista azul abaixo para ver o novo certificado.
