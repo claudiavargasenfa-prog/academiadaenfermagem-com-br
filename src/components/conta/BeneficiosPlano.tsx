@@ -93,17 +93,17 @@ export default function BeneficiosPlano() {
       <div className="flex flex-wrap gap-6 items-start">
         <div 
           className="cursor-pointer space-y-2 group"
-          onClick={() => window.open("https://academiadaenfermagem-com-br.lovable.app/modelo-frente.png", "_blank")}
+          onClick={() => window.open("https://763be538-2d93-4e4b-9706-e7e0e7a46979.lovable.app/modelo-frente.png", "_blank")}
         >
-          <div className="relative overflow-hidden rounded-xl border-2 border-primary/20 shadow-md transition-transform group-hover:scale-[1.02]">
+          <div className="relative overflow-hidden rounded-xl border-2 border-primary/20 shadow-md transition-transform group-hover:scale-[1.02] w-32 h-20 bg-white">
             <img 
-              src="/modelo-frente.png" 
+              src="https://763be538-2d93-4e4b-9706-e7e0e7a46979.lovable.app/modelo-frente.png" 
               alt="Modelo Frente" 
-              className="h-32 w-auto object-contain"
+              className="w-full h-full object-cover"
               loading="lazy"
             />
             <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
-              <span className="text-[10px] font-black text-white uppercase tracking-widest">Ver Frente</span>
+              <span className="text-[10px] font-black text-white uppercase tracking-widest text-center px-1">Ver Frente</span>
             </div>
           </div>
           <p className="text-center text-[10px] font-bold text-muted-foreground uppercase">Frente</p>
@@ -111,17 +111,17 @@ export default function BeneficiosPlano() {
 
         <div 
           className="cursor-pointer space-y-2 group"
-          onClick={() => window.open("https://academiadaenfermagem-com-br.lovable.app/modelo-verso.png", "_blank")}
+          onClick={() => window.open("https://31804b77-ed14-411a-8212-680482b84234.lovable.app/modelo-verso.png", "_blank")}
         >
-          <div className="relative overflow-hidden rounded-xl border-2 border-primary/20 shadow-md transition-transform group-hover:scale-[1.02]">
+          <div className="relative overflow-hidden rounded-xl border-2 border-primary/20 shadow-md transition-transform group-hover:scale-[1.02] w-32 h-20 bg-white">
             <img 
-              src="/modelo-verso.png" 
+              src="https://31804b77-ed14-411a-8212-680482b84234.lovable.app/modelo-verso.png" 
               alt="Modelo Verso" 
-              className="h-32 w-auto object-contain bg-white"
+              className="w-full h-full object-cover"
               loading="lazy"
             />
             <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
-              <span className="text-[10px] font-black text-white uppercase tracking-widest">Ver Verso</span>
+              <span className="text-[10px] font-black text-white uppercase tracking-widest text-center px-1">Ver Verso</span>
             </div>
           </div>
           <p className="text-center text-[10px] font-bold text-muted-foreground uppercase">Verso</p>
