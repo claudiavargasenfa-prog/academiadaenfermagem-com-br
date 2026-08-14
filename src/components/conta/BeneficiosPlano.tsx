@@ -101,6 +101,7 @@ export default function BeneficiosPlano() {
               alt="Modelo Frente" 
               className="w-full h-full object-cover"
               loading="eager"
+              decoding="sync"
             />
             <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
               <span className="text-[10px] font-black text-white uppercase tracking-widest text-center px-1">Ver Frente</span>
@@ -119,6 +120,7 @@ export default function BeneficiosPlano() {
               alt="Modelo Verso" 
               className="w-full h-full object-cover"
               loading="eager"
+              decoding="sync"
             />
             <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
               <span className="text-[10px] font-black text-white uppercase tracking-widest text-center px-1">Ver Verso</span>
