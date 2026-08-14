@@ -24,13 +24,15 @@ Os números dos mini apps ficam gravados no banco e visíveis no painel de admin
 
 ### 3. Novo modelo de certificado (2ª imagem)
 O certificado atual é substituído pelo modelo enviado, mantendo tudo igual: moldura dourada com ondas verdes, logotipo ADEC no topo, "CERTIFICADO", nome do aluno em manuscrito dourado, texto "concluiu com êxito o módulo técnico de especialização em ...", carga horária, selo "QUALIDADE PREMIUM ADEC", assinatura ADEC com a pena e o QR Code de validação no canto inferior esquerdo.
+- **O nome da academia aparece no certificado** (ex.: "Academia do Acadêmico", "Academia do Enfermeiro", "Academia do Estudante de Técnico em Enfermagem", "Academia do Técnico em Enfermagem"), logo abaixo do nome do módulo. Assim nunca há confusão entre dois certificados que tenham o mesmo número de mini app em academias diferentes.
+- O nome da academia também aparece na página `/validacao`, como um campo a mais no bloco "DADOS DO CERTIFICADO".
 - O QR Code aponta para `https://academiadaenfermagem.com.br/validacao?codigo=...`.
 - Continua abrindo em nova aba para imprimir ou salvar em PDF, em formato paisagem.
 
 ## Detalhes técnicos
 
-- Migração: coluna `codigo` (2 dígitos) em `apps`; coluna `codigo` (3 dígitos) em `mini_app_placements`, preenchida em ordem alfabética por academia; sequência `certificado_seq` iniciando em 99; alteração de `issue_certificate` para montar o código no novo formato.
-- Função `validar_certificado(_code text)` (security definer) exposta ao papel `anon`, devolvendo apenas nome, módulo, horas, data de emissão e código — sem expor `user_id` nem e-mail. Sem essa função a tabela `user_certificates` continua fechada por RLS.
+- Migração: coluna `codigo` (2 dígitos) em `apps`; coluna `codigo` (3 dígitos) em `mini_app_placements`, com numeração própria por academia; sequência `certificado_seq` iniciando em 99; colunas `app_slug` e `app_name` em `user_certificates` para guardar a academia; alteração de `issue_certificate` para montar o código no novo formato e registrar a academia.
+- Função `validar_certificado(_code text)` (security definer) exposta ao papel `anon`, devolvendo apenas nome, academia, módulo, horas, data de emissão e código — sem expor `user_id` nem e-mail. Sem essa função a tabela `user_certificates` continua fechada por RLS.
 - Nova rota `src/routes/validacao.tsx` com `head()` próprio (título, descrição, og/twitter).
 - Geração do QR Code via biblioteca leve `qrcode` (data URL embutida no HTML do certificado).
 - Ajuste do gerador de certificado em `src/components/conta/BeneficiosPlano.tsx` para o novo layout.
