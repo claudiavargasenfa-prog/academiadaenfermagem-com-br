@@ -100,9 +100,7 @@ export default function BeneficiosPlano() {
               src="/modelo-frente.png" 
               alt="Modelo Frente" 
               className="h-32 w-auto object-contain"
-              onError={(e) => {
-                e.currentTarget.src = "https://763be538-2d93-4e4b-9706-e7e0e7a46979.lovable.app/modelo-frente.png";
-              }}
+              loading="lazy"
             />
             <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
               <span className="text-[10px] font-black text-white uppercase tracking-widest">Ver Frente</span>
@@ -120,9 +118,7 @@ export default function BeneficiosPlano() {
               src="/modelo-verso.png" 
               alt="Modelo Verso" 
               className="h-32 w-auto object-contain bg-white"
-              onError={(e) => {
-                e.currentTarget.src = "https://31804b77-ed14-411a-8212-680482b84234.lovable.app/modelo-verso.png";
-              }}
+              loading="lazy"
             />
             <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
               <span className="text-[10px] font-black text-white uppercase tracking-widest">Ver Verso</span>
