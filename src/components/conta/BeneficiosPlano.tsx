@@ -103,7 +103,7 @@ export default function BeneficiosPlano() {
 
   return (
     <section className="mt-6 space-y-4">
-      <h2 className="font-display text-lg font-bold">Benefícios do seu plano</h2>
+      <h2 className="font-display text-lg font-bold">Emissão de Certificados</h2>
 
       {anual && (
         <div className="glass rounded-2xl p-4">
@@ -217,6 +217,115 @@ export default function BeneficiosPlano() {
           )}
         </div>
       )}
+
+      <div className="glass rounded-2xl p-6 border-2 border-primary/20 bg-white/50 space-y-4">
+        <h3 className="font-display text-base font-bold flex items-center gap-2">
+          <Award className="h-5 w-5 text-primary" /> Emissão de Certificado Avulso
+        </h3>
+        <p className="text-sm text-muted-foreground leading-relaxed">
+          Você pode solicitar um certificado referente aos estudos realizados em seu respectivo aplicativo. 
+          Informe o tema estudado, escolha a carga horária e realize o pagamento. 
+          Após a confirmação do pagamento, seu certificado será gerado e liberado automaticamente.
+        </p>
+
+        <div className="space-y-4 pt-2">
+          <div className="space-y-1.5">
+            <label className="text-xs font-bold uppercase text-muted-foreground">Tema estudado</label>
+            <input 
+              type="text"
+              placeholder="Ex: Punção Venosa Periférica"
+              value={theme}
+              onChange={(e) => setTheme(e.target.value)}
+              className="w-full rounded-xl border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            />
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="text-xs font-bold uppercase text-muted-foreground">Escolha a carga horária</label>
+            <div className="grid grid-cols-2 gap-2">
+              {[10, 20, 30, 40].map((h) => (
+                <button
+                  key={h}
+                  type="button"
+                  onClick={() => setHours(h.toString())}
+                  className={`flex items-center justify-between rounded-xl border p-3 text-left transition-all ${
+                    hours === h.toString() 
+                      ? "border-primary bg-primary/5 ring-1 ring-primary" 
+                      : "border-input hover:bg-muted"
+                  }`}
+                >
+                  <span className="text-sm font-bold">{h} horas</span>
+                  <span className="text-xs font-black text-primary">R$ {h},00</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <button
+            type="button"
+            disabled={!theme || busy}
+            onClick={async () => {
+              setBusy(true);
+              try {
+                const { data: sessionData } = await supabase.auth.getSession();
+                const user = sessionData.session?.user;
+                if (!user) {
+                  setMsg("Você precisa estar logado para emitir um certificado.");
+                  return;
+                }
+
+                const amountCents = parseInt(hours) * 100;
+                
+                // Cria o pedido no banco
+                const { data: created, error } = await supabase
+                  .from("orders")
+                  .insert({
+                    user_id: user.id,
+                    plan_slug: "certificado-avulso",
+                    amount_cents: amountCents,
+                    payment_method: "mercadopago",
+                    status: "pending",
+                    metadata: {
+                      type: "certificate",
+                      theme: theme,
+                      hours: parseInt(hours),
+                      email: user.email,
+                    },
+                  })
+                  .select("id")
+                  .single();
+
+                if (error || !created?.id) {
+                  throw new Error(error?.message || "Erro ao criar pedido");
+                }
+
+                // Links de checkout conforme solicitado: R$ 10, 20, 30, 40
+                // Mapeamento direto baseado no valor
+                const mpLinks: Record<string, string> = {
+                  "10": "https://mpago.la/2KxS8d7", // Exemplo - deve ser trocado pelos reais se existirem
+                  "20": "https://mpago.la/2KxS8d7",
+                  "30": "https://mpago.la/2KxS8d7",
+                  "40": "https://mpago.la/2KxS8d7",
+                };
+
+                // Como não temos os links específicos ainda, usamos o checkout genérico ou o que estiver disponível
+                // Na falta de links específicos no mp-links.ts para certificados, redirecionamos para a tela de checkout
+                // que lidará com a criação do link se necessário ou usaremos uma URL padrão de pagamento.
+                
+                window.location.href = `https://link.mercadopago.com.br/adec-pagamentos?amount=${amountCents / 100}&description=Certificado+${encodeURIComponent(theme)}&external_reference=${created.id}`;
+                
+              } catch (err: any) {
+                setMsg("Erro ao processar: " + err.message);
+              } finally {
+                setBusy(false);
+              }
+            }}
+            className="w-full rounded-xl bg-primary py-4 text-sm font-black text-primary-foreground shadow-lg transition-transform active:scale-[0.98] disabled:opacity-50"
+          >
+            {busy ? "PROCESSANDO..." : "EMITIR CERTIFICADO"}
+          </button>
+        </div>
+      </div>
 
       {msg && <p className="text-xs font-semibold text-primary">{msg}</p>}
     </section>
