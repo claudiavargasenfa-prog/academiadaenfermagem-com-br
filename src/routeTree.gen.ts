@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as VipRouteImport } from './routes/vip'
 import { Route as VendasRouteImport } from './routes/vendas'
+import { Route as ValidacaoRouteImport } from './routes/validacao'
 import { Route as UtiRouteImport } from './routes/uti'
 import { Route as SvPediatricoRouteImport } from './routes/sv-pediatrico'
 import { Route as SvGestanteRouteImport } from './routes/sv-gestante'
@@ -64,6 +65,11 @@ const VipRoute = VipRouteImport.update({
 const VendasRoute = VendasRouteImport.update({
   id: '/vendas',
   path: '/vendas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ValidacaoRoute = ValidacaoRouteImport.update({
+  id: '/validacao',
+  path: '/validacao',
   getParentRoute: () => rootRouteImport,
 } as any)
 const UtiRoute = UtiRouteImport.update({
@@ -324,6 +330,7 @@ export interface FileRoutesByFullPath {
   '/sv-gestante': typeof SvGestanteRoute
   '/sv-pediatrico': typeof SvPediatricoRoute
   '/uti': typeof UtiRoute
+  '/validacao': typeof ValidacaoRoute
   '/vendas': typeof VendasRoute
   '/vip': typeof VipRoute
   '/app/$slug': typeof AppSlugRouteWithChildren
@@ -372,6 +379,7 @@ export interface FileRoutesByTo {
   '/sv-gestante': typeof SvGestanteRoute
   '/sv-pediatrico': typeof SvPediatricoRoute
   '/uti': typeof UtiRoute
+  '/validacao': typeof ValidacaoRoute
   '/vendas': typeof VendasRoute
   '/vip': typeof VipRoute
   '/cadastro/$slug': typeof CadastroSlugRoute
@@ -420,6 +428,7 @@ export interface FileRoutesById {
   '/sv-gestante': typeof SvGestanteRoute
   '/sv-pediatrico': typeof SvPediatricoRoute
   '/uti': typeof UtiRoute
+  '/validacao': typeof ValidacaoRoute
   '/vendas': typeof VendasRoute
   '/vip': typeof VipRoute
   '/app/$slug': typeof AppSlugRouteWithChildren
@@ -470,6 +479,7 @@ export interface FileRouteTypes {
     | '/sv-gestante'
     | '/sv-pediatrico'
     | '/uti'
+    | '/validacao'
     | '/vendas'
     | '/vip'
     | '/app/$slug'
@@ -518,6 +528,7 @@ export interface FileRouteTypes {
     | '/sv-gestante'
     | '/sv-pediatrico'
     | '/uti'
+    | '/validacao'
     | '/vendas'
     | '/vip'
     | '/cadastro/$slug'
@@ -565,6 +576,7 @@ export interface FileRouteTypes {
     | '/sv-gestante'
     | '/sv-pediatrico'
     | '/uti'
+    | '/validacao'
     | '/vendas'
     | '/vip'
     | '/app/$slug'
@@ -614,6 +626,7 @@ export interface RootRouteChildren {
   SvGestanteRoute: typeof SvGestanteRoute
   SvPediatricoRoute: typeof SvPediatricoRoute
   UtiRoute: typeof UtiRoute
+  ValidacaoRoute: typeof ValidacaoRoute
   VendasRoute: typeof VendasRoute
   VipRoute: typeof VipRoute
   AppSlugRoute: typeof AppSlugRouteWithChildren
@@ -637,6 +650,13 @@ declare module '@tanstack/react-router' {
       path: '/vendas'
       fullPath: '/vendas'
       preLoaderRoute: typeof VendasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/validacao': {
+      id: '/validacao'
+      path: '/validacao'
+      fullPath: '/validacao'
+      preLoaderRoute: typeof ValidacaoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/uti': {
@@ -1011,6 +1031,7 @@ const rootRouteChildren: RootRouteChildren = {
   SvGestanteRoute: SvGestanteRoute,
   SvPediatricoRoute: SvPediatricoRoute,
   UtiRoute: UtiRoute,
+  ValidacaoRoute: ValidacaoRoute,
   VendasRoute: VendasRoute,
   VipRoute: VipRoute,
   AppSlugRoute: AppSlugRouteWithChildren,

@@ -3,6 +3,8 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Award, Gift } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { TRACKS } from "@/lib/access";
+import { abrirCertificado } from "@/lib/certificado";
+
 
 type Sub = {
   id: string;
@@ -21,6 +23,7 @@ type Cert = {
   student_name: string;
   hours: number;
   issued_at: string;
+  app_name: string | null;
 };
 
 async function fetchSubs(): Promise<Sub[]> {
@@ -35,7 +38,7 @@ async function fetchSubs(): Promise<Sub[]> {
 async function fetchCerts(): Promise<Cert[]> {
   const { data } = await supabase
     .from("user_certificates")
-    .select("id, code, mini_app_name, student_name, hours, issued_at")
+    .select("id, code, mini_app_name, student_name, hours, issued_at, app_name")
     .order("issued_at", { ascending: false });
   return (data ?? []) as unknown as Cert[];
 }
@@ -45,30 +48,6 @@ async function fetchAccessibleMiniApps() {
   return (data ?? []) as { id: string; name: string }[];
 }
 
-function abrirCertificado(c: Cert) {
-  const html = `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>Certificado ${c.code}</title>
-<style>
-body{font-family:Georgia,serif;margin:0;padding:48px;background:#f7fbf8;color:#0f2e22}
-.card{max-width:960px;margin:auto;border:10px double #b8912f;background:#fff;padding:56px;text-align:center}
-h1{font-size:34px;letter-spacing:.14em;margin:0 0 8px;color:#0f4c35}
-h2{font-size:15px;letter-spacing:.3em;text-transform:uppercase;color:#b8912f;margin:0 0 32px}
-.nome{font-size:30px;font-weight:bold;margin:24px 0}
-.txt{font-size:16px;line-height:1.7}
-.rodape{margin-top:44px;font-size:12px;color:#4b5f57}
-@media print{body{background:#fff;padding:0}}
-</style></head><body><div class="card">
-<h1>CERTIFICADO</h1><h2>Academia da Enfermagem · ADEC</h2>
-<p class="txt">Certificamos que</p>
-<p class="nome">${c.student_name}</p>
-<p class="txt">concluiu o módulo de estudo <strong>${c.mini_app_name}</strong>,<br>com carga horária de <strong>${c.hours} horas</strong>, na plataforma Academia da Enfermagem.</p>
-<p class="rodape">Emitido em ${new Date(c.issued_at).toLocaleDateString("pt-BR")} · Código de validação: <strong>${c.code}</strong><br>academiadaenfermagem.com.br</p>
-</div><script>window.print()</script></body></html>`;
-  const w = window.open("", "_blank");
-  if (w) {
-    w.document.write(html);
-    w.document.close();
-  }
-}
 
 export default function BeneficiosPlano() {
   const qc = useQueryClient();
