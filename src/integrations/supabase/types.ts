@@ -1356,16 +1356,40 @@ export type Database = {
         }
         Returns: boolean
       }
-      issue_certificate: {
-        Args: { _mini_app_id: string }
-        Returns: {
-          code: string
-          hours: number
-          issued_at: string
-          mini_app_name: string
-          student_name: string
-        }[]
+      internal_issue_certificate: {
+        Args: {
+          _custom_theme: string
+          _hours: number
+          _mini_app_id: string
+          _user_id: string
+        }
+        Returns: undefined
       }
+      issue_certificate:
+        | {
+            Args: { _mini_app_id: string }
+            Returns: {
+              code: string
+              hours: number
+              issued_at: string
+              mini_app_name: string
+              student_name: string
+            }[]
+          }
+        | {
+            Args: {
+              _custom_theme?: string
+              _hours?: number
+              _mini_app_id: string
+            }
+            Returns: {
+              code: string
+              hours: number
+              issued_at: string
+              mini_app_name: string
+              student_name: string
+            }[]
+          }
       list_mini_apps_catalog: {
         Args: never
         Returns: {

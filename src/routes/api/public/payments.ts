@@ -117,7 +117,7 @@ export const Route = createFileRoute("/api/public/payments")({
 
           const { data: order } = await supabaseAdmin
             .from("orders")
-            .select("id, user_id, plan_slug, status")
+            .select("id, user_id, plan_slug, status, metadata")
             .eq("id", orderId)
             .maybeSingle();
 
@@ -135,15 +135,28 @@ export const Route = createFileRoute("/api/public/payments")({
             .eq("status", "pending");
 
           if (order.user_id) {
-            const expiresAt = new Date();
-            expiresAt.setDate(expiresAt.getDate() + 30);
-            await supabaseAdmin.from("user_subscriptions").upsert({
-              user_id: order.user_id,
-              plan_slug: order.plan_slug,
-              status: "active",
-              expires_at: expiresAt.toISOString(),
-              updated_at: new Date().toISOString(),
-            });
+            if (order.metadata && (order.metadata as any).type === "certificate") {
+              // Certificado Avulso
+              const theme = (order.metadata as any).theme;
+              const hours = (order.metadata as any).hours;
+              await supabaseAdmin.rpc("internal_issue_certificate", {
+                _user_id: order.user_id,
+                _mini_app_id: "00000000-0000-0000-0000-000000000000", // ID dummy para customizado
+                _hours: hours,
+                _custom_theme: theme,
+              });
+            } else {
+              // Assinatura de Plano
+              const expiresAt = new Date();
+              expiresAt.setDate(expiresAt.getDate() + 30);
+              await supabaseAdmin.from("user_subscriptions").upsert({
+                user_id: order.user_id,
+                plan_slug: order.plan_slug,
+                status: "active",
+                expires_at: expiresAt.toISOString(),
+                updated_at: new Date().toISOString(),
+              });
+            }
           }
 
           return new Response(JSON.stringify({ received: true }), {
