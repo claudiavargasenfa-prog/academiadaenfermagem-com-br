@@ -24,6 +24,8 @@ Os números dos mini apps ficam gravados no banco e visíveis no painel de admin
 
 ### 3. Novo modelo de certificado (2ª imagem)
 O certificado atual é substituído pelo modelo enviado, mantendo tudo igual: moldura dourada com ondas verdes, logotipo ADEC no topo, "CERTIFICADO", nome do aluno em manuscrito dourado, texto "concluiu com êxito o módulo técnico de especialização em ...", carga horária, selo "QUALIDADE PREMIUM ADEC", assinatura ADEC com a pena e o QR Code de validação no canto inferior esquerdo.
+- **O nome da academia aparece no certificado** (ex.: "Academia do Acadêmico", "Academia do Enfermeiro", "Academia do Estudante de Técnico em Enfermagem", "Academia do Técnico em Enfermagem"), logo abaixo do nome do módulo. Assim nunca há confusão entre dois certificados que tenham o mesmo número de mini app em academias diferentes.
+- O nome da academia também aparece na página `/validacao`, como um campo a mais no bloco "DADOS DO CERTIFICADO".
 - O QR Code aponta para `https://academiadaenfermagem.com.br/validacao?codigo=...`.
 - Continua abrindo em nova aba para imprimir ou salvar em PDF, em formato paisagem.
 
