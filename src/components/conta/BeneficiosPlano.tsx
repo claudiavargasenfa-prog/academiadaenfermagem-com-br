@@ -4,6 +4,7 @@ import { Award, Gift } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { TRACKS } from "@/lib/access";
 import { abrirCertificado } from "@/lib/certificado";
+import { listMiniAppsCatalog } from "@/lib/catalog.functions";
 
 
 type Sub = {
@@ -44,8 +45,7 @@ async function fetchCerts(): Promise<Cert[]> {
 }
 
 async function fetchAccessibleMiniApps() {
-  const { data } = await supabase.rpc("list_mini_apps_catalog");
-  return (data ?? []) as { id: string; name: string }[];
+  return listMiniAppsCatalog();
 }
 
 
@@ -68,9 +68,10 @@ export default function BeneficiosPlano() {
 
   const themes = (miniQ.data ?? []).filter((app: any) => {
     if (!category) return false;
-    if (category === "ENFERMEIRO") return app.track_enfermeiro === true;
-    if (category === "ACADEMICO") return app.track_academico === true;
-    if (category === "TECNICO" || category === "TECNICO_ESTUDANTE") return app.track_tecnico === true;
+    const cat = category.toUpperCase();
+    if (cat === "ENFERMEIRO") return app.track_enfermeiro === true;
+    if (cat === "ACADEMICO") return app.track_academico === true;
+    if (cat === "TECNICO" || cat === "TECNICO_ESTUDANTE") return app.track_tecnico === true;
     return false;
   });
 
@@ -216,7 +217,7 @@ export default function BeneficiosPlano() {
               disabled={!category}
               className="w-full rounded-xl border border-input bg-background px-3 py-2 text-sm focus:ring-2 focus:ring-primary outline-none transition-all disabled:opacity-50"
             >
-              <option value="">Selecione o tema...</option>
+              <option value="">{category && themes.length === 0 ? "A ABA DO TEMA ESTÁ VAZIA VC PRECISA ADCIONAR TODOS OS TÍTULOS DOS MINIS APP, NELA" : "Selecione o tema..."}</option>
               {themes.map((t) => (
                 <option key={t.id} value={t.name}>{t.name}</option>
               ))}
