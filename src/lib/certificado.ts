@@ -35,11 +35,11 @@ export async function certificadoHtml(c: CertificadoDados) {
   *{box-sizing:border-box}
   body{margin:0;background:#e8ece7;font-family:'Montserrat',sans-serif;color:#123524;display:flex;justify-content:center;padding:20px}
   .folha{position:relative;width:1123px;height:794px;background:#eaf1e6;overflow:hidden;box-shadow:0 18px 50px rgba(0,0,0,.25)}
-  .onda{position:absolute;width:820px;height:820px;border-radius:48% 52% 44% 56%;}
-  .o1{top:-430px;left:-320px;background:linear-gradient(135deg,#0f3d28,#1c5c3b);}
-  .o2{top:-390px;left:-300px;background:linear-gradient(135deg,#e8c874,#b8912f);opacity:.95;transform:rotate(8deg) scale(.96)}
-  .o3{bottom:-450px;right:-330px;background:linear-gradient(135deg,#0f3d28,#1c5c3b)}
-  .o4{bottom:-410px;right:-310px;background:linear-gradient(135deg,#e8c874,#b8912f);opacity:.95;transform:rotate(-8deg) scale(.96)}
+  .onda{position:absolute;width:470px;height:470px;border-radius:50% 50% 46% 54%}
+  .o2{top:-300px;left:-210px;background:linear-gradient(135deg,#e8c874,#b8912f)}
+  .o1{top:-312px;left:-232px;background:linear-gradient(135deg,#0f3d28,#1c5c3b)}
+  .o4{bottom:-300px;right:-210px;background:linear-gradient(135deg,#e8c874,#b8912f)}
+  .o3{bottom:-312px;right:-232px;background:linear-gradient(135deg,#0f3d28,#1c5c3b)}
   .moldura{position:absolute;inset:26px;border:2px solid #b8912f;z-index:3;pointer-events:none}
   .moldura:after{content:'';position:absolute;inset:9px;border:1px solid rgba(184,145,47,.45)}
   .conteudo{position:relative;z-index:4;height:100%;padding:58px 90px;text-align:center;display:flex;flex-direction:column;align-items:center}
