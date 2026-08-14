@@ -153,12 +153,15 @@ export default function BeneficiosPlano() {
           <p className="flex items-center gap-2 font-display text-lg font-black text-[#8a6d24]">
             <Award className="h-5 w-5 text-[#b8912f]" /> CERTIFICADOS DE 10 HORAS
           </p>
+          <div className="mt-2 rounded-lg bg-primary/10 p-3 text-xs font-medium text-primary border border-primary/20">
+            Atenção: o certificado novo já está disponível abaixo! Basta clicar no botão azul "Abrir / salvar PDF" na lista de certificados emitidos.
+          </div>
           {allowed > 0 ? (
-            <p className="mt-1 text-sm text-muted-foreground">
+            <p className="mt-2 text-sm text-muted-foreground">
               Você tem <strong>{restantes}</strong> de {allowed} certificados disponíveis. Escolha o Mini App estudado.
             </p>
           ) : (
-            <p className="mt-1 text-sm text-muted-foreground">
+            <p className="mt-2 text-sm text-muted-foreground">
               Seu plano atual ainda não inclui certificados. Os planos trimestral, semestral e anual liberam de 1 a 4
               certificados de 10 horas por ano. Você também pode emitir avulso pelo checkout.
             </p>
@@ -199,9 +202,9 @@ export default function BeneficiosPlano() {
                   <button
                     type="button"
                     onClick={() => abrirCertificado(c)}
-                    className="rounded-lg bg-[#b8912f] px-3 py-1 font-bold text-white transition-colors hover:bg-[#8a6d24]"
+                    className="rounded-lg bg-[#2563eb] px-3 py-1 font-bold text-white transition-colors hover:bg-[#1d4ed8] shadow-sm flex items-center gap-2"
                   >
-                    Abrir / salvar PDF
+                    <Award className="h-3 w-3" /> Abrir / salvar PDF
                   </button>
                 </li>
               ))}
