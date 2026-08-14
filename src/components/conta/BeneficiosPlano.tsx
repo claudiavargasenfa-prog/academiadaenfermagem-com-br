@@ -72,7 +72,7 @@ export default function BeneficiosPlano() {
     if (cat === "ENFERMEIRO") return app.track_enfermeiro === true;
     if (cat === "ACADEMICO") return app.track_academico === true;
     if (cat === "TECNICO" || cat === "TECNICO_ESTUDANTE") return app.track_tecnico === true;
-    return false;
+    return true; // Fallback para mostrar tudo caso a categoria não filtre nada, mas os dados existam
   });
 
   async function escolherBonus() {
