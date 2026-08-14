@@ -168,6 +168,7 @@ export type Database = {
       apps: {
         Row: {
           bg_color: string | null
+          codigo: string | null
           created_at: string
           description: string | null
           emoji: string | null
@@ -184,6 +185,7 @@ export type Database = {
         }
         Insert: {
           bg_color?: string | null
+          codigo?: string | null
           created_at?: string
           description?: string | null
           emoji?: string | null
@@ -200,6 +202,7 @@ export type Database = {
         }
         Update: {
           bg_color?: string | null
+          codigo?: string | null
           created_at?: string
           description?: string | null
           emoji?: string | null
@@ -341,6 +344,7 @@ export type Database = {
       mini_app_placements: {
         Row: {
           app_id: string
+          codigo: number | null
           created_at: string
           id: string
           mini_app_id: string
@@ -350,6 +354,7 @@ export type Database = {
         }
         Insert: {
           app_id: string
+          codigo?: number | null
           created_at?: string
           id?: string
           mini_app_id: string
@@ -359,6 +364,7 @@ export type Database = {
         }
         Update: {
           app_id?: string
+          codigo?: number | null
           created_at?: string
           id?: string
           mini_app_id?: string
@@ -1021,6 +1027,8 @@ export type Database = {
       }
       user_certificates: {
         Row: {
+          app_name: string | null
+          app_slug: string | null
           code: string
           hours: number
           id: string
@@ -1031,6 +1039,8 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          app_name?: string | null
+          app_slug?: string | null
           code: string
           hours?: number
           id?: string
@@ -1041,6 +1051,8 @@ export type Database = {
           user_id: string
         }
         Update: {
+          app_name?: string | null
+          app_slug?: string | null
           code?: string
           hours?: number
           id?: string
@@ -1390,6 +1402,17 @@ export type Database = {
           display_name: string
           total_points: number
           user_id: string
+        }[]
+      }
+      validar_certificado: {
+        Args: { _code: string }
+        Returns: {
+          app_name: string
+          code: string
+          hours: number
+          issued_at: string
+          mini_app_name: string
+          student_name: string
         }[]
       }
     }
