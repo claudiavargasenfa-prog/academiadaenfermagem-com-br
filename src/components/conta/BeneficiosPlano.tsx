@@ -72,8 +72,11 @@ export default function BeneficiosPlano() {
     if (cat === "ENFERMEIRO") return app.track_enfermeiro === true;
     if (cat === "ACADEMICO") return app.track_academico === true;
     if (cat === "TECNICO" || cat === "TECNICO_ESTUDANTE") return app.track_tecnico === true;
-    return true; // Fallback para mostrar tudo caso a categoria não filtre nada, mas os dados existam
+    return false;
   });
+
+  // Se o filtro retornar vazio mas tivermos dados, vamos tentar um fallback menos restrito
+  const displayThemes = themes.length > 0 ? themes : (miniQ.data ?? []);
 
   async function escolherBonus() {
     if (!bonus) return;
