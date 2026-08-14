@@ -117,7 +117,7 @@ export const Route = createFileRoute("/api/public/payments")({
 
           const { data: order } = await supabaseAdmin
             .from("orders")
-            .select("id, user_id, plan_slug, status")
+            .select("id, user_id, plan_slug, status, metadata")
             .eq("id", orderId)
             .maybeSingle();
 
