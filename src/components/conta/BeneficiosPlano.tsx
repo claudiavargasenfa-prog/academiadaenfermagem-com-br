@@ -165,9 +165,6 @@ export default function BeneficiosPlano() {
               <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-[8px] text-white font-bold">VERSO</div>
             </div>
           </div>
-          <div className="mt-2 rounded-lg bg-primary/10 p-3 text-xs font-medium text-primary border border-primary/20">
-            Dica: Os certificados emitidos aparecem logo abaixo do botão de emissão.
-          </div>
           {allowed > 0 ? (
             <p className="mt-2 text-sm text-muted-foreground">
               Você tem <strong>{restantes}</strong> de {allowed} certificados disponíveis. Escolha o Mini App estudado.
