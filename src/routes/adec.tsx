@@ -28,6 +28,12 @@ import {
   X,
   PartyPopper,
 } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+  DialogClose,
+} from "@/components/ui/dialog";
 import logoAsset from "@/assets/logo.png.asset.json";
 import fotoFundadora from "@/assets/foto-fundadora.jpeg.asset.json";
 import {
