@@ -16,8 +16,8 @@ Réplica fiel da 1ª imagem enviada:
 ### 2. Novo padrão de código
 Formato: `ADEC-AA-NNN-CCCC-MM/AAAA`
 - `AA` = academia: 01 acadêmico, 02 enfermeiro, 03 estudante de técnico, 04 técnico.
-- `NNN` = número do mini app (3 dígitos), gerado automaticamente em ordem alfabética dentro de cada academia.
-- `CCCC` = número do certificado, começando em `0099` e seguindo 0100, 0101...
+- `NNN` = número do mini app (3 dígitos), com sequência **própria e independente por academia**. O acadêmico começa em 001 e segue até 029, 030…; o enfermeiro também começa em 001 e segue com seus próprios apps; e assim para os demais.
+- `CCCC` = número do certificado, **único e corrido em todas as academias**, começando em `0099` e seguindo 0100, 0101…
 - `MM/AAAA` = mês e ano da emissão, com barra (ex.: 08/2026). No link do QR Code a barra é convertida automaticamente, e a página aceita o código digitado com barra.
 
 Os números dos mini apps ficam gravados no banco e visíveis no painel de admin (podem ser reordenados depois, se você quiser).
