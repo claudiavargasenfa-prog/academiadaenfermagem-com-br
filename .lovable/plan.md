@@ -6,19 +6,19 @@
 Réplica fiel da 1ª imagem enviada:
 - Faixa verde escura no topo com o logotipo ADEC, título "VALIDAR CERTIFICADO" e a linha dourada com o ponto central.
 - Bloco de instrução com o escudo dourado ("Digite o código do seu certificado...").
-- Caixa branca com o campo "CÓDIGO DO CERTIFICADO" (exemplo: ADEC-01-023-0099-0826), botão verde "VALIDAR" e, à direita, o bloco "OU ESCANEIE O QR CODE".
+- Caixa branca com o campo "CÓDIGO DO CERTIFICADO" (exemplo: ADEC-01-023-0099-08/2026), botão verde "VALIDAR" e, à direita, o bloco "OU ESCANEIE O QR CODE".
 - Resultado da consulta: painel verde "CERTIFICADO VÁLIDO — AUTENTICIDADE CONFIRMADA", dados do certificado (Nome do Aluno, Curso/Módulo, Carga Horária, Data de Conclusão, Código) e, à direita, Data da Validação com a assinatura institucional.
 - Quando o código não existir: mesmo painel em vermelho, "CERTIFICADO NÃO LOCALIZADO".
 - Rodapé "SEGURANÇA E CONFIANÇA" e a barra verde de direitos reservados.
-- A página abre também com o código já preenchido pelo link do QR Code: `/validacao?codigo=ADEC-01-023-0099-0826`.
+- A página abre também com o código já preenchido pelo link do QR Code: `/validacao?codigo=ADEC-01-023-0099-08/2026`.
 - Acesso livre, sem login. Mostra o nome completo do aluno, conforme decidido.
 
 ### 2. Novo padrão de código
-Formato: `ADEC-AA-NNN-CCCC-MMAA`
+Formato: `ADEC-AA-NNN-CCCC-MM/AAAA`
 - `AA` = academia: 01 acadêmico, 02 enfermeiro, 03 estudante de técnico, 04 técnico.
 - `NNN` = número do mini app (3 dígitos), gerado automaticamente em ordem alfabética dentro de cada academia.
 - `CCCC` = número do certificado, começando em `0099` e seguindo 0100, 0101...
-- `MMAA` = mês e ano da emissão (agosto/2026 = 0826).
+- `MM/AAAA` = mês e ano da emissão, com barra (ex.: 08/2026). No link do QR Code a barra é convertida automaticamente, e a página aceita o código digitado com barra.
 
 Os números dos mini apps ficam gravados no banco e visíveis no painel de admin (podem ser reordenados depois, se você quiser).
 
@@ -38,7 +38,7 @@ O certificado atual é substituído pelo modelo enviado, mantendo tudo igual: mo
 
 ## Verificação
 
-- Emitir um certificado de teste e conferir o código no formato `ADEC-01-023-0099-0826`.
+- Emitir um certificado de teste e conferir o código no formato `ADEC-01-023-0099-08/2026`.
 - Ler o QR Code e confirmar que a página abre já validada.
 - Testar um código inexistente e conferir a mensagem de não localizado.
 - Conferir a página em celular e no computador.
