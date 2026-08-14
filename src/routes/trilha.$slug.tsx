@@ -7,6 +7,17 @@ import { ExternalLink, Lock, CheckCircle2, Sparkles, ArrowLeft, BookOpen } from 
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
 import { BadgeList } from "@/components/Badges";
 import {
+  Award,
+  Sparkles as SparklesIcon,
+  X,
+} from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+  DialogClose,
+} from "@/components/ui/dialog";
+import {
   fetchMiniApps,
   fetchMyExtraAccess,
   fetchMyActiveSubscriptions,
