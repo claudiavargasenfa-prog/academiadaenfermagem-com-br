@@ -1,46 +1,20 @@
 import { createServerFn } from "@tanstack/react-start";
+import { supabase } from "@/integrations/supabase/client";
 
-/**
- * Catálogo público de guias clínicos.
- * Retorna APENAS colunas não sensíveis (sem content_md/video_url/audio_url).
- * Executa no servidor para que visitantes não autenticados não precisem de
- * acesso direto ao banco (nenhuma função SECURITY DEFINER exposta ao anon).
- */
-const SAFE_COLUMNS = [
-  "id",
-  "slug",
-  "name",
-  "description",
-  "kind",
-  "price_cents",
-  "price_original_cents",
-  "cakto_product_id",
-  "cakto_checkout_url",
-  "icon",
-  "is_active",
-  "sort_order",
-  "gratuito",
-  "em_breve",
-  "route_path",
-  "horas_certificado",
-  "track_academico",
-  "track_tecnico",
-  "track_enfermeiro",
-  "badges",
-  "created_at",
-  "updated_at",
-].join(", ");
-
-export const listMiniAppsCatalog = createServerFn({ method: "GET" }).handler(
-  async () => {
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data, error } = await supabaseAdmin
+export const listMiniAppsCatalog = createServerFn({ method: "GET" })
+  .handler(async () => {
+    // Note: The table name in Supabase is 'mini_apps', but we used 'mini_apps_catalog' in the previous attempt
+    // Let's check the actual table used for the catalog. Based on types, it's 'mini_apps'.
+    const { data, error } = await supabase
       .from("mini_apps")
-      .select(SAFE_COLUMNS)
+      .select("id, name, track_tecnico, track_academico, track_enfermeiro")
       .eq("is_active", true)
-      .order("sort_order", { ascending: true, nullsFirst: false })
-      .order("name", { ascending: true });
-    if (error) throw new Error("Não foi possível carregar o catálogo.");
-    return data ?? [];
-  },
-);
+      .order("name");
+
+    if (error) {
+      console.error("Error fetching catalog:", error);
+      return [];
+    }
+
+    return data || [];
+  });

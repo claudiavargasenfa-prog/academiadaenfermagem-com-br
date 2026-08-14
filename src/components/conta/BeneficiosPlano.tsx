@@ -100,7 +100,14 @@ export default function BeneficiosPlano() {
               src="https://763be538-2d93-4e4b-9706-e7e0e7a46979.lovable.app/modelo-frente.png" 
               alt="Modelo Frente" 
               className="w-full h-full object-cover"
-              loading="lazy"
+              loading="eager"
+              decoding="sync"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                if (target.src.includes('lovable.app')) {
+                  target.src = '/placeholder.svg';
+                }
+              }}
             />
             <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
               <span className="text-[10px] font-black text-white uppercase tracking-widest text-center px-1">Ver Frente</span>
@@ -118,7 +125,14 @@ export default function BeneficiosPlano() {
               src="https://31804b77-ed14-411a-8212-680482b84234.lovable.app/modelo-verso.png" 
               alt="Modelo Verso" 
               className="w-full h-full object-cover"
-              loading="lazy"
+              loading="eager"
+              decoding="sync"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                if (target.src.includes('lovable.app')) {
+                  target.src = '/placeholder.svg';
+                }
+              }}
             />
             <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
               <span className="text-[10px] font-black text-white uppercase tracking-widest text-center px-1">Ver Verso</span>
