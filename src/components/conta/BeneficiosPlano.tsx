@@ -153,8 +153,11 @@ export default function BeneficiosPlano() {
           <p className="flex items-center gap-2 font-display text-lg font-black text-[#8a6d24]">
             <Award className="h-5 w-5 text-[#b8912f]" /> CERTIFICADOS DE 10 HORAS
           </p>
+          <div className="mt-2 rounded-lg bg-blue-600 p-3 text-sm font-bold text-white border border-blue-400 shadow-md">
+            🚀 NOVO MODELO DISPONÍVEL! Se você já emitiu, clique em "Abrir / salvar PDF" na lista azul abaixo para ver o novo certificado.
+          </div>
           <div className="mt-2 rounded-lg bg-primary/10 p-3 text-xs font-medium text-primary border border-primary/20">
-            Atenção: o certificado novo já está disponível abaixo! Basta clicar no botão azul "Abrir / salvar PDF" na lista de certificados emitidos.
+            Dica: Os certificados emitidos aparecem logo abaixo do botão de emissão.
           </div>
           {allowed > 0 ? (
             <p className="mt-2 text-sm text-muted-foreground">
