@@ -68,9 +68,9 @@ export default function BeneficiosPlano() {
 
   const themes = (miniQ.data ?? []).filter((app: any) => {
     if (!category) return false;
-    if (category === "ENFERMEIRO") return app.track_enfermeiro;
-    if (category === "ACADEMICO") return app.track_academico;
-    if (category === "TECNICO" || category === "TECNICO_ESTUDANTE") return app.track_tecnico;
+    if (category === "ENFERMEIRO") return app.track_enfermeiro === true;
+    if (category === "ACADEMICO") return app.track_academico === true;
+    if (category === "TECNICO" || category === "TECNICO_ESTUDANTE") return app.track_tecnico === true;
     return false;
   });
 
@@ -90,18 +90,19 @@ export default function BeneficiosPlano() {
 
   return (
     <section className="mt-6 space-y-4">
-      <h2 className="font-display text-lg font-bold">Modelos de Certificado</h2>
-
       <div className="flex flex-wrap gap-6 items-start">
         <div 
           className="cursor-pointer space-y-2 group"
-          onClick={() => window.open("https://763be538-2d93-4e4b-9706-e7e0e7a46979.lovable.app/modelo-frente.png", "_blank")}
+          onClick={() => window.open("https://academiadaenfermagem-com-br.lovable.app/modelo-frente.png", "_blank")}
         >
           <div className="relative overflow-hidden rounded-xl border-2 border-primary/20 shadow-md transition-transform group-hover:scale-[1.02]">
             <img 
-              src="https://763be538-2d93-4e4b-9706-e7e0e7a46979.lovable.app/modelo-frente.png" 
+              src="/modelo-frente.png" 
               alt="Modelo Frente" 
               className="h-32 w-auto object-contain"
+              onError={(e) => {
+                e.currentTarget.src = "https://763be538-2d93-4e4b-9706-e7e0e7a46979.lovable.app/modelo-frente.png";
+              }}
             />
             <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
               <span className="text-[10px] font-black text-white uppercase tracking-widest">Ver Frente</span>
@@ -112,13 +113,16 @@ export default function BeneficiosPlano() {
 
         <div 
           className="cursor-pointer space-y-2 group"
-          onClick={() => window.open("https://31804b77-ed14-411a-8212-680482b84234.lovable.app/modelo-verso.png", "_blank")}
+          onClick={() => window.open("https://academiadaenfermagem-com-br.lovable.app/modelo-verso.png", "_blank")}
         >
           <div className="relative overflow-hidden rounded-xl border-2 border-primary/20 shadow-md transition-transform group-hover:scale-[1.02]">
             <img 
-              src="https://31804b77-ed14-411a-8212-680482b84234.lovable.app/modelo-verso.png" 
+              src="/modelo-verso.png" 
               alt="Modelo Verso" 
               className="h-32 w-auto object-contain bg-white"
+              onError={(e) => {
+                e.currentTarget.src = "https://31804b77-ed14-411a-8212-680482b84234.lovable.app/modelo-verso.png";
+              }}
             />
             <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 transition-opacity group-hover:opacity-100">
               <span className="text-[10px] font-black text-white uppercase tracking-widest">Ver Verso</span>
