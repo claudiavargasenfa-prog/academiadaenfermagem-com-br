@@ -68,9 +68,10 @@ export default function BeneficiosPlano() {
 
   const themes = (miniQ.data ?? []).filter((app: any) => {
     if (!category) return false;
-    if (category === "ENFERMEIRO") return app.track_enfermeiro === true;
-    if (category === "ACADEMICO") return app.track_academico === true;
-    if (category === "TECNICO" || category === "TECNICO_ESTUDANTE") return app.track_tecnico === true;
+    const cat = category.toUpperCase();
+    if (cat === "ENFERMEIRO") return app.track_enfermeiro === true;
+    if (cat === "ACADEMICO") return app.track_academico === true;
+    if (cat === "TECNICO" || cat === "TECNICO_ESTUDANTE") return app.track_tecnico === true;
     return false;
   });
 
@@ -216,7 +217,7 @@ export default function BeneficiosPlano() {
               disabled={!category}
               className="w-full rounded-xl border border-input bg-background px-3 py-2 text-sm focus:ring-2 focus:ring-primary outline-none transition-all disabled:opacity-50"
             >
-              <option value="">{themes.length === 0 ? "A ABA DO TEMA ESTÁ VAZIA VC PRECISA ADCIONAR TODOS OS TÍTULOS DOS MINIS APP, NELA" : "Selecione o tema..."}</option>
+              <option value="">{category && themes.length === 0 ? "A ABA DO TEMA ESTÁ VAZIA VC PRECISA ADCIONAR TODOS OS TÍTULOS DOS MINIS APP, NELA" : "Selecione o tema..."}</option>
               {themes.map((t) => (
                 <option key={t.id} value={t.name}>{t.name}</option>
               ))}
