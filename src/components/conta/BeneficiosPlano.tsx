@@ -4,7 +4,9 @@ import { Award, Gift } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { TRACKS } from "@/lib/access";
 import { abrirCertificado } from "@/lib/certificado";
+import { createMpPreference } from "@/lib/mercadopago.functions";
 import { TEMAS_POR_CATEGORIA } from "@/data/temas-certificados";
+
 
 
 type Sub = {
@@ -247,20 +249,20 @@ export default function BeneficiosPlano() {
                   return;
                 }
 
-                const amountCents = parseInt(hours) * 100;
+                const amount = parseInt(hours);
                 
                 const { data: created, error } = await supabase
                   .from("orders")
                   .insert({
                     user_id: user.id,
                     plan_slug: "certificado-avulso",
-                    amount_cents: amountCents,
+                    amount_cents: amount * 100,
                     payment_method: "mercadopago",
                     status: "pending",
                     metadata: {
                       type: "certificate",
                       theme: theme,
-                      hours: parseInt(hours),
+                      hours: amount,
                       email: user.email,
                       category: category
                     },
@@ -272,16 +274,17 @@ export default function BeneficiosPlano() {
                   throw new Error(error?.message || "Erro ao criar pedido");
                 }
 
-                // Links de pagamento fornecidos ou baseados no valor
-                const mpLinks: Record<string, string> = {
-                  "10": "https://mpago.la/2KxS8d7",
-                  "20": "https://mpago.la/2KxS8d7", 
-                  "30": "https://mpago.la/2KxS8d7",
-                  "40": "https://mpago.la/2KxS8d7",
-                };
+                // Criar preferência dinâmica no Mercado Pago via Server Function
+                const { init_point } = await createMpPreference({
+                  data: {
+                    orderId: created.id,
+                    title: `Certificado ADEC - ${theme} (${amount}h)`,
+                    amount: amount,
+                    email: user.email!,
+                  }
+                });
 
-                const link = mpLinks[hours] || mpLinks["10"];
-                window.location.href = `${link}?external_reference=${created.id}`;
+                window.location.href = init_point;
                 
               } catch (err: any) {
                 setMsg("Erro ao processar: " + err.message);
