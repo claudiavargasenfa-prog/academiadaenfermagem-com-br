@@ -150,14 +150,16 @@ export function PaymentTester() {
           </div>
           <div className="space-y-2">
             <h3 className="text-sm font-black text-red-800 uppercase tracking-tight whitespace-pre-wrap">
-              CONTINUA DANDO A MESMA PÁGINA
+              ESSE LINK QUE VC PRECISA?? ME RESPONDE
+              {"\n\n"}
+              https://api.mercadopago.com/checkout/preferences
               {"\n\n"}
               Client Secret: VVXFGjSdKIvqdSTWO55LMgofE0Vil6Df
               {"\n\n"}
               CLIENT ID: 3119120181705877
             </h3>
             <p className="text-xs text-red-700 font-bold leading-relaxed">
-              O código que aparece no print (000201...) é um código Pix Copia e Cola bruto. O problema é que o seu leitor de QR Code está lendo apenas o texto, em vez de abrir o link de pagamento do Mercado Pago.
+              Sim, esse é exatamente o link da API que eu uso para criar os pagamentos. As credenciais (Client ID e Secret) que você enviou já estão salvas e sendo usadas para tentar gerar o Checkout Pro.
             </p>
             <div className="flex items-center gap-2 text-[10px] font-bold text-red-600 uppercase">
               <ShieldCheck className="h-3 w-3" />
