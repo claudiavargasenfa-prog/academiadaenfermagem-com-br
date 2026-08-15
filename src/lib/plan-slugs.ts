@@ -6,6 +6,7 @@ export const BASE_PLAN_SLUGS = [
   "tecnico",
   "tecnico-estudante",
   "enfermeiro",
+  "uti-emergencia",
 ] as const;
 
 export const BASE_PLAN_SLUG_SET = new Set<string>(BASE_PLAN_SLUGS);

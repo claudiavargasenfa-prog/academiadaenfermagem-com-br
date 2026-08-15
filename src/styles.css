@@ -112,6 +112,10 @@
   --track-tecnico-fg: #1E3A8A;
   --track-enfermeiro-bg: #BBF7D0;      /* verde claro */
   --track-enfermeiro-fg: #14532D;
+  
+  /* Premium Plus: UTI & Emergência */
+  --track-uti-emergencia-bg: #0C0C0C;  /* Dark quase preto */
+  --track-uti-emergencia-fg: #E5E7EB;  /* Texto claro */
 }
 
 @keyframes trial-pulse {

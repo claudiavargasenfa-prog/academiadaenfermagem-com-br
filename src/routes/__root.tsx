@@ -91,9 +91,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "Academia da Enfermagem — SAE e PE automatizados" },
-      { name: "description", content: "Academia da Enfermagem: SAE e PE automatizados, cálculo de medicamentos, exame físico, sinais vitais, escalas clínicas e procedimentos." },
-      { property: "og:description", content: "Academia da Enfermagem: SAE e PE automatizados, cálculo de medicamentos, exame físico, sinais vitais, escalas clínicas e procedimentos." },
-      { name: "twitter:description", content: "Academia da Enfermagem: SAE e PE automatizados, cálculo de medicamentos, exame físico, sinais vitais, escalas clínicas e procedimentos." },
+      { name: "description", content: "Academia da Enfermagem: SAE e PE automatizados, cálculo de medicamentos, exame físico, sinais vitais, escalas clínicas, procedimentos e Terapia Intensiva." },
+      { property: "og:description", content: "Academia da Enfermagem: SAE e PE automatizados, cálculo de medicamentos, exame físico, sinais vitais, escalas clínicas, procedimentos e Terapia Intensiva." },
+      { name: "twitter:description", content: "Academia da Enfermagem: SAE e PE automatizados, cálculo de medicamentos, exame físico, sinais vitais, escalas clínicas, procedimentos e Terapia Intensiva." },
 
 
       { property: "og:image", content: `https://academiadaenfermagem.com.br${ogImageAsset.url}` },
