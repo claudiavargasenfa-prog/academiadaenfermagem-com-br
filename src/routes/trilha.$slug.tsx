@@ -172,7 +172,13 @@ function TrilhaPage() {
   const trackActive = !!mySub;
   const plan = (plansQ.data ?? []).find((p) => p.slug === app.slug);
 
-  const cardStyle: React.CSSProperties = {
+  const isPremium = app.slug === "uti-emergencia";
+  const cardStyle: React.CSSProperties = isPremium ? {
+    backgroundColor: "#0C0C0C",
+    color: "#E5E7EB",
+    border: "2px solid #D4AF37", // Borda dourada para o premium
+    boxShadow: "0 0 20px rgba(212, 175, 55, 0.2)"
+  } : {
     backgroundColor: app.bg_color ?? "#F3F4F6",
     color: app.fg_color ?? "#111827",
   };
