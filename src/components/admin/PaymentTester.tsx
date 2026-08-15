@@ -150,7 +150,9 @@ export function PaymentTester() {
           </div>
           <div className="space-y-2">
             <h3 className="text-sm font-black text-red-800 uppercase tracking-tight whitespace-pre-wrap">
-              ESTÁ FALTANDO MAIS ALGUMA INFORMAÇÃO?
+              RESPONDE AS PERGUNTAS QUE FAÇO, SEMPRE.
+              {"\n\n"}
+              FALTA MAIS ALGUMA INFORMAÇÃO?
               {"\n\n"}
               Client Secret: VVXFGjSdKIvqdSTWO55LMgofE0Vil6Df
               {"\n\n"}
