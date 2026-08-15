@@ -149,9 +149,9 @@ export function PaymentTester() {
             <AlertTriangle className="h-6 w-6 text-red-600" />
           </div>
           <div className="space-y-2">
-            <h3 className="text-sm font-black text-red-800 uppercase tracking-tight whitespace-pre-wrap">SÃO ESSES QUE VC PRECISA?
-{"\n\n"}APP_USR-d23a530c-02fe-4b05-9bba-ca65e7dee2b0
-{"\n\n"}APP_USR-3119120181705877-081510-cbbd6feb0d80c08f4bd6e3be272318f6-3591854803</h3>
+            <h3 className="text-sm font-black text-red-800 uppercase tracking-tight whitespace-pre-wrap">SÃO ESSAS, ?
+{"\n\n"}Client Secret: VVXFGjSdKIvqdSTWO55LMgofE0Vil6Df
+{"\n\n"}CLIENT ID: 3119120181705877</h3>
             <p className="text-xs text-red-700 font-bold leading-relaxed">
               RECEBI NO EMAIL UMA COMUNICAÇÃO DE PAGAMENTO PENDENTE, E OS NUMERO DO CÓDIGO QUE FUNCIONAM E ESTÃO NO MEU NOME. MAS O SEU QRCODE, NÃO ESTA FUNCIONANDO
             </p>
