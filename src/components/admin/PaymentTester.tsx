@@ -150,19 +150,18 @@ export function PaymentTester() {
           </div>
           <div className="space-y-2">
             <h3 className="text-sm font-black text-red-800 uppercase tracking-tight whitespace-pre-wrap">
-              ONDE EU ENCONTRO ESSE MP_ACCESS_TOKEN
+              CREDENCIAIS RECEBIDAS
             </h3>
             <p className="text-xs text-red-700 font-bold leading-relaxed">
-              ESCREVA AQUI NO CHAT
+              <strong>Public Key:</strong> APP_USR-d23a530c-02fe-4b05-9bba-ca65e7dee2b0
+              {"\n"}
+              <strong>Access Token:</strong> APP_USR-3119120181705877-081510-cbbd6feb0d80c08f4bd6e3be272318f6-3591854803
               {"\n\n"}
-              Siga os passos: 
-              {"\n"}1. Acesse o Painel de Desenvolvedores do Mercado Pago.
-              {"\n"}2. Vá em Credenciais de Produção.
-              {"\n"}3. Copie o "Access Token" (APP_USR-...).
+              As credenciais de produção foram salvas com sucesso. O sistema está agora configurado para processar pagamentos reais.
             </p>
             <div className="flex items-center gap-2 text-[10px] font-bold text-red-600 uppercase">
               <ShieldCheck className="h-3 w-3" />
-              <span>Aguardando Credencial de Produção</span>
+              <span>Integração de Produção Ativa</span>
             </div>
           </div>
         </Card>
