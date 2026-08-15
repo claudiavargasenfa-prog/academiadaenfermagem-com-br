@@ -47,11 +47,15 @@ export const createMpPreference = createServerFn({ method: "POST" })
     });
 
     if (!response.ok) {
-      const error = await response.json();
-      console.error("Erro MP:", error);
-      throw new Error("Falha ao criar preferência de pagamento.");
+      const errorData = await response.json();
+      console.error("Erro detalhado do Mercado Pago:", JSON.stringify(errorData, null, 2));
+      throw new Error(`Erro MP (${response.status}): ${errorData.message || "Falha ao criar preferência."}`);
     }
 
     const preference = await response.json();
-    return { init_point: preference.init_point };
+    console.log("Preferência criada com sucesso:", preference.id);
+    return { 
+      init_point: preference.init_point,
+      sandbox_init_point: preference.sandbox_init_point
+    };
   });

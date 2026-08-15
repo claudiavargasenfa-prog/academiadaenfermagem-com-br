@@ -1,32 +1,22 @@
 # Plano de Correção do Checkout e Lógica SAE
 
-O usuário relatou que, ao simular o checkout do Mercado Pago, ocorre um erro de código. Além disso, há uma solicitação pendente para garantir que todas as marcações e escritas nas sanfonas (sinais e sintomas) gerem automaticamente os diagnósticos, prescrição e evolução.
+O usuário relatou que recebe e-mails de pagamento pendente com códigos que funcionam, mas o QR Code gerado pelo sistema não está funcionando para conclusão.
 
 ## Ajustes Técnicos
 
-### 1. Correção do Checkout Mercado Pago
-- **Problema:** O erro de código no checkout geralmente ocorre por:
-    - `MP_ACCESS_TOKEN` inválido ou ausente.
-    - Falha na criação da preferência devido a campos obrigatórios.
-    - `external_reference` duplicado ou malformado.
+### 1. Correção do Fluxo de Pagamento (Mercado Pago)
+- **Problema:** O QR Code ou a preferência de pagamento pode estar falhando devido a tokens de teste sendo usados em ambiente de produção ou vice-versa, ou falta de campos no payer.
 - **Ação:** 
-    - Adicionar logs detalhados de erro na Server Function `createMpPreference`.
-    - Garantir que o `orderId` gerado no Supabase seja passado corretamente.
-    - Validar se o token está sendo lido corretamente do ambiente.
+    - Adicionar logs de erro exaustivos na Server Function `createMpPreference` para capturar a resposta exata da API do Mercado Pago.
+    - Garantir que o `sandbox_init_point` seja considerado caso o usuário esteja usando credenciais de teste.
+    - Verificar se os dados do pagador (`email`, `first_name`) estão sendo enviados corretamente, pois o MP exige dados mínimos para gerar QR Code/Pix.
 
 ### 2. Sincronização SAE (Sinais -> Diagnósticos -> Prescrição -> Evolução)
-- **Problema:** O usuário quer que "tudo que for marcado e escrito nas sanfonas" flua automaticamente.
+- **Problema:** Garantir fluxo 100% automático de marcações nas sanfonas para a evolução final.
 - **Ação:**
-    - Ajustar `MiniAppContent.tsx` para capturar inputs de texto dentro das sanfonas do guia clínico.
-    - Refinar a função `extrairSinaisSintomas` para ser mais agressiva na captura de termos técnicos.
-    - Garantir que o botão "Gerar Fluxo Automático" no modo treinamento (ou equivalente no Mini App) execute a cadeia completa:
-        1. Parse do DOM em busca de checkboxes marcados e textos preenchidos.
-        2. Chamada ao motor `matchDiagnosticos` com prioridade nas colunas 5, 7, 8 e 10.
-        3. Preenchimento da tabela de prescrição com base nos resultados.
-        4. Geração do texto da evolução consolidada.
+    - Ajustar `MiniAppContent.tsx` para monitorar mudanças em checkboxes e campos de texto dentro das sanfonas.
+    - O botão "Gerar Fluxo Automático" deve forçar a leitura de todos os achados "anormais" e disparar o motor SAE.
+    - Remover qualquer texto padrão (placeholder) das áreas de texto da SAE para que apenas o conteúdo real do paciente apareça.
 
 ### 3. Interface Administrativa
-- **Ação:** Substituir o texto "language selector" por "SIMULEI, MAS O CODIGO DA ERRO" conforme solicitado visualmente, mantendo o contexto de depuração.
-
-## Revisão de Segurança
-- Garantir que o webhook em `/api/public/payments` continue validando a assinatura caso a secret esteja presente, mas que não bloqueie o fluxo se o pagamento for verificado via API direta com o ID recebido.
+- **Ação:** Atualizar o cabeçalho do `PaymentTester.tsx` com a mensagem de erro específica do usuário para facilitar o rastreamento durante os testes de QR Code.
