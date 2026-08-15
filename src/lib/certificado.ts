@@ -1,5 +1,8 @@
 import QRCode from "qrcode";
 import logoAdec from "@/assets/logo-adec.png.asset.json";
+import { CONTEUDO_PROGRAMATICO } from "@/data/conteudo-programatico";
+import { TEMAS_POR_CATEGORIA } from "@/data/temas-certificados";
+
 
 export const SITE_URL = "https://academiadaenfermagem.com.br";
 
@@ -111,11 +114,111 @@ export async function certificadoHtml(c: CertificadoDados) {
 </body></html>`;
 }
 
-export async function abrirCertificado(c: CertificadoDados) {
-  const w = window.open("", "_blank");
-  const html = await certificadoHtml(c);
-  if (w) {
-    w.document.write(html);
-    w.document.close();
+export async function versoCertificadoHtml(c: CertificadoDados) {
+  const logo = new URL(logoAdec.url, SITE_URL).toString();
+  const data = new Date(c.issued_at).toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" });
+  
+  // Tentar encontrar a categoria e o conteúdo programático
+  let categoria = "ACADEMICO";
+  let conteudo = "Conteúdo programático detalhado da Academia da Enfermagem (ADEC).";
+  
+  for (const [cat, temas] of Object.entries(TEMAS_POR_CATEGORIA)) {
+    if (temas.includes(c.mini_app_name)) {
+      categoria = cat;
+      const map = CONTEUDO_PROGRAMATICO[cat];
+      if (map && map[c.mini_app_name]) {
+        conteudo = map[c.mini_app_name];
+      }
+      break;
+    }
   }
+
+  const itens = conteudo.split(/[;|\n]/).map(t => t.trim()).filter(t => t.length > 3);
+
+  return `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8">
+<title>Verso Certificado ${esc(c.code)}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  @page { size: A4 landscape; margin: 0; }
+  *{box-sizing:border-box}
+  body{margin:0;background:#e8ece7;font-family:'Montserrat',sans-serif;color:#123524;display:flex;justify-content:center;padding:20px}
+  .folha{position:relative;width:1123px;height:794px;background:#fff;overflow:hidden;box-shadow:0 18px 50px rgba(0,0,0,.25);border:1px solid #eee}
+  .moldura{position:absolute;inset:26px;border:1px solid rgba(184,145,47,.3);z-index:3;pointer-events:none}
+  .conteudo{position:relative;z-index:4;height:100%;padding:60px 100px;display:flex;flex-direction:column}
+  .topo{display:flex;justify-content:space-between;align-items:center;margin-bottom:40px;border-bottom:2px solid #0f3d28;padding-bottom:20px}
+  .titulo-verso{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;color:#0f3d28;text-transform:uppercase;letter-spacing:0.1em}
+  .logo-mini{height:50px}
+  .tema-box{margin-bottom:30px}
+  .tema-label{font-size:12px;font-weight:700;color:#b8912f;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px}
+  .tema-nome{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:700;color:#123524}
+  .grid-conteudo{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:20px}
+  .col{display:flex;flex-direction:column;gap:15px}
+  .item{font-size:14px;line-height:1.6;color:#2a4739;padding-left:20px;position:relative}
+  .item:before{content:'•';position:absolute;left:0;color:#b8912f;font-weight:bold}
+  .item strong{color:#0d2e1f;display:block;margin-bottom:2px}
+  .info-legal{margin-top:auto;padding-top:30px;border-top:1px solid #eee;display:flex;justify-content:space-between;align-items:center;font-size:11px;color:#666}
+  .selo-mini{font-weight:700;color:#0f3d28;border:1px solid #0f3d28;padding:4px 8px;border-radius:4px}
+  @media print{body{background:#fff;padding:0}.folha{box-shadow:none;border:none}}
+</style></head><body>
+<div class="folha">
+  <div class="moldura"></div>
+  <div class="conteudo">
+    <div class="topo">
+      <div class="titulo-verso">Conteúdo Programático</div>
+      <img src="${logo}" class="logo-mini" alt="ADEC">
+    </div>
+    
+    <div class="tema-box">
+      <div class="tema-label">Módulo / Tema</div>
+      <div class="tema-nome">${esc(c.mini_app_name)}</div>
+    </div>
+
+    <div class="grid-conteudo">
+      <div class="col">
+        ${itens.slice(0, Math.ceil(itens.length / 2)).map(item => `
+          <div class="item">${esc(item)}</div>
+        `).join('')}
+      </div>
+      <div class="col">
+        ${itens.slice(Math.ceil(itens.length / 2)).map(item => `
+          <div class="item">${esc(item)}</div>
+        `).join('')}
+      </div>
+    </div>
+
+
+    <div class="info-legal">
+      <div>Código de Autenticidade: <strong>${esc(c.code)}</strong> | Verificação em: ${SITE_URL}/validacao</div>
+      <div style="text-align:right">
+        Documento emitido eletronicamente em ${esc(data)}<br>
+        <span class="selo-mini">ADEC - ACADEMIA DA ENFERMAGEM</span>
+      </div>
+    </div>
+  </div>
+</div>
+<script>window.onload=function(){setTimeout(function(){window.print()},800)}</script>
+</body></html>`;
 }
+
+export async function abrirCertificado(c: CertificadoDados) {
+  // Abrir frente
+  const wFrente = window.open("", "_blank");
+  const htmlFrente = await certificadoHtml(c);
+  if (wFrente) {
+    wFrente.document.write(htmlFrente);
+    wFrente.document.close();
+  }
+
+  // Abrir verso (um pequeno delay para não bloquear popups)
+  setTimeout(async () => {
+    const wVerso = window.open("", "_blank");
+    const htmlVerso = await versoCertificadoHtml(c);
+    if (wVerso) {
+      wVerso.document.write(htmlVerso);
+      wVerso.document.close();
+    }
+  }, 500);
+}
+
