@@ -147,7 +147,7 @@ export function DashboardAdmin() {
             <h4 className="text-lg font-black uppercase tracking-tight">Próximo Passo ADEC</h4>
             <p className="text-xs text-muted-foreground font-bold uppercase tracking-wider">Sugestão Técnica:</p>
             <p className="text-sm text-gold-dark font-black leading-relaxed max-w-[400px] mx-auto bg-gold/5 p-3 rounded-2xl border border-gold/20">
-              "ESCREVA PARA MIM QUAL O CONTEUDO QUE VAMOS CRIAR AGORA E QUE VC JULGA MAIS IMPORTANTE? ESCREVA PARA MIM AQUI NO CHAT."
+              "ACHEI ESSA SUGESTÃO MARAVILHOSA, VC CONSEGUE FAZER UM CONTEUDO BEM PROFUNDO FOCADO PARA ENFERMEIROS, CONTENDO TUDO QUE FOR DE MAIS ATUAL, COMAS LEGISLAÇOES MAIS ATUAIS, TUDO MUITO TOP. COM TODAS OS MELHORES DESIG QUE VC SABE FAZER PARA SE TORNAR O ASSUNTO MELHOR MAIS DINAMICO DA WEB. FAÇA UM BANNER PREMIUM PLUS.\n\nESCREVA AQUI NO CHAT PARA MIM UM ESBOÇO DE TUDO QUE VC SUGERE QUE ABORDEMOS."
             </p>
           </div>
         </section>
