@@ -147,7 +147,7 @@ export function DashboardAdmin() {
             <h4 className="text-lg font-black uppercase tracking-tight">Próximo Passo ADEC</h4>
             <p className="text-xs text-muted-foreground font-bold uppercase tracking-wider">Sugestão Técnica:</p>
             <p className="text-sm text-gold-dark font-black leading-relaxed max-w-[400px] mx-auto bg-gold/5 p-3 rounded-2xl border border-gold/20">
-              "SIM , ACHO ÓTIMO, POR ISSO QUE DEVEMOS CONVERSAR ANTES DE QQ POSTAGEM, OK."
+              "ANALISA ESSA DROGA E ME DA UM RETORNO AQUI NO CHAT. \n\n1.3 Dobutamina — o inotrópico, não o vasopressor\n\nO que ensinar:\n\nMecanismo: agonista β1 predominante (força de contração ↑, frequência ↑) com β2 leve (vasodilatação). Ou seja: pode DIMINUIR a PAM — não é droga para pressão!\n\nIndicações: baixo débito cardíaco com pressões de enchimento adequadas; choque cardiogênico; sepse com disfunção miocárdica e hipoperfusão persistente apesar de volemia e PAM adequadas (SSC 2021).\n\nRegra de ouro: se PAM estiver baixa, associar a um vasopressor (noradrenalina) — nunca dobutamina isolada em choque.\n\nApresentação: ampola 250 mg/20 mL (12,5 mg/mL).\n\nDiluição: 250 mg em 250 mL → 1000 mcg/mL.\n\nDose: 2,5–20 mcg/kg/min, titular pela resposta (débito, lactato, ScvO₂).\n\nCuidados: taquicardia e arritmias limitam a dose; taquifilaxia (perda de efeito após ~72 h); extravasamento também causa lesão tecidual."
             </p>
           </div>
         </section>
