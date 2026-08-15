@@ -150,18 +150,18 @@ export function PaymentTester() {
           </div>
           <div className="space-y-2">
             <h3 className="text-sm font-black text-red-800 uppercase tracking-tight whitespace-pre-wrap">
-              NO MP TEM ESSE CÓDIGO, NÃO SEI O QUE É PRECISA DELE?
+              TEM ESSE CODIGO LOGO A BAIXO DO OUTROS, VE SE SERVE, E ME DIZ PRA QUE SÃO????????????
               {"\n\n"}
-              curl -X POST 'https://api.mercadopago.com/checkout/preferences'
+              "init_point": "https://www.mercadopago.com/..."
               {"\n"}
-              -H 'Authorization: Bearer APP_USR-8...88776-122...fc20dede6...a497d7225...64'
+              "sandbox_init_point": "https://sandbox.mercadopago.com/..."
             </h3>
             <p className="text-xs text-red-700 font-bold leading-relaxed">
-              Sim! Esse código é o exemplo de como enviar os dados para o Mercado Pago. O ponto mais importante aí é o <span className="underline decoration-2">Access Token</span> (que começa com APP_USR-...). É essa chave que dá permissão ao app para criar cobranças na sua conta.
+              Esse é o <span className="underline decoration-2">resultado</span> da criação de um pagamento. Os campos <strong>init_point</strong> e <strong>sandbox_init_point</strong> são os links reais que o seu aluno clica para pagar. O fato de aparecer <strong>"preference_expired": true</strong> no seu código indica que esse link de teste específico já venceu.
             </p>
             <div className="flex items-center gap-2 text-[10px] font-bold text-red-600 uppercase">
               <ShieldCheck className="h-3 w-3" />
-              <span>Token de Acesso Detectado - Ação Necessária</span>
+              <span>Análise de Resposta da API - Admin</span>
             </div>
           </div>
         </Card>
