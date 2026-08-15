@@ -144,19 +144,18 @@ export function PaymentTester() {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <Card className="lg:col-span-2 bg-amber-50 border-amber-200 p-5 flex items-start gap-4">
-          <div className="bg-amber-100 p-2 rounded-xl shrink-0">
-            <FlaskConical className="h-6 w-6 text-amber-600" />
+        <Card className="lg:col-span-2 bg-red-50 border-red-200 p-5 flex items-start gap-4">
+          <div className="bg-red-100 p-2 rounded-xl shrink-0">
+            <AlertTriangle className="h-6 w-6 text-red-600" />
           </div>
           <div className="space-y-2">
-            <h3 className="text-sm font-black text-amber-800 uppercase tracking-tight">Ambiente de Teste de Links</h3>
-            <p className="text-xs text-amber-700/80 leading-relaxed">
-              Esta página serve para você <strong>validar se os links do Mercado Pago</strong> estão direcionando para os
-              produtos corretos antes de divulgá-los para os alunos.
+            <h3 className="text-sm font-black text-red-800 uppercase tracking-tight">ALERTA DE ERRO NO QRCODE</h3>
+            <p className="text-xs text-red-700 font-bold leading-relaxed">
+              RECEBI NO EMAIL UMA COMUNICAÇÃO DE PAGAMENTO PENDENTE, E OS NUMERO DO CÓDIGO QUE FUNCIONAM E ESTÃO NO MEU NOME. MAS O SEU QRCODE, NÃO ESTA FUNCIONANDO
             </p>
-            <div className="flex items-center gap-2 text-[10px] font-bold text-amber-600 uppercase">
+            <div className="flex items-center gap-2 text-[10px] font-bold text-red-600 uppercase">
               <ShieldCheck className="h-3 w-3" />
-              <span>Somente administradores visualizam esta aba</span>
+              <span>Ambiente de Teste e Depuração - Somente Admin</span>
             </div>
           </div>
         </Card>

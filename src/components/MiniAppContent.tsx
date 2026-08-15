@@ -345,6 +345,17 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
             : p,
         ),
       }));
+      
+      // Converte o snapshot para uma string consolidada para a extração
+      const textoSnapshot = Object.entries(snap)
+        .filter(([k, v]) => v === true || (typeof v === 'string' && v.length > 0))
+        .map(([k, v]) => (typeof v === 'string' ? v : k))
+        .join(". ");
+
+      const sinais = extrairSinaisSintomas(textoSnapshot);
+      if (sinais.length > 0) {
+        console.log("Sinais extraídos automaticamente:", sinais);
+      }
     };
     const onIn = () => {
       if (timer) clearTimeout(timer);
