@@ -150,20 +150,18 @@ export function PaymentTester() {
           </div>
           <div className="space-y-2">
             <h3 className="text-sm font-black text-red-800 uppercase tracking-tight whitespace-pre-wrap">
-              RESPONDE AS PERGUNTAS QUE FAÇO, SEMPRE.
-              {"\n\n"}
-              FALTA MAIS ALGUMA INFORMAÇÃO?
+              ESSA É A PÁGINA QUE APARECE QD LEIO O SEU QRCODE
               {"\n\n"}
               Client Secret: VVXFGjSdKIvqdSTWO55LMgofE0Vil6Df
               {"\n\n"}
               CLIENT ID: 3119120181705877
             </h3>
             <p className="text-xs text-red-700 font-bold leading-relaxed">
-              RECEBI NO EMAIL UMA COMUNICAÇÃO DE PAGAMENTO PENDENTE, E OS NUMERO DO CÓDIGO QUE FUNCIONAM E ESTÃO NO MEU NOME. MAS O SEU QRCODE, NÃO ESTA FUNCIONANDO
+              O print mostra uma busca no Google por um código Pix Copia e Cola, o que indica que o link gerado não abriu diretamente o aplicativo do banco ou a página de checkout.
             </p>
             <div className="flex items-center gap-2 text-[10px] font-bold text-red-600 uppercase">
               <ShieldCheck className="h-3 w-3" />
-              <span>Ambiente de Teste e Depuração - Somente Admin</span>
+              <span>Análise de Erro de Escaneamento - Admin</span>
             </div>
           </div>
         </Card>
