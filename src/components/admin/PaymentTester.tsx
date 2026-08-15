@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/AppShell";
-import { ExternalLink, FlaskConical, AlertTriangle, ShieldCheck } from "lucide-react";
+import { ExternalLink, FlaskConical, AlertTriangle, ShieldCheck, Key, UserCheck } from "lucide-react";
 
 type Period = "mensal" | "trimestral" | "semestral" | "anual";
 
@@ -143,22 +143,57 @@ export function PaymentTester() {
 
   return (
     <div className="space-y-6">
-      <Card className="bg-amber-50 border-amber-200 p-5 flex items-start gap-4">
-        <div className="bg-amber-100 p-2 rounded-xl shrink-0">
-          <FlaskConical className="h-6 w-6 text-amber-600" />
-        </div>
-        <div className="space-y-2">
-          <h3 className="text-sm font-black text-amber-800 uppercase tracking-tight">Ambiente de Teste de Links</h3>
-          <p className="text-xs text-amber-700/80 leading-relaxed">
-            Esta página serve para você <strong>validar se os links do Mercado Pago</strong> estão direcionando para os
-            produtos corretos antes de divulgá-los para os alunos.
-          </p>
-          <div className="flex items-center gap-2 text-[10px] font-bold text-amber-600 uppercase">
-            <ShieldCheck className="h-3 w-3" />
-            <span>Somente administradores visualizam esta aba</span>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <Card className="lg:col-span-2 bg-amber-50 border-amber-200 p-5 flex items-start gap-4">
+          <div className="bg-amber-100 p-2 rounded-xl shrink-0">
+            <FlaskConical className="h-6 w-6 text-amber-600" />
           </div>
-        </div>
-      </Card>
+          <div className="space-y-2">
+            <h3 className="text-sm font-black text-amber-800 uppercase tracking-tight">Ambiente de Teste de Links</h3>
+            <p className="text-xs text-amber-700/80 leading-relaxed">
+              Esta página serve para você <strong>validar se os links do Mercado Pago</strong> estão direcionando para os
+              produtos corretos antes de divulgá-los para os alunos.
+            </p>
+            <div className="flex items-center gap-2 text-[10px] font-bold text-amber-600 uppercase">
+              <ShieldCheck className="h-3 w-3" />
+              <span>Somente administradores visualizam esta aba</span>
+            </div>
+          </div>
+        </Card>
+
+        <Card className="bg-blue-50 border-blue-200 p-5 space-y-4">
+          <div className="flex items-center gap-2 border-b border-blue-100 pb-2">
+            <Key className="h-4 w-4 text-blue-600" />
+            <h3 className="text-[10px] font-black text-blue-800 uppercase tracking-widest">Credenciais de Teste MP</h3>
+          </div>
+          
+          <div className="grid grid-cols-2 gap-y-3 gap-x-4">
+            <div className="space-y-0.5">
+              <p className="text-[9px] font-bold text-blue-600/70 uppercase">N.º Aplicação</p>
+              <p className="text-[11px] font-mono font-bold text-blue-900">320364173904595</p>
+            </div>
+            <div className="space-y-0.5">
+              <p className="text-[9px] font-bold text-blue-600/70 uppercase">User ID</p>
+              <p className="text-[11px] font-mono font-bold text-blue-900">3618715908</p>
+            </div>
+            <div className="col-span-2 space-y-0.5">
+              <p className="text-[9px] font-bold text-blue-600/70 uppercase">Usuário de Teste</p>
+              <div className="flex items-center gap-2">
+                <UserCheck className="h-3 w-3 text-blue-500" />
+                <p className="text-[10px] font-mono font-bold text-blue-900 break-all">TESTUSER7127946173897251623</p>
+              </div>
+            </div>
+            <div className="space-y-0.5">
+              <p className="text-[9px] font-bold text-blue-600/70 uppercase">Senha</p>
+              <p className="text-[11px] font-mono font-bold text-blue-900">u26voPvrKw</p>
+            </div>
+            <div className="space-y-0.5">
+              <p className="text-[9px] font-bold text-blue-600/70 uppercase">Cód. Verificação</p>
+              <p className="text-[11px] font-mono font-bold text-blue-900">715908</p>
+            </div>
+          </div>
+        </Card>
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
         <div className="flex flex-col gap-[2cm]">
