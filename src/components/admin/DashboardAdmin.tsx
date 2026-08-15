@@ -143,10 +143,11 @@ export function DashboardAdmin() {
           <div className="bg-white p-4 rounded-full shadow-lg">
             <Trophy className="h-10 w-10 text-gold animate-bounce" />
           </div>
-          <div>
-            <h4 className="text-lg font-black uppercase tracking-tight">Dica da Academia</h4>
-            <p className="text-xs text-muted-foreground leading-relaxed max-w-[280px] mx-auto">
-              "Para um app de sucesso, observe quais módulos os alunos mais acessam e crie novos conteúdos baseados neles!"
+          <div className="space-y-2">
+            <h4 className="text-lg font-black uppercase tracking-tight">Próximo Passo ADEC</h4>
+            <p className="text-xs text-muted-foreground font-bold uppercase tracking-wider">Sugestão Técnica:</p>
+            <p className="text-sm text-gold-dark font-black leading-relaxed max-w-[400px] mx-auto bg-gold/5 p-3 rounded-2xl border border-gold/20">
+              "ESCREVA PARA MIM QUAL O CONTEUDO QUE VAMOS CRIAR AGORA E QUE VC JULGA MAIS IMPORTANTE? ESCREVA PARA MIM AQUI NO CHAT."
             </p>
           </div>
         </section>
