@@ -147,7 +147,7 @@ export function DashboardAdmin() {
             <h4 className="text-lg font-black uppercase tracking-tight">Próximo Passo ADEC</h4>
             <p className="text-xs text-muted-foreground font-bold uppercase tracking-wider">Sugestão Técnica:</p>
             <p className="text-sm text-gold-dark font-black leading-relaxed max-w-[400px] mx-auto bg-gold/5 p-3 rounded-2xl border border-gold/20">
-              "OU SERIA MAIS UM TEMA PARA ENFERMEIROS, O QUE VC ACHA?"
+              "OTIMO ENTÃO VAMOS COMEÇAR"
             </p>
           </div>
         </section>
