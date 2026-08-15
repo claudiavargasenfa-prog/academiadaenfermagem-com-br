@@ -251,6 +251,7 @@ function TrilhaPage() {
                   unlocked={isAdminUser || mini.gratuito || trackActive || !!extraAccessByApp[mini.id]}
                   extraExpiresAt={extraAccessByApp[mini.id] ?? null}
                   isAdmin={isAdminUser}
+                  isPremium={isPremium}
                 />
               ))}
 
@@ -340,7 +341,7 @@ function TrilhaPage() {
   );
 }
 
-function TrackAppCard({ app, unlocked, extraExpiresAt, isAdmin }: { app: MiniApp; unlocked: boolean; extraExpiresAt: string | null; isAdmin?: boolean }) {
+function TrackAppCard({ app, unlocked, extraExpiresAt, isAdmin, isPremium }: { app: MiniApp; unlocked: boolean; extraExpiresAt: string | null; isAdmin?: boolean; isPremium?: boolean }) {
   const route = (app.route_path && app.route_path.trim()) || `/app/${app.slug}`;
   return (
     <div className="glass flex flex-col rounded-2xl p-4">
