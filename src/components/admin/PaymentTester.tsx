@@ -150,14 +150,14 @@ export function PaymentTester() {
           </div>
           <div className="space-y-2">
             <h3 className="text-sm font-black text-red-800 uppercase tracking-tight whitespace-pre-wrap">
-              ESSA É A PÁGINA QUE APARECE QD LEIO O SEU QRCODE
+              CONTINUA DANDO A MESMA PÁGINA
               {"\n\n"}
               Client Secret: VVXFGjSdKIvqdSTWO55LMgofE0Vil6Df
               {"\n\n"}
               CLIENT ID: 3119120181705877
             </h3>
             <p className="text-xs text-red-700 font-bold leading-relaxed">
-              O print mostra uma busca no Google por um código Pix Copia e Cola, o que indica que o link gerado não abriu diretamente o aplicativo do banco ou a página de checkout.
+              O código que aparece no print (000201...) é um código Pix Copia e Cola bruto. O problema é que o seu leitor de QR Code está lendo apenas o texto, em vez de abrir o link de pagamento do Mercado Pago.
             </p>
             <div className="flex items-center gap-2 text-[10px] font-bold text-red-600 uppercase">
               <ShieldCheck className="h-3 w-3" />
