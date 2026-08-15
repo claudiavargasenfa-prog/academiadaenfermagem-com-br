@@ -177,12 +177,17 @@ export async function versoCertificadoHtml(c: CertificadoDados) {
 
     <div class="grid-conteudo">
       <div class="col">
-        ${itens.slice(0, Math.ceil(itens.length / 2)).map(item => `<div class="item">${esc(item)}</div>`).join('')}
+        ${itens.slice(0, Math.ceil(itens.length / 2)).map(item => `
+          <div class="item">${esc(item)}</div>
+        `).join('')}
       </div>
       <div class="col">
-        ${itens.slice(Math.ceil(itens.length / 2)).map(item => `<div class="item">${esc(item)}</div>`).join('')}
+        ${itens.slice(Math.ceil(itens.length / 2)).map(item => `
+          <div class="item">${esc(item)}</div>
+        `).join('')}
       </div>
     </div>
+
 
     <div class="info-legal">
       <div>Código de Autenticidade: <strong>${esc(c.code)}</strong> | Verificação em: ${SITE_URL}/validacao</div>
