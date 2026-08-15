@@ -194,7 +194,7 @@ function TrilhaPage() {
           <span className="text-3xl">{app.emoji}</span>
           <div>
             <p className="text-xs font-bold uppercase tracking-widest opacity-70">Aplicativo</p>
-            <h1 className="font-display text-2xl font-extrabold">{app.name}</h1>
+            <h1 className={`font-display text-2xl font-extrabold ${isPremium ? "text-[#D4AF37]" : ""}`}>{app.name}</h1>
           </div>
         </div>
         {(plan?.description || app.description) && (
@@ -210,7 +210,7 @@ function TrilhaPage() {
               <Link
                 to="/planos/$slug"
                 params={{ slug: app.slug }}
-                className="inline-flex items-center gap-1 rounded-full bg-foreground px-4 py-2 text-sm font-bold text-background"
+                className={`inline-flex items-center gap-1 rounded-full px-4 py-2 text-sm font-bold ${isPremium ? "bg-[#D4AF37] text-black hover:bg-[#C5A028]" : "bg-foreground text-background"}`}
               >
                 Assinar a partir de {formatPriceBRL((plan as any).price_novo_cents ?? plan.price_cents)}/mês
               </Link>
@@ -345,7 +345,7 @@ function TrackAppCard({ app, unlocked, extraExpiresAt, isAdmin }: { app: MiniApp
   return (
     <div className="glass flex flex-col rounded-2xl p-4">
       <div className="mb-2 flex items-start justify-between gap-2">
-        <div className="grid h-11 w-11 place-items-center rounded-xl gold-gradient">
+        <div className={`grid h-11 w-11 place-items-center rounded-xl ${app.app_id === 'uti-emergencia' || (typeof window !== 'undefined' && window.location.pathname.includes('uti-emergencia')) ? 'bg-gradient-to-br from-[#D4AF37] to-[#C5A028] text-black' : 'gold-gradient'}`}>
           <BookOpen className="h-5 w-5" />
         </div>
         {app.gratuito ? (
@@ -368,7 +368,7 @@ function TrackAppCard({ app, unlocked, extraExpiresAt, isAdmin }: { app: MiniApp
 
       <div className="mt-3">
         {unlocked ? (
-          <Link to={route} className="block w-full rounded-xl bg-primary py-2 text-center text-sm font-semibold text-primary-foreground">
+          <Link to={route} className={`block w-full rounded-xl py-2 text-center text-sm font-semibold ${app.app_id === 'uti-emergencia' || (typeof window !== 'undefined' && window.location.pathname.includes('uti-emergencia')) ? 'bg-[#D4AF37] text-black hover:bg-[#C5A028]' : 'bg-primary text-primary-foreground'}`}>
             Acessar
           </Link>
         ) : isMercadoPagoUrl(app.cakto_checkout_url) ? (
