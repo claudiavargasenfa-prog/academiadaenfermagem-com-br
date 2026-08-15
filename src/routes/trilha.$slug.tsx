@@ -178,7 +178,7 @@ function TrilhaPage() {
   };
 
   return (
-    <AppShell tint={app.bg_color}>
+    <AppShell tint={app.bg_color} trackSlug={app.slug as any}>
       <Link to="/" className="mb-3 inline-flex items-center gap-1 text-sm font-semibold text-muted-foreground hover:text-foreground">
         <ArrowLeft className="h-4 w-4" /> Voltar para os aplicativos
       </Link>

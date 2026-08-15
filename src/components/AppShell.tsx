@@ -33,7 +33,7 @@ export function AppShell({
   publicRoute,
 }: {
   children: ReactNode;
-  trackSlug?: "academico" | "tecnico" | "enfermeiro";
+  trackSlug?: "academico" | "tecnico" | "enfermeiro" | "uti-emergencia";
   tint?: string | null;
   hideReferences?: boolean;
   publicRoute?: boolean;

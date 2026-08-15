@@ -12,13 +12,14 @@ export type SubscriptionPlan = Database["public"]["Tables"]["subscription_plans"
 export type PlanOffer = Database["public"]["Tables"]["plan_offers"]["Row"];
 export type UserSubscription = Database["public"]["Tables"]["user_subscriptions"]["Row"];
 
-export type TrackSlug = "academico" | "tecnico" | "tecnico-estudante" | "enfermeiro";
+export type TrackSlug = "academico" | "tecnico" | "tecnico-estudante" | "enfermeiro" | "uti-emergencia";
 
 export const TRACKS: { slug: TrackSlug; label: string; short: string; emoji: string }[] = [
   { slug: "academico", label: "Academia do Acadêmico", short: "Acadêmico", emoji: "🎓" },
   { slug: "tecnico", label: "Academia do Técnico", short: "Técnico", emoji: "🩺" },
   { slug: "tecnico-estudante", label: "Academia do Estudante de Técnico", short: "Estudante de Técnico", emoji: "📗" },
   { slug: "enfermeiro", label: "Academia do Enfermeiro", short: "Enfermeiro", emoji: "👩‍⚕️" },
+  { slug: "uti-emergencia", label: "Academia de Terapia Intensiva & Emergência", short: "UTI & Emergência", emoji: "⚡" },
 ];
 
 export function appTracks(app: MiniApp): TrackSlug[] {
@@ -26,6 +27,7 @@ export function appTracks(app: MiniApp): TrackSlug[] {
   if ((app as any).track_academico) out.push("academico");
   if ((app as any).track_tecnico) out.push("tecnico");
   if ((app as any).track_enfermeiro) out.push("enfermeiro");
+  if ((app as any).track_uti_emergencia) out.push("uti-emergencia");
   return out;
 }
 
