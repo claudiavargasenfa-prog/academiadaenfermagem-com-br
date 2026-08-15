@@ -206,7 +206,7 @@ export default function BeneficiosPlano() {
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-[10px] font-black uppercase text-muted-foreground tracking-wider">2. Tema de estudo</label>
+            <label className="text-[10px] font-black uppercase text-muted-foreground tracking-wider">ESTÁ FALTANDE DESCREVER TODAS AS 22 TABELAS E OS 4 SINAIS VITAIS DOS 4 PÚBLICOS DIFERENTES. INCLUA, PQ NO CERTIFICADO TEM QUE TER EXATAMENTE O CONTEÍUDO PROGRAMÁTICO QUE O ALUNO COMPROU.</label>
             <select
               value={theme}
               onChange={(e) => setTheme(e.target.value)}
