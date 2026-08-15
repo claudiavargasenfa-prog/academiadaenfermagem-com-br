@@ -4,7 +4,7 @@ import { Award, Gift } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { TRACKS } from "@/lib/access";
 import { abrirCertificado } from "@/lib/certificado";
-import { listMiniAppsCatalog } from "@/lib/catalog.functions";
+import { TEMAS_POR_CATEGORIA } from "@/data/temas-certificados";
 
 
 type Sub = {
@@ -44,8 +44,9 @@ async function fetchCerts(): Promise<Cert[]> {
   return (data ?? []) as unknown as Cert[];
 }
 
+// Removida busca dinâmica do catálogo para certificados
 async function fetchAccessibleMiniApps() {
-  return listMiniAppsCatalog();
+  return [];
 }
 
 
@@ -66,17 +67,7 @@ export default function BeneficiosPlano() {
   const certs = certsQ.data ?? [];
   const anual = subs.find((s) => s.billing_period === "anual" && s.status === "active");
 
-  const themes = (miniQ.data ?? []).filter((app: any) => {
-    if (!category) return false;
-    const cat = category.toUpperCase();
-    if (cat === "ENFERMEIRO") return app.track_enfermeiro === true;
-    if (cat === "ACADEMICO") return app.track_academico === true;
-    if (cat === "TECNICO" || cat === "TECNICO_ESTUDANTE") return app.track_tecnico === true;
-    return false;
-  });
-
-  // Se o filtro retornar vazio mas tivermos dados, vamos tentar um fallback menos restrito
-  const displayThemes = themes.length > 0 ? themes : (miniQ.data ?? []);
+  const displayThemes = category ? (TEMAS_POR_CATEGORIA[category] || []) : [];
 
   async function escolherBonus() {
     if (!bonus) return;
@@ -222,9 +213,9 @@ export default function BeneficiosPlano() {
               disabled={!category}
               className="w-full rounded-xl border border-input bg-background px-3 py-2 text-sm focus:ring-2 focus:ring-primary outline-none transition-all disabled:opacity-50"
             >
-              <option value="">{category && displayThemes.length === 0 ? "ESTÁ TUDO COMO ESTAVA, SEM IMAGEM DE CERTIFICADO E SEM TEMAS..TA COMPLICADO VC HJ" : "Selecione o tema..."}</option>
+              <option value="">{category && displayThemes.length === 0 ? "Nenhuma lista encontrada para esta categoria" : "Selecione o tema..."}</option>
               {displayThemes.map((t) => (
-                <option key={t.id} value={t.name}>{t.name}</option>
+                <option key={t} value={t}>{t}</option>
               ))}
             </select>
           </div>
