@@ -23,13 +23,13 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Academia da Enfermagem: SAE e PE automatizados e 4 aplicativos com Mini Apps para acadêmicos, estudantes de técnico, técnicos e enfermeiros. 15 dias grátis.",
+          "Academia da Enfermagem: SAE e PE automatizados e 5 aplicativos com Mini Apps para acadêmicos, estudantes de técnico, técnicos e enfermeiros. 15 dias grátis.",
       },
       { property: "og:title", content: "Loja — Academia da Enfermagem | SAE e PE automatizados" },
       {
         property: "og:description",
         content:
-          "Conheça os 4 aplicativos da Academia da Enfermagem, com SAE e PE automatizados, antes de iniciar seus 15 dias grátis.",
+          "Conheça os 5 aplicativos da Academia da Enfermagem, com SAE e PE automatizados, antes de iniciar seus 15 dias grátis.",
       },
 
       { property: "og:type", content: "website" },
@@ -65,7 +65,7 @@ function StoreHomeContent() {
 
 
   const homeTitle = useText("home.title", "Academia da Enfermagem");
-  const homeDesc = useText("home.description", "Quatro aplicativos, uma só academia. Conheça cada um e comece com 15 dias grátis — sem cartão.");
+  const homeDesc = useText("home.description", "Cinco aplicativos, uma só academia. Conheça cada um e comece com 15 dias grátis — sem cartão.");
   const ctaSection = useText("home.cta_section", "Conheça os aplicativos");
   const compraSegura = useText("compra.segura", "🔒 COMPRA SEGURA");
 
