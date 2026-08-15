@@ -34,6 +34,9 @@ export const createMpPreference = createServerFn({ method: "POST" })
         ],
         payer: {
           email: data.email,
+          // Mercado Pago pode exigir nome para QR Code/Pix em certas configurações
+          first_name: "Aluno",
+          last_name: "ADEC"
         },
         external_reference: data.orderId,
         back_urls: {

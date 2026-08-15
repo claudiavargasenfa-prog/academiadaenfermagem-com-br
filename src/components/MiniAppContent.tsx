@@ -345,6 +345,11 @@ export function MiniAppHtmlContent({ html }: { html: string }) {
             : p,
         ),
       }));
+      // Dispara extração automática de sinais e sintomas para o motor SAE quando houver mudanças
+      const sinais = extrairSinaisSintomas(snap);
+      if (sinais.length > 0) {
+        console.log("Sinais extraídos automaticamente:", sinais);
+      }
     };
     const onIn = () => {
       if (timer) clearTimeout(timer);
