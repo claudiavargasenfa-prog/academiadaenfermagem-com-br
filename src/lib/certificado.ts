@@ -133,7 +133,7 @@ export async function versoCertificadoHtml(c: CertificadoDados) {
     }
   }
 
-  const itens = conteudo.split('\n').filter(t => t.trim());
+  const itens = conteudo.split(/[;|\n]/).map(t => t.trim()).filter(t => t.length > 3);
 
   return `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8">
 <title>Verso Certificado ${esc(c.code)}</title>
