@@ -120,7 +120,7 @@ export async function versoCertificadoHtml(c: CertificadoDados) {
   
   // Tentar encontrar a categoria e o conteúdo programático
   let categoria = "ACADEMICO";
-  let conteudo = "Conteúdo programático oficial Academia da Enfermagem.";
+  let conteudo = "Conteúdo programático detalhado da Academia da Enfermagem (ADEC).";
   
   for (const [cat, temas] of Object.entries(TEMAS_POR_CATEGORIA)) {
     if (temas.includes(c.mini_app_name)) {
