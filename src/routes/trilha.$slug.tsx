@@ -345,7 +345,7 @@ function TrackAppCard({ app, unlocked, extraExpiresAt, isAdmin }: { app: MiniApp
   return (
     <div className="glass flex flex-col rounded-2xl p-4">
       <div className="mb-2 flex items-start justify-between gap-2">
-        <div className={`grid h-11 w-11 place-items-center rounded-xl ${app.app_id === 'uti-emergencia' || (typeof window !== 'undefined' && window.location.pathname.includes('uti-emergencia')) ? 'bg-gradient-to-br from-[#D4AF37] to-[#C5A028] text-black' : 'gold-gradient'}`}>
+        <div className={`grid h-11 w-11 place-items-center rounded-xl ${(typeof window !== 'undefined' && window.location.pathname.includes('uti-emergencia')) ? 'bg-gradient-to-br from-[#D4AF37] to-[#C5A028] text-black' : 'gold-gradient'}`}>
           <BookOpen className="h-5 w-5" />
         </div>
         {app.gratuito ? (
@@ -368,7 +368,7 @@ function TrackAppCard({ app, unlocked, extraExpiresAt, isAdmin }: { app: MiniApp
 
       <div className="mt-3">
         {unlocked ? (
-          <Link to={route} className={`block w-full rounded-xl py-2 text-center text-sm font-semibold ${app.app_id === 'uti-emergencia' || (typeof window !== 'undefined' && window.location.pathname.includes('uti-emergencia')) ? 'bg-[#D4AF37] text-black hover:bg-[#C5A028]' : 'bg-primary text-primary-foreground'}`}>
+          <Link to={route} className={`block w-full rounded-xl py-2 text-center text-sm font-semibold ${(typeof window !== 'undefined' && window.location.pathname.includes('uti-emergencia')) ? 'bg-[#D4AF37] text-black hover:bg-[#C5A028]' : 'bg-primary text-primary-foreground'}`}>
             Acessar
           </Link>
         ) : isMercadoPagoUrl(app.cakto_checkout_url) ? (
