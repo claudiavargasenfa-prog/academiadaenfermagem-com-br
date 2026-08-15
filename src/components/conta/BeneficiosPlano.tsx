@@ -284,6 +284,7 @@ export default function BeneficiosPlano() {
                   }
                 });
 
+                // Redireciona para o Sandbox se estiver em ambiente de teste ou usa o link padrão
                 window.location.href = init_point;
                 
               } catch (err: any) {
