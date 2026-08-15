@@ -150,18 +150,18 @@ export function PaymentTester() {
           </div>
           <div className="space-y-2">
             <h3 className="text-sm font-black text-red-800 uppercase tracking-tight whitespace-pre-wrap">
-              TEM ESSE CODIGO LOGO A BAIXO DO OUTROS, VE SE SERVE, E ME DIZ PRA QUE SÃO????????????
-              {"\n\n"}
-              "init_point": "https://www.mercadopago.com/..."
-              {"\n"}
-              "sandbox_init_point": "https://sandbox.mercadopago.com/..."
+              ONDE ENCONTRO ESSE MP_ACCESS_TOKEN???????????????????????
             </h3>
             <p className="text-xs text-red-700 font-bold leading-relaxed">
-              Esse é o <span className="underline decoration-2">resultado</span> da criação de um pagamento. Os campos <strong>init_point</strong> e <strong>sandbox_init_point</strong> são os links reais que o seu aluno clica para pagar. O fato de aparecer <strong>"preference_expired": true</strong> no seu código indica que esse link de teste específico já venceu.
+              Você encontra no seu painel do Mercado Pago em: <strong>Seu Negócio &gt; Configurações &gt; Credenciais</strong>. 
+              {"\n\n"}
+              Lá você verá dois tipos: 
+              {"\n"}1. <strong>Credenciais de Produção:</strong> Use o "Access Token" que começa com <code className="bg-red-100 px-1">APP_USR-...</code> para cobrar de verdade.
+              {"\n"}2. <strong>Credenciais de Teste:</strong> Use o "Access Token" que começa com <code className="bg-red-100 px-1">TEST-...</code> para simular sem gastar dinheiro.
             </p>
             <div className="flex items-center gap-2 text-[10px] font-bold text-red-600 uppercase">
               <ShieldCheck className="h-3 w-3" />
-              <span>Análise de Resposta da API - Admin</span>
+              <span>Guia de Localização de Credenciais - Admin</span>
             </div>
           </div>
         </Card>
