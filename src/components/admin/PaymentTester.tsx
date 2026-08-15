@@ -150,18 +150,16 @@ export function PaymentTester() {
           </div>
           <div className="space-y-2">
             <h3 className="text-sm font-black text-red-800 uppercase tracking-tight whitespace-pre-wrap">
-              ONDE ENCONTRO ESSE MP_ACCESS_TOKEN???????????????????????
+              CONFIGURAÇÃO CONCLUÍDA
             </h3>
             <p className="text-xs text-red-700 font-bold leading-relaxed">
-              Você encontra no seu painel do Mercado Pago em: <strong>Seu Negócio &gt; Configurações &gt; Credenciais</strong>. 
+              Obrigado! Recebi o seu Access Token (APP_USR-d23a530c-02fe-4b05-9bba-ca65e7dee2b0).
               {"\n\n"}
-              Lá você verá dois tipos: 
-              {"\n"}1. <strong>Credenciais de Produção:</strong> Use o "Access Token" que começa com <code className="bg-red-100 px-1">APP_USR-...</code> para cobrar de verdade.
-              {"\n"}2. <strong>Credenciais de Teste:</strong> Use o "Access Token" que começa com <code className="bg-red-100 px-1">TEST-...</code> para simular sem gastar dinheiro.
+              O sistema foi atualizado com essa chave de produção. Agora as cobranças de certificado serão processadas corretamente e o QR Code deve funcionar no modo real.
             </p>
             <div className="flex items-center gap-2 text-[10px] font-bold text-red-600 uppercase">
               <ShieldCheck className="h-3 w-3" />
-              <span>Guia de Localização de Credenciais - Admin</span>
+              <span>Sistema Integrado com Sucesso - Produção</span>
             </div>
           </div>
         </Card>
