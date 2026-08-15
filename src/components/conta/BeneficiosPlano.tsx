@@ -213,7 +213,7 @@ export default function BeneficiosPlano() {
               disabled={!category}
               className="w-full rounded-xl border border-input bg-background px-3 py-2 text-sm focus:ring-2 focus:ring-primary outline-none transition-all disabled:opacity-50"
             >
-              <option value="">{category && displayThemes.length === 0 ? "AGORA QUERO QUE BASEADO NA LISTA DE TEMAS QUE TE ENVIEI, QUE VC DESCREVA EM TÓPICOS OS CONTEUDOS DE CADA TEMA NA INTEGRA, QUE TEMOS NOS APPS NUMERE APARTIR DE 01." : "Selecione o tema..."}</option>
+              <option value="">{category && displayThemes.length === 0 ? "QUERO QUE ME DE ESSA LISTA DOS APP COM OS TEMAS E SEUS RESPECTIVOS ITENS." : "Selecione o tema..."}</option>
               {displayThemes.map((t) => (
                 <option key={t} value={t}>{t}</option>
               ))}
