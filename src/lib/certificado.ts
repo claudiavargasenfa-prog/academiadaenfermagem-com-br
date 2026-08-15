@@ -1,5 +1,8 @@
 import QRCode from "qrcode";
 import logoAdec from "@/assets/logo-adec.png.asset.json";
+import { CONTEUDO_PROGRAMATICO } from "@/data/conteudo-programatico";
+import { TEMAS_POR_CATEGORIA } from "@/data/temas-certificados";
+
 
 export const SITE_URL = "https://academiadaenfermagem.com.br";
 
