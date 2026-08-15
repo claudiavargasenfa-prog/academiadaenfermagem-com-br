@@ -7,44 +7,63 @@ export function DashboardAdmin() {
   const { data: stats, isLoading } = useQuery({
     queryKey: ["admin-dashboard-stats"],
     queryFn: async () => {
-      // Contagem de alunos por trilha (slug do plano)
+      // 1. Contagem TOTAL e por CATEGORIA da tabela profiles
+      // Buscamos todos os perfis para contar localmente por categoria
+      // (Para volumes pequenos como 17-500 usuários, select * é eficiente e nos dá dados precisos)
+      const { data: profiles, error: pErr } = await supabase
+        .from("profiles")
+        .select("id, categoria");
+      
+      if (pErr) throw pErr;
+
+      const profileCounts: Record<string, number> = {
+        academico: 0,
+        tecnico: 0,
+        enfermeiro: 0,
+        "tecnico-estudante": 0
+      };
+
+      (profiles || []).forEach(p => {
+        if (p.categoria && profileCounts[p.categoria] !== undefined) {
+          profileCounts[p.categoria]++;
+        }
+      });
+
+      // 2. Contagem de assinaturas (Active + Trial)
       const { data: subData, error: subError } = await supabase
         .from("user_subscriptions")
-        .select("plan_slug, status")
-        .eq("status", "active");
+        .select("plan_slug")
+        .in("status", ["active", "trial"])
+        .gt("expires_at", new Date().toISOString());
       
       if (subError) throw subError;
 
-      const trackCounts: Record<string, number> = {};
-      (subData || []).forEach(s => {
-        trackCounts[s.plan_slug] = (trackCounts[s.plan_slug] || 0) + 1;
-      });
-
-      // Total de usuários únicos
-      const { count: userCount, error: userError } = await supabase
-        .from("profiles")
-        .select("*", { count: 'exact', head: true });
-      
-      if (userError) throw userError;
-
-      // Guias clínicos "mais acessados" (simulado por enquanto via mini_apps mais recentes ou ativos)
+      // 3. Mini Apps Relevantes (Top 5 ativos)
       const { data: miniApps, error: miniError } = await supabase
         .from("mini_apps")
-        .select("name, slug, kind, gratuitidade:gratuito")
+        .select("name, slug, kind, gratuito")
         .eq("is_active", true)
         .limit(5);
 
       if (miniError) throw miniError;
 
       return {
-        trackCounts,
-        totalUsers: userCount || 0,
+        profileCounts,
+        totalUsers: profiles?.length || 0,
+        activeSubs: subData?.length || 0,
         topMiniApps: miniApps || []
       };
     }
   });
 
-  if (isLoading) return <Card><p className="text-sm animate-pulse">Carregando painel de controle...</p></Card>;
+  if (isLoading) return (
+    <div className="p-8 flex items-center justify-center">
+      <div className="flex flex-col items-center gap-3">
+        <div className="h-8 w-8 border-4 border-gold border-t-transparent rounded-full animate-spin" />
+        <p className="text-sm font-bold text-gold uppercase animate-pulse">Sincronizando estatísticas...</p>
+      </div>
+    </div>
+  );
 
   const tracks = [
     { slug: 'academico', name: 'Acadêmico', color: 'bg-blue-500' },
@@ -80,14 +99,14 @@ export function DashboardAdmin() {
         </Card>
         
         {tracks.map(t => (
-          <Card key={t.slug} className="p-4 border-l-4 border-l-foreground/20">
+          <Card key={t.slug} className="p-4 border-l-4 border-l-foreground/20 hover:border-l-gold/50 transition-all">
             <div className="flex items-center gap-3">
               <div className={`${t.color} bg-opacity-10 p-2 rounded-lg`}>
                 <Smartphone className={`h-5 w-5 ${t.color.replace('bg-', 'text-')}`} />
               </div>
               <div>
                 <p className="text-[10px] font-bold text-muted-foreground uppercase">{t.name}</p>
-                <p className="text-2xl font-black">{stats?.trackCounts[t.slug] || 0}</p>
+                <p className="text-2xl font-black">{stats?.profileCounts[t.slug] || 0}</p>
               </div>
             </div>
           </Card>
@@ -110,7 +129,7 @@ export function DashboardAdmin() {
                     <p className="text-[9px] text-muted-foreground font-semibold uppercase">{m.kind}</p>
                   </div>
                 </div>
-                {m.gratuitidade ? (
+                {m.gratuito ? (
                   <span className="text-[9px] font-black bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full uppercase">Grátis</span>
                 ) : (
                   <span className="text-[9px] font-black bg-gold/10 text-gold-dark px-2 py-0.5 rounded-full uppercase italic">Premium</span>
