@@ -21,7 +21,7 @@ export const TEMAS_POR_CATEGORIA: Record<string, string[]> = {
     "SALA DE PCR E CARRO DE EMERGÊNCIA",
     "Saúde Mental",
     "Segurança do Paciente",
-    "SEGURANÇA NA ADMINISTRAÇÃO DE DROGAS",
+    "SEPSE",
     "SINAIS VITAIS (4 TIPOS: Adulto, Gestante, Pediátrico e Idoso)",
     "Suporte à Decisão Clínica e Mecanismos Fisiopatológicos",
     "TÉCNICAS DE ANAMNESE, EXAME FÍSICO & EVOLUÇÃO COM MODELOS",
