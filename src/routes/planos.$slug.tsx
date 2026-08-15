@@ -17,13 +17,14 @@ import { useAppTexts } from "@/lib/app-texts";
 import { supabase } from "@/integrations/supabase/client";
 import { signOut } from "@/components/AuthGate";
 
-const ALLOWED = new Set(["academico", "tecnico", "tecnico-estudante", "enfermeiro"]);
+const ALLOWED = new Set(["academico", "tecnico", "tecnico-estudante", "enfermeiro", "uti-emergencia"]);
 
 const LABELS: Record<string, string> = {
   academico: "Academia do Acadêmico",
   tecnico: "Academia do Técnico em Enfermagem",
   "tecnico-estudante": "Academia do Estudante de Técnico em Enfermagem",
   enfermeiro: "Academia do Enfermeiro",
+  "uti-emergencia": "Academia de Terapia Intensiva & Emergência",
 };
 
 const DEFAULTS: Record<string, Record<string, string>> = {
@@ -38,6 +39,9 @@ const DEFAULTS: Record<string, Record<string, string>> = {
   },
   enfermeiro: {
     slogan: "Menos burocracia, mais paciente.",
+  },
+  "uti-emergencia": {
+    slogan: "Especialização avançada: do manejo de drogas vasoativas à ventilação mecânica.",
   },
 };
 
