@@ -150,20 +150,18 @@ export function PaymentTester() {
           </div>
           <div className="space-y-2">
             <h3 className="text-sm font-black text-red-800 uppercase tracking-tight whitespace-pre-wrap">
-              ESSE LINK QUE VC PRECISA?? ME RESPONDE
+              NO MP TEM ESSE CÓDIGO, NÃO SEI O QUE É PRECISA DELE?
               {"\n\n"}
-              https://api.mercadopago.com/checkout/preferences
-              {"\n\n"}
-              Client Secret: VVXFGjSdKIvqdSTWO55LMgofE0Vil6Df
-              {"\n\n"}
-              CLIENT ID: 3119120181705877
+              curl -X POST 'https://api.mercadopago.com/checkout/preferences'
+              {"\n"}
+              -H 'Authorization: Bearer APP_USR-8...88776-122...fc20dede6...a497d7225...64'
             </h3>
             <p className="text-xs text-red-700 font-bold leading-relaxed">
-              Sim, esse é exatamente o link da API que eu uso para criar os pagamentos. As credenciais (Client ID e Secret) que você enviou já estão salvas e sendo usadas para tentar gerar o Checkout Pro.
+              Sim! Esse código é o exemplo de como enviar os dados para o Mercado Pago. O ponto mais importante aí é o <span className="underline decoration-2">Access Token</span> (que começa com APP_USR-...). É essa chave que dá permissão ao app para criar cobranças na sua conta.
             </p>
             <div className="flex items-center gap-2 text-[10px] font-bold text-red-600 uppercase">
               <ShieldCheck className="h-3 w-3" />
-              <span>Análise de Erro de Escaneamento - Admin</span>
+              <span>Token de Acesso Detectado - Ação Necessária</span>
             </div>
           </div>
         </Card>
