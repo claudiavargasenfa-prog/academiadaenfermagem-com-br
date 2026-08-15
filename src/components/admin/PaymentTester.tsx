@@ -149,7 +149,7 @@ export function PaymentTester() {
             <AlertTriangle className="h-6 w-6 text-red-600" />
           </div>
           <div className="space-y-2">
-            <h3 className="text-sm font-black text-red-800 uppercase tracking-tight">ALERTA DE ERRO NO QRCODE</h3>
+            <h3 className="text-sm font-black text-red-800 uppercase tracking-tight">QUAL O NUMERO VC PRECISA DO MP PARA FATURAR O CERTIFICADO?</h3>
             <p className="text-xs text-red-700 font-bold leading-relaxed">
               RECEBI NO EMAIL UMA COMUNICAÇÃO DE PAGAMENTO PENDENTE, E OS NUMERO DO CÓDIGO QUE FUNCIONAM E ESTÃO NO MEU NOME. MAS O SEU QRCODE, NÃO ESTA FUNCIONANDO
             </p>
