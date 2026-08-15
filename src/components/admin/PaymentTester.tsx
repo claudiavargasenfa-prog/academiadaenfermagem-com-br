@@ -149,7 +149,7 @@ export function PaymentTester() {
             <AlertTriangle className="h-6 w-6 text-red-600" />
           </div>
           <div className="space-y-2">
-            <h3 className="text-sm font-black text-red-800 uppercase tracking-tight whitespace-pre-wrap">SÃO ESSAS, ?
+            <h3 className="text-sm font-black text-red-800 uppercase tracking-tight whitespace-pre-wrap">ESTÁ FALTANDO MAIS ALGUMA INFORMAÇÃO?</h3>
 {"\n\n"}Client Secret: VVXFGjSdKIvqdSTWO55LMgofE0Vil6Df
 {"\n\n"}CLIENT ID: 3119120181705877</h3>
             <p className="text-xs text-red-700 font-bold leading-relaxed">
