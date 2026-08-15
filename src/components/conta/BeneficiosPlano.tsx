@@ -309,7 +309,8 @@ export default function BeneficiosPlano() {
                     onClick={() => abrirCertificado(c)}
                     className="rounded-lg bg-[#2563eb] px-3 py-1.5 font-bold text-white transition-colors hover:bg-[#1d4ed8] shadow-sm flex items-center gap-2"
                   >
-                    <Award className="h-3 w-3" /> Abrir / salvar PDF
+                    <Award className="h-3 w-3" /> Imprimir Frente e Verso
+
                   </button>
                 </li>
               ))}
