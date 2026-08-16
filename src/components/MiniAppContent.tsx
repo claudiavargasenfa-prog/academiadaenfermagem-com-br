@@ -119,7 +119,6 @@ export function MiniAppContent({ slug }: { slug: string }) {
           .from("mini_app_subtopics")
           .select("*")
           .eq("mini_app_id", appData?.id || "")
-          .eq("is_draft", false)
           .order("ordem");
         
         if (subErr) throw subErr;
