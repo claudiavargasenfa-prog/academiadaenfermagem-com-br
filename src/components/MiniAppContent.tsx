@@ -9,6 +9,7 @@ import { useAuthReady } from "@/lib/access";
 import BlocoDitado from "@/components/voz/BlocoDitado";
 import GuiaColetaTurno from "@/components/GuiaColetaTurno";
 import { CertificadoFAQ } from "@/components/CertificadoFAQ";
+import { AccordionSearchLayout } from "@/components/miniapps/uti/AccordionSearchLayout";
 
 import { renderContent } from "@/lib/markdown";
 import { useLocal } from "@/lib/storage";
@@ -105,6 +106,27 @@ export function MiniAppContent({ slug }: { slug: string }) {
   const q = useQuery({
     queryKey: ["mini_app_content", slug],
     queryFn: async () => {
+      // Se for o mini app de drogas vasoativas, buscamos os sub-tópicos também
+      if (slug === 'drogas-vasoativas') {
+        const { data: appData, error: appErr } = await supabase
+          .from("mini_apps")
+          .select("id, content_md, video_url, audio_url")
+          .eq("slug", slug)
+          .maybeSingle();
+        if (appErr) throw appErr;
+        
+        const { data: subtopics, error: subErr } = await supabase
+          .from("mini_app_subtopics")
+          .select("*")
+          .eq("mini_app_id", appData?.id || "")
+          .eq("is_draft", false)
+          .order("ordem");
+        
+        if (subErr) throw subErr;
+        
+        return { ...appData, subtopics };
+      }
+
       const { data, error } = await supabase
         .from("mini_apps")
         .select("content_md, video_url, audio_url")
@@ -113,7 +135,7 @@ export function MiniAppContent({ slug }: { slug: string }) {
       if (error) throw error;
       return data;
     },
-    enabled: isReady,
+    enabled: isReady && !!slug,
     staleTime: 60_000,
   });
 
@@ -134,8 +156,42 @@ export function MiniAppContent({ slug }: { slug: string }) {
   }
 
   if (!q.data) return null;
-  const { content_md, video_url, audio_url } = q.data;
-  if (!content_md?.trim() && !video_url?.trim() && !audio_url?.trim()) return null;
+  const { content_md, video_url, audio_url } = q.data as any;
+  const hasContent = content_md?.trim() || video_url?.trim() || audio_url?.trim() || (slug === 'drogas-vasoativas' && (q.data as any).subtopics?.length > 0);
+  if (!hasContent) return null;
+
+  if (slug === 'drogas-vasoativas') {
+    const subtopics = (q.data as any).subtopics || [];
+    const drugs = subtopics.map((s: any) => ({
+      id: s.id,
+      title: s.title,
+      category: s.icon === '💉' ? 'Vasoativos' : 'Outros', // Fallback se não tiver categoria mapeada
+      content: s.content_md || 'Conteúdo em breve...',
+      color: s.icon === '💉' ? 'blue' : 'gray'
+    }));
+
+    // Tentar extrair categoria real se estiver no título como [Categoria] ou similar
+    drugs.forEach((d: any) => {
+      const match = d.title.match(/\[(.*?)\]/);
+      if (match) {
+        d.category = match[1];
+        d.title = d.title.replace(/\[.*?\]/, '').trim();
+      }
+    });
+
+    const categories = ['Vasoativos', 'Sedativos', 'Analgésicos', 'Antibióticos', 'Eletrólitos', 'Anticoagulantes'];
+
+    return (
+      <div className="mb-6 space-y-4">
+        <AccordionSearchLayout 
+          mainTitle="DROGAS MAIS UTILIZADA NA TERAPIA INTENSIVA"
+          drugs={drugs}
+          categories={categories}
+        />
+        <CertificadoFAQ />
+      </div>
+    );
+  }
 
   return (
     <div className="mb-6 space-y-4">
