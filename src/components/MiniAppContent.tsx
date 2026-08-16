@@ -118,7 +118,7 @@ export function MiniAppContent({ slug }: { slug: string }) {
         const { data: subtopics, error: subErr } = await supabase
           .from("mini_app_subtopics")
           .select("*")
-          .eq("mini_app_id", appData?.id)
+          .eq("mini_app_id", appData?.id || "")
           .eq("is_draft", false)
           .order("ordem");
         
