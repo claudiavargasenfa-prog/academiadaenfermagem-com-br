@@ -15,6 +15,7 @@ interface Drug {
   category: string;
   content: string;
   color: string;
+  icon?: string;
 }
 
 interface AccordionSearchLayoutProps {
