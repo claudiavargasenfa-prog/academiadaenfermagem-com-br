@@ -181,6 +181,12 @@ export function MiniAppContent({ slug }: { slug: string }) {
     });
 
     const categories = ['Vasoativos', 'Sedativos', 'Analgésicos', 'Antibióticos', 'Eletrólitos', 'Anticoagulantes'];
+    
+    // Log para depuração em caso de problemas
+    console.log("MiniAppContent: Renderizando layout de sanfona para drogas-vasoativas", {
+      totalDrogas: drugs.length,
+      drogas: drugs.map(d => d.title)
+    });
 
     return (
       <div className="mb-6 space-y-4">
