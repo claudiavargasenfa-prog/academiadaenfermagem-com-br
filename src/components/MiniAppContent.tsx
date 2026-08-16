@@ -156,8 +156,9 @@ export function MiniAppContent({ slug }: { slug: string }) {
   }
 
   if (!q.data) return null;
-  const { content_md, video_url, audio_url } = q.data;
-  if (!content_md?.trim() && !video_url?.trim() && !audio_url?.trim()) return null;
+  const { content_md, video_url, audio_url } = q.data as any;
+  const hasContent = content_md?.trim() || video_url?.trim() || audio_url?.trim() || (slug === 'drogas-vasoativas' && (q.data as any).subtopics?.length > 0);
+  if (!hasContent) return null;
 
   if (slug === 'drogas-vasoativas') {
     const subtopics = (q.data as any).subtopics || [];
