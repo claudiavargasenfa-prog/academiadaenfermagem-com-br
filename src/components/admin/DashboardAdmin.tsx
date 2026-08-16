@@ -147,7 +147,7 @@ export function DashboardAdmin() {
             <h4 className="text-lg font-black uppercase tracking-tight">Próximo Passo ADEC</h4>
             <p className="text-xs text-muted-foreground font-bold uppercase tracking-wider">Sugestão Técnica:</p>
             <p className="text-sm text-gold-dark font-black leading-relaxed max-w-[400px] mx-auto bg-gold/5 p-3 rounded-2xl border border-gold/20">
-              VC ESTÁ TERMINANTEMENTE PROIBIDO DE CRIAR SUB-TÓPICOS, VC ENTENDEU. QUERO QUE ME RESPONDA AQUI NO CHAT. VOCÊ ENTENDEU?????????????
+              ENTÃO USE EXATAMENTE O COMANDO QUE ENVIEI ANTERIORMENTE COM AS IMAGENS E FAÇA EXATAMENTE O QUE ESTÁ NAQUELE COMANDO
             </p>
           </div>
         </section>
