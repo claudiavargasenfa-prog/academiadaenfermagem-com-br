@@ -147,12 +147,7 @@ export function DashboardAdmin() {
             <h4 className="text-lg font-black uppercase tracking-tight">Próximo Passo ADEC</h4>
             <p className="text-xs text-muted-foreground font-bold uppercase tracking-wider">Sugestão Técnica:</p>
             <p className="text-sm text-gold-dark font-black leading-relaxed max-w-[400px] mx-auto bg-gold/5 p-3 rounded-2xl border border-gold/20">
-              VAMOS COMEÇAR O MINI APP DE DROGAS, NESSE MODELO:
-              Busca rápida + sanfonas + filtros:
-              DIVIDIMOS ASSIM: vasoativos | sedativos | analgésicos | antibióticos | eletrólitos | anticoagulantes.
-              DEIXEI AS IMAGENS DE UNS DESIGNERS QUE USAMOS EM OUTROS MINIS APP, PARA VC USAR NO APP DE CTI.
-              AGORA QUERO QUE VC INCLUA A NORA, QUE JA DEFINIMOS.
-              VC PRECISA INCLUIR A DROGA DOBUTAMINA, AMBAS NO APP CTI DENTRO DO MINI APP COM O NOME:
+              VC ESTÁ TERMINANTEMENTE PROIBIDO DE CRIAR SUB-TÓPICOS, VC ENTENDEU. QUERO QUE ME RESPONDA AQUI NO CHAT. VOCÊ ENTENDEU?????????????
             </p>
           </div>
         </section>
