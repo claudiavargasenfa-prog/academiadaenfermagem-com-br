@@ -167,7 +167,8 @@ export function MiniAppContent({ slug }: { slug: string }) {
       title: s.title,
       category: 'Vasoativos', // Categoria padrão
       content: s.content_md || 'Conteúdo em breve...',
-      color: 'blue'
+      color: 'blue',
+      icon: s.icon
     }));
 
     // Tentar extrair categoria real se estiver no título como [Categoria] ou similar
