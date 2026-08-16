@@ -1,45 +1,29 @@
-# Plano de Implementação: Terapia Intensiva - Manejo de Drogas Vasoativas (ADEC)
+# Plano: Reestruturação do Mini App Drogas Vasoativas (ICU Master)
 
-Este plano detalha a criação do conteúdo técnico para o Mini App **Manejo de Drogas Vasoativas** dentro da nova academia **ICU Master (Terapia Intensiva & Emergência)**, seguindo as diretrizes técnicas solicitadas e mantendo a identidade visual Premium Plus.
+O usuário solicitou uma reestruturação visual e funcional específica para o Mini App de Drogas Vasoativas, dentro da academia de Terapia Intensiva. O foco é implementar um layout baseado em sanfonas coloridas (tons bebê) com busca rápida e filtros, além de garantir que Noradrenalina e Dobutamina estejam presentes nessa nova estrutura.
 
-## Alterações
+## Alterações Visuais e de Interface (Frontend)
+- **Novo componente `AccordionSearchLayout`**: Criar um componente reutilizável para o layout de "Busca rápida + Sanfona Mestra + Sanfonas de Itens + Filtros".
+- **Estilização "Cores Bebê"**: Aplicar a paleta de cores pastéis conforme os modelos enviados nas imagens (azul claro, rosa claro, verde claro, amarelo claro, lilás).
+- **Integração no `MiniAppContent.tsx`**: Modificar o componente para detectar quando o slug é `drogas-vasoativas` e renderizar este layout especial em vez do fluxo padrão.
 
-### 1. Banco de Dados (Migração SQL)
-- Inserir o primeiro Mini App na academia `uti-emergencia`: **Manejo de Drogas Vasoativas** (`slug: manejo-drogas-vasoativas`).
-- Criar os dois primeiros sub-tópicos dentro deste Mini App:
-  - **1.1 Noradrenalina — a rainha do choque**
-  - **1.2 Dopamina — por que saiu de moda**
-- O conteúdo incluirá o passo a passo técnico, mecanismos de ação, diluições padrão, doses e cuidados críticos de enfermagem.
-- **Importante:** Garantir o `GRANT` de acesso para as novas linhas.
-
-### 2. Frontend & Conteúdo
-- Configurar o conteúdo em Markdown/HTML no banco de dados para que seja renderizado automaticamente pelo componente `MiniAppContent`.
-- Utilizar a paleta **Premium Plus** (Dark Mode, bordas douradas) já implementada na trilha para manter a consistência.
-- Implementar o texto técnico completo solicitado, formatado com ênfases (negrito/badges) para facilitar a leitura rápida à beira-leito.
+## Alterações de Conteúdo e Lógica (Backend/Banco de Dados)
+- **Estrutura de Sub-tópicos**:
+  - Uma sanfona mestra: "DROGAS MAIS UTILIZADAS NA TERAPIA INTENSIVA".
+  - Filtros por categoria: Vasoativos, Sedativos, Analgésicos, Antibióticos, Eletrólitos, Anticoagulantes.
+  - Sub-tópicos para as drogas específicas (Noradrenalina, Dobutamina) com ícones e cores temáticas.
+- **Migração SQL**: Limpar a estrutura atual e inserir os dados conforme o novo modelo.
 
 ## Detalhes Técnicos
+- O layout de busca usará filtragem local (client-side) para performance instantânea.
+- As sanfonas serão implementadas com componentes Shadcn/Radix UI para acessibilidade e animações suaves.
+- O botão "Ler Texto" ou a própria abertura da sanfona exibirá o conteúdo técnico detalhado já definido anteriormente.
 
-### Estrutura de Conteúdo (Markdown)
-O conteúdo será estruturado com:
-- `##` para títulos de seções.
-- `**` para termos técnicos importantes.
-- Listas numeradas e com bullets para o passo a passo.
-- Avisos de segurança em blocos de destaque (badges).
+## User Interface (UI)
+- **Busca**: Input fixo no topo com ícone de lupa.
+- **Filtros**: Chips coloridos horizontais com scroll.
+- **Sanfonas**: Bordas arredondadas, sombras suaves, ícones representativos.
 
-### Exemplo de SQL para Sub-tópicos:
-```sql
-INSERT INTO public.mini_app_subtopics (mini_app_id, slug, title, content_md, ordem)
-VALUES (
-  (SELECT id FROM public.mini_apps WHERE slug = 'manejo-drogas-vasoativas'),
-  'noradrenalina',
-  '1.1 Noradrenalina — a rainha do choque',
-  '## Mecanismo de Ação...',
-  1
-);
-```
-
-## Verificação
-1. Acessar a trilha `/trilha/uti-emergencia`.
-2. Verificar se o card "Manejo de Drogas Vasoativas" aparece com estilo Premium.
-3. Entrar no Mini App e validar a presença dos sub-tópicos no menu lateral e o conteúdo formatado.
-4. Validar o redirecionamento correto entre tópicos.
+## Segurança e Performance
+- Manter o uso de `RawHtmlHost` para evitar perda de estado em conteúdos complexos.
+- RLS e permissões mantidas conforme padrão do sistema.
