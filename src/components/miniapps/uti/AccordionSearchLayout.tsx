@@ -107,7 +107,7 @@ export function AccordionSearchLayout({ mainTitle, drugs, categories }: Accordio
                   >
                     <AccordionTrigger className="px-5 py-4 hover:no-underline text-left">
                       <div className="flex items-center gap-3">
-                        <span className="text-xl">{drug.color === 'blue' ? '💉' : '💊'}</span>
+                        <span className="text-xl">{drug.icon || (drug.color === 'blue' ? '💉' : '💊')}</span>
                         <div className="min-w-0">
                           <p className="font-bold text-sm uppercase tracking-tight truncate">{drug.title}</p>
                           <p className="text-[10px] opacity-70 font-black uppercase tracking-widest">{drug.category}</p>
