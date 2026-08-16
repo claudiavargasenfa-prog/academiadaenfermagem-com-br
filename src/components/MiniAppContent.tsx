@@ -185,7 +185,7 @@ export function MiniAppContent({ slug }: { slug: string }) {
     // Log para depuração em caso de problemas
     console.log("MiniAppContent: Renderizando layout de sanfona para drogas-vasoativas", {
       totalDrogas: drugs.length,
-      drogas: drugs.map(d => d.title)
+      drogas: drugs.map((d: any) => d.title)
     });
 
     return (
