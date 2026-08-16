@@ -104,7 +104,7 @@ export function AccordionSearchLayout({ mainTitle, drugs, categories }: Accordio
                   <AccordionItem 
                     key={drug.id} 
                     value={drug.id}
-                    className={`border rounded-2xl overflow-hidden shadow-sm transition-all ${CATEGORY_COLORS[drug.category.toLowerCase()] || "border-foreground/10 bg-white"}`}
+                    className={`border rounded-2xl overflow-hidden shadow-sm transition-all border-l-4 ${CATEGORY_COLORS[drug.category.toLowerCase()] || "border-foreground/10 bg-white"}`}
                   >
                     <AccordionTrigger className="px-5 py-4 hover:no-underline text-left">
                       <div className="flex items-center gap-3">
