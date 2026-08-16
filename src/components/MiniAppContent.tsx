@@ -135,7 +135,7 @@ export function MiniAppContent({ slug }: { slug: string }) {
       if (error) throw error;
       return data;
     },
-    enabled: isReady,
+    enabled: isReady && !!slug,
     staleTime: 60_000,
   });
 
