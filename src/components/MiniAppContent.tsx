@@ -165,9 +165,10 @@ export function MiniAppContent({ slug }: { slug: string }) {
     const drugs = subtopics.map((s: any) => ({
       id: s.id,
       title: s.title,
-      category: s.icon === '💉' ? 'Vasoativos' : 'Outros', // Fallback se não tiver categoria mapeada
+      category: 'Vasoativos', // Categoria padrão
       content: s.content_md || 'Conteúdo em breve...',
-      color: s.icon === '💉' ? 'blue' : 'gray'
+      color: 'blue',
+      icon: s.icon
     }));
 
     // Tentar extrair categoria real se estiver no título como [Categoria] ou similar

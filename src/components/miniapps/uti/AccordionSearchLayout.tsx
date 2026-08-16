@@ -15,6 +15,7 @@ interface Drug {
   category: string;
   content: string;
   color: string;
+  icon?: string;
 }
 
 interface AccordionSearchLayoutProps {
@@ -24,12 +25,12 @@ interface AccordionSearchLayoutProps {
 }
 
 const CATEGORY_COLORS: Record<string, string> = {
-  vasoativos: "border-blue-200 bg-blue-50 text-blue-900",
-  sedativos: "border-pink-200 bg-pink-50 text-pink-900",
-  analgésicos: "border-purple-200 bg-purple-50 text-purple-900",
-  antibióticos: "border-emerald-200 bg-emerald-50 text-emerald-900",
-  eletrólitos: "border-amber-200 bg-amber-50 text-amber-900",
-  anticoagulantes: "border-indigo-200 bg-indigo-50 text-indigo-900",
+  vasoativos: "border-[#B8E2F2] bg-[#F0F9FF] text-[#0369A1]", // Azul bebê
+  sedativos: "border-[#FBCFE8] bg-[#FFF1F2] text-[#BE185D]", // Rosa bebê
+  analgésicos: "border-[#E9D5FF] bg-[#FAF5FF] text-[#7E22CE]", // Roxo bebê
+  antibióticos: "border-[#A7F3D0] bg-[#ECFDF5] text-[#047857]", // Verde bebê
+  eletrólitos: "border-[#FDE68A] bg-[#FFFBEB] text-[#B45309]", // Amarelo bebê
+  anticoagulantes: "border-[#C7D2FE] bg-[#EEF2FF] text-[#4338CA]", // Índigo suave
 };
 
 export function AccordionSearchLayout({ mainTitle, drugs, categories }: AccordionSearchLayoutProps) {
@@ -107,7 +108,7 @@ export function AccordionSearchLayout({ mainTitle, drugs, categories }: Accordio
                   >
                     <AccordionTrigger className="px-5 py-4 hover:no-underline text-left">
                       <div className="flex items-center gap-3">
-                        <span className="text-xl">{drug.color === 'blue' ? '💉' : '💊'}</span>
+                        <span className="text-xl">{drug.icon || (drug.color === 'blue' ? '💉' : '💊')}</span>
                         <div className="min-w-0">
                           <p className="font-bold text-sm uppercase tracking-tight truncate">{drug.title}</p>
                           <p className="text-[10px] opacity-70 font-black uppercase tracking-widest">{drug.category}</p>
