@@ -1344,6 +1344,21 @@ export type Database = {
         Returns: number
       }
       expire_finished_trials: { Args: never; Returns: number }
+      get_mini_app_meta: {
+        Args: { _slug: string }
+        Returns: {
+          cakto_checkout_url: string
+          description: string
+          em_breve: boolean
+          gratuito: boolean
+          id: string
+          name: string
+          price_cents: number
+          price_original_cents: number
+          route_path: string
+          slug: string
+        }[]
+      }
       has_active_membership: { Args: { _user_id: string }; Returns: boolean }
       has_app_access: {
         Args: { _mini_app_id: string; _user_id: string }
