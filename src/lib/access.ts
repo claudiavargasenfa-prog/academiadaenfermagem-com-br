@@ -220,12 +220,12 @@ export function useAppAccess(slug: string) {
   return useQuery({
     queryKey: ["app_access", slug, user?.id ?? "anon"],
     queryFn: async () => {
-      const { data: app, error: e1 } = await supabase
-        .from("mini_apps")
-        .select("id, name, slug, gratuito, em_breve, route_path, cakto_checkout_url, price_cents, price_original_cents")
-        .eq("slug", slug)
-        .maybeSingle();
+      const { data: metaRows, error: e1 } = await supabase.rpc("get_mini_app_meta", {
+        _slug: slug,
+      });
+      const app = (metaRows ?? [])[0] ?? null;
       if (e1) throw e1;
+
       if (!app) return { app: null, granted: false, expiresAt: null as string | null, viaAdmin: false };
       if (app.gratuito) {
         return { app, granted: true, expiresAt: null as string | null, viaAdmin: false };

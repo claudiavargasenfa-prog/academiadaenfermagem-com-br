@@ -43,13 +43,10 @@ function Page() {
   const appQ = useQuery({
     queryKey: ["mini_app_meta", slug],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("mini_apps")
-        .select("id, name, slug")
-        .eq("slug", slug)
-        .maybeSingle();
+      const { data, error } = await supabase.rpc("get_mini_app_meta", { _slug: slug });
       if (error) throw error;
-      return data;
+      return (data ?? [])[0] ?? null;
+
     },
   });
 
