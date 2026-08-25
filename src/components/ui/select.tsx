@@ -18,7 +18,7 @@ const SelectTrigger = React.forwardRef<
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>
 >(({ className, children, ...props }, ref) => {
   // Tradução forçada conforme pedido do usuário
-  const ariaLabel = props["aria-label"] === "Language selector" || props["aria-label"] === "language selector"
+  const ariaLabel = props["aria-label"] === "Load the security issues from the scan results and fix the selected issues." || props["aria-label"] === "Load the security issues from the scan results and fix the selected issues."
     ? "visualizar senha"
     : props["aria-label"];
 
