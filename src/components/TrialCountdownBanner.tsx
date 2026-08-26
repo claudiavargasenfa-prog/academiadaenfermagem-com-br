@@ -75,13 +75,13 @@ export function TrialCountdownBanner() {
     blue: {
       bg: "bg-sky-500",
       title: "⏳ Seu tempo grátis termina em 5 dias",
-      body: `Olá, ${firstName}! Seu período gratuito${track ? ` na ${track.label}` : ""} termina em ${days} ${dayWord} (${dateLabel}). Para continuar com todo o conteúdo, associe-se por R$ ${priceLabel}/mês.`,
+      body: `Olá, ${firstName}! Seu período gratuito${track ? ` na ${track.label}` : ""} termina em ${days} ${dayWord} (${dateLabel}). Para continuar com todo o conteúdo, associe-se.`,
       cta: "🔐 GARANTIR ACESSO",
     },
     orange: {
       bg: "bg-orange-500",
       title: "⚠️ Seu tempo grátis termina em 3 dias",
-      body: `${firstName}, para continuar acessando todos os conteúdos, acesse o link e seja um associado por R$ ${priceLabel}/mês.`,
+      body: `${firstName}, para continuar acessando todos os conteúdos, acesse o link e seja um associado.`,
       cta: "🔐 SER ASSOCIADO",
     },
     red: {
