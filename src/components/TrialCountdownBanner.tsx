@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { X } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
+import { ensurePixel } from "@/lib/meta-pixel";
 import {
   fetchMyActiveSubscriptions,
   fetchMyProfile,
@@ -74,13 +75,13 @@ export function TrialCountdownBanner() {
     blue: {
       bg: "bg-sky-500",
       title: "⏳ Seu tempo grátis termina em 5 dias",
-      body: `Olá, ${firstName}! Seu período gratuito${track ? ` na ${track.label}` : ""} termina em ${days} ${dayWord} (${dateLabel}). Para continuar com todo o conteúdo, associe-se por R$ ${priceLabel}/mês.`,
+      body: `Olá, ${firstName}! Seu período gratuito${track ? ` na ${track.label}` : ""} termina em ${days} ${dayWord} (${dateLabel}). Para continuar com todo o conteúdo, associe-se.`,
       cta: "🔐 GARANTIR ACESSO",
     },
     orange: {
       bg: "bg-orange-500",
       title: "⚠️ Seu tempo grátis termina em 3 dias",
-      body: `${firstName}, para continuar acessando todos os conteúdos, acesse o link e seja um associado por R$ ${priceLabel}/mês.`,
+      body: `${firstName}, para continuar acessando todos os conteúdos, acesse o link e seja um associado.`,
       cta: "🔐 SER ASSOCIADO",
     },
     red: {
@@ -125,6 +126,14 @@ export function TrialCountdownBanner() {
           <Link
             to="/planos/$slug"
             params={{ slug: planoSlug }}
+            onClick={() => {
+              try {
+                ensurePixel({ pageView: false });
+                (window as any).fbq?.("track", "InitiateCheckout");
+              } catch {
+                /* ignore */
+              }
+            }}
             className="shrink-0 inline-flex items-center gap-1 rounded-lg bg-white px-3 py-1.5 text-xs font-extrabold text-foreground shadow hover:brightness-95"
           >
             {s.cta}
