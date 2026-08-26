@@ -119,8 +119,8 @@ export function TrialCountdownBanner() {
     <div className={`relative ${s.bg} text-white trial-pulse`}>
       <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-2.5">
         <div className="min-w-0 flex-1">
-          <p className="text-sm font-extrabold leading-tight">{s.title}</p>
-          <p className="mt-0.5 line-clamp-2 text-xs opacity-95">{s.body}</p>
+          <p className="text-base font-extrabold leading-tight">{s.title}</p>
+          <p className="mt-0.5 line-clamp-2 text-sm opacity-95">{s.body}</p>
         </div>
         {planoSlug ? (
           <Link
