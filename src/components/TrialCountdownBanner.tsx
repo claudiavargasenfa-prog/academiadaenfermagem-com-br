@@ -126,6 +126,14 @@ export function TrialCountdownBanner() {
           <Link
             to="/planos/$slug"
             params={{ slug: planoSlug }}
+            onClick={() => {
+              try {
+                ensurePixel({ pageView: false });
+                (window as any).fbq?.("track", "InitiateCheckout");
+              } catch {
+                /* ignore */
+              }
+            }}
             className="shrink-0 inline-flex items-center gap-1 rounded-lg bg-white px-3 py-1.5 text-xs font-extrabold text-foreground shadow hover:brightness-95"
           >
             {s.cta}
