@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { X } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
+import { ensurePixel } from "@/lib/meta-pixel";
 import {
   fetchMyActiveSubscriptions,
   fetchMyProfile,
