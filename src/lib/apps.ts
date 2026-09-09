@@ -65,10 +65,9 @@ export async function fetchPlacementsForApp(appId: string): Promise<MiniAppPlace
     .order("ordem", { ascending: true });
   if (error) throw error;
 
-  // Placements continuam sendo usados para seções e ordem. Quando algum Mini App
-  // estiver marcado no catálogo para esta Academia mas faltar no placement, ele
-  // entra automaticamente no final da lista (Geral). Isso evita que um trial
-  // mostre apenas uma parte da Academia por inconsistência de configuração.
+  // Os placements são a fonte primária da composição da Academia.
+  // A consulta de catálogo abaixo é apenas um complemento para recuperar
+  // eventuais Mini Apps que estejam marcados na trilha mas sem placement.
   const trackBySlug: Record<string, keyof CatalogMiniApp | null> = {
     academico: "track_academico",
     tecnico: "track_tecnico",
@@ -78,15 +77,20 @@ export async function fetchPlacementsForApp(appId: string): Promise<MiniAppPlace
   const trackField = app?.slug ? trackBySlug[app.slug] : null;
   if (!trackField) return placements ?? [];
 
-  // O tipo gerado do Supabase pode estar um commit atrás da migration; o cast
-  // mantém o build compatível enquanto a tipagem é regenerada pelo projeto.
+  // O banco de produção pode ainda não ter a coluna opcional da trilha do
+  // Estudante de Técnico. Se a consulta complementar falhar, NÃO podemos
+  // derrubar a Academia: os placements válidos continuam sendo retornados.
   const miniAppsTable = supabase.from("mini_apps") as any;
   const { data: catalog, error: catalogError } = await miniAppsTable
     .select("id, is_active, sort_order, track_academico, track_tecnico, track_tecnico_estudante, track_enfermeiro")
     .eq("is_active", true)
     .eq(trackField, true)
     .order("sort_order", { ascending: true });
-  if (catalogError) throw catalogError;
+
+  if (catalogError) {
+    console.warn("Optional academy track lookup unavailable; using placements:", catalogError);
+    return placements ?? [];
+  }
 
   const existing = new Set((placements ?? []).map((p) => p.mini_app_id));
   const base = placements ?? [];
