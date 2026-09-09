@@ -5,11 +5,12 @@ export const listMiniAppsCatalog = createServerFn({ method: "GET" })
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
     // Catálogo usado pela vitrine das Academias.
-    // Retorna apenas metadados; conteúdo protegido continua fora deste endpoint.
+    // Não depende de colunas opcionais de trilha; a vinculação por Academia
+    // continua sendo determinada pelos placements e pelas regras de acesso.
     const { data, error } = await supabaseAdmin
       .from("mini_apps")
       .select(
-        "id, slug, name, description, kind, price_cents, cakto_product_id, cakto_checkout_url, icon, is_active, sort_order, created_at, updated_at, gratuito, em_breve, route_path, horas_certificado, price_original_cents, track_academico, track_tecnico, track_tecnico_estudante, track_enfermeiro, badges",
+        "id, slug, name, description, kind, price_cents, cakto_product_id, cakto_checkout_url, icon, is_active, sort_order, created_at, updated_at, gratuito, em_breve, route_path, horas_certificado, price_original_cents, track_academico, track_tecnico, track_enfermeiro, badges",
       )
       .eq("is_active", true)
       .order("sort_order", { ascending: true })
