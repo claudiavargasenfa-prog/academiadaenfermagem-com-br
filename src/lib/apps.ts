@@ -78,8 +78,10 @@ export async function fetchPlacementsForApp(appId: string): Promise<MiniAppPlace
   const trackField = app?.slug ? trackBySlug[app.slug] : null;
   if (!trackField) return placements ?? [];
 
-  const { data: catalog, error: catalogError } = await supabase
-    .from("mini_apps")
+  // O tipo gerado do Supabase pode estar um commit atrás da migration; o cast
+  // mantém o build compatível enquanto a tipagem é regenerada pelo projeto.
+  const miniAppsTable = supabase.from("mini_apps") as any;
+  const { data: catalog, error: catalogError } = await miniAppsTable
     .select("id, is_active, sort_order, track_academico, track_tecnico, track_tecnico_estudante, track_enfermeiro")
     .eq("is_active", true)
     .eq(trackField, true)
