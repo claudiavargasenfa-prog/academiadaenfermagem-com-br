@@ -3,12 +3,17 @@ import { createServerFn } from "@tanstack/react-start";
 export const listMiniAppsCatalog = createServerFn({ method: "GET" })
   .handler(async () => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    
+
+    // O catálogo precisa entregar TODOS os campos usados pela vitrine das Academias.
+    // Nunca retornamos conteúdo protegido (content_md, vídeo/áudio ou dados privados).
     const { data, error } = await supabaseAdmin
       .from("mini_apps")
-      .select("id, name, track_tecnico, track_academico, track_enfermeiro")
+      .select(
+        "id, slug, name, description, kind, price_cents, cakto_product_id, cakto_checkout_url, icon, is_active, sort_order, created_at, updated_at, gratuito, em_breve, route_path, horas_certificado, price_original_cents, track_academico, track_tecnico, track_enfermeiro, track_tecnico_estudante, track_uti_emergencia, badges",
+      )
       .eq("is_active", true)
-      .order("name");
+      .order("sort_order", { ascending: true })
+      .order("name", { ascending: true });
 
     if (error) {
       console.error("Error fetching catalog with admin client:", error);
