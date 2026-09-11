@@ -63,9 +63,6 @@ export const checkTrialEligibility = createServerFn({ method: "POST" })
               .gt("expires_at", new Date().toISOString())
               .limit(1)
           : { data: null };
-          .neq("status", "trial")
-          .gt("expires_at", new Date().toISOString())
-          .limit(1);
         if (!paga || paga.length === 0) {
           return {
             allowed: false,
