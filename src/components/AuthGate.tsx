@@ -288,7 +288,16 @@ export function AuthScreen({ cadastroSlug: forcedCadastroSlug }: { cadastroSlug?
                     className={input}
                     placeholder="(11) 99999-0000"
                     inputMode="tel"
+                    autoComplete="tel"
+                    aria-invalid={!!phoneErroInline}
                   />
+                  {phoneErroInline ? (
+                    <p className="mt-1 text-xs font-semibold text-destructive">{phoneErroInline}</p>
+                  ) : (
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      Obrigatório um celular ativo — você poderá receber confirmação.
+                    </p>
+                  )}
                 </div>
                 <div>
                   <label className={label}>Categoria *</label>
