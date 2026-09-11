@@ -123,8 +123,9 @@ export function AuthScreen({ cadastroSlug: forcedCadastroSlug }: { cadastroSlug?
           throw new Error("Informe seu nome completo.");
         }
         const phoneDigits = phone.replace(/\D/g, "");
-        if (phoneDigits.length < 10 || phoneDigits.length > 11) {
-          throw new Error("Celular inválido. Use o formato (DDD) 9XXXX-XXXX.");
+        const phoneErro = validatePhoneBR(phone);
+        if (phoneErro) {
+          throw new Error(phoneErro);
         }
         if (!categoria) {
           throw new Error("Selecione sua categoria (Acadêmico, Estudante de Técnico, Técnico ou Enfermeiro).");
