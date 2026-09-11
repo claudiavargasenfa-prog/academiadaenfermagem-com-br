@@ -53,11 +53,16 @@ export const checkTrialEligibility = createServerFn({ method: "POST" })
       if (dono !== data.email) {
         // Se a conta que já usa este celular é PAGANTE (assinatura ativa, não trial),
         // não bloqueia o novo cadastro — cliente pagante tem prioridade.
-        const donoId = mesmoFone[0]?.id as string | undefined;
-        const { data: paga } = await supabaseAdmin
-          .from("user_subscriptions")
-          .select("id")
-          .eq("user_id", donoId)
+        const donoId = mesmoFone[0]?.id as string;
+        const { data: paga } = donoId
+          ? await supabaseAdmin
+              .from("user_subscriptions")
+              .select("id")
+              .eq("user_id", donoId)
+              .neq("status", "trial")
+              .gt("expires_at", new Date().toISOString())
+              .limit(1)
+          : { data: null };
           .neq("status", "trial")
           .gt("expires_at", new Date().toISOString())
           .limit(1);
