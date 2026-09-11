@@ -99,6 +99,7 @@ export function AuthScreen({ cadastroSlug: forcedCadastroSlug }: { cadastroSlug?
   const checkTrial = useServerFn(checkTrialEligibility);
   const recordTrial = useServerFn(recordTrialFingerprint);
   const navigate = useNavigate();
+  const phoneErroInline = phone.replace(/\D/g, "").length >= 11 ? validatePhoneBR(phone) : null;
 
 
 
