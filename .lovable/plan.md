@@ -1,58 +1,43 @@
-# Só permitir cadastro com celular válido
+# Celular obrigatório e válido no cadastro
 
-## O que você pediu
+## O que muda
 
-Bloquear o cadastro de quem coloca um celular falso e, se possível, confirmar por SMS.
+No formulário de cadastro, o campo de celular passa a ser obrigatório e só aceita um número
+brasileiro real. Abaixo do campo aparece o aviso:
+
+> Obrigatório um celular ativo — você poderá receber confirmação.
+
+## Regras de aceitação do número
+
+O cadastro não conclui se o número:
+
+- não tiver 11 dígitos (DDD + 9 dígitos);
+- tiver um DDD que não existe no Brasil;
+- não começar com 9 depois do DDD (ou seja, fixo não é aceito);
+- for claramente falso (todos os dígitos iguais, sequências como 11999999999 ou 11912345678);
+- já estiver cadastrado por outra pessoa — nesse caso a mensagem é "Este celular já está em uso".
+
+Enquanto a pessoa digita, o número é formatado sozinho como (00) 90000-0000 e, se estiver errado,
+o aviso aparece em vermelho logo abaixo, sem precisar clicar em Criar conta.
 
 ## Sobre o SMS
 
-Enviar SMS não é gratuito: é preciso contratar um serviço de envio (por exemplo Twilio ou Zenvia)
-e cada mensagem custa em média R$ 0,10 a R$ 0,30. Como hoje não há esse serviço contratado, o
-plano abaixo faz duas coisas:
-
-1. Aperta agora, sem custo, a checagem do número no cadastro.
-2. Deixa o caminho pronto para ligar o SMS quando você quiser contratar (é só me avisar e me
-   passar os dados do provedor).
-
-## Etapa 1 — Validação forte do celular (sem custo, feita agora)
-
-No formulário de cadastro, o número só passa se:
-
-- Tiver 11 dígitos (DDD + 9 dígitos).
-- O DDD for um DDD brasileiro que realmente existe.
-- O primeiro dígito depois do DDD for 9 (celular, não fixo).
-- Não for um número obviamente falso (todos os dígitos iguais, sequências como 99999999999,
-  912345678, etc.).
-- Não estiver já cadastrado por outra pessoa — mensagem clara: "Este celular já está em uso".
-
-Enquanto a pessoa digita, o campo mostra a máscara (00) 90000-0000 e um aviso vermelho embaixo
-quando o número não é aceito, em vez de só falhar ao clicar em Criar conta.
-
-## Etapa 2 — Confirmação por SMS (quando você contratar)
-
-Quando quiser ativar, o fluxo passa a ser:
-
-1. Pessoa preenche o cadastro.
-2. Recebe um código de 6 dígitos no celular.
-3. Só depois de digitar o código certo a conta é criada e o período grátis liberado.
-4. Reenvio permitido a cada 60 segundos, código expira em 10 minutos, máximo de 5 tentativas.
-
-Isso elimina de vez cadastro com número inventado.
+Este passo deixa o número confiável e avisa a pessoa que poderá receber confirmação. O envio
+automático do código por SMS depende de contratar um serviço de mensagens (custa por mensagem
+enviada). Quando você quiser ativar, é só me falar que eu ligo o código de 6 dígitos no cadastro.
 
 ## O que não muda
 
-Layout, cores, textos das academias, pagamentos, período grátis de 15 dias individuais, login por
-e-mail e Google — tudo continua igual.
+Layout, cores, textos das academias, período grátis de 15 dias, pagamentos e login por e-mail e
+Google continuam iguais.
 
 ## Detalhes técnicos
 
-- `src/lib/phone-br.ts` (novo): `normalizePhoneBR`, lista de DDDs válidos, detecção de padrões
-  repetidos/sequenciais, `formatPhoneBR` para a máscara.
-- `src/components/AuthGate.tsx`: substituir a checagem `length < 10 || > 11` por
-  `validatePhoneBR`, aplicar máscara no `onChange` do campo e exibir erro inline abaixo do input.
-- `src/lib/trial-guard.functions.ts`: em `checkTrialEligibility`, adicionar verificação de celular
-  já vinculado a um perfil existente (`profiles.phone`) via `supabaseAdmin`, retornando
-  `{ allowed: false, reason: "Este celular já está em uso." }`. Essa checagem vale sempre, inclusive
-  durante a campanha (hoje a campanha retorna `allowed: true` antes de qualquer consulta).
-- Etapa 2 (só ao contratar o provedor): habilitar phone auth no backend, guardar o token do
-  provedor como segredo e inserir um passo de OTP entre o formulário e `supabase.auth.signUp`.
+- `src/lib/phone-br.ts` (novo): lista de DDDs válidos, `validatePhoneBR` (11 dígitos, nono dígito 9,
+  rejeição de repetidos/sequenciais) e `formatPhoneBR` para a máscara.
+- `src/components/AuthGate.tsx`: trocar a checagem `phoneDigits.length < 10 || > 11` por
+  `validatePhoneBR`, aplicar máscara no `onChange`, marcar o input como `required` com
+  `inputMode="tel"`, e renderizar o texto de ajuda e o erro inline abaixo do campo.
+- `src/lib/trial-guard.functions.ts`: em `checkTrialEligibility`, antes do atalho de campanha,
+  consultar `profiles.phone` via `supabaseAdmin` e retornar
+  `{ allowed: false, reason: "Este celular já está em uso." }` quando houver duplicidade.
