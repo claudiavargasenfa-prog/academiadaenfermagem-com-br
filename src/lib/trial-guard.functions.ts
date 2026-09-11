@@ -40,12 +40,29 @@ export const checkTrialEligibility = createServerFn({ method: "POST" })
       };
     }
 
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    // Celular já usado por outra conta — bloqueia sempre, inclusive na campanha
+    const { data: mesmoFone, error: foneErr } = await supabaseAdmin
+      .from("profiles")
+      .select("id, email")
+      .eq("phone", data.phone_digits)
+      .limit(1);
+    if (!foneErr && mesmoFone && mesmoFone.length > 0) {
+      const dono = (mesmoFone[0]?.email || "").toLowerCase();
+      if (dono !== data.email) {
+        return {
+          allowed: false,
+          reason:
+            "Este celular já está em uso em outra conta. Informe um celular ativo que seja seu.",
+        };
+      }
+    }
+
     // Durante a campanha (até 10/09/2026) todo mundo recebe os 15 dias grátis
     if (Date.now() <= TRIAL_FREE_UNTIL.getTime()) {
       return { allowed: true };
     }
-
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
     // Bloqueia apenas se o MESMO celular já usou o grátis nos últimos 180 dias
     // (o device_id continua sendo gravado, mas não bloqueia — aparelhos parecidos colidem)

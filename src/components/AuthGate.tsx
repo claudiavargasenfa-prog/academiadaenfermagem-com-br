@@ -11,6 +11,7 @@ import { getDeviceId } from "@/lib/device-fingerprint";
 import { checkTrialEligibility, recordTrialFingerprint } from "@/lib/trial-guard.functions";
 import { WelcomePanel } from "@/components/cadastro/WelcomePanel";
 import { traduzirErro } from "@/lib/auth-errors";
+import { formatPhoneBR, validatePhoneBR } from "@/lib/phone-br";
 
 
 
@@ -67,14 +68,6 @@ export function WelcomeAuthScreen({ slug }: { slug?: string } = {}) {
 }
 
 
-function formatPhoneBR(v: string): string {
-  const digits = v.replace(/\D/g, "").slice(0, 11);
-  if (digits.length <= 2) return digits.length ? `(${digits}` : "";
-  if (digits.length <= 6) return `(${digits.slice(0, 2)}) ${digits.slice(2)}`;
-  if (digits.length <= 10)
-    return `(${digits.slice(0, 2)}) ${digits.slice(2, 6)}-${digits.slice(6)}`;
-  return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`;
-}
 
 export function AuthScreen({ cadastroSlug: forcedCadastroSlug }: { cadastroSlug?: string } = {}) {
   const currentPath = forcedCadastroSlug ? "/" : typeof window !== "undefined" ? window.location.pathname : "/";
@@ -106,6 +99,7 @@ export function AuthScreen({ cadastroSlug: forcedCadastroSlug }: { cadastroSlug?
   const checkTrial = useServerFn(checkTrialEligibility);
   const recordTrial = useServerFn(recordTrialFingerprint);
   const navigate = useNavigate();
+  const phoneErroInline = phone.replace(/\D/g, "").length >= 11 ? validatePhoneBR(phone) : null;
 
 
 
@@ -130,8 +124,9 @@ export function AuthScreen({ cadastroSlug: forcedCadastroSlug }: { cadastroSlug?
           throw new Error("Informe seu nome completo.");
         }
         const phoneDigits = phone.replace(/\D/g, "");
-        if (phoneDigits.length < 10 || phoneDigits.length > 11) {
-          throw new Error("Celular inválido. Use o formato (DDD) 9XXXX-XXXX.");
+        const phoneErro = validatePhoneBR(phone);
+        if (phoneErro) {
+          throw new Error(phoneErro);
         }
         if (!categoria) {
           throw new Error("Selecione sua categoria (Acadêmico, Estudante de Técnico, Técnico ou Enfermeiro).");
@@ -294,7 +289,16 @@ export function AuthScreen({ cadastroSlug: forcedCadastroSlug }: { cadastroSlug?
                     className={input}
                     placeholder="(11) 99999-0000"
                     inputMode="tel"
+                    autoComplete="tel"
+                    aria-invalid={!!phoneErroInline}
                   />
+                  {phoneErroInline ? (
+                    <p className="mt-1 text-xs font-semibold text-destructive">{phoneErroInline}</p>
+                  ) : (
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      Obrigatório um celular ativo — você poderá receber confirmação.
+                    </p>
+                  )}
                 </div>
                 <div>
                   <label className={label}>Categoria *</label>
