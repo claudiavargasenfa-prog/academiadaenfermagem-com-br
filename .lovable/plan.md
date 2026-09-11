@@ -1,46 +1,58 @@
-# Diagnóstico: por que os alunos em período grátis não veem toda a Academia
+# Só permitir cadastro com celular válido
 
-## Resultado da investigação
+## O que você pediu
 
-A campanha e o banco **estão corretos**. O que quebrou foi o código que veio do GitHub.
+Bloquear o cadastro de quem coloca um celular falso e, se possível, confirmar por SMS.
 
-Verifiquei no banco:
+## Sobre o SMS
 
-- Os cadastros recebem 15 dias individuais, contados da hora do próprio cadastro (ex.: cadastro 04/09 → vence 19/09; cadastro 29/08 → vence 13/09). Nenhuma data única de expiração.
-- Cada aluno recebe o plano da categoria escolhida (acadêmico, técnico, estudante de técnico, enfermeiro).
-- As Academias têm os conteúdos vinculados: Acadêmico 29, Estudante de Técnico 20, Técnico 24, Enfermeiro 30.
-- As regras de acesso do banco (função de liberação e permissões) continuam corretas.
+Enviar SMS não é gratuito: é preciso contratar um serviço de envio (por exemplo Twilio ou Zenvia)
+e cada mensagem custa em média R$ 0,10 a R$ 0,30. Como hoje não há esse serviço contratado, o
+plano abaixo faz duas coisas:
 
-## A causa real
+1. Aperta agora, sem custo, a checagem do número no cadastro.
+2. Deixa o caminho pronto para ligar o SMS quando você quiser contratar (é só me avisar e me
+   passar os dados do provedor).
 
-Algumas correções feitas direto no GitHub passaram a pedir ao banco uma **coluna que não existe**: `track_tecnico_estudante` na tabela dos Mini Apps. O banco só tem `track_academico`, `track_tecnico` e `track_enfermeiro` — a migration que criaria essa coluna nunca foi aplicada.
+## Etapa 1 — Validação forte do celular (sem custo, feita agora)
 
-Consequências, exatamente o sintoma relatado:
+No formulário de cadastro, o número só passa se:
 
-1. `src/lib/catalog.functions.ts` — a busca do catálogo falha e o código devolve uma lista **vazia**. Sem catálogo, a página da Academia não consegue montar os cards, mesmo com os vínculos certos no banco. Isso afeta a trilha, a página Minha Conta e a de planos.
-2. `src/lib/apps.ts` (`fetchPlacementsForApp`) — a mesma coluna inexistente faz a consulta dar erro e a página da Academia quebrar/ficar sem itens.
+- Tiver 11 dígitos (DDD + 9 dígitos).
+- O DDD for um DDD brasileiro que realmente existe.
+- O primeiro dígito depois do DDD for 9 (celular, não fixo).
+- Não for um número obviamente falso (todos os dígitos iguais, sequências como 99999999999,
+  912345678, etc.).
+- Não estiver já cadastrado por outra pessoa — mensagem clara: "Este celular já está em uso".
 
-Ou seja: **não é RLS, não é o trial, não é placements, não é o frontend de bloqueio**. É desalinhamento entre o código do GitHub e o banco (migration não aplicada).
+Enquanto a pessoa digita, o campo mostra a máscara (00) 90000-0000 e um aviso vermelho embaixo
+quando o número não é aceito, em vez de só falhar ao clicar em Criar conta.
 
-## Correção proposta (para sua aprovação, ainda não executada)
+## Etapa 2 — Confirmação por SMS (quando você contratar)
 
-Opção recomendada — alinhar o banco ao código:
+Quando quiser ativar, o fluxo passa a ser:
 
-1. Criar a coluna `track_tecnico_estudante` na tabela dos Mini Apps (padrão: desmarcado).
-2. Preencher essa marcação para os 20 conteúdos já vinculados à Academia do Estudante de Técnico, e conferir as demais marcações de trilha contra os vínculos existentes de cada Academia.
-3. Nenhuma mudança nas regras de acesso, no trial de 15 dias, em preços, layout ou textos.
+1. Pessoa preenche o cadastro.
+2. Recebe um código de 6 dígitos no celular.
+3. Só depois de digitar o código certo a conta é criada e o período grátis liberado.
+4. Reenvio permitido a cada 60 segundos, código expira em 10 minutos, máximo de 5 tentativas.
 
-Alternativa (se preferir não mexer no banco): remover a coluna nova das duas consultas do código. Funciona, mas desfaz as correções feitas no GitHub e volta a depender só dos vínculos.
+Isso elimina de vez cadastro com número inventado.
 
-## Verificação após a correção
+## O que não muda
 
-- Abrir cada uma das 4 Academias e conferir as contagens: 29 / 20 / 24 / 30.
-- Entrar com um aluno em trial vigente e confirmar que todos os conteúdos da Academia dele aparecem liberados e abrem.
-- Confirmar que quem não tem trial nem assinatura continua vendo só os gratuitos.
+Layout, cores, textos das academias, pagamentos, período grátis de 15 dias individuais, login por
+e-mail e Google — tudo continua igual.
 
 ## Detalhes técnicos
 
-- `mini_apps` não possui `track_tecnico_estudante`; `catalog.functions.ts` inclui essa coluna no `select` (PostgREST 42703) e o handler faz `return []` no erro, silenciando a falha.
-- `apps.ts:85` faz o mesmo `select` e ainda `.eq(trackField, true)`, com `throw` no erro — quebra `/trilha/tecnico-estudante`.
-- `access.ts` referencia `track_uti_emergencia` (também inexistente) apenas em memória, sem consulta ao banco: inofensivo hoje, mas vale normalizar.
-- Correção via migration: `ALTER TABLE public.mini_apps ADD COLUMN track_tecnico_estudante boolean NOT NULL DEFAULT false;` + UPDATE marcando os `mini_app_id` presentes em `mini_app_placements` do app `tecnico-estudante`.
+- `src/lib/phone-br.ts` (novo): `normalizePhoneBR`, lista de DDDs válidos, detecção de padrões
+  repetidos/sequenciais, `formatPhoneBR` para a máscara.
+- `src/components/AuthGate.tsx`: substituir a checagem `length < 10 || > 11` por
+  `validatePhoneBR`, aplicar máscara no `onChange` do campo e exibir erro inline abaixo do input.
+- `src/lib/trial-guard.functions.ts`: em `checkTrialEligibility`, adicionar verificação de celular
+  já vinculado a um perfil existente (`profiles.phone`) via `supabaseAdmin`, retornando
+  `{ allowed: false, reason: "Este celular já está em uso." }`. Essa checagem vale sempre, inclusive
+  durante a campanha (hoje a campanha retorna `allowed: true` antes de qualquer consulta).
+- Etapa 2 (só ao contratar o provedor): habilitar phone auth no backend, guardar o token do
+  provedor como segredo e inserir um passo de OTP entre o formulário e `supabase.auth.signUp`.
