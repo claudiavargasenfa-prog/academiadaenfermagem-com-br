@@ -51,11 +51,23 @@ export const checkTrialEligibility = createServerFn({ method: "POST" })
     if (!foneErr && mesmoFone && mesmoFone.length > 0) {
       const dono = (mesmoFone[0]?.email || "").toLowerCase();
       if (dono !== data.email) {
-        return {
-          allowed: false,
-          reason:
-            "Este celular já está em uso em outra conta. Informe um celular ativo que seja seu.",
-        };
+        // Se a conta que já usa este celular é PAGANTE (assinatura ativa, não trial),
+        // não bloqueia o novo cadastro — cliente pagante tem prioridade.
+        const donoId = mesmoFone[0]?.id as string | undefined;
+        const { data: paga } = await supabaseAdmin
+          .from("user_subscriptions")
+          .select("id")
+          .eq("user_id", donoId)
+          .neq("status", "trial")
+          .gt("expires_at", new Date().toISOString())
+          .limit(1);
+        if (!paga || paga.length === 0) {
+          return {
+            allowed: false,
+            reason:
+              "Este celular já está em uso em outra conta. Informe um celular ativo que seja seu.",
+          };
+        }
       }
     }
 
