@@ -11,6 +11,7 @@ import { getDeviceId } from "@/lib/device-fingerprint";
 import { checkTrialEligibility, recordTrialFingerprint } from "@/lib/trial-guard.functions";
 import { WelcomePanel } from "@/components/cadastro/WelcomePanel";
 import { traduzirErro } from "@/lib/auth-errors";
+import { formatPhoneBR, validatePhoneBR } from "@/lib/phone-br";
 
 
 
