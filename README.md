@@ -1,6 +1,6 @@
 # MEU APLICATIVO
 
-QUERO CRIAR UM APP, PARA AJUDAE ACADEMICOS DE ENFERMAGEM.
+QUERO CRIAR UM APP, PARA AJUDAR ACADEMICOS DE ENFERMAGEM.
 
 Objetivo: Agir como um Desenvolvedor Full-Stack Sênior e Designer de UX/UI para converter o conteúdo de um "Caderno de Estágio de Enfermagem" em um Aplicativo PWA (Progressive Web App) funcional, moderno e focado em produtividade acadêmica.
 
