@@ -10,6 +10,7 @@ import BlocoDitado from "@/components/voz/BlocoDitado";
 import GuiaColetaTurno from "@/components/GuiaColetaTurno";
 import { CertificadoFAQ } from "@/components/CertificadoFAQ";
 import { AccordionSearchLayout } from "@/components/miniapps/uti/AccordionSearchLayout";
+import { CuidandoQuemCuida } from "@/components/miniapps/CuidandoQuemCuida";
 
 import { renderContent } from "@/lib/markdown";
 import { useLocal } from "@/lib/storage";
@@ -151,6 +152,14 @@ export function MiniAppContent({ slug }: { slug: string }) {
       <Card className="mb-6 border-destructive/30 bg-destructive/5 text-sm text-destructive">
         Erro ao carregar conteúdo editável: {q.error.message}
       </Card>
+    );
+  }
+
+  if (slug === "SAUDEMENTALPROF.") {
+    return (
+      <div className="mb-6">
+        <CuidandoQuemCuida />
+      </div>
     );
   }
 
