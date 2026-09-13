@@ -257,6 +257,20 @@ export function useAppAccess(slug: string) {
         return { app, granted: true, expiresAt: acc.expires_at, viaAdmin: false };
       }
 
+      // Período gratuito (trial): libera o conteúdo das 4 academias
+      const { data: trialSub } = await supabase
+        .from("user_subscriptions")
+        .select("expires_at")
+        .eq("user_id", user.id)
+        .eq("status", "trial")
+        .gt("expires_at", new Date().toISOString())
+        .order("expires_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (trialSub) {
+        return { app, granted: true, expiresAt: trialSub.expires_at, viaAdmin: false };
+      }
+
       // Acesso via assinatura de qualquer app que contenha este guia clínico
       const { data: placements } = await supabase
         .from("mini_app_placements")
