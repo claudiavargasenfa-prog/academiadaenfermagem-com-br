@@ -305,9 +305,9 @@ export function AuthScreen({ cadastroSlug: forcedCadastroSlug }: { cadastroSlug?
                   <div className="mt-1 grid grid-cols-2 gap-1.5">
                     {(
                       [
-                        { v: "academico", label: "Acadêmico", emoji: "🎓" },
+                        { v: "academico", label: "Acadêmico (Graduação)", emoji: "🎓" },
                         { v: "tecnico-estudante", label: "Estudante de Técnico", emoji: "📘" },
-                        { v: "tecnico", label: "Técnico", emoji: "🩺" },
+                        { v: "tecnico", label: "Técnico/Auxiliar", emoji: "🩺" },
                         { v: "enfermeiro", label: "Enfermeiro", emoji: "👩‍⚕️" },
                       ] as const
                     ).map((opt) => (
