@@ -145,7 +145,7 @@ export function CuidandoQuemCuida() {
 
   return <div className="cqc-root -mx-4 -mt-3 overflow-hidden md:mx-0 md:rounded-lg" id="cuidando-quem-cuida">
     {!started ? <section className="relative min-h-[650px] overflow-hidden bg-cqc-deep md:min-h-[720px]">
-      <img src={espelhoImage} alt="Profissional de enfermagem observa seu reflexo após o plantão" className="absolute inset-0 h-full w-full object-cover object-[62%_center]" />
+      <img src={espelhoImage} alt="Profissional de enfermagem observa seu reflexo após o plantão" width={1600} height={1000} fetchPriority="high" className="absolute inset-0 h-full w-full object-cover object-[62%_center]" />
       <div className="absolute inset-0 bg-cqc-hero" />
       <motion.div initial={reduce ? false : { opacity: 0, y: 28 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .9 }} className="relative z-10 flex min-h-[650px] max-w-2xl flex-col justify-end px-6 pb-12 pt-24 md:min-h-[720px] md:px-12 md:pb-16">
         <p className="mb-4 text-xs font-bold uppercase text-cqc-aqua">Cuidando de quem cuida · Uma viagem por dentro</p>
