@@ -21,20 +21,20 @@ export const Route = createFileRoute("/app/$slug/")({
       ? "Uma jornada acolhedora sobre saúde mental, trabalho e proteção para quem vive a enfermagem."
       : `Mini App ${params.slug} da Academia da Enfermagem.`;
 
-    return ({
-    meta: [
-      { title },
-      { name: "description", content: description },
-      { property: "og:title", content: title },
-      { property: "og:description", content: description },
-      { property: "og:url", content: `https://academiadaenfermagem.com.br/app/${params.slug}` },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-      { name: "twitter:title", content: title },
-      { name: "twitter:description", content: description },
-    ],
-    links: [{ rel: "canonical", href: `https://academiadaenfermagem.com.br/app/${params.slug}` }],
-    ]};
+    return {
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:url", content: `https://academiadaenfermagem.com.br/app/${params.slug}` },
+        { property: "og:type", content: "website" },
+        { name: "twitter:card", content: "summary" },
+        { name: "twitter:title", content: title },
+        { name: "twitter:description", content: description },
+      ],
+      links: [{ rel: "canonical", href: `https://academiadaenfermagem.com.br/app/${params.slug}` }],
+    };
   },
   component: Page,
   errorComponent: ({ error }) => (
