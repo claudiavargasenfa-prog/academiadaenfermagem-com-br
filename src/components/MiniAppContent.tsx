@@ -158,7 +158,7 @@ export function MiniAppContent({ slug }: { slug: string }) {
   if (slug === "SAUDEMENTALPROF.") {
     return (
       <div className="mb-6">
-        <CuidandoQuemCuida />
+        <CuidandoQuemCuida editableContent={q.data?.content_md} />
       </div>
     );
   }
