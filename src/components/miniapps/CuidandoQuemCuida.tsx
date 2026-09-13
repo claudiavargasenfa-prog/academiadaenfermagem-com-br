@@ -13,7 +13,6 @@ import {
   HeartHandshake,
   LifeBuoy,
   Moon,
-  Pause,
   RefreshCcw,
   Scale,
   Shield,

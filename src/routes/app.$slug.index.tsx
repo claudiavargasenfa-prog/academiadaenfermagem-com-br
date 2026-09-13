@@ -12,20 +12,30 @@ export const Route = createFileRoute("/app/$slug/")({
       throw redirect({ to: "/diagnosticos-aede" });
     }
   },
-  head: ({ params }) => ({
+  head: ({ params }) => {
+    const isCuidando = params.slug === "SAUDEMENTALPROF.";
+    const title = isCuidando
+      ? "Cuidando de Quem Cuida — ADEC"
+      : `${params.slug} — Academia da Enfermagem`;
+    const description = isCuidando
+      ? "Uma jornada acolhedora sobre saúde mental, trabalho e proteção para quem vive a enfermagem."
+      : `Mini App ${params.slug} da Academia da Enfermagem.`;
+
+    return ({
     meta: [
-      { title: `${params.slug} — Academia da Enfermagem` },
-      { name: "description", content: `Mini App ${params.slug} da Academia da Enfermagem.` },
-      { property: "og:title", content: `${params.slug} — Academia da Enfermagem` },
-      { property: "og:description", content: `Mini App ${params.slug} da Academia da Enfermagem.` },
+      { title },
+      { name: "description", content: description },
+      { property: "og:title", content: title },
+      { property: "og:description", content: description },
       { property: "og:url", content: `https://academiadaenfermagem.com.br/app/${params.slug}` },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
-      { name: "twitter:title", content: `${params.slug} — Academia da Enfermagem` },
-      { name: "twitter:description", content: `Mini App ${params.slug} da Academia da Enfermagem.` },
+      { name: "twitter:title", content: title },
+      { name: "twitter:description", content: description },
     ],
     links: [{ rel: "canonical", href: `https://academiadaenfermagem.com.br/app/${params.slug}` }],
-  }),
+    ]};
+  },
   component: Page,
   errorComponent: ({ error }) => (
     <AppShell>
