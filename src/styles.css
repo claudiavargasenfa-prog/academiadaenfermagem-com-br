@@ -255,19 +255,23 @@
 
 /* ---------- Cuidando de Quem Cuida ---------- */
 .cqc-root {
-  --cqc-bg: oklch(0.975 0.014 165);
-  --cqc-paper: oklch(0.995 0.005 165);
-  --cqc-ink: oklch(0.25 0.045 175);
-  --cqc-muted: oklch(0.46 0.035 175);
-  --cqc-deep: oklch(0.29 0.07 173);
-  --cqc-teal: oklch(0.49 0.09 175);
-  --cqc-aqua: oklch(0.86 0.075 175);
-  --cqc-mist: oklch(0.95 0.03 173);
-  --cqc-rose: oklch(0.9 0.045 20);
-  --cqc-line: oklch(0.88 0.025 170);
-  --cqc-hero: linear-gradient(90deg, oklch(0.2 0.055 170 / 0.96) 0%, oklch(0.23 0.05 170 / 0.82) 38%, oklch(0.23 0.05 170 / 0.18) 72%, transparent 100%);
+  --cqc-bg: oklch(0.975 0.025 160);
+  --cqc-paper: oklch(0.995 0.008 150);
+  --cqc-ink: oklch(0.28 0.045 285);
+  --cqc-muted: oklch(0.48 0.035 285);
+  --cqc-deep: oklch(0.5 0.11 292);
+  --cqc-teal: oklch(0.65 0.11 165);
+  --cqc-aqua: oklch(0.9 0.07 165);
+  --cqc-mist: oklch(0.94 0.045 300);
+  --cqc-rose: oklch(0.92 0.055 15);
+  --cqc-line: oklch(0.87 0.045 285);
+  --cqc-hero: linear-gradient(90deg, oklch(0.98 0.025 160 / 0.98) 0%, oklch(0.96 0.05 300 / 0.92) 42%, oklch(0.96 0.04 300 / 0.25) 74%, transparent 100%);
+  --cqc-shadow: 0 16px 38px -22px oklch(0.5 0.11 292 / 0.42);
+  font-family: "Nunito Sans", var(--font-sans);
   color: var(--cqc-ink);
 }
+
+.cqc-root h1, .cqc-root h2, .cqc-root h3, .cqc-root h4, .cqc-root .font-display { font-family: "Lora", serif; letter-spacing: 0; }
 
 .text-cqc-paper { color: var(--cqc-paper); }
 .text-cqc-paper\/80 { color: color-mix(in oklab, var(--cqc-paper) 80%, transparent); }
@@ -316,15 +320,16 @@
   align-items: center;
   gap: .8rem;
   border: 1px solid var(--cqc-line);
-  border-radius: .5rem;
+  border-radius: 1rem;
   background: var(--cqc-paper);
   padding: 1rem;
   text-align: left;
   color: var(--cqc-ink);
-  transition: border-color .2s ease, background .2s ease, transform .2s ease;
+  box-shadow: var(--cqc-shadow);
+  transition: border-color .2s ease, background .2s ease, transform .2s ease, box-shadow .2s ease;
 }
 
-.cqc-choice:hover { border-color: var(--cqc-teal); transform: translateY(-2px); }
+.cqc-choice:hover { border-color: var(--cqc-teal); transform: translateY(-4px) rotate(-.35deg); box-shadow: 0 18px 35px -18px oklch(0.65 0.11 165 / .6); }
 .cqc-choice-active { border-color: var(--cqc-teal); background: var(--cqc-mist); box-shadow: inset 3px 0 var(--cqc-teal); }
 .cqc-choice span { display: flex; flex-direction: column; gap: .25rem; }
 .cqc-choice small { font-size: .75rem; line-height: 1.45; color: var(--cqc-muted); }
@@ -379,6 +384,16 @@
 .cqc-help { display: flex; min-height: 7.5rem; flex-direction: column; align-items: center; justify-content: center; gap: .4rem; border: 1px solid var(--cqc-line); border-radius: .5rem; background: var(--cqc-paper); padding: 1rem; text-align: center; font-weight: 750; color: var(--cqc-deep); }
 .cqc-help svg { height: 1.4rem; width: 1.4rem; color: var(--cqc-teal); }
 .cqc-help span { font-size: .7rem; font-weight: 500; line-height: 1.4; color: var(--cqc-muted); }
+
+.cqc-heart-mark { display: grid; height: 5rem; width: 5rem; place-items: center; margin-bottom: 1.4rem; border-radius: 1.5rem; background: linear-gradient(135deg, var(--cqc-aqua), var(--cqc-mist)); color: var(--cqc-deep); box-shadow: var(--cqc-shadow); }
+.cqc-start { border-radius: 999px; background: linear-gradient(110deg, var(--cqc-teal), var(--cqc-deep)); color: var(--cqc-paper); box-shadow: 0 15px 30px -15px var(--cqc-deep); transition: transform .2s ease, box-shadow .2s ease; }
+.cqc-start:hover { transform: translateY(-3px) scale(1.02); background: linear-gradient(110deg, var(--cqc-deep), var(--cqc-teal)); box-shadow: 0 20px 38px -16px var(--cqc-deep); }
+.cqc-step-dot { display: grid; min-width: 2rem; height: 2rem; flex: 1; place-items: center; border-radius: 999px; background: var(--cqc-mist); color: var(--cqc-muted); font-size: .7rem; font-weight: 800; transition: transform .2s ease, background .2s ease, color .2s ease; }
+.cqc-step-dot:hover { transform: translateY(-2px); }
+.cqc-step-dot-active { background: linear-gradient(135deg, var(--cqc-teal), var(--cqc-deep)); color: var(--cqc-paper); transform: scale(1.08); }
+.cqc-editable-content { margin-bottom: 1.5rem; border-radius: 1rem; background: linear-gradient(135deg, var(--cqc-paper), var(--cqc-mist)); padding: 1.2rem; box-shadow: var(--cqc-shadow); }
+.cqc-editable-content p { color: var(--cqc-muted); font-size: 1rem; line-height: 1.8; }
+.cqc-editable-content h2, .cqc-editable-content h3 { color: var(--cqc-deep); }
 
 @media (max-width: 640px) {
   .cqc-root { --cqc-hero: linear-gradient(0deg, oklch(0.2 0.055 170 / 0.98) 0%, oklch(0.22 0.05 170 / 0.76) 48%, oklch(0.22 0.05 170 / 0.08) 100%); }

@@ -1009,6 +1009,11 @@ function MiniAppForm({
           value={form.content_md}
           onChange={(v) => setForm({ ...form, content_md: v })}
         />
+        {normalizedSlug === "saudementalprof." && (
+          <p className="-mt-2 rounded-md border border-primary/20 bg-primary/5 px-3 py-2 text-xs text-muted-foreground">
+            Este texto aparece na primeira jornada do Cuidando de Quem Cuida. As atividades interativas permanecem preservadas.
+          </p>
+        )}
         <div className="grid gap-3 sm:grid-cols-2">
           <Field label="URL de vídeo (YouTube/Vimeo)">
             <input
