@@ -73,7 +73,7 @@ export const checkTrialEligibility = createServerFn({ method: "POST" })
       }
     }
 
-    // Durante a campanha (até 10/09/2026) todo mundo recebe os 15 dias grátis
+    // Durante a campanha (até 30/09/2026) todo mundo recebe os 15 dias grátis
     if (Date.now() <= TRIAL_FREE_UNTIL.getTime()) {
       return { allowed: true };
     }
