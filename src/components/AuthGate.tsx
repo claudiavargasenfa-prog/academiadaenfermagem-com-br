@@ -13,9 +13,6 @@ import { WelcomePanel } from "@/components/cadastro/WelcomePanel";
 import { traduzirErro } from "@/lib/auth-errors";
 import { formatPhoneBR, validatePhoneBR } from "@/lib/phone-br";
 
-
-
-
 export function AuthGate({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
@@ -54,7 +51,6 @@ function slugFromPath(): string {
   return found ?? (q && CADASTRO_SLUGS.includes(q) ? q : "academico");
 }
 
-/** Única porta de entrada: página de cadastro com boas-vindas. */
 export function WelcomeAuthScreen({ slug }: { slug?: string } = {}) {
   const resolved = slug ?? slugFromPath();
   return (
@@ -66,8 +62,6 @@ export function WelcomeAuthScreen({ slug }: { slug?: string } = {}) {
     </div>
   );
 }
-
-
 
 export function AuthScreen({ cadastroSlug: forcedCadastroSlug }: { cadastroSlug?: string } = {}) {
   const currentPath = forcedCadastroSlug ? "/" : typeof window !== "undefined" ? window.location.pathname : "/";
@@ -101,9 +95,6 @@ export function AuthScreen({ cadastroSlug: forcedCadastroSlug }: { cadastroSlug?
   const navigate = useNavigate();
   const phoneErroInline = phone.replace(/\D/g, "").length >= 11 ? validatePhoneBR(phone) : null;
 
-
-
-
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setBusy(true);
@@ -125,13 +116,13 @@ export function AuthScreen({ cadastroSlug: forcedCadastroSlug }: { cadastroSlug?
         }
         const phoneDigits = phone.replace(/\D/g, "");
         const phoneErro = validatePhoneBR(phone);
-        if (phoneErro) {
-          throw new Error(phoneErro);
-        }
+        if (phoneErro) throw new Error(phoneErro);
         if (!categoria) {
           throw new Error("Selecione sua categoria (Acadêmico, Estudante de Técnico, Técnico ou Enfermeiro).");
         }
-        // Antifraude: bloqueia se celular/dispositivo já usou grátis
+
+        // Mantemos a proteção contra abuso, mas o acesso da campanha é concedido pelo banco
+        // até 30/09/2026, independentemente de serem 15 dias ou menos a partir do cadastro.
         const deviceId = await getDeviceId();
         const check = await checkTrial({
           data: { email, phone_digits: phoneDigits, device_id: deviceId },
@@ -139,6 +130,7 @@ export function AuthScreen({ cadastroSlug: forcedCadastroSlug }: { cadastroSlug?
         if (!check.allowed) {
           throw new Error(check.reason || "Não foi possível liberar o período grátis.");
         }
+
         const { data, error } = await supabase.auth.signUp({
           email,
           password,
@@ -152,7 +144,7 @@ export function AuthScreen({ cadastroSlug: forcedCadastroSlug }: { cadastroSlug?
           },
         });
         if (error) throw error;
-        // Registra fingerprint depois do signup bem-sucedido
+
         try {
           await recordTrial({
             data: {
@@ -165,25 +157,22 @@ export function AuthScreen({ cadastroSlug: forcedCadastroSlug }: { cadastroSlug?
         } catch (e) {
           console.error("[trial] record failed", e);
         }
+
         if (!data.session) {
           setMsg({
             type: "info",
-            text: "Cadastro criado! Verifique seu e-mail para confirmar — o link já leva direto para o seu app.",
+            text: "Cadastro criado! Verifique seu e-mail para confirmar — seu acesso gratuito ficará disponível até 30/09/2026.",
           });
           setMode("signin");
         } else {
           navigate({ to: "/trilha/$slug", params: { slug: categoria } });
         }
-
-
-
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
       }
     } catch (err) {
       setMsg({ type: "error", text: traduzirErro(err) });
-
     } finally {
       setBusy(false);
     }
@@ -192,10 +181,16 @@ export function AuthScreen({ cadastroSlug: forcedCadastroSlug }: { cadastroSlug?
   async function handleGoogle() {
     setBusy(true);
     setMsg(null);
-    const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin,
-    });
-    if (result.error) {
+    try {
+      const result = await lovable.auth.signInWithOAuth("google", {
+        redirect_uri: window.location.origin,
+      });
+      if (result.error) {
+        setMsg({ type: "error", text: "Não foi possível entrar com Google." });
+        setBusy(false);
+      }
+    } catch (err) {
+      console.error("[auth] Google sign-in failed", err);
       setMsg({ type: "error", text: "Não foi possível entrar com Google." });
       setBusy(false);
     }
@@ -217,9 +212,7 @@ export function AuthScreen({ cadastroSlug: forcedCadastroSlug }: { cadastroSlug?
           <h1 className="mt-3 font-display text-2xl font-extrabold text-gold">
             Academia da Enfermagem
           </h1>
-          <p className="text-sm text-primary-foreground/80">
-            Informação Atualizada em suas Mãos
-          </p>
+          <p className="text-sm text-primary-foreground/80">Informação Atualizada em suas Mãos</p>
         </div>
 
         <div className="rounded-3xl border border-gold/40 bg-card/95 p-6 text-foreground shadow-[var(--shadow-glass)]">
@@ -253,13 +246,11 @@ export function AuthScreen({ cadastroSlug: forcedCadastroSlug }: { cadastroSlug?
           {mode === "signup" && (
             isFreeTrialOpen() ? (
               <div className="mb-3 rounded-lg bg-emerald-500/10 px-3 py-2 text-xs font-semibold text-emerald-800">
-                🎁 Cadastro novo ganha <strong>15 dias grátis</strong> do seu aplicativo — sem cartão.
+                🎁 Cadastro novo ganha <strong>acesso grátis até 30/09/2026</strong> — sem cartão.
               </div>
             ) : (
               <div className="mb-3 rounded-lg border border-orange-500/40 bg-orange-500/10 px-3 py-2 text-xs font-semibold text-orange-900">
-                ⚠️ <strong>Período gratuito encerrado</strong> (válido até {TRIAL_FREE_UNTIL_LABEL}).
-                Você pode criar sua conta, mas o acesso ao conteúdo só é liberado após a assinatura
-                do plano da sua categoria.
+                ⚠️ <strong>Período gratuito encerrado</strong> (válido até {TRIAL_FREE_UNTIL_LABEL}). Você pode criar sua conta, mas o acesso ao conteúdo só é liberado após a assinatura do plano da sua categoria.
               </div>
             )
           )}
@@ -269,15 +260,7 @@ export function AuthScreen({ cadastroSlug: forcedCadastroSlug }: { cadastroSlug?
               <>
                 <div>
                   <label className={label}>Nome completo *</label>
-                  <input
-                    type="text"
-                    required
-                    value={nome}
-                    onChange={(e) => setNome(e.target.value)}
-                    className={input}
-                    placeholder="Maria da Silva"
-                    maxLength={120}
-                  />
+                  <input type="text" required value={nome} onChange={(e) => setNome(e.target.value)} className={input} placeholder="Maria da Silva" maxLength={120} />
                 </div>
                 <div>
                   <label className={label}>Celular (WhatsApp) *</label>
@@ -295,30 +278,24 @@ export function AuthScreen({ cadastroSlug: forcedCadastroSlug }: { cadastroSlug?
                   {phoneErroInline ? (
                     <p className="mt-1 text-xs font-semibold text-destructive">{phoneErroInline}</p>
                   ) : (
-                    <p className="mt-1 text-xs text-muted-foreground">
-                      Obrigatório um celular ativo — você poderá receber confirmação.
-                    </p>
+                    <p className="mt-1 text-xs text-muted-foreground">Celular ativo com DDD é obrigatório para concluir o cadastro.</p>
                   )}
                 </div>
                 <div>
                   <label className={label}>Categoria *</label>
                   <div className="mt-1 grid grid-cols-2 gap-1.5">
-                    {(
-                      [
-                        { v: "academico", label: "Acadêmico (Graduação)", emoji: "🎓" },
-                        { v: "tecnico-estudante", label: "Estudante de Técnico", emoji: "📘" },
-                        { v: "tecnico", label: "Técnico/Auxiliar", emoji: "🩺" },
-                        { v: "enfermeiro", label: "Enfermeiro", emoji: "👩‍⚕️" },
-                      ] as const
-                    ).map((opt) => (
+                    {([
+                      { v: "academico", label: "Acadêmico (Graduação)", emoji: "🎓" },
+                      { v: "tecnico-estudante", label: "Estudante de Técnico", emoji: "📘" },
+                      { v: "tecnico", label: "Técnico/Auxiliar", emoji: "🩺" },
+                      { v: "enfermeiro", label: "Enfermeiro", emoji: "👩‍⚕️" },
+                    ] as const).map((opt) => (
                       <button
                         type="button"
                         key={opt.v}
                         onClick={() => setCategoria(opt.v)}
                         className={`rounded-lg border px-2 py-2 text-xs font-semibold transition-colors ${
-                          categoria === opt.v
-                            ? "border-primary bg-primary text-primary-foreground"
-                            : "border-border bg-background text-foreground/70 hover:bg-secondary/60"
+                          categoria === opt.v ? "border-primary bg-primary text-primary-foreground" : "border-border bg-background text-foreground/70 hover:bg-secondary/60"
                         }`}
                       >
                         <div>{opt.emoji}</div>
@@ -329,60 +306,24 @@ export function AuthScreen({ cadastroSlug: forcedCadastroSlug }: { cadastroSlug?
                 </div>
               </>
             )}
+
             <div>
               <label className={label}>E-mail *</label>
-              <input
-                type="email"
-                required
-                autoComplete="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className={input}
-                placeholder="voce@email.com"
-                maxLength={255}
-              />
-              {mode === "signup" && (
-                <p className="mt-1 text-[10px] text-muted-foreground">
-                  Usado para emitir seu certificado.
-                </p>
-              )}
+              <input type="email" required autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} className={input} placeholder="voce@email.com" maxLength={255} />
+              {mode === "signup" && <p className="mt-1 text-[10px] text-muted-foreground">Usado para emitir seu certificado.</p>}
             </div>
+
             {mode !== "forgot" && (
               <div>
                 <label className={label}>Senha *</label>
                 <div className="relative">
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    required
-                    minLength={6}
-                    autoComplete={mode === "signup" ? "new-password" : "current-password"}
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className={`${input} pr-10`}
-                    placeholder="Mínimo 6 caracteres"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground"
-                    title={showPassword ? "Ocultar senha" : "Ver senha"}
-                  >
-                    {showPassword ? (
-                      <EyeOff className="h-4 w-4" />
-                    ) : (
-                      <Eye className="h-4 w-4" />
-                    )}
+                  <input type={showPassword ? "text" : "password"} required minLength={6} autoComplete={mode === "signup" ? "new-password" : "current-password"} value={password} onChange={(e) => setPassword(e.target.value)} className={`${input} pr-10`} placeholder="Mínimo 6 caracteres" />
+                  <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground transition-colors hover:text-foreground" title={showPassword ? "Ocultar senha" : "Ver senha"}>
+                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                   </button>
                 </div>
                 {mode === "signin" && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setMode("forgot");
-                      setMsg(null);
-                    }}
-                    className="mt-1 text-xs font-semibold text-primary hover:underline"
-                  >
+                  <button type="button" onClick={() => { setMode("forgot"); setMsg(null); }} className="mt-1 text-xs font-semibold text-primary hover:underline">
                     Esqueci minha senha
                   </button>
                 )}
@@ -390,71 +331,45 @@ export function AuthScreen({ cadastroSlug: forcedCadastroSlug }: { cadastroSlug?
             )}
 
             {msg && (
-              <div
-                className={`rounded-lg px-3 py-2 text-xs ${
-                  msg.type === "error"
-                    ? "bg-destructive/10 text-destructive"
-                    : "bg-primary/10 text-primary"
-                }`}
-              >
+              <div className={`rounded-lg px-3 py-2 text-xs ${msg.type === "error" ? "bg-destructive/10 text-destructive" : "bg-primary/10 text-primary"}`}>
                 {msg.text}
               </div>
             )}
 
-            <button
-              type="submit"
-              disabled={busy}
-              className="w-full rounded-xl bg-primary py-2.5 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-60"
-            >
-              {busy
-                ? "Aguarde..."
-                : mode === "signup"
-                ? isFreeTrialOpen()
-                  ? "Criar conta com 15 dias grátis"
-                  : "Criar minha conta"
-                : mode === "forgot"
-                ? "Enviar link de redefinição"
-                : "Entrar"}
+            <button type="submit" disabled={busy} className="w-full rounded-xl bg-primary py-2.5 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-60">
+              {busy ? "Aguarde..." : mode === "signup" ? (isFreeTrialOpen() ? "Criar conta — acesso grátis até 30/09" : "Criar minha conta") : mode === "forgot" ? "Enviar link de redefinição" : "Entrar"}
             </button>
 
             {mode === "forgot" && (
-              <button
-                type="button"
-                onClick={() => {
-                  setMode("signin");
-                  setMsg(null);
-                }}
-                className="w-full text-center text-xs font-semibold text-muted-foreground hover:text-foreground"
-              >
+              <button type="button" onClick={() => { setMode("signin"); setMsg(null); }} className="w-full text-center text-xs font-semibold text-muted-foreground hover:text-foreground">
                 ← Voltar para o login
               </button>
             )}
           </form>
 
-          <div className="my-4 flex items-center gap-3">
-            <div className="h-px flex-1 bg-border" />
-            <span className="text-[11px] uppercase tracking-wider text-muted-foreground">ou</span>
-            <div className="h-px flex-1 bg-border" />
-          </div>
+          {mode !== "signup" && (
+            <>
+              <div className="my-4 flex items-center gap-3">
+                <div className="h-px flex-1 bg-border" />
+                <span className="text-[11px] uppercase tracking-wider text-muted-foreground">ou</span>
+                <div className="h-px flex-1 bg-border" />
+              </div>
 
-          <button
-            type="button"
-            onClick={handleGoogle}
-            disabled={busy}
-            className="flex w-full items-center justify-center gap-2 rounded-xl border border-border bg-background py-2.5 text-sm font-semibold text-foreground transition-colors hover:bg-secondary/60 disabled:opacity-60"
-          >
-            <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden>
-              <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.8 32.5 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.1 6 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20c11 0 20-8 20-20 0-1.2-.1-2.3-.4-3.5z"/>
-              <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 16 19 12 24 12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.1 6 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/>
-              <path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.5-5.2l-6.2-5.2C29.2 35 26.7 36 24 36c-5.3 0-9.8-3.4-11.3-8.1l-6.5 5C9.6 39.6 16.3 44 24 44z"/>
-              <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.3-4.3 5.6l6.2 5.2C40.9 35.1 44 30 44 24c0-1.2-.1-2.3-.4-3.5z"/>
-            </svg>
-            Continuar com Google
-          </button>
+              <button type="button" onClick={handleGoogle} disabled={busy} className="flex w-full items-center justify-center gap-2 rounded-xl border border-border bg-background py-2.5 text-sm font-semibold text-foreground transition-colors hover:bg-secondary/60 disabled:opacity-60">
+                <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden>
+                  <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.8 32.5 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.1 6 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20c11 0 20-8 20-20 0-1.2-.1-2.3-.4-3.5z"/>
+                  <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 16 19 12 24 12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.1 6 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/>
+                  <path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.5-5.2l-6.2-5.2C29.2 35 26.7 36 24 36c-5.3 0-9.8-3.4-11.3-8.1l-6.5 5C9.6 39.6 16.3 44 24 44z"/>
+                  <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.3-4.3 5.6l6.2 5.2C40.9 35.1 44 30 44 24c0-1.2-.1-2.3-.4-3.5z"/>
+                </svg>
+                Continuar com Google
+              </button>
+            </>
+          )}
 
           {mode === "signup" && (
-            <p className="mt-3 text-center text-[10px] text-muted-foreground">
-              Login com Google entra direto no aplicativo <strong>Acadêmico</strong>. Para escolher outra categoria, use o cadastro por e-mail.
+            <p className="mt-4 rounded-xl bg-secondary/60 px-3 py-2 text-center text-[10px] font-medium text-muted-foreground">
+              Para criar uma nova conta é obrigatório informar <strong>celular com DDD</strong>, nome, categoria, e-mail e senha. O acesso da campanha será gratuito até <strong>30/09/2026</strong>.
             </p>
           )}
 
