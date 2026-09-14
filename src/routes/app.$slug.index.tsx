@@ -15,10 +15,10 @@ export const Route = createFileRoute("/app/$slug/")({
   head: ({ params }) => {
     const isCuidando = params.slug === "SAUDEMENTALPROF.";
     const title = isCuidando
-      ? "Cuidando de Quem Cuida — ADEC"
+      ? "Cuidando de Quem Cuida: Uma viagem por dentro. Você está pronto?"
       : `${params.slug} — Academia da Enfermagem`;
     const description = isCuidando
-      ? "Uma jornada acolhedora sobre saúde mental, trabalho e proteção para quem vive a enfermagem."
+      ? "Mini App de referência da Academia da Enfermagem para orientação, autocuidado, riscos psicossociais, busca de ajuda e proteção de quem cuida."
       : `Mini App ${params.slug} da Academia da Enfermagem.`;
 
     return {
@@ -61,7 +61,6 @@ function Page() {
       const { data, error } = await supabase.rpc("get_mini_app_meta", { _slug: slug });
       if (error) throw error;
       return (data ?? [])[0] ?? null;
-
     },
   });
 
@@ -92,13 +91,18 @@ function Page() {
   const app = q.data;
   const subs = subsQ.data ?? [];
   const hasSubs = subs.length > 0;
+  const isCuidando = slug === "SAUDEMENTALPROF.";
 
   return (
     <AppShell>
       <Link to="/" className="mb-3 inline-flex items-center gap-1 text-sm font-semibold text-muted-foreground hover:text-foreground">
         <ArrowLeft className="h-4 w-4" /> Voltar
       </Link>
-      <PageHeader eyebrow="Mini App" title={app.name} description={app.description ?? undefined} />
+      <PageHeader
+        eyebrow={isCuidando ? "Mini App de referência" : "Mini App"}
+        title={isCuidando ? "Cuidando de Quem Cuida: Uma viagem por dentro. Você está pronto?" : app.name}
+        description={isCuidando ? "Uma experiência educativa, acolhedora e prática para perceber sinais, compreender o trabalho, buscar ajuda e construir proteção." : app.description ?? undefined}
+      />
       <AppAccessGate slug={slug}>
         <MiniAppContent slug={slug} />
 
@@ -126,7 +130,7 @@ function Page() {
               ))}
             </ul>
           </Card>
-        ) : (
+        ) : !isCuidando ? (
           <Card>
             <div className="mb-3 flex items-center gap-2 text-gold">
               <BookOpen className="h-5 w-5" />
@@ -137,7 +141,7 @@ function Page() {
               Mini App em subtópicos. O conteúdo aparecerá automaticamente acima deste bloco.
             </p>
           </Card>
-        )}
+        ) : null}
       </AppAccessGate>
     </AppShell>
   );
