@@ -21,8 +21,8 @@ export default defineConfig({
           cleanupOutdatedCaches: true,
           skipWaiting: true,
           clientsClaim: true,
-          // Garante que TODOS os arquivos essenciais sejam cacheados para uso offline
-          globPatterns: ["**/*.{js,css,html,ico,png,svg,webp,woff2,json}"],
+          // Cacheia apenas arquivos estáticos. HTML de páginas sempre consulta a versão atual.
+          globPatterns: ["**/*.{js,css,ico,png,svg,webp,woff2,json}"],
           manifestTransforms: [
             (entries) => ({
               manifest: entries.map((entry) => ({
@@ -36,28 +36,12 @@ export default defineConfig({
           navigateFallbackDenylist: [/^\/api\//, /^\/~oauth/, /^\/_server/],
           runtimeCaching: [
             {
-              // Modo Offline Completo: Cache First para as rotas do App
-              urlPattern: ({ request, url }) =>
-                request.mode === "navigate" &&
-                !url.pathname.startsWith("/api/") &&
-                !url.pathname.startsWith("/admin") &&
-                !url.pathname.startsWith("/planos/"),
-              handler: "CacheFirst", // Prioriza o cache para funcionar offline
-              options: {
-                cacheName: "app-pages-offline",
-                expiration: {
-                  maxEntries: 100,
-                  maxAgeSeconds: 60 * 60 * 24 * 30, // 30 dias
-                },
-              },
-            },
-            {
               urlPattern: ({ request }) => request.mode === "navigate",
               handler: "NetworkFirst",
               options: {
-                cacheName: "html-pages",
+                cacheName: "adec-pages-v2",
                 networkTimeoutSeconds: 4,
-                expiration: { maxEntries: 40, maxAgeSeconds: 60 * 60 * 24 * 7 },
+                expiration: { maxEntries: 40, maxAgeSeconds: 60 * 60 * 24 },
               },
             },
             {
@@ -65,7 +49,7 @@ export default defineConfig({
                 sameOrigin && /\.(?:js|css|woff2|png|jpg|jpeg|svg|webp|ico)$/.test(url.pathname),
               handler: "CacheFirst",
               options: {
-                cacheName: "static-assets",
+                cacheName: "adec-static-v2",
                 expiration: { maxEntries: 500, maxAgeSeconds: 60 * 60 * 24 * 60 },
               },
             },

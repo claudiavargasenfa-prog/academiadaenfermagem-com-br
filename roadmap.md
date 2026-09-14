@@ -1,6 +1,7 @@
 # Roadmap ADEC
 
 ## Concluído
+- Corrigir a queda da Área VIP: permissão da regra de acesso restaurada, falhas isoladas na página e cache antigo de páginas removido.
 - Estabilizar a loja para que falhas temporárias de conteúdo, autenticação ou banco não tirem o site inteiro do ar.
 - Exportar conteúdo dos mini-apps do banco para arquivos no repositório GitHub, permitindo que o ChatGPT leia/analise o conteúdo real.
 - GitHub conectado e sincronizado.

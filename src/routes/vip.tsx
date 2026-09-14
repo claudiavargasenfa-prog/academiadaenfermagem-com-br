@@ -17,6 +17,7 @@ import {
   toggleLike,
 } from "@/lib/vip";
 import {
+  AlertCircle,
   Crown,
   Heart,
   MessageCircle,
@@ -25,6 +26,7 @@ import {
   Sparkles,
   Trash2,
   ShieldCheck,
+  RotateCw,
 } from "lucide-react";
 
 export const Route = createFileRoute("/vip")({
@@ -121,6 +123,12 @@ function VipPage() {
 
   const liked = new Set(likesQ.data ?? []);
   const posts = postsQ.data ?? [];
+  const loadError = postsQ.error ?? likesQ.error;
+
+  const retryLoad = () => {
+    void postsQ.refetch();
+    void likesQ.refetch();
+  };
 
   return (
     <AppShell>
@@ -204,13 +212,33 @@ function VipPage() {
         </div>
       </Card>
 
-      {postsQ.isLoading && (
+      {loadError && (
+        <Card className="mb-6 border border-destructive/30 bg-destructive/5 text-center">
+          <AlertCircle className="mx-auto h-6 w-6 text-destructive" />
+          <p className="mt-2 text-sm font-semibold text-foreground">
+            A comunidade não carregou agora.
+          </p>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Sua conta e seus dados estão seguros. Tente novamente sem sair desta página.
+          </p>
+          <button
+            type="button"
+            onClick={retryLoad}
+            className="mt-3 inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-sm font-bold text-primary-foreground"
+          >
+            <RotateCw className="h-4 w-4" />
+            Tentar novamente
+          </button>
+        </Card>
+      )}
+
+      {postsQ.isLoading && !loadError && (
         <Card>
           <p className="animate-pulse text-sm text-muted-foreground">Carregando a comunidade...</p>
         </Card>
       )}
 
-      {!postsQ.isLoading && posts.length === 0 && (
+      {!postsQ.isLoading && !loadError && posts.length === 0 && (
         <Card className="text-center">
           <p className="text-sm text-muted-foreground">
             Ainda não há publicações. Seja a primeira pessoa a abrir uma conversa aqui!
@@ -218,7 +246,7 @@ function VipPage() {
         </Card>
       )}
 
-      <div className="grid gap-4">
+      {!loadError && <div className="grid gap-4">
         {posts.map((p) => (
           <Card
             key={p.id}
@@ -287,7 +315,7 @@ function VipPage() {
             )}
           </Card>
         ))}
-      </div>
+      </div>}
     </AppShell>
   );
 }
@@ -331,6 +359,18 @@ function CommentThread({
 
   return (
     <div className="mt-4 space-y-3 border-t border-foreground/10 pt-4">
+      {q.error && (
+        <div className="rounded-xl border border-destructive/30 bg-destructive/5 p-3 text-center">
+          <p className="text-xs font-semibold text-foreground">As respostas não carregaram.</p>
+          <button
+            type="button"
+            onClick={() => void q.refetch()}
+            className="mt-2 inline-flex items-center gap-1 text-xs font-bold text-primary"
+          >
+            <RotateCw className="h-3.5 w-3.5" /> Tentar novamente
+          </button>
+        </div>
+      )}
       {(q.data ?? []).map((c) => (
         <div key={c.id} className="rounded-xl bg-foreground/5 p-3">
           <div className="mb-1 flex items-center gap-2">
