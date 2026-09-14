@@ -1,4 +1,4 @@
-/** Janela do período gratuito de 15 dias (deve espelhar handle_new_user no banco). */
+/** Janela da campanha de acesso gratuito até 30/09/2026. */
 export const TRIAL_FREE_START = new Date("2026-08-10T00:00:00-03:00");
 export const TRIAL_FREE_UNTIL = new Date("2026-09-30T23:59:59-03:00");
 
