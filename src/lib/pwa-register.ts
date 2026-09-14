@@ -4,7 +4,13 @@
 // Se detectar SW antigo em contexto proibido, desregistra.
 
 const APP_SW_PATH = "/sw.js";
-const LEGACY_CACHE_MARKERS = ["html-pages", "app-pages-offline", "adec-pages-v1"];
+const LEGACY_CACHE_MARKERS = [
+  "html-pages",
+  "app-pages-offline",
+  "adec-pages-v1",
+  "adec-pages-v2",
+  "adec-static-v2",
+];
 
 function isRefusedContext(): boolean {
   if (typeof window === "undefined") return true;
