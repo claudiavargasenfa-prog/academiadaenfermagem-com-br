@@ -102,14 +102,14 @@ const rights = [
 ];
 
 const initialPosts: Post[] = [
-  { id: 1, text: "Hoje o plantão estava com pouca gente e eu saí sentindo que fiz o possível, mas ainda assim me senti insuficiente.", time: "há pouco", reactions: { torcendo: 8, entendendo: 12, abraco: 7 } },
-  { id: 2, text: "Cheguei em casa e meus filhos queriam atenção. Eu amo estar com eles, mas às vezes parece que o plantão continua dentro de mim.", time: "há 1h", reactions: { torcendo: 11, entendendo: 16, abraco: 13 } },
-  { id: 3, text: "Só queria dizer para quem está lendo: você não é fraco por estar cansado. Eu também estou aprendendo a respeitar meus limites.", time: "há 2h", reactions: { torcendo: 19, entendendo: 23, abraco: 21 } },
+  { id: 1, text: "Hoje o plantão estava com pouca gente e eu saí sentindo que fiz o possível, mas ainda assim me senti insuficiente.", time: "há pouco", reactions: { torcendo: 8, entendo: 12, abraco: 7 } },
+  { id: 2, text: "Cheguei em casa e meus filhos queriam atenção. Eu amo estar com eles, mas às vezes parece que o plantão continua dentro de mim.", time: "há 1h", reactions: { torcendo: 11, entendo: 16, abraco: 13 } },
+  { id: 3, text: "Só queria dizer para quem está lendo: você não é fraco por estar cansado. Eu também estou aprendendo a respeitar meus limites.", time: "há 2h", reactions: { torcendo: 19, entendo: 23, abraco: 21 } },
 ];
 
 const reactionLabels: Record<Reaction, string> = {
   torcendo: "Estou torcendo por você",
-  entendendo: "Te entendo perfeitamente",
+  entendo: "Te entendo perfeitamente",
   abraco: "Te envio um abraço",
 };
 
@@ -146,7 +146,7 @@ export function CuidandoQuemCuida() {
   const addPost = () => {
     const text = newPost.trim();
     if (!text) return;
-    setPosts((current) => [{ id: Date.now(), text, time: "agora", reactions: { torcendo: 0, entendendo: 0, abraco: 0 } }, ...current]);
+    setPosts((current) => [{ id: Date.now(), text, time: "agora", reactions: { torcendo: 0, entendo: 0, abraco: 0 } }, ...current]);
     setNewPost("");
   };
 
