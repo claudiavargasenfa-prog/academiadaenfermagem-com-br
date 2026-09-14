@@ -39,7 +39,7 @@ function Section({ id, number, eyebrow, title, text, children }: { id: string; n
   return <section id={`cqc-${id}`} className="scroll-mt-24"><Reveal><div className="mb-7 max-w-3xl"><div className="mb-3 flex items-center gap-3 text-[11px] font-black uppercase tracking-[.22em] text-[#62877A]"><span className="grid h-8 w-8 place-items-center rounded-xl bg-[#DDEBE4] text-[#466B5F]">{number}</span>{eyebrow}</div><h2 className="font-display text-3xl font-black leading-tight text-[#17362F] sm:text-4xl lg:text-5xl">{title}</h2><p className="mt-4 text-base leading-7 text-[#61736D] sm:text-lg">{text}</p></div>{children}</Reveal></section>;
 }
 
-export function CuidandoQuemCuidaPremium() {
+export function CuidandoQuemCuidaPremium({ editableContent }: { editableContent?: string | null } = {}) {
   const [mood, setMood] = useState<string>();
   const [selectedSigns, setSelectedSigns] = useState<string[]>([]);
   const [breathing, setBreathing] = useState(false);
