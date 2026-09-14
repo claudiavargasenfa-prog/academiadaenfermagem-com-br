@@ -1,50 +1,28 @@
-# Análise real da página inicial/Loja — sem alterações
+# Uso correto da ponte GitHub ↔ ChatGPT ↔ Lovable
 
-## Resultado da leitura integral
+## O que aconteceu
+Você tentou usar o ChatGPT para editar diretamente o repositório no GitHub, mas ele informou corretamente que **não tem permissão de escrita**. Ele só consegue ler os arquivos que você envia (ou que estão públicos). Não consegue fazer "push", criar branches ou fazer commits.
 
-A Loja real está em `src/routes/index.tsx` e usa o componente principal `StoreHomeContent`.
+## O que isso significa na prática
+O fluxo ideal **ChatGPT edita → GitHub recebe → Lovable sincroniza** só funciona se o ChatGPT tiver uma conta de usuário ou um "token" com permissão de escrita no seu repositório. Como ele é uma IA e não uma pessoa com login próprio, isso não é o padrão e exigiria configurações técnicas complexas e inseguras (dar sua senha/token para a IA).
 
-A “dupla com o cartaz” **não é um componente separado**. Ela é exibida diretamente dentro de `StoreHomeContent`, nas linhas 82–88, por este bloco:
+## Soluções possíveis (escolha uma)
 
-```tsx
-<div className="mb-8 flex justify-center">
-  <img
-    src={mascotesAsset.url}
-    alt="Mascotes Academia da Enfermagem — Time contra as IRAS"
-    className="h-40 w-auto object-contain sm:h-52 md:h-60 [animation:pulse_3s_ease-in-out_infinite]"
-  />
-</div>
-```
+### Opção A — Eu faço aqui no Lovable (recomendado)
+Você continua me pedindo as alterações aqui no chat. Eu edito o código diretamente no seu app e o Lovable sincroniza automaticamente com o GitHub (que já está conectado). O ChatGPT fica como consultor: você cola o código para ele analisar e depois me pede para implementar aqui.
 
-A imagem vem desta importação, na linha 5:
+### Opção B — Fluxo ZIP (sem automação)
+1. Você baixa o ZIP do seu código pelo GitHub ou pelo Lovable.
+2. Envia para o ChatGPT.
+3. Ele te devolve os arquivos alterados.
+4. Você faz upload manual dos arquivos alterados aqui no Lovable ou no GitHub.
+**Desvantagem:** perde a sincronização automática e é trabalhoso.
 
-```tsx
-import mascotesAsset from "@/assets/mascotes-iras.png.asset.json";
-```
+### Opção C — GitHub Actions (avançado, requer técnico)
+Criar um "robô" (GitHub Action) que recebe comandos do ChatGPT via API e faz commits. É complexo, requer conhecimento de programação e pode gerar custos.
 
-Portanto, a futura substituição deve retirar somente essa importação e esse bloco de imagem, colocando o carrossel exatamente no mesmo ponto: depois do título/descrição da Loja e antes dos cartões dos aplicativos.
+## Recomendação
+Use a **Opção A**: eu continuo sendo seu editor principal. O ChatGPT ajuda a pensar, analisar e sugerir, mas quem aplica as mudanças com segurança sou eu aqui no Lovable. O GitHub já está conectado e servindo como backup automático — isso já é o benefício principal.
 
-## Estrutura confirmada da Loja
-
-- `StoreHome` chama `StoreHomeContent`.
-- `StoreHomeContent` carrega aplicativos, planos, assinaturas e textos editáveis.
-- O cabeçalho da Loja ocupa as linhas 76–80.
-- A dupla com o cartaz ocupa as linhas 82–88.
-- Os cartões dos aplicativos começam na linha 90.
-- O formulário de opinião aparece no final.
-- `TestimonialsSection` está importado, mas não é exibido pelo arquivo atual.
-
-## Preparação da futura troca
-
-Quando a alteração for autorizada:
-
-1. Preservar integralmente título, descrição, cartões, acessos, planos e formulário de opinião.
-2. Substituir somente o bloco da dupla/cartaz por um carrossel com os 10 banners do Setembro Amarelo.
-3. Manter o carrossel adequado para celular e computador, com passagem automática, setas, indicadores e pausa durante a interação.
-4. Respeitar a configuração de redução de movimento do aparelho.
-5. Usar textos alternativos próprios em todos os banners.
-6. Conferir visualmente a Loja em celular e computador.
-
-## Limite desta etapa
-
-Nenhum arquivo do aplicativo será alterado, nenhum README será criado e nenhum commit será feito. Esta etapa entrega somente a análise. Os arquivos ou textos dos 10 banners não aparecem no histórico disponível desta conversa; eles precisarão estar anexados ou listados antes da futura implementação para evitar inventar conteúdo.
+## O que fazer agora
+Se você quer que eu implemente a troca da imagem da Loja (Setembro Amarelo), me envie os 10 banners (ou os textos/imagens deles) e eu faço a substituição aqui mesmo, sem precisar passar pelo ChatGPT.
