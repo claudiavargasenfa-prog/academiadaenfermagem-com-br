@@ -40,18 +40,32 @@ export function useAuthReady() {
   useEffect(() => {
     let alive = true;
 
-    supabase.auth.getSession().then(({ data }) => {
-      if (!alive) return;
-      setState({ isReady: true, user: data.session?.user ?? null });
-    });
+    let unsubscribe: (() => void) | undefined;
+    try {
+      supabase.auth
+        .getSession()
+        .then(({ data }) => {
+          if (!alive) return;
+          setState({ isReady: true, user: data.session?.user ?? null });
+        })
+        .catch((error) => {
+          console.error("Authentication temporarily unavailable:", error);
+          if (alive) setState({ isReady: true, user: null });
+        });
 
-    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
-      setState({ isReady: true, user: session?.user ?? null });
-    });
+      const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
+        if (alive) setState({ isReady: true, user: session?.user ?? null });
+      });
+      unsubscribe = () => sub.subscription.unsubscribe();
+    } catch (error) {
+      // A página pública continua disponível mesmo durante uma oscilação da autenticação.
+      console.error("Authentication could not start:", error);
+      setState({ isReady: true, user: null });
+    }
 
     return () => {
       alive = false;
-      sub.subscription.unsubscribe();
+      unsubscribe?.();
     };
   }, []);
 
