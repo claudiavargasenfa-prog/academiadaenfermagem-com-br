@@ -136,7 +136,10 @@ export function MiniAppContent({ slug }: { slug: string }) {
       return data;
     },
     enabled: isReady && !!slug,
-    staleTime: 60_000,
+    // Conteúdo editado no Admin precisa aparecer assim que o aluno volta à tela.
+    staleTime: 0,
+    refetchOnMount: "always",
+    refetchOnWindowFocus: true,
   });
 
   if (!isReady || q.isLoading) {
