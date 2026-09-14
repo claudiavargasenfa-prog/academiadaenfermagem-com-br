@@ -23,13 +23,28 @@ export function ContentProtection({
 
   useEffect(() => {
     let mounted = true;
-    supabase.auth.getUser().then(({ data }) => {
-      if (!mounted) return;
-      const email = data.user?.email ?? "convidado";
-      const id = (data.user?.id ?? "anon").slice(0, 8);
-      const ts = new Date().toLocaleString("pt-BR");
-      setStamp(`${email} · ${id} · ${ts}`);
-    });
+
+    // Nunca deixe uma falha de autenticação derrubar a página inteira.
+    // O conteúdo já foi autorizado pelo AppAccessGate; a marca d'água é apenas complementar.
+    try {
+      void supabase.auth
+        .getUser()
+        .then(({ data }) => {
+          if (!mounted) return;
+          const email = data.user?.email ?? "convidado";
+          const id = (data.user?.id ?? "anon").slice(0, 8);
+          const ts = new Date().toLocaleString("pt-BR");
+          setStamp(`${email} · ${id} · ${ts}`);
+        })
+        .catch((error) => {
+          console.warn("[ContentProtection] Não foi possível obter usuário para marca d'água:", error);
+          if (mounted) setStamp("Academia da Enfermagem");
+        });
+    } catch (error) {
+      console.warn("[ContentProtection] Autenticação indisponível; mantendo conteúdo utilizável:", error);
+      setStamp("Academia da Enfermagem");
+    }
+
     return () => {
       mounted = false;
     };
@@ -38,14 +53,12 @@ export function ContentProtection({
   useEffect(() => {
     const block = (e: KeyboardEvent) => {
       const k = e.key.toLowerCase();
-      // Ctrl/Cmd + P (print) e S (save)
       if ((e.ctrlKey || e.metaKey) && (k === "p" || k === "s")) {
         if (!(allowPrint && k === "p")) {
           e.preventDefault();
           e.stopPropagation();
         }
       }
-      // F12 / Ctrl+Shift+I / Ctrl+Shift+J / Ctrl+U (devtools/view-source)
       if (
         k === "f12" ||
         ((e.ctrlKey || e.metaKey) && e.shiftKey && (k === "i" || k === "j" || k === "c")) ||
@@ -77,9 +90,7 @@ export function ContentProtection({
       className="content-protected relative"
       style={{ userSelect: "none", WebkitUserSelect: "none" }}
     >
-
       {children}
-      {/* Marca d'água diagonal sobre todo o conteúdo */}
       <div
         aria-hidden
         className="pointer-events-none fixed inset-0 z-[5] overflow-hidden"
@@ -148,8 +159,7 @@ export function AppAccessGate({
         </div>
         <h2 className="font-display text-xl font-bold">{app.name}</h2>
         <p className="mt-2 text-sm text-muted-foreground">
-          Este Mini App é pago. Após a compra, você terá acesso por{" "}
-          <strong>150 dias</strong>.
+          Este Mini App é pago. Após a compra, você terá acesso por <strong>150 dias</strong>.
         </p>
         <div className="mt-3 space-y-1">
           {hasDiscount && (
@@ -173,14 +183,9 @@ export function AppAccessGate({
               <ExternalLink className="h-3.5 w-3.5" />
             </a>
           ) : (
-            <p className="text-xs text-amber-700">
-              Checkout ainda não configurado pelo administrador.
-            </p>
+            <p className="text-xs text-amber-700">Checkout ainda não configurado pelo administrador.</p>
           )}
-          <Link
-            to="/"
-            className="text-sm font-semibold text-primary hover:underline"
-          >
+          <Link to="/" className="text-sm font-semibold text-primary hover:underline">
             Voltar à Loja
           </Link>
         </div>
