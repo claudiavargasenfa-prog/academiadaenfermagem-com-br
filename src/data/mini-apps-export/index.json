@@ -1,0 +1,2245 @@
+[
+  {
+    "slug": "treinamento_simulação",
+    "name": "🩺 SIMULAÇÕES: DIAGNÓSTICO E RACIOCÍNIO CLÍNICO",
+    "description": "Aqui você poderá treinar seu raciocínio clínico e crítico, antes de chegar nos cuidados dos pacientes. \nAlinhado à Resolução COFEN nº 736/2024 . Transformar resultados clínicos em tomadas de decisões seguras, éticas e amparadas pela legislação.\n",
+    "kind": "Suporte",
+    "price_cents": 999,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": true,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 0,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      },
+      {
+        "icon": "🔄",
+        "color": "blue",
+        "label": "ATUALIZADO"
+      },
+      {
+        "icon": "",
+        "color": "purple",
+        "label": "2026"
+      }
+    ],
+    "content_file": "treinamento_simulação.md"
+  },
+  {
+    "slug": "CVD",
+    "name": "CATETERISMO VESICAL",
+    "description": null,
+    "kind": "Assistêncial",
+    "price_cents": 1199,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": true,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 0,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      },
+      {
+        "icon": "🔄",
+        "color": "blue",
+        "label": "ATUALIZADO"
+      },
+      {
+        "icon": "",
+        "color": "purple",
+        "label": "2026"
+      }
+    ],
+    "content_file": "CVD.md"
+  },
+  {
+    "slug": "CME",
+    "name": "CENTRAL DE MATERIAIS ESTERILIZADOS - CME",
+    "description": "Aprenda sobre processamento de produtos para saúde, limpeza, desinfecção, preparo, esterilização, armazenamento e rastreabilidade no Centro de Material e Esterilização.\nConteúdos organizados com rotinas, classificação dos artigos, métodos de processamento, indicadores e principais cuidados para a segurança do paciente.\nTudo de forma prática, objetiva e direcionada à realidade do CME e à preparação para concursos.",
+    "kind": "extra",
+    "price_cents": 0,
+    "gratuito": false,
+    "em_breve": true,
+    "is_active": false,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 0,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "green",
+        "label": "EM BREVE"
+      }
+    ],
+    "content_file": "CME.md"
+  },
+  {
+    "slug": "CCO",
+    "name": "CENTRO CIRÚRGICO",
+    "description": "Conteúdos essenciais PARA TÉCNICOS E ENFERMEIROS sobre estrutura e funcionamento do Centro Cirúrgico, classificação das cirurgias, períodos operatórios, preparo do paciente, segurança e assistência de enfermagem.\nVocê encontrará checklist cirúrgico, posicionamento, prevenção de lesões, controle de infecção, materiais, equipamentos, recuperação pós-anestésica e principais cuidados no perioperatório.\nTudo organizado de forma prática, objetiva e direcionada à atuação profissional e à preparação para concursos.",
+    "kind": "extra",
+    "price_cents": 0,
+    "gratuito": false,
+    "em_breve": true,
+    "is_active": true,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 0,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "green",
+        "label": "EM BREVE"
+      }
+    ],
+    "content_file": "CCO.md"
+  },
+  {
+    "slug": "dispcuidados",
+    "name": "CUIDADOS COM DISPOSITIVOS",
+    "description": "MÁSCARA LARÍNGEA, TOT, SVD, TQT, SONDA ENTERAL, SNG — Fixações, higiene e prevenção de complicações",
+    "kind": "Assistencial",
+    "price_cents": 0,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": true,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 0,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      },
+      {
+        "icon": "🔄",
+        "color": "blue",
+        "label": "ATUALIZADO"
+      },
+      {
+        "icon": "",
+        "color": "purple",
+        "label": "2026"
+      }
+    ],
+    "content_file": "dispcuidados.md"
+  },
+  {
+    "slug": "paliativos",
+    "name": "CUIDADOS PALIATIVOS",
+    "description": "A Política Nacional de Cuidados Paliativos (PNCP), instituída no SUS, trabalha com cuidado integral, humanizado e centrado na pessoa, podendo começar desde o diagnóstico de uma doença grave e acompanhar outros tratamentos.",
+    "kind": "extra",
+    "price_cents": 0,
+    "gratuito": false,
+    "em_breve": true,
+    "is_active": false,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 0,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "green",
+        "label": "EM BREVE"
+      }
+    ],
+    "content_file": "paliativos.md"
+  },
+  {
+    "slug": "SAUDEMENTALPROF.",
+    "name": "CUIDANDO DE QUEM CUIDA: Uma viagem por dentro. Você está pronto?",
+    "description": "“Antes de cuidar do outro, você consegue perceber o que está acontecendo dentro de você?”\n\nVocê aprendeu a reconhecer sinais no paciente.\nAprendeu a observar alterações.\nAprendeu a agir diante de situações críticas.\n\nMas quanto você aprendeu a observar em você?",
+    "kind": "extra",
+    "price_cents": 0,
+    "gratuito": true,
+    "em_breve": false,
+    "is_active": true,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 0,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "⭐",
+        "color": "amber",
+        "label": "DESTAQUE"
+      }
+    ],
+    "content_file": "SAUDEMENTALPROF..md"
+  },
+  {
+    "slug": "mcc",
+    "name": "EQUIPAMENTOS E EXAMES",
+    "description": "No atendimento ao paciente CRÍTICO OU INSTÁVEL, a monitorização e a realização de exames complementares são fundamentais para avaliar a condição clínica, identificar alterações associadas e oferecer maior segurança durante a investigação e o tratamento. A equipe de enfermagem participa ativamente desse processo, realizando a monitorização, preparando o paciente para os exames, ECG e reconhecendo alterações que necessitam de comunicação imediata à equipe responsável.",
+    "kind": "Assistencial",
+    "price_cents": 1599,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": true,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 0,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      },
+      {
+        "icon": "🔄",
+        "color": "blue",
+        "label": "ATUALIZADO"
+      },
+      {
+        "icon": "",
+        "color": "purple",
+        "label": "2026"
+      }
+    ],
+    "content_file": "mcc.md"
+  },
+  {
+    "slug": "escalas-clinicas",
+    "name": "ESCALAS DE AVALIAÇÕES CLINICAS",
+    "description": "22 ESCALA UTILIZADAS NO MUNDO: Avaliação rápida do paciente.",
+    "kind": "extra",
+    "price_cents": 1899,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": true,
+    "track_academico": true,
+    "track_tecnico": true,
+    "track_enfermeiro": true,
+    "sort_order": 0,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      },
+      {
+        "icon": "🔄",
+        "color": "blue",
+        "label": "ATUALIZADO"
+      },
+      {
+        "icon": "",
+        "color": "purple",
+        "label": "2026"
+      }
+    ],
+    "content_file": "escalas-clinicas.md"
+  },
+  {
+    "slug": "vm-fundamentos",
+    "name": "Fundamentos da VM",
+    "description": "Interpretação de curvas, modos ventilatórios (VCV, PCV, PSV) e alarmes.",
+    "kind": "Trilha",
+    "price_cents": 0,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": true,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 0,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [],
+    "content_file": "vm-fundamentos.md"
+  },
+  {
+    "slug": "gerador-presc.",
+    "name": "Gerador de Prescrição de Enfermagem ",
+    "description": "TUDO EM UM UNICO LUGAR - \n\nAnamnese + Exame Físico → Diagnósticos → Prescrição e Evolução\nSelecione os achados, gere diagnósticos e prescrição formatada — tudo em um fluxo\nPrescrição pronta para imprimir ou salvar em PDF.",
+    "kind": "extra",
+    "price_cents": 2990,
+    "gratuito": false,
+    "em_breve": true,
+    "is_active": false,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 0,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      },
+      {
+        "icon": "🔄",
+        "color": "blue",
+        "label": "ATUALIZADO"
+      },
+      {
+        "icon": "",
+        "color": "green",
+        "label": "INÉDITO"
+      },
+      {
+        "icon": "",
+        "color": "purple",
+        "label": "2026"
+      }
+    ],
+    "content_file": "gerador-presc..md"
+  },
+  {
+    "slug": "drogas-vasoativas",
+    "name": "Manejo de Drogas Vasoativas",
+    "description": "Guia completo e calculadora de infusão para Noradrenalina, Vasopressina e Inotrópicos.",
+    "kind": "Calculadora",
+    "price_cents": 0,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": true,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 0,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [],
+    "content_file": "drogas-vasoativas.md"
+  },
+  {
+    "slug": "manejo-drogas-vasoativas",
+    "name": "Manejo de Drogas Vasoativas",
+    "description": null,
+    "kind": "protocolo",
+    "price_cents": 0,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": true,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 0,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [],
+    "content_file": "manejo-drogas-vasoativas.md"
+  },
+  {
+    "slug": "pai-debito",
+    "name": "Monitorização de PAI e Débito",
+    "description": "Interpretação da curva dicrótica e monitorização hemodinâmica invasiva.",
+    "kind": "Guia",
+    "price_cents": 0,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": true,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 0,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [],
+    "content_file": "pai-debito.md"
+  },
+  {
+    "slug": "NANDA-NON-NIC",
+    "name": "Planos de Cuidado — 50 Diagnósticos NANDA + NOC + NIC - Integrados com Metas SMART",
+    "description": null,
+    "kind": "extra",
+    "price_cents": 0,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": false,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 0,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [],
+    "content_file": "NANDA-NON-NIC.md"
+  },
+  {
+    "slug": "posicao-prona",
+    "name": "Posição Prona na SDRA",
+    "description": "Checklist de segurança e manobra de pronação para pacientes com hipoxemia grave.",
+    "kind": "Procedimento",
+    "price_cents": 0,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": true,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 0,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [],
+    "content_file": "posicao-prona.md"
+  },
+  {
+    "slug": "PROCTEC",
+    "name": "PROCEDIMENTOS TÉCNICOS — CVC, SVD, TQT, dreno, PICC",
+    "description": null,
+    "kind": "Assistencial",
+    "price_cents": 2800,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": true,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 0,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "🔄",
+        "color": "blue",
+        "label": "ATUALIZADO"
+      },
+      {
+        "icon": "",
+        "color": "purple",
+        "label": "2026"
+      }
+    ],
+    "content_file": "PROCTEC.md"
+  },
+  {
+    "slug": "PROM-SAUDE SÍNDROME",
+    "name": "Promoção da saúde e síndrome",
+    "description": null,
+    "kind": "extra",
+    "price_cents": 0,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": false,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 0,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [],
+    "content_file": "PROM-SAUDE_SÍNDROME.md"
+  },
+  {
+    "slug": "protocolo-padis",
+    "name": "Protocolo PADIS & Sedação",
+    "description": "Manejo de dor, agitação, delirium e imobilidade em pacientes críticos.",
+    "kind": "Protocolo",
+    "price_cents": 0,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": true,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 0,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [],
+    "content_file": "protocolo-padis.md"
+  },
+  {
+    "slug": "SAE E PE DESCOMPLICADOS + IMPLICAÇÕES LEGAIS",
+    "name": "SAE E PE DESCOMPLICADOS + IMPLICAÇÕES LEGAIS",
+    "description": null,
+    "kind": "extra",
+    "price_cents": 0,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": true,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 0,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "pink",
+        "label": "NOVO"
+      }
+    ],
+    "content_file": "SAE_E_PE_DESCOMPLICADOS___IMPLICAÇÕES_LEGAIS.md"
+  },
+  {
+    "slug": "sae-descomplicada-automatizada",
+    "name": "SAE E PE DESCOMPLICADOS E AUTOMATIZADOS",
+    "description": "A Sistematização da Assistência de Enfermagem (SAE) e o Processo de Enfermagem (PE) em uma rotina mais simples, organizada e prática. Com a ADEC, você conta com recursos que ajudam a estruturar o raciocínio clínico, organizar informações e agilizar a elaboração dos registros e cuidados de enfermagem — sem complicação e com mais segurança no dia a dia.  se você quiser, é so ditar que ele escreve, esse formato ajuda o profissional paramentado.",
+    "kind": "extra",
+    "price_cents": 3999,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": true,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 0,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      },
+      {
+        "icon": "🔄",
+        "color": "blue",
+        "label": "ATUALIZADO"
+      },
+      {
+        "icon": "",
+        "color": "purple",
+        "label": "2026"
+      }
+    ],
+    "content_file": "sae-descomplicada-automatizada.md"
+  },
+  {
+    "slug": "carropcr",
+    "name": "SALA DE PCR E CARRO DE EMERGÊNCIA ",
+    "description": "organização e CONFERÊNCIA DE SALA E CARRO DE EMERGÊNCIA ",
+    "kind": "Gestão de Qualidade e Assistência",
+    "price_cents": 0,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": true,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 0,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [],
+    "content_file": "carropcr.md"
+  },
+  {
+    "slug": "Sepse",
+    "name": "SEPSE",
+    "description": "SEPSE: triagem NEWS2, novo papel do qSOFA (prognóstico) e do SOFA, fluxo do enfermeiro em 8 passos, pacote da 1ª hora com metas de 3h/6h, cálculo de volume 30 mL/kg, valores laboratoriais de alerta, choque séptico com drogas vasoativas e antibióticos por foco, populações especiais, os 8 erros que matam, SAE/SBAR com prescrição e aprazamento. No Brasil, estima-se que a sepse seja responsável por mais de 240 mil mortes por ano. O enfermeiro é a única barreira capaz de detectar os sinais sutis de declínio antes que a falência de órgãos se torne irreversível. Dominar esse rastreio não é um diferencial, é o dever técnico que separa a sobrevivência do óbito.",
+    "kind": "extra",
+    "price_cents": 2999,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": true,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 0,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [],
+    "content_file": "Sepse.md"
+  },
+  {
+    "slug": "sv-idoso",
+    "name": "SINAIS VITAIS NO IDOSO",
+    "description": "A pessoa idosa tem características próprias. O maior desafio para o enfermeiro é que o idoso pode estar gravemente doente com sinais vitais \"dentro da normalidade. \"Aqui você vai aprender, valores limitrofes e as alterações do sinais vitais das pessoas idosas, porque o envelhecimento impõe alterações fisiológicas progressivas em todos os sistemas orgânicos.",
+    "kind": "mensal",
+    "price_cents": 1599,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": true,
+    "track_academico": true,
+    "track_tecnico": true,
+    "track_enfermeiro": true,
+    "sort_order": 0,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      },
+      {
+        "icon": "🔄",
+        "color": "blue",
+        "label": "ATUALIZADO"
+      },
+      {
+        "icon": "",
+        "color": "purple",
+        "label": "2026"
+      }
+    ],
+    "content_file": "sv-idoso.md"
+  },
+  {
+    "slug": "DE-FUNDAMENTOS",
+    "name": "Suporte à Decisão Clínica e Mecanismos Fisiopatológicos",
+    "description": null,
+    "kind": "extra",
+    "price_cents": 1299,
+    "gratuito": true,
+    "em_breve": false,
+    "is_active": true,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 0,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      },
+      {
+        "icon": "🔄",
+        "color": "blue",
+        "label": "ATUALIZADO"
+      },
+      {
+        "icon": "",
+        "color": "purple",
+        "label": "2026"
+      }
+    ],
+    "content_file": "DE-FUNDAMENTOS.md"
+  },
+  {
+    "slug": "urgemer.",
+    "name": "URGÊNCIA E EMERGÊNCIA",
+    "description": "protocolos, procedimentos, sinais de alerta, cuidados de enfermagem, situações clínicas e condutas essenciais para atuar com mais segurança.\nTudo organizado de forma objetiva e didática para estudar, revisar e se preparar para a prática profissional e concursos.",
+    "kind": "extra",
+    "price_cents": 0,
+    "gratuito": false,
+    "em_breve": true,
+    "is_active": false,
+    "track_academico": true,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 0,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "green",
+        "label": "EM BREVE"
+      }
+    ],
+    "content_file": "urgemer..md"
+  },
+  {
+    "slug": "manual-sobrevivencia",
+    "name": "MANUAL DE SOBREVIVÊNCIA NO ESTÁGIO",
+    "description": "Primeiros passos e checklist de mochila.",
+    "kind": "PRIORIDADE",
+    "price_cents": 999,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": true,
+    "track_academico": true,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 1,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "⭐",
+        "color": "amber",
+        "label": "DESTAQUE"
+      },
+      {
+        "icon": "🔄",
+        "color": "blue",
+        "label": "ATUALIZADO"
+      },
+      {
+        "icon": "",
+        "color": "purple",
+        "label": "2026"
+      }
+    ],
+    "content_file": "manual-sobrevivencia.md"
+  },
+  {
+    "slug": "SAE",
+    "name": "SAE Descomplicada - Resolução COFEN nº 736/2024",
+    "description": "O ponto de partida que diferencia acadêmicos e profissionais que utilizam a ciência no seu dia a dia. Metodologia de facil entendimento. Aqui você vai aprender sobre o que é, porque SAE, como utilizar. ",
+    "kind": "extra",
+    "price_cents": 0,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": true,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 1,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [],
+    "content_file": "SAE.md"
+  },
+  {
+    "slug": "postura-etica",
+    "name": "Postura e Ética Profissional",
+    "description": "Conduta, sigilo, COFEN, comunicação terapêutica.",
+    "kind": "extra",
+    "price_cents": 990,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": false,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 2,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      },
+      {
+        "icon": "🔄",
+        "color": "blue",
+        "label": "ATUALIZADO"
+      }
+    ],
+    "content_file": "postura-etica.md"
+  },
+  {
+    "slug": "sinais-vitais",
+    "name": "Sinais Vitais — Adulto",
+    "description": "PA, FC, FR, T° e SpO₂.",
+    "kind": "extra",
+    "price_cents": 990,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": true,
+    "track_academico": true,
+    "track_tecnico": true,
+    "track_enfermeiro": true,
+    "sort_order": 3,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      },
+      {
+        "icon": "🔄",
+        "color": "blue",
+        "label": "ATUALIZADO"
+      },
+      {
+        "icon": "",
+        "color": "purple",
+        "label": "2026"
+      }
+    ],
+    "content_file": "sinais-vitais.md"
+  },
+  {
+    "slug": "IRAS",
+    "name": "IRAS - INFECÇÃO RELACIONADA A ASSISTENCIA A SAÚDE",
+    "description": "Os 5 principais tipos de IRAS (ICS, PAV, ITU, ISC, IPPM)2️⃣Cadeia epidemiológica da infecção — 6 elos3️⃣Precauções Padrão4️⃣Isolamentos: Contato 🟡Gotículas 🔵Aerossóis 5️⃣Paramentação — HAMÓL 6️⃣Desparamentação7️⃣Luvas: quando usar e nunca fazer8️⃣Bundles de prevenção (CVC, PAV, ITU, ISC)🩺Raciocínio clínico e muito mais.",
+    "kind": "extra",
+    "price_cents": 990,
+    "gratuito": true,
+    "em_breve": false,
+    "is_active": true,
+    "track_academico": true,
+    "track_tecnico": true,
+    "track_enfermeiro": true,
+    "sort_order": 4,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      },
+      {
+        "icon": "🔄",
+        "color": "blue",
+        "label": "ATUALIZADO"
+      },
+      {
+        "icon": "",
+        "color": "purple",
+        "label": "2026"
+      }
+    ],
+    "content_file": "IRAS.md"
+  },
+  {
+    "slug": "exame-fisico-escalas",
+    "name": "EXAME FÍSICO E ESCALA CLÍNICA",
+    "description": "Cefalocaudal, Glasgow, Braden e mais.",
+    "kind": "extra",
+    "price_cents": 1490,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": false,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 5,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [],
+    "content_file": "exame-fisico-escalas.md"
+  },
+  {
+    "slug": "seguranca",
+    "name": "Segurança do Paciente",
+    "description": "Metas internacionais de segurança.",
+    "kind": "extra",
+    "price_cents": 990,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": true,
+    "track_academico": true,
+    "track_tecnico": true,
+    "track_enfermeiro": true,
+    "sort_order": 5,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      },
+      {
+        "icon": "🔄",
+        "color": "blue",
+        "label": "ATUALIZADO"
+      },
+      {
+        "icon": "",
+        "color": "purple",
+        "label": "2026"
+      }
+    ],
+    "content_file": "seguranca.md"
+  },
+  {
+    "slug": "sv_adulto",
+    "name": "SINAIS VITAIS: idoso",
+    "description": null,
+    "kind": "mensal",
+    "price_cents": 0,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": true,
+    "track_academico": false,
+    "track_tecnico": true,
+    "track_enfermeiro": false,
+    "sort_order": 5,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      },
+      {
+        "icon": "🔄",
+        "color": "blue",
+        "label": "ATUALIZADO"
+      }
+    ],
+    "content_file": "sv_adulto.md"
+  },
+  {
+    "slug": "ORIENTAÇÕES PARA ANAMNESEexame-fisico-ORIENTAÇÕES",
+    "name": "TÉCNICAS DE ANAMNESE, EXAME FÍSICO & EVOLUÇÃO COM MODELOS",
+    "description": "Aplicativo prático e objetivo para orientar o acadêmico de enfermagem e enfermeiro na realização da ANAMNESE, no EXAME FÍSICO e no registro de EVOLUÇÃO segura e bem fundamentada com modelo.\nReúne conteúdo técnico, guia prático e base legal para fortalecer o raciocínio clínico, a qualidade do registro e a segurança profissional.",
+    "kind": "Suporte",
+    "price_cents": 1400,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": true,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": true,
+    "sort_order": 6,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      },
+      {
+        "icon": "🔄",
+        "color": "blue",
+        "label": "ATUALIZADO"
+      },
+      {
+        "icon": "",
+        "color": "purple",
+        "label": "2026"
+      }
+    ],
+    "content_file": "ORIENTAÇÕES_PARA_ANAMNESEexame-fisico-ORIENTAÇÕES.md"
+  },
+  {
+    "slug": "medicamentosecalculos",
+    "name": "FÁRMACOS DE A-Z ",
+    "description": "Indicações, diluições, efeitos adversos, drogas de alta vigilância e cuidados de enfermagem, CÁLCULADORAS MEDICAMENTOSAS: adulto e pediátrica, Regra de três e gotejamento. EM GOTAS E MICRGOTAS, POR KG/PESO",
+    "kind": "extra",
+    "price_cents": 2490,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": true,
+    "track_academico": false,
+    "track_tecnico": true,
+    "track_enfermeiro": true,
+    "sort_order": 7,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      },
+      {
+        "icon": "🔄",
+        "color": "blue",
+        "label": "ATUALIZADO"
+      },
+      {
+        "icon": "",
+        "color": "purple",
+        "label": "2026"
+      }
+    ],
+    "content_file": "medicamentosecalculos.md"
+  },
+  {
+    "slug": "sv-neo_ped",
+    "name": "SINAIS VITAI: neonatologia e Pediatria",
+    "description": "Valores por faixa etária e particularidades da avaliação do acadêmico desde o neonato até a idade de 12 anos",
+    "kind": "extra",
+    "price_cents": 990,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": true,
+    "track_academico": true,
+    "track_tecnico": true,
+    "track_enfermeiro": true,
+    "sort_order": 8,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      },
+      {
+        "icon": "🔄",
+        "color": "blue",
+        "label": "ATUALIZADO"
+      },
+      {
+        "icon": "",
+        "color": "purple",
+        "label": "2026"
+      }
+    ],
+    "content_file": "sv-neo_ped.md"
+  },
+  {
+    "slug": "sv-gestante",
+    "name": "SINAIS VITAIS: gestante",
+    "description": "Particularidades, sinais de alarme e cuidados no pré-natal.",
+    "kind": "mensal",
+    "price_cents": 1490,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": true,
+    "track_academico": true,
+    "track_tecnico": true,
+    "track_enfermeiro": true,
+    "sort_order": 9,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      },
+      {
+        "icon": "🔄",
+        "color": "blue",
+        "label": "ATUALIZADO"
+      },
+      {
+        "icon": "",
+        "color": "purple",
+        "label": "2026"
+      }
+    ],
+    "content_file": "sv-gestante.md"
+  },
+  {
+    "slug": "curativos",
+    "name": "Curativos e Lesões de Pele",
+    "description": "Tipos de feridas e coberturas.",
+    "kind": "extra",
+    "price_cents": 1990,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": true,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 10,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      },
+      {
+        "icon": "🔄",
+        "color": "blue",
+        "label": "ATUALIZADO"
+      }
+    ],
+    "content_file": "curativos.md"
+  },
+  {
+    "slug": "CCR E QUIZZ",
+    "name": "CLASSIFICAÇÃO DE RISCO E QUIZZ DE QUESTÕES DE PROVA",
+    "description": "Algoritmos de PCR adulto, ritmos chocáveis e não chocáveis, drogas.",
+    "kind": "extra",
+    "price_cents": 2490,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": true,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": true,
+    "sort_order": 11,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      },
+      {
+        "icon": "🔄",
+        "color": "blue",
+        "label": "ATUALIZADO"
+      },
+      {
+        "icon": "",
+        "color": "purple",
+        "label": "2026"
+      }
+    ],
+    "content_file": "CCR_E_QUIZZ.md"
+  },
+  {
+    "slug": "uti",
+    "name": "Enfermagem em UTI",
+    "description": "Monitorização e ventilação mecânica.",
+    "kind": "extra",
+    "price_cents": 2490,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": true,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 12,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      },
+      {
+        "icon": "🔄",
+        "color": "blue",
+        "label": "ATUALIZADO"
+      },
+      {
+        "icon": "🆕",
+        "color": "green",
+        "label": "NOVO"
+      }
+    ],
+    "content_file": "uti.md"
+  },
+  {
+    "slug": "farmacologia-avancada",
+    "name": "Farmacologia Avançada",
+    "description": "Aminas e diluições críticas.",
+    "kind": "extra",
+    "price_cents": 1990,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": true,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 13,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      },
+      {
+        "icon": "🔄",
+        "color": "blue",
+        "label": "ATUALIZADO"
+      }
+    ],
+    "content_file": "farmacologia-avancada.md"
+  },
+  {
+    "slug": "saude-mental",
+    "name": "ENFERMAGEM EM SAÚDE MENTAL",
+    "description": "Manejo da crise e comunicação.",
+    "kind": "extra",
+    "price_cents": 1490,
+    "gratuito": true,
+    "em_breve": false,
+    "is_active": true,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 14,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      },
+      {
+        "icon": "🔄",
+        "color": "blue",
+        "label": "ATUALIZADO"
+      },
+      {
+        "icon": "",
+        "color": "purple",
+        "label": "2026"
+      }
+    ],
+    "content_file": "saude-mental.md"
+  },
+  {
+    "slug": "relatorio-abnt",
+    "name": "Relatório de Estágio (ABNT)",
+    "description": "Gera o relatório a partir do Diário de Bordo (5 aberturas por compra).",
+    "kind": "relatorio",
+    "price_cents": 6000,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": false,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 15,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "🔄",
+        "color": "blue",
+        "label": "ATUALIZADO"
+      },
+      {
+        "icon": "🆕",
+        "color": "green",
+        "label": "NOVO"
+      }
+    ],
+    "content_file": "relatorio-abnt.md"
+  },
+  {
+    "slug": "obstetricia",
+    "name": "ENFERMAGEM EM OBSTETRÍCIA",
+    "description": "Anamnese, exame físico no trabalho de parto sem distócia e na internaçlão clinica com agravos. Atendimento hospitalar",
+    "kind": "mensal",
+    "price_cents": 1990,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": true,
+    "track_academico": true,
+    "track_tecnico": false,
+    "track_enfermeiro": true,
+    "sort_order": 16,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      },
+      {
+        "icon": "🔄",
+        "color": "blue",
+        "label": "ATUALIZADO"
+      },
+      {
+        "icon": "",
+        "color": "purple",
+        "label": "2026"
+      }
+    ],
+    "content_file": "obstetricia.md"
+  },
+  {
+    "slug": "pediatria",
+    "name": "Enfermagem Pediátrica",
+    "description": "Cuidado integral à criança hospitalizada e ambulatorial.",
+    "kind": "extra",
+    "price_cents": 1990,
+    "gratuito": false,
+    "em_breve": true,
+    "is_active": false,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 17,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      },
+      {
+        "icon": "🔄",
+        "color": "blue",
+        "label": "ATUALIZADO"
+      }
+    ],
+    "content_file": "pediatria.md"
+  },
+  {
+    "slug": "anatomia",
+    "name": "Anatomia Clínica Aplicada",
+    "description": "Anatomia funcional para a prática de enfermagem.",
+    "kind": "extra",
+    "price_cents": 1490,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": true,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 18,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      }
+    ],
+    "content_file": "anatomia.md"
+  },
+  {
+    "slug": "fisiologia",
+    "name": "Fisiologia para Enfermagem",
+    "description": "Sistemas, regulação e correlação clínica.",
+    "kind": "extra",
+    "price_cents": 1490,
+    "gratuito": false,
+    "em_breve": true,
+    "is_active": false,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 19,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      }
+    ],
+    "content_file": "fisiologia.md"
+  },
+  {
+    "slug": "microbiologia",
+    "name": "Microbiologia para a Prática",
+    "description": "Patógenos, isolamentos e prevenção de transmissão.",
+    "kind": "extra",
+    "price_cents": 1490,
+    "gratuito": false,
+    "em_breve": true,
+    "is_active": false,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 20,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      }
+    ],
+    "content_file": "microbiologia.md"
+  },
+  {
+    "slug": "gestao-enfermagem",
+    "name": "Gerenciamento em Enfermagem",
+    "description": "Liderança, dimensionamento, escala, indicadores e qualidade.",
+    "kind": "extra",
+    "price_cents": 1990,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": true,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 21,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      },
+      {
+        "icon": "🔄",
+        "color": "blue",
+        "label": "ATUALIZADO"
+      },
+      {
+        "icon": "",
+        "color": "purple",
+        "label": "2026"
+      }
+    ],
+    "content_file": "gestao-enfermagem.md"
+  },
+  {
+    "slug": "sbv",
+    "name": "Suporte Básico de Vida (SBV)",
+    "description": "Cadeia de sobrevivência, RCP de alta qualidade, DEA e OVACE — adulto, pediátrico e lactente.",
+    "kind": "extra",
+    "price_cents": 0,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": false,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 22,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      }
+    ],
+    "content_file": "sbv.md"
+  },
+  {
+    "slug": "quizzes",
+    "name": "QUIZZES: perguntas e respostas ",
+    "description": "São mais de 245 quizzes para acadêmicos e enfermeiros: UTI, ACLS, farmacologia, sinais vitais, segurança do paciente, uregência e emergência e muito mais.",
+    "kind": "quiz",
+    "price_cents": 0,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": true,
+    "track_academico": true,
+    "track_tecnico": true,
+    "track_enfermeiro": true,
+    "sort_order": 23,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "⭐",
+        "color": "amber",
+        "label": "DESTAQUE"
+      },
+      {
+        "icon": "🆕",
+        "color": "green",
+        "label": "NOVO"
+      },
+      {
+        "icon": "",
+        "color": "purple",
+        "label": "2026"
+      },
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      }
+    ],
+    "content_file": "quizzes.md"
+  },
+  {
+    "slug": "procedimentos-enfermagem",
+    "name": "PUNÇÃO VENOSA PERIFÉRICA E PREVENÇÃO DE FLEBITE",
+    "description": null,
+    "kind": "Assistência",
+    "price_cents": 1999,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": true,
+    "track_academico": true,
+    "track_tecnico": true,
+    "track_enfermeiro": true,
+    "sort_order": 24,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      },
+      {
+        "icon": "🆕",
+        "color": "green",
+        "label": "NOVO"
+      },
+      {
+        "icon": "🔄",
+        "color": "blue",
+        "label": "ATUALIZADO"
+      }
+    ],
+    "content_file": "procedimentos-enfermagem.md"
+  },
+  {
+    "slug": "Cod. 001 - diagnosticos-aede",
+    "name": "ANAMNESE, EXAME FÍSICO, DIAGNOSTICOS E EVOLUÇÃO ",
+    "description": "Aqui você vai poder realizar a ANAMNESE, EXAME FÍSICO. \nMontar diagnósticos de enfermagem baseados nos sinais e sintomas e gere automaticamente a prescrição de enfermagem com sugestões de horários e aprazamentos.  ",
+    "kind": "Inédito",
+    "price_cents": 2799,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": true,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": true,
+    "sort_order": 50,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      },
+      {
+        "icon": "🔄",
+        "color": "blue",
+        "label": "ATUALIZADO"
+      },
+      {
+        "icon": "",
+        "color": "purple",
+        "label": "2026"
+      }
+    ],
+    "content_file": "Cod._001_-_diagnosticos-aede.md"
+  },
+  {
+    "slug": "clinica-medica",
+    "name": "Enfermagem em Clínica Médica",
+    "description": "Cuidado clínico geral em enfermaria.",
+    "kind": "curso",
+    "price_cents": 0,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": false,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 101,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      },
+      {
+        "icon": "🔄",
+        "color": "blue",
+        "label": "ATUALIZADO"
+      },
+      {
+        "icon": "",
+        "color": "purple",
+        "label": "2026"
+      }
+    ],
+    "content_file": "clinica-medica.md"
+  },
+  {
+    "slug": "sae-completo",
+    "name": "SAE Completo + Processos",
+    "description": "Sistematização da Assistência de Enfermagem em todas as etapas.",
+    "kind": "curso",
+    "price_cents": 0,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": false,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 102,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      },
+      {
+        "icon": "🔄",
+        "color": "blue",
+        "label": "ATUALIZADO"
+      }
+    ],
+    "content_file": "sae-completo.md"
+  },
+  {
+    "slug": "clinica-cirurgica",
+    "name": "Enfermagem em Clínica Cirúrgica",
+    "description": "Pré, trans e pós-operatório.",
+    "kind": "curso",
+    "price_cents": 0,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": false,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 103,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      },
+      {
+        "icon": "🔄",
+        "color": "blue",
+        "label": "ATUALIZADO"
+      }
+    ],
+    "content_file": "clinica-cirurgica.md"
+  },
+  {
+    "slug": "centro-cirurgico",
+    "name": "Enfermagem em Centro Cirúrgico",
+    "description": "Atuação no bloco operatório.",
+    "kind": "curso",
+    "price_cents": 0,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": false,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 104,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      },
+      {
+        "icon": "🔄",
+        "color": "blue",
+        "label": "ATUALIZADO"
+      }
+    ],
+    "content_file": "centro-cirurgico.md"
+  },
+  {
+    "slug": "cme",
+    "name": "Enfermagem em CME",
+    "description": "Central de Material e Esterilização.",
+    "kind": "curso",
+    "price_cents": 0,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": false,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 105,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      },
+      {
+        "icon": "🔄",
+        "color": "blue",
+        "label": "ATUALIZADO"
+      }
+    ],
+    "content_file": "cme.md"
+  },
+  {
+    "slug": "saude-homem",
+    "name": "Enfermagem em Saúde do Homem",
+    "description": "Cuidado integral à saúde masculina.",
+    "kind": "curso",
+    "price_cents": 0,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": false,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 106,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      },
+      {
+        "icon": "🔄",
+        "color": "blue",
+        "label": "ATUALIZADO"
+      }
+    ],
+    "content_file": "saude-homem.md"
+  },
+  {
+    "slug": "saude-idoso",
+    "name": "Enfermagem em Saúde do Idoso",
+    "description": "Geriatria e Gerontologia.",
+    "kind": "curso",
+    "price_cents": 0,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": false,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 107,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      },
+      {
+        "icon": "🔄",
+        "color": "blue",
+        "label": "ATUALIZADO"
+      }
+    ],
+    "content_file": "saude-idoso.md"
+  },
+  {
+    "slug": "nefrologia",
+    "name": "Enfermagem em Nefrologia",
+    "description": "Cuidados renais, diálise e transplante.",
+    "kind": "curso",
+    "price_cents": 0,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": false,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 108,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      }
+    ],
+    "content_file": "nefrologia.md"
+  },
+  {
+    "slug": "urologia",
+    "name": "Enfermagem em Urologia",
+    "description": "Cuidados em afecções urológicas.",
+    "kind": "curso",
+    "price_cents": 0,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": false,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 109,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [],
+    "content_file": "urologia.md"
+  },
+  {
+    "slug": "neurologia",
+    "name": "Enfermagem em Neurologia",
+    "description": "Cuidados neurológicos.",
+    "kind": "curso",
+    "price_cents": 0,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": false,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 110,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      },
+      {
+        "icon": "🔄",
+        "color": "blue",
+        "label": "ATUALIZADO"
+      }
+    ],
+    "content_file": "neurologia.md"
+  },
+  {
+    "slug": "hepatologia",
+    "name": "Enfermagem em Hepatologia",
+    "description": "Cuidados hepáticos.",
+    "kind": "curso",
+    "price_cents": 0,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": false,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 111,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      },
+      {
+        "icon": "🔄",
+        "color": "blue",
+        "label": "ATUALIZADO"
+      }
+    ],
+    "content_file": "hepatologia.md"
+  },
+  {
+    "slug": "hematologia",
+    "name": "Enfermagem em Hematologia",
+    "description": "Cuidados hematológicos.",
+    "kind": "curso",
+    "price_cents": 0,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": false,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 112,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      },
+      {
+        "icon": "🔄",
+        "color": "blue",
+        "label": "ATUALIZADO"
+      }
+    ],
+    "content_file": "hematologia.md"
+  },
+  {
+    "slug": "ginecologia",
+    "name": "Enfermagem em Ginecologia",
+    "description": "Cuidados ginecológicos.",
+    "kind": "curso",
+    "price_cents": 0,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": false,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 113,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      },
+      {
+        "icon": "🔄",
+        "color": "blue",
+        "label": "ATUALIZADO"
+      }
+    ],
+    "content_file": "ginecologia.md"
+  },
+  {
+    "slug": "curativos-pro",
+    "name": "Curativos (versão profissional)",
+    "description": "Avaliação de feridas e coberturas avançadas.",
+    "kind": "curso",
+    "price_cents": 0,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": false,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 114,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      },
+      {
+        "icon": "🔄",
+        "color": "blue",
+        "label": "ATUALIZADO"
+      }
+    ],
+    "content_file": "curativos-pro.md"
+  },
+  {
+    "slug": "offshore",
+    "name": "Enfermagem Offshore",
+    "description": "Atuação em plataformas e ambientes offshore.",
+    "kind": "curso",
+    "price_cents": 0,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": false,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 115,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      },
+      {
+        "icon": "🔄",
+        "color": "blue",
+        "label": "ATUALIZADO"
+      },
+      {
+        "icon": "🆕",
+        "color": "green",
+        "label": "NOVO"
+      }
+    ],
+    "content_file": "offshore.md"
+  },
+  {
+    "slug": "de-bordo",
+    "name": "Enfermagem de Bordo",
+    "description": "Atuação em aeronaves e transporte.",
+    "kind": "curso",
+    "price_cents": 0,
+    "gratuito": false,
+    "em_breve": true,
+    "is_active": false,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 116,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      },
+      {
+        "icon": "🔄",
+        "color": "blue",
+        "label": "ATUALIZADO"
+      },
+      {
+        "icon": "🆕",
+        "color": "green",
+        "label": "NOVO"
+      }
+    ],
+    "content_file": "de-bordo.md"
+  },
+  {
+    "slug": "saude-digital",
+    "name": "Saúde Digital: PEP, Prontuário e Registro",
+    "description": "Prontuário eletrônico e registro técnico.",
+    "kind": "curso",
+    "price_cents": 0,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": true,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 117,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      }
+    ],
+    "content_file": "saude-digital.md"
+  },
+  {
+    "slug": "tele-enfermagem",
+    "name": "Tele-enfermagem, LGPD e Segurança de Dados",
+    "description": "Tele-atendimento e proteção de dados.",
+    "kind": "curso",
+    "price_cents": 0,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": true,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 118,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      }
+    ],
+    "content_file": "tele-enfermagem.md"
+  },
+  {
+    "slug": "ColetaDados-AdmissãoTurno",
+    "name": "Coleta de Dados + Ditado + Admissão de Turno + anotações automáticas ",
+    "description": "Operação e segurança no uso de equipamentos.",
+    "kind": "Assitencia",
+    "price_cents": 0,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": true,
+    "track_academico": false,
+    "track_tecnico": true,
+    "track_enfermeiro": false,
+    "sort_order": 119,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      },
+      {
+        "icon": "🔄",
+        "color": "blue",
+        "label": "ATUALIZADO"
+      },
+      {
+        "icon": "",
+        "color": "purple",
+        "label": "2026"
+      }
+    ],
+    "content_file": "ColetaDados-AdmissãoTurno.md"
+  },
+  {
+    "slug": "sus-programas",
+    "name": "SUS: Programas e Indicadores de Saúde",
+    "description": "Programas e indicadores do SUS.",
+    "kind": "curso",
+    "price_cents": 0,
+    "gratuito": false,
+    "em_breve": true,
+    "is_active": false,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 120,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      }
+    ],
+    "content_file": "sus-programas.md"
+  },
+  {
+    "slug": "vigilancia-epi",
+    "name": "Vigilância Epidemiológica e Doenças Emergentes",
+    "description": "Vigilância e surtos.",
+    "kind": "curso",
+    "price_cents": 0,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": true,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 121,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      }
+    ],
+    "content_file": "vigilancia-epi.md"
+  },
+  {
+    "slug": "medadm",
+    "name": "SEGURANÇA NA ADMINISTRAÇÃO DE DROGAS",
+    "description": "META INTERNACIONAL Nº 01. Referência de estudo para técnicos e estudantes. Sempre confirme a prescrição médica, a bula do fabricante e o protocolo da sua instituição. Medicamentos Potencialmente Perigosos (MPP / alta vigilância), e muito mais.",
+    "kind": "Assistencial",
+    "price_cents": 0,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": true,
+    "track_academico": true,
+    "track_tecnico": true,
+    "track_enfermeiro": false,
+    "sort_order": 122,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      },
+      {
+        "icon": "🔄",
+        "color": "blue",
+        "label": "ATUALIZADO"
+      }
+    ],
+    "content_file": "medadm.md"
+  },
+  {
+    "slug": "has-dm",
+    "name": "HIPERTENSÃO E DIABETES",
+    "description": "Cuidado e monitorização de HAS e DM. Baseado nos protocolos atuais.",
+    "kind": "curso",
+    "price_cents": 0,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": true,
+    "track_academico": false,
+    "track_tecnico": true,
+    "track_enfermeiro": false,
+    "sort_order": 123,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      },
+      {
+        "icon": "🔄",
+        "color": "blue",
+        "label": "ATUALIZADO"
+      },
+      {
+        "icon": "",
+        "color": "purple",
+        "label": "2026"
+      }
+    ],
+    "content_file": "has-dm.md"
+  },
+  {
+    "slug": "etica-tecnico",
+    "name": "CÓDIGO DE ÉTICA: Direitos, Deveres e Limites Técnicos",
+    "description": "Ética profissional da enfermagem",
+    "kind": "curso",
+    "price_cents": 1299,
+    "gratuito": true,
+    "em_breve": false,
+    "is_active": true,
+    "track_academico": false,
+    "track_tecnico": true,
+    "track_enfermeiro": false,
+    "sort_order": 124,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      },
+      {
+        "icon": "🔄",
+        "color": "blue",
+        "label": "ATUALIZADO"
+      },
+      {
+        "icon": "",
+        "color": "purple",
+        "label": "2026"
+      }
+    ],
+    "content_file": "etica-tecnico.md"
+  },
+  {
+    "slug": "semana-enfermagem",
+    "name": "SAÚDE MENTAL",
+    "description": "Conteúdo histórico, técnico e político.",
+    "kind": "curso",
+    "price_cents": 0,
+    "gratuito": false,
+    "em_breve": false,
+    "is_active": true,
+    "track_academico": false,
+    "track_tecnico": true,
+    "track_enfermeiro": false,
+    "sort_order": 125,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [
+      {
+        "icon": "🆕",
+        "color": "green",
+        "label": "NOVO"
+      },
+      {
+        "icon": "🔄",
+        "color": "blue",
+        "label": "ATUALIZADO"
+      },
+      {
+        "icon": "",
+        "color": "red",
+        "label": "CERTIFICADO OPCIONAL"
+      }
+    ],
+    "content_file": "semana-enfermagem.md"
+  }
+]
