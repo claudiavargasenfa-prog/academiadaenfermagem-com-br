@@ -70,7 +70,7 @@ export function CuidandoQuemCuidaPremium({ editableContent }: { editableContent?
         <section id="cqc-apresentacao" className="scroll-mt-24">
           <Reveal>
             <Card className="rounded-[2rem] border-0 bg-white p-7 shadow-sm ring-1 ring-[#E1E9E4] sm:p-10">
-              <div className="cqc-editavel prose prose-neutral max-w-none text-[#3E574F] prose-headings:font-display prose-headings:font-black prose-headings:text-[#17362F] prose-strong:text-[#244A40] prose-a:text-[#4F7769] prose-blockquote:border-l-[#9DBDB0] prose-blockquote:text-[#3E574F]">
+              <div className="cqc-editavel max-w-none text-base leading-7 text-[#3E574F] [&_em]:text-[#3E574F] [&_h1]:text-[#17362F] [&_h2]:text-[#17362F] [&_h3]:text-[#244A40] [&_li]:text-base [&_li]:leading-7 [&_p]:text-base [&_p]:leading-7 [&_p]:text-[#3E574F] [&_strong]:text-[#244A40]">
                 {renderContent(editableContent)}
               </div>
             </Card>
