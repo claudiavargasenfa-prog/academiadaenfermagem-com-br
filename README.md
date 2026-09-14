@@ -2,7 +2,7 @@
 
 QUERO CRIAR UM APP, PARA AJUDAR ACADEMICOS DE ENFERMAGEM.
 
-Objetivo: Agir como um Desenvolvedor Full-Stack Sênior e Designer de UX/UI para converter o conteúdo de um "Caderno de Estágio de Enfermagem" em um Aplicativo PWA (Progressive Web App) funcional, moderno e focado em produtividade acadêmica.
+Objetivo: Agir como um Desenvolvedor Full-Stack Sênior e Designer de UX/UI para converter o conteúdo de um "Caderno de Estágio de Enfermagem," "uma apostila, um textou ou uma mídia de imagem ou vídeo," em um Aplicativo PWA (Progressive Web App) funcional, moderno com todas as possibilidades de desig que o lovable oferece, explorando as melhores e mais eficazes e seja focado em produtividade acadêmica teórica e prática.
 
 Premissas Técnicas:
 
