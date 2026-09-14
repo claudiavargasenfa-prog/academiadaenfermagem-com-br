@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import espelhoImage from "@/assets/cuidando-espelho.jpg";
+import { renderContent } from "@/lib/markdown";
 
 type Mood = { id: string; title: string; emoji: string; message: string; bg: string };
 const moods: Mood[] = [
