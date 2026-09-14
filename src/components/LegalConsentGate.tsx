@@ -26,10 +26,12 @@ export function LegalNotice({ className = "" }: { className?: string }) {
   );
 }
 
-/** Modal obrigatório de primeiro acesso, com registro eletrônico do aceite. */
+/**
+ * Modal obrigatório de primeiro acesso.
+ * O aceite fecha o bloqueio imediatamente; o registro remoto não pode prender a UI.
+ */
 export function LegalConsentGate() {
   const [show, setShow] = useState(false);
-  const [busy, setBusy] = useState(false);
 
   useEffect(() => {
     if (!hasAcceptedLegalLocally()) setShow(true);
@@ -37,11 +39,14 @@ export function LegalConsentGate() {
 
   if (!show) return null;
 
-  async function accept() {
-    setBusy(true);
-    await recordLegalAcceptance("primeiro_acesso");
-    setBusy(false);
+  function accept() {
+    // Fecha imediatamente para nunca deixar o aluno preso em "Registrando aceite…".
     setShow(false);
+
+    // Persistência remota em segundo plano. Nenhum await no fluxo da interface.
+    void recordLegalAcceptance("primeiro_acesso").catch((error) => {
+      console.warn("[Legal] Falha não bloqueante no registro do aceite:", error);
+    });
   }
 
   return (
@@ -80,10 +85,9 @@ export function LegalConsentGate() {
           <button
             type="button"
             onClick={accept}
-            disabled={busy}
-            className="flex-1 rounded-xl bg-emerald-900 py-3 text-sm font-extrabold text-white shadow hover:opacity-90 disabled:opacity-60"
+            className="flex-1 rounded-xl bg-emerald-900 py-3 text-sm font-extrabold text-white shadow transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-emerald-700 focus:ring-offset-2"
           >
-            {busy ? "Registrando aceite…" : "Li e aceito os Termos e a Política de Privacidade"}
+            Li e aceito os Termos e a Política de Privacidade
           </button>
           <Link
             to="/legal"
