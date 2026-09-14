@@ -10,7 +10,7 @@ import BlocoDitado from "@/components/voz/BlocoDitado";
 import GuiaColetaTurno from "@/components/GuiaColetaTurno";
 import { CertificadoFAQ } from "@/components/CertificadoFAQ";
 import { AccordionSearchLayout } from "@/components/miniapps/uti/AccordionSearchLayout";
-import { CuidandoQuemCuida } from "@/components/miniapps/CuidandoQuemCuida";
+
 
 import { renderContent } from "@/lib/markdown";
 import { useLocal } from "@/lib/storage";
@@ -158,13 +158,6 @@ export function MiniAppContent({ slug }: { slug: string }) {
     );
   }
 
-  if (slug === "SAUDEMENTALPROF.") {
-    return (
-      <div className="mb-6">
-        <CuidandoQuemCuida editableContent={q.data?.content_md} />
-      </div>
-    );
-  }
 
   if (!q.data) return null;
   const { content_md, video_url, audio_url } = q.data as any;
