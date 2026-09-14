@@ -10,3 +10,8 @@
 ## Pendente
 - Google Search Console: aguardando nova conexão própria.
 - Setembro Amarelo: aguardando 10 banners.
+
+## Cuidando de Quem Cuida — conteúdo 100% editável (14/09/2026) — CONCLUÍDO
+- [x] Removida a tela fixa do mini app SAUDEMENTALPROF.
+- [x] Mini app passa a usar o conteúdo escrito do painel, como os demais
+- [x] Texto completo da jornada gravado no campo editável
