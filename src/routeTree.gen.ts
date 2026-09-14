@@ -56,6 +56,7 @@ import { Route as AppSlugRouteImport } from './routes/app.$slug'
 import { Route as AppSlugIndexRouteImport } from './routes/app.$slug.index'
 import { Route as AppSlugSubtopicRouteImport } from './routes/app.$slug.$subtopic'
 import { Route as ApiPublicPaymentsRouteImport } from './routes/api/public/payments'
+import { Route as ApiPublicMiniAppsExportRouteImport } from './routes/api/public/mini-apps-export'
 
 const VipRoute = VipRouteImport.update({
   id: '/vip',
@@ -292,6 +293,11 @@ const ApiPublicPaymentsRoute = ApiPublicPaymentsRouteImport.update({
   path: '/api/public/payments',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicMiniAppsExportRoute = ApiPublicMiniAppsExportRouteImport.update({
+  id: '/api/public/mini-apps-export',
+  path: '/api/public/mini-apps-export',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -338,6 +344,7 @@ export interface FileRoutesByFullPath {
   '/planos/$slug': typeof PlanosSlugRoute
   '/quizzes/$slug': typeof QuizzesSlugRoute
   '/trilha/$slug': typeof TrilhaSlugRoute
+  '/api/public/mini-apps-export': typeof ApiPublicMiniAppsExportRoute
   '/api/public/payments': typeof ApiPublicPaymentsRoute
   '/app/$slug/$subtopic': typeof AppSlugSubtopicRoute
   '/app/$slug/': typeof AppSlugIndexRoute
@@ -386,6 +393,7 @@ export interface FileRoutesByTo {
   '/planos/$slug': typeof PlanosSlugRoute
   '/quizzes/$slug': typeof QuizzesSlugRoute
   '/trilha/$slug': typeof TrilhaSlugRoute
+  '/api/public/mini-apps-export': typeof ApiPublicMiniAppsExportRoute
   '/api/public/payments': typeof ApiPublicPaymentsRoute
   '/app/$slug/$subtopic': typeof AppSlugSubtopicRoute
   '/app/$slug': typeof AppSlugIndexRoute
@@ -436,6 +444,7 @@ export interface FileRoutesById {
   '/planos/$slug': typeof PlanosSlugRoute
   '/quizzes/$slug': typeof QuizzesSlugRoute
   '/trilha/$slug': typeof TrilhaSlugRoute
+  '/api/public/mini-apps-export': typeof ApiPublicMiniAppsExportRoute
   '/api/public/payments': typeof ApiPublicPaymentsRoute
   '/app/$slug/$subtopic': typeof AppSlugSubtopicRoute
   '/app/$slug/': typeof AppSlugIndexRoute
@@ -487,6 +496,7 @@ export interface FileRouteTypes {
     | '/planos/$slug'
     | '/quizzes/$slug'
     | '/trilha/$slug'
+    | '/api/public/mini-apps-export'
     | '/api/public/payments'
     | '/app/$slug/$subtopic'
     | '/app/$slug/'
@@ -535,6 +545,7 @@ export interface FileRouteTypes {
     | '/planos/$slug'
     | '/quizzes/$slug'
     | '/trilha/$slug'
+    | '/api/public/mini-apps-export'
     | '/api/public/payments'
     | '/app/$slug/$subtopic'
     | '/app/$slug'
@@ -584,6 +595,7 @@ export interface FileRouteTypes {
     | '/planos/$slug'
     | '/quizzes/$slug'
     | '/trilha/$slug'
+    | '/api/public/mini-apps-export'
     | '/api/public/payments'
     | '/app/$slug/$subtopic'
     | '/app/$slug/'
@@ -633,6 +645,7 @@ export interface RootRouteChildren {
   CadastroSlugRoute: typeof CadastroSlugRoute
   PlanosSlugRoute: typeof PlanosSlugRoute
   TrilhaSlugRoute: typeof TrilhaSlugRoute
+  ApiPublicMiniAppsExportRoute: typeof ApiPublicMiniAppsExportRoute
   ApiPublicPaymentsRoute: typeof ApiPublicPaymentsRoute
 }
 
@@ -967,6 +980,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicPaymentsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/mini-apps-export': {
+      id: '/api/public/mini-apps-export'
+      path: '/api/public/mini-apps-export'
+      fullPath: '/api/public/mini-apps-export'
+      preLoaderRoute: typeof ApiPublicMiniAppsExportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -1038,6 +1058,7 @@ const rootRouteChildren: RootRouteChildren = {
   CadastroSlugRoute: CadastroSlugRoute,
   PlanosSlugRoute: PlanosSlugRoute,
   TrilhaSlugRoute: TrilhaSlugRoute,
+  ApiPublicMiniAppsExportRoute: ApiPublicMiniAppsExportRoute,
   ApiPublicPaymentsRoute: ApiPublicPaymentsRoute,
 }
 export const routeTree = rootRouteImport
