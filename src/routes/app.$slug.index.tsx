@@ -4,7 +4,10 @@ import { ArrowLeft, BookOpen, ChevronRight } from "lucide-react";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
 import { AppAccessGate } from "@/components/ContentProtection";
 import { MiniAppContent } from "@/components/MiniAppContent";
+import { CuidandoQuemCuida } from "@/components/miniapps/CuidandoQuemCuida";
 import { supabase } from "@/integrations/supabase/client";
+
+const CUIDANDO_SLUG = "SAUDEMENTALPROF.";
 
 export const Route = createFileRoute("/app/$slug/")({
   beforeLoad: ({ params }) => {
@@ -13,12 +16,12 @@ export const Route = createFileRoute("/app/$slug/")({
     }
   },
   head: ({ params }) => {
-    const isCuidando = params.slug === "SAUDEMENTALPROF.";
+    const isCuidando = params.slug === CUIDANDO_SLUG;
     const title = isCuidando
-      ? "Cuidando de Quem Cuida: Uma viagem por dentro. Você está pronto?"
+      ? "Cuidando de Quem Cuida — Um espaço para você"
       : `${params.slug} — Academia da Enfermagem`;
     const description = isCuidando
-      ? "Mini App de referência da Academia da Enfermagem para orientação, autocuidado, riscos psicossociais, busca de ajuda e proteção de quem cuida."
+      ? "Um espaço acolhedor para profissionais de enfermagem respirarem, perceberem seus limites, encontrarem apoio e cuidarem de si."
       : `Mini App ${params.slug} da Academia da Enfermagem.`;
 
     return {
@@ -55,6 +58,8 @@ export const Route = createFileRoute("/app/$slug/")({
 
 function Page() {
   const { slug } = Route.useParams();
+  const isCuidando = slug === CUIDANDO_SLUG;
+
   const q = useQuery({
     queryKey: ["mini_app_meta", slug],
     queryFn: async () => {
@@ -66,7 +71,7 @@ function Page() {
 
   const subsQ = useQuery({
     queryKey: ["mini_app_subtopics", slug],
-    enabled: !!q.data?.id,
+    enabled: !!q.data?.id && !isCuidando,
     queryFn: async () => {
       const { data, error } = await supabase
         .from("mini_app_subtopics")
@@ -91,7 +96,19 @@ function Page() {
   const app = q.data;
   const subs = subsQ.data ?? [];
   const hasSubs = subs.length > 0;
-  const isCuidando = slug === "SAUDEMENTALPROF.";
+
+  if (isCuidando) {
+    return (
+      <AppShell>
+        <Link to="/" className="mb-3 inline-flex items-center gap-1 text-sm font-semibold text-muted-foreground hover:text-foreground">
+          <ArrowLeft className="h-4 w-4" /> Voltar
+        </Link>
+        <AppAccessGate slug={slug}>
+          <CuidandoQuemCuida />
+        </AppAccessGate>
+      </AppShell>
+    );
+  }
 
   return (
     <AppShell>
@@ -99,9 +116,9 @@ function Page() {
         <ArrowLeft className="h-4 w-4" /> Voltar
       </Link>
       <PageHeader
-        eyebrow={isCuidando ? "Mini App de referência" : "Mini App"}
-        title={isCuidando ? "Cuidando de Quem Cuida: Uma viagem por dentro. Você está pronto?" : app.name}
-        description={isCuidando ? "Uma experiência educativa, acolhedora e prática para perceber sinais, compreender o trabalho, buscar ajuda e construir proteção." : app.description ?? undefined}
+        eyebrow="Mini App"
+        title={app.name}
+        description={app.description ?? undefined}
       />
       <AppAccessGate slug={slug}>
         <MiniAppContent slug={slug} />
@@ -130,7 +147,7 @@ function Page() {
               ))}
             </ul>
           </Card>
-        ) : !isCuidando ? (
+        ) : (
           <Card>
             <div className="mb-3 flex items-center gap-2 text-gold">
               <BookOpen className="h-5 w-5" />
@@ -141,7 +158,7 @@ function Page() {
               Mini App em subtópicos. O conteúdo aparecerá automaticamente acima deste bloco.
             </p>
           </Card>
-        ) : null}
+        )}
       </AppAccessGate>
     </AppShell>
   );
