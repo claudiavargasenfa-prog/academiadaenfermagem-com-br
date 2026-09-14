@@ -17,38 +17,47 @@ export function hasAcceptedLegalLocally(): boolean {
   try {
     return !!localStorage.getItem(LEGAL_ACCEPT_STORAGE_KEY);
   } catch {
-    return true;
+    return false;
   }
 }
 
 /**
- * Registra eletronicamente o aceite: data/hora (timestamp do servidor), versão dos
- * Termos e da Política de Privacidade, identificador do usuário e/ou do dispositivo.
+ * Registra o aceite sem bloquear a interface.
+ * O registro local acontece primeiro; a persistência no Supabase é feita em segundo plano.
  */
 export async function recordLegalAcceptance(scope = "primeiro_acesso") {
-  const deviceId = await getDeviceId().catch(() => "");
-  const { data: sess } = await supabase.auth.getSession();
-  const userId = sess?.session?.user?.id ?? null;
+  const acceptedAt = new Date().toISOString();
 
-  const { error } = await supabase.from("legal_acceptances").insert({
-    user_id: userId,
-    device_id: deviceId || null,
-    doc_version: LEGAL_DOC_VERSION,
-    doc_date: LEGAL_DOC_DATE,
-    terms_version: LEGAL_TERMS_VERSION,
-    privacy_version: LEGAL_PRIVACY_VERSION,
-    scope,
-    user_agent: typeof navigator !== "undefined" ? navigator.userAgent.slice(0, 400) : null,
-  });
-
+  // Libera o aplicativo imediatamente, mesmo sem internet ou com Supabase lento.
   try {
     localStorage.setItem(
       LEGAL_ACCEPT_STORAGE_KEY,
-      JSON.stringify({ at: new Date().toISOString(), version: LEGAL_DOC_VERSION }),
+      JSON.stringify({ at: acceptedAt, version: LEGAL_DOC_VERSION }),
     );
   } catch {
-    /* ignore */
+    // O aceite remoto ainda será tentado.
   }
 
-  return { ok: !error, error };
+  try {
+    const deviceId = await getDeviceId().catch(() => "");
+    const { data: sess } = await supabase.auth.getSession();
+    const userId = sess?.session?.user?.id ?? null;
+
+    const { error } = await supabase.from("legal_acceptances").insert({
+      user_id: userId,
+      device_id: deviceId || null,
+      doc_version: LEGAL_DOC_VERSION,
+      doc_date: LEGAL_DOC_DATE,
+      terms_version: LEGAL_TERMS_VERSION,
+      privacy_version: LEGAL_PRIVACY_VERSION,
+      scope,
+      user_agent:
+        typeof navigator !== "undefined" ? navigator.userAgent.slice(0, 400) : null,
+    });
+
+    return { ok: !error, error };
+  } catch (error) {
+    console.warn("[Legal] Registro remoto indisponível; aceite local preservado.", error);
+    return { ok: false, error };
+  }
 }
