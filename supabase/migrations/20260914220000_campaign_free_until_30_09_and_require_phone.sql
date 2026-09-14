@@ -16,11 +16,11 @@ DECLARE
   _plan TEXT;
 BEGIN
   _full_name := COALESCE(NEW.raw_user_meta_data->>'full_name', NEW.raw_user_meta_data->>'name', '');
-  _phone := NULLIF(regexp_replace(COALESCE(NEW.raw_user_meta_data->>'phone', ''), '\\D', '', 'g'), '');
+  _phone := NULLIF(regexp_replace(COALESCE(NEW.raw_user_meta_data->>'phone', ''), '[^0-9]', '', 'g'), '');
   _categoria := NEW.raw_user_meta_data->>'categoria';
 
   -- Todo cadastro novo precisa ter celular brasileiro válido (DDD + número).
-  IF _phone IS NULL OR length(_phone) <> 11 OR left(_phone, 1) = '0' OR substring(_phone, 3, 1) NOT IN ('9') THEN
+  IF _phone IS NULL OR length(_phone) <> 11 OR left(_phone, 1) = '0' OR substring(_phone, 3, 1) <> '9' THEN
     RAISE EXCEPTION 'CELULAR_OBRIGATORIO: informe um celular brasileiro com DDD.';
   END IF;
 
