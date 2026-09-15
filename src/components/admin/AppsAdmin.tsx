@@ -300,9 +300,13 @@ function AppContent({ app }: { app: AppRow }) {
     },
   });
   const allAppsQ = useQuery({ queryKey: ["apps"], queryFn: fetchApps });
-  const targetApps = (allAppsQ.data ?? []).filter(
-    (a) => a.is_active && a.slug !== "arquivo-2-projeto" && a.id !== app.id,
+  const activeApps = (allAppsQ.data ?? []).filter(
+    (a) => a.is_active && a.slug !== "arquivo-2-projeto",
   );
+  const healthMentalApp = activeApps.find((a) => a.slug === "suporte-tecnico");
+  const targetApps = healthMentalApp && healthMentalApp.id !== app.id
+    ? [healthMentalApp, ...activeApps.filter((a) => a.id !== app.id && a.id !== healthMentalApp.id)]
+    : activeApps.filter((a) => a.id !== app.id);
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
