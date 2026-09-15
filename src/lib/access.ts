@@ -23,7 +23,7 @@ export const TRACKS: { slug: TrackSlug; label: string; short: string; emoji: str
 
 export const CAMPAIGN_FREE_UNTIL = new Date("2026-09-30T23:59:59-03:00");
 export const CAMPAIGN_FREE_UNTIL_LABEL = "30/09/2026";
-export const PERMANENT_FREE_SLUGS = ["SAUDEMENTALPROF.", "cuidando-de-quem-cuida"];
+export const PERMANENT_FREE_SLUGS = ["SAUDEMENTALPROF.", "cuidando-de-quem-cuida", "suporte-tecnico"];
 export function isCampaignOpen(now: Date = new Date()): boolean { return now.getTime() <= CAMPAIGN_FREE_UNTIL.getTime(); }
 
 export function appTracks(app: MiniApp): TrackSlug[] {
