@@ -56,7 +56,10 @@ function AppContent({ app }: { app: AppRow }) {
   const placementsQ = useQuery({ queryKey: ["app_placements", app.id], queryFn: () => fetchPlacementsForApp(app.id) });
   const miniAppsQ = useQuery({ queryKey: ["admin_mini_apps_all"], queryFn: async () => { const { data, error } = await supabase.from("mini_apps").select("*").order("sort_order", { ascending: true }).order("name", { ascending: true }); if (error) throw error; return data ?? []; } });
   const allAppsQ = useQuery({ queryKey: ["apps"], queryFn: fetchApps });
-  const targetApps = (allAppsQ.data ?? []).filter((a) => a.is_active && a.slug !== "arquivo-2-projeto" && a.id !== app.id);
+  const activeApps = (allAppsQ.data ?? []).filter((a) => a.is_active && a.slug !== "arquivo-2-projeto");
+  const otherApps = activeApps.filter((a) => a.id !== app.id && a.slug !== "suporte-tecnico");
+  const healthMentalApp = activeApps.find((a) => a.slug === "suporte-tecnico");
+  const targetApps = healthMentalApp && healthMentalApp.id !== app.id ? [...otherApps, healthMentalApp] : otherApps;
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 6 } }), useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }));
   const sections = sectionsQ.data ?? []; const placements = placementsQ.data ?? []; const miniApps = miniAppsQ.data ?? [];
   const miniById = useMemo(() => new Map(miniApps.map((m) => [m.id, m])), [miniApps]);
@@ -128,4 +131,3 @@ function SortableItem({ id, title, icon, inactive, onRemove, targetApps, onMoveT
 }
 
 const input = "rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary/40";
-function Field({ label, children }: { label: string; children: React.ReactNode }) { return <label className="block"><span className="mb-1 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">{label}</span>{children}</label>; }
