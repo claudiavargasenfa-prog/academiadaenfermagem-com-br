@@ -1,33 +1,20 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-
 import { useQuery } from "@tanstack/react-query";
 import { AppShell } from "@/components/AppShell";
 import mascotesAsset from "@/assets/mascotes-iras.png.asset.json";
-import {
-  fetchSubscriptionPlans,
-  fetchMyActiveSubscriptions,
-} from "@/lib/access";
+import { fetchSubscriptionPlans, fetchMyActiveSubscriptions } from "@/lib/access";
 import { useApps } from "@/lib/apps";
 import { isBasePlanSlug } from "@/lib/plan-slugs";
 import { RichText, useText } from "@/lib/app-texts";
 import { FeedbackCollector } from "@/components/FeedbackCollector";
-import { TestimonialsSection } from "@/components/TestimonialsSection";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Loja — Academia da Enfermagem | SAE e PE automatizados" },
-      {
-        name: "description",
-        content:
-          "Academia da Enfermagem: SAE e PE automatizados e 6 Academias com Mini Apps para acadêmicos, estudantes de técnico, técnicos e enfermeiros.",
-      },
+      { name: "description", content: "Academia da Enfermagem: SAE e PE automatizados e 6 Academias com Mini Apps para acadêmicos, estudantes de técnico, técnicos e enfermeiros." },
       { property: "og:title", content: "Loja — Academia da Enfermagem | SAE e PE automatizados" },
-      {
-        property: "og:description",
-        content:
-          "Conheça as 6 Academias da Academia da Enfermagem, com conteúdos para formação e prática profissional.",
-      },
+      { property: "og:description", content: "Conheça as 6 Academias da Academia da Enfermagem, com conteúdos para formação e prática profissional." },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://academiadaenfermagem.com.br/" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -37,29 +24,20 @@ export const Route = createFileRoute("/")({
   component: StoreHome,
 });
 
-function StoreHome() {
-  return <StoreHomeContent />;
-}
+function StoreHome() { return <StoreHomeContent />; }
 
 function StoreHomeContent() {
   const plansQ = useQuery({ queryKey: ["subscription_plans"], queryFn: fetchSubscriptionPlans });
   const mySubsQ = useQuery({ queryKey: ["my_subs"], queryFn: fetchMyActiveSubscriptions });
   const appsQ = useApps();
   const appBySlug = new Map((appsQ.data ?? []).map((a) => [a.slug, a]));
-
   const lojaSortMode = useText("ordenacao.loja", "numeric");
-  const activePlans = (plansQ.data ?? [])
-    .filter((p) => p.is_active && isBasePlanSlug(p.slug))
-    .slice()
-    .sort((a, b) => {
-      if (lojaSortMode === "alpha") return a.name.localeCompare(b.name, "pt-BR");
-      return ((a as any).sort_order ?? 0) - ((b as any).sort_order ?? 0);
-    });
+  const activePlans = (plansQ.data ?? []).filter((p) => p.is_active && isBasePlanSlug(p.slug)).slice().sort((a, b) => {
+    if (lojaSortMode === "alpha") return a.name.localeCompare(b.name, "pt-BR");
+    return ((a as any).sort_order ?? 0) - ((b as any).sort_order ?? 0);
+  });
   const mySubs = mySubsQ.data ?? [];
-
-  // A 6ª Academia foi criada no Admin sem plano de assinatura: ela é gratuita e permanente.
-  const freeMentalHealthApp = (appsQ.data ?? []).find((app) => app.slug === "suporte-tecnico");
-
+  const freeMentalHealthApp = appBySlug.get("suporte-tecnico");
   const homeTitle = useText("home.title", "Academia da Enfermagem");
   const homeDesc = useText("home.description", "Seis Academias, uma só plataforma. Conheça cada uma e encontre conteúdos para sua formação e prática na enfermagem.");
   const ctaSection = useText("home.cta_section", "Conheça as Academias");
@@ -74,19 +52,35 @@ function StoreHomeContent() {
       </div>
 
       <div className="mb-8 flex justify-center">
-        <img
-          src={mascotesAsset.url}
-          alt="Mascotes Academia da Enfermagem — Time contra as IRAS"
-          className="h-40 w-auto object-contain sm:h-52 md:h-60 [animation:pulse_3s_ease-in-out_infinite]"
-        />
+        <img src={mascotesAsset.url} alt="Mascotes Academia da Enfermagem — Time contra as IRAS" className="h-40 w-auto object-contain sm:h-52 md:h-60 [animation:pulse_3s_ease-in-out_infinite]" />
       </div>
+
+      {/* Academia de Saúde Mental: sempre em primeiro lugar na Loja e com acesso gratuito permanente. */}
+      {freeMentalHealthApp && (
+        <section className="mb-8 scroll-mt-20" aria-labelledby="academia-saude-mental">
+          <Link
+            to="/app/$slug"
+            params={{ slug: freeMentalHealthApp.slug }}
+            className="group relative block overflow-hidden rounded-3xl border-2 border-yellow-300 bg-gradient-to-br from-yellow-50 via-white to-yellow-100 p-6 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
+          >
+            <div className="absolute -right-12 -top-12 h-40 w-40 rounded-full bg-yellow-300/30 blur-3xl transition-transform duration-500 group-hover:scale-125" />
+            <div className="absolute right-5 top-5 flex h-14 w-14 items-center justify-center rounded-full bg-yellow-300 shadow-md" aria-label="Laço amarelo — conscientização e prevenção do suicídio">
+              <span className="text-3xl" role="img" aria-hidden="true">🎗️</span>
+            </div>
+            <div className="relative max-w-3xl pr-16">
+              <span className="mb-3 inline-flex rounded-full bg-yellow-300 px-3 py-1 text-xs font-black uppercase tracking-wider text-yellow-950">GRÁTIS • ACESSO PERMANENTE</span>
+              <h2 id="academia-saude-mental" className="font-display text-2xl font-black tracking-tight text-yellow-950 md:text-3xl">Academia de Saúde Mental</h2>
+              <p className="mt-2 text-sm font-medium leading-relaxed text-yellow-900 md:text-base">Um espaço de acolhimento, fortalecimento e cuidado para quem vive a enfermagem, com conteúdos para apoiar a saúde mental e o bem-estar profissional.</p>
+              <span className="mt-5 inline-flex rounded-xl bg-yellow-400 px-5 py-3 text-sm font-black uppercase tracking-wide text-yellow-950 shadow-md transition-transform group-hover:translate-x-1">Acessar gratuitamente →</span>
+            </div>
+          </Link>
+        </section>
+      )}
 
       {activePlans.length > 0 && (
         <section id="aplicativos" className="mb-8 scroll-mt-20">
           <h2 className="mb-1 font-display text-lg font-bold"><RichText>{ctaSection}</RichText></h2>
-          <p className="mb-4 text-sm text-muted-foreground">
-            Escolha a sua porta. O conteúdo de cada Academia só é revelado dentro da página dela.
-          </p>
+          <p className="mb-4 text-sm text-muted-foreground">Escolha a sua porta. O conteúdo de cada Academia só é revelado dentro da página dela.</p>
           <div className="grid gap-3 sm:grid-cols-2">
             {activePlans.map((plan) => {
               const appRow = appBySlug.get(plan.slug);
@@ -94,18 +88,9 @@ function StoreHomeContent() {
               const subscribed = !!sub && (sub.status === "active" || sub.status === "trial");
               const inTrial = !!sub && sub.status === "trial";
               const slug = plan.slug;
-              const cardStyle: React.CSSProperties = {
-                backgroundColor: appRow?.bg_color ?? "#F3F4F6",
-                color: appRow?.fg_color ?? "#111827",
-              };
-
+              const cardStyle: React.CSSProperties = { backgroundColor: appRow?.bg_color ?? "#F3F4F6", color: appRow?.fg_color ?? "#111827" };
               return (
-                <div
-                  key={plan.id}
-                  className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/40 p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
-                  style={cardStyle}
-                  data-app={slug}
-                >
+                <div key={plan.id} className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/40 p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl" style={cardStyle} data-app={slug}>
                   <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
                   <div className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-white/30 blur-2xl" />
                   <div className="relative mb-3 flex items-center gap-3">
@@ -115,75 +100,25 @@ function StoreHomeContent() {
                   <PlanSlogan slug={slug} />
                   <div className="relative mb-4 flex items-start gap-2 rounded-xl bg-black/5 p-2">
                     <span className="mt-0.5">🔒</span>
-                    <p className="text-[10px] font-bold leading-tight opacity-80">
-                      CONTEÚDO PREMIUM EXCLUSIVO: Os módulos só podem ser visualizados por assinantes ou após clicar em descobrir.
-                    </p>
+                    <p className="text-[10px] font-bold leading-tight opacity-80">CONTEÚDO PREMIUM EXCLUSIVO: Os módulos só podem ser visualizados por assinantes ou após clicar em descobrir.</p>
                   </div>
-
                   <div className="relative mt-auto space-y-2 pt-4">
                     {subscribed ? (
                       <>
-                        <Link
-                          to="/trilha/$slug"
-                          params={{ slug }}
-                          className="block w-full scale-100 rounded-xl bg-foreground py-3 text-center text-sm font-black uppercase tracking-wider text-background shadow-lg transition-transform active:scale-95 hover:scale-[1.02]"
-                        >
-                          Acessar Agora →
-                        </Link>
-                        <span className="block w-full rounded-xl bg-white/40 py-2 text-center text-xs font-bold">
-                          {inTrial
-                            ? `🎁 Trial ativo · até ${new Date(sub!.expires_at).toLocaleDateString("pt-BR")}`
-                            : "✓ Assinatura ativa"}
-                        </span>
+                        <Link to="/trilha/$slug" params={{ slug }} className="block w-full scale-100 rounded-xl bg-foreground py-3 text-center text-sm font-black uppercase tracking-wider text-background shadow-lg transition-transform active:scale-95 hover:scale-[1.02]">Acessar Agora →</Link>
+                        <span className="block w-full rounded-xl bg-white/40 py-2 text-center text-xs font-bold">{inTrial ? `🎁 Trial ativo · até ${new Date(sub!.expires_at).toLocaleDateString("pt-BR")}` : "✓ Assinatura ativa"}</span>
                       </>
                     ) : (
-                      <Link
-                        to="/planos/$slug"
-                        params={{ slug }}
-                        className="group/btn block w-full scale-100 rounded-xl bg-foreground py-3 text-center text-sm font-black uppercase tracking-wider text-background shadow-lg transition-all active:scale-95 hover:scale-[1.02] hover:shadow-black/20"
-                      >
+                      <Link to="/planos/$slug" params={{ slug }} className="group/btn block w-full scale-100 rounded-xl bg-foreground py-3 text-center text-sm font-black uppercase tracking-wider text-background shadow-lg transition-all active:scale-95 hover:scale-[1.02] hover:shadow-black/20">
                         <span className="inline-block transition-transform group-hover/btn:translate-x-1">Descobrir Conteúdo →</span>
                       </Link>
                     )}
-
-                    <p className="text-center text-[11px] font-extrabold tracking-wide text-emerald-700">
-                      <RichText>{compraSegura}</RichText>
-                    </p>
+                    <p className="text-center text-[11px] font-extrabold tracking-wide text-emerald-700"><RichText>{compraSegura}</RichText></p>
                   </div>
                 </div>
               );
             })}
           </div>
-        </section>
-      )}
-
-      {freeMentalHealthApp && (
-        <section className="mb-8 scroll-mt-20" aria-labelledby="academia-saude-mental">
-          <div className="mb-3 flex items-end justify-between gap-3">
-            <div>
-              <p className="mb-1 text-xs font-semibold uppercase tracking-widest text-gold">Nova Academia · acesso livre</p>
-              <h2 id="academia-saude-mental" className="font-display text-lg font-bold">Academia de Saúde Mental</h2>
-              <p className="mt-1 text-sm text-muted-foreground">Um espaço gratuito e permanente para cuidar de quem cuida — com os conteúdos que você já adicionou no Admin.</p>
-            </div>
-            <span className="shrink-0 rounded-full bg-emerald-100 px-3 py-1 text-xs font-black uppercase tracking-wide text-emerald-800">GRÁTIS</span>
-          </div>
-          <Link
-            to="/app/$slug"
-            params={{ slug: freeMentalHealthApp.slug }}
-            className="group relative block overflow-hidden rounded-3xl border border-emerald-200/70 bg-gradient-to-br from-emerald-50 via-sky-50 to-amber-50 p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
-          >
-            <div className="absolute -right-12 -top-12 h-36 w-36 rounded-full bg-white/60 blur-2xl transition-transform duration-500 group-hover:scale-125" />
-            <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <div className="flex items-center gap-4">
-                <span className="text-5xl transition-transform duration-500 group-hover:scale-110">🧠</span>
-                <div>
-                  <h3 className="font-display text-xl font-black tracking-tight">{freeMentalHealthApp.name || "Academia de Saúde Mental"}</h3>
-                  <p className="mt-1 text-sm font-medium text-foreground/70">Cuidando de Quem Cuida · Segurança do Paciente · Como Sobreviver no Estágio · 22 Tabelas Clínicas · e outros conteúdos</p>
-                </div>
-              </div>
-              <span className="inline-flex shrink-0 items-center justify-center rounded-xl bg-foreground px-5 py-3 text-sm font-black uppercase tracking-wider text-background shadow-lg transition-transform group-hover:translate-x-1">Acessar gratuitamente →</span>
-            </div>
-          </Link>
         </section>
       )}
 
@@ -195,9 +130,5 @@ function StoreHomeContent() {
 function PlanSlogan({ slug }: { slug: string }) {
   const txt = useText(`aplicativo.${slug}.slogan`, "");
   if (!txt.trim()) return null;
-  return (
-    <p className="mb-2 text-xs font-extrabold uppercase tracking-wide">
-      <RichText>{txt}</RichText>
-    </p>
-  );
+  return <p className="mb-2 text-xs font-extrabold uppercase tracking-wide"><RichText>{txt}</RichText></p>;
 }
