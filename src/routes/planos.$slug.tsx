@@ -1,4 +1,4 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import type { Session } from "@supabase/supabase-js";
@@ -16,8 +16,6 @@ import OfertasPeriodo from "@/components/planos/OfertasPeriodo";
 import { useAppTexts } from "@/lib/app-texts";
 import { supabase } from "@/integrations/supabase/client";
 import { signOut } from "@/components/AuthGate";
-
-const ALLOWED = new Set(["academico", "tecnico", "tecnico-estudante", "enfermeiro", "uti-emergencia"]);
 
 const LABELS: Record<string, string> = {
   academico: "Academia do Acadêmico",
@@ -64,16 +62,12 @@ export const Route = createFileRoute("/planos/$slug")({
       links: [{ rel: "canonical", href: `https://academiadaenfermagem.com.br/planos/${params.slug}` }],
     };
   },
-  beforeLoad: ({ params }) => {
-    if (!ALLOWED.has(params.slug)) throw notFound();
-    return undefined as never;
-  },
   component: PlanoPage,
 });
 
 function PlanoPage() {
   const { slug } = Route.useParams();
-  const label = LABELS[slug];
+  // O nome vem da Academia cadastrada no Admin; a lista fixa é só um apoio.
 
   const [session, setSession] = useState<Session | null>(null);
   useEffect(() => {
@@ -94,6 +88,7 @@ function PlanoPage() {
   const isAdmin = !!isAdminQ.data;
 
   const appQ = useQuery({ queryKey: ["app", slug], queryFn: () => fetchAppBySlug(slug) });
+  const label = LABELS[slug] ?? appQ.data?.name ?? "Academia da Enfermagem";
   const placementsQ = useQuery({
     queryKey: ["app_placements", appQ.data?.id],
     enabled: !!appQ.data?.id,

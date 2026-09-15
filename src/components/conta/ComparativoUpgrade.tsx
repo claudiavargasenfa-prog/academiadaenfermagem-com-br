@@ -1,18 +1,19 @@
 import { Award, Check, CreditCard, Sparkles, Star, TrendingUp, Zap } from "lucide-react";
-import { fetchPlanOffers, formatPriceBRL, type PlanOffer, TRACKS, type TrackSlug } from "@/lib/access";
+import { fetchPlanOffers, formatPriceBRL, type PlanOffer, useTracks } from "@/lib/access";
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { Card } from "@/components/AppShell";
 
 export default function ComparativoUpgrade() {
   const offersQ = useQuery({ queryKey: ["plan_offers"], queryFn: fetchPlanOffers });
+  const allTracks = useTracks();
   const offers = offersQ.data ?? [];
 
   if (offers.length === 0) return null;
 
   // Group offers by track to show comparisons
-  const tracks = TRACKS.map(track => {
-    const trackOffers = offers.filter(o => o.plan_slug === track.slug);
+  const tracks = allTracks.map((track) => {
+    const trackOffers = offers.filter((o) => o.plan_slug === track.slug);
     return { track, offers: trackOffers };
   });
 

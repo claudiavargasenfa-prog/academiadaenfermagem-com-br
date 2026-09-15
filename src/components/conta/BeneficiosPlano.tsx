@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Award, Gift } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { TRACKS } from "@/lib/access";
+import { useTracks } from "@/lib/access";
 import { abrirCertificado } from "@/lib/certificado";
 import { createMpPreference } from "@/lib/mercadopago.functions";
 import { TEMAS_POR_CATEGORIA } from "@/data/temas-certificados";
@@ -57,6 +57,7 @@ export default function BeneficiosPlano() {
   const subsQ = useQuery({ queryKey: ["my_subs_full"], queryFn: fetchSubs });
   const certsQ = useQuery({ queryKey: ["my_certs"], queryFn: fetchCerts });
   const miniQ = useQuery({ queryKey: ["mini_apps_catalog"], queryFn: fetchAccessibleMiniApps });
+  const tracks = useTracks();
 
   const [bonus, setBonus] = useState("");
   const [theme, setTheme] = useState("");
@@ -149,7 +150,7 @@ export default function BeneficiosPlano() {
           {anual.bonus_app_slug ? (
             <p className="mt-1 text-sm text-muted-foreground">
               Aplicativo bônus escolhido:{" "}
-              <strong>{TRACKS.find((t) => t.slug === anual.bonus_app_slug)?.label ?? anual.bonus_app_slug}</strong>
+              <strong>{tracks.find((t) => t.slug === anual.bonus_app_slug)?.label ?? anual.bonus_app_slug}</strong>
             </p>
           ) : (
             <>
@@ -163,7 +164,7 @@ export default function BeneficiosPlano() {
                   className="rounded-xl border px-3 py-2 text-sm"
                 >
                   <option value="">Selecione um aplicativo…</option>
-                  {TRACKS.filter((t) => t.slug !== anual.plan_slug).map((t) => (
+                  {tracks.filter((t) => t.slug !== anual.plan_slug).map((t) => (
                     <option key={t.slug} value={t.slug}>
                       {t.label}
                     </option>

@@ -163,20 +163,56 @@ function AppForm({ app, onClose }: { app: AppRow | null; onClose: () => void }) 
     const res = app
       ? await supabase.from("apps").update(payload).eq("id", app.id)
       : await supabase.from("apps").insert(payload);
-    setBusy(false);
-    if (res.error) return setErr(res.error.message);
-    if (!app && payload.slug) {
-      // Cria automaticamente a chave de slogan em Textos do App para o novo app
-      await supabase.from("app_texts").upsert(
-        {
-          key: `aplicativo.${payload.slug}.slogan`,
-          value: "",
-          description: `Slogan do card do app ${payload.name} na loja.`,
-        },
-        { onConflict: "key" },
-      );
+    if (res.error) {
+      setBusy(false);
+      return setErr(res.error.message);
     }
-    setOk("✅ Salvo com sucesso.");
+
+    if (payload.slug) {
+      // Cria automaticamente a chave de slogan em Textos do App para o novo app
+      if (!app) {
+        await supabase.from("app_texts").upsert(
+          {
+            key: `aplicativo.${payload.slug}.slogan`,
+            value: "",
+            description: `Slogan do card do app ${payload.name} na loja.`,
+          },
+          { onConflict: "key" },
+        );
+      }
+
+      // Garante que a Academia entre automaticamente na loja e na página
+      // /planos/<slug>, criando (ou atualizando) o plano correspondente.
+      const { data: existingPlan } = await supabase
+        .from("subscription_plans")
+        .select("id")
+        .eq("slug", payload.slug)
+        .maybeSingle();
+
+      if (existingPlan) {
+        await supabase
+          .from("subscription_plans")
+          .update({
+            name: payload.name,
+            description: payload.description,
+            is_active: payload.is_active,
+            sort_order: payload.ordem,
+          })
+          .eq("id", existingPlan.id);
+      } else {
+        await supabase.from("subscription_plans").insert({
+          slug: payload.slug,
+          name: payload.name,
+          description: payload.description,
+          is_active: payload.is_active,
+          sort_order: payload.ordem,
+          price_cents: 0,
+        });
+      }
+    }
+
+    setBusy(false);
+    setOk("✅ Salvo com sucesso. A Academia já aparece na loja e pode receber Mini Apps.");
     window.setTimeout(onClose, 450);
   }
 

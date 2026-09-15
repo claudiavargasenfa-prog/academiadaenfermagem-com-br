@@ -11,8 +11,7 @@ import {
   fetchSubscriptionPlans,
   summarizeAccess,
   daysUntil,
-  TRACKS,
-  type TrackSlug,
+  useTracks,
 } from "@/lib/access";
 import BeneficiosPlano from "@/components/conta/BeneficiosPlano";
 import ComparativoUpgrade from "@/components/conta/ComparativoUpgrade";
@@ -61,6 +60,7 @@ function MinhaContaPage() {
     (a, b) => new Date(a.expires_at).getTime() - new Date(b.expires_at).getTime(),
   );
   const plans = plansQ.data ?? [];
+  const tracks = useTracks();
 
   return (
     <AppShell>
@@ -77,9 +77,9 @@ function MinhaContaPage() {
           <h2 className="mb-3 font-display text-lg font-bold">Status da sua assinatura</h2>
           <div className="grid gap-3 sm:grid-cols-2">
             {mySubs.map((s) => {
-              const track = TRACKS.find((t) => t.slug === (s.plan_slug as TrackSlug));
+              const track = tracks.find((t) => t.slug === s.plan_slug);
               const plan = plans.find((p) => p.slug === s.plan_slug);
-              const planoSlug = TRACKS.some((t) => t.slug === s.plan_slug) ? (s.plan_slug as TrackSlug) : null;
+              const planoSlug = track ? s.plan_slug : null;
               const days = daysUntil(s.expires_at) ?? 0;
               const isTrial = s.status === "trial";
 
