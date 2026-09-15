@@ -65,15 +65,11 @@ function StoreHomeContent() {
             className="group relative block overflow-hidden rounded-3xl border-2 border-yellow-300 bg-gradient-to-br from-yellow-50 via-white to-yellow-100 p-6 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
           >
             <div className="absolute -right-12 -top-12 h-40 w-40 rounded-full bg-yellow-300/30 blur-3xl transition-transform duration-500 group-hover:scale-125" />
-            <div className="absolute right-5 top-5 flex h-14 w-14 items-center justify-center rounded-full bg-yellow-300 shadow-md" aria-label="Laço amarelo — conscientização e prevenção do suicídio">
-              <span className="text-3xl" role="img" aria-hidden="true">🎗️</span>
+            <div className="absolute right-6 top-6 flex h-24 w-24 items-center justify-center rounded-full bg-yellow-300 shadow-lg" aria-label="Laço amarelo — conscientização e prevenção do suicídio">
+              <span className="text-6xl leading-none" role="img" aria-hidden="true">🎗️</span>
             </div>
 
-            <div className="pointer-events-none absolute bottom-0 right-0 hidden h-[290px] w-[230px] md:block" aria-hidden="true">
-              <img src="/mental-woman.svg" alt="Profissional de enfermagem acolhendo e estendendo a mão" className="h-full w-full object-contain object-bottom drop-shadow-xl" />
-            </div>
-
-            <div className="relative max-w-3xl pr-16 md:pr-40">
+            <div className="relative max-w-3xl pr-20 md:pr-32">
               <span className="mb-3 inline-flex rounded-full bg-yellow-300 px-3 py-1 text-xs font-black uppercase tracking-wider text-yellow-950">GRÁTIS • ACESSO PERMANENTE</span>
               <h2 id="academia-saude-mental" className="font-display text-2xl font-black tracking-tight text-yellow-950 md:text-3xl">Academia de Saúde Mental</h2>
               <p className="mt-2 text-sm font-medium leading-relaxed text-yellow-900 md:text-base">Um espaço de acolhimento, fortalecimento e cuidado para quem vive a enfermagem, com conteúdos para apoiar a saúde mental e o bem-estar profissional.</p>
