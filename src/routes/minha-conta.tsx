@@ -11,8 +11,7 @@ import {
   fetchSubscriptionPlans,
   summarizeAccess,
   daysUntil,
-  TRACKS,
-  type TrackSlug,
+  useTracks,
 } from "@/lib/access";
 import BeneficiosPlano from "@/components/conta/BeneficiosPlano";
 import ComparativoUpgrade from "@/components/conta/ComparativoUpgrade";
