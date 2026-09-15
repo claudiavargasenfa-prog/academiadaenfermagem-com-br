@@ -21,6 +21,40 @@ export const TRACKS: { slug: TrackSlug; label: string; short: string; emoji: str
   { slug: "uti-emergencia", label: "Academia de Terapia Intensiva & Emergência", short: "UTI & Emergência", emoji: "⚡" },
 ];
 
+/**
+ * Lista de Academias usada em toda a plataforma.
+ * A fonte da verdade é a tabela `apps`: qualquer Academia criada no Admin
+ * aparece automaticamente aqui (e, portanto, em todas as telas).
+ * A lista fixa acima é apenas um fallback enquanto o banco não responde.
+ */
+export type Track = { slug: string; label: string; short: string; emoji: string };
+
+export function useTracks(): Track[] {
+  const { data } = useQuery({
+    queryKey: ["apps"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("apps")
+        .select("*")
+        .order("ordem", { ascending: true })
+        .order("name", { ascending: true });
+      if (error) throw error;
+      return data ?? [];
+    },
+    staleTime: 60_000,
+  });
+
+  const rows = (data ?? []).filter((a: any) => a.is_active);
+  if (rows.length === 0) return TRACKS as unknown as Track[];
+
+  return rows.map((a: any) => ({
+    slug: a.slug as string,
+    label: (a.name as string) ?? a.slug,
+    short: (a.short_name as string) ?? (a.name as string) ?? a.slug,
+    emoji: (a.emoji as string) ?? "📘",
+  }));
+}
+
 export const CAMPAIGN_FREE_UNTIL = new Date("2026-09-30T23:59:59-03:00");
 export const CAMPAIGN_FREE_UNTIL_LABEL = "30/09/2026";
 export const PERMANENT_FREE_SLUGS = ["SAUDEMENTALPROF.", "cuidando-de-quem-cuida", "suporte-tecnico"];
