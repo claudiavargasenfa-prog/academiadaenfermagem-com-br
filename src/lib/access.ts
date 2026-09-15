@@ -22,6 +22,17 @@ export const TRACKS: { slug: TrackSlug; label: string; short: string; emoji: str
   { slug: "uti-emergencia", label: "Academia de Terapia Intensiva & Emergência", short: "UTI & Emergência", emoji: "⚡" },
 ];
 
+/** Campanha: qualquer novo cadastro feito até 30/09/2026 recebe acesso às academias pagas. */
+export const CAMPAIGN_FREE_UNTIL = new Date("2026-09-30T23:59:59-03:00");
+export const CAMPAIGN_FREE_UNTIL_LABEL = "30/09/2026";
+
+/** Slugs que permanecem gratuitos mesmo depois do fim da campanha. */
+export const PERMANENT_FREE_SLUGS = ["SAUDEMENTALPROF.", "cuidando-de-quem-cuida"];
+
+export function isCampaignOpen(now: Date = new Date()): boolean {
+  return now.getTime() <= CAMPAIGN_FREE_UNTIL.getTime();
+}
+
 export function appTracks(app: MiniApp): TrackSlug[] {
   const out: TrackSlug[] = [];
   if ((app as any).track_academico) out.push("academico");
@@ -32,37 +43,28 @@ export function appTracks(app: MiniApp): TrackSlug[] {
 }
 
 export function useAuthReady() {
-  const [state, setState] = useState<{
-    isReady: boolean;
-    user: User | null;
-  }>({ isReady: false, user: null });
+  const [state, setState] = useState<{ isReady: boolean; user: User | null }>({ isReady: false, user: null });
 
   useEffect(() => {
     let alive = true;
-
     let unsubscribe: (() => void) | undefined;
     try {
-      supabase.auth
-        .getSession()
-        .then(({ data }) => {
-          if (!alive) return;
-          setState({ isReady: true, user: data.session?.user ?? null });
-        })
-        .catch((error) => {
-          console.error("Authentication temporarily unavailable:", error);
-          if (alive) setState({ isReady: true, user: null });
-        });
+      supabase.auth.getSession().then(({ data }) => {
+        if (!alive) return;
+        setState({ isReady: true, user: data.session?.user ?? null });
+      }).catch((error) => {
+        console.error("Authentication temporarily unavailable:", error);
+        if (alive) setState({ isReady: true, user: null });
+      });
 
       const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
         if (alive) setState({ isReady: true, user: session?.user ?? null });
       });
       unsubscribe = () => sub.subscription.unsubscribe();
     } catch (error) {
-      // A página pública continua disponível mesmo durante uma oscilação da autenticação.
       console.error("Authentication could not start:", error);
       setState({ isReady: true, user: null });
     }
-
     return () => {
       alive = false;
       unsubscribe?.();
@@ -73,19 +75,13 @@ export function useAuthReady() {
 }
 
 export async function fetchSubscriptionPlans(): Promise<SubscriptionPlan[]> {
-  const { data, error } = await supabase
-    .from("subscription_plans")
-    .select("*")
-    .order("sort_order", { ascending: true });
+  const { data, error } = await supabase.from("subscription_plans").select("*").order("sort_order", { ascending: true });
   if (error) throw error;
   return data ?? [];
 }
 
 export async function fetchPlanOffers(): Promise<PlanOffer[]> {
-  const { data, error } = await supabase
-    .from("plan_offers")
-    .select("*")
-    .order("sort_order", { ascending: true });
+  const { data, error } = await supabase.from("plan_offers").select("*").order("sort_order", { ascending: true });
   if (error) throw error;
   return data ?? [];
 }
@@ -94,12 +90,7 @@ export async function fetchMyActiveSubscriptions(): Promise<UserSubscription[]> 
   const { data: sessionData } = await supabase.auth.getSession();
   const user = sessionData.session?.user;
   if (!user) return [];
-  const { data, error } = await supabase
-    .from("user_subscriptions")
-    .select("*")
-    .eq("user_id", user.id)
-    .in("status", ["active", "trial"])
-    .gt("expires_at", new Date().toISOString());
+  const { data, error } = await supabase.from("user_subscriptions").select("*").eq("user_id", user.id).in("status", ["active", "trial"]).gt("expires_at", new Date().toISOString());
   if (error) throw error;
   return data ?? [];
 }
@@ -108,22 +99,14 @@ export async function fetchMyProfile() {
   const { data: sessionData } = await supabase.auth.getSession();
   const user = sessionData.session?.user;
   if (!user) return null;
-  const { data } = await supabase
-    .from("profiles")
-    .select("*")
-    .eq("id", user.id)
-    .maybeSingle();
+  const { data } = await supabase.from("profiles").select("*").eq("id", user.id).maybeSingle();
   return data;
 }
 
-/** Dias de acesso após a compra (regra de negócio). */
 export const ACCESS_DAYS = 150;
 
 export function formatPriceBRL(cents: number): string {
-  return new Intl.NumberFormat("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-  }).format(cents / 100);
+  return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(cents / 100);
 }
 
 export function daysUntil(iso: string | null | undefined): number | null {
@@ -133,31 +116,18 @@ export function daysUntil(iso: string | null | undefined): number | null {
 }
 
 export async function fetchMiniApps(): Promise<MiniApp[]> {
-  // Server function retorna apenas colunas não sensíveis do catálogo
-  // (sem content_md/video_url/audio_url). O conteúdo pago continua
-  // protegido por RLS na tabela base via has_app_access.
   const data = await listMiniAppsCatalog();
   return (data ?? []) as unknown as MiniApp[];
 }
 
-
 export async function fetchMyExtraAccess(): Promise<UserAppAccess[]> {
-  const { data, error } = await supabase
-    .from("user_app_access")
-    .select("*")
-    .gt("expires_at", new Date().toISOString())
-    .order("expires_at", { ascending: true });
+  const { data, error } = await supabase.from("user_app_access").select("*").gt("expires_at", new Date().toISOString()).order("expires_at", { ascending: true });
   if (error) throw error;
   return data ?? [];
 }
 
-/** Legado — mantido por compatibilidade com a tela /minha-conta. */
 export async function fetchMyBasicSubscription(): Promise<Subscription | null> {
-  const { data, error } = await supabase
-    .from("subscriptions")
-    .select("*, mini_apps!inner(kind)")
-    .eq("mini_apps.kind", "basico")
-    .maybeSingle();
+  const { data, error } = await supabase.from("subscriptions").select("*, mini_apps!inner(kind)").eq("mini_apps.kind", "basico").maybeSingle();
   if (error && error.code !== "PGRST116") throw error;
   return (data as Subscription | null) ?? null;
 }
@@ -166,149 +136,89 @@ export async function isAdmin(): Promise<boolean> {
   const { data: sessionData } = await supabase.auth.getSession();
   const user = sessionData.session?.user;
   if (!user) return false;
-  const { data } = await supabase
-    .from("user_roles")
-    .select("role")
-    .eq("user_id", user.id)
-    .eq("role", "admin")
-    .maybeSingle();
+  const { data } = await supabase.from("user_roles").select("role").eq("user_id", user.id).eq("role", "admin").maybeSingle();
   return !!data;
 }
 
-/** Hook: o usuário atual é admin? Cacheado por sessão. */
 export function useIsAdmin() {
   const { isReady, user } = useAuthReady();
   const userId = user?.id ?? null;
   const email = user?.email ?? "";
-
   return useQuery({
     queryKey: ["is_admin", userId],
     queryFn: async () => {
-      // Hardcode de emergência para a dona do app enquanto o RLS ou cache oscila
       if (email === "enfa.contato@gmail.com") return true;
       return isAdmin();
     },
     enabled: isReady && !!userId,
-    staleTime: 0, // Força verificação fresca
+    staleTime: 0,
   });
 }
 
-export type AccessSummary = {
-  /** mini_app_id -> expires_at (apenas extras pagos vigentes) */
-  extraAccessByApp: Record<string, string>;
-};
+export type AccessSummary = { extraAccessByApp: Record<string, string> };
 
 export function summarizeExtras(extras: UserAppAccess[]): AccessSummary {
   const extraAccessByApp: Record<string, string> = {};
   for (const a of extras) {
-    if (
-      !extraAccessByApp[a.mini_app_id] ||
-      new Date(a.expires_at) > new Date(extraAccessByApp[a.mini_app_id])
-    ) {
+    if (!extraAccessByApp[a.mini_app_id] || new Date(a.expires_at) > new Date(extraAccessByApp[a.mini_app_id])) {
       extraAccessByApp[a.mini_app_id] = a.expires_at;
     }
   }
   return { extraAccessByApp };
 }
 
-/** Compat: muitos componentes ainda importam `summarizeAccess`. */
-export function summarizeAccess(
-  sub: Subscription | null,
-  extras: UserAppAccess[],
-) {
-  const basicActive =
-    !!sub &&
-    sub.status === "active" &&
-    (!sub.current_period_end || new Date(sub.current_period_end) > new Date());
-  return {
-    basicActive,
-    basicEndsAt: sub?.current_period_end ?? null,
-    extraAccessByApp: summarizeExtras(extras).extraAccessByApp,
-  };
+export function summarizeAccess(sub: Subscription | null, extras: UserAppAccess[]) {
+  const basicActive = !!sub && sub.status === "active" && (!sub.current_period_end || new Date(sub.current_period_end) > new Date());
+  return { basicActive, basicEndsAt: sub?.current_period_end ?? null, extraAccessByApp: summarizeExtras(extras).extraAccessByApp };
 }
 
-/** Hook: estado de acesso do usuário atual a um guia clínico (por slug). */
+/**
+ * Regra central de acesso:
+ * 1) A nova Academia Cuidando de Quem Cuida permanece gratuita.
+ * 2) Até 30/09, todo usuário cadastrado tem acesso às academias pagas.
+ * 3) Depois de 30/09, o acesso das academias pagas exige compra/assinatura vigente.
+ */
 export function useAppAccess(slug: string) {
   const { isReady, user } = useAuthReady();
 
   return useQuery({
     queryKey: ["app_access", slug, user?.id ?? "anon"],
     queryFn: async () => {
-      const { data: metaRows, error: e1 } = await supabase.rpc("get_mini_app_meta", {
-        _slug: slug,
-      });
-      const app = (metaRows ?? [])[0] ?? null;
+      const { data: metaRows, error: e1 } = await supabase.rpc("get_mini_app_meta", { _slug: slug });
       if (e1) throw e1;
+      const app = (metaRows ?? [])[0] ?? null;
+      if (!app) return { app: null, granted: false, expiresAt: null as string | null, viaAdmin: false, accessType: "none" as const };
 
-      if (!app) return { app: null, granted: false, expiresAt: null as string | null, viaAdmin: false };
-      if (app.gratuito) {
-        return { app, granted: true, expiresAt: null as string | null, viaAdmin: false };
+      const permanentlyFree = PERMANENT_FREE_SLUGS.includes(slug) || slug.toLowerCase().includes("cuidando-de-quem-cuida");
+      if (app.gratuito || permanentlyFree) {
+        return { app, granted: true, expiresAt: null as string | null, viaAdmin: false, accessType: "free" as const };
       }
-      if (!user) return { app, granted: false, expiresAt: null as string | null, viaAdmin: false };
+      if (!user) return { app, granted: false, expiresAt: null as string | null, viaAdmin: false, accessType: "none" as const };
 
-      // Admin bypass: vê todo conteúdo pago sem registro em user_app_access.
-      const { data: roleRow } = await supabase
-        .from("user_roles")
-        .select("role")
-        .eq("user_id", user.id)
-        .eq("role", "admin")
-        .maybeSingle();
-      if (roleRow) {
-        return { app, granted: true, expiresAt: null as string | null, viaAdmin: true };
-      }
+      const { data: roleRow } = await supabase.from("user_roles").select("role").eq("user_id", user.id).eq("role", "admin").maybeSingle();
+      if (roleRow) return { app, granted: true, expiresAt: null as string | null, viaAdmin: true, accessType: "admin" as const };
 
-      const { data: acc } = await supabase
-        .from("user_app_access")
-        .select("expires_at")
-        .eq("user_id", user.id)
-        .eq("mini_app_id", app.id)
-        .gt("expires_at", new Date().toISOString())
-        .order("expires_at", { ascending: false })
-        .limit(1)
-        .maybeSingle();
+      const { data: acc } = await supabase.from("user_app_access").select("expires_at").eq("user_id", user.id).eq("mini_app_id", app.id).gt("expires_at", new Date().toISOString()).order("expires_at", { ascending: false }).limit(1).maybeSingle();
+      if (acc) return { app, granted: true, expiresAt: acc.expires_at, viaAdmin: false, accessType: "purchase" as const };
 
-      if (acc) {
-        return { app, granted: true, expiresAt: acc.expires_at, viaAdmin: false };
+      const now = new Date();
+      const createdAt = user.created_at ? new Date(user.created_at) : now;
+      // Campanha por data de cadastro: não depende de a rotina de trial ter conseguido criar uma linha no banco.
+      if (isCampaignOpen(now) && createdAt.getTime() <= CAMPAIGN_FREE_UNTIL.getTime()) {
+        return { app, granted: true, expiresAt: CAMPAIGN_FREE_UNTIL.toISOString(), viaAdmin: false, accessType: "campaign" as const };
       }
 
-      // Período gratuito (trial): libera o conteúdo das 4 academias
-      const { data: trialSub } = await supabase
-        .from("user_subscriptions")
-        .select("expires_at")
-        .eq("user_id", user.id)
-        .eq("status", "trial")
-        .gt("expires_at", new Date().toISOString())
-        .order("expires_at", { ascending: false })
-        .limit(1)
-        .maybeSingle();
-      if (trialSub) {
-        return { app, granted: true, expiresAt: trialSub.expires_at, viaAdmin: false };
-      }
+      const { data: trialSub } = await supabase.from("user_subscriptions").select("expires_at").eq("user_id", user.id).eq("status", "trial").gt("expires_at", new Date().toISOString()).order("expires_at", { ascending: false }).limit(1).maybeSingle();
+      if (trialSub) return { app, granted: true, expiresAt: trialSub.expires_at, viaAdmin: false, accessType: "trial" as const };
 
-      // Acesso via assinatura de qualquer app que contenha este guia clínico
-      const { data: placements } = await supabase
-        .from("mini_app_placements")
-        .select("app_id, apps:app_id (slug)")
-        .eq("mini_app_id", app.id);
-      const planSlugs: string[] = (placements ?? [])
-        .map((p: any) => p.apps?.slug)
-        .filter(Boolean);
+      const { data: placements } = await supabase.from("mini_app_placements").select("app_id, apps:app_id (slug)").eq("mini_app_id", app.id);
+      const planSlugs: string[] = (placements ?? []).map((p: any) => p.apps?.slug).filter(Boolean);
       if (planSlugs.length > 0) {
-        const { data: sub } = await supabase
-          .from("user_subscriptions")
-          .select("expires_at")
-          .eq("user_id", user.id)
-          .in("status", ["active", "trial"])
-          .in("plan_slug", planSlugs)
-          .gt("expires_at", new Date().toISOString())
-          .order("expires_at", { ascending: false })
-          .limit(1)
-          .maybeSingle();
-        if (sub) {
-          return { app, granted: true, expiresAt: sub.expires_at, viaAdmin: false };
-        }
+        const { data: sub } = await supabase.from("user_subscriptions").select("expires_at").eq("user_id", user.id).in("status", ["active", "trial"]).in("plan_slug", planSlugs).gt("expires_at", new Date().toISOString()).order("expires_at", { ascending: false }).limit(1).maybeSingle();
+        if (sub) return { app, granted: true, expiresAt: sub.expires_at, viaAdmin: false, accessType: "subscription" as const };
       }
-      return { app, granted: false, expiresAt: null as string | null, viaAdmin: false };
+
+      return { app, granted: false, expiresAt: null as string | null, viaAdmin: false, accessType: "none" as const };
     },
     enabled: isReady,
   });
