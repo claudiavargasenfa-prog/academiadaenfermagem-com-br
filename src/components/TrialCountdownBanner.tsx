@@ -7,10 +7,8 @@ import {
   fetchMyActiveSubscriptions,
   fetchMyProfile,
   fetchSubscriptionPlans,
-  TRACKS,
-  type TrackSlug,
+  useTracks,
 } from "@/lib/access";
-import { BASE_PLAN_SLUG_SET } from "@/lib/plan-slugs";
 
 type Stage = "blue" | "orange" | "red" | null;
 

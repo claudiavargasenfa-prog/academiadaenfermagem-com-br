@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Award, Gift } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { TRACKS } from "@/lib/access";
+import { useTracks } from "@/lib/access";
 import { abrirCertificado } from "@/lib/certificado";
 import { createMpPreference } from "@/lib/mercadopago.functions";
 import { TEMAS_POR_CATEGORIA } from "@/data/temas-certificados";
