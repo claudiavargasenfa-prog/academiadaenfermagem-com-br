@@ -69,7 +69,7 @@ export const Route = createFileRoute("/planos/$slug")({
 
 function PlanoPage() {
   const { slug } = Route.useParams();
-  const label = LABELS[slug];
+  // O nome vem da Academia cadastrada no Admin; a lista fixa é só um apoio.
 
   const [session, setSession] = useState<Session | null>(null);
   useEffect(() => {
