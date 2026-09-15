@@ -32,7 +32,8 @@ function StoreHomeContent() {
   const appsQ = useApps();
   const appBySlug = new Map((appsQ.data ?? []).map((a) => [a.slug, a]));
   const lojaSortMode = useText("ordenacao.loja", "numeric");
-  const activePlans = (plansQ.data ?? []).filter((p) => p.is_active && isBasePlanSlug(p.slug)).slice().sort((a, b) => {
+  // Toda Academia cadastrada em Admin → Apps aparece automaticamente na loja.
+  const activePlans = (plansQ.data ?? []).filter((p) => p.is_active && (appBySlug.has(p.slug) || isBasePlanSlug(p.slug))).slice().sort((a, b) => {
     if (lojaSortMode === "alpha") return a.name.localeCompare(b.name, "pt-BR");
     return ((a as any).sort_order ?? 0) - ((b as any).sort_order ?? 0);
   });
