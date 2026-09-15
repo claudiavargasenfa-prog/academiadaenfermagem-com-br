@@ -69,40 +69,8 @@ function StoreHomeContent() {
               <span className="text-3xl" role="img" aria-hidden="true">🎗️</span>
             </div>
 
-            <div className="pointer-events-none absolute bottom-0 right-0 hidden h-[245px] w-[205px] md:block" aria-hidden="true">
-              <svg viewBox="0 0 205 245" className="h-full w-full drop-shadow-xl" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                  <linearGradient id="mentalHair" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0" stopColor="#3f2b20" />
-                    <stop offset="1" stopColor="#17110d" />
-                  </linearGradient>
-                  <linearGradient id="mentalSkin" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0" stopColor="#f5c9aa" />
-                    <stop offset="1" stopColor="#d99a78" />
-                  </linearGradient>
-                  <linearGradient id="mentalUniform" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0" stopColor="#ffffff" />
-                    <stop offset="1" stopColor="#e5e7eb" />
-                  </linearGradient>
-                </defs>
-                <ellipse cx="139" cy="237" rx="62" ry="8" fill="#b45309" opacity="0.12" />
-                <path d="M94 73c-5-27 12-54 43-57 29-3 50 17 50 47 0 18-7 31-19 42l-53 5c-11-9-18-21-21-37Z" fill="url(#mentalHair)" />
-                <path d="M112 72c0-22 13-39 32-42 19-3 33 11 34 31 1 23-9 43-31 46-19 2-34-13-35-35Z" fill="url(#mentalSkin)" />
-                <path d="M121 64c9-11 21-17 36-16 10 1 18 6 23 14-2-18-14-31-32-32-19-1-32 11-36 29 3 2 6 3 9 5Z" fill="url(#mentalHair)" />
-                <circle cx="132" cy="74" r="2.1" fill="#4b3028" />
-                <circle cx="160" cy="72" r="2.1" fill="#4b3028" />
-                <path d="M140 91c7 5 14 5 20-1" fill="none" stroke="#9b5d51" strokeWidth="2" strokeLinecap="round" />
-                <path d="M121 104c8 8 24 11 37 5l6 17-24 15-25-14Z" fill="url(#mentalSkin)" />
-                <path d="M90 238c1-55 12-91 40-106l22 15 24-17c31 14 42 53 43 108Z" fill="url(#mentalUniform)" />
-                <path d="M130 132l22 17-10 25-25-25Z" fill="#d1d5db" opacity="0.9" />
-                <path d="M153 149l-9 25 21-24Z" fill="#f3f4f6" />
-                <path d="M171 155c9 14 14 33 18 54" fill="none" stroke="#111827" strokeWidth="3" />
-                <path d="M171 155c-5 13-6 28-4 45" fill="none" stroke="#111827" strokeWidth="3" />
-                <path d="M167 199c0 8 5 15 12 17 7 2 13-1 15-7" fill="none" stroke="#111827" strokeWidth="3" />
-                <path d="M110 157c-14 18-24 34-34 50-5 8-14 10-22 5l-3-2c-8-5-11-14-6-22l31-53c5-8 15-11 24-7Z" fill="url(#mentalUniform)" />
-                <path d="M51 207c-7-4-13-4-19 0l-9 7c-4 3-4 9 0 12l4 2c4 3 9 2 12-1l9-8 12 1c6 1 10-4 9-9-1-4-5-6-9-6Z" fill="url(#mentalSkin)" />
-                <path d="M47 208c5-5 12-5 18-1" fill="none" stroke="#c48769" strokeWidth="2" strokeLinecap="round" />
-              </svg>
+            <div className="pointer-events-none absolute bottom-0 right-0 hidden h-[290px] w-[230px] md:block" aria-hidden="true">
+              <img src="/mental-woman.svg" alt="Profissional de enfermagem acolhendo e estendendo a mão" className="h-full w-full object-contain object-bottom drop-shadow-xl" />
             </div>
 
             <div className="relative max-w-3xl pr-16 md:pr-40">
