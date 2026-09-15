@@ -26,6 +26,7 @@ export function TrialCountdownBanner() {
   const subsQ = useQuery({ queryKey: ["my_subs"], queryFn: fetchMyActiveSubscriptions });
   const plansQ = useQuery({ queryKey: ["subscription_plans"], queryFn: fetchSubscriptionPlans });
   const [dismissed, setDismissed] = useState(false);
+  const tracks = useTracks();
 
   // Re-render once per minute to keep countdown fresh
   const [, setTick] = useState(0);

@@ -57,6 +57,7 @@ export default function BeneficiosPlano() {
   const subsQ = useQuery({ queryKey: ["my_subs_full"], queryFn: fetchSubs });
   const certsQ = useQuery({ queryKey: ["my_certs"], queryFn: fetchCerts });
   const miniQ = useQuery({ queryKey: ["mini_apps_catalog"], queryFn: fetchAccessibleMiniApps });
+  const tracks = useTracks();
 
   const [bonus, setBonus] = useState("");
   const [theme, setTheme] = useState("");
