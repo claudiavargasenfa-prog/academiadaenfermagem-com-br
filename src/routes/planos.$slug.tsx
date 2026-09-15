@@ -64,10 +64,6 @@ export const Route = createFileRoute("/planos/$slug")({
       links: [{ rel: "canonical", href: `https://academiadaenfermagem.com.br/planos/${params.slug}` }],
     };
   },
-  beforeLoad: ({ params }) => {
-    if (!ALLOWED.has(params.slug)) throw notFound();
-    return undefined as never;
-  },
   component: PlanoPage,
 });
 
