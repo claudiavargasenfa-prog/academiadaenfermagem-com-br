@@ -51,484 +51,88 @@ export function AppsAdmin() {
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h2 className="font-display text-lg font-bold">Apps (academias)</h2>
-        <button
-          type="button"
-          onClick={() => setCreatingApp(true)}
-          className="inline-flex items-center gap-1.5 rounded-xl gold-gradient px-4 py-2 text-sm font-bold"
-        >
-          <Plus className="h-4 w-4" /> Novo app
-        </button>
+        <button type="button" onClick={() => setCreatingApp(true)} className="inline-flex items-center gap-1.5 rounded-xl gold-gradient px-4 py-2 text-sm font-bold"><Plus className="h-4 w-4" /> Novo app</button>
       </div>
-
-      {(creatingApp || editingApp) && (
-        <AppForm
-          app={editingApp}
-          onClose={() => {
-            setCreatingApp(false);
-            setEditingApp(null);
-            qc.invalidateQueries({ queryKey: ["apps"] });
-          }}
-        />
-      )}
-
+      {(creatingApp || editingApp) && <AppForm app={editingApp} onClose={() => { setCreatingApp(false); setEditingApp(null); qc.invalidateQueries({ queryKey: ["apps"] }); }} />}
       <div className="flex flex-wrap gap-2">
-        {apps.map((app) => (
-          <button
-            type="button"
-            key={app.id}
-            onClick={() => setSelectedAppId(app.id)}
-            className={`flex items-center gap-1.5 rounded-xl border px-3 py-2 text-sm font-semibold ${
-              selected?.id === app.id ? "border-primary bg-primary/10" : "border-foreground/15"
-            }`}
-            style={
-              selected?.id === app.id
-                ? undefined
-                : { backgroundColor: app.bg_color ?? undefined, color: app.fg_color ?? undefined }
-            }
-          >
-            <span>{app.emoji}</span>
-            {app.short_name ?? app.name}
-            {!app.is_active && <span className="text-[10px] opacity-60">(inativo)</span>}
-          </button>
-        ))}
+        {apps.map((app) => <button type="button" key={app.id} onClick={() => setSelectedAppId(app.id)} className={`flex items-center gap-1.5 rounded-xl border px-3 py-2 text-sm font-semibold ${selected?.id === app.id ? "border-primary bg-primary/10" : "border-foreground/15"}`} style={selected?.id === app.id ? undefined : { backgroundColor: app.bg_color ?? undefined, color: app.fg_color ?? undefined }}><span>{app.emoji}</span>{app.short_name ?? app.name}{!app.is_active && <span className="text-[10px] opacity-60">(inativo)</span>}</button>)}
       </div>
-
-      {selected && (
-        <Card>
-          <div className="mb-3 flex items-center justify-between gap-2">
-            <div>
-              <p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">App selecionado</p>
-              <h3 className="font-display text-base font-extrabold">
-                {selected.emoji} {selected.name}
-              </h3>
-              <p className="text-[11px] text-muted-foreground">slug: {selected.slug} · ordem: {selected.ordem}</p>
-            </div>
-            <div className="flex gap-1">
-              <button
-                type="button"
-                onClick={() => setEditingApp(selected)}
-                className="rounded-lg bg-primary/10 p-2 text-primary hover:bg-primary/20"
-                aria-label="Editar"
-              >
-                <Pencil className="h-4 w-4" />
-              </button>
-              <button
-                type="button"
-                onClick={() => handleDeleteApp(selected.id)}
-                className="rounded-lg bg-destructive/10 p-2 text-destructive hover:bg-destructive/20"
-                aria-label="Excluir"
-              >
-                <Trash2 className="h-4 w-4" />
-              </button>
-            </div>
-          </div>
-          <AppContent app={selected} />
-        </Card>
-      )}
+      {selected && <Card><div className="mb-3 flex items-center justify-between gap-2"><div><p className="text-xs font-bold uppercase tracking-wider text-muted-foreground">App selecionado</p><h3 className="font-display text-base font-extrabold">{selected.emoji} {selected.name}</h3><p className="text-[11px] text-muted-foreground">slug: {selected.slug} · ordem: {selected.ordem}</p></div><div className="flex gap-1"><button type="button" onClick={() => setEditingApp(selected)} className="rounded-lg bg-primary/10 p-2 text-primary hover:bg-primary/20" aria-label="Editar"><Pencil className="h-4 w-4" /></button><button type="button" onClick={() => handleDeleteApp(selected.id)} className="rounded-lg bg-destructive/10 p-2 text-destructive hover:bg-destructive/20" aria-label="Excluir"><Trash2 className="h-4 w-4" /></button></div></div><AppContent app={selected} /></Card>}
     </div>
   );
 }
 
 function AppForm({ app, onClose }: { app: AppRow | null; onClose: () => void }) {
-  const [form, setForm] = useState({
-    slug: app?.slug ?? "",
-    name: app?.name ?? "",
-    short_name: app?.short_name ?? "",
-    emoji: app?.emoji ?? "📱",
-    bg_color: app?.bg_color ?? "#E0F2FE",
-    fg_color: app?.fg_color ?? "#0C4A6E",
-    description: app?.description ?? "",
-    ordem: app?.ordem ?? 0,
-    is_active: app?.is_active ?? true,
-  });
-  const [busy, setBusy] = useState(false);
-  const [err, setErr] = useState<string | null>(null);
-  const [ok, setOk] = useState<string | null>(null);
-
+  const [form, setForm] = useState({ slug: app?.slug ?? "", name: app?.name ?? "", short_name: app?.short_name ?? "", emoji: app?.emoji ?? "📱", bg_color: app?.bg_color ?? "#E0F2FE", fg_color: app?.fg_color ?? "#0C4A6E", description: app?.description ?? "", ordem: app?.ordem ?? 0, is_active: app?.is_active ?? true });
+  const [busy, setBusy] = useState(false); const [err, setErr] = useState<string | null>(null); const [ok, setOk] = useState<string | null>(null);
   async function handleSave(e: React.FormEvent) {
-    e.preventDefault();
-    if (busy) return;
-    setBusy(true);
-    setErr(null);
-    setOk(null);
-    const payload = {
-      ...form,
-      short_name: form.short_name || null,
-      description: form.description || null,
-    };
-    const res = app
-      ? await supabase.from("apps").update(payload).eq("id", app.id)
-      : await supabase.from("apps").insert(payload);
-    if (res.error) {
-      setBusy(false);
-      return setErr(res.error.message);
-    }
-
+    e.preventDefault(); if (busy) return; setBusy(true); setErr(null); setOk(null);
+    const payload = { ...form, short_name: form.short_name || null, description: form.description || null };
+    const res = app ? await supabase.from("apps").update(payload).eq("id", app.id) : await supabase.from("apps").insert(payload);
+    if (res.error) { setBusy(false); return setErr(res.error.message); }
     if (payload.slug) {
-      if (!app) {
-        await supabase.from("app_texts").upsert(
-          {
-            key: `aplicativo.${payload.slug}.slogan`,
-            value: "",
-            description: `Slogan do card do app ${payload.name} na loja.`,
-          },
-          { onConflict: "key" },
-        );
-      }
-
-      const { data: existingPlan } = await supabase
-        .from("subscription_plans")
-        .select("id")
-        .eq("slug", payload.slug)
-        .maybeSingle();
-
-      if (existingPlan) {
-        await supabase
-          .from("subscription_plans")
-          .update({
-            name: payload.name,
-            description: payload.description,
-            is_active: payload.is_active,
-            sort_order: payload.ordem,
-          })
-          .eq("id", existingPlan.id);
-      } else {
-        await supabase.from("subscription_plans").insert({
-          slug: payload.slug,
-          name: payload.name,
-          description: payload.description,
-          is_active: payload.is_active,
-          sort_order: payload.ordem,
-          price_cents: 0,
-        });
-      }
+      if (!app) await supabase.from("app_texts").upsert({ key: `aplicativo.${payload.slug}.slogan`, value: "", description: `Slogan do card do app ${payload.name} na loja.` }, { onConflict: "key" });
+      const { data: existingPlan } = await supabase.from("subscription_plans").select("id").eq("slug", payload.slug).maybeSingle();
+      if (existingPlan) await supabase.from("subscription_plans").update({ name: payload.name, description: payload.description, is_active: payload.is_active, sort_order: payload.ordem }).eq("id", existingPlan.id);
+      else await supabase.from("subscription_plans").insert({ slug: payload.slug, name: payload.name, description: payload.description, is_active: payload.is_active, sort_order: payload.ordem, price_cents: 0 });
     }
-
-    setBusy(false);
-    setOk("✅ Salvo com sucesso. A Academia já aparece na loja e pode receber Mini Apps.");
-    window.setTimeout(onClose, 450);
+    setBusy(false); setOk("✅ Salvo com sucesso. A Academia já aparece na loja e pode receber Mini Apps."); window.setTimeout(onClose, 450);
   }
-
-  return (
-    <Card className="border-primary/40">
-      <form onSubmit={handleSave} className="space-y-3 text-sm">
-        <h3 className="font-display text-base font-bold">{app ? "Editar app" : "Novo app"}</h3>
-        <div className="grid gap-3 sm:grid-cols-2">
-          <Field label="Nome">
-            <input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className={input} />
-          </Field>
-          <Field label="Nome curto (chips/menu)">
-            <input value={form.short_name} onChange={(e) => setForm({ ...form, short_name: e.target.value })} className={input} />
-          </Field>
-          <Field label="Slug (url, sem espaço)">
-            <input
-              required
-              value={form.slug}
-              onChange={(e) => setForm({ ...form, slug: e.target.value.toLowerCase().replace(/\s+/g, "-") })}
-              className={input}
-              placeholder="ex: tecnico-estudante"
-            />
-          </Field>
-          <Field label="Emoji">
-            <input value={form.emoji} onChange={(e) => setForm({ ...form, emoji: e.target.value })} className={input} />
-          </Field>
-          <Field label="Cor de fundo">
-            <input type="color" value={form.bg_color} onChange={(e) => setForm({ ...form, bg_color: e.target.value })} className="h-10 w-full rounded-lg" />
-          </Field>
-          <Field label="Cor do texto">
-            <input type="color" value={form.fg_color} onChange={(e) => setForm({ ...form, fg_color: e.target.value })} className="h-10 w-full rounded-lg" />
-          </Field>
-        </div>
-        <Field label="Descrição">
-          <textarea rows={2} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className={input} />
-        </Field>
-        <div className="flex flex-wrap items-center gap-4">
-          <label className="flex items-center gap-2">
-            <input type="checkbox" checked={form.is_active} onChange={(e) => setForm({ ...form, is_active: e.target.checked })} />
-            Ativo (visível na loja)
-          </label>
-          <Field label="Ordem">
-            <input type="number" value={form.ordem} onChange={(e) => setForm({ ...form, ordem: Number(e.target.value) })} className={`${input} w-24`} />
-          </Field>
-        </div>
-        {err && <p className="text-xs text-destructive">{err}</p>}
-        {ok && <p className="rounded-lg bg-emerald-500/10 px-3 py-2 text-xs font-bold text-emerald-700">{ok}</p>}
-        <div className="flex justify-end gap-2 pt-2">
-          <button type="button" onClick={onClose} className="rounded-xl bg-foreground/10 px-4 py-2 text-sm font-semibold">Cancelar</button>
-          <button type="submit" disabled={busy} className="rounded-xl bg-primary px-4 py-2 text-sm font-bold text-primary-foreground shadow-sm transition hover:brightness-110 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-60">
-            {busy ? "Salvando..." : ok ? "Salvo" : "Salvar"}
-          </button>
-        </div>
-      </form>
-    </Card>
-  );
+  return <Card className="border-primary/40"><form onSubmit={handleSave} className="space-y-3 text-sm"><h3 className="font-display text-base font-bold">{app ? "Editar app" : "Novo app"}</h3><div className="grid gap-3 sm:grid-cols-2"><Field label="Nome"><input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className={input} /></Field><Field label="Nome curto (chips/menu)"><input value={form.short_name} onChange={(e) => setForm({ ...form, short_name: e.target.value })} className={input} /></Field><Field label="Slug (url, sem espaço)"><input required value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value.toLowerCase().replace(/\s+/g, "-") })} className={input} placeholder="ex: tecnico-estudante" /></Field><Field label="Emoji"><input value={form.emoji} onChange={(e) => setForm({ ...form, emoji: e.target.value })} className={input} /></Field><Field label="Cor de fundo"><input type="color" value={form.bg_color} onChange={(e) => setForm({ ...form, bg_color: e.target.value })} className="h-10 w-full rounded-lg" /></Field><Field label="Cor do texto"><input type="color" value={form.fg_color} onChange={(e) => setForm({ ...form, fg_color: e.target.value })} className="h-10 w-full rounded-lg" /></Field></div><Field label="Descrição"><textarea rows={2} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className={input} /></Field><div className="flex flex-wrap items-center gap-4"><label className="flex items-center gap-2"><input type="checkbox" checked={form.is_active} onChange={(e) => setForm({ ...form, is_active: e.target.checked })} />Ativo (visível na loja)</label><Field label="Ordem"><input type="number" value={form.ordem} onChange={(e) => setForm({ ...form, ordem: Number(e.target.value) })} className={`${input} w-24`} /></Field></div>{err && <p className="text-xs text-destructive">{err}</p>}{ok && <p className="rounded-lg bg-emerald-500/10 px-3 py-2 text-xs font-bold text-emerald-700">{ok}</p>}<div className="flex justify-end gap-2 pt-2"><button type="button" onClick={onClose} className="rounded-xl bg-foreground/10 px-4 py-2 text-sm font-semibold">Cancelar</button><button type="submit" disabled={busy} className="rounded-xl bg-primary px-4 py-2 text-sm font-bold text-primary-foreground shadow-sm transition hover:brightness-110 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-60">{busy ? "Salvando..." : ok ? "Salvo" : "Salvar"}</button></div></form></Card>;
 }
 
 function AppContent({ app }: { app: AppRow }) {
   const qc = useQueryClient();
   const sectionsQ = useQuery({ queryKey: ["app_sections", app.id], queryFn: () => fetchAppSections(app.id) });
   const placementsQ = useQuery({ queryKey: ["app_placements", app.id], queryFn: () => fetchPlacementsForApp(app.id) });
-  const miniAppsQ = useQuery({
-    queryKey: ["admin_mini_apps_all"],
-    queryFn: async () => {
-      const { data, error } = await supabase.from("mini_apps").select("*").order("sort_order", { ascending: true }).order("name", { ascending: true });
-      if (error) throw error;
-      return data ?? [];
-    },
-  });
+  const miniAppsQ = useQuery({ queryKey: ["admin_mini_apps_all"], queryFn: async () => { const { data, error } = await supabase.from("mini_apps").select("*").order("sort_order", { ascending: true }).order("name", { ascending: true }); if (error) throw error; return data ?? []; } });
   const allAppsQ = useQuery({ queryKey: ["apps"], queryFn: fetchApps });
-  const activeApps = (allAppsQ.data ?? []).filter((a) => a.is_active && a.slug !== "arquivo-2-projeto");
-  const otherApps = activeApps.filter((a) => a.id !== app.id && a.slug !== "suporte-tecnico");
-  const healthMentalApp = activeApps.find((a) => a.slug === "suporte-tecnico");
-  const targetApps = healthMentalApp && healthMentalApp.id !== app.id
-    ? [...otherApps, healthMentalApp]
-    : otherApps;
-  const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
-    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }),
-  );
-  const sections = sectionsQ.data ?? [];
-  const placements = placementsQ.data ?? [];
-  const miniApps = miniAppsQ.data ?? [];
+
+  // A lista de destino deve mostrar TODAS as academias ativas, inclusive Saúde Mental.
+  // O app atualmente aberto aparece apenas como "atual" e fica desabilitado para impedir duplicação.
+  const targetApps = (allAppsQ.data ?? []).filter((a) => a.is_active && a.slug !== "arquivo-2-projeto");
+
+  const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 6 } }), useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }));
+  const sections = sectionsQ.data ?? []; const placements = placementsQ.data ?? []; const miniApps = miniAppsQ.data ?? [];
   const miniById = useMemo(() => new Map(miniApps.map((m) => [m.id, m])), [miniApps]);
   const placedIds = new Set(placements.map((p) => p.mini_app_id));
   const available = miniApps.filter((m) => !placedIds.has(m.id)).slice().sort((a, b) => (a.name ?? "").localeCompare(b.name ?? "", "pt-BR"));
   const currentSortMode = ((app as any).sort_mode ?? "numeric") as "numeric" | "alpha";
-  const sortItems = (items: MiniAppPlacement[]) => items.slice().sort((a, b) => {
-    if (currentSortMode === "alpha") {
-      const na = miniById.get(a.mini_app_id)?.name ?? "";
-      const nb = miniById.get(b.mini_app_id)?.name ?? "";
-      return na.localeCompare(nb, "pt-BR");
-    }
-    return a.ordem - b.ordem;
-  });
-  const containers = useMemo(() => {
-    const out: { id: string; title: string; emoji: string | null; sectionId: string | null; items: MiniAppPlacement[] }[] = [];
-    out.push({ id: "unsec", title: "Sem seção (geral)", emoji: "📦", sectionId: null, items: sortItems(placements.filter((p) => !p.section_id)) });
-    for (const s of sections) out.push({ id: s.id, title: s.title, emoji: s.emoji, sectionId: s.id, items: sortItems(placements.filter((p) => p.section_id === s.id)) });
-    return out;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sections, placements, miniById, currentSortMode]);
+  const sortItems = (items: MiniAppPlacement[]) => items.slice().sort((a, b) => currentSortMode === "alpha" ? (miniById.get(a.mini_app_id)?.name ?? "").localeCompare(miniById.get(b.mini_app_id)?.name ?? "", "pt-BR") : a.ordem - b.ordem);
+  const containers = useMemo(() => { const out: { id: string; title: string; emoji: string | null; sectionId: string | null; items: MiniAppPlacement[] }[] = []; out.push({ id: "unsec", title: "Sem seção (geral)", emoji: "📦", sectionId: null, items: sortItems(placements.filter((p) => !p.section_id)) }); for (const s of sections) out.push({ id: s.id, title: s.title, emoji: s.emoji, sectionId: s.id, items: sortItems(placements.filter((p) => p.section_id === s.id)) }); return out; }, [sections, placements, miniById, currentSortMode]);
   function findContainerOf(placementId: string) { return containers.find((c) => c.items.some((p) => p.id === placementId)); }
-  async function persistContainer(containerId: string, items: MiniAppPlacement[]) {
-    const section_id = containerId === "unsec" ? null : containerId;
-    const updates = items.map((p, i) => ({ id: p.id, section_id, ordem: i }));
-    for (const u of updates) await supabase.from("mini_app_placements").update({ section_id: u.section_id, ordem: u.ordem }).eq("id", u.id);
-    qc.invalidateQueries({ queryKey: ["app_placements", app.id] });
-  }
-  async function handleDragEnd(e: DragEndEvent) {
-    const { active, over } = e;
-    if (!over) return;
-    const activeId = String(active.id);
-    const overId = String(over.id);
-    const fromContainer = findContainerOf(activeId);
-    if (!fromContainer) return;
-    let toContainer = containers.find((c) => c.id === overId);
-    if (!toContainer) toContainer = findContainerOf(overId);
-    if (!toContainer) return;
-    if (fromContainer.id === toContainer.id) {
-      const oldIdx = fromContainer.items.findIndex((p) => p.id === activeId);
-      const newIdx = fromContainer.items.findIndex((p) => p.id === overId);
-      if (oldIdx < 0 || newIdx < 0 || oldIdx === newIdx) return;
-      await persistContainer(fromContainer.id, arrayMove(fromContainer.items, oldIdx, newIdx));
-    } else {
-      const item = fromContainer.items.find((p) => p.id === activeId)!;
-      const newFrom = fromContainer.items.filter((p) => p.id !== activeId);
-      const insertIdx = toContainer.id === overId ? toContainer.items.length : toContainer.items.findIndex((p) => p.id === overId);
-      const newTo = [...toContainer.items];
-      newTo.splice(insertIdx < 0 ? newTo.length : insertIdx, 0, item);
-      await Promise.all([persistContainer(fromContainer.id, newFrom), persistContainer(toContainer.id, newTo)]);
-    }
-  }
-  async function addPlacement(miniAppId: string, sectionId: string | null) {
-    const ordem = placements.filter((p) => p.section_id === sectionId).reduce((m, p) => Math.max(m, p.ordem), -1) + 1;
-    const isArchiveApp = app.slug === "arquivo-2-projeto";
-    if (!isArchiveApp) {
-      const { error: activateError } = await supabase.from("mini_apps").update({ is_active: true } as any).eq("id", miniAppId);
-      if (activateError) return alert(activateError.message);
-    }
-    const { error } = await supabase.from("mini_app_placements").insert({ mini_app_id: miniAppId, app_id: app.id, section_id: sectionId, ordem });
-    if (error) return alert(error.message);
-    if (!isArchiveApp) {
-      const { data: archiveApp } = await supabase.from("apps").select("id").eq("slug", "arquivo-2-projeto").maybeSingle();
-      if (archiveApp?.id) {
-        await supabase.from("mini_app_placements").delete().eq("mini_app_id", miniAppId).eq("app_id", archiveApp.id);
-        qc.invalidateQueries({ queryKey: ["app_placements", archiveApp.id] });
-      }
-    }
-    qc.invalidateQueries({ queryKey: ["admin_mini_apps"] });
-    qc.invalidateQueries({ queryKey: ["admin_mini_apps_all"] });
-    qc.invalidateQueries({ queryKey: ["mini_apps"] });
-    qc.invalidateQueries({ queryKey: ["app_placements", app.id] });
-  }
-  async function removePlacement(id: string) {
-    if (!confirm("Remover este Mini App deste app? Ele continua existindo, só sai daqui.")) return;
-    const placement = placements.find((p) => p.id === id);
-    if (placement) {
-      const legacyOff = app.slug === "academico" ? { track_academico: false } : app.slug === "tecnico" ? { track_tecnico: false } : app.slug === "enfermeiro" ? { track_enfermeiro: false } : null;
-      if (legacyOff) {
-        const { error: legacyError } = await supabase.from("mini_apps").update(legacyOff as any).eq("id", placement.mini_app_id);
-        if (legacyError) return alert(legacyError.message);
-      }
-    }
-    const { error } = await supabase.from("mini_app_placements").delete().eq("id", id);
-    if (error) alert(error.message);
-    qc.invalidateQueries({ queryKey: ["admin_mini_apps"] });
-    qc.invalidateQueries({ queryKey: ["admin_mini_apps_all"] });
-    qc.invalidateQueries({ queryKey: ["mini_apps"] });
-    qc.invalidateQueries({ queryKey: ["app_placements", app.id] });
-  }
-  async function moveMiniAppToApp(miniAppId: string, targetAppId: string, opts?: { removeFromCurrent?: boolean; currentPlacementId?: string }) {
-    const { error: actErr } = await supabase.from("mini_apps").update({ is_active: true } as any).eq("id", miniAppId);
-    if (actErr) return alert(actErr.message);
-    const { data: existing } = await supabase.from("mini_app_placements").select("id").eq("mini_app_id", miniAppId).eq("app_id", targetAppId).maybeSingle();
-    if (!existing) {
-      const { data: dst } = await supabase.from("mini_app_placements").select("ordem").eq("app_id", targetAppId).is("section_id", null).order("ordem", { ascending: false }).limit(1);
-      const nextOrdem = (dst?.[0]?.ordem ?? -1) + 1;
-      const { error: insErr } = await supabase.from("mini_app_placements").insert({ mini_app_id: miniAppId, app_id: targetAppId, section_id: null, ordem: nextOrdem });
-      if (insErr) return alert(insErr.message);
-    }
-    if (opts?.removeFromCurrent && opts.currentPlacementId) await supabase.from("mini_app_placements").delete().eq("id", opts.currentPlacementId);
-    const { data: archiveApp } = await supabase.from("apps").select("id, slug").eq("slug", "arquivo-2-projeto").maybeSingle();
-    if (archiveApp?.id && archiveApp.id !== targetAppId) {
-      await supabase.from("mini_app_placements").delete().eq("mini_app_id", miniAppId).eq("app_id", archiveApp.id);
-      qc.invalidateQueries({ queryKey: ["app_placements", archiveApp.id] });
-    }
-    qc.invalidateQueries({ queryKey: ["admin_mini_apps"] });
-    qc.invalidateQueries({ queryKey: ["admin_mini_apps_all"] });
-    qc.invalidateQueries({ queryKey: ["mini_apps"] });
-    qc.invalidateQueries({ queryKey: ["app_placements", app.id] });
-    qc.invalidateQueries({ queryKey: ["app_placements", targetAppId] });
-  }
+  async function persistContainer(containerId: string, items: MiniAppPlacement[]) { const section_id = containerId === "unsec" ? null : containerId; const updates = items.map((p, i) => ({ id: p.id, section_id, ordem: i })); for (const u of updates) await supabase.from("mini_app_placements").update({ section_id: u.section_id, ordem: u.ordem }).eq("id", u.id); qc.invalidateQueries({ queryKey: ["app_placements", app.id] }); }
+  async function handleDragEnd(e: DragEndEvent) { const { active, over } = e; if (!over) return; const activeId = String(active.id); const overId = String(over.id); const fromContainer = findContainerOf(activeId); if (!fromContainer) return; let toContainer = containers.find((c) => c.id === overId); if (!toContainer) toContainer = findContainerOf(overId); if (!toContainer) return; if (fromContainer.id === toContainer.id) { const oldIdx = fromContainer.items.findIndex((p) => p.id === activeId); const newIdx = fromContainer.items.findIndex((p) => p.id === overId); if (oldIdx < 0 || newIdx < 0 || oldIdx === newIdx) return; await persistContainer(fromContainer.id, arrayMove(fromContainer.items, oldIdx, newIdx)); } else { const item = fromContainer.items.find((p) => p.id === activeId)!; const newFrom = fromContainer.items.filter((p) => p.id !== activeId); const insertIdx = toContainer.id === overId ? toContainer.items.length : toContainer.items.findIndex((p) => p.id === overId); const newTo = [...toContainer.items]; newTo.splice(insertIdx < 0 ? newTo.length : insertIdx, 0, item); await Promise.all([persistContainer(fromContainer.id, newFrom), persistContainer(toContainer.id, newTo)]); } }
+  async function addPlacement(miniAppId: string, sectionId: string | null) { const ordem = placements.filter((p) => p.section_id === sectionId).reduce((m, p) => Math.max(m, p.ordem), -1) + 1; const isArchiveApp = app.slug === "arquivo-2-projeto"; if (!isArchiveApp) { const { error: activateError } = await supabase.from("mini_apps").update({ is_active: true } as any).eq("id", miniAppId); if (activateError) return alert(activateError.message); } const { error } = await supabase.from("mini_app_placements").insert({ mini_app_id: miniAppId, app_id: app.id, section_id: sectionId, ordem }); if (error) return alert(error.message); if (!isArchiveApp) { const { data: archiveApp } = await supabase.from("apps").select("id").eq("slug", "arquivo-2-projeto").maybeSingle(); if (archiveApp?.id) { await supabase.from("mini_app_placements").delete().eq("mini_app_id", miniAppId).eq("app_id", archiveApp.id); qc.invalidateQueries({ queryKey: ["app_placements", archiveApp.id] }); } } qc.invalidateQueries({ queryKey: ["admin_mini_apps"] }); qc.invalidateQueries({ queryKey: ["admin_mini_apps_all"] }); qc.invalidateQueries({ queryKey: ["mini_apps"] }); qc.invalidateQueries({ queryKey: ["app_placements", app.id] }); }
+  async function removePlacement(id: string) { if (!confirm("Remover este Mini App deste app? Ele continua existindo, só sai daqui.")) return; const placement = placements.find((p) => p.id === id); if (placement) { const legacyOff = app.slug === "academico" ? { track_academico: false } : app.slug === "tecnico" ? { track_tecnico: false } : app.slug === "enfermeiro" ? { track_enfermeiro: false } : null; if (legacyOff) { const { error: legacyError } = await supabase.from("mini_apps").update(legacyOff as any).eq("id", placement.mini_app_id); if (legacyError) return alert(legacyError.message); } } const { error } = await supabase.from("mini_app_placements").delete().eq("id", id); if (error) alert(error.message); qc.invalidateQueries({ queryKey: ["admin_mini_apps"] }); qc.invalidateQueries({ queryKey: ["admin_mini_apps_all"] }); qc.invalidateQueries({ queryKey: ["mini_apps"] }); qc.invalidateQueries({ queryKey: ["app_placements", app.id] }); }
+  async function moveMiniAppToApp(miniAppId: string, targetAppId: string, opts?: { removeFromCurrent?: boolean; currentPlacementId?: string }) { if (targetAppId === app.id) return; const { error: actErr } = await supabase.from("mini_apps").update({ is_active: true } as any).eq("id", miniAppId); if (actErr) return alert(actErr.message); const { data: existing } = await supabase.from("mini_app_placements").select("id").eq("mini_app_id", miniAppId).eq("app_id", targetAppId).maybeSingle(); if (!existing) { const { data: dst } = await supabase.from("mini_app_placements").select("ordem").eq("app_id", targetAppId).is("section_id", null).order("ordem", { ascending: false }).limit(1); const nextOrdem = (dst?.[0]?.ordem ?? -1) + 1; const { error: insErr } = await supabase.from("mini_app_placements").insert({ mini_app_id: miniAppId, app_id: targetAppId, section_id: null, ordem: nextOrdem }); if (insErr) return alert(insErr.message); } if (opts?.removeFromCurrent && opts.currentPlacementId) await supabase.from("mini_app_placements").delete().eq("id", opts.currentPlacementId); const { data: archiveApp } = await supabase.from("apps").select("id, slug").eq("slug", "arquivo-2-projeto").maybeSingle(); if (archiveApp?.id && archiveApp.id !== targetAppId) { await supabase.from("mini_app_placements").delete().eq("mini_app_id", miniAppId).eq("app_id", archiveApp.id); qc.invalidateQueries({ queryKey: ["app_placements", archiveApp.id] }); } qc.invalidateQueries({ queryKey: ["admin_mini_apps"] }); qc.invalidateQueries({ queryKey: ["admin_mini_apps_all"] }); qc.invalidateQueries({ queryKey: ["mini_apps"] }); qc.invalidateQueries({ queryKey: ["app_placements", app.id] }); qc.invalidateQueries({ queryKey: ["app_placements", targetAppId] }); }
   const sortMode = currentSortMode;
-  async function setSortMode(mode: "numeric" | "alpha") {
-    await supabase.from("apps").update({ sort_mode: mode } as any).eq("id", app.id);
-    qc.invalidateQueries({ queryKey: ["apps"] });
-  }
-  async function renumberBy10() {
-    const grouped = new Map<string | null, MiniAppPlacement[]>();
-    for (const p of placements) {
-      const k = p.section_id ?? null;
-      const arr = grouped.get(k) ?? [];
-      arr.push(p);
-      grouped.set(k, arr);
-    }
-    for (const [, arr] of grouped) {
-      arr.sort((a, b) => a.ordem - b.ordem);
-      for (let i = 0; i < arr.length; i++) await supabase.from("mini_app_placements").update({ ordem: (i + 1) * 10 }).eq("id", arr[i].id);
-    }
-    qc.invalidateQueries({ queryKey: ["app_placements", app.id] });
-    alert("Renumerado! Agora insira novos entre os números (ex.: 15, 25).");
-  }
-  return (
-    <div className="space-y-5">
-      <div className="flex flex-wrap items-center gap-2 rounded-xl border border-primary/30 bg-primary/5 px-3 py-2 text-sm">
-        <span className="font-semibold">Ordem dos Mini Apps neste app:</span>
-        <button type="button" onClick={() => setSortMode("numeric")} className={`rounded-lg px-3 py-1 text-xs font-bold ${sortMode === "numeric" ? "bg-primary text-primary-foreground" : "bg-background"}`}>🔢 Numérica</button>
-        <button type="button" onClick={() => setSortMode("alpha")} className={`rounded-lg px-3 py-1 text-xs font-bold ${sortMode === "alpha" ? "bg-primary text-primary-foreground" : "bg-background"}`}>🔤 Alfabética (A→Z)</button>
-        <button type="button" onClick={renumberBy10} className="ml-auto rounded-lg bg-foreground/10 px-3 py-1 text-xs font-bold hover:bg-foreground/20" title="Reescreve as ordens em 10, 20, 30… para você inserir novos no meio">↻ Renumerar de 10 em 10</button>
-        <span className="w-full text-[11px] text-muted-foreground">{sortMode === "numeric" ? "Arraste os cards abaixo (grava número automaticamente) ou renumere." : "Ignora os números; a tela do aluno mostra em ordem alfabética."}</span>
-      </div>
-      <SectionsManager appId={app.id} sections={sections} />
-      <div className="grid gap-4 lg:grid-cols-[1fr_280px]">
-        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-          <div className="space-y-4">
-            {containers.map((c) => (
-              <Container key={c.id} container={c} miniById={miniById} onRemove={removePlacement} onAddTo={(mid) => addPlacement(mid, c.sectionId)} available={available} targetApps={targetApps} onMoveTo={(miniAppId, targetAppId, placementId) => moveMiniAppToApp(miniAppId, targetAppId, { removeFromCurrent: true, currentPlacementId: placementId })} onReorder={(containerId, from, to) => { const cont = containers.find((x) => x.id === containerId); if (!cont) return; const reordered = arrayMove(cont.items, from, to); persistContainer(containerId, reordered); }} />
-            ))}
-          </div>
-        </DndContext>
-        <aside className="space-y-2">
-          <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Mini Apps fora deste app ({available.length})</h4>
-          <p className="text-[10px] text-muted-foreground">Inativos e arquivados aparecem aqui. Use <strong>Reativar em ▾</strong> para colocar em qualquer app (Acadêmico, Estudante Técnico, Técnico ou Enfermeiro) — o Mini App é reativado automaticamente.</p>
-          <div className="max-h-[480px] overflow-y-auto rounded-xl border border-foreground/10 p-2 text-xs">
-            {available.length === 0 ? <p className="text-muted-foreground">Todos já estão neste app.</p> : (
-              <ul className="space-y-1">
-                {available.map((m) => (
-                  <li key={m.id} className="flex flex-col gap-1 rounded-lg border border-foreground/10 bg-background px-2 py-1.5">
-                    <div className="flex items-center justify-between gap-2"><span className="truncate"><span className="mr-1">{m.icon ?? "📘"}</span>{m.name}{!m.is_active && <span className="ml-1 rounded-full bg-foreground/10 px-1.5 py-0.5 text-[9px] font-bold uppercase">inativo</span>}</span><button type="button" onClick={() => addPlacement(m.id, null)} className="shrink-0 rounded-md bg-primary/10 px-2 py-0.5 text-[10px] font-bold text-primary hover:bg-primary/20" title="Adicionar aqui em 'Sem seção' (reativa se estiver inativo)">+ add aqui</button></div>
-                    {targetApps.length > 0 && <select className="rounded-md border border-foreground/15 bg-background px-2 py-1 text-[11px]" defaultValue="" onChange={(e) => { const v = e.target.value; if (v) { moveMiniAppToApp(m.id, v); e.currentTarget.value = ""; } }}><option value="">↩ Reativar em… (outro app)</option>{targetApps.map((a) => <option key={a.id} value={a.id}>{a.emoji} {a.short_name ?? a.name}</option>)}</select>}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        </aside>
-      </div>
-    </div>
-  );
+  async function setSortMode(mode: "numeric" | "alpha") { await supabase.from("apps").update({ sort_mode: mode } as any).eq("id", app.id); qc.invalidateQueries({ queryKey: ["apps"] }); }
+  async function renumberBy10() { const grouped = new Map<string | null, MiniAppPlacement[]>(); for (const p of placements) { const k = p.section_id ?? null; const arr = grouped.get(k) ?? []; arr.push(p); grouped.set(k, arr); } for (const [, arr] of grouped) { arr.sort((a, b) => a.ordem - b.ordem); for (let i = 0; i < arr.length; i++) await supabase.from("mini_app_placements").update({ ordem: (i + 1) * 10 }).eq("id", arr[i].id); } qc.invalidateQueries({ queryKey: ["app_placements", app.id] }); alert("Renumerado! Agora insira novos entre os números (ex.: 15, 25)."); }
+  return <div className="space-y-5"><div className="flex flex-wrap items-center gap-2 rounded-xl border border-primary/30 bg-primary/5 px-3 py-2 text-sm"><span className="font-semibold">Ordem dos Mini Apps neste app:</span><button type="button" onClick={() => setSortMode("numeric")} className={`rounded-lg px-3 py-1 text-xs font-bold ${sortMode === "numeric" ? "bg-primary text-primary-foreground" : "bg-background"}`}>🔢 Numérica</button><button type="button" onClick={() => setSortMode("alpha")} className={`rounded-lg px-3 py-1 text-xs font-bold ${sortMode === "alpha" ? "bg-primary text-primary-foreground" : "bg-background"}`}>🔤 Alfabética (A→Z)</button><button type="button" onClick={renumberBy10} className="ml-auto rounded-lg bg-foreground/10 px-3 py-1 text-xs font-bold hover:bg-foreground/20" title="Reescreve as ordens em 10, 20, 30… para você inserir novos no meio">↻ Renumerar de 10 em 10</button><span className="w-full text-[11px] text-muted-foreground">{sortMode === "numeric" ? "Arraste os cards abaixo (grava número automaticamente) ou renumere." : "Ignora os números; a tela do aluno mostra em ordem alfabética."}</span></div><SectionsManager appId={app.id} sections={sections} /><div className="grid gap-4 lg:grid-cols-[1fr_280px]"><DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}><div className="space-y-4">{containers.map((c) => <Container key={c.id} container={c} miniById={miniById} onRemove={removePlacement} onAddTo={(mid) => addPlacement(mid, c.sectionId)} available={available} targetApps={targetApps} onMoveTo={(miniAppId, targetAppId, placementId) => moveMiniAppToApp(miniAppId, targetAppId, { removeFromCurrent: true, currentPlacementId: placementId })} onReorder={(containerId, from, to) => { const cont = containers.find((x) => x.id === containerId); if (!cont) return; const reordered = arrayMove(cont.items, from, to); persistContainer(containerId, reordered); }} />)}</div></DndContext><aside className="space-y-2"><h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Mini Apps fora deste app ({available.length})</h4><p className="text-[10px] text-muted-foreground">Inativos e arquivados aparecem aqui. Use <strong>Reativar em ▾</strong> para colocar em qualquer app (Acadêmico, Estudante Técnico, Técnico ou Enfermeiro) — o Mini App é reativado automaticamente.</p><div className="max-h-[480px] overflow-y-auto rounded-xl border border-foreground/10 p-2 text-xs">{available.length === 0 ? <p className="text-muted-foreground">Todos já estão neste app.</p> : <ul className="space-y-1">{available.map((m) => <li key={m.id} className="flex flex-col gap-1 rounded-lg border border-foreground/10 bg-background px-2 py-1.5"><div className="flex items-center justify-between gap-2"><span className="truncate"><span className="mr-1">{m.icon ?? "📘"}</span>{m.name}{!m.is_active && <span className="ml-1 rounded-full bg-foreground/10 px-1.5 py-0.5 text-[9px] font-bold uppercase">inativo</span>}</span><button type="button" onClick={() => addPlacement(m.id, null)} className="shrink-0 rounded-md bg-primary/10 px-2 py-0.5 text-[10px] font-bold text-primary hover:bg-primary/20" title="Adicionar aqui em 'Sem seção' (reativa se estiver inativo)">+ add aqui</button></div>{targetApps.length > 0 && <select className="rounded-md border border-foreground/15 bg-background px-2 py-1 text-[11px]" defaultValue="" onChange={(e) => { const v = e.target.value; if (v) { moveMiniAppToApp(m.id, v); e.currentTarget.value = ""; } }}><option value="">↩ Reativar em… (outro app)</option>{targetApps.map((a) => <option key={a.id} value={a.id} disabled={a.id === app.id}>{a.emoji} {a.short_name ?? a.name}{a.id === app.id ? " (atual)" : ""}</option>)}</select>}</li>)}</ul>}</div></aside></div></div>;
 }
 
 function SectionsManager({ appId, sections }: { appId: string; sections: AppSection[] }) {
-  const qc = useQueryClient();
-  const [title, setTitle] = useState("");
-  const [emoji, setEmoji] = useState("📚");
-  async function addSection() {
-    if (!title.trim()) return;
-    const ordem = sections.reduce((m, s) => Math.max(m, s.ordem), -1) + 1;
-    const { error } = await supabase.from("app_sections").insert({ app_id: appId, title: title.trim(), emoji: emoji || null, ordem });
-    if (error) return alert(error.message);
-    setTitle("");
-    qc.invalidateQueries({ queryKey: ["app_sections", appId] });
-  }
-  async function rename(s: AppSection) {
-    const v = prompt("Novo título:", s.title);
-    if (v == null) return;
-    const e = prompt("Emoji (opcional):", s.emoji ?? "");
-    await supabase.from("app_sections").update({ title: v.trim() || s.title, emoji: e?.trim() || null }).eq("id", s.id);
-    qc.invalidateQueries({ queryKey: ["app_sections", appId] });
-  }
-  async function remove(s: AppSection) {
-    if (!confirm(`Excluir seção "${s.title}"? Mini Apps dentro voltam para "Sem seção".`)) return;
-    await supabase.from("app_sections").delete().eq("id", s.id);
-    qc.invalidateQueries({ queryKey: ["app_sections", appId] });
-    qc.invalidateQueries({ queryKey: ["app_placements", appId] });
-  }
-  async function move(s: AppSection, dir: -1 | 1) {
-    const sorted = [...sections].sort((a, b) => a.ordem - b.ordem);
-    const idx = sorted.findIndex((x) => x.id === s.id);
-    const j = idx + dir;
-    if (j < 0 || j >= sorted.length) return;
-    const other = sorted[j];
-    await supabase.from("app_sections").update({ ordem: other.ordem }).eq("id", s.id);
-    await supabase.from("app_sections").update({ ordem: s.ordem }).eq("id", other.id);
-    qc.invalidateQueries({ queryKey: ["app_sections", appId] });
-  }
-  return (
-    <div className="rounded-xl border border-foreground/10 p-3">
-      <h4 className="mb-2 text-xs font-bold uppercase tracking-wider text-muted-foreground">Seções deste app</h4>
-      <div className="mb-3 flex flex-wrap gap-2"><input value={emoji} onChange={(e) => setEmoji(e.target.value)} className={`${input} w-20`} placeholder="📚" /><input value={title} onChange={(e) => setTitle(e.target.value)} className={`${input} flex-1 min-w-[200px]`} placeholder="Nova seção (ex.: SAE, Saúde do Adulto…)" /><button type="button" onClick={addSection} className="rounded-lg bg-primary px-3 py-2 text-xs font-bold text-primary-foreground">+ Adicionar seção</button></div>
-      {sections.length === 0 ? <p className="text-xs text-muted-foreground">Nenhuma seção. Adicione uma para agrupar os Mini Apps.</p> : <ul className="space-y-1">{[...sections].sort((a, b) => a.ordem - b.ordem).map((s) => <li key={s.id} className="flex items-center justify-between gap-2 rounded-lg bg-foreground/5 px-2 py-1.5 text-sm"><span className="font-semibold"><span className="mr-1">{s.emoji ?? "📚"}</span>{s.title}</span><div className="flex gap-1"><button type="button" onClick={() => move(s, -1)} className="rounded p-1 hover:bg-foreground/10" aria-label="Subir"><ArrowUp className="h-3.5 w-3.5" /></button><button type="button" onClick={() => move(s, 1)} className="rounded p-1 hover:bg-foreground/10" aria-label="Descer"><ArrowDown className="h-3.5 w-3.5" /></button><button type="button" onClick={() => rename(s)} className="rounded p-1 hover:bg-foreground/10" aria-label="Renomear"><Pencil className="h-3.5 w-3.5" /></button><button type="button" onClick={() => remove(s)} className="rounded p-1 text-destructive hover:bg-destructive/10" aria-label="Excluir"><Trash2 className="h-3.5 w-3.5" /></button></div></li>)}</ul>}
-    </div>
-  );
+  const qc = useQueryClient(); const [title, setTitle] = useState(""); const [emoji, setEmoji] = useState("📚");
+  async function addSection() { if (!title.trim()) return; const ordem = sections.reduce((m, s) => Math.max(m, s.ordem), -1) + 1; const { error } = await supabase.from("app_sections").insert({ app_id: appId, title: title.trim(), emoji: emoji || null, ordem }); if (error) return alert(error.message); setTitle(""); qc.invalidateQueries({ queryKey: ["app_sections", appId] }); }
+  async function rename(s: AppSection) { const v = prompt("Novo título:", s.title); if (v == null) return; const e = prompt("Emoji (opcional):", s.emoji ?? ""); await supabase.from("app_sections").update({ title: v.trim() || s.title, emoji: e?.trim() || null }).eq("id", s.id); qc.invalidateQueries({ queryKey: ["app_sections", appId] }); }
+  async function remove(s: AppSection) { if (!confirm(`Excluir seção "${s.title}"? Mini Apps dentro voltam para "Sem seção".`)) return; await supabase.from("app_sections").delete().eq("id", s.id); qc.invalidateQueries({ queryKey: ["app_sections", appId] }); qc.invalidateQueries({ queryKey: ["app_placements", appId] }); }
+  async function move(s: AppSection, dir: -1 | 1) { const sorted = [...sections].sort((a, b) => a.ordem - b.ordem); const idx = sorted.findIndex((x) => x.id === s.id); const j = idx + dir; if (j < 0 || j >= sorted.length) return; const other = sorted[j]; await supabase.from("app_sections").update({ ordem: other.ordem }).eq("id", s.id); await supabase.from("app_sections").update({ ordem: s.ordem }).eq("id", other.id); qc.invalidateQueries({ queryKey: ["app_sections", appId] }); }
+  return <div className="rounded-xl border border-foreground/10 p-3"><h4 className="mb-2 text-xs font-bold uppercase tracking-wider text-muted-foreground">Seções deste app</h4><div className="mb-3 flex flex-wrap gap-2"><input value={emoji} onChange={(e) => setEmoji(e.target.value)} className={`${input} w-20`} placeholder="📚" /><input value={title} onChange={(e) => setTitle(e.target.value)} className={`${input} flex-1 min-w-[200px]`} placeholder="Nova seção (ex.: SAE, Saúde do Adulto…)" /><button type="button" onClick={addSection} className="rounded-lg bg-primary px-3 py-2 text-xs font-bold text-primary-foreground">+ Adicionar seção</button></div>{sections.length === 0 ? <p className="text-xs text-muted-foreground">Nenhuma seção. Adicione uma para agrupar os Mini Apps.</p> : <ul className="space-y-1">{[...sections].sort((a, b) => a.ordem - b.ordem).map((s) => <li key={s.id} className="flex items-center justify-between gap-2 rounded-lg bg-foreground/5 px-2 py-1.5 text-sm"><span className="font-semibold"><span className="mr-1">{s.emoji ?? "📚"}</span>{s.title}</span><div className="flex gap-1"><button type="button" onClick={() => move(s, -1)} className="rounded p-1 hover:bg-foreground/10" aria-label="Subir"><ArrowUp className="h-3.5 w-3.5" /></button><button type="button" onClick={() => move(s, 1)} className="rounded p-1 hover:bg-foreground/10" aria-label="Descer"><ArrowDown className="h-3.5 w-3.5" /></button><button type="button" onClick={() => rename(s)} className="rounded p-1 hover:bg-foreground/10" aria-label="Renomear"><Pencil className="h-3.5 w-3.5" /></button><button type="button" onClick={() => remove(s)} className="rounded p-1 text-destructive hover:bg-destructive/10" aria-label="Excluir"><Trash2 className="h-3.5 w-3.5" /></button></div></li>)}</ul>}</div>;
 }
 
 function Container({ container, miniById, onRemove, onAddTo, available, targetApps, onMoveTo, onReorder }: { container: { id: string; title: string; emoji: string | null; sectionId: string | null; items: MiniAppPlacement[] }; miniById: Map<string, any>; onRemove: (id: string) => void; onAddTo: (miniAppId: string) => void; available: any[]; targetApps: AppRow[]; onMoveTo: (miniAppId: string, targetAppId: string, placementId: string) => void; onReorder: (containerId: string, from: number, to: number) => void; }) {
   const ids = container.items.map((i) => i.id);
-  return (
-    <div className={`rounded-xl border p-3 ${container.items.length === 0 ? "border-dashed border-foreground/15 bg-foreground/3 opacity-70" : "border-foreground/10 bg-background"}`}>
-      <div className="mb-2 flex items-center justify-between gap-2"><h4 className="text-sm font-bold"><span className="mr-1">{container.emoji ?? "📦"}</span>{container.title}<span className="ml-2 text-[10px] font-normal text-muted-foreground">({container.items.length})</span>{container.items.length === 0 && <span className="ml-2 rounded-full bg-foreground/10 px-2 py-0.5 text-[10px] font-semibold text-muted-foreground">sem conteúdo — não aparece para o aluno</span>}</h4><select className="rounded-md border border-foreground/15 bg-background px-2 py-1 text-[11px]" defaultValue="" onChange={(e) => { if (e.target.value) { onAddTo(e.target.value); e.currentTarget.value = ""; } }}><option value="">+ adicionar aqui…</option>{available.map((m) => <option key={m.id} value={m.id}>{m.name}{!m.is_active ? " (inativo)" : ""}</option>)}</select></div>
-      <SortableContext items={ids} strategy={verticalListSortingStrategy} id={container.id}><ul data-container-id={container.id} className="min-h-[40px] space-y-1 rounded-md bg-foreground/3 p-1">{container.items.length === 0 && <li className="rounded-md border border-dashed border-foreground/15 px-2 py-3 text-center text-[11px] text-muted-foreground">Arraste Mini Apps para cá</li>}{container.items.map((p, idx) => { const m = miniById.get(p.mini_app_id); if (!m) return null; return <SortableItem key={p.id} id={p.id} title={m.name} icon={m.icon ?? "📘"} inactive={!m.is_active} onRemove={() => onRemove(p.id)} targetApps={targetApps} onMoveTo={(targetAppId) => onMoveTo(m.id, targetAppId, p.id)} onUp={idx > 0 ? () => onReorder(container.id, idx, idx - 1) : undefined} onDown={idx < container.items.length - 1 ? () => onReorder(container.id, idx, idx + 1) : undefined} />; })}</ul></SortableContext>
-    </div>
-  );
+  return <div className={`rounded-xl border p-3 ${container.items.length === 0 ? "border-dashed border-foreground/15 bg-foreground/3 opacity-70" : "border-foreground/10 bg-background"}`}><div className="mb-2 flex items-center justify-between gap-2"><h4 className="text-sm font-bold"><span className="mr-1">{container.emoji ?? "📦"}</span>{container.title}<span className="ml-2 text-[10px] font-normal text-muted-foreground">({container.items.length})</span>{container.items.length === 0 && <span className="ml-2 rounded-full bg-foreground/10 px-2 py-0.5 text-[10px] font-semibold text-muted-foreground">sem conteúdo — não aparece para o aluno</span>}</h4><select className="rounded-md border border-foreground/15 bg-background px-2 py-1 text-[11px]" defaultValue="" onChange={(e) => { if (e.target.value) { onAddTo(e.target.value); e.currentTarget.value = ""; } }}><option value="">+ adicionar aqui…</option>{available.map((m) => <option key={m.id} value={m.id}>{m.name}{!m.is_active ? " (inativo)" : ""}</option>)}</select></div><SortableContext items={ids} strategy={verticalListSortingStrategy} id={container.id}><ul data-container-id={container.id} className="min-h-[40px] space-y-1 rounded-md bg-foreground/3 p-1">{container.items.length === 0 && <li className="rounded-md border border-dashed border-foreground/15 px-2 py-3 text-center text-[11px] text-muted-foreground">Arraste Mini Apps para cá</li>}{container.items.map((p, idx) => { const m = miniById.get(p.mini_app_id); if (!m) return null; return <SortableItem key={p.id} id={p.id} title={m.name} icon={m.icon ?? "📘"} inactive={!m.is_active} onRemove={() => onRemove(p.id)} targetApps={targetApps} currentAppId={appIdFromContainerId(container)} onMoveTo={(targetAppId) => onMoveTo(m.id, targetAppId, p.id)} onUp={idx > 0 ? () => onReorder(container.id, idx, idx - 1) : undefined} onDown={idx < container.items.length - 1 ? () => onReorder(container.id, idx, idx + 1) : undefined} />; })}</ul></SortableContext></div>;
 }
 
-function SortableItem({ id, title, icon, inactive, onRemove, targetApps, onMoveTo, onUp, onDown }: { id: string; title: string; icon: string; inactive?: boolean; onRemove: () => void; targetApps: AppRow[]; onMoveTo: (targetAppId: string) => void; onUp?: () => void; onDown?: () => void; }) {
+function appIdFromContainerId(_container: { id: string }): string | null { return null; }
+
+function SortableItem({ id, title, icon, inactive, onRemove, targetApps, currentAppId, onMoveTo, onUp, onDown }: { id: string; title: string; icon: string; inactive?: boolean; onRemove: () => void; targetApps: AppRow[]; currentAppId: string | null; onMoveTo: (targetAppId: string) => void; onUp?: () => void; onDown?: () => void; }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id });
   const style: React.CSSProperties = { transform: CSS.Transform.toString(transform), transition, opacity: isDragging ? 0.4 : 1 };
-  return (
-    <li ref={setNodeRef} style={style} className="flex items-center justify-between gap-2 rounded-md border border-foreground/10 bg-background px-2 py-1.5 text-sm">
-      <button type="button" {...attributes} {...listeners} className="cursor-grab touch-none rounded p-1 text-muted-foreground hover:bg-foreground/10" aria-label="Arrastar"><GripVertical className="h-3.5 w-3.5" /></button>
-      <button type="button" onClick={onUp} disabled={!onUp} className="rounded p-1 text-muted-foreground hover:bg-foreground/10 disabled:opacity-30" aria-label="Subir" title="Subir"><ArrowUp className="h-3.5 w-3.5" /></button>
-      <button type="button" onClick={onDown} disabled={!onDown} className="rounded p-1 text-muted-foreground hover:bg-foreground/10 disabled:opacity-30" aria-label="Descer" title="Descer"><ArrowDown className="h-3.5 w-3.5" /></button>
-      <span className="flex-1 truncate"><span className="mr-1">{icon}</span>{title}{inactive && <span className="ml-1 rounded-full bg-foreground/10 px-1.5 py-0.5 text-[9px] font-bold uppercase">inativo</span>}</span>
-      {targetApps.length > 0 && <select className="rounded-md border border-foreground/15 bg-background px-1.5 py-0.5 text-[10px]" defaultValue="" title="Mover (e reativar) para outro app" onChange={(e) => { const v = e.target.value; if (v) { onMoveTo(v); e.currentTarget.value = ""; } }}><option value="">↪ mover para…</option>{targetApps.map((a) => <option key={a.id} value={a.id}>{a.emoji} {a.short_name ?? a.name}</option>)}</select>}
-      <button type="button" onClick={onRemove} className="rounded p-1 text-destructive hover:bg-destructive/10" aria-label="Remover deste app"><X className="h-3.5 w-3.5" /></button>
-    </li>
-  );
+  return <li ref={setNodeRef} style={style} className="flex items-center justify-between gap-2 rounded-md border border-foreground/10 bg-background px-2 py-1.5 text-sm"><button type="button" {...attributes} {...listeners} className="cursor-grab touch-none rounded p-1 text-muted-foreground hover:bg-foreground/10" aria-label="Arrastar"><GripVertical className="h-3.5 w-3.5" /></button><button type="button" onClick={onUp} disabled={!onUp} className="rounded p-1 text-muted-foreground hover:bg-foreground/10 disabled:opacity-30" aria-label="Subir" title="Subir"><ArrowUp className="h-3.5 w-3.5" /></button><button type="button" onClick={onDown} disabled={!onDown} className="rounded p-1 text-muted-foreground hover:bg-foreground/10 disabled:opacity-30" aria-label="Descer" title="Descer"><ArrowDown className="h-3.5 w-3.5" /></button><span className="flex-1 truncate"><span className="mr-1">{icon}</span>{title}{inactive && <span className="ml-1 rounded-full bg-foreground/10 px-1.5 py-0.5 text-[9px] font-bold uppercase">inativo</span>}</span>{targetApps.length > 0 && <select className="rounded-md border border-foreground/15 bg-background px-1.5 py-0.5 text-[10px]" defaultValue="" title="Mover (e reativar) para outro app" onChange={(e) => { const v = e.target.value; if (v) { onMoveTo(v); e.currentTarget.value = ""; } }}><option value="">↪ mover para…</option>{targetApps.map((a) => <option key={a.id} value={a.id} disabled={currentAppId === a.id}>{a.emoji} {a.short_name ?? a.name}{currentAppId === a.id ? " (atual)" : ""}</option>)}</select>}<button type="button" onClick={onRemove} className="rounded p-1 text-destructive hover:bg-destructive/10" aria-label="Remover deste app"><X className="h-3.5 w-3.5" /></button></li>;
 }
 
 const input = "rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary/40";
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
-  return <label className="block"><span className="mb-1 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">{label}</span>{children}</label>;
-}
+function Field({ label, children }: { label: string; children: React.ReactNode }) { return <label className="block"><span className="mb-1 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">{label}</span>{children}</label>; }
