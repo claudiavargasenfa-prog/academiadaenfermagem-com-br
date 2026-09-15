@@ -150,7 +150,7 @@ export default function BeneficiosPlano() {
           {anual.bonus_app_slug ? (
             <p className="mt-1 text-sm text-muted-foreground">
               Aplicativo bônus escolhido:{" "}
-              <strong>{TRACKS.find((t) => t.slug === anual.bonus_app_slug)?.label ?? anual.bonus_app_slug}</strong>
+              <strong>{tracks.find((t) => t.slug === anual.bonus_app_slug)?.label ?? anual.bonus_app_slug}</strong>
             </p>
           ) : (
             <>
@@ -164,7 +164,7 @@ export default function BeneficiosPlano() {
                   className="rounded-xl border px-3 py-2 text-sm"
                 >
                   <option value="">Selecione um aplicativo…</option>
-                  {TRACKS.filter((t) => t.slug !== anual.plan_slug).map((t) => (
+                  {tracks.filter((t) => t.slug !== anual.plan_slug).map((t) => (
                     <option key={t.slug} value={t.slug}>
                       {t.label}
                     </option>

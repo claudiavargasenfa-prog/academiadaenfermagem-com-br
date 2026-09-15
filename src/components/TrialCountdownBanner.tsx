@@ -58,9 +58,9 @@ export function TrialCountdownBanner() {
     typeof window !== "undefined" && window.sessionStorage.getItem(dismissKey) === "1";
   if (dismissed || alreadyDismissed) return null;
 
-  const track = TRACKS.find((t) => t.slug === (target.plan_slug as TrackSlug));
+  const track = tracks.find((t) => t.slug === target.plan_slug);
   const plan = (plansQ.data ?? []).find((p) => p.slug === target.plan_slug);
-  const planoSlug = BASE_PLAN_SLUG_SET.has(target.plan_slug) ? target.plan_slug : null;
+  const planoSlug = track ? target.plan_slug : null;
   const firstName = (profile?.full_name || "aluno(a)").split(" ")[0];
   const dateLabel = new Date(target.expires_at).toLocaleDateString("pt-BR");
 
