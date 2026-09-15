@@ -66,7 +66,41 @@ function StoreHomeContent() {
               const subscribed = !!sub && (sub.status === "active" || sub.status === "trial");
               const inTrial = !!sub && sub.status === "trial";
               const slug = plan.slug;
-              const cardStyle: React.CSSProperties = { backgroundColor: appRow?.bg_color ?? "#F3F4F6", color: appRow?.fg_color ?? "#111827" };
+              const isMentalHealth = slug === "suporte-tecnico";
+              const cardStyle: React.CSSProperties = isMentalHealth
+                ? { background: "linear-gradient(135deg, #fffef0 0%, #fff9b8 52%, #fff176 100%)", color: "#422006" }
+                : { backgroundColor: appRow?.bg_color ?? "#F3F4F6", color: appRow?.fg_color ?? "#111827" };
+
+              if (isMentalHealth) {
+                return (
+                  <Link
+                    key={plan.id}
+                    to="/app/$slug"
+                    params={{ slug }}
+                    className="group relative col-span-1 flex min-h-[250px] overflow-hidden rounded-3xl border-2 border-yellow-300 p-6 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl sm:col-span-2 md:min-h-[270px]"
+                    style={cardStyle}
+                  >
+                    <div className="absolute -right-12 -top-16 h-48 w-48 rounded-full bg-yellow-300/40 blur-3xl transition-transform duration-500 group-hover:scale-125" />
+                    <div className="absolute right-5 top-1/2 -translate-y-1/2 opacity-95 transition-transform duration-500 group-hover:scale-105 md:right-10">
+                      <svg width="150" height="190" viewBox="0 0 150 190" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Laço amarelo de conscientização e prevenção do suicídio">
+                        <path d="M69 12C42 25 25 48 25 77C25 108 47 126 70 143C90 158 105 170 105 181" stroke="#F4C400" strokeWidth="25" strokeLinecap="round" />
+                        <path d="M81 12C108 25 125 48 125 77C125 108 103 126 80 143C60 158 45 170 45 181" stroke="#FFE45C" strokeWidth="25" strokeLinecap="round" />
+                        <path d="M69 12C42 25 25 48 25 77C25 108 47 126 70 143C90 158 105 170 105 181" stroke="#DCA900" strokeWidth="5" strokeLinecap="round" opacity="0.65" />
+                        <path d="M81 12C108 25 125 48 125 77C125 108 103 126 80 143C60 158 45 170 45 181" stroke="#FFF2A6" strokeWidth="5" strokeLinecap="round" opacity="0.8" />
+                      </svg>
+                    </div>
+
+                    <div className="relative z-10 max-w-3xl pr-20 md:pr-36">
+                      <span className="mb-3 inline-flex rounded-full bg-yellow-300 px-3 py-1 text-xs font-black uppercase tracking-wider text-yellow-950">GRÁTIS • ACESSO PERMANENTE</span>
+                      <h3 className="font-display text-2xl font-black tracking-tight text-yellow-950 md:text-3xl">🎗️ Academia de Saúde Mental</h3>
+                      <p className="mt-2 text-sm font-black uppercase leading-relaxed text-yellow-950 md:text-base">SETEMBRO · OUTUBRO AMARELO — PREVENÇÃO AO SUICÍDIO</p>
+                      <p className="mt-1 text-sm font-medium leading-relaxed text-yellow-900 md:text-base">Um espaço de acolhimento, fortalecimento e cuidado para quem vive a enfermagem.</p>
+                      <span className="mt-5 inline-flex rounded-xl bg-yellow-400 px-5 py-3 text-sm font-black uppercase tracking-wide text-yellow-950 shadow-md transition-transform group-hover:translate-x-1">Acessar gratuitamente →</span>
+                    </div>
+                  </Link>
+                );
+              }
+
               return (
                 <div key={plan.id} className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/40 p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl" style={cardStyle} data-app={slug}>
                   <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
