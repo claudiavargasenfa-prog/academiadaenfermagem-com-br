@@ -13,9 +13,6 @@ import { RichText, useText } from "@/lib/app-texts";
 import { FeedbackCollector } from "@/components/FeedbackCollector";
 import { TestimonialsSection } from "@/components/TestimonialsSection";
 
-
-
-
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -23,15 +20,14 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Academia da Enfermagem: SAE e PE automatizados e 5 aplicativos com Mini Apps para acadêmicos, estudantes de técnico, técnicos e enfermeiros. 15 dias grátis.",
+          "Academia da Enfermagem: SAE e PE automatizados e 6 Academias com Mini Apps para acadêmicos, estudantes de técnico, técnicos e enfermeiros.",
       },
       { property: "og:title", content: "Loja — Academia da Enfermagem | SAE e PE automatizados" },
       {
         property: "og:description",
         content:
-          "Conheça os 5 aplicativos da Academia da Enfermagem, com SAE e PE automatizados, antes de iniciar seus 15 dias grátis.",
+          "Conheça as 6 Academias da Academia da Enfermagem, com conteúdos para formação e prática profissional.",
       },
-
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://academiadaenfermagem.com.br/" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -40,8 +36,6 @@ export const Route = createFileRoute("/")({
   }),
   component: StoreHome,
 });
-
-
 
 function StoreHome() {
   return <StoreHomeContent />;
@@ -63,13 +57,13 @@ function StoreHomeContent() {
     });
   const mySubs = mySubsQ.data ?? [];
 
+  // A 6ª Academia foi criada no Admin sem plano de assinatura: ela é gratuita e permanente.
+  const freeMentalHealthApp = (appsQ.data ?? []).find((app) => app.slug === "suporte-tecnico");
 
   const homeTitle = useText("home.title", "Academia da Enfermagem");
-  const homeDesc = useText("home.description", "Cinco aplicativos, uma só academia. Conheça cada um e comece com 15 dias grátis — sem cartão.");
-  const ctaSection = useText("home.cta_section", "Conheça os aplicativos");
+  const homeDesc = useText("home.description", "Seis Academias, uma só plataforma. Conheça cada uma e encontre conteúdos para sua formação e prática na enfermagem.");
+  const ctaSection = useText("home.cta_section", "Conheça as Academias");
   const compraSegura = useText("compra.segura", "🔒 COMPRA SEGURA");
-
-
 
   return (
     <AppShell hideReferences publicRoute>
@@ -87,12 +81,11 @@ function StoreHomeContent() {
         />
       </div>
 
-      {/* 4 portas — cada aplicativo tem a sua própria página */}
       {activePlans.length > 0 && (
         <section id="aplicativos" className="mb-8 scroll-mt-20">
           <h2 className="mb-1 font-display text-lg font-bold"><RichText>{ctaSection}</RichText></h2>
           <p className="mb-4 text-sm text-muted-foreground">
-            Escolha a sua porta. O conteúdo de cada aplicativo só é revelado dentro da página dele.
+            Escolha a sua porta. O conteúdo de cada Academia só é revelado dentro da página dela.
           </p>
           <div className="grid gap-3 sm:grid-cols-2">
             {activePlans.map((plan) => {
@@ -164,11 +157,37 @@ function StoreHomeContent() {
         </section>
       )}
 
+      {freeMentalHealthApp && (
+        <section className="mb-8 scroll-mt-20" aria-labelledby="academia-saude-mental">
+          <div className="mb-3 flex items-end justify-between gap-3">
+            <div>
+              <p className="mb-1 text-xs font-semibold uppercase tracking-widest text-gold">Nova Academia · acesso livre</p>
+              <h2 id="academia-saude-mental" className="font-display text-lg font-bold">Academia de Saúde Mental</h2>
+              <p className="mt-1 text-sm text-muted-foreground">Um espaço gratuito e permanente para cuidar de quem cuida — com os conteúdos que você já adicionou no Admin.</p>
+            </div>
+            <span className="shrink-0 rounded-full bg-emerald-100 px-3 py-1 text-xs font-black uppercase tracking-wide text-emerald-800">GRÁTIS</span>
+          </div>
+          <Link
+            to="/app/$slug"
+            params={{ slug: freeMentalHealthApp.slug }}
+            className="group relative block overflow-hidden rounded-3xl border border-emerald-200/70 bg-gradient-to-br from-emerald-50 via-sky-50 to-amber-50 p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+          >
+            <div className="absolute -right-12 -top-12 h-36 w-36 rounded-full bg-white/60 blur-2xl transition-transform duration-500 group-hover:scale-125" />
+            <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex items-center gap-4">
+                <span className="text-5xl transition-transform duration-500 group-hover:scale-110">🧠</span>
+                <div>
+                  <h3 className="font-display text-xl font-black tracking-tight">{freeMentalHealthApp.name || "Academia de Saúde Mental"}</h3>
+                  <p className="mt-1 text-sm font-medium text-foreground/70">Cuidando de Quem Cuida · Segurança do Paciente · Como Sobreviver no Estágio · 22 Tabelas Clínicas · e outros conteúdos</p>
+                </div>
+              </div>
+              <span className="inline-flex shrink-0 items-center justify-center rounded-xl bg-foreground px-5 py-3 text-sm font-black uppercase tracking-wider text-background shadow-lg transition-transform group-hover:translate-x-1">Acessar gratuitamente →</span>
+            </div>
+          </Link>
+        </section>
+      )}
+
       <FeedbackCollector />
-
-
-
-
     </AppShell>
   );
 }
@@ -182,5 +201,3 @@ function PlanSlogan({ slug }: { slug: string }) {
     </p>
   );
 }
-
-
