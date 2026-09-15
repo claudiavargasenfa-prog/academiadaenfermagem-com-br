@@ -38,7 +38,6 @@ function StoreHomeContent() {
     return ((a as any).sort_order ?? 0) - ((b as any).sort_order ?? 0);
   });
   const mySubs = mySubsQ.data ?? [];
-  const freeMentalHealthApp = appBySlug.get("suporte-tecnico");
   const homeTitle = useText("home.title", "Academia da Enfermagem");
   const homeDesc = useText("home.description", "Seis Academias, uma só plataforma. Conheça cada uma e encontre conteúdos para sua formação e prática na enfermagem.");
   const ctaSection = useText("home.cta_section", "Conheça as Academias");
@@ -55,29 +54,6 @@ function StoreHomeContent() {
       <div className="mb-8 flex justify-center">
         <img src={mascotesAsset.url} alt="Mascotes Academia da Enfermagem — Time contra as IRAS" className="h-40 w-auto object-contain sm:h-52 md:h-60 [animation:pulse_3s_ease-in-out_infinite]" />
       </div>
-
-      {/* Academia de Saúde Mental: sempre em primeiro lugar na Loja e com acesso gratuito permanente. */}
-      {freeMentalHealthApp && (
-        <section className="mb-8 scroll-mt-20" aria-labelledby="academia-saude-mental">
-          <Link
-            to="/app/$slug"
-            params={{ slug: freeMentalHealthApp.slug }}
-            className="group relative block overflow-hidden rounded-3xl border-2 border-yellow-300 bg-gradient-to-br from-yellow-50 via-white to-yellow-100 p-6 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl"
-          >
-            <div className="absolute -right-12 -top-12 h-40 w-40 rounded-full bg-yellow-300/30 blur-3xl transition-transform duration-500 group-hover:scale-125" />
-            <div className="absolute right-6 top-6 flex h-24 w-24 items-center justify-center rounded-full bg-yellow-300 shadow-lg" aria-label="Laço amarelo — conscientização e prevenção do suicídio">
-              <span className="text-6xl leading-none" role="img" aria-hidden="true">🎗️</span>
-            </div>
-
-            <div className="relative max-w-3xl pr-20 md:pr-32">
-              <span className="mb-3 inline-flex rounded-full bg-yellow-300 px-3 py-1 text-xs font-black uppercase tracking-wider text-yellow-950">GRÁTIS • ACESSO PERMANENTE</span>
-              <h2 id="academia-saude-mental" className="font-display text-2xl font-black tracking-tight text-yellow-950 md:text-3xl">Academia de Saúde Mental</h2>
-              <p className="mt-2 text-sm font-medium leading-relaxed text-yellow-900 md:text-base">Um espaço de acolhimento, fortalecimento e cuidado para quem vive a enfermagem, com conteúdos para apoiar a saúde mental e o bem-estar profissional.</p>
-              <span className="mt-5 inline-flex rounded-xl bg-yellow-400 px-5 py-3 text-sm font-black uppercase tracking-wide text-yellow-950 shadow-md transition-transform group-hover:translate-x-1">Acessar gratuitamente →</span>
-            </div>
-          </Link>
-        </section>
-      )}
 
       {activePlans.length > 0 && (
         <section id="aplicativos" className="mb-8 scroll-mt-20">
