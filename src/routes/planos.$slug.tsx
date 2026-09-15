@@ -90,6 +90,7 @@ function PlanoPage() {
   const isAdmin = !!isAdminQ.data;
 
   const appQ = useQuery({ queryKey: ["app", slug], queryFn: () => fetchAppBySlug(slug) });
+  const label = LABELS[slug] ?? appQ.data?.name ?? "Academia da Enfermagem";
   const placementsQ = useQuery({
     queryKey: ["app_placements", appQ.data?.id],
     enabled: !!appQ.data?.id,
