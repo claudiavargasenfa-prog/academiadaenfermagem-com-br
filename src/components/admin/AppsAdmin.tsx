@@ -50,6 +50,15 @@ function AppForm({ app, onClose }: { app: AppRow | null; onClose: () => void }) 
   return <Card className="border-primary/40"><form onSubmit={handleSave} className="space-y-3 text-sm"><h3 className="font-display text-base font-bold">{app ? "Editar app" : "Novo app"}</h3><div className="grid gap-3 sm:grid-cols-2"><Field label="Nome"><input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className={input} /></Field><Field label="Nome curto (chips/menu)"><input value={form.short_name} onChange={(e) => setForm({ ...form, short_name: e.target.value })} className={input} /></Field><Field label="Slug (url, sem espaço)"><input required value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value.toLowerCase().replace(/\s+/g, "-") })} className={input} placeholder="ex: tecnico-estudante" /></Field><Field label="Emoji"><input value={form.emoji} onChange={(e) => setForm({ ...form, emoji: e.target.value })} className={input} /></Field><Field label="Cor de fundo"><input type="color" value={form.bg_color} onChange={(e) => setForm({ ...form, bg_color: e.target.value })} className="h-10 w-full rounded-lg" /></Field><Field label="Cor do texto"><input type="color" value={form.fg_color} onChange={(e) => setForm({ ...form, fg_color: e.target.value })} className="h-10 w-full rounded-lg" /></Field></div><Field label="Descrição"><textarea rows={2} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className={input} /></Field><div className="flex flex-wrap items-center gap-4"><label className="flex items-center gap-2"><input type="checkbox" checked={form.is_active} onChange={(e) => setForm({ ...form, is_active: e.target.checked })} />Ativo (visível na loja)</label><Field label="Ordem"><input type="number" value={form.ordem} onChange={(e) => setForm({ ...form, ordem: Number(e.target.value) })} className={`${input} w-24`} /></Field></div>{err && <p className="text-xs text-destructive">{err}</p>}{ok && <p className="rounded-lg bg-emerald-500/10 px-3 py-2 text-xs font-bold text-emerald-700">{ok}</p>}<div className="flex justify-end gap-2 pt-2"><button type="button" onClick={onClose} className="rounded-xl bg-foreground/10 px-4 py-2 text-sm font-semibold">Cancelar</button><button type="submit" disabled={busy} className="rounded-xl bg-primary px-4 py-2 text-sm font-bold text-primary-foreground shadow-sm transition hover:brightness-110 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-60">{busy ? "Salvando..." : ok ? "Salvo" : "Salvar"}</button></div></form></Card>;
 }
 
+function Field({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <label className="flex flex-col gap-1 text-xs font-semibold text-muted-foreground">
+      <span>{label}</span>
+      {children}
+    </label>
+  );
+}
+
 function AppContent({ app }: { app: AppRow }) {
   const qc = useQueryClient();
   const sectionsQ = useQuery({ queryKey: ["app_sections", app.id], queryFn: () => fetchAppSections(app.id) });
@@ -57,9 +66,7 @@ function AppContent({ app }: { app: AppRow }) {
   const miniAppsQ = useQuery({ queryKey: ["admin_mini_apps_all"], queryFn: async () => { const { data, error } = await supabase.from("mini_apps").select("*").order("sort_order", { ascending: true }).order("name", { ascending: true }); if (error) throw error; return data ?? []; } });
   const allAppsQ = useQuery({ queryKey: ["apps"], queryFn: fetchApps });
   const activeApps = (allAppsQ.data ?? []).filter((a) => a.is_active && a.slug !== "arquivo-2-projeto");
-  const otherApps = activeApps.filter((a) => a.id !== app.id && a.slug !== "suporte-tecnico");
-  const healthMentalApp = activeApps.find((a) => a.slug === "suporte-tecnico");
-  const targetApps = healthMentalApp && healthMentalApp.id !== app.id ? [...otherApps, healthMentalApp] : otherApps;
+  const targetApps = activeApps.filter((a) => a.id !== app.id);
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 6 } }), useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }));
   const sections = sectionsQ.data ?? []; const placements = placementsQ.data ?? []; const miniApps = miniAppsQ.data ?? [];
   const miniById = useMemo(() => new Map(miniApps.map((m) => [m.id, m])), [miniApps]);

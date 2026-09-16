@@ -75,7 +75,7 @@ function StoreHomeContent() {
                 return (
                   <Link
                     key={plan.id}
-                    to="/app/$slug"
+                    to="/trilha/$slug"
                     params={{ slug }}
                     className="group relative col-span-1 flex min-h-[250px] overflow-hidden rounded-3xl border-2 border-yellow-300 p-6 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl sm:col-span-2 md:min-h-[270px]"
                     style={cardStyle}
