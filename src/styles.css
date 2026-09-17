@@ -404,3 +404,127 @@
 @media (prefers-reduced-motion: reduce) {
   .cqc-root *, .cqc-root *::before, .cqc-root *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
 }
+
+/* Manual de Sobrevivência no Estágio — conteúdo editável e responsivo */
+.manual-survival-content {
+  width: 100%;
+  max-width: 850px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.manual-survival-content,
+.manual-survival-content * {
+  box-sizing: border-box;
+}
+
+.manual-survival-content img,
+.manual-survival-content video,
+.manual-survival-content iframe {
+  max-width: 100%;
+  height: auto;
+}
+
+.manual-survival-content table {
+  min-width: 620px;
+}
+
+.manual-2026-update {
+  margin-bottom: 1.25rem;
+  border: 1px solid var(--border);
+  border-left: 6px solid var(--primary);
+  border-radius: 1rem;
+  background: color-mix(in oklab, var(--primary) 8%, var(--card));
+  padding: 1.5rem;
+  color: var(--foreground);
+  box-shadow: 0 8px 24px color-mix(in oklab, var(--foreground) 8%, transparent);
+}
+
+.manual-2026-update h2 {
+  margin: .25rem 0 1rem !important;
+  color: var(--foreground) !important;
+}
+
+.manual-2026-update h3 {
+  margin: 0 0 .35rem !important;
+  color: var(--foreground) !important;
+}
+
+.manual-2026-update p {
+  color: var(--foreground) !important;
+  line-height: 1.7 !important;
+}
+
+.manual-2026-kicker {
+  margin: 0 !important;
+  color: var(--primary) !important;
+  font-size: .75rem !important;
+  font-weight: 800;
+  letter-spacing: .08em;
+}
+
+.manual-2026-topic {
+  margin-top: .85rem;
+  border-radius: .75rem;
+  background: var(--card);
+  padding: 1rem;
+}
+
+@media (max-width: 640px) {
+  .manual-survival-content {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-inline: 0 !important;
+  }
+
+  .manual-survival-content > div,
+  .manual-survival-content > section {
+    max-width: 100% !important;
+    padding: 1rem !important;
+  }
+
+  .manual-survival-content > div:first-child {
+    padding: 1.5rem 1rem !important;
+    border-radius: 1rem !important;
+  }
+
+  .manual-survival-content > div:first-child > div:first-child {
+    font-size: 3.25rem !important;
+  }
+
+  .manual-survival-content > div:first-child h1 {
+    font-size: 1.55rem !important;
+    line-height: 1.2 !important;
+  }
+
+  .manual-survival-content [style*="grid-template-columns: 1fr 1fr"] {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .manual-survival-content [style*="display: flex"] {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .manual-survival-content [style*="overflow-x: auto"] {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto !important;
+    overscroll-behavior-inline: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .manual-survival-content table {
+    min-width: 620px;
+  }
+
+  .manual-survival-content th,
+  .manual-survival-content td {
+    padding: .65rem .75rem !important;
+    white-space: normal;
+  }
+
+  .manual-2026-update {
+    padding: 1rem;
+  }
+}

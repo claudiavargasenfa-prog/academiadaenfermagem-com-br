@@ -1,6 +1,7 @@
 # Roadmap ADEC
 
 ## Concluído
+- Atualizar o mini app “Manual de Sobrevivência no Estágio” com as diretrizes de 2026 e corrigir cortes em celular, tablet e computador.
 - Corrigir a Academia de Saúde Mental: a loja agora abre sua trilha com os Mini Apps vinculados, e ela segue as mesmas opções de adicionar, mover e reativar conteúdos das demais Academias.
 - Corrigir a queda da Área VIP: permissão da regra de acesso restaurada, falhas isoladas na página e cache antigo de páginas removido.
 - Estabilizar a loja para que falhas temporárias de conteúdo, autenticação ou banco não tirem o site inteiro do ar.
