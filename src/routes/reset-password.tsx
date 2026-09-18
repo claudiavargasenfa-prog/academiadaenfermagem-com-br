@@ -15,6 +15,7 @@ export const Route = createFileRoute("/reset-password")({
       { property: "og:description", content: "Defina uma nova senha para sua conta." },
       { property: "og:url", content: "https://academiadaenfermagem.com.br/reset-password" },
       { property: "og:type", content: "website" },
+      { name: "robots", content: "noindex, nofollow" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:title", content: "Redefinir senha — Academia da Enfermagem" },
       { name: "twitter:description", content: "Defina uma nova senha para sua conta." },

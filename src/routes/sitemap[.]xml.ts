@@ -9,7 +9,28 @@ interface SitemapEntry {
   priority?: string;
 }
 
-const PLAN_SLUGS = ["academico", "tecnico", "tecnico-estudante", "enfermeiro"];
+const PLAN_SLUGS = ["academico", "tecnico", "tecnico-estudante", "enfermeiro", "uti-emergencia"];
+
+const PUBLIC_CONTENT_PATHS = [
+  "/acls",
+  "/calculadora",
+  "/curativos",
+  "/diagnosticos-aede",
+  "/escalas-clinicas",
+  "/exame-fisico-escalas",
+  "/farmacologia-avancada",
+  "/iras",
+  "/postura-etica",
+  "/procedimentos-enfermagem",
+  "/saude-mental",
+  "/sbv",
+  "/seguranca",
+  "/sinais-vitais",
+  "/sv-gestante",
+  "/sv-pediatrico",
+  "/uti",
+  "/validacao",
+] as const;
 
 export const Route = createFileRoute("/sitemap.xml")({
   server: {
@@ -22,15 +43,15 @@ export const Route = createFileRoute("/sitemap.xml")({
           { path: "/legal", changefreq: "monthly", priority: "0.5" },
           { path: "/minha-historia", changefreq: "monthly", priority: "0.6" },
           { path: "/manual-sobrevivencia", changefreq: "monthly", priority: "0.7" },
+          ...PUBLIC_CONTENT_PATHS.map((path) => ({
+            path,
+            changefreq: "monthly" as const,
+            priority: "0.7",
+          })),
           ...PLAN_SLUGS.map((slug) => ({
             path: `/planos/${slug}`,
             changefreq: "weekly" as const,
             priority: "0.8",
-          })),
-          ...PLAN_SLUGS.map((slug) => ({
-            path: `/cadastro/${slug}`,
-            changefreq: "monthly" as const,
-            priority: "0.5",
           })),
         ];
 

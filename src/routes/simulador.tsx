@@ -22,6 +22,7 @@ export const Route = createFileRoute("/simulador")({
         content: "Simulados cronometrados de enfermagem com ranking dos alunos.",
       },
       { property: "og:type", content: "website" },
+      { name: "robots", content: "noindex, nofollow" },
       { name: "twitter:card", content: "summary_large_image" },
       { property: "og:url", content: "https://academiadaenfermagem.com.br/simulador" },
     ],

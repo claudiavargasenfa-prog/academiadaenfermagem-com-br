@@ -21,6 +21,7 @@ export const Route = createFileRoute("/relatorio-abnt")({
       { property: "og:description", content: "Gere automaticamente o seu relatório de estágio em norma ABNT a partir do seu Diário de Bordo." },
       { property: "og:url", content: "https://academiadaenfermagem.com.br/relatorio-abnt" },
       { property: "og:type", content: "website" },
+      { name: "robots", content: "noindex, nofollow" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:title", content: "Relatório de Estágio (ABNT) — Academia da Enfermagem" },
       { name: "twitter:description", content: "Gere automaticamente o seu relatório de estágio em norma ABNT a partir do seu Diário de Bordo." },

@@ -13,6 +13,7 @@ export const Route = createFileRoute("/diario")({
       { property: "og:description", content: "Anotações diárias do estágio com exportação em PDF formatado em ABNT." },
       { property: "og:url", content: "https://academiadaenfermagem.com.br/diario" },
       { property: "og:type", content: "website" },
+      { name: "robots", content: "noindex, nofollow" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:title", content: "Diário de Bordo — Enfermagem em Foco" },
       { name: "twitter:description", content: "Anotações diárias do estágio com exportação em PDF formatado em ABNT." },

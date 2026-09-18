@@ -41,6 +41,7 @@ export const Route = createFileRoute("/trilha/$slug")({
       { property: "og:description", content: `Mini Apps do aplicativo ${params.slug} da Academia da Enfermagem.` },
       { property: "og:url", content: `https://academiadaenfermagem.com.br/trilha/${params.slug}` },
       { property: "og:type", content: "website" },
+      { name: "robots", content: "noindex, nofollow" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:title", content: `${params.slug} — Academia da Enfermagem` },
       { name: "twitter:description", content: `Mini Apps do aplicativo ${params.slug} da Academia da Enfermagem.` },

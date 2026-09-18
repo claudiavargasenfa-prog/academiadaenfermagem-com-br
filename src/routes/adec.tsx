@@ -985,7 +985,7 @@ function AdecPage() {
                     <DialogTrigger asChild>
                       <button className="relative block w-full outline-none">
                         <img 
-                          src="https://id-preview--ee1abee9-28d3-4826-82bc-7387b3880d45.lovable.app/lovable-uploads/763be538-348e-4903-888f-013697669d72.png" 
+                          src="https://academiadaenfermagem.com.br/lovable-uploads/763be538-348e-4903-888f-013697669d72.png" 
                           alt="Modelo Frente do Certificado ADEC" 
                           className="h-auto w-full"
                         />
@@ -997,7 +997,7 @@ function AdecPage() {
                     <DialogContent className="max-w-4xl border-none bg-transparent p-0 shadow-none sm:rounded-none">
                       <div className="relative p-2">
                         <img 
-                          src="https://id-preview--ee1abee9-28d3-4826-82bc-7387b3880d45.lovable.app/lovable-uploads/763be538-348e-4903-888f-013697669d72.png" 
+                          src="https://academiadaenfermagem.com.br/lovable-uploads/763be538-348e-4903-888f-013697669d72.png" 
                           alt="Modelo Frente do Certificado ADEC" 
                           className="h-auto w-full rounded-lg shadow-2xl"
                         />
@@ -1017,7 +1017,7 @@ function AdecPage() {
                     <DialogTrigger asChild>
                       <button className="relative block w-full outline-none">
                         <img 
-                          src="https://id-preview--ee1abee9-28d3-4826-82bc-7387b3880d45.lovable.app/lovable-uploads/31804b77-b9c9-4a0b-8d59-3d127c52367d.png" 
+                          src="https://academiadaenfermagem.com.br/lovable-uploads/31804b77-b9c9-4a0b-8d59-3d127c52367d.png" 
                           alt="Modelo Verso do Certificado ADEC" 
                           className="h-auto w-full"
                         />
@@ -1029,7 +1029,7 @@ function AdecPage() {
                     <DialogContent className="max-w-4xl border-none bg-transparent p-0 shadow-none sm:rounded-none">
                       <div className="relative p-2">
                         <img 
-                          src="https://id-preview--ee1abee9-28d3-4826-82bc-7387b3880d45.lovable.app/lovable-uploads/31804b77-b9c9-4a0b-8d59-3d127c52367d.png" 
+                          src="https://academiadaenfermagem.com.br/lovable-uploads/31804b77-b9c9-4a0b-8d59-3d127c52367d.png" 
                           alt="Modelo Verso do Certificado ADEC" 
                           className="h-auto w-full rounded-lg shadow-2xl"
                         />

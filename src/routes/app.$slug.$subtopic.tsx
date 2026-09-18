@@ -19,6 +19,7 @@ export const Route = createFileRoute("/app/$slug/$subtopic")({
         { property: "og:description", content: desc },
         { property: "og:url", content: url },
         { property: "og:type", content: "article" },
+        { name: "robots", content: "noindex, nofollow" },
         { name: "twitter:card", content: "summary" },
         { name: "twitter:title", content: title },
         { name: "twitter:description", content: desc },
