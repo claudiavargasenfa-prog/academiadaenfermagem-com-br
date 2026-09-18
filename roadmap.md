@@ -14,6 +14,7 @@
 
 ## Pendente
 - Google Search Console: correções do site concluídas; a proprietária confirmou que “Enfermagem's Google Search Console” também é sua e gratuita. Aguardando reconectar essa conta diretamente ao projeto com a permissão correta.
+- Confirmar que o domínio oficial `https://academiadaenfermagem.com.br` pode ser descoberto pelos principais buscadores e orientar sobre o prazo normal de indexação.
 - Setembro Amarelo: aguardando 10 banners.
 
 ## Cuidando de Quem Cuida — conteúdo 100% editável (14/09/2026) — CONCLUÍDO
