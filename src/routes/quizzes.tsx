@@ -14,6 +14,7 @@ export const Route = createFileRoute("/quizzes")({
       { property: "og:description", content: "50 quizzes de enfermagem para acadêmicos e enfermeiros: UTI, ACLS, farmacologia, sinais vitais e mais." },
       { property: "og:url", content: "https://academiadaenfermagem.com.br/quizzes" },
       { property: "og:type", content: "website" },
+      { name: "robots", content: "noindex, nofollow" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:title", content: "Quizzes de Enfermagem — Academia da Enfermagem" },
       { name: "twitter:description", content: "50 quizzes de enfermagem para acadêmicos e enfermeiros: UTI, ACLS, farmacologia, sinais vitais e mais." },

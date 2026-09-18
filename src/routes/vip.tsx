@@ -44,6 +44,7 @@ export const Route = createFileRoute("/vip")({
         content: "Comunidade exclusiva dos alunos da Academia da Enfermagem.",
       },
       { property: "og:type", content: "website" },
+      { name: "robots", content: "noindex, nofollow" },
       { name: "twitter:card", content: "summary_large_image" },
       { property: "og:url", content: "https://academiadaenfermagem.com.br/vip" },
     ],

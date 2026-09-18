@@ -29,9 +29,11 @@ export const Route = createFileRoute("/validacao")({
         property: "og:description",
         content: "Consulta pública de autenticidade dos certificados emitidos pela Academia da Enfermagem.",
       },
+      { property: "og:url", content: "https://academiadaenfermagem.com.br/validacao" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "canonical", href: "https://academiadaenfermagem.com.br/validacao" }],
   }),
 });
 

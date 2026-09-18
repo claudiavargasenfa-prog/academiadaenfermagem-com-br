@@ -32,6 +32,7 @@ export const Route = createFileRoute("/app/$slug/")({
         { property: "og:description", content: description },
         { property: "og:url", content: `https://academiadaenfermagem.com.br/app/${params.slug}` },
         { property: "og:type", content: "website" },
+        { name: "robots", content: "noindex, nofollow" },
         { name: "twitter:card", content: "summary" },
         { name: "twitter:title", content: title },
         { name: "twitter:description", content: description },

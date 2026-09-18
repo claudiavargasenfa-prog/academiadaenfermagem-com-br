@@ -33,6 +33,7 @@ export const Route = createFileRoute("/simulacoes-reais")({
       { property: "og:description", content: "Casos clínicos hospitalares com monitor multiparamétrico: Clínica Médica, Pediatria, Gineco/Obstetrícia, Neonatologia e Trauma." },
       { property: "og:url", content: "https://academiadaenfermagem.com.br/simulacoes-reais" },
       { property: "og:type", content: "website" },
+      { name: "robots", content: "noindex, nofollow" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:title", content: "Simulações Reais — Academia da Enfermagem" },
       { name: "twitter:description", content: "Casos clínicos hospitalares com monitor multiparamétrico: Clínica Médica, Pediatria, Gineco/Obstetrícia, Neonatologia e Trauma." },

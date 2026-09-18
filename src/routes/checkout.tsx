@@ -81,6 +81,7 @@ export const Route = createFileRoute("/checkout")({
         content: "Pagamento seguro no Mercado Pago. Acesso liberado logo após a confirmação.",
       },
       { property: "og:type", content: "website" },
+      { name: "robots", content: "noindex, nofollow" },
       { name: "twitter:card", content: "summary" },
       { property: "og:url", content: "https://academiadaenfermagem.com.br/checkout" },
     ],

@@ -1,6 +1,7 @@
 # Roadmap ADEC
 
 ## Concluído
+- Corrigir o SEO técnico: sitemap público ampliado, páginas privadas protegidas da busca, duplicidade de `/novo-app` removida e validação com endereço principal.
 - Corrigir o erro 404 do Mini App “Cuide da Sua Saúde Mental”, preservando o conteúdo e prevenindo endereços internos inválidos no Admin.
 - Atualizar o mini app “Manual de Sobrevivência no Estágio” com as diretrizes de 2026 e corrigir cortes em celular, tablet e computador.
 - Corrigir a Academia de Saúde Mental: a loja agora abre sua trilha com os Mini Apps vinculados, e ela segue as mesmas opções de adicionar, mover e reativar conteúdos das demais Academias.
@@ -19,6 +20,6 @@
 - [x] Removida a tela fixa do mini app SAUDEMENTALPROF.
 - [x] Mini app passa a usar o conteúdo escrito do painel, como os demais
 - [x] Texto completo da jornada gravado no campo editável
-- [ ] Revisar falhas atuais de SEO
-- [ ] Corrigir todas as falhas possíveis
+- [x] Revisar falhas atuais de SEO
+- [x] Corrigir todas as falhas possíveis no site
 - [ ] Validar e atualizar os resultados

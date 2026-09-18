@@ -26,6 +26,7 @@ export const Route = createFileRoute("/cadastro/$slug")({
         { property: "og:title", content: `Cadastro ${label} — Academia da Enfermagem` },
         { property: "og:description", content: desc },
         { property: "og:type", content: "website" },
+        { name: "robots", content: "noindex, nofollow" },
         { name: "twitter:card", content: "summary" },
         { property: "og:url", content: `https://academiadaenfermagem.com.br/cadastro/${params.slug}` },
       ],
