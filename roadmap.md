@@ -18,3 +18,6 @@
 - [x] Removida a tela fixa do mini app SAUDEMENTALPROF.
 - [x] Mini app passa a usar o conteúdo escrito do painel, como os demais
 - [x] Texto completo da jornada gravado no campo editável
+- [ ] Revisar falhas atuais de SEO
+- [ ] Corrigir todas as falhas possíveis
+- [ ] Validar e atualizar os resultados
