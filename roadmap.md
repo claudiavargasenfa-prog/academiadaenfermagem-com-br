@@ -13,7 +13,7 @@
 - Mini-app "Cuidando de Quem Cuida" finalizado.
 
 ## Pendente
-- Google Search Console: aguardando nova conexão própria.
+- Google Search Console: correções do site concluídas; aguardando a proprietária autorizar uma nova conexão própria do Google em português. A conexão “Enfermagem's Google Search Console” é antiga, pertence a outra pessoa e não será usada.
 - Setembro Amarelo: aguardando 10 banners.
 
 ## Cuidando de Quem Cuida — conteúdo 100% editável (14/09/2026) — CONCLUÍDO
