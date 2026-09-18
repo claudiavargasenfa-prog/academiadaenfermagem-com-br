@@ -1,6 +1,7 @@
 # Roadmap ADEC
 
 ## Concluído
+- Corrigir o erro 404 do Mini App “Cuide da Sua Saúde Mental”, preservando o conteúdo e prevenindo endereços internos inválidos no Admin.
 - Atualizar o mini app “Manual de Sobrevivência no Estágio” com as diretrizes de 2026 e corrigir cortes em celular, tablet e computador.
 - Corrigir a Academia de Saúde Mental: a loja agora abre sua trilha com os Mini Apps vinculados, e ela segue as mesmas opções de adicionar, mover e reativar conteúdos das demais Academias.
 - Corrigir a queda da Área VIP: permissão da regra de acesso restaurada, falhas isoladas na página e cache antigo de páginas removido.

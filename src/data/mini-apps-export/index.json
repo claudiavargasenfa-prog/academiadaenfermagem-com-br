@@ -2241,5 +2241,24 @@
       }
     ],
     "content_file": "semana-enfermagem.md"
+  },
+  {
+    "slug": "cuide-da-sua-saude-mental",
+    "name": "CUIDE DA SUA SAÚDE MENTAL",
+    "description": null,
+    "kind": "extra",
+    "price_cents": 0,
+    "gratuito": true,
+    "em_breve": false,
+    "is_active": true,
+    "track_academico": false,
+    "track_tecnico": false,
+    "track_enfermeiro": false,
+    "sort_order": 0,
+    "video_url": null,
+    "audio_url": null,
+    "badges": [],
+    "route_path": "/app/cuide-da-sua-saude-mental",
+    "content_file": "cuide-da-sua-saude-mental.md"
   }
 ]
