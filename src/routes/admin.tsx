@@ -819,6 +819,12 @@ function MiniAppForm({
     // Obstetrícia é feito por mini_app_placements logo abaixo.
     const { price_reais, price_original_reais, track_obstetricia: _obst, ...rest } = form;
     const priceOriginalCents = reaisToCents(price_original_reais);
+    const rawRoutePath = form.route_path.trim();
+    const normalizedRoutePath = rawRoutePath
+      ? rawRoutePath.startsWith("/")
+        ? rawRoutePath
+        : `/${rawRoutePath}`
+      : null;
     const payload = {
       ...rest,
       kind: (form.kind || "extra").trim(),
@@ -829,7 +835,7 @@ function MiniAppForm({
       content_md: form.content_md || null,
       video_url: form.video_url || null,
       audio_url: form.audio_url || null,
-      route_path: form.route_path || null,
+      route_path: normalizedRoutePath,
       horas_certificado: Number(form.horas_certificado) || null,
       price_cents: reaisToCents(price_reais),
       price_original_cents: priceOriginalCents > 0 ? priceOriginalCents : null,
@@ -967,6 +973,10 @@ function MiniAppForm({
             <input
               value={form.route_path}
               onChange={(e) => setForm({ ...form, route_path: e.target.value })}
+              onBlur={(e) => {
+                const value = e.target.value.trim();
+                setForm({ ...form, route_path: value && !value.startsWith("/") ? `/${value}` : value });
+              }}
               className={input}
               placeholder="/slug-da-tela"
             />

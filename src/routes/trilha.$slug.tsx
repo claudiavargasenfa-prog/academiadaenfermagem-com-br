@@ -342,7 +342,8 @@ function TrilhaPage() {
 }
 
 function TrackAppCard({ app, unlocked, extraExpiresAt, isAdmin, isPremium }: { app: MiniApp; unlocked: boolean; extraExpiresAt: string | null; isAdmin?: boolean; isPremium?: boolean }) {
-  const route = (app.route_path && app.route_path.trim()) || `/app/${app.slug}`;
+  const savedRoute = app.route_path?.trim();
+  const route = savedRoute?.startsWith("/") ? savedRoute : `/app/${app.slug}`;
   return (
     <div className="glass flex flex-col rounded-2xl p-4">
       <div className="mb-2 flex items-start justify-between gap-2">
