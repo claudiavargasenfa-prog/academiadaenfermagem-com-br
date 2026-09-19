@@ -8,7 +8,9 @@ Na página da loja, substituir:
 
 por:
 
-**“Acesso totalmente grátis até 30.09.26”**
+**“Acesso totalmente grátis até 30.09.26”**  
+**TODOS QUE ACESSAREM ATÉ  DIA 30.09.26, ENTRARÃO TOTALMENTE GRATIS APÓS CADASTRO PADRÃO**  
+
 
 ## Como será feito
 
