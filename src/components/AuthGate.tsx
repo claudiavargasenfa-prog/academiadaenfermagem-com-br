@@ -1,6 +1,5 @@
 import { isFreeTrialOpen, TRIAL_FREE_UNTIL_LABEL } from "@/lib/trial-window";
 import { useEffect, useState, type ReactNode } from "react";
-import { useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import type { Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
@@ -18,15 +17,33 @@ export function AuthGate({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let active = true;
     const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => {
+      if (!active) return;
       setSession(s);
       setLoading(false);
     });
-    supabase.auth.getSession().then(({ data }) => {
-      setSession(data.session);
-      setLoading(false);
+    supabase.auth.getUser().then(async ({ data, error }) => {
+      if (!active) return;
+      if (error) {
+        await supabase.auth.signOut({ scope: "local" }).catch(() => undefined);
+        setSession(null);
+      } else {
+        const { data: sessionData } = await supabase.auth.getSession();
+        if (active) setSession(data.user ? sessionData.session : null);
+      }
+      if (active) setLoading(false);
+    }).catch(async () => {
+      await supabase.auth.signOut({ scope: "local" }).catch(() => undefined);
+      if (active) {
+        setSession(null);
+        setLoading(false);
+      }
     });
-    return () => sub.subscription.unsubscribe();
+    return () => {
+      active = false;
+      sub.subscription.unsubscribe();
+    };
   }, []);
 
   if (loading) {
@@ -42,6 +59,31 @@ export function AuthGate({ children }: { children: ReactNode }) {
 }
 
 const CADASTRO_SLUGS = ["academico", "tecnico", "tecnico-estudante", "enfermeiro"];
+const LOGIN_DESTINATION_KEY = "adec-login-destination";
+
+function safeDestination(path: string | null | undefined): string {
+  if (!path || !path.startsWith("/") || path.startsWith("//")) return "/minha-conta";
+  return path;
+}
+
+function currentLoginDestination(): string {
+  if (typeof window === "undefined") return "/minha-conta";
+  const current = `${window.location.pathname}${window.location.search}`;
+  return current === "/" ? "/minha-conta" : safeDestination(current);
+}
+
+function rememberLoginDestination(destination: string) {
+  if (typeof window !== "undefined") {
+    window.sessionStorage.setItem(LOGIN_DESTINATION_KEY, safeDestination(destination));
+  }
+}
+
+function finishLogin(fallback: string) {
+  if (typeof window === "undefined") return;
+  const destination = safeDestination(window.sessionStorage.getItem(LOGIN_DESTINATION_KEY) ?? fallback);
+  window.sessionStorage.removeItem(LOGIN_DESTINATION_KEY);
+  window.location.assign(destination);
+}
 
 function slugFromPath(): string {
   if (typeof window === "undefined") return "academico";
@@ -92,8 +134,23 @@ export function AuthScreen({ cadastroSlug: forcedCadastroSlug }: { cadastroSlug?
   const [msg, setMsg] = useState<{ type: "error" | "info"; text: string } | null>(null);
   const checkTrial = useServerFn(checkTrialEligibility);
   const recordTrial = useServerFn(recordTrialFingerprint);
-  const navigate = useNavigate();
   const phoneErroInline = phone.replace(/\D/g, "").length >= 11 ? validatePhoneBR(phone) : null;
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const oauthError = params.get("error_description") ?? params.get("error");
+    if (oauthError) {
+      setMsg({ type: "error", text: traduzirErro(oauthError, "O Google não autorizou a entrada. Escolha uma conta e tente novamente.") });
+      window.history.replaceState({}, "", window.location.pathname);
+      return;
+    }
+
+    const destination = window.sessionStorage.getItem(LOGIN_DESTINATION_KEY);
+    if (!destination) return;
+    supabase.auth.getUser().then(({ data }) => {
+      if (data.user) finishLogin(destination);
+    }).catch(() => undefined);
+  }, []);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -165,11 +222,19 @@ export function AuthScreen({ cadastroSlug: forcedCadastroSlug }: { cadastroSlug?
           });
           setMode("signin");
         } else {
-          navigate({ to: "/trilha/$slug", params: { slug: categoria } });
+          finishLogin(`/trilha/${categoria}`);
         }
       } else {
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        const { data, error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
         if (error) throw error;
+        if (!data.session) throw new Error("Não foi possível confirmar sua entrada. Tente novamente.");
+
+        const { data: verified, error: verificationError } = await supabase.auth.getUser();
+        if (verificationError || !verified.user) {
+          await supabase.auth.signOut({ scope: "local" }).catch(() => undefined);
+          throw verificationError ?? new Error("Sua entrada não pôde ser confirmada. Tente novamente.");
+        }
+        finishLogin(currentLoginDestination());
       }
     } catch (err) {
       setMsg({ type: "error", text: traduzirErro(err) });
@@ -179,19 +244,29 @@ export function AuthScreen({ cadastroSlug: forcedCadastroSlug }: { cadastroSlug?
   }
 
   async function handleGoogle() {
+    if (busy) return;
     setBusy(true);
     setMsg(null);
     try {
+      const destination = currentLoginDestination();
+      rememberLoginDestination(destination);
       const result = await lovable.auth.signInWithOAuth("google", {
         redirect_uri: window.location.origin,
+        extraParams: { prompt: "select_account" },
       });
       if (result.error) {
-        setMsg({ type: "error", text: "Não foi possível entrar com Google." });
-        setBusy(false);
+        window.sessionStorage.removeItem(LOGIN_DESTINATION_KEY);
+        throw result.error;
       }
+      if (result.redirected) return;
+
+      const { data, error } = await supabase.auth.getUser();
+      if (error || !data.user) throw error ?? new Error("O Google não confirmou sua entrada.");
+      finishLogin(destination);
     } catch (err) {
       console.error("[auth] Google sign-in failed", err);
-      setMsg({ type: "error", text: "Não foi possível entrar com Google." });
+      window.sessionStorage.removeItem(LOGIN_DESTINATION_KEY);
+      setMsg({ type: "error", text: traduzirErro(err, "O Google não autorizou a entrada. Escolha uma conta e tente novamente.") });
       setBusy(false);
     }
   }
