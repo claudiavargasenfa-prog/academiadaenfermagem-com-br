@@ -14,6 +14,8 @@ const RULES: Array<[RegExp, string]> = [
   [/signups? not allowed|signup_disabled/i, "Os cadastros estão temporariamente desativados."],
   [/anonymous sign-?ins are disabled/i, "Não é possível entrar sem cadastro."],
   [/unsupported provider|provider is not enabled/i, "Esse método de login não está disponível no momento."],
+  [/access_denied|not permitted|permission denied by user/i, "O Google não autorizou a entrada. Escolha uma conta e tente novamente."],
+  [/refresh_token_already_used|refresh token.*used/i, "Sua entrada anterior venceu. Tente entrar novamente."],
   [/auth session missing|session.*(expired|not found)|jwt expired/i, "Sua sessão expirou. Entre novamente."],
   [/database error saving new user|database error/i, "Não foi possível salvar seu cadastro agora. Tente novamente em instantes."],
   [/duplicate key value|already exists/i, "Esse registro já existe."],
