@@ -1,8 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
+import { Loader2, LogOut } from "lucide-react";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
 import { supabase } from "@/integrations/supabase/client";
+import { signOut } from "@/components/AuthGate";
+import { Button } from "@/components/ui/button";
 import {
   fetchMiniApps,
   fetchMyBasicSubscription,
@@ -35,6 +38,17 @@ export const Route = createFileRoute("/minha-conta")({
 function MinhaContaPage() {
   const [email, setEmail] = useState<string>("");
   const [name, setName] = useState<string>("");
+  const [leaving, setLeaving] = useState(false);
+
+  async function handleSignOut() {
+    if (leaving) return;
+    setLeaving(true);
+    try {
+      await signOut();
+    } finally {
+      window.location.replace("/minha-conta");
+    }
+  }
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {
@@ -131,6 +145,16 @@ function MinhaContaPage() {
               <dd className="font-medium">{email || "—"}</dd>
             </div>
           </dl>
+          <Button
+            type="button"
+            variant="outline"
+            className="mt-5 w-full"
+            onClick={handleSignOut}
+            disabled={leaving}
+          >
+            {leaving ? <Loader2 className="animate-spin" /> : <LogOut />}
+            {leaving ? "Saindo..." : "Sair e entrar com outra conta"}
+          </Button>
         </Card>
 
         <Card>
