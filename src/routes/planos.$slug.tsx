@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+﻿import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import type { Session } from "@supabase/supabase-js";
@@ -43,12 +43,12 @@ const DEFAULTS: Record<string, Record<string, string>> = {
   },
 };
 
-const TRIAL_DAYS = 15;
+const TRIAL_DAYS = 0; // Período gratuito encerrado
 
 export const Route = createFileRoute("/planos/$slug")({
   head: ({ params }) => {
     const label = LABELS[params.slug] ?? "Academia da Enfermagem";
-    const desc = `Conheça a ${label}: Mini Apps, escalas clínicas, SAE automatizada, quizzes e muito mais. ${TRIAL_DAYS} dias grátis + Grupo VIP no WhatsApp.`;
+    const desc = `Conheça a ${label}: Mini Apps, escalas clínicas, SAE automatizada, quizzes e muito mais. Grupo VIP no WhatsApp.`;
     return {
       meta: [
         { title: `${label} — Planos | Academia da Enfermagem` },
@@ -115,14 +115,14 @@ function PlanoPage() {
 
   const slogan = t("slogan", DEFAULTS[slug]?.slogan ?? "");
   const promoTitle = t("promo_title", "🎁 Promoção de lançamento");
-  const promoText = t("promo_text", `${TRIAL_DAYS} dias grátis + Grupo VIP no WhatsApp — válido até 01/10/2026`);
+  const promoText = t("promo_text", `Grupo VIP no WhatsApp — válido até 01/10/2026`);
   const ctaFinalTitle = t("cta_final_title", "Pronto para começar?");
   const miniAppsTitle = t("mini_apps_title", "🧩 O que você vai encontrar");
 
   const faqs = [
     {
-      q: t("faq1_q", "Como funciona o período grátis?"),
-      a: t("faq1_a", `Você se cadastra e ganha ${TRIAL_DAYS} dias de acesso ao conteúdo, sem precisar informar cartão. No fim do período, é só assinar para continuar.`),
+      q: t("faq1_q", "Como funciona a assinatura?"),
+      a: t("faq1_a", `Você escolhe o plano da sua categoria e assina para ter acesso completo ao conteúdo.`),
     },
     {
       q: t("faq2_q", "Como entro no Grupo VIP do WhatsApp?"),
@@ -221,7 +221,7 @@ function PlanoPage() {
                     className="group inline-flex items-center gap-2 rounded-2xl bg-primary px-6 py-3.5 text-sm font-extrabold text-primary-foreground shadow-lg transition hover:-translate-y-0.5 hover:opacity-90 hover:shadow-xl"
                   >
                     <Sparkles className="h-4 w-4" />
-                    Começar meus {TRIAL_DAYS} dias grátis
+                    Começar agora
                     <span className="transition group-hover:translate-x-0.5">→</span>
                   </a>
                   <Link
@@ -344,7 +344,7 @@ function PlanoPage() {
         >
           <h2 className="font-display text-2xl font-extrabold md:text-3xl">{ctaFinalTitle}</h2>
           <p className="mt-2 text-sm opacity-80">
-            {formatPriceBRL(price)}/mês · {TRIAL_DAYS} dias grátis · cancele quando quiser
+            {formatPriceBRL(price)}/mês – cancele quando quiser
           </p>
           <div className="mt-5 flex flex-wrap justify-center gap-3">
             {subscribed ? (
@@ -370,7 +370,7 @@ function PlanoPage() {
                   className="inline-flex items-center gap-1.5 rounded-xl bg-primary px-6 py-3 text-sm font-extrabold text-primary-foreground shadow hover:opacity-90"
                 >
                   <Sparkles className="h-4 w-4" />
-                  Começar meus {TRIAL_DAYS} dias grátis
+                  Começar agora
                 </a>
                 <Link
                   to="/checkout"
@@ -390,3 +390,4 @@ function PlanoPage() {
     </AppShell>
   );
 }
+

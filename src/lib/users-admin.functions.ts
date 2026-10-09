@@ -1,4 +1,4 @@
-import { createServerFn } from "@tanstack/react-start";
+﻿import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 type Categoria = "academico" | "tecnico-estudante" | "tecnico" | "enfermeiro";
@@ -78,7 +78,7 @@ export const createUserAdmin = createServerFn({ method: "POST" })
     const phoneDigits = (d.phone || "").replace(/\D/g, "");
     if (phoneDigits.length < 10 || phoneDigits.length > 11) throw new Error("Celular inválido");
     if (!["academico", "tecnico-estudante", "tecnico", "enfermeiro"].includes(d.categoria)) throw new Error("Categoria inválida");
-    return { ...d, phone: phoneDigits, trial_days: d.trial_days ?? 15 };
+    return { ...d, phone: phoneDigits, trial_days: d.trial_days ?? 0 };
   })
   .handler(async ({ context, data }) => {
     await ensureAdmin(context);
@@ -225,3 +225,4 @@ export const resetPasswordAdmin = createServerFn({ method: "POST" })
     await logAction(context.userId, "reset_password", data.user_id, {});
     return { ok: true };
   });
+

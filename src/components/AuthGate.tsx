@@ -1,4 +1,4 @@
-import { isFreeTrialOpen, TRIAL_FREE_UNTIL_LABEL } from "@/lib/trial-window";
+﻿import { isFreeTrialOpen, TRIAL_FREE_UNTIL_LABEL } from "@/lib/trial-window";
 import { useEffect, useState, type ReactNode } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import type { Session } from "@supabase/supabase-js";
@@ -179,13 +179,13 @@ export function AuthScreen({ cadastroSlug: forcedCadastroSlug }: { cadastroSlug?
         }
 
         // Mantemos a proteção contra abuso, mas o acesso da campanha é concedido pelo banco
-        // até 30/09/2026, independentemente de serem 15 dias ou menos a partir do cadastro.
+        // Período gratuito encerrado.
         const deviceId = await getDeviceId();
         const check = await checkTrial({
           data: { email, phone_digits: phoneDigits, device_id: deviceId },
         });
         if (!check.allowed) {
-          throw new Error(check.reason || "Não foi possível liberar o período grátis.");
+          throw new Error(check.reason || "Não foi possível liberar o acesso.");
         }
 
         const { data, error } = await supabase.auth.signUp({
@@ -460,3 +460,4 @@ export function AuthScreen({ cadastroSlug: forcedCadastroSlug }: { cadastroSlug?
 export async function signOut() {
   await supabase.auth.signOut();
 }
+

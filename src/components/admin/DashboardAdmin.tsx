@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+﻿import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/AppShell";
 import { BarChart3, Users, Smartphone, TrendingUp, Trophy } from "lucide-react";
@@ -130,7 +130,7 @@ export function DashboardAdmin() {
                   </div>
                 </div>
                 {m.gratuito ? (
-                  <span className="text-[9px] font-black bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full uppercase">Grátis</span>
+                  <span className="text-[9px] font-black bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full uppercase">Sem assinatura</span>
                 ) : (
                   <span className="text-[9px] font-black bg-gold/10 text-gold-dark px-2 py-0.5 rounded-full uppercase italic">Premium</span>
                 )}
@@ -155,3 +155,4 @@ export function DashboardAdmin() {
     </div>
   );
 }
+

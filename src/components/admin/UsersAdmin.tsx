@@ -1,4 +1,4 @@
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+﻿import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState, useMemo } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { UserPlus, Pencil, Trash2, KeyRound, Calendar, Search } from "lucide-react";
@@ -210,7 +210,7 @@ function FormShell({ title, children, onClose, submitting, error, onSubmit, subm
 
 function CreateUserForm({ onClose }: { onClose: () => void }) {
   const create = useServerFn(createUserAdmin);
-  const [form, setForm] = useState({ email: "", password: "", full_name: "", phone: "", categoria: "academico" as Categoria, trial_days: 15 });
+  const [form, setForm] = useState({ email: "", password: "", full_name: "", phone: "", categoria: "academico" as Categoria, trial_days: 0 });
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
 
@@ -224,7 +224,7 @@ function CreateUserForm({ onClose }: { onClose: () => void }) {
   }
 
   return (
-    <FormShell title="Criar novo usuário" onClose={onClose} submitting={busy} error={err} onSubmit={save} submitLabel="Criar com 15 dias trial">
+    <FormShell title="Criar novo usuário" onClose={onClose} submitting={busy} error={err} onSubmit={save} submitLabel="Criar usuario">
       <label className="block"><span className="mb-1 block text-xs font-semibold uppercase text-muted-foreground">Nome completo *</span>
         <input className={input} value={form.full_name} onChange={(e) => setForm({ ...form, full_name: e.target.value })} required /></label>
       <div className="grid gap-3 sm:grid-cols-2">
@@ -376,3 +376,4 @@ function ExtendTrialForm({ user, onClose }: { user: UserRow; onClose: () => void
     </FormShell>
   );
 }
+

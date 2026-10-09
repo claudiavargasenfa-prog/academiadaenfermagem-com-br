@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+﻿import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState, useMemo } from "react";
 import { Pencil, Plus, Trash2, ArrowLeft, LayoutGrid, FlaskConical } from "lucide-react";
@@ -1079,7 +1079,7 @@ function MiniAppForm({
               checked={form.gratuito}
               onChange={(e) => setForm({ ...form, gratuito: e.target.checked })}
             />
-            <span>Grátis</span>
+            <span>Sem assinatura</span>
           </label>
           <label className="flex items-center gap-2">
             <input
@@ -1288,3 +1288,4 @@ function ContentMarkdownEditor({
     </div>
   );
 }
+

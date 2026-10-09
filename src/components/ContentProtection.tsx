@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from "react";
+﻿import { useEffect, useState, type ReactNode } from "react";
 import { isMercadoPagoUrl } from "@/lib/mp-links";
 import { Link } from "@tanstack/react-router";
 import { Lock, ExternalLink, Sparkles, Clock3, ShieldCheck } from "lucide-react";
@@ -72,12 +72,12 @@ function RenewalNotice({ days, expiresAt }: { days: number; expiresAt: string })
         </div>
         <div className="min-w-0 flex-1">
           <p className="text-sm font-extrabold">
-            {days === 5 ? "Faltam 5 dias para o fim do acesso gratuito." : finalDay ? "Seu acesso gratuito termina amanhã." : "Faltam 3 dias para o fim do acesso gratuito."}
+            {days === 5 ? "Faltam 5 dias para o fim da sua assinatura." : finalDay ? "Seu acesso por assinatura termina amanhã." : "Faltam 3 dias para o fim da sua assinatura."}
           </p>
           <p className="mt-1 text-xs leading-5 opacity-90">
             {finalDay
-              ? `O período gratuito termina em ${CAMPAIGN_FREE_UNTIL_LABEL}. Para continuar com todos os conteúdos e benefícios, faça sua assinatura antes do encerramento.`
-              : `Seu acesso gratuito termina em ${CAMPAIGN_FREE_UNTIL_LABEL}. Você ainda tem acesso completo durante a campanha. Escolha seu plano com antecedência para não interromper seu acesso.`}
+              ? `O assinatura termina em ${CAMPAIGN_FREE_UNTIL_LABEL}. Para continuar com todos os conteúdos e benefícios, faça sua assinatura antes do encerramento.`
+              : `Seu acesso por assinatura termina em ${CAMPAIGN_FREE_UNTIL_LABEL}. Você ainda tem acesso completo durante a campanha. Escolha seu plano com antecedência para não interromper seu acesso.`}
           </p>
           <div className="mt-3 flex flex-wrap items-center gap-2">
             <Link to="/" className="inline-flex items-center gap-1.5 rounded-xl bg-primary px-3 py-2 text-xs font-bold text-primary-foreground shadow-sm hover:opacity-90"><Sparkles className="h-3.5 w-3.5" /> Ver planos e assinar</Link>
@@ -101,7 +101,7 @@ export function AppAccessGate({ slug, children, allowPrint = false }: { slug: st
       <div className="glass mx-auto mt-6 max-w-lg rounded-2xl border border-gold/40 p-6 text-center">
         <div className="mx-auto mb-3 grid h-14 w-14 place-items-center rounded-2xl bg-foreground/10"><Lock className="h-6 w-6 text-foreground/70" /></div>
         <h2 className="font-display text-xl font-bold">{app.name}</h2>
-        <p className="mt-2 text-sm text-muted-foreground">Seu acesso gratuito terminou. Para continuar tendo acesso aos conteúdos e benefícios, escolha uma assinatura vigente.</p>
+        <p className="mt-2 text-sm text-muted-foreground">Seu acesso por assinatura terminou. Para continuar tendo acesso aos conteúdos e benefícios, escolha uma assinatura vigente.</p>
         <div className="mt-3 space-y-1">{hasDiscount && <p className="text-sm font-semibold text-muted-foreground line-through">De {formatPriceBRL(fromCents)}</p>}<p className="text-3xl font-extrabold text-foreground">{hasDiscount ? "Por " : ""}{formatPriceBRL(app.price_cents)}</p></div>
         <div className="mt-4 flex flex-col gap-2">
           {isMercadoPagoUrl(app.cakto_checkout_url) ? <a href={app.cakto_checkout_url!} target="_blank" rel="noreferrer" className="inline-flex items-center justify-center gap-1 rounded-xl gold-gradient py-2.5 text-sm font-bold text-foreground"><Sparkles className="h-4 w-4" /> Assinar agora <ExternalLink className="h-3.5 w-3.5" /></a> : <Link to="/" className="inline-flex items-center justify-center rounded-xl gold-gradient py-2.5 text-sm font-bold text-foreground">Ver opções de assinatura</Link>}
@@ -123,3 +123,4 @@ export function AppAccessGate({ slug, children, allowPrint = false }: { slug: st
     </>
   );
 }
+

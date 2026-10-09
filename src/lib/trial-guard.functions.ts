@@ -1,4 +1,4 @@
-import { createServerFn } from "@tanstack/react-start";
+﻿import { createServerFn } from "@tanstack/react-start";
 import { TRIAL_FREE_UNTIL } from "@/lib/trial-window";
 
 
@@ -73,12 +73,12 @@ export const checkTrialEligibility = createServerFn({ method: "POST" })
       }
     }
 
-    // Durante a campanha (até 30/09/2026) todo mundo recebe os 15 dias grátis
+    // Durante a campanha (até 30/09/2026) todo mundo recebe os acesso por assinatura
     if (Date.now() <= TRIAL_FREE_UNTIL.getTime()) {
       return { allowed: true };
     }
 
-    // Bloqueia apenas se o MESMO celular já usou o grátis nos últimos 180 dias
+    // Bloqueia apenas se o MESMO celular já usou o periodo gratuito nos últimos 180 dias
     // (o device_id continua sendo gravado, mas não bloqueia — aparelhos parecidos colidem)
     const sinceDate = new Date(Date.now() - 180 * 86400000).toISOString();
 
@@ -101,7 +101,7 @@ export const checkTrialEligibility = createServerFn({ method: "POST" })
       return {
         allowed: false,
         reason:
-          "Detectamos que você já utilizou seu período grátis. Para continuar, assine um dos planos mensais — cancele quando quiser.",
+          "Detectamos que você já utilizou seu acesso gratuito. Para continuar, assine um dos planos mensais — cancele quando quiser.",
       };
     }
 
@@ -139,3 +139,4 @@ export const recordTrialFingerprint = createServerFn({ method: "POST" })
     if (error) console.error("[trial-guard] record error:", error);
     return { ok: !error };
   });
+

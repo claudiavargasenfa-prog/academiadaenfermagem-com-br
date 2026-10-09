@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+﻿import { createFileRoute } from "@tanstack/react-router";
 import { ContentProtection } from "@/components/ContentProtection";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
 import { MiniAppContent } from "@/components/MiniAppContent";
@@ -31,7 +31,7 @@ function Page() {
     <AppShell>
       <ContentProtection allowPrint>
       <PageHeader
-        eyebrow="Grátis"
+        eyebrow="Incluído"
         title="Manual de Sobrevivência do Estágio"
         description="Tudo que você precisa saber no seu primeiro dia de campo — sem pagar nada."
       />
@@ -98,3 +98,4 @@ function Page() {
     </AppShell>
   );
 }
+

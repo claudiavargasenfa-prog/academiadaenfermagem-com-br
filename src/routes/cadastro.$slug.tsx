@@ -1,4 +1,4 @@
-import { createFileRoute, notFound } from "@tanstack/react-router";
+﻿import { createFileRoute, notFound } from "@tanstack/react-router";
 
 import { WelcomeAuthScreen } from "@/components/AuthGate";
 
@@ -18,7 +18,7 @@ export const Route = createFileRoute("/cadastro/$slug")({
   },
   head: ({ params }) => {
     const label = LABELS[params.slug] ?? "Academia da Enfermagem";
-    const desc = `Crie seu cadastro para iniciar 15 dias grátis no app ${label}, sem cartão.`;
+    const desc = `Crie seu cadastro para acessar o app ${label}.`;
     return {
       meta: [
         { title: `Cadastro ${label} — Academia da Enfermagem` },

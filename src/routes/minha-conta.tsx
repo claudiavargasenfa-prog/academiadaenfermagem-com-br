@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+﻿import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { AppShell, Card, PageHeader } from "@/components/AppShell";
@@ -93,7 +93,7 @@ function MinhaContaPage() {
                     {track?.label ?? s.plan_slug}
                   </p>
                   <p className="mt-1 text-sm font-semibold">
-                    {isTrial ? "Período gratuito" : "Assinatura ativa"}
+                    {isTrial ? "Período de teste" : "Assinatura ativa"}
                   </p>
                   <p className="mt-1 text-xs text-muted-foreground">
                     {isTrial ? "Termina em " : "Vence em "}
@@ -172,3 +172,4 @@ function MinhaContaPage() {
     </AppShell>
   );
 }
+

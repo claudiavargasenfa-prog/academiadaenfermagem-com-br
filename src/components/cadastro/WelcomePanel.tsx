@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useMpLink } from "@/lib/mp-links";
@@ -140,10 +140,10 @@ export function WelcomePanel({ slug }: { slug: string }) {
         {freeOpen ? (
           <>
             <p className="mt-3 text-sm font-extrabold text-foreground md:text-base">
-              Atenção: No período gratuito você tem direito a cadastrar-se em um app.
+              Você tem direito a cadastrar-se em um app.
             </p>
             <p className="mt-1 text-sm font-extrabold text-foreground md:text-base">
-              O período gratuito de teste é de {TRIAL_FREE_START_LABEL} a {TRIAL_FREE_UNTIL_LABEL}.
+              Para ter acesso ao conteúdo, escolha um plano e assine.
             </p>
           </>
         ) : (
@@ -151,11 +151,11 @@ export function WelcomePanel({ slug }: { slug: string }) {
             <div className="flex items-center gap-2">
               <AlertTriangle className="h-4 w-4 text-orange-600" />
               <span className="text-sm font-extrabold text-orange-900">
-                Período gratuito encerrado
+                Acesso por assinatura
               </span>
             </div>
             <p className="mt-2 text-sm text-foreground/80">
-              A degustação de 15 dias foi válida até <b>{TRIAL_FREE_UNTIL_LABEL}</b>. Novos cadastros
+              Novos cadastros
               não recebem mais acesso gratuito — para entrar no app é preciso{" "}
               <b>assinar o plano da sua categoria</b>. Você pode criar sua conta normalmente e
               liberar o conteúdo logo após a assinatura.
@@ -184,12 +184,12 @@ export function WelcomePanel({ slug }: { slug: string }) {
                     <CheckCircle2 className="h-4 w-4 text-emerald-600" />
                   )}
                   <span className="text-sm font-extrabold">
-                    {sub.status === "trial" ? "Acesso gratuito (teste)" : "Acesso pago ativo"}
+                    {sub.status === "trial" ? "Assinatura ativa" : "Acesso pago ativo"}
                   </span>
                 </div>
                 <p className="mt-2 text-sm text-muted-foreground">
                   {sub.status === "trial"
-                    ? `Faltam ${daysLeft(sub.expires_at)} dia(s) do seu período gratuito.`
+                    ? `Sua assinatura expira em ${daysLeft(sub.expires_at)} dia(s).`
                     : `Seu acesso é válido até ${new Date(sub.expires_at).toLocaleDateString("pt-BR")} (${daysLeft(sub.expires_at)} dias).`}
                 </p>
                 <p className="mt-1 text-xs text-muted-foreground">
@@ -292,10 +292,10 @@ export function WelcomePanel({ slug }: { slug: string }) {
           </a>
         </div>
 
-        {/* Instalar app grátis */}
+        {/* Instalar app */}
         <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border/60 bg-background/70 p-4">
           <div>
-            <p className="text-sm font-extrabold">Baixe grátis o nosso app</p>
+            <p className="text-sm font-extrabold">Baixe nosso app</p>
             <p className="text-xs text-muted-foreground">
               Instale na tela inicial do celular e acesse offline, em 1 toque.
             </p>
@@ -305,7 +305,7 @@ export function WelcomePanel({ slug }: { slug: string }) {
             onClick={install}
             className="inline-flex items-center gap-2 rounded-xl gold-gradient px-4 py-2 text-sm font-extrabold"
           >
-            <Download className="h-4 w-4" /> Instalar grátis
+            <Download className="h-4 w-4" /> Instalar
           </button>
         </div>
 
@@ -344,3 +344,4 @@ export function WelcomePanel({ slug }: { slug: string }) {
     </aside>
   );
 }
+

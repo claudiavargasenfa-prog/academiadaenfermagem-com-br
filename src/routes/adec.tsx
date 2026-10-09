@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+﻿import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
@@ -46,7 +46,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { CountUp, Marquee, Reveal, ShineCTA, StickyCTA, WordReveal } from "@/components/adec/fx";
 import { PhoneMockup } from "@/components/adec/PhoneMockup";
 
-const TRIAL_DAYS = 15;
+const TRIAL_DAYS = 0; // Período gratuito encerrado
 
 /** Paleta original mantida: fundo verde água + CTA verde fechado + detalhes ouro + urgência laranja */
 const C = {
@@ -64,9 +64,9 @@ const C = {
   cardStrong: "rgba(255,255,255,0.85)",
 };
 
-const CTA_TOPO = "QUERO TESTAR GRÁTIS POR 15 DIAS →";
+const CTA_TOPO = "QUERO COMEÇAR AGORA 🚀";
 const CTA_MEIO = "SIM, QUERO TRANSFORMAR MEU PLANTÃO";
-const CTA_RODAPE = "COMEÇAR MEU TESTE GRÁTIS →";
+const CTA_RODAPE = "COMEÇAR AGORA 🚀";
 
 /** Fase de inauguração: sem números de usuários e sem depoimentos até termos casos reais. */
 const LANCAMENTO = "Turma de inauguração";
@@ -225,9 +225,9 @@ const AUTOMATICOS = [
 
 export const Route = createFileRoute("/adec")({
   head: () => {
-    const title = "Inauguração da ADEC — Academia da Enfermagem | 15 dias grátis";
+    const title = "Inauguração da ADEC — Academia da Enfermagem | acesso exclusivo";
     const description =
-      "Inauguração da ADEC: 4 apps de suporte à decisão clínica para acadêmicos, técnicos e enfermeiros. Anotação automática, SAE, cálculos e escalas. 15 dias grátis, sem cartão.";
+      "Inauguração da ADEC: 4 apps de suporte à decisão clínica para acadêmicos, técnicos e enfermeiros. Anotação automática, SAE, cálculos e escalas. acesso exclusivo.";
     return {
       meta: [
         { title },
@@ -349,7 +349,7 @@ function AdecPage() {
   };
 
   const chips = [
-    { Icon: CalendarCheck, label: `${TRIAL_DAYS} dias grátis` },
+    { Icon: CalendarCheck, label: `${TRIAL_DAYS} acesso exclusivo` },
     { Icon: CreditCard, label: "Sem cartão no cadastro" },
     { Icon: WifiOff, label: "Funciona offline" },
     { Icon: RefreshCw, label: "Atualizações contínuas" },
@@ -397,7 +397,7 @@ function AdecPage() {
         <span className="inline-flex items-center gap-1.5">
           <Flame className="h-3.5 w-3.5" />
           <PartyPopper className="h-3.5 w-3.5" />
-          Inauguração da ADEC — turma fundadora aberta: comece hoje com {TRIAL_DAYS} dias grátis
+          Inauguração da ADEC — turma fundadora aberta: comece hoje com {TRIAL_DAYS} acesso exclusivo
         </span>
         <span
           className="adec-shine pointer-events-none absolute inset-y-0 -left-1/3 w-1/3"
@@ -856,7 +856,7 @@ function AdecPage() {
           <SectionTitle
             eyebrow="Escolha seu app"
             title={t("planos_title", "4 apps, um só padrão de excelência")}
-            sub={`${TRIAL_DAYS} dias grátis, sem cartão. Cancele quando quiser.`}
+            sub={`${TRIAL_DAYS} acesso exclusivo. Cancele quando quiser.`}
           />
 
           <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
@@ -919,14 +919,14 @@ function AdecPage() {
                         style={{ color: C.orange }}
                       >
                         <Sparkles className="h-3 w-3" />
-                        {TRIAL_DAYS} dias grátis · sem cartão
+                        {TRIAL_DAYS} acesso exclusivo · sem cartão
                       </p>
 
                       <p
                         className="mt-2 rounded-lg px-2 py-1.5 text-[11px] font-bold leading-snug"
                         style={{ background: "rgba(212,175,55,0.16)", color: C.ink }}
                       >
-                        Período de teste grátis, 15 dias, para quem acessar entre os dias 10.08.2026 a 10.09.2026
+                        Período de acesso exclusivo, 15 dias, para quem acessar entre os dias 10.08.2026 a 10.09.2026
                       </p>
                     </div>
 
@@ -1110,7 +1110,7 @@ function AdecPage() {
               {
                 icon: ShieldCheck,
                 title: "Teste sem risco",
-                desc: `${TRIAL_DAYS} dias grátis, sem cartão no cadastro. Você usa no plantão de verdade antes de decidir.`,
+                desc: `${TRIAL_DAYS} acesso exclusivo, sem cartão no cadastro. Você usa no plantão de verdade antes de decidir.`,
               },
             ].map((c, i) => (
               <Reveal key={c.title} delay={i * 0.1}>
@@ -1193,7 +1193,7 @@ function AdecPage() {
           <div className="mx-auto mt-8 max-w-3xl space-y-2">
             {[
               {
-                q: "Como funciona o período grátis?",
+                q: "Como funciona o assinatura ativa?",
                 a: `Você se cadastra e ganha ${TRIAL_DAYS} dias de acesso completo, sem precisar informar cartão. No fim do período, é só assinar para continuar.`,
               },
               {
@@ -1337,7 +1337,7 @@ function AdecPage() {
       <StickyCTA
         href="#planos"
         label={CTA_TOPO}
-        hint={`${LANCAMENTO} · ${TRIAL_DAYS} dias grátis, sem cartão`}
+        hint={`${LANCAMENTO} · ${TRIAL_DAYS} acesso exclusivo, sem cartão`}
         bg={C.cta}
         fg="rgba(255,255,255,0.9)"
         accent={C.goldBright}
@@ -1345,3 +1345,4 @@ function AdecPage() {
     </div>
   );
 }
+
