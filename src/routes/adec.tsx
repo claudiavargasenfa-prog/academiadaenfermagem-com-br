@@ -26,7 +26,6 @@ import {
   WifiOff,
   RefreshCw,
   X,
-  PartyPopper,
 } from "lucide-react";
 import {
   Dialog,
@@ -64,12 +63,10 @@ const C = {
   cardStrong: "rgba(255,255,255,0.85)",
 };
 
-const CTA_TOPO = "QUERO COMEÇAR AGORA 🚀";
+const CTA_TOPO = "QUERO MINHA LICENÇA ANUAL →";
 const CTA_MEIO = "SIM, QUERO TRANSFORMAR MEU PLANTÃO";
 const CTA_RODAPE = "COMEÇAR AGORA 🚀";
 
-/** Fase de inauguração: sem números de usuários e sem depoimentos até termos casos reais. */
-const LANCAMENTO = "Turma de inauguração";
 
 const PLANOS = [
   {
@@ -365,10 +362,10 @@ function AdecPage() {
   };
 
   const chips = [
-    { Icon: CalendarCheck, label: "Licença anual completa" },
-    { Icon: CreditCard, label: "PIX ou cartão" },
-    { Icon: WifiOff, label: "Funciona offline" },
-    { Icon: RefreshCw, label: "Atualizações contínuas" },
+    { Icon: ShieldCheck, label: "Acesso Imediato" },
+    { Icon: CalendarCheck, label: "Licença Anual (Sem Mensalidades)" },
+    { Icon: WifiOff, label: "Funciona Offline no Celular" },
+    { Icon: RefreshCw, label: "Atualizações Contínuas" },
   ];
 
   return (
@@ -405,16 +402,24 @@ function AdecPage() {
         <div className="adec-grain absolute inset-0 opacity-[0.06] mix-blend-multiply" />
       </div>
 
-      {/* Barra de urgência */}
+      {/* Banner superior da plataforma */}
       <div
-        className="relative w-full overflow-hidden px-4 py-2 text-center text-[11px] font-extrabold uppercase tracking-widest md:text-xs"
+        className="relative w-full overflow-hidden px-4 py-2.5 text-center text-[11px] font-extrabold tracking-wide md:text-xs"
         style={{ background: C.orange, color: "#fff" }}
       >
-        <span className="inline-flex items-center gap-1.5">
-          <Flame className="h-3.5 w-3.5" />
-          <PartyPopper className="h-3.5 w-3.5" />
-          Inauguração da ADEC — turma fundadora aberta: adquira sua licença anual e comece hoje
-        </span>
+        <div className="relative mx-auto flex max-w-7xl flex-col items-center justify-center gap-2 sm:flex-row sm:gap-4">
+          <p className="inline-flex items-center gap-1.5 leading-relaxed">
+            <span aria-hidden="true" className="text-base">⚡</span>
+            Plataforma ADEC: Otimize suas evoluções e cálculos de plantão em 2 cliques com Licença Anual.
+          </p>
+          <a
+            href="#planos"
+            className="inline-flex shrink-0 items-center justify-center gap-1 rounded-full bg-white px-4 py-2 font-black uppercase tracking-wide transition hover:-translate-y-0.5 hover:bg-amber-50"
+            style={{ color: C.cta }}
+          >
+            VER PLANOS ANUAIS <ArrowRight className="h-3.5 w-3.5" />
+          </a>
+        </div>
         <span
           className="adec-shine pointer-events-none absolute inset-y-0 -left-1/3 w-1/3"
           style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)" }}
@@ -479,14 +484,11 @@ function AdecPage() {
                 style={{ background: C.orange, color: "#fff", boxShadow: "0 0 0 0 rgba(234,88,12,0.6)" }}
               >
                 <Sparkles className="h-3.5 w-3.5" />
-                {t("hero_selo", "Inauguração oficial — estamos abrindo as portas")}
+                Plataforma Privada de Suporte à Decisão Clínica
               </motion.span>
 
               <WordReveal
-                text={t(
-                  "hero_title",
-                  "A ADEC está sendo inaugurada: automatize suas anotações com 2 cliques e foque no paciente.",
-                )}
+                text="Otimize suas evoluções e cálculos de plantão em 2 cliques."
                 delay={0.2}
                 className="mt-6 max-w-3xl font-display text-3xl font-extrabold leading-[1.12] tracking-tight md:text-5xl"
                 style={{ color: C.ink }}
@@ -512,11 +514,6 @@ function AdecPage() {
                 </ShineCTA>
               </div>
 
-              <p className="mt-3 flex items-center gap-1.5 text-xs font-bold md:text-sm" style={{ color: C.orange }}>
-                <Sparkles className="h-3.5 w-3.5" />
-                {LANCAMENTO}: os primeiros assinantes entram com acesso completo e canal direto com a autora
-              </p>
-
               <div className="mt-7 flex flex-wrap justify-center gap-2 lg:justify-start">
                 {chips.map((c, i) => (
                   <motion.span
@@ -535,7 +532,7 @@ function AdecPage() {
 
               <p className="mt-6 flex items-center gap-1.5 text-xs font-semibold" style={{ color: C.inkSoft }}>
                 <ShieldCheck className="h-3.5 w-3.5" style={{ color: C.gold }} />
-                Compra 100% segura · PIX ou cartão · Licença anual
+                Compra 100% Segura • Acesso Imediato via PIX ou Cartão
               </p>
             </div>
 
@@ -1352,7 +1349,7 @@ function AdecPage() {
       <StickyCTA
         href="#planos"
         label={CTA_TOPO}
-        hint={`${LANCAMENTO} · Licença anual completa · PIX ou cartão`}
+        hint="Licença anual sem mensalidades · Acesso imediato via PIX ou cartão"
         bg={C.cta}
         fg="rgba(255,255,255,0.9)"
         accent={C.goldBright}
