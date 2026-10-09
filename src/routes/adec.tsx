@@ -1,4 +1,4 @@
-﻿import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
@@ -73,59 +73,75 @@ const LANCAMENTO = "Turma de inauguração";
 
 const PLANOS = [
   {
-    slug: "academico",
-    Icon: GraduationCap,
-    label: "Academia do Acadêmico",
-    tag: "Para o graduando de Enfermagem",
-    dor: "Do primeiro ao último estágio, sem sofrer.",
-    bullets: [
-      "Chegue no estágio sabendo exatamente o que fazer",
-      "Escalas clínicas na mão — sem caçar PDF na hora",
-      "Procedimentos passo a passo antes de encostar no paciente",
-      "Obstetrícia, saúde mental e IRAS explicados de verdade",
-      "Passe nas provas sem abrir mão do seu descanso",
-    ],
-  },
-  {
     slug: "tecnico-estudante",
     Icon: BookMarked,
     label: "Estudante de Técnico",
-    tag: "Para quem ainda está no curso técnico",
-    dor: "Passa na prova, encara o campo com confiança.",
+    tagSuperior: "Formação Técnica",
+    tag: "Para quem está no curso técnico de enfermagem",
+    dor: "Raciocínio clínico inicial, checklists de procedimento e fixação prática sem pânico no campo de estágio.",
+    price: "R$ 37,97",
+    priceLabel: "Licença Anual • Parcela Única no PIX ou Cartão (Sem mensalidade)",
+    ctaLabel: "ADQUIRIR LICENÇA ANUAL — R$ 37,97",
     bullets: [
-      "Reconheça sinais de alerta sem travar na hora",
-      "Nunca mais tenha medo de errar uma medicação",
-      "Simulações reais de plantão para perder o nervosismo",
-      "Checklists que evitam o famoso branco no campo",
-      "Passe nas provas sem abrir mão do seu descanso",
+      "Checklists de procedimentos básicos passo a passo para o estágio",
+      "Suporte para cálculo e diluição segura de medicamentos",
+      "Modelos de anotações técnicas para treino e prática",
+      "Quizzes e simulações para provas e concursos",
+      "Acesso completo por 365 dias com atualizações do aplicativo",
     ],
   },
   {
     slug: "tecnico",
     Icon: Stethoscope,
     label: "Academia do Técnico",
-    tag: "Para o Técnico em Enfermagem atuando",
-    dor: "Prática segura, plantão tranquilo.",
+    tagSuperior: "Prática Assistencial",
+    tag: "Para o Técnico em Enfermagem em atuação no plantão",
+    dor: "Agilidade nos registros do turno, segurança na administração de medicamentos e otimização do tempo.",
+    price: "R$ 47,97",
+    priceLabel: "Licença Anual • Parcela Única no PIX ou Cartão (Sem mensalidade)",
+    ctaLabel: "ADQUIRIR LICENÇA ANUAL — R$ 47,97",
     bullets: [
-      "Ganhe horas de sono no pós-plantão com anotação automática",
-      "Vários pacientes organizados por abas, sem se perder",
-      "Nunca mais tenha medo de errar uma medicação",
-      "Saia do plantão no horário, com tudo registrado",
-      "Passe nas provas sem abrir mão do seu descanso",
+      "Automatizador de Anotação Técnica de Enfermagem",
+      "Organização de múltiplos pacientes por abas durante o plantão",
+      "Módulo de precisão para cálculos de dosagem e gotejamento",
+      "Consulta rápida a escalas clínicas e procedimentos de urgência",
+      "Funciona offline no celular para uso na beira do leito",
+    ],
+  },
+  {
+    slug: "academico",
+    Icon: GraduationCap,
+    label: "Academia do Acadêmico",
+    tagSuperior: "Graduação & Estágio",
+    tag: "Para o graduando em Enfermagem",
+    dor: "Do primeiro estágio à elaboração do relatório, com domínio da SAE e raciocínio diagnóstico autoral.",
+    price: "R$ 67,97",
+    priceLabel: "Licença Anual • Parcela Única no PIX ou Cartão (Sem mensalidade)",
+    ctaLabel: "ADQUIRIR LICENÇA ANUAL — R$ 67,97",
+    bullets: [
+      "Suporte ao Raciocínio Clínico e Diagnósticos de Enfermagem",
+      "Transformador de Diário de Bordo de Estágio em Relatório formatado (ABNT)",
+      "Guias de exame físico, anamnese e escalas clínicas integradas",
+      "Módulo de apoio à revisão para provas acadêmicas e residências",
+      "Emissão de certificados ao concluir as trilhas de atualização",
     ],
   },
   {
     slug: "enfermeiro",
     Icon: UserRound,
     label: "Academia do Enfermeiro",
-    tag: "Para o Enfermeiro assistencial e liderança",
-    dor: "Menos burocracia, mais assistência com tranquilidade.",
+    tagSuperior: "+ Escolhido • Decisão Clínica & Liderança",
+    tag: "Para o Enfermeiro assistencial, gestor ou preceptor",
+    dor: "Redução de burocracia, automação de processos clínicos e máxima precisão no registro do Processo de Enfermagem.",
+    price: "R$ 97,97",
+    priceLabel: "Licença Anual • Parcela Única no PIX ou Cartão (Sem mensalidade)",
+    ctaLabel: "ADQUIRIR LICENÇA ANUAL — R$ 97,97",
     bullets: [
-      "Evolução e prescrição prontas em 2 cliques",
-      "Ganhe horas de sono no pós-plantão",
-      "Durma tranquila: tudo amparado por COFEN/COREN",
-      "Acompanhe o plantão inteiro sem perder nenhum registro",
-      "Passe nas provas e concursos sem abrir mão do descanso",
+      "Gerador Automatizado de Evolução e Prescrição de Enfermagem",
+      "Raciocínio diagnóstico estruturado a partir dos sinais e sintomas informados",
+      "Suporte à Decisão Clínica com base nas normas e legislações vigentes da profissão",
+      "Acesso a 22+ escalas clínicas atualizadas com pontuação automática",
+      "Atualizações contínuas e suporte priorizado",
     ],
   },
 ];
@@ -274,10 +290,10 @@ export const Route = createFileRoute("/adec")({
             mainEntity: [
               {
                 "@type": "Question",
-                name: "Preciso de cartão de crédito para testar?",
+                name: "Como faço para adquirir o acesso?",
                 acceptedAnswer: {
                   "@type": "Answer",
-                  text: "Não. O teste de 15 dias é liberado no cadastro, sem cartão de crédito.",
+                  text: "Escolha o plano da sua categoria profissional, clique em 'Adquirir Licença Anual' e conclua o pagamento via PIX ou cartão. O acesso é liberado imediatamente após a confirmação.",
                 },
               },
               {
@@ -349,8 +365,8 @@ function AdecPage() {
   };
 
   const chips = [
-    { Icon: CalendarCheck, label: `${TRIAL_DAYS} acesso exclusivo` },
-    { Icon: CreditCard, label: "Sem cartão no cadastro" },
+    { Icon: CalendarCheck, label: "Licença anual completa" },
+    { Icon: CreditCard, label: "PIX ou cartão" },
     { Icon: WifiOff, label: "Funciona offline" },
     { Icon: RefreshCw, label: "Atualizações contínuas" },
   ];
@@ -397,7 +413,7 @@ function AdecPage() {
         <span className="inline-flex items-center gap-1.5">
           <Flame className="h-3.5 w-3.5" />
           <PartyPopper className="h-3.5 w-3.5" />
-          Inauguração da ADEC — turma fundadora aberta: comece hoje com {TRIAL_DAYS} acesso exclusivo
+          Inauguração da ADEC — turma fundadora aberta: adquira sua licença anual e comece hoje
         </span>
         <span
           className="adec-shine pointer-events-none absolute inset-y-0 -left-1/3 w-1/3"
@@ -519,7 +535,7 @@ function AdecPage() {
 
               <p className="mt-6 flex items-center gap-1.5 text-xs font-semibold" style={{ color: C.inkSoft }}>
                 <ShieldCheck className="h-3.5 w-3.5" style={{ color: C.gold }} />
-                Compra segura · PIX ou cartão só depois do teste
+                Compra 100% segura · PIX ou cartão · Licença anual
               </p>
             </div>
 
@@ -856,7 +872,7 @@ function AdecPage() {
           <SectionTitle
             eyebrow="Escolha seu app"
             title={t("planos_title", "4 apps, um só padrão de excelência")}
-            sub={`${TRIAL_DAYS} acesso exclusivo. Cancele quando quiser.`}
+            sub="Licença anual completa. Acesso imediato. Pague uma vez, use o ano todo."
           />
 
           <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
@@ -886,6 +902,14 @@ function AdecPage() {
                         + escolhido
                       </span>
                     )}
+                    {!destacado && (
+                      <span
+                        className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest shadow"
+                        style={{ background: C.gold, color: "#fff" }}
+                      >
+                        {p.tagSuperior}
+                      </span>
+                    )}
 
                     <div
                       className="grid h-14 w-14 place-items-center rounded-2xl"
@@ -900,33 +924,25 @@ function AdecPage() {
                     <p className="mt-1 text-xs font-semibold" style={{ color: C.inkSoft }}>
                       {p.tag}
                     </p>
-                    <p className="mt-2 text-sm font-semibold" style={{ color: C.gold }}>
+                    <p className="mt-2 text-sm font-semibold leading-snug" style={{ color: C.gold }}>
                       {p.dor}
                     </p>
 
                     <div className="mt-4">
                       <div className="flex items-baseline gap-1">
                         <span className="font-display text-3xl font-extrabold" style={{ color: C.ink }}>
-                          R$ 0,00
+                          {p.price}
                         </span>
                         <span className="text-xs font-bold" style={{ color: C.inkSoft }}>
-                          /mês
+                          /ano
                         </span>
                       </div>
 
                       <p
-                        className="mt-1 inline-flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wide"
-                        style={{ color: C.orange }}
+                        className="mt-1 text-[11px] font-semibold leading-snug"
+                        style={{ color: C.inkSoft }}
                       >
-                        <Sparkles className="h-3 w-3" />
-                        {TRIAL_DAYS} acesso exclusivo · sem cartão
-                      </p>
-
-                      <p
-                        className="mt-2 rounded-lg px-2 py-1.5 text-[11px] font-bold leading-snug"
-                        style={{ background: "rgba(212,175,55,0.16)", color: C.ink }}
-                      >
-                        Período de acesso exclusivo, 15 dias, para quem acessar entre os dias 10.08.2026 a 10.09.2026
+                        {p.priceLabel}
                       </p>
                     </div>
 
@@ -956,7 +972,7 @@ function AdecPage() {
                           className="inline-flex items-center justify-center gap-1.5 rounded-xl px-4 py-3 text-center text-xs font-extrabold uppercase leading-tight tracking-wide transition hover:-translate-y-0.5"
                           style={ctaStyle}
                         >
-                          {CTA_TOPO}
+                          {p.ctaLabel}
                         </a>
                       )}
                     </div>
@@ -1052,11 +1068,11 @@ function AdecPage() {
               <div className="flex items-center gap-2">
                 <ShieldCheck className="h-6 w-6" style={{ color: C.cta }} />
                 <p className="font-display text-lg font-extrabold" style={{ color: C.ink }}>
-                  Garantia real de {TRIAL_DAYS} dias
+                  Pagamento 100% seguro
                 </p>
               </div>
               <p className="mt-2 text-sm" style={{ color: C.inkSoft }}>
-                Você entra, testa tudo, e só assina se quiser continuar. Sem cartão no cadastro, sem cobrança escondida.
+                Pague via PIX ou cartão de crédito com total segurança. Licença anual sem mensalidade — pague uma vez e use o ano todo.
               </p>
             </div>
           </Reveal>
@@ -1079,7 +1095,7 @@ function AdecPage() {
                 style={{ background: C.orange, color: "#fff" }}
               >
                 <Flame className="h-3.5 w-3.5" />
-                Grupo VIP da inauguração — o convite chega ao ativar seu teste
+                Grupo VIP da inauguração — o convite chega após a confirmação do seu plano
               </p>
             </div>
           </Reveal>
@@ -1109,8 +1125,8 @@ function AdecPage() {
               },
               {
                 icon: ShieldCheck,
-                title: "Teste sem risco",
-                desc: `${TRIAL_DAYS} acesso exclusivo, sem cartão no cadastro. Você usa no plantão de verdade antes de decidir.`,
+                title: "Acesso imediato",
+                desc: "Após a confirmação do pagamento, seu acesso é liberado na hora. Licença anual completa, sem mensalidade.",
               },
             ].map((c, i) => (
               <Reveal key={c.title} delay={i * 0.1}>
@@ -1193,8 +1209,8 @@ function AdecPage() {
           <div className="mx-auto mt-8 max-w-3xl space-y-2">
             {[
               {
-                q: "Como funciona o assinatura ativa?",
-                a: `Você se cadastra e ganha ${TRIAL_DAYS} dias de acesso completo, sem precisar informar cartão. No fim do período, é só assinar para continuar.`,
+                q: "Como funciona a aquisição do acesso?",
+                a: "Escolha o plano da sua categoria, clique em 'Adquirir Licença Anual' e pague via PIX ou cartão. O acesso é liberado imediatamente após a confirmação do pagamento. Você recebe 365 dias de acesso completo, sem mensalidade.",
               },
               {
                 q: "Posso cancelar quando quiser?",
@@ -1321,9 +1337,8 @@ function AdecPage() {
         </section>
 
         <footer className="mt-8 text-center text-[11px]" style={{ color: C.inkSoft }}>
-          <p className="mx-auto max-w-2xl leading-relaxed">
-            Aviso Legal: ferramenta de apoio à decisão clínica. Não substitui o julgamento técnico do
-            profissional, o exame do paciente nem as fontes oficiais (COFEN, COREN, MS, ANVISA).
+          <p className="mx-auto max-w-3xl leading-relaxed">
+            <strong>Aviso Legal e Institucional:</strong> A ADEC (Academia da Enfermagem) é um ecossistema autoral privado de suporte à decisão clínica e aprendizagem contínua. As ferramentas, modelos de evolução, calculadoras e guias foram desenvolvidos com base em literatura técnico-científica e nas resoluções públicas vigentes do COFEN, Ministério da Saúde e ANVISA. A ADEC é uma iniciativa independente e não possui vínculo, homologação ou endosso institucional direto por parte dos Conselhos de Enfermagem (COFEN/CORENs). O uso das ferramentas não substitui o julgamento técnico, ético e individual do profissional responsável.
           </p>
           <p className="mt-2">
             <Link to="/legal" className="font-extrabold underline" style={{ color: C.goldBright }}>
@@ -1337,7 +1352,7 @@ function AdecPage() {
       <StickyCTA
         href="#planos"
         label={CTA_TOPO}
-        hint={`${LANCAMENTO} · ${TRIAL_DAYS} acesso exclusivo, sem cartão`}
+        hint={`${LANCAMENTO} · Licença anual completa · PIX ou cartão`}
         bg={C.cta}
         fg="rgba(255,255,255,0.9)"
         accent={C.goldBright}
