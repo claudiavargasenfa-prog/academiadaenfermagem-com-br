@@ -18,7 +18,7 @@ export const Route = createFileRoute("/.lovable/oauth/consent")({
     { name: "twitter:card", content: "summary" },
     { name: "robots", content: "noindex,nofollow" },
   ] }),
-  component: () => <AuthGate><Consent /></AuthGate>,
+  component: () => <AuthGate signInOnly><Consent /></AuthGate>,
 });
 
 function Consent() {
@@ -33,6 +33,7 @@ function Consent() {
       try {
         if (!authorization_id) throw new Error("Solicitação de autorização ausente. Inicie a conexão novamente no agente.");
         const { data, error } = await supabase.auth.oauth.getAuthorizationDetails(authorization_id);
+        if (error?.message.includes("unauthorized request origin")) throw new Error("A autorização precisa ser concluída no endereço oficial do aplicativo, após publicar esta versão.");
         if (error || !data) throw new Error("Esta solicitação venceu ou não está disponível. Inicie a conexão novamente no agente.");
         if (!active) return;
         if ("redirect_url" in data) { window.location.assign(data.redirect_url); return; }

@@ -13,7 +13,7 @@ import { traduzirErro } from "@/lib/auth-errors";
 import { formatPhoneBR, validatePhoneBR } from "@/lib/phone-br";
 import { oauthReturnPath } from "@/lib/oauth-return-path";
 
-export function AuthGate({ children }: { children: ReactNode }) {
+export function AuthGate({ children, signInOnly = false }: { children: ReactNode; signInOnly?: boolean }) {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -55,7 +55,7 @@ export function AuthGate({ children }: { children: ReactNode }) {
     );
   }
 
-  if (!session) return <WelcomeAuthScreen />;
+  if (!session) return signInOnly ? <AuthScreen /> : <WelcomeAuthScreen />;
   return <>{children}</>;
 }
 
