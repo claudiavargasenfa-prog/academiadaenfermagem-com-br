@@ -11,8 +11,9 @@ import { checkTrialEligibility, recordTrialFingerprint } from "@/lib/trial-guard
 import { WelcomePanel } from "@/components/cadastro/WelcomePanel";
 import { traduzirErro } from "@/lib/auth-errors";
 import { formatPhoneBR, validatePhoneBR } from "@/lib/phone-br";
+import { oauthReturnPath } from "@/lib/oauth-return-path";
 
-export function AuthGate({ children }: { children: ReactNode }) {
+export function AuthGate({ children, signInOnly = false }: { children: ReactNode; signInOnly?: boolean }) {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -54,7 +55,7 @@ export function AuthGate({ children }: { children: ReactNode }) {
     );
   }
 
-  if (!session) return <WelcomeAuthScreen />;
+  if (!session) return signInOnly ? <AuthScreen /> : <WelcomeAuthScreen />;
   return <>{children}</>;
 }
 
@@ -62,13 +63,13 @@ const CADASTRO_SLUGS = ["academico", "tecnico", "tecnico-estudante", "enfermeiro
 const LOGIN_DESTINATION_KEY = "adec-login-destination";
 
 function safeDestination(path: string | null | undefined): string {
-  if (!path || !path.startsWith("/") || path.startsWith("//")) return "/minha-conta";
-  return path;
+  const safe = oauthReturnPath(path);
+  return safe === "/" ? "/minha-conta" : safe;
 }
 
 function currentLoginDestination(): string {
   if (typeof window === "undefined") return "/minha-conta";
-  const current = `${window.location.pathname}${window.location.search}`;
+  const current = `${window.location.pathname}${window.location.search}${window.location.hash}`;
   return current === "/" ? "/minha-conta" : safeDestination(current);
 }
 
@@ -192,7 +193,9 @@ export function AuthScreen({ cadastroSlug: forcedCadastroSlug }: { cadastroSlug?
           email,
           password,
           options: {
-            emailRedirectTo: `${window.location.origin}/trilha/${categoria}`,
+            emailRedirectTo: window.location.pathname === "/.lovable/oauth/consent"
+              ? new URL(currentLoginDestination(), window.location.origin).href
+              : `${window.location.origin}/trilha/${categoria}`,
             data: {
               full_name: nome.trim(),
               phone: phoneDigits,
@@ -251,7 +254,9 @@ export function AuthScreen({ cadastroSlug: forcedCadastroSlug }: { cadastroSlug?
       const destination = currentLoginDestination();
       rememberLoginDestination(destination);
       const result = await lovable.auth.signInWithOAuth("google", {
-        redirect_uri: window.location.origin,
+        redirect_uri: window.location.pathname === "/.lovable/oauth/consent"
+          ? new URL(destination, window.location.origin).href
+          : window.location.origin,
         extraParams: { prompt: "select_account" },
       });
       if (result.error) {

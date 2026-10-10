@@ -1,0 +1,83 @@
+{
+  "version": 1,
+  "sdk_version": "3.0.5",
+  "path": "/mcp",
+  "auth": {
+    "type": "oauth",
+    "issuer": "https://xqnclfobyqduccefgljh.supabase.co/auth/v1",
+    "require_oauth_client_claim": true,
+    "accepted_audiences": [
+      "authenticated"
+    ]
+  },
+  "mcp": {
+    "server": {
+      "name": "academia-da-enfermagem",
+      "version": "1.0.0",
+      "title": "ACADEMIA DA ENFERMAGEM"
+    },
+    "tools": [
+      {
+        "name": "listar_academias",
+        "title": "Listar Academias",
+        "description": "Lista as Academias ativas, sem revelar conteúdo protegido nem informações de alunos.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "consultar_conteudo",
+        "title": "Consultar conteúdo autorizado",
+        "description": "Consulta o texto de um Mini App apenas quando a conta conectada possui acesso a ele.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "slug": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 150,
+              "description": "Identificador do Mini App."
+            }
+          },
+          "required": [
+            "slug"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "minhas_assinaturas",
+        "title": "Consultar minhas assinaturas",
+        "description": "Consulta apenas os planos e as datas de validade da própria conta conectada.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "type": "object",
+          "properties": {},
+          "additionalProperties": false
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
