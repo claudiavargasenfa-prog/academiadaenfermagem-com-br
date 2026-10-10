@@ -31,6 +31,7 @@ import { Route as PosturaEticaRouteImport } from './routes/postura-etica'
 import { Route as NovoAppRouteImport } from './routes/novo-app'
 import { Route as MinhaHistoriaRouteImport } from './routes/minha-historia'
 import { Route as MinhaContaRouteImport } from './routes/minha-conta'
+import { Route as McpRouteImport } from './routes/mcp'
 import { Route as ManualSobrevivenciaRouteImport } from './routes/manual-sobrevivencia'
 import { Route as LojaRouteImport } from './routes/loja'
 import { Route as LegalRouteImport } from './routes/legal'
@@ -53,9 +54,11 @@ import { Route as QuizzesSlugRouteImport } from './routes/quizzes.$slug'
 import { Route as PlanosSlugRouteImport } from './routes/planos.$slug'
 import { Route as CadastroSlugRouteImport } from './routes/cadastro.$slug'
 import { Route as AppSlugRouteImport } from './routes/app.$slug'
+import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as AppSlugIndexRouteImport } from './routes/app.$slug.index'
 import { Route as AppSlugSubtopicRouteImport } from './routes/app.$slug.$subtopic'
 import { Route as ApiPublicPaymentsRouteImport } from './routes/api/public/payments'
+import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 
 const VipRoute = VipRouteImport.update({
   id: '/vip',
@@ -165,6 +168,11 @@ const MinhaHistoriaRoute = MinhaHistoriaRouteImport.update({
 const MinhaContaRoute = MinhaContaRouteImport.update({
   id: '/minha-conta',
   path: '/minha-conta',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const McpRoute = McpRouteImport.update({
+  id: '/mcp',
+  path: '/mcp',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ManualSobrevivenciaRoute = ManualSobrevivenciaRouteImport.update({
@@ -277,6 +285,12 @@ const AppSlugRoute = AppSlugRouteImport.update({
   path: '/app/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const Char91DotwellKnownChar93OauthProtectedResourceRoute =
+  Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
+    id: '/.well-known/oauth-protected-resource',
+    path: '/.well-known/oauth-protected-resource',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const AppSlugIndexRoute = AppSlugIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -290,6 +304,11 @@ const AppSlugSubtopicRoute = AppSlugSubtopicRouteImport.update({
 const ApiPublicPaymentsRoute = ApiPublicPaymentsRouteImport.update({
   id: '/api/public/payments',
   path: '/api/public/payments',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
+  id: '/.lovable/oauth/consent',
+  path: '/.lovable/oauth/consent',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -311,6 +330,7 @@ export interface FileRoutesByFullPath {
   '/legal': typeof LegalRoute
   '/loja': typeof LojaRoute
   '/manual-sobrevivencia': typeof ManualSobrevivenciaRoute
+  '/mcp': typeof McpRoute
   '/minha-conta': typeof MinhaContaRoute
   '/minha-historia': typeof MinhaHistoriaRoute
   '/novo-app': typeof NovoAppRoute
@@ -333,11 +353,13 @@ export interface FileRoutesByFullPath {
   '/validacao': typeof ValidacaoRoute
   '/vendas': typeof VendasRoute
   '/vip': typeof VipRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/app/$slug': typeof AppSlugRouteWithChildren
   '/cadastro/$slug': typeof CadastroSlugRoute
   '/planos/$slug': typeof PlanosSlugRoute
   '/quizzes/$slug': typeof QuizzesSlugRoute
   '/trilha/$slug': typeof TrilhaSlugRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/api/public/payments': typeof ApiPublicPaymentsRoute
   '/app/$slug/$subtopic': typeof AppSlugSubtopicRoute
   '/app/$slug/': typeof AppSlugIndexRoute
@@ -360,6 +382,7 @@ export interface FileRoutesByTo {
   '/legal': typeof LegalRoute
   '/loja': typeof LojaRoute
   '/manual-sobrevivencia': typeof ManualSobrevivenciaRoute
+  '/mcp': typeof McpRoute
   '/minha-conta': typeof MinhaContaRoute
   '/minha-historia': typeof MinhaHistoriaRoute
   '/novo-app': typeof NovoAppRoute
@@ -382,10 +405,12 @@ export interface FileRoutesByTo {
   '/validacao': typeof ValidacaoRoute
   '/vendas': typeof VendasRoute
   '/vip': typeof VipRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/cadastro/$slug': typeof CadastroSlugRoute
   '/planos/$slug': typeof PlanosSlugRoute
   '/quizzes/$slug': typeof QuizzesSlugRoute
   '/trilha/$slug': typeof TrilhaSlugRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/api/public/payments': typeof ApiPublicPaymentsRoute
   '/app/$slug/$subtopic': typeof AppSlugSubtopicRoute
   '/app/$slug': typeof AppSlugIndexRoute
@@ -409,6 +434,7 @@ export interface FileRoutesById {
   '/legal': typeof LegalRoute
   '/loja': typeof LojaRoute
   '/manual-sobrevivencia': typeof ManualSobrevivenciaRoute
+  '/mcp': typeof McpRoute
   '/minha-conta': typeof MinhaContaRoute
   '/minha-historia': typeof MinhaHistoriaRoute
   '/novo-app': typeof NovoAppRoute
@@ -431,11 +457,13 @@ export interface FileRoutesById {
   '/validacao': typeof ValidacaoRoute
   '/vendas': typeof VendasRoute
   '/vip': typeof VipRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/app/$slug': typeof AppSlugRouteWithChildren
   '/cadastro/$slug': typeof CadastroSlugRoute
   '/planos/$slug': typeof PlanosSlugRoute
   '/quizzes/$slug': typeof QuizzesSlugRoute
   '/trilha/$slug': typeof TrilhaSlugRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/api/public/payments': typeof ApiPublicPaymentsRoute
   '/app/$slug/$subtopic': typeof AppSlugSubtopicRoute
   '/app/$slug/': typeof AppSlugIndexRoute
@@ -460,6 +488,7 @@ export interface FileRouteTypes {
     | '/legal'
     | '/loja'
     | '/manual-sobrevivencia'
+    | '/mcp'
     | '/minha-conta'
     | '/minha-historia'
     | '/novo-app'
@@ -482,11 +511,13 @@ export interface FileRouteTypes {
     | '/validacao'
     | '/vendas'
     | '/vip'
+    | '/.well-known/oauth-protected-resource'
     | '/app/$slug'
     | '/cadastro/$slug'
     | '/planos/$slug'
     | '/quizzes/$slug'
     | '/trilha/$slug'
+    | '/.lovable/oauth/consent'
     | '/api/public/payments'
     | '/app/$slug/$subtopic'
     | '/app/$slug/'
@@ -509,6 +540,7 @@ export interface FileRouteTypes {
     | '/legal'
     | '/loja'
     | '/manual-sobrevivencia'
+    | '/mcp'
     | '/minha-conta'
     | '/minha-historia'
     | '/novo-app'
@@ -531,10 +563,12 @@ export interface FileRouteTypes {
     | '/validacao'
     | '/vendas'
     | '/vip'
+    | '/.well-known/oauth-protected-resource'
     | '/cadastro/$slug'
     | '/planos/$slug'
     | '/quizzes/$slug'
     | '/trilha/$slug'
+    | '/.lovable/oauth/consent'
     | '/api/public/payments'
     | '/app/$slug/$subtopic'
     | '/app/$slug'
@@ -557,6 +591,7 @@ export interface FileRouteTypes {
     | '/legal'
     | '/loja'
     | '/manual-sobrevivencia'
+    | '/mcp'
     | '/minha-conta'
     | '/minha-historia'
     | '/novo-app'
@@ -579,11 +614,13 @@ export interface FileRouteTypes {
     | '/validacao'
     | '/vendas'
     | '/vip'
+    | '/.well-known/oauth-protected-resource'
     | '/app/$slug'
     | '/cadastro/$slug'
     | '/planos/$slug'
     | '/quizzes/$slug'
     | '/trilha/$slug'
+    | '/.lovable/oauth/consent'
     | '/api/public/payments'
     | '/app/$slug/$subtopic'
     | '/app/$slug/'
@@ -607,6 +644,7 @@ export interface RootRouteChildren {
   LegalRoute: typeof LegalRoute
   LojaRoute: typeof LojaRoute
   ManualSobrevivenciaRoute: typeof ManualSobrevivenciaRoute
+  McpRoute: typeof McpRoute
   MinhaContaRoute: typeof MinhaContaRoute
   MinhaHistoriaRoute: typeof MinhaHistoriaRoute
   NovoAppRoute: typeof NovoAppRoute
@@ -629,10 +667,12 @@ export interface RootRouteChildren {
   ValidacaoRoute: typeof ValidacaoRoute
   VendasRoute: typeof VendasRoute
   VipRoute: typeof VipRoute
+  Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   AppSlugRoute: typeof AppSlugRouteWithChildren
   CadastroSlugRoute: typeof CadastroSlugRoute
   PlanosSlugRoute: typeof PlanosSlugRoute
   TrilhaSlugRoute: typeof TrilhaSlugRoute
+  DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   ApiPublicPaymentsRoute: typeof ApiPublicPaymentsRoute
 }
 
@@ -792,6 +832,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MinhaContaRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/mcp': {
+      id: '/mcp'
+      path: '/mcp'
+      fullPath: '/mcp'
+      preLoaderRoute: typeof McpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/manual-sobrevivencia': {
       id: '/manual-sobrevivencia'
       path: '/manual-sobrevivencia'
@@ -946,6 +993,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/.well-known/oauth-protected-resource': {
+      id: '/.well-known/oauth-protected-resource'
+      path: '/.well-known/oauth-protected-resource'
+      fullPath: '/.well-known/oauth-protected-resource'
+      preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/app/$slug/': {
       id: '/app/$slug/'
       path: '/'
@@ -965,6 +1019,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/payments'
       fullPath: '/api/public/payments'
       preLoaderRoute: typeof ApiPublicPaymentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.lovable/oauth/consent': {
+      id: '/.lovable/oauth/consent'
+      path: '/.lovable/oauth/consent'
+      fullPath: '/.lovable/oauth/consent'
+      preLoaderRoute: typeof DotlovableOauthConsentRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -1012,6 +1073,7 @@ const rootRouteChildren: RootRouteChildren = {
   LegalRoute: LegalRoute,
   LojaRoute: LojaRoute,
   ManualSobrevivenciaRoute: ManualSobrevivenciaRoute,
+  McpRoute: McpRoute,
   MinhaContaRoute: MinhaContaRoute,
   MinhaHistoriaRoute: MinhaHistoriaRoute,
   NovoAppRoute: NovoAppRoute,
@@ -1034,10 +1096,13 @@ const rootRouteChildren: RootRouteChildren = {
   ValidacaoRoute: ValidacaoRoute,
   VendasRoute: VendasRoute,
   VipRoute: VipRoute,
+  Char91DotwellKnownChar93OauthProtectedResourceRoute:
+    Char91DotwellKnownChar93OauthProtectedResourceRoute,
   AppSlugRoute: AppSlugRouteWithChildren,
   CadastroSlugRoute: CadastroSlugRoute,
   PlanosSlugRoute: PlanosSlugRoute,
   TrilhaSlugRoute: TrilhaSlugRoute,
+  DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   ApiPublicPaymentsRoute: ApiPublicPaymentsRoute,
 }
 export const routeTree = rootRouteImport

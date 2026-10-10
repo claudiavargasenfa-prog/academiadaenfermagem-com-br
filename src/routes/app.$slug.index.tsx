@@ -44,7 +44,7 @@ export const Route = createFileRoute("/app/$slug/")({
   errorComponent: ({ error }) => (
     <AppShell>
       <Card>
-        <p className="text-sm text-destructive">Erro ao carregar: {String(error?.message ?? error)}</p>
+        <p className="text-sm text-destructive">Erro ao carregar: {error instanceof Error ? error.message : String(error)}</p>
       </Card>
     </AppShell>
   ),

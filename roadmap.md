@@ -13,6 +13,7 @@
 - Mini-app "Cuidando de Quem Cuida" finalizado.
 
 ## Pendente
+- Integrações de agentes: configurar MCP protegido, autorização da conta e ferramentas com as permissões atuais; validar e aguardar republicação.
 - Google Search Console: correções do site concluídas; a proprietária confirmou que “Enfermagem's Google Search Console” também é sua e gratuita. Aguardando reconectar essa conta diretamente ao projeto com a permissão correta.
 - Ação da proprietária: concluir o quadro de autorização do Google quando ele aparecer; sem essa autorização, não é possível verificar o domínio nem enviar o sitemap ao Google.
 - Confirmar que o domínio oficial `https://academiadaenfermagem.com.br` pode ser descoberto pelos principais buscadores e orientar sobre o prazo normal de indexação.

@@ -3,6 +3,7 @@
 // sandbox detection. Do NOT duplicate those here.
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 import { VitePWA } from "vite-plugin-pwa";
+import { mcpPlugin } from "@lovable.dev/mcp-js/stacks/tanstack/vite";
 
 export default defineConfig({
   tanstackStart: {
@@ -11,6 +12,7 @@ export default defineConfig({
   },
   vite: {
     plugins: [
+      mcpPlugin(),
       VitePWA({
         registerType: "autoUpdate",
         injectRegister: null,
@@ -33,10 +35,10 @@ export default defineConfig({
             }),
           ],
           navigateFallback: "/",
-          navigateFallbackDenylist: [/^\/api\//, /^\/~oauth/, /^\/_server/],
+          navigateFallbackDenylist: [/^\/api\//, /^\/~oauth/, /^\/_server/, /^\/mcp(?:\/|$)/, /^\/\.well-known\//, /^\/\.lovable\/oauth\//],
           runtimeCaching: [
             {
-              urlPattern: ({ request }) => request.mode === "navigate",
+              urlPattern: ({ request, url }) => request.mode === "navigate" && !/^\/(?:mcp(?:\/|$)|\.well-known\/|\.lovable\/oauth\/)/.test(url.pathname),
               handler: "NetworkFirst",
               options: {
                 cacheName: "adec-pages-v2",
