@@ -14,6 +14,9 @@
 - Mini-app "Cuidando de Quem Cuida" finalizado.
 
 ## Pendente
+- Oferta anual: unificar quatro preços e remover bônus e testes das ofertas.
+- Oferta anual: checkout autenticado, confirmação segura e concessão transacional de 365 dias.
+- Oferta anual: atualizar apresentação, validar compra e configurar assinatura das notificações do Mercado Pago.
 - Integrações de agentes: MCP protegido e três ferramentas de consulta gerados; testes de endereço e bloqueio sem login aprovados. Republicar e validar aprovação/recusa no endereço autorizado: o ambiente local recebe “unauthorized request origin” da autorização.
 - Google Search Console: correções do site concluídas; a proprietária confirmou que “Enfermagem's Google Search Console” também é sua e gratuita. Aguardando reconectar essa conta diretamente ao projeto com a permissão correta.
 - Ação da proprietária: concluir o quadro de autorização do Google quando ele aparecer; sem essa autorização, não é possível verificar o domínio nem enviar o sitemap ao Google.
