@@ -4,12 +4,14 @@
 
 Pagamento único pelo Mercado Pago, sem mensalidade nem renovação automática. A liberação ocorrerá automaticamente após a confirmação do pagamento, sem envio de comprovante no chat.
 
-| Academia | Valor total anual |
-|---|---:|
-| Estudante de Técnico em Enfermagem | R$ 37,99 |
-| Técnico em Enfermagem | R$ 57,99 |
-| Acadêmico em Enfermagem | R$ 77,99 |
-| Enfermeiro | R$ 97,99 |
+
+| Academia                           | Valor total anual |
+| ---------------------------------- | ----------------- |
+| Estudante de Técnico em Enfermagem | R$ 37,99          |
+| Técnico em Enfermagem              | R$ 57,99          |
+| Acadêmico em Enfermagem            | R$ 77,99          |
+| Enfermeiro                         | R$ 97,99          |
+
 
 Usar 365 dias de acesso contados a partir da aprovação do pagamento. Cada compra libera a academia escolhida e seus conteúdos, não as quatro academias. Uma nova compra durante o acesso vigente acrescentará 365 dias ao vencimento existente.
 
@@ -42,12 +44,14 @@ Há também promessas de teste grátis e Grupo VIP da inauguração na página A
 ## Implementação
 
 ### 1. Unificar oferta e identificação
+
 - Usar as quatro academias existentes, sem criar academias duplicadas.
 - Cadastrar uma oferta anual por academia com os valores acima; desativar suas variações antigas de venda sem apagar históricos.
 - Corrigir divergências entre nomes, preços e destinos. Foi encontrado um plano de R$ 97,99 com nome de Enfermeiro vinculado ao identificador de UTI: não transferir conteúdos nem alterar outras academias automaticamente.
 - Manter outras academias cadastradas fora desta mudança comercial, sem inventar preços ou liberar acesso conjunto.
 
 ### 2. Corrigir compra e liberação automática
+
 - Exigir uma conta identificada para comprar; vincular pedido, academia e pagamento à mesma conta.
 - Criar o pagamento no Mercado Pago com preço anual consultado no servidor e referência única ao pedido. Não aceitar valor, beneficiário ou duração enviados pelo cliente como fonte de verdade.
 - Exigir assinatura válida da notificação e consultar o pagamento no Mercado Pago. Validar valor, moeda, recebedor, referência e status aprovado antes da liberação.
@@ -56,6 +60,7 @@ Há também promessas de teste grátis e Grupo VIP da inauguração na página A
 - Permitir reprocessar confirmações que falharam sem duplicar acesso. Tratar estorno integral e contestação na concessão correspondente, sem cancelar outras compras válidas da conta.
 
 ### 3. Organizar toda a apresentação
+
 - Atualizar ADEC do banner coral ao rodapé, loja, páginas das academias, compra, cadastro, Minha Conta, comparativos, avisos e administração.
 - Exibir o **valor total anual**, não um preço mensal como destaque; remover opções de períodos antigos das quatro academias.
 - Substituir anúncios de gratuidade vencida e testes por acesso anual pago. Não reabrir a campanha gratuita.
@@ -63,6 +68,7 @@ Há também promessas de teste grátis e Grupo VIP da inauguração na página A
 - Manter a edição completa da página ADEC disponível no Admin.
 
 ### 4. Alinhar permissões e bônus
+
 - Conferir acesso tanto na tela quanto nas regras que protegem o conteúdo: somente pagamento vigente da academia correspondente ou administrador.
 - Encerrar concessões de teste nas quatro academias e revisar exceções antigas para que não contornem a nova oferta.
 - Quando você decidir os bônus, retirar suas promessas, concessões e botões de ativação — não apenas esconder textos. Certificados avulsos e conteúdos não serão apagados por consequência.
@@ -82,6 +88,6 @@ Reutilizar `subscription_plans`, `plan_offers`, `orders` e `user_subscriptions`,
 
 ## Dependências e limites
 
-- **Decisão sobre bônus:** você recebeu a lista acima; nenhuma exclusão definitiva será feita sem sua escolha.
-- **Mercado Pago:** configurar a chave de assinatura das notificações por formulário seguro e validar a conta e o recebimento dos eventos antes de prometer liberação automática em produção.
-- Sua informação de que ninguém comprou será respeitada, mas pedidos, contas e registros antigos não serão apagados.
+- **Decisão sobre bônus:** você recebeu a lista acima; nenhuma exclusão definitiva será feita sem sua escolha. PODE RETIRAR TODOS OS BONUS DOS 4 APPS.
+- **Mercado Pago:** configurar a chave de assinatura das notificações por formulário seguro e validar a conta e o recebimento dos eventos antes de prometer liberação automática em produção. QUERO QUE O CLIENTE ENTRE PELA LANDING PAGE,  LÁ ELE ESCOLHE A ACADEMIA QUE DESEJA, CLICA EM ADQUIRIR, É DIRECIONADO AO MERCADO PAGO, ELE PAGA, O MERCADO PAGO COMUNICA A LOVABLE QUE APOS CONFIRMAÇÃO DO PAGAMENTO, LIBERA O ACESSO AO CLIENTE. PODE SER ASSIM?
+- Sua informação de que ninguém comprou será respeitada, mas pedidos, contas e registros antigos não serão apagados. OK
