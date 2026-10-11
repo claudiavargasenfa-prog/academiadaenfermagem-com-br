@@ -11,7 +11,7 @@ import { ANNUAL_PLANS, isAnnualPlan } from '@/lib/annual-plans';
 import { createAnnualCheckout } from '@/lib/mercadopago.functions';
 import { AuthScreen } from '@/components/AuthGate';
 export const Route=createFileRoute('/checkout')({
- validateSearch:(s:Record<string,unknown>)=>({plan:typeof s.plan==='string'?s.plan:'academico',order:typeof s.order==='string'?s.order:undefined,status:typeof s.status==='string'?s.status:undefined,period:typeof s.period==='string'?s.period:undefined}),
+ validateSearch:(s:Record<string,unknown>): {plan:string;order?:string;status?:string;period?:string}=>({plan:typeof s.plan==='string'?s.plan:'academico',order:typeof s.order==='string'?s.order:undefined,status:typeof s.status==='string'?s.status:undefined,period:typeof s.period==='string'?s.period:undefined}),
  head:()=>({meta:[{title:'Adquirir acesso anual — ADEC'},{name:'description',content:'Pagamento único anual pelo Mercado Pago, com acesso após confirmação.'},{property:'og:title',content:'Adquirir acesso anual — ADEC'},{property:'og:description',content:'365 dias de acesso à academia escolhida.'},{property:'og:type',content:'website'},{name:'twitter:card',content:'summary'},{name:'robots',content:'noindex, nofollow'}]}),
  component:CheckoutPage,
 });
