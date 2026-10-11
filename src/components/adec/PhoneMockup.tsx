@@ -6,17 +6,19 @@ export function PhoneMockup({
   cta,
   gold,
   line,
+  text = (_key, fallback) => fallback,
 }: {
   ink: string;
   cta: string;
   gold: string;
   line: string;
+  text?: (key: string, fallback: string) => string;
 }) {
   const linhas = [
-    { d: "Risco de queda", h: "6/6h", p: "Alta", cor: "#EA580C" },
-    { d: "Integridade da pele prejudicada", h: "4/4h", p: "Média", cor: "#b07d1a" },
-    { d: "Débito cardíaco diminuído", h: "2/2h", p: "Alta", cor: "#EA580C" },
-    { d: "Ansiedade", h: "12/12h", p: "Baixa", cor: "#0d3b2e" },
+    { d: text("phone_1", "Risco de queda"), h: text("phone_2", "6/6h"), p: text("phone_3", "Alta"), cor: "#EA580C" },
+    { d: text("phone_4", "Integridade da pele prejudicada"), h: text("phone_5", "4/4h"), p: text("phone_6", "Média"), cor: "#b07d1a" },
+    { d: text("phone_7", "Débito cardíaco diminuído"), h: text("phone_8", "2/2h"), p: text("phone_3", "Alta"), cor: "#EA580C" },
+    { d: text("phone_9", "Ansiedade"), h: text("phone_10", "12/12h"), p: text("phone_11", "Baixa"), cor: "#0d3b2e" },
   ];
 
   return (
@@ -34,10 +36,10 @@ export function PhoneMockup({
         <div className="rounded-[1.7rem] bg-white p-3">
           <div className="mx-auto mb-3 h-1.5 w-16 rounded-full" style={{ background: line }} />
           <p className="text-[9px] font-extrabold uppercase tracking-[0.2em]" style={{ color: gold }}>
-            SAE automatizada
+            {text("phone_12", "SAE automatizada")}
           </p>
           <p className="mt-0.5 text-[13px] font-extrabold leading-tight" style={{ color: ink }}>
-            Prescrição de enfermagem
+            {text("phone_13", "Prescrição de enfermagem")}
           </p>
 
           <div className="mt-3 space-y-1.5">
@@ -77,7 +79,7 @@ export function PhoneMockup({
             className="mt-3 rounded-lg px-2 py-2 text-center text-[10px] font-extrabold uppercase tracking-wide"
             style={{ background: cta, color: "#fff" }}
           >
-            Baixar em PDF / DOC
+            {text("phone_14", "Baixar em PDF / DOC")}
           </motion.div>
         </div>
       </div>

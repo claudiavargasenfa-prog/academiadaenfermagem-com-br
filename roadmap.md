@@ -1,6 +1,7 @@
 # Roadmap ADEC
 
 ## Concluído
+- Edição da página ADEC no Admin: textos, imagens e destinos dos botões do banner ao rodapé; salvamento autenticado conferido na página.
 - Corrigir o SEO técnico: sitemap público ampliado, páginas privadas protegidas da busca, duplicidade de `/novo-app` removida e validação com endereço principal.
 - Corrigir o erro 404 do Mini App “Cuide da Sua Saúde Mental”, preservando o conteúdo e prevenindo endereços internos inválidos no Admin.
 - Atualizar o mini app “Manual de Sobrevivência no Estágio” com as diretrizes de 2026 e corrigir cortes em celular, tablet e computador.
