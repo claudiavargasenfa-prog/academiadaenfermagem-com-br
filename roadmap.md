@@ -15,8 +15,8 @@
 
 ## Pendente
 - Oferta anual: quatro preços e telas anuais atualizados; oito testes aprovados e preços conferidos com conta autenticada.
-- Oferta anual: aguardando decisão da proprietária sobre liberação manual ou automática, demais bônus e direitos anteriores; não declarar retirada integral aprovada.
-- Oferta anual: cobrança bloqueada por ausência de MP_WEBHOOK_SECRET; configurar somente após definir o fluxo, validar pagamento real e a leitura do acesso na conta.
+- Oferta anual: liberação automática e retirada de todos os brindes das novas ofertas confirmadas; preservar conteúdos e revisar direitos antigos com a proprietária.
+- Oferta anual: cobrança bloqueada por ausência de MP_WEBHOOK_SECRET; aguarda chave de assinatura das notificações, pagamento real e leitura do acesso na conta.
 - Oferta anual: confirmar emissão de certificados avulsos e revisão de renovações anteriores antes de ativar a nova cobrança.
 - Integrações de agentes: MCP protegido e três ferramentas de consulta gerados; testes de endereço e bloqueio sem login aprovados. Republicar e validar aprovação/recusa no endereço autorizado: o ambiente local recebe “unauthorized request origin” da autorização.
 - Google Search Console: correções do site concluídas; a proprietária confirmou que “Enfermagem's Google Search Console” também é sua e gratuita. Aguardando reconectar essa conta diretamente ao projeto com a permissão correta.
