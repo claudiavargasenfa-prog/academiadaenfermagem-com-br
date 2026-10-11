@@ -99,7 +99,7 @@ export function WelcomePanel({ slug }: { slug: string }) {
   const subs = subsQ.data ?? [];
   const sub = subs.find((s) => s.plan_slug === slug) ?? subs[0] ?? null;
   const plan = (plansQ.data ?? []).find((p) => p.slug === slug);
-  const { url: mpUrl } = useMpLink(slug, "mensal");
+  const mpUrl = `/checkout?plan=${slug}&period=anual`;
   const checkoutUrl = mpUrl ?? "";
   const firstName = (profileQ.data?.full_name || "").split(" ")[0];
   const logged = isReady && !!user;
@@ -137,41 +137,7 @@ export function WelcomePanel({ slug }: { slug: string }) {
           Você está entrando na <b>Academia da Enfermagem</b>. {slogan} Aqui a teoria vira prática,
           e o plantão fica mais leve. 💚
         </p>
-        {freeOpen ? (
-          <>
-            <p className="mt-3 text-sm font-extrabold text-foreground md:text-base">
-              Atenção: No período gratuito você tem direito a cadastrar-se em um app.
-            </p>
-            <p className="mt-1 text-sm font-extrabold text-foreground md:text-base">
-              O período gratuito de teste é de {TRIAL_FREE_START_LABEL} a {TRIAL_FREE_UNTIL_LABEL}.
-            </p>
-          </>
-        ) : (
-          <div className="mt-4 rounded-2xl border-2 border-orange-500/50 bg-orange-500/10 p-4">
-            <div className="flex items-center gap-2">
-              <AlertTriangle className="h-4 w-4 text-orange-600" />
-              <span className="text-sm font-extrabold text-orange-900">
-                Período gratuito encerrado
-              </span>
-            </div>
-            <p className="mt-2 text-sm text-foreground/80">
-              A degustação de 15 dias foi válida até <b>{TRIAL_FREE_UNTIL_LABEL}</b>. Novos cadastros
-              não recebem mais acesso gratuito — para entrar no app é preciso{" "}
-              <b>assinar o plano da sua categoria</b>. Você pode criar sua conta normalmente e
-              liberar o conteúdo logo após a assinatura.
-            </p>
-            {checkoutUrl ? (
-              <a
-                href={checkoutUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="mt-3 inline-flex items-center gap-1 rounded-xl bg-primary px-4 py-2 text-sm font-extrabold text-primary-foreground"
-              >
-                Assinar agora <CreditCard className="h-4 w-4" />
-              </a>
-            ) : null}
-          </div>
-        )}
+        <div className="mt-4 border-l-2 border-primary pl-4"><p className="font-bold">Acesso anual à sua academia</p><p className="mt-2 text-sm text-muted-foreground">Crie sua conta, pague pelo Mercado Pago e tenha 365 dias de acesso após aprovação. Sem mensalidade ou renovação automática.</p></div>
 
         {logged ? (
           <div className="mt-6 space-y-4">
@@ -254,8 +220,8 @@ export function WelcomePanel({ slug }: { slug: string }) {
               },
               {
                 icon: Sparkles,
-                t: "3. Comece a usar agora mesmo",
-                d: "SAE automatizada, cálculos, escalas, procedimentos e quizzes liberados.",
+                t: "3. Adquira o acesso anual",
+                d: "Pague pelo Mercado Pago; os conteúdos da academia são liberados após aprovação.",
               },
             ].map(({ icon: Icon, t, d }) => (
               <li
@@ -272,30 +238,10 @@ export function WelcomePanel({ slug }: { slug: string }) {
           </ol>
         )}
 
-        {/* Comunidade VIP */}
-        <div className="mt-6 rounded-2xl border border-emerald-600/30 bg-emerald-600/10 p-4">
-          <div className="flex items-center gap-2">
-            <Heart className="h-4 w-4 text-emerald-600" />
-            <p className="text-sm font-extrabold">Sua presença é muito importante</p>
-          </div>
-          <p className="mt-1 text-xs text-muted-foreground">
-            Entre no Grupo VIP no WhatsApp, dê sua opinião e ajude a construir o app junto com a
-            gente. Suas ideias viram funcionalidades.
-          </p>
-          <a
-            href={whatsappUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="mt-3 inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2 text-sm font-extrabold text-white"
-          >
-            <MessageCircle className="h-4 w-4" /> Entrar no Grupo VIP
-          </a>
-        </div>
-
         {/* Instalar app grátis */}
         <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border/60 bg-background/70 p-4">
           <div>
-            <p className="text-sm font-extrabold">Baixe grátis o nosso app</p>
+            <p className="text-sm font-extrabold">Instale o aplicativo</p>
             <p className="text-xs text-muted-foreground">
               Instale na tela inicial do celular e acesse offline, em 1 toque.
             </p>
@@ -305,7 +251,7 @@ export function WelcomePanel({ slug }: { slug: string }) {
             onClick={install}
             className="inline-flex items-center gap-2 rounded-xl gold-gradient px-4 py-2 text-sm font-extrabold"
           >
-            <Download className="h-4 w-4" /> Instalar grátis
+            <Download className="h-4 w-4" /> Instalar
           </button>
         </div>
 
@@ -319,7 +265,7 @@ export function WelcomePanel({ slug }: { slug: string }) {
             {[
               "Novos Mini Apps e conteúdos publicados toda semana",
               "Protocolos revisados conforme COFEN, ANVISA e Ministério da Saúde",
-              "Melhorias sugeridas pelos alunos do Grupo VIP",
+              "Melhorias nos conteúdos de estudo",
             ].map((i) => (
               <li key={i} className="flex items-start gap-2">
                 <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-emerald-600" />

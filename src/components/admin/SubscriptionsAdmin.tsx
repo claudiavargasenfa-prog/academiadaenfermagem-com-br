@@ -51,7 +51,7 @@ export function SubscriptionsAdmin() {
           <h4 className="text-xs font-black uppercase tracking-wider">Status das Integrações</h4>
         </div>
         <p className="text-[11px] text-emerald-600">
-          Webhook do Pix e Assinaturas (Mercado Pago) estão operando normalmente. Para logs detalhados, acesse a aba <strong>Pix / Webhooks</strong>.
+          A confirmação automática depende da configuração e validação do Mercado Pago. Consulte a aba <strong>Pix / Webhooks</strong>.
         </p>
       </div>
 
@@ -69,7 +69,7 @@ export function SubscriptionsAdmin() {
                   </p>
                   <h4 className="font-display text-base font-bold">{p.name}</h4>
                   <p className="mt-1 text-xs text-muted-foreground">{p.description}</p>
-                  <p className="mt-2 text-lg font-extrabold">{formatPriceBRL((p as any).price_novo_cents ?? p.price_cents)}<span className="text-xs font-normal text-muted-foreground">/mês</span></p>
+                  <p className="mt-2 text-lg font-extrabold">{formatPriceBRL((p as any).price_novo_cents ?? p.price_cents)}<span className="text-xs font-normal text-muted-foreground">/ano</span></p>
                   {(p as any).price_promo_migracao_cents && (
                     <p className="mt-0.5 text-[11px] font-semibold text-amber-700">
                       Migre para outro app e ganhe 15%: <span className="line-through">{formatPriceBRL((p as any).price_original_migracao_cents)}</span> {formatPriceBRL((p as any).price_promo_migracao_cents)}
@@ -266,7 +266,7 @@ function PlanForm({ plan, onClose }: { plan: SubscriptionPlan; onClose: () => vo
         <fieldset className="rounded-xl border border-border/60 p-3">
           <legend className="px-1 text-[10px] font-bold uppercase text-muted-foreground">Cadastro novo (Mercado Pago)</legend>
           <div className="grid gap-3 sm:grid-cols-2">
-            <label className="block"><span className="mb-1 block text-xs font-semibold uppercase text-muted-foreground">Preço mensal (R$)</span>
+            <label className="block"><span className="mb-1 block text-xs font-semibold uppercase text-muted-foreground">Preço anual (R$)</span>
               <input className={input} value={form.price_novo} onChange={(e) => setForm({ ...form, price_novo: e.target.value })} placeholder="24,99" /></label>
             <label className="block"><span className="mb-1 block text-xs font-semibold uppercase text-muted-foreground">Link Mercado Pago (novo)</span>
               <input className={input} value={form.mp_link} onChange={(e) => setForm({ ...form, mp_link: e.target.value })} placeholder="https://mpago.la/..." /></label>
@@ -275,19 +275,6 @@ function PlanForm({ plan, onClose }: { plan: SubscriptionPlan; onClose: () => vo
             <input className={input} value={form.mp_product_id} onChange={(e) => setForm({ ...form, mp_product_id: e.target.value })} placeholder="ex.: 12345678-..." /></label>
         </fieldset>
 
-
-        <fieldset className="rounded-xl border border-amber-400/40 bg-amber-50/40 p-3">
-          <legend className="px-1 text-[10px] font-bold uppercase text-amber-700">Migre p/ outro app (15% por 3 meses)</legend>
-          <p className="mb-2 text-[10px] text-muted-foreground">Mostrado automaticamente quando o aluno logado já tem outro aplicativo ativo.</p>
-          <div className="grid gap-3 sm:grid-cols-3">
-            <label className="block"><span className="mb-1 block text-xs font-semibold uppercase text-muted-foreground">DE (R$)</span>
-              <input className={input} value={form.price_original_migracao} onChange={(e) => setForm({ ...form, price_original_migracao: e.target.value })} placeholder="39,99" /></label>
-            <label className="block"><span className="mb-1 block text-xs font-semibold uppercase text-muted-foreground">POR (R$)</span>
-              <input className={input} value={form.price_promo_migracao} onChange={(e) => setForm({ ...form, price_promo_migracao: e.target.value })} placeholder="33,99" /></label>
-            <label className="block"><span className="mb-1 block text-xs font-semibold uppercase text-muted-foreground">Link Cakto (migração)</span>
-              <input className={input} value={form.cakto_link_migracao} onChange={(e) => setForm({ ...form, cakto_link_migracao: e.target.value })} placeholder="https://mpago.la/..." /></label>
-          </div>
-        </fieldset>
 
         <div className="flex flex-wrap items-center gap-4">
           <label className="flex items-center gap-2">
@@ -311,22 +298,14 @@ function PlanForm({ plan, onClose }: { plan: SubscriptionPlan; onClose: () => vo
 }
 
 const ALL_PLANS = [
-  { slug: "academico", label: "Acadêmico (Mensal)" },
-  { slug: "tecnico", label: "Técnico (Mensal)" },
-  { slug: "enfermeiro", label: "Enfermeiro (Mensal)" },
-  { slug: "tecnico-estudante", label: "Estudante Técnico (Mensal)" },
-  { slug: "enfermeiro-trimestral", label: "Enfermeiro (Trimestral)" },
-  { slug: "enfermeiro-semestral", label: "Enfermeiro (Semestral)" },
-  { slug: "enfermeiro-anual", label: "Enfermeiro (Anual)" },
-  { slug: "tecnico-trimestral", label: "Estudante Técnico (Trimestral)" },
-  { slug: "tecnico-semestral", label: "Estudante Técnico (Semestral)" },
+ {slug:"academico",label:"Acadêmico (Anual)"}, {slug:"tecnico",label:"Técnico (Anual)"}, {slug:"tecnico-estudante",label:"Estudante de Técnico (Anual)"}, {slug:"enfermeiro",label:"Enfermeiro (Anual)"},
 ] as const;
 
 function GrantForm({ onClose }: { onClose: () => void }) {
   const [form, setForm] = useState({
     email: "",
     plans: { academico: true, tecnico: false, enfermeiro: false } as Record<string, boolean>,
-    days: 30,
+    days: 365,
     notes: "",
   });
   const [busy, setBusy] = useState(false);
@@ -369,6 +348,10 @@ function GrantForm({ onClose }: { onClose: () => void }) {
       user_id: (prof as any).id,
       plan_slug,
       status: "active",
+      billing_period: "anual",
+      certificates_allowed: 0,
+      report_quota: 0,
+      bonus_app_slug: null,
       started_at: new Date().toISOString(),
       expires_at: expires,
       notes: form.notes || null,
@@ -397,7 +380,7 @@ function GrantForm({ onClose }: { onClose: () => void }) {
         </label>
         <fieldset className="rounded-xl border border-border/60 p-3">
           <legend className="px-1 text-[10px] font-bold uppercase text-muted-foreground">
-            Aplicativos (marque 1, 2 ou 3)
+            Academias
           </legend>
           <div className="grid gap-2 sm:grid-cols-3">
             {ALL_PLANS.map((p) => (
