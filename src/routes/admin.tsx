@@ -26,6 +26,10 @@ export const Route = createFileRoute("/admin")({
     meta: [
       { title: "Admin — Academia da Enfermagem" },
       { name: "description", content: "Painel administrativo da Academia da Enfermagem." },
+      { property: "og:title", content: "Admin — Academia da Enfermagem" },
+      { property: "og:description", content: "Administração de academias, conteúdos e página ADEC." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
       { name: "robots", content: "noindex, nofollow" },
     ],
   }),
