@@ -1,6 +1,7 @@
 # Roadmap ADEC
 
 ## Concluído
+- Edição da página ADEC no Admin: textos, imagens e destinos dos botões do banner ao rodapé; salvamento autenticado conferido na página.
 - Corrigir o SEO técnico: sitemap público ampliado, páginas privadas protegidas da busca, duplicidade de `/novo-app` removida e validação com endereço principal.
 - Corrigir o erro 404 do Mini App “Cuide da Sua Saúde Mental”, preservando o conteúdo e prevenindo endereços internos inválidos no Admin.
 - Atualizar o mini app “Manual de Sobrevivência no Estágio” com as diretrizes de 2026 e corrigir cortes em celular, tablet e computador.
@@ -13,7 +14,6 @@
 - Mini-app "Cuidando de Quem Cuida" finalizado.
 
 ## Pendente
-- Edição integral da página ADEC: ligar os textos, imagens e botões do banner ao rodapé ao Admin e validar o salvamento.
 - Integrações de agentes: MCP protegido e três ferramentas de consulta gerados; testes de endereço e bloqueio sem login aprovados. Republicar e validar aprovação/recusa no endereço autorizado: o ambiente local recebe “unauthorized request origin” da autorização.
 - Google Search Console: correções do site concluídas; a proprietária confirmou que “Enfermagem's Google Search Console” também é sua e gratuita. Aguardando reconectar essa conta diretamente ao projeto com a permissão correta.
 - Ação da proprietária: concluir o quadro de autorização do Google quando ele aparecer; sem essa autorização, não é possível verificar o domínio nem enviar o sitemap ao Google.
