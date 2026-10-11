@@ -408,14 +408,14 @@ const AUTOMATICOS = [
 
       <header className="relative mx-auto flex max-w-7xl items-center justify-between px-5 pt-6">
         <Link to="/" className="flex items-center gap-2 opacity-90 transition hover:opacity-100">
-          <img src={t("logo_image", "/__l5e/assets-v1/20892c4a-2b50-483d-a19d-a5067c9d5188/logo-adec.png")} alt={t("pagina_133", "ADEC")}{" "} className="h-10 w-auto" />
+          <img src={t("logo_image", "/__l5e/assets-v1/20892c4a-2b50-483d-a19d-a5067c9d5188/logo-adec.png")} alt={t("pagina_133", "ADEC")} className="h-10 w-auto" />
         </Link>
         <Link
           to="/"
           className="rounded-full border px-4 py-1.5 text-xs font-bold uppercase tracking-widest transition hover:bg-white/60"
           style={{ borderColor: C.line, color: C.cta, background: "rgba(255,255,255,0.5)" }}
         >
-          {t("pagina_134", "Loja completa")}{" "}</Link>
+          {t("pagina_134", "Loja completa")}</Link>
       </header>
 
       <div className="relative mx-auto max-w-7xl px-5 pb-28 pt-8">
@@ -440,7 +440,7 @@ const AUTOMATICOS = [
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
                 src={t("logo_image", logoAsset.url)}
-                alt={t("pagina_135", "ADEC — Avaliação Diagnóstica em Enfermagem Clínica")}{" "}
+                alt={t("pagina_135", "ADEC — Avaliação Diagnóstica em Enfermagem Clínica")}
                 className="h-28 w-auto drop-shadow-xl md:h-36"
               />
 
@@ -448,7 +448,7 @@ const AUTOMATICOS = [
                 className="mt-2 text-[10px] font-extrabold uppercase tracking-[0.35em] md:text-xs"
                 style={{ color: C.gold }}
               >
-                {t("pagina_136", "Avaliação Diagnóstica em Enfermagem Clínica")}{" "}</p>
+                {t("pagina_136", "Avaliação Diagnóstica em Enfermagem Clínica")}</p>
               <div
                 className="mt-1 h-px w-40"
                 style={{ background: `linear-gradient(90deg, transparent, ${C.goldBright}, transparent)` }}
@@ -497,7 +497,7 @@ const AUTOMATICOS = [
 
               <p className="mt-3 flex items-center gap-1.5 text-xs font-bold md:text-sm" style={{ color: C.orange }}>
                 <Sparkles className="h-3.5 w-3.5" />
-                {LANCAMENTO}{t("pagina_137", ": os primeiros assinantes entram com acesso completo e canal direto com a autora")}{" "}</p>
+                {LANCAMENTO}{t("pagina_137", ": os primeiros assinantes entram com acesso completo e canal direto com a autora")}</p>
 
               <div className="mt-7 flex flex-wrap justify-center gap-2 lg:justify-start">
                 {chips.map((c, i) => (
@@ -517,7 +517,7 @@ const AUTOMATICOS = [
 
               <p className="mt-6 flex items-center gap-1.5 text-xs font-semibold" style={{ color: C.inkSoft }}>
                 <ShieldCheck className="h-3.5 w-3.5" style={{ color: C.gold }} />
-                {t("pagina_138", "Compra segura · PIX ou cartão só depois do teste")}{" "}</p>
+                {t("pagina_138", "Compra segura · PIX ou cartão só depois do teste")}</p>
             </div>
 
             <PhoneMockup ink={C.ink} cta={C.cta} gold={C.goldBright} line={C.line} />
@@ -530,7 +530,7 @@ const AUTOMATICOS = [
           style={{ borderColor: C.line, background: C.card }}
         >
           <p className="mb-2 text-center text-[10px] font-extrabold uppercase tracking-[0.3em]" style={{ color: C.gold }}>
-            {t("pagina_139", "Base legal e científica")}{" "}</p>
+            {t("pagina_139", "Base legal e científica")}</p>
           <Marquee items={SELOS} color={C.cta} />
         </section>
 
@@ -540,7 +540,7 @@ const AUTOMATICOS = [
           style={{ borderColor: C.line, background: C.card }}
         >
           <p className="mb-4 text-center text-xs font-extrabold uppercase tracking-widest" style={{ color: C.gold }}>
-            {t("pagina_140", "Conteúdo construído por quem vive o plantão e o consultório")}{" "}</p>
+            {t("pagina_140", "Conteúdo construído por quem vive o plantão e o consultório")}</p>
           <div className="flex flex-wrap items-center justify-around gap-4 text-center">
             {[
               { v: 35, suf: t("pagina_141", " anos"), l: t("pagina_142", "De vivência em enfermagem") },
@@ -563,7 +563,7 @@ const AUTOMATICOS = [
 
         {/* PARA QUEM É */}
         <section className="mt-16">
-          <SectionTitle eyebrow={t("pagina_149", "Para quem é")}{" "} title={t("pagina_150", "Escolha o app da sua fase profissional")}{" "} />
+          <SectionTitle eyebrow={t("pagina_149", "Para quem é")} title={t("pagina_150", "Escolha o app da sua fase profissional")} />
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {PLANOS.map((p, i) => (
               <Reveal key={p.slug} delay={i * 0.08}>
@@ -597,9 +597,9 @@ const AUTOMATICOS = [
         {/* BENEFÍCIOS */}
         <section className="mt-16">
           <SectionTitle
-            eyebrow={t("pagina_151", "O que muda na sua vida")}{" "}
-            title={t("pagina_152", "Não é só um app. É o seu plantão de volta.")}{" "}
-            sub={t("pagina_153", "Cada módulo resolve uma dor concreta do plantão, do consultório ou da prova — com base em evidência científica.")}{" "}
+            eyebrow={t("pagina_151", "O que muda na sua vida")}
+            title={t("pagina_152", "Não é só um app. É o seu plantão de volta.")}
+            sub={t("pagina_153", "Cada módulo resolve uma dor concreta do plantão, do consultório ou da prova — com base em evidência científica.")}
           />
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {MODULOS_SHOWCASE.map((m, i) => (
@@ -670,9 +670,9 @@ const AUTOMATICOS = [
         {/* CONTEÚDOS DOS MINI APPS */}
         <section className="mt-16">
           <SectionTitle
-            eyebrow={t("pagina_160", "Conteúdos")}{" "}
-            title={t("pagina_161", "O que você encontra dentro dos Mini Apps")}{" "}
-            sub={t("pagina_162", "Cada Mini App é um tema resolvido, direto ao ponto, para usar no plantão, no estágio ou na prova.")}{" "}
+            eyebrow={t("pagina_160", "Conteúdos")}
+            title={t("pagina_161", "O que você encontra dentro dos Mini Apps")}
+            sub={t("pagina_162", "Cada Mini App é um tema resolvido, direto ao ponto, para usar no plantão, no estágio ou na prova.")}
           />
           <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {CONTEUDOS_MINI_APPS.map((c, i) => (
@@ -698,9 +698,9 @@ const AUTOMATICOS = [
         {/* 3 APPS AUTOMÁTICOS */}
         <section className="mt-16">
           <SectionTitle
-            eyebrow={t("pagina_163", "Exclusivo ADEC")}{" "}
-            title={t("pagina_164", "Os 3 automáticos: o app escreve por você")}{" "}
-            sub={t("pagina_165", "São três ferramentas que transformam o que você marcou em documento pronto — sem digitar tudo de novo.")}{" "}
+            eyebrow={t("pagina_163", "Exclusivo ADEC")}
+            title={t("pagina_164", "Os 3 automáticos: o app escreve por você")}
+            sub={t("pagina_165", "São três ferramentas que transformam o que você marcou em documento pronto — sem digitar tudo de novo.")}
           />
           <div className="mt-8 grid gap-4 lg:grid-cols-3">
             {AUTOMATICOS.map((a, i) => (
@@ -719,7 +719,7 @@ const AUTOMATICOS = [
                     className="absolute right-3 top-3 rounded-full px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-widest"
                     style={{ background: "rgba(212,175,55,0.25)", color: C.gold }}
                   >
-                    {t("pagina_166", "Automático")}{" "}</span>
+                    {t("pagina_166", "Automático")}</span>
                   <div
                     className="grid h-12 w-12 place-items-center rounded-xl"
                     style={{ background: C.cta, color: C.goldBright }}
@@ -759,9 +759,9 @@ const AUTOMATICOS = [
         {/* COMPARATIVO SEM x COM */}
         <section className="mt-16">
           <SectionTitle
-            eyebrow={t("pagina_167", "A diferença")}{" "}
-            title={t("pagina_168", "Seu plantão sem a ADEC e com a ADEC")}{" "}
-            sub={t("pagina_169", "Mesma carga de trabalho. Duas experiências completamente diferentes.")}{" "}
+            eyebrow={t("pagina_167", "A diferença")}
+            title={t("pagina_168", "Seu plantão sem a ADEC e com a ADEC")}
+            sub={t("pagina_169", "Mesma carga de trabalho. Duas experiências completamente diferentes.")}
           />
           <div className="mt-8 grid gap-4 md:grid-cols-2">
             <Reveal>
@@ -770,7 +770,7 @@ const AUTOMATICOS = [
                 style={{ borderColor: C.line, background: "rgba(255,255,255,0.45)" }}
               >
                 <p className="text-xs font-extrabold uppercase tracking-[0.25em]" style={{ color: C.inkSoft }}>
-                  {t("pagina_170", "Sem a ADEC")}{" "}</p>
+                  {t("pagina_170", "Sem a ADEC")}</p>
                 <ul className="mt-4 space-y-3">
                   {SEM_ADEC.map((s) => (
                     <li key={s} className="flex items-start gap-3 text-sm" style={{ color: C.inkSoft }}>
@@ -795,7 +795,7 @@ const AUTOMATICOS = [
                   style={{ background: "rgba(212,175,55,0.3)" }}
                 />
                 <p className="relative text-xs font-extrabold uppercase tracking-[0.25em]" style={{ color: C.gold }}>
-                  {t("pagina_171", "Com a ADEC")}{" "}</p>
+                  {t("pagina_171", "Com a ADEC")}</p>
                 <ul className="relative mt-4 space-y-3">
                   {COM_ADEC.map((s) => (
                     <li key={s} className="flex items-start gap-3 text-sm font-semibold" style={{ color: C.ink }}>
@@ -814,7 +814,7 @@ const AUTOMATICOS = [
           className="mt-16 overflow-hidden rounded-3xl border p-8 md:p-12"
           style={{ borderColor: C.line, background: C.cardStrong }}
         >
-          <SectionTitle eyebrow={t("pagina_172", "Na prática")}{" "} title={t("pagina_173", "Plantão com a Academia")}{" "} />
+          <SectionTitle eyebrow={t("pagina_172", "Na prática")} title={t("pagina_173", "Plantão com a Academia")} />
           <ul className="mx-auto mt-8 max-w-3xl space-y-3">
             {[
               t("pagina_174", "Você sai no horário: anotação e evolução saem prontas do que você já avaliou"),
@@ -841,7 +841,7 @@ const AUTOMATICOS = [
         {/* PLANOS */}
         <section id="planos" className="mt-16 scroll-mt-16">
           <SectionTitle
-            eyebrow={t("pagina_179", "Escolha seu app")}{" "}
+            eyebrow={t("pagina_179", "Escolha seu app")}
             title={t("planos_title", "4 apps, um só padrão de excelência")}
             sub={t("plans_subtitle", "15 dias grátis, sem cartão. Cancele quando quiser.")}
           />
@@ -870,7 +870,7 @@ const AUTOMATICOS = [
                         className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest shadow"
                         style={{ background: C.orange, color: "#fff" }}
                       >
-                        {t("pagina_180", "+ escolhido")}{" "}</span>
+                        {t("pagina_180", "+ escolhido")}</span>
                     )}
 
                     <div
@@ -893,9 +893,9 @@ const AUTOMATICOS = [
                     <div className="mt-4">
                       <div className="flex items-baseline gap-1">
                         <span className="font-display text-3xl font-extrabold" style={{ color: C.ink }}>
-                          {t("pagina_181", "R$ 0,00")}{" "}</span>
+                          {t("pagina_181", "R$ 0,00")}</span>
                         <span className="text-xs font-bold" style={{ color: C.inkSoft }}>
-                          {t("pagina_182", "/mês")}{" "}</span>
+                          {t("pagina_182", "/mês")}</span>
                       </div>
 
                       <p
@@ -909,7 +909,7 @@ const AUTOMATICOS = [
                         className="mt-2 rounded-lg px-2 py-1.5 text-[11px] font-bold leading-snug"
                         style={{ background: "rgba(212,175,55,0.16)", color: C.ink }}
                       >
-                        {t("pagina_184", "Período de teste grátis, 15 dias, para quem acessar entre os dias 10.08.2026 a 10.09.2026")}{" "}</p>
+                        {t("pagina_184", "Período de teste grátis, 15 dias, para quem acessar entre os dias 10.08.2026 a 10.09.2026")}</p>
                     </div>
 
 
@@ -930,7 +930,7 @@ const AUTOMATICOS = [
                           className="inline-flex items-center justify-center gap-1.5 rounded-xl px-4 py-3 text-sm font-extrabold transition hover:-translate-y-0.5"
                           style={ctaStyle}
                         >
-                          <CheckCircle2 className="h-4 w-4" /> {t("pagina_185", "Acessar meu app →")}{" "}</Link>
+                          <CheckCircle2 className="h-4 w-4" /> {t("pagina_185", "Acessar meu app →")}</Link>
                       ) : (
                         <a
                           href={safeLandingUrl(t("signup_" + p.slug, `/cadastro/${p.slug}`), `/cadastro/${p.slug}`)}
@@ -952,20 +952,20 @@ const AUTOMATICOS = [
         <section className="mt-12 overflow-hidden rounded-[2rem] border-2 border-[#b8912f] bg-white p-6 shadow-xl">
           <div className="flex flex-col items-center text-center">
             <div className="inline-flex items-center gap-2 rounded-full bg-[#0d3b2e] px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-[#f0d489]">
-              <Award className="h-4 w-4" /> {t("pagina_186", "Certificados reconhecidos")}{" "}</div>
+              <Award className="h-4 w-4" /> {t("pagina_186", "Certificados reconhecidos")}</div>
             <p className="mt-4 max-w-2xl text-sm font-medium text-[#0b3229]/80">
-              {t("pagina_187", "Nossos certificados possuem validade em todo território nacional para comprovação de horas complementares e atualização profissional.")}{" "}</p>
+              {t("pagina_187", "Nossos certificados possuem validade em todo território nacional para comprovação de horas complementares e atualização profissional.")}</p>
             
             <div className="mt-8 grid grid-cols-2 gap-4">
               <div className="group relative">
-                <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-[#b8912f]">{t("pagina_188", "Frente (Modelo)")}{" "}</p>
+                <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-[#b8912f]">{t("pagina_188", "Frente (Modelo)")}</p>
                 <div className="overflow-hidden rounded-xl border border-[#b8912f]/30 shadow-sm transition-all hover:scale-[1.02] hover:shadow-md">
                   <Dialog>
                     <DialogTrigger asChild>
                       <button className="relative block w-full outline-none">
                         <img 
-                          src={t("pagina_189", "https://academiadaenfermagem.com.br/lovable-uploads/763be538-348e-4903-888f-013697669d72.png")}{" "} 
-                          alt={t("pagina_190", "Modelo Frente do Certificado ADEC")}{" "} 
+                          src={t("pagina_189", "https://academiadaenfermagem.com.br/lovable-uploads/763be538-348e-4903-888f-013697669d72.png")} 
+                          alt={t("pagina_190", "Modelo Frente do Certificado ADEC")} 
                           className="h-auto w-full"
                         />
                         <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 transition-opacity group-hover:opacity-100">
@@ -976,8 +976,8 @@ const AUTOMATICOS = [
                     <DialogContent className="max-w-4xl border-none bg-transparent p-0 shadow-none sm:rounded-none">
                       <div className="relative p-2">
                         <img 
-                          src={t("pagina_189", "https://academiadaenfermagem.com.br/lovable-uploads/763be538-348e-4903-888f-013697669d72.png")}{" "} 
-                          alt={t("pagina_192", "Modelo Frente do Certificado ADEC")}{" "} 
+                          src={t("pagina_189", "https://academiadaenfermagem.com.br/lovable-uploads/763be538-348e-4903-888f-013697669d72.png")} 
+                          alt={t("pagina_192", "Modelo Frente do Certificado ADEC")} 
                           className="h-auto w-full rounded-lg shadow-2xl"
                         />
                         <DialogClose className="absolute -top-10 right-0 text-white hover:text-white/80">
@@ -990,14 +990,14 @@ const AUTOMATICOS = [
               </div>
 
               <div className="group relative">
-                <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-[#b8912f]">{t("pagina_193", "Verso (Modelo)")}{" "}</p>
+                <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-[#b8912f]">{t("pagina_193", "Verso (Modelo)")}</p>
                 <div className="overflow-hidden rounded-xl border border-[#b8912f]/30 shadow-sm transition-all hover:scale-[1.02] hover:shadow-md">
                   <Dialog>
                     <DialogTrigger asChild>
                       <button className="relative block w-full outline-none">
                         <img 
-                          src={t("pagina_194", "https://academiadaenfermagem.com.br/lovable-uploads/31804b77-b9c9-4a0b-8d59-3d127c52367d.png")}{" "} 
-                          alt={t("pagina_195", "Modelo Verso do Certificado ADEC")}{" "} 
+                          src={t("pagina_194", "https://academiadaenfermagem.com.br/lovable-uploads/31804b77-b9c9-4a0b-8d59-3d127c52367d.png")} 
+                          alt={t("pagina_195", "Modelo Verso do Certificado ADEC")} 
                           className="h-auto w-full"
                         />
                         <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 transition-opacity group-hover:opacity-100">
@@ -1008,8 +1008,8 @@ const AUTOMATICOS = [
                     <DialogContent className="max-w-4xl border-none bg-transparent p-0 shadow-none sm:rounded-none">
                       <div className="relative p-2">
                         <img 
-                          src={t("pagina_194", "https://academiadaenfermagem.com.br/lovable-uploads/31804b77-b9c9-4a0b-8d59-3d127c52367d.png")}{" "} 
-                          alt={t("pagina_197", "Modelo Verso do Certificado ADEC")}{" "} 
+                          src={t("pagina_194", "https://academiadaenfermagem.com.br/lovable-uploads/31804b77-b9c9-4a0b-8d59-3d127c52367d.png")} 
+                          alt={t("pagina_197", "Modelo Verso do Certificado ADEC")} 
                           className="h-auto w-full rounded-lg shadow-2xl"
                         />
                         <DialogClose className="absolute -top-10 right-0 text-white hover:text-white/80">
@@ -1034,7 +1034,7 @@ const AUTOMATICOS = [
                   {t("guarantee_title", "Garantia real de 15 dias")}</p>
               </div>
               <p className="mt-2 text-sm" style={{ color: C.inkSoft }}>
-                {t("pagina_200", "Você entra, testa tudo, e só assina se quiser continuar. Sem cartão no cadastro, sem cobrança escondida.")}{" "}</p>
+                {t("pagina_200", "Você entra, testa tudo, e só assina se quiser continuar. Sem cartão no cadastro, sem cobrança escondida.")}</p>
             </div>
           </Reveal>
           <Reveal delay={0.1}>
@@ -1045,16 +1045,16 @@ const AUTOMATICOS = [
               <div className="flex items-center gap-2">
                 <MessageCircle className="h-6 w-6" style={{ color: C.orange }} />
                 <p className="font-display text-lg font-extrabold" style={{ color: C.ink }}>
-                  {t("pagina_201", "Grupo VIP no WhatsApp")}{" "}</p>
+                  {t("pagina_201", "Grupo VIP no WhatsApp")}</p>
               </div>
               <p className="mt-2 text-sm" style={{ color: C.inkSoft }}>
-                {t("pagina_202", "Tira-dúvidas direto com a fundadora, atualizações em primeira mão e trocas entre colegas de plantão.")}{" "}</p>
+                {t("pagina_202", "Tira-dúvidas direto com a fundadora, atualizações em primeira mão e trocas entre colegas de plantão.")}</p>
               <p
                 className="mt-3 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-extrabold uppercase tracking-wide"
                 style={{ background: C.orange, color: "#fff" }}
               >
                 <Flame className="h-3.5 w-3.5" />
-                {t("pagina_203", "Grupo VIP da inauguração — o convite chega ao ativar seu teste")}{" "}</p>
+                {t("pagina_203", "Grupo VIP da inauguração — o convite chega ao ativar seu teste")}</p>
             </div>
           </Reveal>
         </section>
@@ -1062,7 +1062,7 @@ const AUTOMATICOS = [
         {/* INAUGURAÇÃO */}
         <section className="mt-16">
           <SectionTitle
-            eyebrow={t("pagina_204", "Inauguração")}{" "}
+            eyebrow={t("pagina_204", "Inauguração")}
             title={t("inauguracao_titulo", "Por que entrar agora, na turma de inauguração")}
             sub={t(
               "inauguracao_sub",
@@ -1112,14 +1112,14 @@ const AUTOMATICOS = [
           className="mt-16 overflow-hidden rounded-[2rem] border p-8 md:p-12"
           style={{ borderColor: C.line, background: C.cardStrong }}
         >
-          <SectionTitle eyebrow={t("pagina_210", "Sobre a autora")}{" "} title={t("pagina_211", "Conheça um pouco da minha História")}{" "} />
+          <SectionTitle eyebrow={t("pagina_210", "Sobre a autora")} title={t("pagina_211", "Conheça um pouco da minha História")} />
 
           <div className="mt-8 grid gap-8 lg:grid-cols-[240px_1fr] lg:items-start">
             <Reveal className="mx-auto lg:mx-0">
               <div className="overflow-hidden rounded-3xl border-2 shadow-xl" style={{ borderColor: C.goldBright }}>
                 <img
                   src={t("author_image", "/__l5e/assets-v1/1f1033de-3186-4e0c-a8ac-f1bb100a0745/foto-fundadora.jpeg")}
-                  alt={t("pagina_212", "Fundadora — Academia da Enfermagem")}{" "}
+                  alt={t("pagina_212", "Fundadora — Academia da Enfermagem")}
                   className="h-56 w-56 object-cover lg:h-60 lg:w-60"
                 />
               </div>
@@ -1155,7 +1155,7 @@ const AUTOMATICOS = [
                 className="inline-flex items-center gap-1.5 text-sm font-bold underline underline-offset-4 transition hover:opacity-80"
                 style={{ color: C.cta }}
               >
-                {t("pagina_219", "Ler minha história completa")}{" "}<ArrowRight className="h-4 w-4" />
+                {t("pagina_219", "Ler minha história completa")}<ArrowRight className="h-4 w-4" />
               </Link>
             </div>
           </div>
@@ -1163,7 +1163,7 @@ const AUTOMATICOS = [
 
         {/* FAQ */}
         <section className="mt-16">
-          <SectionTitle eyebrow={t("pagina_220", "Dúvidas frequentes")}{" "} title={t("pagina_221", "Antes de decidir")}{" "} />
+          <SectionTitle eyebrow={t("pagina_220", "Dúvidas frequentes")} title={t("pagina_221", "Antes de decidir")} />
           <div className="mx-auto mt-8 max-w-3xl space-y-2">
             {[
               {
@@ -1237,12 +1237,12 @@ const AUTOMATICOS = [
               style={{ background: C.orange, color: "#fff" }}
             >
               <Clock className="h-3.5 w-3.5" />
-              {t("pagina_233", "Turma de inauguração aberta agora")}{" "}</div>
+              {t("pagina_233", "Turma de inauguração aberta agora")}</div>
             <Reveal>
               <h2 className="mt-4 font-display text-3xl font-extrabold md:text-5xl" style={{ color: "#fff" }}>
-                {t("pagina_234", "Saia do próximo plantão no horário")}{" "}</h2>
+                {t("pagina_234", "Saia do próximo plantão no horário")}</h2>
               <p className="mx-auto mt-3 max-w-xl text-sm md:text-base" style={{ color: "rgba(255,255,255,0.85)" }}>
-                {t("pagina_235", "Sem cartão de crédito. Sem fidelidade. Cancele quando quiser. Entre na turma de inauguração da ADEC.")}{" "}</p>
+                {t("pagina_235", "Sem cartão de crédito. Sem fidelidade. Cancele quando quiser. Entre na turma de inauguração da ADEC.")}</p>
             </Reveal>
 
             <div className="mx-auto mt-8 grid max-w-3xl gap-3 sm:grid-cols-2">
@@ -1286,18 +1286,18 @@ const AUTOMATICOS = [
               className="mt-6 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-extrabold uppercase tracking-wide"
               style={{ background: "rgba(255,255,255,0.14)", color: "#fff" }}
             >
-              <ShieldCheck className="h-3.5 w-3.5" style={{ color: C.goldBright }} /> {t("pagina_236", "Compra 100% segura")}{" "}</p>
+              <ShieldCheck className="h-3.5 w-3.5" style={{ color: C.goldBright }} /> {t("pagina_236", "Compra 100% segura")}</p>
           </div>
         </section>
 
         <footer className="mt-8 text-center text-[11px]" style={{ color: C.inkSoft }}>
           <p className="mx-auto max-w-2xl leading-relaxed">
-            {t("pagina_237", "Aviso Legal: ferramenta de apoio à decisão clínica. Não substitui o julgamento técnico do profissional, o exame do paciente nem as fontes oficiais (COFEN, COREN, MS, ANVISA).")}{" "}</p>
+            {t("pagina_237", "Aviso Legal: ferramenta de apoio à decisão clínica. Não substitui o julgamento técnico do profissional, o exame do paciente nem as fontes oficiais (COFEN, COREN, MS, ANVISA).")}</p>
           <p className="mt-2">
             <Link to="/legal" className="font-extrabold underline" style={{ color: C.goldBright }}>
-              {t("pagina_238", "Termos de Uso, Aviso Legal e Política de Privacidade")}{" "}</Link>
+              {t("pagina_238", "Termos de Uso, Aviso Legal e Política de Privacidade")}</Link>
           </p>
-          <p className="mt-2">{t("pagina_239", "ADEC · Academia da Enfermagem · academiadaenfermagem.com.br")}{" "}</p>
+          <p className="mt-2">{t("pagina_239", "ADEC · Academia da Enfermagem · academiadaenfermagem.com.br")}</p>
         </footer>
       </div>
 
