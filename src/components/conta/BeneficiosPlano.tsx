@@ -142,48 +142,6 @@ export default function BeneficiosPlano() {
         </div>
       </div>
 
-      {anual && (
-        <div className="glass rounded-2xl p-4">
-          <p className="flex items-center gap-2 font-display text-base font-bold">
-            <Gift className="h-4 w-4 text-primary" /> 2º aplicativo (plano anual)
-          </p>
-          {anual.bonus_app_slug ? (
-            <p className="mt-1 text-sm text-muted-foreground">
-              Aplicativo bônus escolhido:{" "}
-              <strong>{tracks.find((t) => t.slug === anual.bonus_app_slug)?.label ?? anual.bonus_app_slug}</strong>
-            </p>
-          ) : (
-            <>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Escolha o segundo aplicativo que deseja liberar. A escolha é única e vale por 12 meses.
-              </p>
-              <div className="mt-3 flex flex-wrap gap-2">
-                <select
-                  value={bonus}
-                  onChange={(e) => setBonus(e.target.value)}
-                  className="rounded-xl border px-3 py-2 text-sm"
-                >
-                  <option value="">Selecione um aplicativo…</option>
-                  {tracks.filter((t) => t.slug !== anual.plan_slug).map((t) => (
-                    <option key={t.slug} value={t.slug}>
-                      {t.label}
-                    </option>
-                  ))}
-                </select>
-                <button
-                  type="button"
-                  disabled={!bonus || busy}
-                  onClick={escolherBonus}
-                  className="rounded-xl bg-primary px-4 py-2 text-sm font-extrabold text-primary-foreground disabled:opacity-50"
-                >
-                  Liberar aplicativo
-                </button>
-              </div>
-            </>
-          )}
-        </div>
-      )}
-
       <div className="glass rounded-2xl p-6 border-2 border-primary/20 bg-white/50 space-y-6">
         <h3 className="font-display text-base font-bold flex items-center gap-2">
           <Award className="h-5 w-5 text-primary" /> Emissão de Certificados
@@ -281,7 +239,7 @@ export default function BeneficiosPlano() {
                     orderId: created.id,
                     title: `Certificado ADEC - ${theme} (${amount}h)`,
                     amount: amount,
-                    email: user.email!,
+                    email: user.email ?? "",
                   }
                 });
 

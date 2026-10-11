@@ -179,23 +179,13 @@ export function AuthScreen({ cadastroSlug: forcedCadastroSlug }: { cadastroSlug?
           throw new Error("Selecione sua categoria (Acadêmico, Estudante de Técnico, Técnico ou Enfermeiro).");
         }
 
-        // Mantemos a proteção contra abuso, mas o acesso da campanha é concedido pelo banco
-        // até 30/09/2026, independentemente de serem 15 dias ou menos a partir do cadastro.
-        const deviceId = await getDeviceId();
-        const check = await checkTrial({
-          data: { email, phone_digits: phoneDigits, device_id: deviceId },
-        });
-        if (!check.allowed) {
-          throw new Error(check.reason || "Não foi possível liberar o período grátis.");
-        }
-
         const { data, error } = await supabase.auth.signUp({
           email,
           password,
           options: {
             emailRedirectTo: window.location.pathname === "/.lovable/oauth/consent"
               ? new URL(currentLoginDestination(), window.location.origin).href
-              : `${window.location.origin}/trilha/${categoria}`,
+              : `${window.location.origin}/checkout?plan=${categoria}&period=anual`,
             data: {
               full_name: nome.trim(),
               phone: phoneDigits,
@@ -205,27 +195,14 @@ export function AuthScreen({ cadastroSlug: forcedCadastroSlug }: { cadastroSlug?
         });
         if (error) throw error;
 
-        try {
-          await recordTrial({
-            data: {
-              email,
-              phone_digits: phoneDigits,
-              device_id: deviceId,
-              user_id: data.user?.id ?? null,
-            },
-          });
-        } catch (e) {
-          console.error("[trial] record failed", e);
-        }
-
         if (!data.session) {
           setMsg({
             type: "info",
-            text: "Cadastro criado! Verifique seu e-mail para confirmar — seu acesso gratuito ficará disponível até 30/09/2026.",
+            text: "Cadastro criado! Confirme seu e-mail e entre para adquirir o acesso anual.",
           });
           setMode("signin");
         } else {
-          finishLogin(`/trilha/${categoria}`);
+          finishLogin(`/checkout?plan=${categoria}&period=anual`);
         }
       } else {
         const { data, error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
@@ -237,7 +214,7 @@ export function AuthScreen({ cadastroSlug: forcedCadastroSlug }: { cadastroSlug?
           await supabase.auth.signOut({ scope: "local" }).catch(() => undefined);
           throw verificationError ?? new Error("Sua entrada não pôde ser confirmada. Tente novamente.");
         }
-        finishLogin(currentLoginDestination());
+        finishLogin(forcedCadastroSlug ? `/checkout?plan=${forcedCadastroSlug}&period=anual` : currentLoginDestination());
       }
     } catch (err) {
       setMsg({ type: "error", text: traduzirErro(err) });
@@ -323,17 +300,7 @@ export function AuthScreen({ cadastroSlug: forcedCadastroSlug }: { cadastroSlug?
             </button>
           </div>
 
-          {mode === "signup" && (
-            isFreeTrialOpen() ? (
-              <div className="mb-3 rounded-lg bg-emerald-500/10 px-3 py-2 text-xs font-semibold text-emerald-800">
-                🎁 Cadastro novo ganha <strong>acesso grátis até 30/09/2026</strong> — sem cartão.
-              </div>
-            ) : (
-              <div className="mb-3 rounded-lg border border-orange-500/40 bg-orange-500/10 px-3 py-2 text-xs font-semibold text-orange-900">
-                ⚠️ <strong>Período gratuito encerrado</strong> (válido até {TRIAL_FREE_UNTIL_LABEL}). Você pode criar sua conta, mas o acesso ao conteúdo só é liberado após a assinatura do plano da sua categoria.
-              </div>
-            )
-          )}
+          {mode === "signup" && <p className="mb-3 text-sm text-muted-foreground">Crie sua conta. O conteúdo será liberado após a confirmação da compra anual.</p>}
 
           <form onSubmit={handleSubmit} className="space-y-3">
             {mode === "signup" && (
@@ -417,7 +384,7 @@ export function AuthScreen({ cadastroSlug: forcedCadastroSlug }: { cadastroSlug?
             )}
 
             <button type="submit" disabled={busy} className="w-full rounded-xl bg-primary py-2.5 text-sm font-bold text-primary-foreground transition-opacity hover:opacity-90 disabled:opacity-60">
-              {busy ? "Aguarde..." : mode === "signup" ? (isFreeTrialOpen() ? "Criar conta — acesso grátis até 30/09" : "Criar minha conta") : mode === "forgot" ? "Enviar link de redefinição" : "Entrar"}
+              {busy ? "Aguarde..." : mode === "signup" ? "Criar minha conta" : mode === "forgot" ? "Enviar link de redefinição" : "Entrar"}
             </button>
 
             {mode === "forgot" && (
