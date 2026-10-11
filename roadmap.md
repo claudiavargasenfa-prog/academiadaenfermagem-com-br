@@ -14,7 +14,7 @@
 - Mini-app "Cuidando de Quem Cuida" finalizado.
 
 ## Pendente
-- Verificar se a credencial dos planos anuais antigos pode ser reutilizada sem cobrar preços antigos; não substituir a chave de assinatura por outra credencial.
+- Credencial antiga do Mercado Pago reutilizada no checkout; preços enviados pelo app. Chave de assinatura das notificações não está configurada e não pode ser substituída pelo token de acesso.
 - Oferta anual: quatro preços e telas anuais atualizados; oito testes aprovados e preços conferidos com conta autenticada.
 - Oferta anual: liberação automática e retirada de todos os brindes das novas ofertas confirmadas; preservar conteúdos e revisar direitos antigos com a proprietária.
 - Oferta anual: cobrança bloqueada por ausência de MP_WEBHOOK_SECRET; aguarda chave de assinatura das notificações, pagamento real e leitura do acesso na conta.
