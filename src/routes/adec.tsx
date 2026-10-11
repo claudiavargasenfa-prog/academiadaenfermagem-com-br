@@ -499,7 +499,7 @@ const AUTOMATICOS = [
 
               <p className="mt-3 flex items-center gap-1.5 text-xs font-bold md:text-sm" style={{ color: C.orange }}>
                 <Sparkles className="h-3.5 w-3.5" />
-                {t("pagina_137", "Turma de inauguração: os primeiros assinantes entram com acesso completo e canal direto com a autora")}</p>
+                {t("pagina_137", "365 dias de acesso à academia escolhida, com pagamento único")}</p>
 
               <div className="mt-7 flex flex-wrap justify-center gap-2 lg:justify-start">
                 {chips.map((c, i) => (
@@ -519,7 +519,7 @@ const AUTOMATICOS = [
 
               <p className="mt-6 flex items-center gap-1.5 text-xs font-semibold" style={{ color: C.inkSoft }}>
                 <ShieldCheck className="h-3.5 w-3.5" style={{ color: C.gold }} />
-                {t("pagina_138", "Compra segura · PIX ou cartão só depois do teste")}</p>
+                {t("pagina_138", "Pagamento pelo Mercado Pago · acesso após confirmação")}</p>
             </div>
 
             <PhoneMockup text={t} ink={C.ink} cta={C.cta} gold={C.goldBright} line={C.line} />
@@ -639,7 +639,7 @@ const AUTOMATICOS = [
               {
                 eyebrow: t("pagina_157", "Certificação avulsa opcional"),
                 title: t("pagina_158", "Certificados vendidos separadamente, sem emissão gratuita incluída."),
-                desc: t("pagina_159", "Trilhas com emissão de certificado ao concluir os módulos."),
+                desc: t("pagina_159", "Certificação opcional, contratada separadamente do acesso anual."),
               },
             ].map((b, i) => (
               <Reveal key={b.eyebrow} delay={i * 0.08}>
@@ -895,7 +895,7 @@ const AUTOMATICOS = [
                     <div className="mt-4">
                       <div className="flex items-baseline gap-1">
                         <span className="font-display text-3xl font-extrabold" style={{ color: C.ink }}>
-                          {isAnnualPlan(p.slug) ? formatPriceBRL(ANNUAL_PLANS[p.slug].cents) : ""}</span>
+                          {t(`annual_price_${p.slug}`, isAnnualPlan(p.slug) ? formatPriceBRL(ANNUAL_PLANS[p.slug].cents) : "")}</span>
                         <span className="text-xs font-bold" style={{ color: C.inkSoft }}>
                           {t("pagina_182", "/ano")}</span>
                       </div>
@@ -935,7 +935,7 @@ const AUTOMATICOS = [
                           <CheckCircle2 className="h-4 w-4" /> {t("pagina_185", "Acessar meu app →")}</Link>
                       ) : (
                         <a
-                          href={`/checkout?plan=${p.slug}&period=anual`}
+                            href={safeLandingUrl(t("signup_" + p.slug, `/checkout?plan=${p.slug}&period=anual`), `/checkout?plan=${p.slug}&period=anual`)}
                           className="inline-flex items-center justify-center gap-1.5 rounded-xl px-4 py-3 text-center text-xs font-extrabold uppercase leading-tight tracking-wide transition hover:-translate-y-0.5"
                           style={ctaStyle}
                         >

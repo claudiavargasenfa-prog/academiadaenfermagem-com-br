@@ -3,3 +3,4 @@
 - MCP uses verified OAuth caller tokens and a shared caller-scoped database factory, preserving existing RLS and content-access checks; never use privileged clients for MCP.
 - Keep OAuth consent at the public same-origin consent route and preserve its full validated return path through login and email confirmation so authorization can finish.
 - Keep ADEC landing content registered in the shared editor field catalog and persisted through app_texts with existing admin RLS; every displayed copy or image must be editable without changing membership or payment rules.
+- Annual checkout must derive prices from server-validated offers and bind payments to authenticated owners; payment processing must verify signature, official provider status, currency, amount and collector before transactional access changes, preventing forged or duplicate grants.

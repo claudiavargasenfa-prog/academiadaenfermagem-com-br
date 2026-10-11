@@ -6,6 +6,10 @@ export function safeLandingUrl(value: string, fallback: string): string {
 }
 
 export const ADEC_FIELDS: LandingField[] = [
+  { key: "annual_price_tecnico-estudante", label: "Preço exibido — Estudante de Técnico", group: "Planos anuais", defaultValue: "R$ 37,99", kind: "text" },
+  { key: "annual_price_tecnico", label: "Preço exibido — Técnico", group: "Planos anuais", defaultValue: "R$ 57,99", kind: "text" },
+  { key: "annual_price_academico", label: "Preço exibido — Acadêmico", group: "Planos anuais", defaultValue: "R$ 77,99", kind: "text" },
+  { key: "annual_price_enfermeiro", label: "Preço exibido — Enfermeiro", group: "Planos anuais", defaultValue: "R$ 97,99", kind: "text" },
   {
     "key": "pagina_3",
     "label": "QUERO TESTAR GRÁTIS POR 15 DIAS →",
