@@ -23,7 +23,9 @@ export function useAppTexts() {
   return useQuery({
     queryKey: ["app_texts"],
     queryFn: fetchAppTexts,
-    staleTime: 60_000,
+    staleTime: 0,
+    refetchOnMount: "always",
+    refetchOnWindowFocus: true,
   });
 }
 
