@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { AppShell } from "@/components/AppShell";
 import mascotesAsset from "@/assets/mascotes-iras.png.asset.json";
-import { fetchSubscriptionPlans, fetchMyActiveSubscriptions } from "@/lib/access";
+import { fetchSubscriptionPlans, fetchMyActiveSubscriptions, formatPriceBRL } from "@/lib/access";
 import { useApps } from "@/lib/apps";
 import { isBasePlanSlug } from "@/lib/plan-slugs";
 import { RichText, useText } from "@/lib/app-texts";
@@ -63,7 +63,7 @@ function StoreHomeContent() {
             {activePlans.map((plan) => {
               const appRow = appBySlug.get(plan.slug);
               const sub = mySubs.find((s) => s.plan_slug === plan.slug);
-              const subscribed = !!sub && (sub.status === "active" || sub.status === "trial");
+              const subscribed = !!sub && sub.status === "active";
               const inTrial = !!sub && sub.status === "trial";
               const slug = plan.slug;
               const isMentalHealth = slug === "suporte-tecnico";
@@ -110,6 +110,7 @@ function StoreHomeContent() {
                     <h3 className="font-display text-lg font-black tracking-tight">{plan.name}</h3>
                   </div>
                   <PlanSlogan slug={slug} />
+                  {["academico","tecnico","tecnico-estudante","enfermeiro"].includes(slug) && <p className="mb-3 text-xl font-bold">{formatPriceBRL(plan.price_cents)}/ano</p>}
                   <div className="relative mb-4 flex items-start gap-2 rounded-xl bg-black/5 p-2">
                     <span className="mt-0.5">🔒</span>
                     <p className="text-[10px] font-bold leading-tight opacity-80">CONTEÚDO PREMIUM EXCLUSIVO: Os módulos só podem ser visualizados por assinantes ou após clicar em descobrir.</p>
@@ -118,7 +119,7 @@ function StoreHomeContent() {
                     {subscribed ? (
                       <>
                         <Link to="/trilha/$slug" params={{ slug }} className="block w-full scale-100 rounded-xl bg-foreground py-3 text-center text-sm font-black uppercase tracking-wider text-background shadow-lg transition-transform active:scale-95 hover:scale-[1.02]">Acessar Agora →</Link>
-                        <span className="block w-full rounded-xl bg-white/40 py-2 text-center text-xs font-bold">{inTrial ? `🎁 Trial ativo · até ${new Date(sub!.expires_at).toLocaleDateString("pt-BR")}` : "✓ Assinatura ativa"}</span>
+                        <span className="block w-full rounded-xl bg-white/40 py-2 text-center text-xs font-bold">{inTrial ? `🎁 Trial ativo · até ${new Date(sub?.expires_at ?? "").toLocaleDateString("pt-BR")}` : "✓ Assinatura ativa"}</span>
                       </>
                     ) : (
                       <Link to="/planos/$slug" params={{ slug }} className="group/btn block w-full scale-100 rounded-xl bg-foreground py-3 text-center text-sm font-black uppercase tracking-wider text-background shadow-lg transition-all active:scale-95 hover:scale-[1.02] hover:shadow-black/20">

@@ -44,6 +44,8 @@ import {
 import { useAppTexts } from "@/lib/app-texts";
 import { supabase } from "@/integrations/supabase/client";
 import { Marquee, Reveal, ShineCTA, StickyCTA, WordReveal } from "@/components/adec/fx";
+import { ANNUAL_PLANS, isAnnualPlan } from "@/lib/annual-plans";
+import { formatPriceBRL } from "@/lib/access";
 import { safeLandingUrl } from "@/lib/adec-editor";
 import { PhoneMockup } from "@/components/adec/PhoneMockup";
 
@@ -67,9 +69,9 @@ const C = {
 
 export const Route = createFileRoute("/adec")({
   head: () => {
-    const title = "Inauguração da ADEC — Academia da Enfermagem | 15 dias grátis";
+    const title = "ADEC — Academia da Enfermagem | Acesso anual";
     const description =
-      "Inauguração da ADEC: 4 apps de suporte à decisão clínica para acadêmicos, técnicos e enfermeiros. Anotação automática, SAE, cálculos e escalas. 15 dias grátis, sem cartão.";
+      "ADEC: 4 academias de suporte à decisão clínica para acadêmicos, técnicos e enfermeiros. Anotação automática, SAE, cálculos e escalas. Acesso anual a partir de R$ 37,99.";
     return {
       meta: [
         { title },
@@ -116,10 +118,10 @@ export const Route = createFileRoute("/adec")({
             mainEntity: [
               {
                 "@type": "Question",
-                name: "Preciso de cartão de crédito para testar?",
+                name: "Como adquirir o acesso anual?",
                 acceptedAnswer: {
                   "@type": "Answer",
-                  text: "Não. O teste de 15 dias é liberado no cadastro, sem cartão de crédito.",
+                  text: "Escolha uma academia, identifique sua conta e pague pelo Mercado Pago. Acesso liberado após confirmação por 365 dias.",
                 },
               },
               {
@@ -179,9 +181,9 @@ function AdecPage() {
   const textsQ = useAppTexts();
   const t = (k: string, fb: string) => textsQ.data?.[`vendas.${k}`] ?? fb;
 
-const CTA_TOPO = t("pagina_3", "QUERO TESTAR GRÁTIS POR 15 DIAS →");
+const CTA_TOPO = t("pagina_3", "ADQUIRIR ACESSO ANUAL →");
 const CTA_MEIO = t("pagina_4", "SIM, QUERO TRANSFORMAR MEU PLANTÃO");
-const CTA_RODAPE = t("pagina_5", "COMEÇAR MEU TESTE GRÁTIS →");
+const CTA_RODAPE = t("pagina_5", "ESCOLHER MINHA ACADEMIA →");
 
 /** Fase de inauguração: sem números de usuários e sem depoimentos até termos casos reais. */
 
@@ -294,7 +296,7 @@ const CONTEUDOS_MINI_APPS: { t: string; d: string }[] = [
   { t: t("pagina_101", "Quizzes e Simulados"), d: t("pagina_102", "Questões por tema com correção na hora e ranking nacional.") },
   { t: t("pagina_103", "Obstetrícia, Saúde Mental e Idoso"), d: t("pagina_104", "Cuidados específicos de cada público explicados de forma prática.") },
   { t: t("pagina_105", "Manual de Sobrevivência no Estágio"), d: t("pagina_106", "Mochila, postura e comunicação com o preceptor desde o 1º dia.") },
-  { t: t("pagina_107", "Certificados"), d: t("pagina_108", "Emissão de certificado ao concluir as trilhas dos módulos.") },
+  { t: t("pagina_107", "Certificados avulsos"), d: t("pagina_108", "Certificação opcional vendida separadamente; não incluída no acesso anual.") },
 ];
 
 /** Os três recursos que geram documento pronto automaticamente. */
@@ -341,7 +343,7 @@ const AUTOMATICOS = [
 
   const isSubscribed = (slug: string) => {
     const s = (subsQ.data ?? []).find((x) => x.plan_slug === slug);
-    return !!s && (s.status === "active" || s.status === "trial");
+    return !!s && s.status === "active";
   };
 
   const ctaStyle: React.CSSProperties = {
@@ -351,8 +353,8 @@ const AUTOMATICOS = [
   };
 
   const chips = [
-    { Icon: CalendarCheck, label: t("chip_trial", "15 dias grátis") },
-    { Icon: CreditCard, label: t("pagina_127", "Sem cartão no cadastro") },
+    { Icon: CalendarCheck, label: t("chip_trial", "365 dias de acesso") },
+    { Icon: CreditCard, label: t("pagina_127", "Pagamento único anual") },
     { Icon: WifiOff, label: t("pagina_128", "Funciona offline") },
     { Icon: RefreshCw, label: t("pagina_129", "Atualizações contínuas") },
   ];
@@ -399,7 +401,7 @@ const AUTOMATICOS = [
         <span className="inline-flex items-center gap-1.5">
           <Flame className="h-3.5 w-3.5" />
           <PartyPopper className="h-3.5 w-3.5" />
-          {t("banner_text", "Inauguração da ADEC — turma fundadora aberta: comece hoje com 15 dias grátis")}</span>
+          {t("banner_text", "ADEC — acesso anual a partir de R$ 37,99")}</span>
         <span
           className="adec-shine pointer-events-none absolute inset-y-0 -left-1/3 w-1/3"
           style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)" }}
@@ -497,7 +499,7 @@ const AUTOMATICOS = [
 
               <p className="mt-3 flex items-center gap-1.5 text-xs font-bold md:text-sm" style={{ color: C.orange }}>
                 <Sparkles className="h-3.5 w-3.5" />
-                {t("pagina_137", "Turma de inauguração: os primeiros assinantes entram com acesso completo e canal direto com a autora")}</p>
+                {t("pagina_137", "365 dias de acesso à academia escolhida, com pagamento único")}</p>
 
               <div className="mt-7 flex flex-wrap justify-center gap-2 lg:justify-start">
                 {chips.map((c, i) => (
@@ -517,7 +519,7 @@ const AUTOMATICOS = [
 
               <p className="mt-6 flex items-center gap-1.5 text-xs font-semibold" style={{ color: C.inkSoft }}>
                 <ShieldCheck className="h-3.5 w-3.5" style={{ color: C.gold }} />
-                {t("pagina_138", "Compra segura · PIX ou cartão só depois do teste")}</p>
+                {t("pagina_138", "Pagamento pelo Mercado Pago · acesso após confirmação")}</p>
             </div>
 
             <PhoneMockup text={t} ink={C.ink} cta={C.cta} gold={C.goldBright} line={C.line} />
@@ -635,9 +637,9 @@ const AUTOMATICOS = [
                 desc: t("pagina_156", "COFEN, CORENs, ANVISA, Ministério da Saúde, OMS — sempre em dia."),
               },
               {
-                eyebrow: t("pagina_157", "Extra"),
-                title: t("pagina_158", "Com certificação opcional"),
-                desc: t("pagina_159", "Trilhas com emissão de certificado ao concluir os módulos."),
+                eyebrow: t("pagina_157", "Certificação avulsa opcional"),
+                title: t("pagina_158", "Certificados vendidos separadamente, sem emissão gratuita incluída."),
+                desc: t("pagina_159", "Certificação opcional, contratada separadamente do acesso anual."),
               },
             ].map((b, i) => (
               <Reveal key={b.eyebrow} delay={i * 0.08}>
@@ -843,7 +845,7 @@ const AUTOMATICOS = [
           <SectionTitle
             eyebrow={t("pagina_179", "Escolha seu app")}
             title={t("planos_title", "4 apps, um só padrão de excelência")}
-            sub={t("plans_subtitle", "15 dias grátis, sem cartão. Cancele quando quiser.")}
+            sub={t("plans_subtitle", "Escolha sua academia. Pagamento único anual pelo Mercado Pago.")}
           />
 
           <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
@@ -893,9 +895,9 @@ const AUTOMATICOS = [
                     <div className="mt-4">
                       <div className="flex items-baseline gap-1">
                         <span className="font-display text-3xl font-extrabold" style={{ color: C.ink }}>
-                          {t("pagina_181", "R$ 0,00")}</span>
+                          {t(`annual_price_${p.slug}`, isAnnualPlan(p.slug) ? formatPriceBRL(ANNUAL_PLANS[p.slug].cents) : "")}</span>
                         <span className="text-xs font-bold" style={{ color: C.inkSoft }}>
-                          {t("pagina_182", "/mês")}</span>
+                          {t("pagina_182", "/ano")}</span>
                       </div>
 
                       <p
@@ -903,13 +905,13 @@ const AUTOMATICOS = [
                         style={{ color: C.orange }}
                       >
                         <Sparkles className="h-3 w-3" />
-                        {t("plans_badge", "15 dias grátis · sem cartão")}</p>
+                        {t("plans_badge", "Acesso anual · pagamento único")}</p>
 
                       <p
                         className="mt-2 rounded-lg px-2 py-1.5 text-[11px] font-bold leading-snug"
                         style={{ background: "rgba(212,175,55,0.16)", color: C.ink }}
                       >
-                        {t("pagina_184", "Período de teste grátis, 15 dias, para quem acessar entre os dias 10.08.2026 a 10.09.2026")}</p>
+                        {t("pagina_184", "Liberação após aprovação do pagamento. Sem renovação automática.")}</p>
                     </div>
 
 
@@ -933,7 +935,7 @@ const AUTOMATICOS = [
                           <CheckCircle2 className="h-4 w-4" /> {t("pagina_185", "Acessar meu app →")}</Link>
                       ) : (
                         <a
-                          href={safeLandingUrl(t("signup_" + p.slug, `/cadastro/${p.slug}`), `/cadastro/${p.slug}`)}
+                            href={safeLandingUrl(t("signup_" + p.slug, `/checkout?plan=${p.slug}&period=anual`), `/checkout?plan=${p.slug}&period=anual`)}
                           className="inline-flex items-center justify-center gap-1.5 rounded-xl px-4 py-3 text-center text-xs font-extrabold uppercase leading-tight tracking-wide transition hover:-translate-y-0.5"
                           style={ctaStyle}
                         >
@@ -952,9 +954,9 @@ const AUTOMATICOS = [
         <section className="mt-12 overflow-hidden rounded-[2rem] border-2 border-[#b8912f] bg-white p-6 shadow-xl">
           <div className="flex flex-col items-center text-center">
             <div className="inline-flex items-center gap-2 rounded-full bg-[#0d3b2e] px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-[#f0d489]">
-              <Award className="h-4 w-4" /> {t("pagina_186", "Certificados reconhecidos")}</div>
+              <Award className="h-4 w-4" /> {t("pagina_186", "Certificados vendidos separadamente")}</div>
             <p className="mt-4 max-w-2xl text-sm font-medium text-[#0b3229]/80">
-              {t("pagina_187", "Nossos certificados possuem validade em todo território nacional para comprovação de horas complementares e atualização profissional.")}</p>
+              {t("pagina_187", "O acesso anual não inclui certificados. A certificação avulsa possui contratação separada.")}</p>
             
             <div className="mt-8 grid grid-cols-2 gap-4">
               <div className="group relative">
@@ -1031,10 +1033,10 @@ const AUTOMATICOS = [
               <div className="flex items-center gap-2">
                 <ShieldCheck className="h-6 w-6" style={{ color: C.cta }} />
                 <p className="font-display text-lg font-extrabold" style={{ color: C.ink }}>
-                  {t("guarantee_title", "Garantia real de 15 dias")}</p>
+                  {t("guarantee_title", "Compra identificada e segura")}</p>
               </div>
               <p className="mt-2 text-sm" style={{ color: C.inkSoft }}>
-                {t("pagina_200", "Você entra, testa tudo, e só assina se quiser continuar. Sem cartão no cadastro, sem cobrança escondida.")}</p>
+                {t("pagina_200", "Entre ou crie sua conta, pague pelo Mercado Pago e acesse sua academia após a confirmação.")}</p>
             </div>
           </Reveal>
           <Reveal delay={0.1}>
@@ -1045,16 +1047,16 @@ const AUTOMATICOS = [
               <div className="flex items-center gap-2">
                 <MessageCircle className="h-6 w-6" style={{ color: C.orange }} />
                 <p className="font-display text-lg font-extrabold" style={{ color: C.ink }}>
-                  {t("pagina_201", "Grupo VIP no WhatsApp")}</p>
+                  {t("pagina_201", "Sua academia por 365 dias")}</p>
               </div>
               <p className="mt-2 text-sm" style={{ color: C.inkSoft }}>
-                {t("pagina_202", "Tira-dúvidas direto com a fundadora, atualizações em primeira mão e trocas entre colegas de plantão.")}</p>
+                {t("pagina_202", "A compra libera os conteúdos da academia escolhida durante um ano.")}</p>
               <p
                 className="mt-3 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-extrabold uppercase tracking-wide"
                 style={{ background: C.orange, color: "#fff" }}
               >
                 <Flame className="h-3.5 w-3.5" />
-                {t("pagina_203", "Grupo VIP da inauguração — o convite chega ao ativar seu teste")}</p>
+                {t("pagina_203", "Sem mensalidade ou renovação automática")}</p>
             </div>
           </Reveal>
         </section>
@@ -1062,8 +1064,8 @@ const AUTOMATICOS = [
         {/* INAUGURAÇÃO */}
         <section className="mt-16">
           <SectionTitle
-            eyebrow={t("pagina_204", "Inauguração")}
-            title={t("inauguracao_titulo", "Por que entrar agora, na turma de inauguração")}
+            eyebrow={t("pagina_204", "Acesso anual")}
+            title={t("inauguracao_titulo", "Sua academia durante um ano")}
             sub={t(
               "inauguracao_sub",
               "A ADEC está sendo inaugurada. Quem entra agora ajuda a moldar o app e recebe tudo o que for lançado dentro da sua academia.",
@@ -1073,18 +1075,18 @@ const AUTOMATICOS = [
             {[
               {
                 icon: Star,
-                title: t("pagina_205", "Acesso de fundadora"),
-                desc: t("pagina_206", "Seu preço de entrada é mantido enquanto a assinatura estiver ativa, mesmo com novos módulos chegando."),
+                title: t("pagina_205", "Pagamento único"),
+                desc: t("pagina_206", "Um pagamento garante 365 dias de acesso à academia escolhida."),
               },
               {
                 icon: MessageCircle,
-                title: t("pagina_207", "Canal direto com a autora"),
-                desc: t("pagina_208", "Pediu, foi analisado: nesta fase suas sugestões entram na fila de desenvolvimento com prioridade."),
+                title: t("pagina_207", "Conteúdo da sua academia"),
+                desc: t("pagina_208", "Ferramentas de estudo e apoio à prática conforme os módulos da academia escolhida."),
               },
               {
                 icon: ShieldCheck,
-                title: t("pagina_209", "Teste sem risco"),
-                desc: t("launch_trial", "15 dias grátis, sem cartão no cadastro. Você usa no plantão de verdade antes de decidir."),
+                title: t("pagina_209", "Liberação após pagamento"),
+                desc: t("launch_trial", "O Mercado Pago confirma a aprovação e o acesso é liberado na conta usada na compra."),
               },
             ].map((c, i) => (
               <Reveal key={c.title} delay={i * 0.1}>
@@ -1167,20 +1169,20 @@ const AUTOMATICOS = [
           <div className="mx-auto mt-8 max-w-3xl space-y-2">
             {[
               {
-                q: t("pagina_222", "Como funciona o período grátis?"),
-                a: t("faq_trial", "Você se cadastra e ganha 15 dias de acesso completo, sem precisar informar cartão. No fim do período, é só assinar para continuar."),
+                q: t("pagina_222", "Como o acesso é liberado?"),
+                a: t("faq_trial", "Escolha sua academia, entre ou crie sua conta e pague pelo Mercado Pago. O acesso é liberado após confirmação do pagamento."),
               },
               {
-                q: t("pagina_223", "Posso cancelar quando quiser?"),
-                a: t("pagina_224", "Sim. A assinatura é mensal e sem fidelidade — cancele pelo checkout a qualquer momento."),
+                q: t("pagina_223", "Existe cobrança mensal ou renovação automática?"),
+                a: t("pagina_224", "Não. Você paga uma única vez por 365 dias. Para continuar após o vencimento, faça uma nova compra."),
               },
               {
                 q: t("pagina_225", "Funciona offline?"),
                 a: t("pagina_226", "Sim. Instale como app no celular (PWA) e a maior parte do conteúdo funciona sem internet, ideal para plantão."),
               },
               {
-                q: t("pagina_227", "Como entro no Grupo VIP do WhatsApp?"),
-                a: t("pagina_228", "Assim que ativar seu acesso, o convite do grupo aparece dentro do app. As vagas de cada turma são limitadas."),
+                q: t("pagina_227", "A compra inclui bônus ou certificados?"),
+                a: t("pagina_228", "Não. O valor anual corresponde ao acesso à academia escolhida. Certificados avulsos são vendidos separadamente."),
               },
               {
                 q: t("pagina_229", "Posso usar no celular e no computador?"),
@@ -1304,7 +1306,7 @@ const AUTOMATICOS = [
       <StickyCTA
         href={safeLandingUrl(t("cta_target", "#planos"), "#planos")}
         label={CTA_TOPO}
-        hint={t("sticky_hint", "Turma de inauguração · 15 dias grátis, sem cartão")}
+        hint={t("sticky_hint", "Acesso anual · escolha sua academia")}
         bg={C.cta}
         fg="rgba(255,255,255,0.9)"
         accent={C.goldBright}

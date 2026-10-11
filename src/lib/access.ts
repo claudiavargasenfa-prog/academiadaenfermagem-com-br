@@ -100,14 +100,14 @@ export async function fetchPlanOffers(): Promise<PlanOffer[]> {
 }
 export async function fetchMyActiveSubscriptions(): Promise<UserSubscription[]> {
   const { data: sessionData } = await supabase.auth.getSession(); const user = sessionData.session?.user; if (!user) return [];
-  const { data, error } = await supabase.from("user_subscriptions").select("*").eq("user_id", user.id).in("status", ["active", "trial"]).gt("expires_at", new Date().toISOString());
+  const { data, error } = await supabase.from("user_subscriptions").select("*").eq("user_id", user.id).eq("status", "active").gt("expires_at", new Date().toISOString());
   if (error) throw error; return data ?? [];
 }
 export async function fetchMyProfile() {
   const { data: sessionData } = await supabase.auth.getSession(); const user = sessionData.session?.user; if (!user) return null;
   const { data } = await supabase.from("profiles").select("*").eq("id", user.id).maybeSingle(); return data;
 }
-export const ACCESS_DAYS = 150;
+export const ACCESS_DAYS = 365;
 export function formatPriceBRL(cents: number): string { return new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(cents / 100); }
 export function daysUntil(iso: string | null | undefined): number | null { if (!iso) return null; return Math.max(0, Math.ceil((new Date(iso).getTime() - Date.now()) / (1000 * 60 * 60 * 24))); }
 export async function fetchMiniApps(): Promise<MiniApp[]> { const data = await listMiniAppsCatalog(); return (data ?? []) as unknown as MiniApp[]; }
@@ -147,8 +147,6 @@ export function useAppAccess(slug: string) {
       if (e1) throw e1;
       const app = (metaRows ?? [])[0] ?? null;
       if (!app) return { app: null, granted: false, expiresAt: null as string | null, viaAdmin: false, accessType: "none" as const };
-      const permanentlyFree = PERMANENT_FREE_SLUGS.includes(slug) || slug.toLowerCase().includes("cuidando-de-quem-cuida");
-      if (app.gratuito || permanentlyFree) return { app, granted: true, expiresAt: null as string | null, viaAdmin: false, accessType: "free" as const };
       if (!user) return { app, granted: false, expiresAt: null as string | null, viaAdmin: false, accessType: "none" as const };
 
       const { data: roleRow } = await supabase.from("user_roles").select("role").eq("user_id", user.id).eq("role", "admin").maybeSingle();
@@ -156,12 +154,6 @@ export function useAppAccess(slug: string) {
 
       const { data: acc } = await supabase.from("user_app_access").select("expires_at").eq("user_id", user.id).eq("mini_app_id", app.id).gt("expires_at", new Date().toISOString()).order("expires_at", { ascending: false }).limit(1).maybeSingle();
       if (acc) return { app, granted: true, expiresAt: acc.expires_at, viaAdmin: false, accessType: "purchase" as const };
-
-      const now = new Date();
-      const createdAt = user.created_at ? new Date(user.created_at) : now;
-      if (isCampaignOpen(now) && createdAt.getTime() <= CAMPAIGN_FREE_UNTIL.getTime()) {
-        return { app, granted: true, expiresAt: CAMPAIGN_FREE_UNTIL.toISOString(), viaAdmin: false, accessType: "campaign" as const };
-      }
 
       // A partir de 01/10, nenhuma assinatura do tipo trial criada pela campanha mantém acesso.
       // Somente assinatura paga vigente (active) ou acesso individual comprado libera o conteúdo.

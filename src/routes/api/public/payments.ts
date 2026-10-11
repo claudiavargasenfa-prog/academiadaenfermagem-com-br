@@ -1,176 +1,34 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { createHmac, timingSafeEqual } from "crypto";
+import { createFileRoute } from '@tanstack/react-router';
+import { verifyMpSignature } from '@/lib/mp-signature';
+import { validAnnualPayment } from '@/lib/annual-plans';
 
-/**
- * Webhook de pagamentos (Mercado Pago).
- *
- * SEGURANÇA:
- * - Nada do corpo da requisição é considerado confiável.
- * - Quando MP_WEBHOOK_SECRET existe, a assinatura x-signature é validada.
- * - O status real do pagamento é sempre buscado na API do Mercado Pago
- *   usando MP_ACCESS_TOKEN. Só então o pedido é liberado.
- * - Toda escrita é feita com o cliente de servidor (service role).
- */
-
-function verifySignature(
-  secret: string,
-  xSignature: string | null,
-  xRequestId: string | null,
-  dataId: string,
-): boolean {
-  if (!xSignature) return false;
-  const parts = Object.fromEntries(
-    xSignature.split(",").map((p) => {
-      const [k, ...rest] = p.split("=");
-      return [k.trim(), rest.join("=").trim()];
-    }),
-  ) as Record<string, string>;
-  const ts = parts["ts"];
-  const v1 = parts["v1"];
-  if (!ts || !v1) return false;
-  const manifest = `id:${dataId};request-id:${xRequestId ?? ""};ts:${ts};`;
-  const expected = createHmac("sha256", secret).update(manifest).digest("hex");
-  const a = Buffer.from(expected);
-  const b = Buffer.from(v1);
-  return a.length === b.length && timingSafeEqual(a, b);
-}
-
-export const Route = createFileRoute("/api/public/payments")({
-  server: {
-    handlers: {
-      POST: async ({ request }) => {
-        const { supabaseAdmin } = await import(
-          "@/integrations/supabase/client.server"
-        );
-
-        try {
-          const raw = await request.text();
-          let payload: any = {};
-          try {
-            payload = raw ? JSON.parse(raw) : {};
-          } catch {
-            return new Response(JSON.stringify({ error: "invalid_payload" }), {
-              status: 400,
-              headers: { "Content-Type": "application/json" },
-            });
-          }
-
-          const url = new URL(request.url);
-          const paymentId = String(
-            payload?.data?.id ??
-              url.searchParams.get("data.id") ??
-              url.searchParams.get("id") ??
-              "",
-          );
-
-          // Registro de auditoria (nunca libera acesso por si só)
-          await supabaseAdmin.from("payment_webhooks").insert({
-            provider: "mercadopago",
-            payload,
-          });
-
-          const secret = process.env["MP_WEBHOOK_SECRET"];
-          if (secret) {
-            const ok = verifySignature(
-              secret,
-              request.headers.get("x-signature"),
-              request.headers.get("x-request-id"),
-              paymentId,
-            );
-            if (!ok) {
-              return new Response(JSON.stringify({ error: "unauthorized" }), {
-                status: 401,
-                headers: { "Content-Type": "application/json" },
-              });
-            }
-          }
-
-          const accessToken = process.env["MP_ACCESS_TOKEN"];
-          if (!accessToken || !paymentId) {
-            // Sem verificação possível: apenas registra e encerra.
-            return new Response(JSON.stringify({ received: true }), {
-              status: 200,
-              headers: { "Content-Type": "application/json" },
-            });
-          }
-
-          const mpRes = await fetch(
-            `https://api.mercadopago.com/v1/payments/${encodeURIComponent(paymentId)}`,
-            { headers: { Authorization: `Bearer ${accessToken}` } },
-          );
-          if (!mpRes.ok) {
-            return new Response(JSON.stringify({ received: true }), {
-              status: 200,
-              headers: { "Content-Type": "application/json" },
-            });
-          }
-          const payment: any = await mpRes.json();
-
-          const approved = payment?.status === "approved";
-          const orderId: string | null = payment?.external_reference ?? null;
-          if (!approved || !orderId) {
-            return new Response(JSON.stringify({ received: true }), {
-              status: 200,
-              headers: { "Content-Type": "application/json" },
-            });
-          }
-
-          const { data: order } = await supabaseAdmin
-            .from("orders")
-            .select("id, user_id, plan_slug, status, metadata")
-            .eq("id", orderId)
-            .maybeSingle();
-
-          if (!order || order.status === "paid") {
-            return new Response(JSON.stringify({ received: true }), {
-              status: 200,
-              headers: { "Content-Type": "application/json" },
-            });
-          }
-
-          await supabaseAdmin
-            .from("orders")
-            .update({ status: "paid", external_id: String(paymentId) })
-            .eq("id", order.id)
-            .eq("status", "pending");
-
-          if (order.user_id) {
-            if (order.metadata && (order.metadata as any).type === "certificate") {
-              // Certificado Avulso
-              const theme = (order.metadata as any).theme;
-              const hours = (order.metadata as any).hours;
-              await supabaseAdmin.rpc("internal_issue_certificate", {
-                _user_id: order.user_id,
-                _mini_app_id: "00000000-0000-0000-0000-000000000000", // ID dummy para customizado
-                _hours: hours,
-                _custom_theme: theme,
-              });
-            } else {
-              // Assinatura de Plano
-              const expiresAt = new Date();
-              expiresAt.setDate(expiresAt.getDate() + 30);
-              await supabaseAdmin.from("user_subscriptions").upsert({
-                user_id: order.user_id,
-                plan_slug: order.plan_slug,
-                status: "active",
-                expires_at: expiresAt.toISOString(),
-                updated_at: new Date().toISOString(),
-              });
-            }
-          }
-
-          return new Response(JSON.stringify({ received: true }), {
-            status: 200,
-            headers: { "Content-Type": "application/json" },
-          });
-        } catch (err) {
-          console.error("Erro no webhook de pagamento");
-          return new Response(JSON.stringify({ error: "internal_error" }), {
-            status: 500,
-            headers: { "Content-Type": "application/json" },
-          });
-        }
-      },
-    },
-  },
-});
+export const Route = createFileRoute('/api/public/payments')({server:{handlers:{POST:async({request})=>{
+ const secret=process.env['MP_WEBHOOK_SECRET'],token=process.env['MP_ACCESS_TOKEN'];
+ if (!secret || !token) return Response.json({error:'configuration_pending'},{status:503});
+ try {
+  const url=new URL(request.url);
+  const payload = await request.json() as {data?:{id?:string|number};type?:string};
+  const signatureId=url.searchParams.get('data.id') ?? '';
+  if (!verifyMpSignature(secret,request.headers.get('x-signature'),request.headers.get('x-request-id'),signatureId)) return Response.json({error:'unauthorized'},{status:401});
+  const id=String(payload.data?.id ?? signatureId);
+  if (id!==signatureId || !/^\d+$/.test(id)) return Response.json({error:'invalid_payment'},{status:400});
+  if (payload.type && payload.type!=='payment') return Response.json({received:true});
+  const headers={Authorization:`Bearer ${token}`};
+  const [payRes,meRes]=await Promise.all([fetch(`https://api.mercadopago.com/v1/payments/${id}`,{headers}),fetch('https://api.mercadopago.com/users/me',{headers})]);
+  if (!payRes.ok || !meRes.ok) return Response.json({error:'verification_unavailable'},{status:503});
+  const payment=await payRes.json() as {id:number;status:string;external_reference:string;transaction_amount:number;currency_id:string;collector_id:number;date_approved:string|null;transaction_amount_refunded?:number};
+  const me=await meRes.json() as {id:number};
+  if (!payment.external_reference) return Response.json({received:true});
+  const {supabaseAdmin}=await import('@/integrations/supabase/client.server');
+  const {data:order,error}=await supabaseAdmin.from('orders').select('id,amount_cents,metadata').eq('id',payment.external_reference).maybeSingle();
+  if (error) return Response.json({error:'order_read_failed'},{status:503});
+  if (!order) return Response.json({received:true});
+  if (!validAnnualPayment(payment,order,me.id) || String(payment.id)!==id) return Response.json({error:'payment_mismatch'},{status:400});
+  if ((order.metadata as {type?:string}|null)?.type!=='annual_membership') return Response.json({error:'legacy_order_requires_review'},{status:409});
+  if (payment.status==='refunded' && (payment.transaction_amount_refunded ?? 0)<payment.transaction_amount) return Response.json({error:'partial_refund_requires_review'},{status:409});
+  const {error:processError}=await supabaseAdmin.rpc('process_annual_payment',{_order_id:order.id,_payment_id:id,_status:payment.status,_amount_cents:Math.round(payment.transaction_amount*100),_approved_at:payment.date_approved ?? new Date().toISOString()});
+  if (processError) {console.error('Falha na concessão transacional',processError.code);return Response.json({error:'processing_failed'},{status:503});}
+  await supabaseAdmin.from('payment_webhooks').insert({provider:'mercadopago',payload:{payment_id:id,status:payment.status,order_id:order.id},processed:true});
+  return Response.json({received:true});
+ } catch { return Response.json({error:'processing_failed'},{status:503}); }
+}}}});

@@ -107,8 +107,9 @@ function MinhaContaPage() {
                     {track?.label ?? s.plan_slug}
                   </p>
                   <p className="mt-1 text-sm font-semibold">
-                    {isTrial ? "Período gratuito" : "Assinatura ativa"}
+                    {isTrial ? "Período gratuito" : "Acesso anual ativo"}
                   </p>
+                  <p className="mt-1 text-xs text-muted-foreground">Início: {new Date(s.started_at).toLocaleDateString("pt-BR")}</p>
                   <p className="mt-1 text-xs text-muted-foreground">
                     {isTrial ? "Termina em " : "Vence em "}
                     {new Date(s.expires_at).toLocaleDateString("pt-BR")} ({days}{" "}

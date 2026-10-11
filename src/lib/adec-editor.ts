@@ -6,11 +6,15 @@ export function safeLandingUrl(value: string, fallback: string): string {
 }
 
 export const ADEC_FIELDS: LandingField[] = [
+  { key: "annual_price_tecnico-estudante", label: "Preço exibido — Estudante de Técnico", group: "Planos anuais", defaultValue: "R$ 37,99", kind: "text" },
+  { key: "annual_price_tecnico", label: "Preço exibido — Técnico", group: "Planos anuais", defaultValue: "R$ 57,99", kind: "text" },
+  { key: "annual_price_academico", label: "Preço exibido — Acadêmico", group: "Planos anuais", defaultValue: "R$ 77,99", kind: "text" },
+  { key: "annual_price_enfermeiro", label: "Preço exibido — Enfermeiro", group: "Planos anuais", defaultValue: "R$ 97,99", kind: "text" },
   {
     "key": "pagina_3",
     "label": "QUERO TESTAR GRÁTIS POR 15 DIAS →",
     "group": "Apresentação e cartões",
-    "defaultValue": "QUERO TESTAR GRÁTIS POR 15 DIAS →",
+    "defaultValue": "ADQUIRIR ACESSO ANUAL →",
     "kind": "text"
   },
   {
@@ -24,7 +28,7 @@ export const ADEC_FIELDS: LandingField[] = [
     "key": "pagina_5",
     "label": "COMEÇAR MEU TESTE GRÁTIS →",
     "group": "Apresentação e cartões",
-    "defaultValue": "COMEÇAR MEU TESTE GRÁTIS →",
+    "defaultValue": "ESCOLHER MINHA ACADEMIA →",
     "kind": "text"
   },
   {
@@ -731,14 +735,14 @@ export const ADEC_FIELDS: LandingField[] = [
     "key": "pagina_107",
     "label": "Certificados",
     "group": "Conteúdos dos Mini Apps",
-    "defaultValue": "Certificados",
+    "defaultValue": "Certificados avulsos",
     "kind": "text"
   },
   {
     "key": "pagina_108",
     "label": "Emissão de certificado ao concluir as trilhas dos módulos.",
     "group": "Conteúdos dos Mini Apps",
-    "defaultValue": "Emissão de certificado ao concluir as trilhas dos módulos.",
+    "defaultValue": "Certificação opcional vendida separadamente; não incluída no acesso anual.",
     "kind": "text"
   },
   {
@@ -871,7 +875,7 @@ export const ADEC_FIELDS: LandingField[] = [
     "key": "pagina_127",
     "label": "Sem cartão no cadastro",
     "group": "Apresentação e cartões",
-    "defaultValue": "Sem cartão no cadastro",
+    "defaultValue": "Pagamento único anual",
     "kind": "text"
   },
   {
@@ -941,14 +945,14 @@ export const ADEC_FIELDS: LandingField[] = [
     "key": "pagina_137",
     "label": ": os primeiros assinantes entram com acesso completo e canal direto com a autora",
     "group": "Apresentação",
-    "defaultValue": "Turma de inauguração: os primeiros assinantes entram com acesso completo e canal direto com a autora",
+    "defaultValue": "365 dias de acesso à academia escolhida, com pagamento único",
     "kind": "text"
   },
   {
     "key": "pagina_138",
     "label": "Compra segura · PIX ou cartão só depois do teste",
     "group": "Apresentação",
-    "defaultValue": "Compra segura · PIX ou cartão só depois do teste",
+    "defaultValue": "Pagamento pelo Mercado Pago · acesso após confirmação",
     "kind": "text"
   },
   {
@@ -1081,21 +1085,21 @@ export const ADEC_FIELDS: LandingField[] = [
     "key": "pagina_157",
     "label": "Extra",
     "group": "BENEFÍCIOS",
-    "defaultValue": "Extra",
+    "defaultValue": "Certificação avulsa opcional",
     "kind": "text"
   },
   {
     "key": "pagina_158",
     "label": "Com certificação opcional",
     "group": "BENEFÍCIOS",
-    "defaultValue": "Com certificação opcional",
+    "defaultValue": "Certificados vendidos separadamente, sem emissão gratuita incluída.",
     "kind": "text"
   },
   {
     "key": "pagina_159",
     "label": "Trilhas com emissão de certificado ao concluir os módulos.",
     "group": "BENEFÍCIOS",
-    "defaultValue": "Trilhas com emissão de certificado ao concluir os módulos.",
+    "defaultValue": "Certificação opcional, contratada separadamente do acesso anual.",
     "kind": "text"
   },
   {
@@ -1263,14 +1267,14 @@ export const ADEC_FIELDS: LandingField[] = [
     "key": "pagina_182",
     "label": "/mês",
     "group": "PLANOS",
-    "defaultValue": "/mês",
+    "defaultValue": "/ano",
     "kind": "text"
   },
   {
     "key": "pagina_184",
     "label": "Período de teste grátis, 15 dias, para quem acessar entre os dias 10.08.2026 a 10.09.2026",
     "group": "PLANOS",
-    "defaultValue": "Período de teste grátis, 15 dias, para quem acessar entre os dias 10.08.2026 a 10.09.2026",
+    "defaultValue": "Liberação após aprovação do pagamento. Sem renovação automática.",
     "kind": "text"
   },
   {
@@ -1284,14 +1288,14 @@ export const ADEC_FIELDS: LandingField[] = [
     "key": "pagina_186",
     "label": "Certificados reconhecidos",
     "group": "Banner Certificados Reconhecidos",
-    "defaultValue": "Certificados reconhecidos",
+    "defaultValue": "Certificados vendidos separadamente",
     "kind": "text"
   },
   {
     "key": "pagina_187",
     "label": "Nossos certificados possuem validade em todo território nacional para comprovação de horas c…",
     "group": "Banner Certificados Reconhecidos",
-    "defaultValue": "Nossos certificados possuem validade em todo território nacional para comprovação de horas complementares e atualização profissional.",
+    "defaultValue": "O acesso anual não inclui certificados. A certificação avulsa possui contratação separada.",
     "kind": "text"
   },
   {
@@ -1354,84 +1358,84 @@ export const ADEC_FIELDS: LandingField[] = [
     "key": "pagina_200",
     "label": "Você entra, testa tudo, e só assina se quiser continuar. Sem cartão no cadastro, sem cobranç…",
     "group": "GARANTIA + WHATSAPP",
-    "defaultValue": "Você entra, testa tudo, e só assina se quiser continuar. Sem cartão no cadastro, sem cobrança escondida.",
+    "defaultValue": "Entre ou crie sua conta, pague pelo Mercado Pago e acesse sua academia após a confirmação.",
     "kind": "text"
   },
   {
     "key": "pagina_201",
     "label": "Grupo VIP no WhatsApp",
     "group": "GARANTIA + WHATSAPP",
-    "defaultValue": "Grupo VIP no WhatsApp",
+    "defaultValue": "Sua academia por 365 dias",
     "kind": "text"
   },
   {
     "key": "pagina_202",
     "label": "Tira-dúvidas direto com a fundadora, atualizações em primeira mão e trocas entre colegas de …",
     "group": "GARANTIA + WHATSAPP",
-    "defaultValue": "Tira-dúvidas direto com a fundadora, atualizações em primeira mão e trocas entre colegas de plantão.",
+    "defaultValue": "A compra libera os conteúdos da academia escolhida durante um ano.",
     "kind": "text"
   },
   {
     "key": "pagina_203",
     "label": "Grupo VIP da inauguração — o convite chega ao ativar seu teste",
     "group": "GARANTIA + WHATSAPP",
-    "defaultValue": "Grupo VIP da inauguração — o convite chega ao ativar seu teste",
+    "defaultValue": "Sem mensalidade ou renovação automática",
     "kind": "text"
   },
   {
     "key": "pagina_204",
     "label": "Inauguração",
     "group": "Inauguração",
-    "defaultValue": "Inauguração",
+    "defaultValue": "Acesso anual",
     "kind": "text"
   },
   {
     "key": "inauguracao_titulo",
     "label": "Por que entrar agora, na turma de inauguração",
     "group": "Inauguração",
-    "defaultValue": "Por que entrar agora, na turma de inauguração",
+    "defaultValue": "Sua academia durante um ano",
     "kind": "text"
   },
   {
     "key": "inauguracao_sub",
     "label": "A ADEC está sendo inaugurada. Quem entra agora ajuda a moldar o app e recebe tudo o que for …",
     "group": "Inauguração",
-    "defaultValue": "A ADEC está sendo inaugurada. Quem entra agora ajuda a moldar o app e recebe tudo o que for lançado dentro da sua academia.",
+    "defaultValue": "Escolha a academia da sua formação e tenha acesso aos seus conteúdos por 365 dias.",
     "kind": "text"
   },
   {
     "key": "pagina_205",
     "label": "Acesso de fundadora",
     "group": "Inauguração",
-    "defaultValue": "Acesso de fundadora",
+    "defaultValue": "Pagamento único",
     "kind": "text"
   },
   {
     "key": "pagina_206",
     "label": "Seu preço de entrada é mantido enquanto a assinatura estiver ativa, mesmo com novos módulos …",
     "group": "Inauguração",
-    "defaultValue": "Seu preço de entrada é mantido enquanto a assinatura estiver ativa, mesmo com novos módulos chegando.",
+    "defaultValue": "Um pagamento garante 365 dias de acesso à academia escolhida.",
     "kind": "text"
   },
   {
     "key": "pagina_207",
     "label": "Canal direto com a autora",
     "group": "Inauguração",
-    "defaultValue": "Canal direto com a autora",
+    "defaultValue": "Conteúdo da sua academia",
     "kind": "text"
   },
   {
     "key": "pagina_208",
     "label": "Pediu, foi analisado: nesta fase suas sugestões entram na fila de desenvolvimento com priori…",
     "group": "Inauguração",
-    "defaultValue": "Pediu, foi analisado: nesta fase suas sugestões entram na fila de desenvolvimento com prioridade.",
+    "defaultValue": "Ferramentas de estudo e apoio à prática conforme os módulos da academia escolhida.",
     "kind": "text"
   },
   {
     "key": "pagina_209",
     "label": "Teste sem risco",
     "group": "Inauguração",
-    "defaultValue": "Teste sem risco",
+    "defaultValue": "Liberação após pagamento",
     "kind": "text"
   },
   {
@@ -1522,21 +1526,21 @@ export const ADEC_FIELDS: LandingField[] = [
     "key": "pagina_222",
     "label": "Como funciona o período grátis?",
     "group": "Dúvidas frequentes",
-    "defaultValue": "Como funciona o período grátis?",
+    "defaultValue": "Como o acesso é liberado?",
     "kind": "text"
   },
   {
     "key": "pagina_223",
     "label": "Posso cancelar quando quiser?",
     "group": "Dúvidas frequentes",
-    "defaultValue": "Posso cancelar quando quiser?",
+    "defaultValue": "Existe cobrança mensal ou renovação automática?",
     "kind": "text"
   },
   {
     "key": "pagina_224",
     "label": "Sim. A assinatura é mensal e sem fidelidade — cancele pelo checkout a qualquer momento.",
     "group": "Dúvidas frequentes",
-    "defaultValue": "Sim. A assinatura é mensal e sem fidelidade — cancele pelo checkout a qualquer momento.",
+    "defaultValue": "Não. Você paga uma única vez por 365 dias. Para continuar após o vencimento, faça uma nova compra.",
     "kind": "text"
   },
   {
@@ -1557,14 +1561,14 @@ export const ADEC_FIELDS: LandingField[] = [
     "key": "pagina_227",
     "label": "Como entro no Grupo VIP do WhatsApp?",
     "group": "Dúvidas frequentes",
-    "defaultValue": "Como entro no Grupo VIP do WhatsApp?",
+    "defaultValue": "A compra inclui bônus ou certificados?",
     "kind": "text"
   },
   {
     "key": "pagina_228",
     "label": "Assim que ativar seu acesso, o convite do grupo aparece dentro do app. As vagas de cada turm…",
     "group": "Dúvidas frequentes",
-    "defaultValue": "Assim que ativar seu acesso, o convite do grupo aparece dentro do app. As vagas de cada turma são limitadas.",
+    "defaultValue": "Não. O valor anual corresponde ao acesso à academia escolhida. Certificados avulsos são vendidos separadamente.",
     "kind": "text"
   },
   {
@@ -1661,56 +1665,56 @@ export const ADEC_FIELDS: LandingField[] = [
   {
     "key": "chip_trial",
     "label": "15 dias grátis",
-    "defaultValue": "15 dias grátis",
+    "defaultValue": "365 dias de acesso",
     "group": "Apresentação e cartões",
     "kind": "text"
   },
   {
     "key": "plans_subtitle",
     "label": "15 dias grátis, sem cartão. Cancele quando quiser.",
-    "defaultValue": "15 dias grátis, sem cartão. Cancele quando quiser.",
+    "defaultValue": "Escolha sua academia. Pagamento único anual pelo Mercado Pago.",
     "group": "PLANOS",
     "kind": "text"
   },
   {
     "key": "launch_trial",
     "label": "15 dias grátis, sem cartão no cadastro. Você usa no plantão de verdade antes de decidir.",
-    "defaultValue": "15 dias grátis, sem cartão no cadastro. Você usa no plantão de verdade antes de decidir.",
+    "defaultValue": "O Mercado Pago confirma a aprovação e o acesso é liberado na conta usada na compra.",
     "group": "Inauguração",
     "kind": "text"
   },
   {
     "key": "faq_trial",
     "label": "Você se cadastra e ganha 15 dias de acesso completo, sem precisar informar cartão. No fim do período, é só assinar para continuar.",
-    "defaultValue": "Você se cadastra e ganha 15 dias de acesso completo, sem precisar informar cartão. No fim do período, é só assinar para continuar.",
+    "defaultValue": "Escolha sua academia, entre ou crie sua conta e pague pelo Mercado Pago. O acesso é liberado após confirmação do pagamento.",
     "group": "Dúvidas frequentes",
     "kind": "text"
   },
   {
     "key": "sticky_hint",
     "label": "Turma de inauguração · 15 dias grátis, sem cartão",
-    "defaultValue": "Turma de inauguração · 15 dias grátis, sem cartão",
+    "defaultValue": "Acesso anual · escolha sua academia",
     "group": "Barra fixa",
     "kind": "text"
   },
   {
     "key": "banner_text",
     "label": "Inauguração da ADEC — turma fundadora aberta: comece hoje com 15 dias grátis",
-    "defaultValue": "Inauguração da ADEC — turma fundadora aberta: comece hoje com 15 dias grátis",
+    "defaultValue": "ADEC — acesso anual a partir de R$ 37,99",
     "group": "Banner coral",
     "kind": "text"
   },
   {
     "key": "guarantee_title",
     "label": "Garantia real de 15 dias",
-    "defaultValue": "Garantia real de 15 dias",
+    "defaultValue": "Compra identificada e segura",
     "group": "GARANTIA + WHATSAPP",
     "kind": "text"
   },
   {
     "key": "plans_badge",
     "label": "15 dias grátis · sem cartão",
-    "defaultValue": "15 dias grátis · sem cartão",
+    "defaultValue": "Acesso anual · pagamento único",
     "group": "PLANOS",
     "kind": "text"
   },
@@ -1731,28 +1735,28 @@ export const ADEC_FIELDS: LandingField[] = [
   {
     "key": "signup_academico",
     "label": "Botão — academico",
-    "defaultValue": "/cadastro/academico",
+    "defaultValue": "/checkout?plan=academico",
     "group": "Botões e links",
     "kind": "link"
   },
   {
     "key": "signup_tecnico-estudante",
     "label": "Botão — tecnico-estudante",
-    "defaultValue": "/cadastro/tecnico-estudante",
+    "defaultValue": "/checkout?plan=tecnico-estudante",
     "group": "Botões e links",
     "kind": "link"
   },
   {
     "key": "signup_tecnico",
     "label": "Botão — tecnico",
-    "defaultValue": "/cadastro/tecnico",
+    "defaultValue": "/checkout?plan=tecnico",
     "group": "Botões e links",
     "kind": "link"
   },
   {
     "key": "signup_enfermeiro",
     "label": "Botão — enfermeiro",
-    "defaultValue": "/cadastro/enfermeiro",
+    "defaultValue": "/checkout?plan=enfermeiro",
     "group": "Botões e links",
     "kind": "link"
   },
