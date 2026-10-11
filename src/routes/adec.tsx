@@ -238,9 +238,9 @@ const AUTOMATICOS = [
 
 export const Route = createFileRoute("/adec")({
   head: () => {
-    const title = "Inauguração da ADEC — Academia da Enfermagem | acesso exclusivo";
+    const title = "ADEC — Academia da Enfermagem | Licença Anual";
     const description =
-      "Inauguração da ADEC: 4 apps de suporte à decisão clínica para acadêmicos, técnicos e enfermeiros. Anotação automática, SAE, cálculos e escalas. acesso exclusivo.";
+      "Plataforma privada de suporte à decisão clínica para estudantes, técnicos e enfermeiros. Anotações, evolução, SAE, cálculos e escalas clínicas com licença anual.";
     return {
       meta: [
         { title },
@@ -1092,33 +1092,33 @@ function AdecPage() {
                 style={{ background: C.orange, color: "#fff" }}
               >
                 <Flame className="h-3.5 w-3.5" />
-                Grupo VIP da inauguração — o convite chega após a confirmação do seu plano
+                Atualizações contínuas para acompanhar sua prática profissional
               </p>
             </div>
           </Reveal>
         </section>
 
-        {/* INAUGURAÇÃO */}
+        {/* BENEFÍCIOS DA LICENÇA ANUAL */}
         <section className="mt-16">
           <SectionTitle
-            eyebrow="Inauguração"
-            title={t("inauguracao_titulo", "Por que entrar agora, na turma de inauguração")}
+            eyebrow="Licença anual"
+            title={t("licenca_titulo", "Mais recursos para apoiar sua rotina de enfermagem")}
             sub={t(
-              "inauguracao_sub",
-              "A ADEC está sendo inaugurada. Quem entra agora ajuda a moldar o app e recebe tudo o que for lançado dentro da sua academia.",
+              "licenca_sub",
+              "Tenha acesso à sua academia profissional por um ano, com recursos práticos e atualizações contínuas.",
             )}
           />
           <div className="mt-8 grid gap-4 md:grid-cols-3">
             {[
               {
                 icon: Star,
-                title: "Acesso de fundadora",
-                desc: "Seu preço de entrada é mantido enquanto a assinatura estiver ativa, mesmo com novos módulos chegando.",
+                title: "Licença anual completa",
+                desc: "Um único pagamento para ter acesso à sua categoria profissional durante 365 dias, sem mensalidades.",
               },
               {
                 icon: MessageCircle,
-                title: "Canal direto com a autora",
-                desc: "Pediu, foi analisado: nesta fase suas sugestões entram na fila de desenvolvimento com prioridade.",
+                title: "Recursos para sua rotina",
+                desc: "Ferramentas de apoio ao estudo, aos registros e ao raciocínio clínico, conforme sua academia.",
               },
               {
                 icon: ShieldCheck,
@@ -1276,14 +1276,14 @@ function AdecPage() {
               style={{ background: C.orange, color: "#fff" }}
             >
               <Clock className="h-3.5 w-3.5" />
-              Turma de inauguração aberta agora
+              Escolha sua licença anual
             </div>
             <Reveal>
               <h2 className="mt-4 font-display text-3xl font-extrabold md:text-5xl" style={{ color: "#fff" }}>
                 Saia do próximo plantão no horário
               </h2>
               <p className="mx-auto mt-3 max-w-xl text-sm md:text-base" style={{ color: "rgba(255,255,255,0.85)" }}>
-                Sem cartão de crédito. Sem fidelidade. Cancele quando quiser. Entre na turma de inauguração da ADEC.
+                Pagamento único via PIX ou cartão. Acesso à sua academia por 365 dias, com atualizações contínuas.
               </p>
             </Reveal>
 
