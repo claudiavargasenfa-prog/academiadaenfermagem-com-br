@@ -945,14 +945,14 @@ export const ADEC_FIELDS: LandingField[] = [
     "key": "pagina_137",
     "label": ": os primeiros assinantes entram com acesso completo e canal direto com a autora",
     "group": "Apresentação",
-    "defaultValue": "Turma de inauguração: os primeiros assinantes entram com acesso completo e canal direto com a autora",
+    "defaultValue": "365 dias de acesso à academia escolhida, com pagamento único",
     "kind": "text"
   },
   {
     "key": "pagina_138",
     "label": "Compra segura · PIX ou cartão só depois do teste",
     "group": "Apresentação",
-    "defaultValue": "Compra segura · PIX ou cartão só depois do teste",
+    "defaultValue": "Pagamento pelo Mercado Pago · acesso após confirmação",
     "kind": "text"
   },
   {
@@ -1099,7 +1099,7 @@ export const ADEC_FIELDS: LandingField[] = [
     "key": "pagina_159",
     "label": "Trilhas com emissão de certificado ao concluir os módulos.",
     "group": "BENEFÍCIOS",
-    "defaultValue": "Trilhas com emissão de certificado ao concluir os módulos.",
+    "defaultValue": "Certificação opcional, contratada separadamente do acesso anual.",
     "kind": "text"
   },
   {
@@ -1735,28 +1735,28 @@ export const ADEC_FIELDS: LandingField[] = [
   {
     "key": "signup_academico",
     "label": "Botão — academico",
-    "defaultValue": "/cadastro/academico",
+    "defaultValue": "/checkout?plan=academico",
     "group": "Botões e links",
     "kind": "link"
   },
   {
     "key": "signup_tecnico-estudante",
     "label": "Botão — tecnico-estudante",
-    "defaultValue": "/cadastro/tecnico-estudante",
+    "defaultValue": "/checkout?plan=tecnico-estudante",
     "group": "Botões e links",
     "kind": "link"
   },
   {
     "key": "signup_tecnico",
     "label": "Botão — tecnico",
-    "defaultValue": "/cadastro/tecnico",
+    "defaultValue": "/checkout?plan=tecnico",
     "group": "Botões e links",
     "kind": "link"
   },
   {
     "key": "signup_enfermeiro",
     "label": "Botão — enfermeiro",
-    "defaultValue": "/cadastro/enfermeiro",
+    "defaultValue": "/checkout?plan=enfermeiro",
     "group": "Botões e links",
     "kind": "link"
   },
