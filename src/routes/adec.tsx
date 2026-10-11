@@ -184,7 +184,7 @@ const CTA_MEIO = t("pagina_4", "SIM, QUERO TRANSFORMAR MEU PLANTÃO");
 const CTA_RODAPE = t("pagina_5", "COMEÇAR MEU TESTE GRÁTIS →");
 
 /** Fase de inauguração: sem números de usuários e sem depoimentos até termos casos reais. */
-const LANCAMENTO = t("pagina_6", "Turma de inauguração");
+
 
 const PLANOS = [
   {
@@ -497,7 +497,7 @@ const AUTOMATICOS = [
 
               <p className="mt-3 flex items-center gap-1.5 text-xs font-bold md:text-sm" style={{ color: C.orange }}>
                 <Sparkles className="h-3.5 w-3.5" />
-                {LANCAMENTO}{t("pagina_137", ": os primeiros assinantes entram com acesso completo e canal direto com a autora")}</p>
+                {t("pagina_137", "Turma de inauguração: os primeiros assinantes entram com acesso completo e canal direto com a autora")}</p>
 
               <div className="mt-7 flex flex-wrap justify-center gap-2 lg:justify-start">
                 {chips.map((c, i) => (
@@ -520,7 +520,7 @@ const AUTOMATICOS = [
                 {t("pagina_138", "Compra segura · PIX ou cartão só depois do teste")}</p>
             </div>
 
-            <PhoneMockup ink={C.ink} cta={C.cta} gold={C.goldBright} line={C.line} />
+            <PhoneMockup text={t} ink={C.ink} cta={C.cta} gold={C.goldBright} line={C.line} />
           </div>
         </section>
 
