@@ -9,245 +9,60 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as VipRouteImport } from './routes/vip'
-import { Route as VendasRouteImport } from './routes/vendas'
-import { Route as ValidacaoRouteImport } from './routes/validacao'
-import { Route as UtiRouteImport } from './routes/uti'
-import { Route as SvPediatricoRouteImport } from './routes/sv-pediatrico'
-import { Route as SvGestanteRouteImport } from './routes/sv-gestante'
-import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
-import { Route as SinaisVitaisRouteImport } from './routes/sinais-vitais'
-import { Route as SimuladorRouteImport } from './routes/simulador'
-import { Route as SimulacoesReaisRouteImport } from './routes/simulacoes-reais'
-import { Route as SegurancaRouteImport } from './routes/seguranca'
-import { Route as SbvRouteImport } from './routes/sbv'
-import { Route as SaudeMentalRouteImport } from './routes/saude-mental'
-import { Route as ResetPasswordRouteImport } from './routes/reset-password'
-import { Route as RelatorioAbntRouteImport } from './routes/relatorio-abnt'
-import { Route as QuizzesRouteImport } from './routes/quizzes'
-import { Route as ProcedimentosEnfermagemRouteImport } from './routes/procedimentos-enfermagem'
-import { Route as PrescricaoRouteImport } from './routes/prescricao'
-import { Route as PosturaEticaRouteImport } from './routes/postura-etica'
-import { Route as NovoAppRouteImport } from './routes/novo-app'
-import { Route as MinhaHistoriaRouteImport } from './routes/minha-historia'
-import { Route as MinhaContaRouteImport } from './routes/minha-conta'
-import { Route as McpRouteImport } from './routes/mcp'
-import { Route as ManualSobrevivenciaRouteImport } from './routes/manual-sobrevivencia'
-import { Route as LojaRouteImport } from './routes/loja'
-import { Route as LegalRouteImport } from './routes/legal'
-import { Route as IrasRouteImport } from './routes/iras'
-import { Route as FarmacologiaAvancadaRouteImport } from './routes/farmacologia-avancada'
-import { Route as ExameFisicoEscalasRouteImport } from './routes/exame-fisico-escalas'
-import { Route as EscalasClinicasRouteImport } from './routes/escalas-clinicas'
-import { Route as DiarioRouteImport } from './routes/diario'
-import { Route as DiagnosticosAedeRouteImport } from './routes/diagnosticos-aede'
-import { Route as CurativosRouteImport } from './routes/curativos'
-import { Route as ConfiancaRouteImport } from './routes/confianca'
-import { Route as CheckoutRouteImport } from './routes/checkout'
-import { Route as CalculadoraRouteImport } from './routes/calculadora'
-import { Route as AdminRouteImport } from './routes/admin'
-import { Route as AdecRouteImport } from './routes/adec'
-import { Route as AclsRouteImport } from './routes/acls'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as TrilhaSlugRouteImport } from './routes/trilha.$slug'
-import { Route as QuizzesSlugRouteImport } from './routes/quizzes.$slug'
-import { Route as PlanosSlugRouteImport } from './routes/planos.$slug'
-import { Route as CadastroSlugRouteImport } from './routes/cadastro.$slug'
-import { Route as AppSlugRouteImport } from './routes/app.$slug'
+import { Route as AclsRouteImport } from './routes/acls'
+import { Route as AdecRouteImport } from './routes/adec'
+import { Route as AdminRouteImport } from './routes/admin'
+import { Route as CalculadoraRouteImport } from './routes/calculadora'
+import { Route as CheckoutRouteImport } from './routes/checkout'
+import { Route as ConfiancaRouteImport } from './routes/confianca'
+import { Route as CurativosRouteImport } from './routes/curativos'
+import { Route as DiagnosticosAedeRouteImport } from './routes/diagnosticos-aede'
+import { Route as DiarioRouteImport } from './routes/diario'
+import { Route as EscalasClinicasRouteImport } from './routes/escalas-clinicas'
+import { Route as ExameFisicoEscalasRouteImport } from './routes/exame-fisico-escalas'
+import { Route as FarmacologiaAvancadaRouteImport } from './routes/farmacologia-avancada'
+import { Route as IrasRouteImport } from './routes/iras'
+import { Route as LegalRouteImport } from './routes/legal'
+import { Route as LojaRouteImport } from './routes/loja'
+import { Route as ManualSobrevivenciaRouteImport } from './routes/manual-sobrevivencia'
+import { Route as McpRouteImport } from './routes/mcp'
+import { Route as MinhaContaRouteImport } from './routes/minha-conta'
+import { Route as MinhaHistoriaRouteImport } from './routes/minha-historia'
+import { Route as NovoAppRouteImport } from './routes/novo-app'
+import { Route as PosturaEticaRouteImport } from './routes/postura-etica'
+import { Route as PrescricaoRouteImport } from './routes/prescricao'
+import { Route as ProcedimentosEnfermagemRouteImport } from './routes/procedimentos-enfermagem'
+import { Route as QuizzesRouteImport } from './routes/quizzes'
+import { Route as RelatorioAbntRouteImport } from './routes/relatorio-abnt'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as SaudeMentalRouteImport } from './routes/saude-mental'
+import { Route as SbvRouteImport } from './routes/sbv'
+import { Route as SegurancaRouteImport } from './routes/seguranca'
+import { Route as SimulacoesReaisRouteImport } from './routes/simulacoes-reais'
+import { Route as SimuladorRouteImport } from './routes/simulador'
+import { Route as SinaisVitaisRouteImport } from './routes/sinais-vitais'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as SvGestanteRouteImport } from './routes/sv-gestante'
+import { Route as SvPediatricoRouteImport } from './routes/sv-pediatrico'
+import { Route as UtiRouteImport } from './routes/uti'
+import { Route as ValidacaoRouteImport } from './routes/validacao'
+import { Route as VendasRouteImport } from './routes/vendas'
+import { Route as VipRouteImport } from './routes/vip'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
+import { Route as AppSlugRouteImport } from './routes/app.$slug'
+import { Route as CadastroSlugRouteImport } from './routes/cadastro.$slug'
+import { Route as PlanosSlugRouteImport } from './routes/planos.$slug'
+import { Route as QuizzesSlugRouteImport } from './routes/quizzes.$slug'
+import { Route as TrilhaSlugRouteImport } from './routes/trilha.$slug'
+import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
+import { Route as ApiPublicPaymentsRouteImport } from './routes/api/public/payments'
 import { Route as AppSlugIndexRouteImport } from './routes/app.$slug.index'
 import { Route as AppSlugSubtopicRouteImport } from './routes/app.$slug.$subtopic'
-import { Route as ApiPublicPaymentsRouteImport } from './routes/api/public/payments'
-import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 
-const VipRoute = VipRouteImport.update({
-  id: '/vip',
-  path: '/vip',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const VendasRoute = VendasRouteImport.update({
-  id: '/vendas',
-  path: '/vendas',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ValidacaoRoute = ValidacaoRouteImport.update({
-  id: '/validacao',
-  path: '/validacao',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const UtiRoute = UtiRouteImport.update({
-  id: '/uti',
-  path: '/uti',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SvPediatricoRoute = SvPediatricoRouteImport.update({
-  id: '/sv-pediatrico',
-  path: '/sv-pediatrico',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SvGestanteRoute = SvGestanteRouteImport.update({
-  id: '/sv-gestante',
-  path: '/sv-gestante',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
-  id: '/sitemap.xml',
-  path: '/sitemap.xml',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SinaisVitaisRoute = SinaisVitaisRouteImport.update({
-  id: '/sinais-vitais',
-  path: '/sinais-vitais',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SimuladorRoute = SimuladorRouteImport.update({
-  id: '/simulador',
-  path: '/simulador',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SimulacoesReaisRoute = SimulacoesReaisRouteImport.update({
-  id: '/simulacoes-reais',
-  path: '/simulacoes-reais',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SegurancaRoute = SegurancaRouteImport.update({
-  id: '/seguranca',
-  path: '/seguranca',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SbvRoute = SbvRouteImport.update({
-  id: '/sbv',
-  path: '/sbv',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SaudeMentalRoute = SaudeMentalRouteImport.update({
-  id: '/saude-mental',
-  path: '/saude-mental',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ResetPasswordRoute = ResetPasswordRouteImport.update({
-  id: '/reset-password',
-  path: '/reset-password',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RelatorioAbntRoute = RelatorioAbntRouteImport.update({
-  id: '/relatorio-abnt',
-  path: '/relatorio-abnt',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const QuizzesRoute = QuizzesRouteImport.update({
-  id: '/quizzes',
-  path: '/quizzes',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProcedimentosEnfermagemRoute = ProcedimentosEnfermagemRouteImport.update({
-  id: '/procedimentos-enfermagem',
-  path: '/procedimentos-enfermagem',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PrescricaoRoute = PrescricaoRouteImport.update({
-  id: '/prescricao',
-  path: '/prescricao',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PosturaEticaRoute = PosturaEticaRouteImport.update({
-  id: '/postura-etica',
-  path: '/postura-etica',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const NovoAppRoute = NovoAppRouteImport.update({
-  id: '/novo-app',
-  path: '/novo-app',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MinhaHistoriaRoute = MinhaHistoriaRouteImport.update({
-  id: '/minha-historia',
-  path: '/minha-historia',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MinhaContaRoute = MinhaContaRouteImport.update({
-  id: '/minha-conta',
-  path: '/minha-conta',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const McpRoute = McpRouteImport.update({
-  id: '/mcp',
-  path: '/mcp',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ManualSobrevivenciaRoute = ManualSobrevivenciaRouteImport.update({
-  id: '/manual-sobrevivencia',
-  path: '/manual-sobrevivencia',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LojaRoute = LojaRouteImport.update({
-  id: '/loja',
-  path: '/loja',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LegalRoute = LegalRouteImport.update({
-  id: '/legal',
-  path: '/legal',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const IrasRoute = IrasRouteImport.update({
-  id: '/iras',
-  path: '/iras',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FarmacologiaAvancadaRoute = FarmacologiaAvancadaRouteImport.update({
-  id: '/farmacologia-avancada',
-  path: '/farmacologia-avancada',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ExameFisicoEscalasRoute = ExameFisicoEscalasRouteImport.update({
-  id: '/exame-fisico-escalas',
-  path: '/exame-fisico-escalas',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const EscalasClinicasRoute = EscalasClinicasRouteImport.update({
-  id: '/escalas-clinicas',
-  path: '/escalas-clinicas',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DiarioRoute = DiarioRouteImport.update({
-  id: '/diario',
-  path: '/diario',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DiagnosticosAedeRoute = DiagnosticosAedeRouteImport.update({
-  id: '/diagnosticos-aede',
-  path: '/diagnosticos-aede',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CurativosRoute = CurativosRouteImport.update({
-  id: '/curativos',
-  path: '/curativos',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ConfiancaRoute = ConfiancaRouteImport.update({
-  id: '/confianca',
-  path: '/confianca',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CheckoutRoute = CheckoutRouteImport.update({
-  id: '/checkout',
-  path: '/checkout',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CalculadoraRoute = CalculadoraRouteImport.update({
-  id: '/calculadora',
-  path: '/calculadora',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminRoute = AdminRouteImport.update({
-  id: '/admin',
-  path: '/admin',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdecRoute = AdecRouteImport.update({
-  id: '/adec',
-  path: '/adec',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AclsRoute = AclsRouteImport.update({
@@ -255,34 +70,194 @@ const AclsRoute = AclsRouteImport.update({
   path: '/acls',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const AdecRoute = AdecRouteImport.update({
+  id: '/adec',
+  path: '/adec',
   getParentRoute: () => rootRouteImport,
 } as any)
-const TrilhaSlugRoute = TrilhaSlugRouteImport.update({
-  id: '/trilha/$slug',
-  path: '/trilha/$slug',
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
-const QuizzesSlugRoute = QuizzesSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => QuizzesRoute,
-} as any)
-const PlanosSlugRoute = PlanosSlugRouteImport.update({
-  id: '/planos/$slug',
-  path: '/planos/$slug',
+const CalculadoraRoute = CalculadoraRouteImport.update({
+  id: '/calculadora',
+  path: '/calculadora',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CadastroSlugRoute = CadastroSlugRouteImport.update({
-  id: '/cadastro/$slug',
-  path: '/cadastro/$slug',
+const CheckoutRoute = CheckoutRouteImport.update({
+  id: '/checkout',
+  path: '/checkout',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AppSlugRoute = AppSlugRouteImport.update({
-  id: '/app/$slug',
-  path: '/app/$slug',
+const ConfiancaRoute = ConfiancaRouteImport.update({
+  id: '/confianca',
+  path: '/confianca',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CurativosRoute = CurativosRouteImport.update({
+  id: '/curativos',
+  path: '/curativos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DiagnosticosAedeRoute = DiagnosticosAedeRouteImport.update({
+  id: '/diagnosticos-aede',
+  path: '/diagnosticos-aede',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DiarioRoute = DiarioRouteImport.update({
+  id: '/diario',
+  path: '/diario',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EscalasClinicasRoute = EscalasClinicasRouteImport.update({
+  id: '/escalas-clinicas',
+  path: '/escalas-clinicas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ExameFisicoEscalasRoute = ExameFisicoEscalasRouteImport.update({
+  id: '/exame-fisico-escalas',
+  path: '/exame-fisico-escalas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FarmacologiaAvancadaRoute = FarmacologiaAvancadaRouteImport.update({
+  id: '/farmacologia-avancada',
+  path: '/farmacologia-avancada',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IrasRoute = IrasRouteImport.update({
+  id: '/iras',
+  path: '/iras',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LegalRoute = LegalRouteImport.update({
+  id: '/legal',
+  path: '/legal',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LojaRoute = LojaRouteImport.update({
+  id: '/loja',
+  path: '/loja',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ManualSobrevivenciaRoute = ManualSobrevivenciaRouteImport.update({
+  id: '/manual-sobrevivencia',
+  path: '/manual-sobrevivencia',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const McpRoute = McpRouteImport.update({
+  id: '/mcp',
+  path: '/mcp',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MinhaContaRoute = MinhaContaRouteImport.update({
+  id: '/minha-conta',
+  path: '/minha-conta',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MinhaHistoriaRoute = MinhaHistoriaRouteImport.update({
+  id: '/minha-historia',
+  path: '/minha-historia',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NovoAppRoute = NovoAppRouteImport.update({
+  id: '/novo-app',
+  path: '/novo-app',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PosturaEticaRoute = PosturaEticaRouteImport.update({
+  id: '/postura-etica',
+  path: '/postura-etica',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrescricaoRoute = PrescricaoRouteImport.update({
+  id: '/prescricao',
+  path: '/prescricao',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProcedimentosEnfermagemRoute = ProcedimentosEnfermagemRouteImport.update({
+  id: '/procedimentos-enfermagem',
+  path: '/procedimentos-enfermagem',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuizzesRoute = QuizzesRouteImport.update({
+  id: '/quizzes',
+  path: '/quizzes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RelatorioAbntRoute = RelatorioAbntRouteImport.update({
+  id: '/relatorio-abnt',
+  path: '/relatorio-abnt',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SaudeMentalRoute = SaudeMentalRouteImport.update({
+  id: '/saude-mental',
+  path: '/saude-mental',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SbvRoute = SbvRouteImport.update({
+  id: '/sbv',
+  path: '/sbv',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SegurancaRoute = SegurancaRouteImport.update({
+  id: '/seguranca',
+  path: '/seguranca',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SimulacoesReaisRoute = SimulacoesReaisRouteImport.update({
+  id: '/simulacoes-reais',
+  path: '/simulacoes-reais',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SimuladorRoute = SimuladorRouteImport.update({
+  id: '/simulador',
+  path: '/simulador',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SinaisVitaisRoute = SinaisVitaisRouteImport.update({
+  id: '/sinais-vitais',
+  path: '/sinais-vitais',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SvGestanteRoute = SvGestanteRouteImport.update({
+  id: '/sv-gestante',
+  path: '/sv-gestante',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SvPediatricoRoute = SvPediatricoRouteImport.update({
+  id: '/sv-pediatrico',
+  path: '/sv-pediatrico',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UtiRoute = UtiRouteImport.update({
+  id: '/uti',
+  path: '/uti',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ValidacaoRoute = ValidacaoRouteImport.update({
+  id: '/validacao',
+  path: '/validacao',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VendasRoute = VendasRouteImport.update({
+  id: '/vendas',
+  path: '/vendas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VipRoute = VipRouteImport.update({
+  id: '/vip',
+  path: '/vip',
   getParentRoute: () => rootRouteImport,
 } as any)
 const Char91DotwellKnownChar93OauthProtectedResourceRoute =
@@ -291,6 +266,41 @@ const Char91DotwellKnownChar93OauthProtectedResourceRoute =
     path: '/.well-known/oauth-protected-resource',
     getParentRoute: () => rootRouteImport,
   } as any)
+const AppSlugRoute = AppSlugRouteImport.update({
+  id: '/app/$slug',
+  path: '/app/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CadastroSlugRoute = CadastroSlugRouteImport.update({
+  id: '/cadastro/$slug',
+  path: '/cadastro/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlanosSlugRoute = PlanosSlugRouteImport.update({
+  id: '/planos/$slug',
+  path: '/planos/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuizzesSlugRoute = QuizzesSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => QuizzesRoute,
+} as any)
+const TrilhaSlugRoute = TrilhaSlugRouteImport.update({
+  id: '/trilha/$slug',
+  path: '/trilha/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
+  id: '/.lovable/oauth/consent',
+  path: '/.lovable/oauth/consent',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicPaymentsRoute = ApiPublicPaymentsRouteImport.update({
+  id: '/api/public/payments',
+  path: '/api/public/payments',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppSlugIndexRoute = AppSlugIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -300,16 +310,6 @@ const AppSlugSubtopicRoute = AppSlugSubtopicRouteImport.update({
   id: '/$subtopic',
   path: '/$subtopic',
   getParentRoute: () => AppSlugRoute,
-} as any)
-const ApiPublicPaymentsRoute = ApiPublicPaymentsRouteImport.update({
-  id: '/api/public/payments',
-  path: '/api/public/payments',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
-  id: '/.lovable/oauth/consent',
-  path: '/.lovable/oauth/consent',
-  getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -678,270 +678,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/vip': {
-      id: '/vip'
-      path: '/vip'
-      fullPath: '/vip'
-      preLoaderRoute: typeof VipRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/vendas': {
-      id: '/vendas'
-      path: '/vendas'
-      fullPath: '/vendas'
-      preLoaderRoute: typeof VendasRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/validacao': {
-      id: '/validacao'
-      path: '/validacao'
-      fullPath: '/validacao'
-      preLoaderRoute: typeof ValidacaoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/uti': {
-      id: '/uti'
-      path: '/uti'
-      fullPath: '/uti'
-      preLoaderRoute: typeof UtiRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sv-pediatrico': {
-      id: '/sv-pediatrico'
-      path: '/sv-pediatrico'
-      fullPath: '/sv-pediatrico'
-      preLoaderRoute: typeof SvPediatricoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sv-gestante': {
-      id: '/sv-gestante'
-      path: '/sv-gestante'
-      fullPath: '/sv-gestante'
-      preLoaderRoute: typeof SvGestanteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sitemap.xml': {
-      id: '/sitemap.xml'
-      path: '/sitemap.xml'
-      fullPath: '/sitemap.xml'
-      preLoaderRoute: typeof SitemapDotxmlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sinais-vitais': {
-      id: '/sinais-vitais'
-      path: '/sinais-vitais'
-      fullPath: '/sinais-vitais'
-      preLoaderRoute: typeof SinaisVitaisRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/simulador': {
-      id: '/simulador'
-      path: '/simulador'
-      fullPath: '/simulador'
-      preLoaderRoute: typeof SimuladorRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/simulacoes-reais': {
-      id: '/simulacoes-reais'
-      path: '/simulacoes-reais'
-      fullPath: '/simulacoes-reais'
-      preLoaderRoute: typeof SimulacoesReaisRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/seguranca': {
-      id: '/seguranca'
-      path: '/seguranca'
-      fullPath: '/seguranca'
-      preLoaderRoute: typeof SegurancaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/sbv': {
-      id: '/sbv'
-      path: '/sbv'
-      fullPath: '/sbv'
-      preLoaderRoute: typeof SbvRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/saude-mental': {
-      id: '/saude-mental'
-      path: '/saude-mental'
-      fullPath: '/saude-mental'
-      preLoaderRoute: typeof SaudeMentalRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/reset-password': {
-      id: '/reset-password'
-      path: '/reset-password'
-      fullPath: '/reset-password'
-      preLoaderRoute: typeof ResetPasswordRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/relatorio-abnt': {
-      id: '/relatorio-abnt'
-      path: '/relatorio-abnt'
-      fullPath: '/relatorio-abnt'
-      preLoaderRoute: typeof RelatorioAbntRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/quizzes': {
-      id: '/quizzes'
-      path: '/quizzes'
-      fullPath: '/quizzes'
-      preLoaderRoute: typeof QuizzesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/procedimentos-enfermagem': {
-      id: '/procedimentos-enfermagem'
-      path: '/procedimentos-enfermagem'
-      fullPath: '/procedimentos-enfermagem'
-      preLoaderRoute: typeof ProcedimentosEnfermagemRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/prescricao': {
-      id: '/prescricao'
-      path: '/prescricao'
-      fullPath: '/prescricao'
-      preLoaderRoute: typeof PrescricaoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/postura-etica': {
-      id: '/postura-etica'
-      path: '/postura-etica'
-      fullPath: '/postura-etica'
-      preLoaderRoute: typeof PosturaEticaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/novo-app': {
-      id: '/novo-app'
-      path: '/novo-app'
-      fullPath: '/novo-app'
-      preLoaderRoute: typeof NovoAppRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/minha-historia': {
-      id: '/minha-historia'
-      path: '/minha-historia'
-      fullPath: '/minha-historia'
-      preLoaderRoute: typeof MinhaHistoriaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/minha-conta': {
-      id: '/minha-conta'
-      path: '/minha-conta'
-      fullPath: '/minha-conta'
-      preLoaderRoute: typeof MinhaContaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/mcp': {
-      id: '/mcp'
-      path: '/mcp'
-      fullPath: '/mcp'
-      preLoaderRoute: typeof McpRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/manual-sobrevivencia': {
-      id: '/manual-sobrevivencia'
-      path: '/manual-sobrevivencia'
-      fullPath: '/manual-sobrevivencia'
-      preLoaderRoute: typeof ManualSobrevivenciaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/loja': {
-      id: '/loja'
-      path: '/loja'
-      fullPath: '/loja'
-      preLoaderRoute: typeof LojaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/legal': {
-      id: '/legal'
-      path: '/legal'
-      fullPath: '/legal'
-      preLoaderRoute: typeof LegalRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/iras': {
-      id: '/iras'
-      path: '/iras'
-      fullPath: '/iras'
-      preLoaderRoute: typeof IrasRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/farmacologia-avancada': {
-      id: '/farmacologia-avancada'
-      path: '/farmacologia-avancada'
-      fullPath: '/farmacologia-avancada'
-      preLoaderRoute: typeof FarmacologiaAvancadaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/exame-fisico-escalas': {
-      id: '/exame-fisico-escalas'
-      path: '/exame-fisico-escalas'
-      fullPath: '/exame-fisico-escalas'
-      preLoaderRoute: typeof ExameFisicoEscalasRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/escalas-clinicas': {
-      id: '/escalas-clinicas'
-      path: '/escalas-clinicas'
-      fullPath: '/escalas-clinicas'
-      preLoaderRoute: typeof EscalasClinicasRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/diario': {
-      id: '/diario'
-      path: '/diario'
-      fullPath: '/diario'
-      preLoaderRoute: typeof DiarioRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/diagnosticos-aede': {
-      id: '/diagnosticos-aede'
-      path: '/diagnosticos-aede'
-      fullPath: '/diagnosticos-aede'
-      preLoaderRoute: typeof DiagnosticosAedeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/curativos': {
-      id: '/curativos'
-      path: '/curativos'
-      fullPath: '/curativos'
-      preLoaderRoute: typeof CurativosRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/confianca': {
-      id: '/confianca'
-      path: '/confianca'
-      fullPath: '/confianca'
-      preLoaderRoute: typeof ConfiancaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/checkout': {
-      id: '/checkout'
-      path: '/checkout'
-      fullPath: '/checkout'
-      preLoaderRoute: typeof CheckoutRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/calculadora': {
-      id: '/calculadora'
-      path: '/calculadora'
-      fullPath: '/calculadora'
-      preLoaderRoute: typeof CalculadoraRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin': {
-      id: '/admin'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AdminRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/adec': {
-      id: '/adec'
-      path: '/adec'
-      fullPath: '/adec'
-      preLoaderRoute: typeof AdecRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/acls': {
@@ -951,39 +692,277 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AclsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/adec': {
+      id: '/adec'
+      path: '/adec'
+      fullPath: '/adec'
+      preLoaderRoute: typeof AdecRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/trilha/$slug': {
-      id: '/trilha/$slug'
-      path: '/trilha/$slug'
-      fullPath: '/trilha/$slug'
-      preLoaderRoute: typeof TrilhaSlugRouteImport
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/quizzes/$slug': {
-      id: '/quizzes/$slug'
-      path: '/$slug'
-      fullPath: '/quizzes/$slug'
-      preLoaderRoute: typeof QuizzesSlugRouteImport
-      parentRoute: typeof QuizzesRoute
-    }
-    '/planos/$slug': {
-      id: '/planos/$slug'
-      path: '/planos/$slug'
-      fullPath: '/planos/$slug'
-      preLoaderRoute: typeof PlanosSlugRouteImport
+    '/calculadora': {
+      id: '/calculadora'
+      path: '/calculadora'
+      fullPath: '/calculadora'
+      preLoaderRoute: typeof CalculadoraRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/cadastro/$slug': {
-      id: '/cadastro/$slug'
-      path: '/cadastro/$slug'
-      fullPath: '/cadastro/$slug'
-      preLoaderRoute: typeof CadastroSlugRouteImport
+    '/checkout': {
+      id: '/checkout'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof CheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/confianca': {
+      id: '/confianca'
+      path: '/confianca'
+      fullPath: '/confianca'
+      preLoaderRoute: typeof ConfiancaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/curativos': {
+      id: '/curativos'
+      path: '/curativos'
+      fullPath: '/curativos'
+      preLoaderRoute: typeof CurativosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/diagnosticos-aede': {
+      id: '/diagnosticos-aede'
+      path: '/diagnosticos-aede'
+      fullPath: '/diagnosticos-aede'
+      preLoaderRoute: typeof DiagnosticosAedeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/diario': {
+      id: '/diario'
+      path: '/diario'
+      fullPath: '/diario'
+      preLoaderRoute: typeof DiarioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/escalas-clinicas': {
+      id: '/escalas-clinicas'
+      path: '/escalas-clinicas'
+      fullPath: '/escalas-clinicas'
+      preLoaderRoute: typeof EscalasClinicasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/exame-fisico-escalas': {
+      id: '/exame-fisico-escalas'
+      path: '/exame-fisico-escalas'
+      fullPath: '/exame-fisico-escalas'
+      preLoaderRoute: typeof ExameFisicoEscalasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/farmacologia-avancada': {
+      id: '/farmacologia-avancada'
+      path: '/farmacologia-avancada'
+      fullPath: '/farmacologia-avancada'
+      preLoaderRoute: typeof FarmacologiaAvancadaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/iras': {
+      id: '/iras'
+      path: '/iras'
+      fullPath: '/iras'
+      preLoaderRoute: typeof IrasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/legal': {
+      id: '/legal'
+      path: '/legal'
+      fullPath: '/legal'
+      preLoaderRoute: typeof LegalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/loja': {
+      id: '/loja'
+      path: '/loja'
+      fullPath: '/loja'
+      preLoaderRoute: typeof LojaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/manual-sobrevivencia': {
+      id: '/manual-sobrevivencia'
+      path: '/manual-sobrevivencia'
+      fullPath: '/manual-sobrevivencia'
+      preLoaderRoute: typeof ManualSobrevivenciaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mcp': {
+      id: '/mcp'
+      path: '/mcp'
+      fullPath: '/mcp'
+      preLoaderRoute: typeof McpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/minha-conta': {
+      id: '/minha-conta'
+      path: '/minha-conta'
+      fullPath: '/minha-conta'
+      preLoaderRoute: typeof MinhaContaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/minha-historia': {
+      id: '/minha-historia'
+      path: '/minha-historia'
+      fullPath: '/minha-historia'
+      preLoaderRoute: typeof MinhaHistoriaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/novo-app': {
+      id: '/novo-app'
+      path: '/novo-app'
+      fullPath: '/novo-app'
+      preLoaderRoute: typeof NovoAppRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/postura-etica': {
+      id: '/postura-etica'
+      path: '/postura-etica'
+      fullPath: '/postura-etica'
+      preLoaderRoute: typeof PosturaEticaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/prescricao': {
+      id: '/prescricao'
+      path: '/prescricao'
+      fullPath: '/prescricao'
+      preLoaderRoute: typeof PrescricaoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/procedimentos-enfermagem': {
+      id: '/procedimentos-enfermagem'
+      path: '/procedimentos-enfermagem'
+      fullPath: '/procedimentos-enfermagem'
+      preLoaderRoute: typeof ProcedimentosEnfermagemRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/quizzes': {
+      id: '/quizzes'
+      path: '/quizzes'
+      fullPath: '/quizzes'
+      preLoaderRoute: typeof QuizzesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/relatorio-abnt': {
+      id: '/relatorio-abnt'
+      path: '/relatorio-abnt'
+      fullPath: '/relatorio-abnt'
+      preLoaderRoute: typeof RelatorioAbntRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/saude-mental': {
+      id: '/saude-mental'
+      path: '/saude-mental'
+      fullPath: '/saude-mental'
+      preLoaderRoute: typeof SaudeMentalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sbv': {
+      id: '/sbv'
+      path: '/sbv'
+      fullPath: '/sbv'
+      preLoaderRoute: typeof SbvRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/seguranca': {
+      id: '/seguranca'
+      path: '/seguranca'
+      fullPath: '/seguranca'
+      preLoaderRoute: typeof SegurancaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/simulacoes-reais': {
+      id: '/simulacoes-reais'
+      path: '/simulacoes-reais'
+      fullPath: '/simulacoes-reais'
+      preLoaderRoute: typeof SimulacoesReaisRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/simulador': {
+      id: '/simulador'
+      path: '/simulador'
+      fullPath: '/simulador'
+      preLoaderRoute: typeof SimuladorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sinais-vitais': {
+      id: '/sinais-vitais'
+      path: '/sinais-vitais'
+      fullPath: '/sinais-vitais'
+      preLoaderRoute: typeof SinaisVitaisRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sv-gestante': {
+      id: '/sv-gestante'
+      path: '/sv-gestante'
+      fullPath: '/sv-gestante'
+      preLoaderRoute: typeof SvGestanteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sv-pediatrico': {
+      id: '/sv-pediatrico'
+      path: '/sv-pediatrico'
+      fullPath: '/sv-pediatrico'
+      preLoaderRoute: typeof SvPediatricoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/uti': {
+      id: '/uti'
+      path: '/uti'
+      fullPath: '/uti'
+      preLoaderRoute: typeof UtiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/validacao': {
+      id: '/validacao'
+      path: '/validacao'
+      fullPath: '/validacao'
+      preLoaderRoute: typeof ValidacaoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/vendas': {
+      id: '/vendas'
+      path: '/vendas'
+      fullPath: '/vendas'
+      preLoaderRoute: typeof VendasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/vip': {
+      id: '/vip'
+      path: '/vip'
+      fullPath: '/vip'
+      preLoaderRoute: typeof VipRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.well-known/oauth-protected-resource': {
+      id: '/.well-known/oauth-protected-resource'
+      path: '/.well-known/oauth-protected-resource'
+      fullPath: '/.well-known/oauth-protected-resource'
+      preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/app/$slug': {
@@ -993,11 +972,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/.well-known/oauth-protected-resource': {
-      id: '/.well-known/oauth-protected-resource'
-      path: '/.well-known/oauth-protected-resource'
-      fullPath: '/.well-known/oauth-protected-resource'
-      preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
+    '/cadastro/$slug': {
+      id: '/cadastro/$slug'
+      path: '/cadastro/$slug'
+      fullPath: '/cadastro/$slug'
+      preLoaderRoute: typeof CadastroSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/planos/$slug': {
+      id: '/planos/$slug'
+      path: '/planos/$slug'
+      fullPath: '/planos/$slug'
+      preLoaderRoute: typeof PlanosSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/quizzes/$slug': {
+      id: '/quizzes/$slug'
+      path: '/$slug'
+      fullPath: '/quizzes/$slug'
+      preLoaderRoute: typeof QuizzesSlugRouteImport
+      parentRoute: typeof QuizzesRoute
+    }
+    '/trilha/$slug': {
+      id: '/trilha/$slug'
+      path: '/trilha/$slug'
+      fullPath: '/trilha/$slug'
+      preLoaderRoute: typeof TrilhaSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.lovable/oauth/consent': {
+      id: '/.lovable/oauth/consent'
+      path: '/.lovable/oauth/consent'
+      fullPath: '/.lovable/oauth/consent'
+      preLoaderRoute: typeof DotlovableOauthConsentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/payments': {
+      id: '/api/public/payments'
+      path: '/api/public/payments'
+      fullPath: '/api/public/payments'
+      preLoaderRoute: typeof ApiPublicPaymentsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/app/$slug/': {
@@ -1013,20 +1027,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/app/$slug/$subtopic'
       preLoaderRoute: typeof AppSlugSubtopicRouteImport
       parentRoute: typeof AppSlugRoute
-    }
-    '/api/public/payments': {
-      id: '/api/public/payments'
-      path: '/api/public/payments'
-      fullPath: '/api/public/payments'
-      preLoaderRoute: typeof ApiPublicPaymentsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/.lovable/oauth/consent': {
-      id: '/.lovable/oauth/consent'
-      path: '/.lovable/oauth/consent'
-      fullPath: '/.lovable/oauth/consent'
-      preLoaderRoute: typeof DotlovableOauthConsentRouteImport
-      parentRoute: typeof rootRouteImport
     }
   }
 }
