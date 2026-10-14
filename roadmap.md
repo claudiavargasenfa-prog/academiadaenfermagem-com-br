@@ -32,3 +32,5 @@
 - [x] Revisar falhas atuais de SEO
 - [x] Corrigir todas as falhas possíveis no site
 - [ ] Validar e atualizar os resultados
+
+- [ ] GitHub: concluir junção (pull request) do branch do Lovable com o principal (inclui commit a292617).
