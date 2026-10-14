@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { X } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
@@ -73,20 +73,20 @@ export function TrialCountdownBanner() {
   const trialStyles: Record<NonNullable<Stage>, { bg: string; title: string; body: string; cta: string }> = {
     blue: {
       bg: "bg-sky-500",
-      title: "⏳ Seu tempo grátis termina em 5 dias",
-      body: `Olá, ${firstName}! Seu período gratuito${track ? ` na ${track.label}` : ""} termina em ${days} ${dayWord} (${dateLabel}). Para continuar com todo o conteúdo, associe-se.`,
+      title: "⏳ Sua assinatura expira em 5 dias",
+      body: `Olá, ${firstName}! Sua assinatura${track ? ` na ${track.label}` : ""} termina em ${days} ${dayWord} (${dateLabel}). Para continuar com todo o conteúdo, renove sua assinatura.`,
       cta: "🔐 GARANTIR ACESSO",
     },
     orange: {
       bg: "bg-orange-500",
-      title: "⚠️ Seu tempo grátis termina em 3 dias",
+      title: "⚠️ Sua assinatura expira em 3 dias",
       body: `${firstName}, para continuar acessando todos os conteúdos, acesse o link e seja um associado.`,
       cta: "🔐 SER ASSOCIADO",
     },
     red: {
       bg: "bg-red-600",
       title: "🚨 Seu prazo de gratuidade é até amanhã",
-      body: `${firstName}, passando para lembrar que sua gratuidade termina amanhã. Não perca todo esse conteúdo e os demais que estão por vir — acesse o link e associe-se.`,
+      body: `${firstName}, passando para lembrar que sua gratuidade termina amanhã. Não perca todo esse conteúdo e os demais que estão por vir — acesse o link e renove sua assinatura.`,
       cta: "🔐 ASSOCIE-SE AGORA",
     },
   };
@@ -158,3 +158,4 @@ export function TrialCountdownBanner() {
     </div>
   );
 }
+

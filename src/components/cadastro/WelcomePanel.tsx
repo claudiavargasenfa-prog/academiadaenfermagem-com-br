@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useMpLink } from "@/lib/mp-links";
@@ -150,12 +150,12 @@ export function WelcomePanel({ slug }: { slug: string }) {
                     <CheckCircle2 className="h-4 w-4 text-emerald-600" />
                   )}
                   <span className="text-sm font-extrabold">
-                    {sub.status === "trial" ? "Acesso gratuito (teste)" : "Acesso pago ativo"}
+                    {sub.status === "trial" ? "Assinatura ativa" : "Acesso pago ativo"}
                   </span>
                 </div>
                 <p className="mt-2 text-sm text-muted-foreground">
                   {sub.status === "trial"
-                    ? `Faltam ${daysLeft(sub.expires_at)} dia(s) do seu período gratuito.`
+                    ? `Sua assinatura expira em ${daysLeft(sub.expires_at)} dia(s).`
                     : `Seu acesso é válido até ${new Date(sub.expires_at).toLocaleDateString("pt-BR")} (${daysLeft(sub.expires_at)} dias).`}
                 </p>
                 <p className="mt-1 text-xs text-muted-foreground">
@@ -238,10 +238,30 @@ export function WelcomePanel({ slug }: { slug: string }) {
           </ol>
         )}
 
-        {/* Instalar app grátis */}
+        {/* Comunidade VIP */}
+        <div className="mt-6 rounded-2xl border border-emerald-600/30 bg-emerald-600/10 p-4">
+          <div className="flex items-center gap-2">
+            <Heart className="h-4 w-4 text-emerald-600" />
+            <p className="text-sm font-extrabold">Sua presença é muito importante</p>
+          </div>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Entre no Grupo VIP no WhatsApp, dê sua opinião e ajude a construir o app junto com a
+            gente. Suas ideias viram funcionalidades.
+          </p>
+          <a
+            href={whatsappUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="mt-3 inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2 text-sm font-extrabold text-white"
+          >
+            <MessageCircle className="h-4 w-4" /> Entrar no Grupo VIP
+          </a>
+        </div>
+
+        {/* Instalar app */}
         <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border/60 bg-background/70 p-4">
           <div>
-            <p className="text-sm font-extrabold">Instale o aplicativo</p>
+            <p className="text-sm font-extrabold">Baixe nosso app</p>
             <p className="text-xs text-muted-foreground">
               Instale na tela inicial do celular e acesse offline, em 1 toque.
             </p>
@@ -290,3 +310,4 @@ export function WelcomePanel({ slug }: { slug: string }) {
     </aside>
   );
 }
+

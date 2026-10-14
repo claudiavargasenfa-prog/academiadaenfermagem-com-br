@@ -1,4 +1,4 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+﻿import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -353,7 +353,7 @@ function TrackAppCard({ app, unlocked, extraExpiresAt, isAdmin, isPremium }: { a
         </div>
         {app.gratuito ? (
           <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-2 py-0.5 text-[10px] font-semibold text-emerald-700">
-            <Sparkles className="h-3 w-3" /> Grátis
+            <Sparkles className="h-3 w-3" /> Incluído
           </span>
         ) : unlocked ? (
           <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-2 py-0.5 text-[10px] font-semibold text-emerald-700">
@@ -390,7 +390,7 @@ function TrackAppCard({ app, unlocked, extraExpiresAt, isAdmin, isPremium }: { a
 
 function TrilhaHeader({ slug, count }: { slug: string; count: number }) {
   const title = useText(`trilha.${slug}.title`, `${count} Mini Apps neste aplicativo`);
-  const desc = useText(`trilha.${slug}.description`, "Apps grátis liberam para qualquer pessoa. Os demais exigem assinatura deste aplicativo.");
+  const desc = useText(`trilha.${slug}.description`, "Apps incluídos liberam para qualquer pessoa. Os demais exigem assinatura deste aplicativo.");
   const rendered = title.replace(/\{count\}/g, String(count));
   return (
     <div className="mb-4">
@@ -417,3 +417,4 @@ function MeuEstagioCard() {
     </Card>
   );
 }
+

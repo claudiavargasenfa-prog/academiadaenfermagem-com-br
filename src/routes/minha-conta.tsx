@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+﻿import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { Loader2, LogOut } from "lucide-react";
@@ -197,3 +197,4 @@ function MinhaContaPage() {
     </AppShell>
   );
 }
+

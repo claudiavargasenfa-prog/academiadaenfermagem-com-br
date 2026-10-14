@@ -26,7 +26,6 @@ import {
   WifiOff,
   RefreshCw,
   X,
-  PartyPopper,
 } from "lucide-react";
 import {
   Dialog,
@@ -393,9 +392,9 @@ const AUTOMATICOS = [
         <div className="adec-grain absolute inset-0 opacity-[0.06] mix-blend-multiply" />
       </div>
 
-      {/* Barra de urgência */}
+      {/* Banner superior da plataforma */}
       <div
-        className="relative w-full overflow-hidden px-4 py-2 text-center text-[11px] font-extrabold uppercase tracking-widest md:text-xs"
+        className="relative w-full overflow-hidden px-4 py-2.5 text-center text-[11px] font-extrabold tracking-wide md:text-xs"
         style={{ background: C.orange, color: "#fff" }}
       >
         <span className="inline-flex items-center gap-1.5">
@@ -464,14 +463,11 @@ const AUTOMATICOS = [
                 style={{ background: C.orange, color: "#fff", boxShadow: "0 0 0 0 rgba(234,88,12,0.6)" }}
               >
                 <Sparkles className="h-3.5 w-3.5" />
-                {t("hero_selo", "Inauguração oficial — estamos abrindo as portas")}
+                Plataforma Privada de Suporte à Decisão Clínica
               </motion.span>
 
               <WordReveal
-                text={t(
-                  "hero_title",
-                  "A ADEC está sendo inaugurada: automatize suas anotações com 2 cliques e foque no paciente.",
-                )}
+                text="Otimize suas evoluções e cálculos de plantão em 2 cliques."
                 delay={0.2}
                 className="mt-6 max-w-3xl font-display text-3xl font-extrabold leading-[1.12] tracking-tight md:text-5xl"
                 style={{ color: C.ink }}
@@ -874,6 +870,14 @@ const AUTOMATICOS = [
                       >
                         {t("pagina_180", "+ escolhido")}</span>
                     )}
+                    {!destacado && (
+                      <span
+                        className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest shadow"
+                        style={{ background: C.gold, color: "#fff" }}
+                      >
+                        {p.tagSuperior}
+                      </span>
+                    )}
 
                     <div
                       className="grid h-14 w-14 place-items-center rounded-2xl"
@@ -888,7 +892,7 @@ const AUTOMATICOS = [
                     <p className="mt-1 text-xs font-semibold" style={{ color: C.inkSoft }}>
                       {p.tag}
                     </p>
-                    <p className="mt-2 text-sm font-semibold" style={{ color: C.gold }}>
+                    <p className="mt-2 text-sm font-semibold leading-snug" style={{ color: C.gold }}>
                       {p.dor}
                     </p>
 
@@ -901,8 +905,8 @@ const AUTOMATICOS = [
                       </div>
 
                       <p
-                        className="mt-1 inline-flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wide"
-                        style={{ color: C.orange }}
+                        className="mt-1 text-[11px] font-semibold leading-snug"
+                        style={{ color: C.inkSoft }}
                       >
                         <Sparkles className="h-3 w-3" />
                         {t("plans_badge", "Acesso anual · pagamento único")}</p>
@@ -939,7 +943,7 @@ const AUTOMATICOS = [
                           className="inline-flex items-center justify-center gap-1.5 rounded-xl px-4 py-3 text-center text-xs font-extrabold uppercase leading-tight tracking-wide transition hover:-translate-y-0.5"
                           style={ctaStyle}
                         >
-                          {CTA_TOPO}
+                          {p.ctaLabel}
                         </a>
                       )}
                     </div>
@@ -1061,14 +1065,14 @@ const AUTOMATICOS = [
           </Reveal>
         </section>
 
-        {/* INAUGURAÇÃO */}
+        {/* BENEFÍCIOS DA LICENÇA ANUAL */}
         <section className="mt-16">
           <SectionTitle
             eyebrow={t("pagina_204", "Acesso anual")}
             title={t("inauguracao_titulo", "Sua academia durante um ano")}
             sub={t(
-              "inauguracao_sub",
-              "A ADEC está sendo inaugurada. Quem entra agora ajuda a moldar o app e recebe tudo o que for lançado dentro da sua academia.",
+              "licenca_sub",
+              "Tenha acesso à sua academia profissional por um ano, com recursos práticos e atualizações contínuas.",
             )}
           />
           <div className="mt-8 grid gap-4 md:grid-cols-3">
@@ -1314,3 +1318,4 @@ const AUTOMATICOS = [
     </div>
   );
 }
+
