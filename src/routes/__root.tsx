@@ -83,6 +83,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
       { title: "Academia da Enfermagem — SAE e PE automatizados" },
+      { name: "google-site-verification", content: "2CTYF_k55XsIlcCGNxh1aDTCBx3pv-KaaXCcfdRg6-M" },
       { name: "theme-color", content: "#0c3e21" },
       { name: "mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
