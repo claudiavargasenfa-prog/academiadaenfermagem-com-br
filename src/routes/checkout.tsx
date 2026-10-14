@@ -34,7 +34,7 @@ function CheckoutPage(){
  <Button asChild variant="ghost"><Link to="/adec">Voltar às academias</Link></Button>
  <h1 className="mt-6 font-display text-3xl font-bold">{plan.name}</h1>
  <p className="mt-4 text-4xl font-bold text-primary">{formatPriceBRL(plan.cents)}<span className="ml-2 text-base text-muted-foreground">/ano</span></p>
- <p className="mt-3 text-muted-foreground">Pagamento único · 365 dias de acesso · Sem renovação automática</p>
+ <p className="mt-3 text-muted-foreground">Acesso anual · 365 dias · pagamento seguro pelo Mercado Pago</p>
  {!user?<div className="mt-8"><p className="mb-4">Entre ou crie sua conta para vincular o acesso à sua compra.</p><AuthScreen/></div>:<div className="mt-8 space-y-4">
  {paid?<><CheckCircle2 className="h-8 w-8 text-primary"/><h2 className="text-xl font-bold">Pagamento confirmado. Acesso liberado!</h2><Button asChild><Link to="/trilha/$slug" params={{slug:orderQ.data?.plan_slug??base}}>Acessar minha academia</Link></Button></>:<>
  {search.order&&<div className="border-l-2 border-primary pl-4"><p>{orderQ.isError?'Não foi possível consultar o pedido. Tente atualizar.':['rejected','cancelled'].includes(orderQ.data?.status??'')?'Pagamento não aprovado. Você pode tentar novamente.':['refunded','charged_back'].includes(orderQ.data?.status??'')?'Pagamento estornado ou contestado.':'Aguardando confirmação do Mercado Pago. O retorno à página não confirma o pagamento.'}</p><Button variant="outline" onClick={()=>orderQ.refetch()}><RefreshCw className="h-4 w-4"/>Atualizar situação</Button></div>}

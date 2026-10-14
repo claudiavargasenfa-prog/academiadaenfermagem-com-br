@@ -7,6 +7,8 @@ import { useTracks } from "@/lib/access";
 import { abrirCertificado } from "@/lib/certificado";
 import { createMpPreference } from "@/lib/mercadopago.functions";
 import { TEMAS_POR_CATEGORIA } from "@/data/temas-certificados";
+import certificateFrontAsset from "@/assets/certificados/certificado-frente-adec.png.asset.json";
+import certificateBackAsset from "@/assets/certificados/certificado-verso-adec.png.asset.json";
 
 
 
@@ -92,11 +94,11 @@ export default function BeneficiosPlano() {
       <div className="flex flex-wrap gap-6 items-start">
         <div 
           className="cursor-pointer space-y-2 group"
-          onClick={() => window.open("/modelo-frente.png", "_blank")}
+          onClick={() => window.open(certificateFrontAsset.url, "_blank")}
         >
           <div className="relative overflow-hidden rounded-xl border-2 border-primary/20 shadow-md transition-transform group-hover:scale-[1.02] w-32 h-20 bg-white">
             <img 
-              src="/modelo-frente.png" 
+              src={certificateFrontAsset.url} 
 
               alt="Modelo Frente" 
               className="w-full h-full object-cover"
@@ -118,11 +120,11 @@ export default function BeneficiosPlano() {
 
         <div 
           className="cursor-pointer space-y-2 group"
-          onClick={() => window.open("/modelo-verso.png", "_blank")}
+          onClick={() => window.open(certificateBackAsset.url, "_blank")}
         >
           <div className="relative overflow-hidden rounded-xl border-2 border-primary/20 shadow-md transition-transform group-hover:scale-[1.02] w-32 h-20 bg-white">
             <img 
-              src="/modelo-verso.png" 
+              src={certificateBackAsset.url} 
 
               alt="Modelo Verso" 
               className="w-full h-full object-cover"
