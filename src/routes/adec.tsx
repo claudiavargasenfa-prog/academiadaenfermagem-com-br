@@ -26,6 +26,7 @@ import {
   WifiOff,
   RefreshCw,
   X,
+  PartyPopper,
 } from "lucide-react";
 import {
   Dialog,
@@ -875,7 +876,7 @@ const AUTOMATICOS = [
                         className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest shadow"
                         style={{ background: C.gold, color: "#fff" }}
                       >
-                        {p.tagSuperior}
+                        {p.tag}
                       </span>
                     )}
 
@@ -943,7 +944,7 @@ const AUTOMATICOS = [
                           className="inline-flex items-center justify-center gap-1.5 rounded-xl px-4 py-3 text-center text-xs font-extrabold uppercase leading-tight tracking-wide transition hover:-translate-y-0.5"
                           style={ctaStyle}
                         >
-                          {p.ctaLabel}
+                          {t("pagina_ctaplano", "Garantir meu acesso anual")}
                         </a>
                       )}
                     </div>
