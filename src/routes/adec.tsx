@@ -36,6 +36,8 @@ import {
 } from "@/components/ui/dialog";
 import logoAsset from "@/assets/logo.png.asset.json";
 import fotoFundadora from "@/assets/foto-fundadora.jpeg.asset.json";
+import certificateFrontAsset from "@/assets/certificados/certificado-frente-adec.png.asset.json";
+import certificateBackAsset from "@/assets/certificados/certificado-verso-adec.png.asset.json";
 import {
 
   fetchMyActiveSubscriptions,
@@ -61,6 +63,7 @@ const C = {
   ctaHover: "#082418",
   gold: "#b07d1a",
   goldBright: "#d4af37",
+  textOnDark: "#ffffff",
   orange: "#EA580C",
   line: "rgba(13,59,46,0.14)",
   card: "rgba(255,255,255,0.62)",
@@ -306,10 +309,10 @@ const AUTOMATICOS = [
     title: t("pagina_109", "SAE Descomplicada e Automatizada"),
     para: t("pagina_110", "Acadêmico e Enfermeiro"),
     como:
-      t("pagina_111", "Você marca os sinais e sintomas do paciente (ou dita por voz) e o app cruza tudo com o banco autoral da ADEC, devolvendo o Processo de Enfermagem completo."),
+      t("pagina_111", "Você marca os sinais e sintomas do paciente (ou dita por voz) e o motor clínico cruza tudo com o banco autoral da ADEC, devolvendo o Processo de Enfermagem completo."),
     passos: [
       t("pagina_112", "Marque ou dite as evidências clínicas do paciente"),
-      t("pagina_113", "O app sugere diagnósticos com o mecanismo científico por trás"),
+      t("pagina_113", "O motor clínico sugere diagnósticos e apresenta o mecanismo científico por trás"),
       t("pagina_114", "Prescrição, aprazamento e prioridade clínica saem prontos em PDF/DOC"),
     ],
   },
@@ -327,13 +330,13 @@ const AUTOMATICOS = [
   },
   {
     Icon: BookOpen,
-    title: t("pagina_121", "Diário de Bordo → Relatório em ABNT"),
+    title: t("pagina_121", "Diário de Bordo — Prévia do seu Relatório em ABNT"),
     para: t("pagina_122", "Acadêmico em estágio"),
     como:
-      t("pagina_123", "Você registra o dia de estágio em poucas linhas e o app transforma esses registros no relatório formatado nas normas ABNT."),
+      t("pagina_123", "Você registra o dia de estágio em poucas linhas e o módulo transforma esses registros no relatório formatado nas normas ABNT."),
     passos: [
       t("pagina_124", "Anote o que viu e fez a cada dia de estágio"),
-      t("pagina_125", "O app organiza por data, campo e competência"),
+      t("pagina_125", "O módulo organiza por data, campo e competência"),
       t("pagina_126", "Gere o relatório final em ABNT sem virar a madrugada"),
     ],
   },
@@ -395,12 +398,12 @@ const AUTOMATICOS = [
 
       {/* Banner superior da plataforma */}
       <div
-        className="relative w-full overflow-hidden px-4 py-2.5 text-center text-[11px] font-extrabold tracking-wide md:text-xs"
+        className="relative w-full overflow-hidden px-4 py-5 text-center text-base font-black md:py-6 md:text-xl"
         style={{ background: C.orange, color: "#fff" }}
       >
         <span className="inline-flex items-center gap-1.5">
-          <Flame className="h-3.5 w-3.5" />
-          <PartyPopper className="h-3.5 w-3.5" />
+          <Flame className="h-5 w-5 shrink-0 md:h-6 md:w-6" />
+          <PartyPopper className="h-5 w-5 shrink-0 md:h-6 md:w-6" />
           {t("banner_text", "ADEC — acesso anual a partir de R$ 37,99")}</span>
         <span
           className="adec-shine pointer-events-none absolute inset-y-0 -left-1/3 w-1/3"
@@ -525,12 +528,12 @@ const AUTOMATICOS = [
 
         {/* SELOS EM MARQUEE */}
         <section
-          className="mt-6 overflow-hidden rounded-3xl border py-4 backdrop-blur"
-          style={{ borderColor: C.line, background: C.card }}
+          className="mt-6 overflow-hidden rounded-3xl border-2 py-5 shadow-xl"
+          style={{ borderColor: C.goldBright, background: C.cta }}
         >
-          <p className="mb-2 text-center text-[10px] font-extrabold uppercase tracking-[0.3em]" style={{ color: C.gold }}>
+          <p className="mb-3 text-center text-xs font-extrabold uppercase tracking-[0.3em]" style={{ color: C.goldBright }}>
             {t("pagina_139", "Base legal e científica")}</p>
-          <Marquee items={SELOS} color={C.cta} />
+          <Marquee items={SELOS} color={C.textOnDark} />
         </section>
 
         {/* CREDIBILIDADE — números animados */}
@@ -542,7 +545,7 @@ const AUTOMATICOS = [
             {t("pagina_140", "Conteúdo construído por quem vive o plantão e o consultório")}</p>
           <div className="flex flex-wrap items-center justify-around gap-4 text-center">
             {[
-              { v: 35, suf: t("pagina_141", " anos"), l: t("pagina_142", "De vivência em enfermagem") },
+              { v: 35, suf: t("pagina_141", "+ anos"), l: t("pagina_142", "De vivência em enfermagem") },
               { v: 60, suf: t("pagina_143", "+"), l: t("pagina_144", "MSDC — Módulos de Suporte à Decisão Clínica") },
               { v: 22, suf: t("pagina_145", "+"), l: t("pagina_146", "Escalas clínicas") },
               { v: 100, suf: t("pagina_147", "%"), l: t("pagina_148", "Base COFEN / COREN") },
@@ -562,7 +565,7 @@ const AUTOMATICOS = [
 
         {/* PARA QUEM É */}
         <section className="mt-16">
-          <SectionTitle eyebrow={t("pagina_149", "Para quem é")} title={t("pagina_150", "Escolha o app da sua fase profissional")} />
+          <SectionTitle eyebrow={t("pagina_149", "Para quem é")} title={t("pagina_150", "Escolha a academia da sua fase profissional")} />
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {PLANOS.map((p, i) => (
               <Reveal key={p.slug} delay={i * 0.08}>
@@ -591,13 +594,27 @@ const AUTOMATICOS = [
               </Reveal>
             ))}
           </div>
+          <Reveal className="mt-8">
+            <div
+              className="mx-auto max-w-4xl border-y-2 px-5 py-7 text-center"
+              style={{ borderColor: C.goldBright, background: "rgba(255,255,255,0.4)" }}
+            >
+              <Award className="mx-auto h-7 w-7" style={{ color: C.gold }} />
+              <h3 className="mt-3 font-display text-2xl font-extrabold" style={{ color: C.ink }}>
+                {t("pagina_concurso_titulo", "Preparação para provas e concursos")}
+              </h3>
+              <p className="mx-auto mt-2 max-w-2xl text-sm font-semibold md:text-base" style={{ color: C.inkSoft }}>
+                {t("pagina_concurso_texto", "Conteúdo direto ao ponto, questões comentadas e raciocínio clínico para transformar estudo em resultado.")}
+              </p>
+            </div>
+          </Reveal>
         </section>
 
         {/* BENEFÍCIOS */}
         <section className="mt-16">
           <SectionTitle
             eyebrow={t("pagina_151", "O que muda na sua vida")}
-            title={t("pagina_152", "Não é só um app. É o seu plantão de volta.")}
+            title={t("pagina_152", "Não é apenas conteúdo. É o seu plantão de volta.")}
             sub={t("pagina_153", "Cada módulo resolve uma dor concreta do plantão, do consultório ou da prova — com base em evidência científica.")}
           />
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -666,12 +683,12 @@ const AUTOMATICOS = [
           </Reveal>
         </section>
 
-        {/* CONTEÚDOS DOS MINI APPS */}
+        {/* CONTEÚDOS DOS MÓDULOS */}
         <section className="mt-16">
           <SectionTitle
             eyebrow={t("pagina_160", "Conteúdos")}
-            title={t("pagina_161", "O que você encontra dentro dos Mini Apps")}
-            sub={t("pagina_162", "Cada Mini App é um tema resolvido, direto ao ponto, para usar no plantão, no estágio ou na prova.")}
+            title={t("pagina_161", "O que você encontra nos Módulos de Decisão Clínica")}
+            sub={t("pagina_162", "Cada módulo resolve um tema de forma direta, para usar no plantão, no estágio, nas provas e nos concursos.")}
           />
           <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {CONTEUDOS_MINI_APPS.map((c, i) => (
@@ -694,11 +711,11 @@ const AUTOMATICOS = [
           </div>
         </section>
 
-        {/* 3 APPS AUTOMÁTICOS */}
+        {/* 3 MOTORES AUTOMATIZADOS */}
         <section className="mt-16">
           <SectionTitle
             eyebrow={t("pagina_163", "Exclusivo ADEC")}
-            title={t("pagina_164", "Os 3 automáticos: o app escreve por você")}
+            title={t("pagina_164", "3 motores clínicos que transformam dados em documentos prontos")}
             sub={t("pagina_165", "São três ferramentas que transformam o que você marcou em documento pronto — sem digitar tudo de novo.")}
           />
           <div className="mt-8 grid gap-4 lg:grid-cols-3">
@@ -840,8 +857,8 @@ const AUTOMATICOS = [
         {/* PLANOS */}
         <section id="planos" className="mt-16 scroll-mt-16">
           <SectionTitle
-            eyebrow={t("pagina_179", "Escolha seu app")}
-            title={t("planos_title", "4 apps, um só padrão de excelência")}
+            eyebrow={t("pagina_179", "Escolha sua academia")}
+            title={t("planos_title", "4 academias, um só padrão de excelência")}
             sub={t("plans_subtitle", "Escolha sua academia. Pagamento único anual pelo Mercado Pago.")}
           />
 
@@ -916,7 +933,7 @@ const AUTOMATICOS = [
                         className="mt-2 rounded-lg px-2 py-1.5 text-[11px] font-bold leading-snug"
                         style={{ background: "rgba(212,175,55,0.16)", color: C.ink }}
                       >
-                        {t("pagina_184", "Liberação após aprovação do pagamento. Sem renovação automática.")}</p>
+                        {t("pagina_184", "Liberação após aprovação do pagamento pelo Mercado Pago.")}</p>
                     </div>
 
 
@@ -937,7 +954,7 @@ const AUTOMATICOS = [
                           className="inline-flex items-center justify-center gap-1.5 rounded-xl px-4 py-3 text-sm font-extrabold transition hover:-translate-y-0.5"
                           style={ctaStyle}
                         >
-                          <CheckCircle2 className="h-4 w-4" /> {t("pagina_185", "Acessar meu app →")}</Link>
+                          <CheckCircle2 className="h-4 w-4" /> {t("pagina_185", "Acessar minha academia →")}</Link>
                       ) : (
                         <a
                             href={safeLandingUrl(t("signup_" + p.slug, `/checkout?plan=${p.slug}&period=anual`), `/checkout?plan=${p.slug}&period=anual`)}
@@ -971,7 +988,7 @@ const AUTOMATICOS = [
                     <DialogTrigger asChild>
                       <button className="relative block w-full outline-none">
                         <img 
-                          src={t("pagina_189", "https://academiadaenfermagem.com.br/lovable-uploads/763be538-348e-4903-888f-013697669d72.png")} 
+                          src={t("pagina_189", certificateFrontAsset.url)} 
                           alt={t("pagina_190", "Modelo Frente do Certificado ADEC")} 
                           className="h-auto w-full"
                         />
@@ -983,7 +1000,7 @@ const AUTOMATICOS = [
                     <DialogContent className="max-w-4xl border-none bg-transparent p-0 shadow-none sm:rounded-none">
                       <div className="relative p-2">
                         <img 
-                          src={t("pagina_189", "https://academiadaenfermagem.com.br/lovable-uploads/763be538-348e-4903-888f-013697669d72.png")} 
+                          src={t("pagina_189", certificateFrontAsset.url)} 
                           alt={t("pagina_192", "Modelo Frente do Certificado ADEC")} 
                           className="h-auto w-full rounded-lg shadow-2xl"
                         />
@@ -1003,7 +1020,7 @@ const AUTOMATICOS = [
                     <DialogTrigger asChild>
                       <button className="relative block w-full outline-none">
                         <img 
-                          src={t("pagina_194", "https://academiadaenfermagem.com.br/lovable-uploads/31804b77-b9c9-4a0b-8d59-3d127c52367d.png")} 
+                          src={t("pagina_194", certificateBackAsset.url)} 
                           alt={t("pagina_195", "Modelo Verso do Certificado ADEC")} 
                           className="h-auto w-full"
                         />
@@ -1015,7 +1032,7 @@ const AUTOMATICOS = [
                     <DialogContent className="max-w-4xl border-none bg-transparent p-0 shadow-none sm:rounded-none">
                       <div className="relative p-2">
                         <img 
-                          src={t("pagina_194", "https://academiadaenfermagem.com.br/lovable-uploads/31804b77-b9c9-4a0b-8d59-3d127c52367d.png")} 
+                          src={t("pagina_194", certificateBackAsset.url)} 
                           alt={t("pagina_197", "Modelo Verso do Certificado ADEC")} 
                           className="h-auto w-full rounded-lg shadow-2xl"
                         />
@@ -1061,7 +1078,7 @@ const AUTOMATICOS = [
                 style={{ background: C.orange, color: "#fff" }}
               >
                 <Flame className="h-3.5 w-3.5" />
-                {t("pagina_203", "Sem mensalidade ou renovação automática")}</p>
+                {t("pagina_203", "Acesso anual à academia escolhida")}</p>
             </div>
           </Reveal>
         </section>
@@ -1178,12 +1195,12 @@ const AUTOMATICOS = [
                 a: t("faq_trial", "Escolha sua academia, entre ou crie sua conta e pague pelo Mercado Pago. O acesso é liberado após confirmação do pagamento."),
               },
               {
-                q: t("pagina_223", "Existe cobrança mensal ou renovação automática?"),
-                a: t("pagina_224", "Não. Você paga uma única vez por 365 dias. Para continuar após o vencimento, faça uma nova compra."),
+                q: t("pagina_223", "Como funciona o acesso anual?"),
+                a: t("pagina_224", "A aprovação do pagamento libera 365 dias de acesso à academia escolhida."),
               },
               {
                 q: t("pagina_225", "Funciona offline?"),
-                a: t("pagina_226", "Sim. Instale como app no celular (PWA) e a maior parte do conteúdo funciona sem internet, ideal para plantão."),
+                a: t("pagina_226", "Sim. Instale a plataforma no celular e a maior parte do conteúdo funciona sem internet, ideal para plantão."),
               },
               {
                 q: t("pagina_227", "Os módulos têm certificado?"),

@@ -454,420 +454,420 @@ export const ADEC_FIELDS: LandingField[] = [
   {
     "key": "pagina_67",
     "label": "Anamnese",
-    "group": "Conteúdos dos Mini Apps",
+    "group": "Conteúdos dos Módulos",
     "defaultValue": "Anamnese",
     "kind": "text"
   },
   {
     "key": "pagina_68",
     "label": "Roteiro de entrevista para colher a história do paciente sem esquecer nada.",
-    "group": "Conteúdos dos Mini Apps",
+    "group": "Conteúdos dos Módulos",
     "defaultValue": "Roteiro de entrevista para colher a história do paciente sem esquecer nada.",
     "kind": "text"
   },
   {
     "key": "pagina_69",
     "label": "Exame Físico",
-    "group": "Conteúdos dos Mini Apps",
+    "group": "Conteúdos dos Módulos",
     "defaultValue": "Exame Físico",
     "kind": "text"
   },
   {
     "key": "pagina_70",
     "label": "Avaliação cefalocaudal passo a passo, com o que registrar em cada segmento.",
-    "group": "Conteúdos dos Mini Apps",
+    "group": "Conteúdos dos Módulos",
     "defaultValue": "Avaliação cefalocaudal passo a passo, com o que registrar em cada segmento.",
     "kind": "text"
   },
   {
     "key": "pagina_71",
     "label": "Diagnósticos de Enfermagem",
-    "group": "Conteúdos dos Mini Apps",
+    "group": "Conteúdos dos Módulos",
     "defaultValue": "Diagnósticos de Enfermagem",
     "kind": "text"
   },
   {
     "key": "pagina_72",
     "label": "Dos sinais e sintomas marcados ao diagnóstico correto, com base científica.",
-    "group": "Conteúdos dos Mini Apps",
+    "group": "Conteúdos dos Módulos",
     "defaultValue": "Dos sinais e sintomas marcados ao diagnóstico correto, com base científica.",
     "kind": "text"
   },
   {
     "key": "pagina_73",
     "label": "Evolução de Enfermagem",
-    "group": "Conteúdos dos Mini Apps",
+    "group": "Conteúdos dos Módulos",
     "defaultValue": "Evolução de Enfermagem",
     "kind": "text"
   },
   {
     "key": "pagina_74",
     "label": "Modelo pronto para descrever o turno de forma técnica e segura.",
-    "group": "Conteúdos dos Mini Apps",
+    "group": "Conteúdos dos Módulos",
     "defaultValue": "Modelo pronto para descrever o turno de forma técnica e segura.",
     "kind": "text"
   },
   {
     "key": "pagina_75",
     "label": "Cálculos de Medicamentos",
-    "group": "Conteúdos dos Mini Apps",
+    "group": "Conteúdos dos Módulos",
     "defaultValue": "Cálculos de Medicamentos",
     "kind": "text"
   },
   {
     "key": "pagina_76",
     "label": "Dose, diluição, gotejamento e bomba de infusão conferidos na hora.",
-    "group": "Conteúdos dos Mini Apps",
+    "group": "Conteúdos dos Módulos",
     "defaultValue": "Dose, diluição, gotejamento e bomba de infusão conferidos na hora.",
     "kind": "text"
   },
   {
     "key": "pagina_77",
     "label": "Farmacologia Clínica",
-    "group": "Conteúdos dos Mini Apps",
+    "group": "Conteúdos dos Módulos",
     "defaultValue": "Farmacologia Clínica",
     "kind": "text"
   },
   {
     "key": "pagina_78",
     "label": "Catálogo A-Z com indicação, cuidados de enfermagem e sinais de alerta.",
-    "group": "Conteúdos dos Mini Apps",
+    "group": "Conteúdos dos Módulos",
     "defaultValue": "Catálogo A-Z com indicação, cuidados de enfermagem e sinais de alerta.",
     "kind": "text"
   },
   {
     "key": "pagina_79",
     "label": "Sinais Vitais",
-    "group": "Conteúdos dos Mini Apps",
+    "group": "Conteúdos dos Módulos",
     "defaultValue": "Sinais Vitais",
     "kind": "text"
   },
   {
     "key": "pagina_80",
     "label": "Valores normais de adulto, idoso, criança e gestante — e quando é alerta.",
-    "group": "Conteúdos dos Mini Apps",
+    "group": "Conteúdos dos Módulos",
     "defaultValue": "Valores normais de adulto, idoso, criança e gestante — e quando é alerta.",
     "kind": "text"
   },
   {
     "key": "pagina_81",
     "label": "Escalas Clínicas",
-    "group": "Conteúdos dos Mini Apps",
+    "group": "Conteúdos dos Módulos",
     "defaultValue": "Escalas Clínicas",
     "kind": "text"
   },
   {
     "key": "pagina_82",
     "label": "22+ escalas (Braden, Glasgow, Morse, dor) prontas para pontuar offline.",
-    "group": "Conteúdos dos Mini Apps",
+    "group": "Conteúdos dos Módulos",
     "defaultValue": "22+ escalas (Braden, Glasgow, Morse, dor) prontas para pontuar offline.",
     "kind": "text"
   },
   {
     "key": "pagina_83",
     "label": "Punção Venosa e Flebite",
-    "group": "Conteúdos dos Mini Apps",
+    "group": "Conteúdos dos Módulos",
     "defaultValue": "Punção Venosa e Flebite",
     "kind": "text"
   },
   {
     "key": "pagina_84",
     "label": "Punção ilustrada passo a passo e os graus de flebite com fotos reais.",
-    "group": "Conteúdos dos Mini Apps",
+    "group": "Conteúdos dos Módulos",
     "defaultValue": "Punção ilustrada passo a passo e os graus de flebite com fotos reais.",
     "kind": "text"
   },
   {
     "key": "pagina_85",
     "label": "Cateterismo Vesical",
-    "group": "Conteúdos dos Mini Apps",
+    "group": "Conteúdos dos Módulos",
     "defaultValue": "Cateterismo Vesical",
     "kind": "text"
   },
   {
     "key": "pagina_86",
     "label": "SVD/SVA feminino e masculino com técnica estéril imagem por imagem.",
-    "group": "Conteúdos dos Mini Apps",
+    "group": "Conteúdos dos Módulos",
     "defaultValue": "SVD/SVA feminino e masculino com técnica estéril imagem por imagem.",
     "kind": "text"
   },
   {
     "key": "pagina_87",
     "label": "SNG e Dispositivos",
-    "group": "Conteúdos dos Mini Apps",
+    "group": "Conteúdos dos Módulos",
     "defaultValue": "SNG e Dispositivos",
     "kind": "text"
   },
   {
     "key": "pagina_88",
     "label": "Sonda enteral, TQT, CVC, PICC e dreno: fixação, higiene e complicações.",
-    "group": "Conteúdos dos Mini Apps",
+    "group": "Conteúdos dos Módulos",
     "defaultValue": "Sonda enteral, TQT, CVC, PICC e dreno: fixação, higiene e complicações.",
     "kind": "text"
   },
   {
     "key": "pagina_89",
     "label": "Curativos e Feridas",
-    "group": "Conteúdos dos Mini Apps",
+    "group": "Conteúdos dos Módulos",
     "defaultValue": "Curativos e Feridas",
     "kind": "text"
   },
   {
     "key": "pagina_90",
     "label": "Escolha da cobertura certa e a técnica correta para cada tipo de lesão.",
-    "group": "Conteúdos dos Mini Apps",
+    "group": "Conteúdos dos Módulos",
     "defaultValue": "Escolha da cobertura certa e a técnica correta para cada tipo de lesão.",
     "kind": "text"
   },
   {
     "key": "pagina_91",
     "label": "IRAS e Precauções",
-    "group": "Conteúdos dos Mini Apps",
+    "group": "Conteúdos dos Módulos",
     "defaultValue": "IRAS e Precauções",
     "kind": "text"
   },
   {
     "key": "pagina_92",
     "label": "Isolamentos, paramentação e bundles para não levar infecção ao paciente.",
-    "group": "Conteúdos dos Mini Apps",
+    "group": "Conteúdos dos Módulos",
     "defaultValue": "Isolamentos, paramentação e bundles para não levar infecção ao paciente.",
     "kind": "text"
   },
   {
     "key": "pagina_93",
     "label": "Segurança do Paciente",
-    "group": "Conteúdos dos Mini Apps",
+    "group": "Conteúdos dos Módulos",
     "defaultValue": "Segurança do Paciente",
     "kind": "text"
   },
   {
     "key": "pagina_94",
     "label": "As metas internacionais aplicadas à rotina, sem teoria solta.",
-    "group": "Conteúdos dos Mini Apps",
+    "group": "Conteúdos dos Módulos",
     "defaultValue": "As metas internacionais aplicadas à rotina, sem teoria solta.",
     "kind": "text"
   },
   {
     "key": "pagina_95",
     "label": "Sepse e Deterioração",
-    "group": "Conteúdos dos Mini Apps",
+    "group": "Conteúdos dos Módulos",
     "defaultValue": "Sepse e Deterioração",
     "kind": "text"
   },
   {
     "key": "pagina_96",
     "label": "Triagem NEWS2, pacote da 1ª hora e o que o enfermeiro faz em cada passo.",
-    "group": "Conteúdos dos Mini Apps",
+    "group": "Conteúdos dos Módulos",
     "defaultValue": "Triagem NEWS2, pacote da 1ª hora e o que o enfermeiro faz em cada passo.",
     "kind": "text"
   },
   {
     "key": "pagina_97",
     "label": "Sala de PCR e Carro de Emergência",
-    "group": "Conteúdos dos Mini Apps",
+    "group": "Conteúdos dos Módulos",
     "defaultValue": "Sala de PCR e Carro de Emergência",
     "kind": "text"
   },
   {
     "key": "pagina_98",
     "label": "Conferência da sala, checklist do carro e sua função na parada.",
-    "group": "Conteúdos dos Mini Apps",
+    "group": "Conteúdos dos Módulos",
     "defaultValue": "Conferência da sala, checklist do carro e sua função na parada.",
     "kind": "text"
   },
   {
     "key": "pagina_99",
     "label": "Simulações Clínicas",
-    "group": "Conteúdos dos Mini Apps",
+    "group": "Conteúdos dos Módulos",
     "defaultValue": "Simulações Clínicas",
     "kind": "text"
   },
   {
     "key": "pagina_100",
     "label": "Casos reais para treinar raciocínio clínico antes de encarar o leito.",
-    "group": "Conteúdos dos Mini Apps",
+    "group": "Conteúdos dos Módulos",
     "defaultValue": "Casos reais para treinar raciocínio clínico antes de encarar o leito.",
     "kind": "text"
   },
   {
     "key": "pagina_101",
     "label": "Quizzes e Simulados",
-    "group": "Conteúdos dos Mini Apps",
+    "group": "Conteúdos dos Módulos",
     "defaultValue": "Quizzes e Simulados",
     "kind": "text"
   },
   {
     "key": "pagina_102",
     "label": "Questões por tema com correção na hora e ranking nacional.",
-    "group": "Conteúdos dos Mini Apps",
+    "group": "Conteúdos dos Módulos",
     "defaultValue": "Questões por tema com correção na hora e ranking nacional.",
     "kind": "text"
   },
   {
     "key": "pagina_103",
     "label": "Obstetrícia, Saúde Mental e Idoso",
-    "group": "Conteúdos dos Mini Apps",
+    "group": "Conteúdos dos Módulos",
     "defaultValue": "Obstetrícia, Saúde Mental e Idoso",
     "kind": "text"
   },
   {
     "key": "pagina_104",
     "label": "Cuidados específicos de cada público explicados de forma prática.",
-    "group": "Conteúdos dos Mini Apps",
+    "group": "Conteúdos dos Módulos",
     "defaultValue": "Cuidados específicos de cada público explicados de forma prática.",
     "kind": "text"
   },
   {
     "key": "pagina_105",
     "label": "Manual de Sobrevivência no Estágio",
-    "group": "Conteúdos dos Mini Apps",
+    "group": "Conteúdos dos Módulos",
     "defaultValue": "Manual de Sobrevivência no Estágio",
     "kind": "text"
   },
   {
     "key": "pagina_106",
     "label": "Mochila, postura e comunicação com o preceptor desde o 1º dia.",
-    "group": "Conteúdos dos Mini Apps",
+    "group": "Conteúdos dos Módulos",
     "defaultValue": "Mochila, postura e comunicação com o preceptor desde o 1º dia.",
     "kind": "text"
   },
   {
     "key": "pagina_107",
     "label": "Certificados",
-    "group": "Conteúdos dos Mini Apps",
+    "group": "Conteúdos dos Módulos",
     "defaultValue": "Certificação em cada módulo",
     "kind": "text"
   },
   {
     "key": "pagina_108",
     "label": "Emissão de certificado ao concluir as trilhas dos módulos.",
-    "group": "Conteúdos dos Mini Apps",
+    "group": "Conteúdos dos Módulos",
     "defaultValue": "Cada Módulo de Decisão Clínica conta com certificado de conclusão e horas complementares, com validação digital.",
     "kind": "text"
   },
   {
     "key": "pagina_109",
     "label": "SAE Descomplicada e Automatizada",
-    "group": "Apps automáticos",
+    "group": "Motores automatizados",
     "defaultValue": "SAE Descomplicada e Automatizada",
     "kind": "text"
   },
   {
     "key": "pagina_110",
     "label": "Acadêmico e Enfermeiro",
-    "group": "Apps automáticos",
+    "group": "Motores automatizados",
     "defaultValue": "Acadêmico e Enfermeiro",
     "kind": "text"
   },
   {
     "key": "pagina_111",
-    "label": "Você marca os sinais e sintomas do paciente (ou dita por voz) e o app cruza tudo com o banco…",
-    "group": "Apps automáticos",
-    "defaultValue": "Você marca os sinais e sintomas do paciente (ou dita por voz) e o app cruza tudo com o banco autoral da ADEC, devolvendo o Processo de Enfermagem completo.",
+    "label": "Você marca os sinais e sintomas e o motor clínico cruza tudo com o banco autoral da ADEC.",
+    "group": "Motores automatizados",
+    "defaultValue": "Você marca os sinais e sintomas do paciente (ou dita por voz) e o motor clínico cruza tudo com o banco autoral da ADEC, devolvendo o Processo de Enfermagem completo.",
     "kind": "text"
   },
   {
     "key": "pagina_112",
     "label": "Marque ou dite as evidências clínicas do paciente",
-    "group": "Apps automáticos",
+    "group": "Motores automatizados",
     "defaultValue": "Marque ou dite as evidências clínicas do paciente",
     "kind": "text"
   },
   {
     "key": "pagina_113",
-    "label": "O app sugere diagnósticos com o mecanismo científico por trás",
-    "group": "Apps automáticos",
-    "defaultValue": "O app sugere diagnósticos com o mecanismo científico por trás",
+    "label": "O motor clínico sugere diagnósticos e apresenta o mecanismo científico por trás",
+    "group": "Motores automatizados",
+    "defaultValue": "O motor clínico sugere diagnósticos e apresenta o mecanismo científico por trás",
     "kind": "text"
   },
   {
     "key": "pagina_114",
     "label": "Prescrição, aprazamento e prioridade clínica saem prontos em PDF/DOC",
-    "group": "Apps automáticos",
+    "group": "Motores automatizados",
     "defaultValue": "Prescrição, aprazamento e prioridade clínica saem prontos em PDF/DOC",
     "kind": "text"
   },
   {
     "key": "pagina_115",
     "label": "Anotação de Enfermagem Automatizada",
-    "group": "Apps automáticos",
+    "group": "Motores automatizados",
     "defaultValue": "Anotação de Enfermagem Automatizada",
     "kind": "text"
   },
   {
     "key": "pagina_116",
     "label": "Técnico e Estudante de Técnico",
-    "group": "Apps automáticos",
+    "group": "Motores automatizados",
     "defaultValue": "Técnico e Estudante de Técnico",
     "kind": "text"
   },
   {
     "key": "pagina_117",
     "label": "Durante o plantão você vai marcando o que fez em cada paciente, em abas separadas. No fim, a…",
-    "group": "Apps automáticos",
+    "group": "Motores automatizados",
     "defaultValue": "Durante o plantão você vai marcando o que fez em cada paciente, em abas separadas. No fim, a anotação técnica já está escrita.",
     "kind": "text"
   },
   {
     "key": "pagina_118",
     "label": "Um paciente por aba, sem misturar informação",
-    "group": "Apps automáticos",
+    "group": "Motores automatizados",
     "defaultValue": "Um paciente por aba, sem misturar informação",
     "kind": "text"
   },
   {
     "key": "pagina_119",
     "label": "Tudo que você marca vira rascunho salvo no aparelho",
-    "group": "Apps automáticos",
+    "group": "Motores automatizados",
     "defaultValue": "Tudo que você marca vira rascunho salvo no aparelho",
     "kind": "text"
   },
   {
     "key": "pagina_120",
     "label": "Clique em gerar e a anotação sai pronta para copiar ou baixar",
-    "group": "Apps automáticos",
+    "group": "Motores automatizados",
     "defaultValue": "Clique em gerar e a anotação sai pronta para copiar ou baixar",
     "kind": "text"
   },
   {
     "key": "pagina_121",
-    "label": "Diário de Bordo → Relatório em ABNT",
-    "group": "Apps automáticos",
-    "defaultValue": "Diário de Bordo → Relatório em ABNT",
+    "label": "Diário de Bordo — Prévia do seu Relatório em ABNT",
+    "group": "Motores automatizados",
+    "defaultValue": "Diário de Bordo — Prévia do seu Relatório em ABNT",
     "kind": "text"
   },
   {
     "key": "pagina_122",
     "label": "Acadêmico em estágio",
-    "group": "Apps automáticos",
+    "group": "Motores automatizados",
     "defaultValue": "Acadêmico em estágio",
     "kind": "text"
   },
   {
     "key": "pagina_123",
-    "label": "Você registra o dia de estágio em poucas linhas e o app transforma esses registros no relató…",
-    "group": "Apps automáticos",
-    "defaultValue": "Você registra o dia de estágio em poucas linhas e o app transforma esses registros no relatório formatado nas normas ABNT.",
+    "label": "Você registra o dia de estágio e o módulo transforma os registros no relatório em ABNT.",
+    "group": "Motores automatizados",
+    "defaultValue": "Você registra o dia de estágio em poucas linhas e o módulo transforma esses registros no relatório formatado nas normas ABNT.",
     "kind": "text"
   },
   {
     "key": "pagina_124",
     "label": "Anote o que viu e fez a cada dia de estágio",
-    "group": "Apps automáticos",
+    "group": "Motores automatizados",
     "defaultValue": "Anote o que viu e fez a cada dia de estágio",
     "kind": "text"
   },
   {
     "key": "pagina_125",
-    "label": "O app organiza por data, campo e competência",
-    "group": "Apps automáticos",
-    "defaultValue": "O app organiza por data, campo e competência",
+    "label": "O módulo organiza por data, campo e competência",
+    "group": "Motores automatizados",
+    "defaultValue": "O módulo organiza por data, campo e competência",
     "kind": "text"
   },
   {
     "key": "pagina_126",
     "label": "Gere o relatório final em ABNT sem virar a madrugada",
-    "group": "Apps automáticos",
+    "group": "Motores automatizados",
     "defaultValue": "Gere o relatório final em ABNT sem virar a madrugada",
     "kind": "text"
   },
@@ -971,9 +971,9 @@ export const ADEC_FIELDS: LandingField[] = [
   },
   {
     "key": "pagina_141",
-    "label": " anos",
+    "label": "+ anos",
     "group": "CREDIBILIDADE — números animados",
-    "defaultValue": " anos",
+    "defaultValue": "+ anos",
     "kind": "text"
   },
   {
@@ -1034,9 +1034,9 @@ export const ADEC_FIELDS: LandingField[] = [
   },
   {
     "key": "pagina_150",
-    "label": "Escolha o app da sua fase profissional",
+    "label": "Escolha a academia da sua fase profissional",
     "group": "PARA QUEM É",
-    "defaultValue": "Escolha o app da sua fase profissional",
+    "defaultValue": "Escolha a academia da sua fase profissional",
     "kind": "text"
   },
   {
@@ -1047,10 +1047,24 @@ export const ADEC_FIELDS: LandingField[] = [
     "kind": "text"
   },
   {
+    "key": "pagina_concurso_titulo",
+    "label": "Preparação para provas e concursos",
+    "group": "PARA QUEM É",
+    "defaultValue": "Preparação para provas e concursos",
+    "kind": "text"
+  },
+  {
+    "key": "pagina_concurso_texto",
+    "label": "Conteúdo direto ao ponto, questões comentadas e raciocínio clínico para transformar estudo em resultado.",
+    "group": "PARA QUEM É",
+    "defaultValue": "Conteúdo direto ao ponto, questões comentadas e raciocínio clínico para transformar estudo em resultado.",
+    "kind": "text"
+  },
+  {
     "key": "pagina_152",
-    "label": "Não é só um app. É o seu plantão de volta.",
+    "label": "Não é apenas conteúdo. É o seu plantão de volta.",
     "group": "BENEFÍCIOS",
-    "defaultValue": "Não é só um app. É o seu plantão de volta.",
+    "defaultValue": "Não é apenas conteúdo. É o seu plantão de volta.",
     "kind": "text"
   },
   {
@@ -1111,43 +1125,43 @@ export const ADEC_FIELDS: LandingField[] = [
   },
   {
     "key": "pagina_161",
-    "label": "O que você encontra dentro dos Mini Apps",
-    "group": "CONTEÚDOS DOS MINI APPS",
-    "defaultValue": "O que você encontra dentro dos Mini Apps",
+    "label": "O que você encontra nos Módulos de Decisão Clínica",
+    "group": "CONTEÚDOS DOS MÓDULOS",
+    "defaultValue": "O que você encontra nos Módulos de Decisão Clínica",
     "kind": "text"
   },
   {
     "key": "pagina_162",
-    "label": "Cada Mini App é um tema resolvido, direto ao ponto, para usar no plantão, no estágio ou na p…",
-    "group": "CONTEÚDOS DOS MINI APPS",
-    "defaultValue": "Cada Mini App é um tema resolvido, direto ao ponto, para usar no plantão, no estágio ou na prova.",
+    "label": "Cada módulo resolve um tema de forma direta, para usar no plantão, no estágio, nas provas e nos concursos.",
+    "group": "CONTEÚDOS DOS MÓDULOS",
+    "defaultValue": "Cada módulo resolve um tema de forma direta, para usar no plantão, no estágio, nas provas e nos concursos.",
     "kind": "text"
   },
   {
     "key": "pagina_163",
     "label": "Exclusivo ADEC",
-    "group": "3 APPS AUTOMÁTICOS",
+    "group": "3 MOTORES AUTOMATIZADOS",
     "defaultValue": "Exclusivo ADEC",
     "kind": "text"
   },
   {
     "key": "pagina_164",
-    "label": "Os 3 automáticos: o app escreve por você",
-    "group": "3 APPS AUTOMÁTICOS",
-    "defaultValue": "Os 3 automáticos: o app escreve por você",
+    "label": "3 motores clínicos que transformam dados em documentos prontos",
+    "group": "3 MOTORES AUTOMATIZADOS",
+    "defaultValue": "3 motores clínicos que transformam dados em documentos prontos",
     "kind": "text"
   },
   {
     "key": "pagina_165",
     "label": "São três ferramentas que transformam o que você marcou em documento pronto — sem digitar tud…",
-    "group": "3 APPS AUTOMÁTICOS",
+    "group": "3 MOTORES AUTOMATIZADOS",
     "defaultValue": "São três ferramentas que transformam o que você marcou em documento pronto — sem digitar tudo de novo.",
     "kind": "text"
   },
   {
     "key": "pagina_166",
     "label": "Automático",
-    "group": "3 APPS AUTOMÁTICOS",
+    "group": "3 MOTORES AUTOMATIZADOS",
     "defaultValue": "Automático",
     "kind": "text"
   },
@@ -1237,16 +1251,16 @@ export const ADEC_FIELDS: LandingField[] = [
   },
   {
     "key": "pagina_179",
-    "label": "Escolha seu app",
+    "label": "Escolha sua academia",
     "group": "PLANOS",
-    "defaultValue": "Escolha seu app",
+    "defaultValue": "Escolha sua academia",
     "kind": "text"
   },
   {
     "key": "planos_title",
-    "label": "4 apps, um só padrão de excelência",
+    "label": "4 academias, um só padrão de excelência",
     "group": "PLANOS",
-    "defaultValue": "4 apps, um só padrão de excelência",
+    "defaultValue": "4 academias, um só padrão de excelência",
     "kind": "text"
   },
   {
@@ -1272,16 +1286,16 @@ export const ADEC_FIELDS: LandingField[] = [
   },
   {
     "key": "pagina_184",
-    "label": "Período de teste grátis, 15 dias, para quem acessar entre os dias 10.08.2026 a 10.09.2026",
+    "label": "Liberação após aprovação do pagamento pelo Mercado Pago.",
     "group": "PLANOS",
-    "defaultValue": "Liberação após aprovação do pagamento. Sem renovação automática.",
+    "defaultValue": "Liberação após aprovação do pagamento pelo Mercado Pago.",
     "kind": "text"
   },
   {
     "key": "pagina_185",
-    "label": "Acessar meu app →",
+    "label": "Acessar minha academia →",
     "group": "PLANOS",
-    "defaultValue": "Acessar meu app →",
+    "defaultValue": "Acessar minha academia →",
     "kind": "text"
   },
   {
@@ -1307,9 +1321,9 @@ export const ADEC_FIELDS: LandingField[] = [
   },
   {
     "key": "pagina_189",
-    "label": "https://academiadaenfermagem.com.br/lovable-uploads/763be538-348e-4903-888f-013697669d72.png",
+    "label": "/__l5e/assets-v1/e91cb3c7-3513-48d0-9965-4aa88777f5a4/certificado-frente-adec.png",
     "group": "Banner Certificados Reconhecidos",
-    "defaultValue": "https://academiadaenfermagem.com.br/lovable-uploads/763be538-348e-4903-888f-013697669d72.png",
+    "defaultValue": "/__l5e/assets-v1/e91cb3c7-3513-48d0-9965-4aa88777f5a4/certificado-frente-adec.png",
     "kind": "image"
   },
   {
@@ -1335,9 +1349,9 @@ export const ADEC_FIELDS: LandingField[] = [
   },
   {
     "key": "pagina_194",
-    "label": "https://academiadaenfermagem.com.br/lovable-uploads/31804b77-b9c9-4a0b-8d59-3d127c52367d.png",
+    "label": "/__l5e/assets-v1/a282d08f-c7c5-4142-9881-0d56deaaac9b/certificado-verso-adec.png",
     "group": "Banner Certificados Reconhecidos",
-    "defaultValue": "https://academiadaenfermagem.com.br/lovable-uploads/31804b77-b9c9-4a0b-8d59-3d127c52367d.png",
+    "defaultValue": "/__l5e/assets-v1/a282d08f-c7c5-4142-9881-0d56deaaac9b/certificado-verso-adec.png",
     "kind": "image"
   },
   {
@@ -1377,9 +1391,9 @@ export const ADEC_FIELDS: LandingField[] = [
   },
   {
     "key": "pagina_203",
-    "label": "Grupo VIP da inauguração — o convite chega ao ativar seu teste",
+    "label": "Acesso anual à academia escolhida",
     "group": "GARANTIA + WHATSAPP",
-    "defaultValue": "Sem mensalidade ou renovação automática",
+    "defaultValue": "Acesso anual à academia escolhida",
     "kind": "text"
   },
   {
@@ -1398,7 +1412,7 @@ export const ADEC_FIELDS: LandingField[] = [
   },
   {
     "key": "inauguracao_sub",
-    "label": "A ADEC está sendo inaugurada. Quem entra agora ajuda a moldar o app e recebe tudo o que for …",
+    "label": "Escolha a academia da sua formação e tenha acesso aos seus conteúdos por 365 dias.",
     "group": "Inauguração",
     "defaultValue": "Escolha a academia da sua formação e tenha acesso aos seus conteúdos por 365 dias.",
     "kind": "text"
@@ -1531,16 +1545,16 @@ export const ADEC_FIELDS: LandingField[] = [
   },
   {
     "key": "pagina_223",
-    "label": "Posso cancelar quando quiser?",
+    "label": "Como funciona o acesso anual?",
     "group": "Dúvidas frequentes",
-    "defaultValue": "Existe cobrança mensal ou renovação automática?",
+    "defaultValue": "Como funciona o acesso anual?",
     "kind": "text"
   },
   {
     "key": "pagina_224",
-    "label": "Sim. A assinatura é mensal e sem fidelidade — cancele pelo checkout a qualquer momento.",
+    "label": "A aprovação do pagamento libera 365 dias de acesso à academia escolhida.",
     "group": "Dúvidas frequentes",
-    "defaultValue": "Não. Você paga uma única vez por 365 dias. Para continuar após o vencimento, faça uma nova compra.",
+    "defaultValue": "A aprovação do pagamento libera 365 dias de acesso à academia escolhida.",
     "kind": "text"
   },
   {
@@ -1552,9 +1566,9 @@ export const ADEC_FIELDS: LandingField[] = [
   },
   {
     "key": "pagina_226",
-    "label": "Sim. Instale como app no celular (PWA) e a maior parte do conteúdo funciona sem internet, id…",
+    "label": "Sim. Instale a plataforma no celular e a maior parte do conteúdo funciona sem internet, ideal para plantão.",
     "group": "Dúvidas frequentes",
-    "defaultValue": "Sim. Instale como app no celular (PWA) e a maior parte do conteúdo funciona sem internet, ideal para plantão.",
+    "defaultValue": "Sim. Instale a plataforma no celular e a maior parte do conteúdo funciona sem internet, ideal para plantão.",
     "kind": "text"
   },
   {

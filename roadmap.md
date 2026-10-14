@@ -12,12 +12,14 @@
 - GitHub conectado e sincronizado.
 - Campanha de gratuidade estendida até 30/09/2026.
 - Mini-app "Cuidando de Quem Cuida" finalizado.
+- Página ADEC valorizada: faixa coral ampliada, base científica verde e ouro, linguagem profissional sem “mini app”, destaque para concursos e modelos corretos do certificado.
 
 ## Pendente
 - Credencial antiga do Mercado Pago reutilizada no checkout; preços enviados pelo app. Chave de assinatura das notificações não está configurada e não pode ser substituída pelo token de acesso.
 - Oferta anual: quatro preços e telas anuais atualizados; oito testes aprovados e preços conferidos com conta autenticada.
 - Oferta anual: liberação automática e retirada de todos os brindes das novas ofertas confirmadas; preservar conteúdos e revisar direitos antigos com a proprietária.
-- Oferta anual: cobrança bloqueada por ausência de MP_WEBHOOK_SECRET; aguarda chave de assinatura das notificações, pagamento real e leitura do acesso na conta.
+- Oferta anual: confirmação automática configurada; aguarda pagamento real e leitura do acesso na conta para validação final.
+- Oferta anual: renovação automática recorrente ainda não existe; a cobrança atual libera 365 dias por pagamento aprovado.
 - Oferta anual: confirmar emissão de certificados avulsos e revisão de renovações anteriores antes de ativar a nova cobrança.
 - Integrações de agentes: MCP protegido e três ferramentas de consulta gerados; testes de endereço e bloqueio sem login aprovados. Republicar e validar aprovação/recusa no endereço autorizado: o ambiente local recebe “unauthorized request origin” da autorização.
 - Google Search Console: correções do site concluídas; a proprietária confirmou que “Enfermagem's Google Search Console” também é sua e gratuita. Aguardando reconectar essa conta diretamente ao projeto com a permissão correta.
@@ -33,4 +35,4 @@
 - [x] Corrigir todas as falhas possíveis no site
 - [ ] Validar e atualizar os resultados
 
-- [ ] GitHub: concluir junção (pull request) do branch do Lovable com o principal (inclui commit a292617).
+- [x] GitHub: junção concluída no ramo principal, incluindo o commit a292617.
