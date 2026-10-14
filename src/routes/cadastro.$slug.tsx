@@ -18,7 +18,7 @@ export const Route = createFileRoute("/cadastro/$slug")({
   },
   head: ({ params }) => {
     const label = LABELS[params.slug] ?? "Academia da Enfermagem";
-    const desc = `Crie seu cadastro para acessar o app ${label}.`;
+    const desc = `Crie sua conta para adquirir o acesso anual à Academia ${label}.`;
     return {
       meta: [
         { title: `Cadastro ${label} — Academia da Enfermagem` },

@@ -1144,6 +1144,7 @@ export type Database = {
           expires_at: string
           id: string
           notes: string | null
+          payment_order_id: string | null
           plan_slug: string
           report_quota: number
           started_at: string
@@ -1160,6 +1161,7 @@ export type Database = {
           expires_at: string
           id?: string
           notes?: string | null
+          payment_order_id?: string | null
           plan_slug: string
           report_quota?: number
           started_at?: string
@@ -1176,6 +1178,7 @@ export type Database = {
           expires_at?: string
           id?: string
           notes?: string | null
+          payment_order_id?: string | null
           plan_slug?: string
           report_quota?: number
           started_at?: string
@@ -1343,6 +1346,7 @@ export type Database = {
         Args: { _mini_app_id: string }
         Returns: number
       }
+      create_annual_order: { Args: { _plan_slug: string }; Returns: string }
       expire_finished_trials: { Args: never; Returns: number }
       get_mini_app_meta: {
         Args: { _slug: string }
@@ -1431,6 +1435,16 @@ export type Database = {
           track_tecnico: boolean
           updated_at: string
         }[]
+      }
+      process_annual_payment: {
+        Args: {
+          _amount_cents: number
+          _approved_at: string
+          _order_id: string
+          _payment_id: string
+          _status: string
+        }
+        Returns: undefined
       }
       set_bonus_app: { Args: { _bonus_slug: string }; Returns: string }
       simulado_ranking: {

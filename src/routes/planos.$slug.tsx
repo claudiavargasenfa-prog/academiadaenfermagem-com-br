@@ -43,12 +43,12 @@ const DEFAULTS: Record<string, Record<string, string>> = {
   },
 };
 
-const TRIAL_DAYS = 0; // Período gratuito encerrado
+const TRIAL_DAYS = 365;
 
 export const Route = createFileRoute("/planos/$slug")({
   head: ({ params }) => {
     const label = LABELS[params.slug] ?? "Academia da Enfermagem";
-    const desc = `Conheça a ${label}: Mini Apps, escalas clínicas, SAE automatizada, quizzes e muito mais. Grupo VIP no WhatsApp.`;
+    const desc = `Conheça a ${label}: Mini Apps, escalas clínicas, SAE automatizada, quizzes e muito mais. Acesso anual com pagamento único pelo Mercado Pago.`;
     return {
       meta: [
         { title: `${label} — Planos | Academia da Enfermagem` },
@@ -81,7 +81,7 @@ function PlanoPage() {
     queryKey: ["is_admin", session?.user?.id],
     enabled: isLoggedIn,
     queryFn: async () => {
-      const { data } = await supabase.rpc("has_role", { _user_id: session!.user.id, _role: "admin" });
+      const { data } = await supabase.rpc("has_role", { _user_id: session?.user.id ?? "", _role: "admin" });
       return !!data;
     },
   });
@@ -92,7 +92,7 @@ function PlanoPage() {
   const placementsQ = useQuery({
     queryKey: ["app_placements", appQ.data?.id],
     enabled: !!appQ.data?.id,
-    queryFn: () => fetchPlacementsForApp(appQ.data!.id),
+    queryFn: () => appQ.data?.id ? fetchPlacementsForApp(appQ.data.id) : Promise.resolve([]),
   });
   const miniAppsQ = useQuery({ queryKey: ["mini_apps"], queryFn: fetchMiniApps });
   const plansQ = useQuery({ queryKey: ["subscription_plans"], queryFn: fetchSubscriptionPlans });
@@ -114,23 +114,23 @@ function PlanoPage() {
 
 
   const slogan = t("slogan", DEFAULTS[slug]?.slogan ?? "");
-  const promoTitle = t("promo_title", "🎁 Promoção de lançamento");
-  const promoText = t("promo_text", `Grupo VIP no WhatsApp — válido até 01/10/2026`);
+  const promoTitle = t("promo_title", "Acesso anual");
+  const promoText = t("promo_text", `365 dias de acesso · pagamento único`);
   const ctaFinalTitle = t("cta_final_title", "Pronto para começar?");
   const miniAppsTitle = t("mini_apps_title", "🧩 O que você vai encontrar");
 
   const faqs = [
     {
-      q: t("faq1_q", "Como funciona a assinatura?"),
-      a: t("faq1_a", `Você escolhe o plano da sua categoria e assina para ter acesso completo ao conteúdo.`),
+      q: t("faq1_q", "Como funciona o acesso anual?"),
+      a: t("faq1_a", `Escolha a academia, identifique sua conta e pague pelo Mercado Pago. Após aprovação, o acesso dura 365 dias.`),
     },
     {
-      q: t("faq2_q", "Como entro no Grupo VIP do WhatsApp?"),
-      a: t("faq2_a", "Assim que ativar seu acesso, o link do grupo aparece aqui e dentro do app."),
+      q: t("faq2_q", "O plano inclui bônus?"),
+      a: t("faq2_a", "Não. O plano anual libera a academia escolhida, sem certificados gratuitos, segundo aplicativo ou outros brindes."),
     },
     {
-      q: t("faq3_q", "Posso cancelar quando quiser?"),
-      a: t("faq3_a", "Sim. A assinatura é mensal e sem fidelidade — você cancela pelo checkout a qualquer momento."),
+      q: t("faq3_q", "Existe renovação automática?"),
+      a: t("faq3_a", "Não. O pagamento é único e uma nova compra é necessária após o vencimento."),
     },
     {
       q: t("faq4_q", "Funciona offline?"),
@@ -179,9 +179,9 @@ function PlanoPage() {
             {/* Trust chips */}
             <div className="mt-6 flex flex-wrap gap-2">
               {[
-                `✨ ${TRIAL_DAYS} dias grátis`,
-                "💳 Sem cartão no cadastro",
-                "🚪 Cancele quando quiser",
+                "365 dias de acesso",
+                "Pagamento único",
+                "Sem renovação automática",
                 "📶 Funciona offline",
               ].map((chip) => (
                 <span
@@ -206,7 +206,7 @@ function PlanoPage() {
                 <>
                   <Link
                     to="/checkout"
-                    search={{ plan: slug }}
+                    search={{ plan: slug, period: "anual" }}
                     className="group inline-flex items-center gap-2 rounded-2xl bg-primary px-6 py-3.5 text-sm font-extrabold text-primary-foreground shadow-lg transition hover:-translate-y-0.5 hover:opacity-90 hover:shadow-xl"
                   >
                     <Sparkles className="h-4 w-4" />
@@ -221,12 +221,12 @@ function PlanoPage() {
                     className="group inline-flex items-center gap-2 rounded-2xl bg-primary px-6 py-3.5 text-sm font-extrabold text-primary-foreground shadow-lg transition hover:-translate-y-0.5 hover:opacity-90 hover:shadow-xl"
                   >
                     <Sparkles className="h-4 w-4" />
-                    Começar agora
+                    Adquirir acesso anual
                     <span className="transition group-hover:translate-x-0.5">→</span>
                   </a>
                   <Link
                     to="/checkout"
-                    search={{ plan: slug }}
+                    search={{ plan: slug, period: "anual" }}
                     className="inline-flex items-center gap-1.5 rounded-2xl border-2 border-white/70 bg-white/70 px-6 py-3.5 text-sm font-extrabold backdrop-blur transition hover:bg-white"
                   >
                     Já quero assinar <span className="ml-1">→</span>
@@ -237,7 +237,7 @@ function PlanoPage() {
 
             {isLoggedIn && !subscribed && (
               <p className="mt-3 max-w-xl rounded-xl bg-white/70 px-3 py-2 text-xs font-semibold text-emerald-950 backdrop-blur">
-                Você já está logada como <strong>{session?.user?.email}</strong>. O período grátis é só para novos cadastros — para liberar este aplicativo, faça a assinatura.
+                Sua conta está identificada. Para liberar esta academia, adquira o acesso anual.
                 <button
                   type="button"
                   onClick={() => signOut().then(() => window.location.reload())}
@@ -249,7 +249,7 @@ function PlanoPage() {
             )}
 
             <p className="mt-4 text-xs font-semibold opacity-70">
-              {t("hero_footnote", "Sem cartão de crédito · Ativa na hora · PIX ou cartão só depois do teste")}
+              {t("hero_footnote", "Pagamento único pelo Mercado Pago · Acesso após confirmação")}
             </p>
           </div>
         </section>
@@ -264,7 +264,7 @@ function PlanoPage() {
               <strong>{promoText}</strong>
             </p>
           </div>
-          {whatsappUrl && (
+          {false && whatsappUrl && (
             <a
               href={whatsappUrl}
               target="_blank"
@@ -344,7 +344,7 @@ function PlanoPage() {
         >
           <h2 className="font-display text-2xl font-extrabold md:text-3xl">{ctaFinalTitle}</h2>
           <p className="mt-2 text-sm opacity-80">
-            {formatPriceBRL(price)}/mês – cancele quando quiser
+            {formatPriceBRL(price)}/ano · 365 dias · sem renovação automática
           </p>
           <div className="mt-5 flex flex-wrap justify-center gap-3">
             {subscribed ? (
@@ -358,7 +358,7 @@ function PlanoPage() {
             ) : isLoggedIn ? (
               <Link
                 to="/checkout"
-                search={{ plan: slug }}
+                search={{ plan: slug, period: "anual" }}
                 className="inline-flex items-center gap-1.5 rounded-xl bg-primary px-6 py-3 text-sm font-extrabold text-primary-foreground shadow hover:opacity-90"
               >
                 Assinar agora <span className="ml-1">→</span>
@@ -370,11 +370,11 @@ function PlanoPage() {
                   className="inline-flex items-center gap-1.5 rounded-xl bg-primary px-6 py-3 text-sm font-extrabold text-primary-foreground shadow hover:opacity-90"
                 >
                   <Sparkles className="h-4 w-4" />
-                  Começar agora
+                  Adquirir acesso anual
                 </a>
                 <Link
                   to="/checkout"
-                  search={{ plan: slug }}
+                  search={{ plan: slug, period: "anual" }}
                   className="inline-flex items-center gap-1.5 rounded-xl border-2 border-white/60 bg-white/90 px-6 py-3 text-sm font-extrabold hover:bg-white"
                 >
                   Assinar agora <span className="ml-1">→</span>

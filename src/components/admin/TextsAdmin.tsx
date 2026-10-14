@@ -4,6 +4,8 @@ import { Save } from "lucide-react";
 import { Card } from "@/components/AppShell";
 import { supabase } from "@/integrations/supabase/client";
 import { RichText, fetchAppTexts } from "@/lib/app-texts";
+import { LandingEditor } from "@/components/admin/LandingEditor";
+import { Button } from "@/components/ui/button";
 
 const input =
   "w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-primary/40";
@@ -11,6 +13,7 @@ const input =
 type Row = { key: string; value: string; description: string | null };
 
 export function TextsAdmin() {
+  const [view, setView] = useState<"landing" | "other">("landing");
   const qc = useQueryClient();
   const q = useQuery({
     queryKey: ["admin_app_texts"],
@@ -69,6 +72,11 @@ export function TextsAdmin() {
 
   return (
     <div className="space-y-4">
+      <div className="flex flex-wrap gap-2">
+        <Button variant={view === "landing" ? "default" : "outline"} onClick={() => setView("landing")}>Página ADEC</Button>
+        <Button variant={view === "other" ? "default" : "outline"} onClick={() => setView("other")}>Outros textos</Button>
+      </div>
+      {view === "landing" ? <LandingEditor /> : <>
       <Card>
         <h3 className="font-display text-base font-bold">Como funciona</h3>
         <p className="mt-1 text-xs text-muted-foreground">
@@ -133,6 +141,7 @@ export function TextsAdmin() {
           <button className="rounded-xl bg-primary px-4 py-2 text-xs font-bold text-primary-foreground">Criar texto</button>
         </form>
       </Card>
+      </>}
     </div>
   );
 }

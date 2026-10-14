@@ -36,16 +36,19 @@ import {
 import logoAsset from "@/assets/logo.png.asset.json";
 import fotoFundadora from "@/assets/foto-fundadora.jpeg.asset.json";
 import {
-  fetchSubscriptionPlans,
+
   fetchMyActiveSubscriptions,
 
 } from "@/lib/access";
 import { useAppTexts } from "@/lib/app-texts";
 import { supabase } from "@/integrations/supabase/client";
-import { CountUp, Marquee, Reveal, ShineCTA, StickyCTA, WordReveal } from "@/components/adec/fx";
+import { Marquee, Reveal, ShineCTA, StickyCTA, WordReveal } from "@/components/adec/fx";
+import { ANNUAL_PLANS, isAnnualPlan } from "@/lib/annual-plans";
+import { formatPriceBRL } from "@/lib/access";
+import { safeLandingUrl } from "@/lib/adec-editor";
 import { PhoneMockup } from "@/components/adec/PhoneMockup";
 
-const TRIAL_DAYS = 0; // Período gratuito encerrado
+
 
 /** Paleta original mantida: fundo verde água + CTA verde fechado + detalhes ouro + urgência laranja */
 const C = {
@@ -63,184 +66,11 @@ const C = {
   cardStrong: "rgba(255,255,255,0.85)",
 };
 
-const CTA_TOPO = "QUERO MINHA LICENÇA ANUAL →";
-const CTA_MEIO = "SIM, QUERO TRANSFORMAR MEU PLANTÃO";
-const CTA_RODAPE = "COMEÇAR AGORA 🚀";
-
-
-const PLANOS = [
-  {
-    slug: "tecnico-estudante",
-    Icon: BookMarked,
-    label: "Estudante de Técnico",
-    tagSuperior: "Formação Técnica",
-    tag: "Para quem está no curso técnico de enfermagem",
-    dor: "Raciocínio clínico inicial, checklists de procedimento e fixação prática sem pânico no campo de estágio.",
-    price: "R$ 37,97",
-    priceLabel: "Licença Anual • Parcela Única no PIX ou Cartão (Sem mensalidade)",
-    ctaLabel: "ADQUIRIR LICENÇA ANUAL — R$ 37,97",
-    bullets: [
-      "Checklists de procedimentos básicos passo a passo para o estágio",
-      "Suporte para cálculo e diluição segura de medicamentos",
-      "Modelos de anotações técnicas para treino e prática",
-      "Quizzes e simulações para provas e concursos",
-      "Acesso completo por 365 dias com atualizações do aplicativo",
-    ],
-  },
-  {
-    slug: "tecnico",
-    Icon: Stethoscope,
-    label: "Academia do Técnico",
-    tagSuperior: "Prática Assistencial",
-    tag: "Para o Técnico em Enfermagem em atuação no plantão",
-    dor: "Agilidade nos registros do turno, segurança na administração de medicamentos e otimização do tempo.",
-    price: "R$ 47,97",
-    priceLabel: "Licença Anual • Parcela Única no PIX ou Cartão (Sem mensalidade)",
-    ctaLabel: "ADQUIRIR LICENÇA ANUAL — R$ 47,97",
-    bullets: [
-      "Automatizador de Anotação Técnica de Enfermagem",
-      "Organização de múltiplos pacientes por abas durante o plantão",
-      "Módulo de precisão para cálculos de dosagem e gotejamento",
-      "Consulta rápida a escalas clínicas e procedimentos de urgência",
-      "Funciona offline no celular para uso na beira do leito",
-    ],
-  },
-  {
-    slug: "academico",
-    Icon: GraduationCap,
-    label: "Academia do Acadêmico",
-    tagSuperior: "Graduação & Estágio",
-    tag: "Para o graduando em Enfermagem",
-    dor: "Do primeiro estágio à elaboração do relatório, com domínio da SAE e raciocínio diagnóstico autoral.",
-    price: "R$ 67,97",
-    priceLabel: "Licença Anual • Parcela Única no PIX ou Cartão (Sem mensalidade)",
-    ctaLabel: "ADQUIRIR LICENÇA ANUAL — R$ 67,97",
-    bullets: [
-      "Suporte ao Raciocínio Clínico e Diagnósticos de Enfermagem",
-      "Transformador de Diário de Bordo de Estágio em Relatório formatado (ABNT)",
-      "Guias de exame físico, anamnese e escalas clínicas integradas",
-      "Módulo de apoio à revisão para provas acadêmicas e residências",
-      "Emissão de certificados ao concluir as trilhas de atualização",
-    ],
-  },
-  {
-    slug: "enfermeiro",
-    Icon: UserRound,
-    label: "Academia do Enfermeiro",
-    tagSuperior: "+ Escolhido • Decisão Clínica & Liderança",
-    tag: "Para o Enfermeiro assistencial, gestor ou preceptor",
-    dor: "Redução de burocracia, automação de processos clínicos e máxima precisão no registro do Processo de Enfermagem.",
-    price: "R$ 97,97",
-    priceLabel: "Licença Anual • Parcela Única no PIX ou Cartão (Sem mensalidade)",
-    ctaLabel: "ADQUIRIR LICENÇA ANUAL — R$ 97,97",
-    bullets: [
-      "Gerador Automatizado de Evolução e Prescrição de Enfermagem",
-      "Raciocínio diagnóstico estruturado a partir dos sinais e sintomas informados",
-      "Suporte à Decisão Clínica com base nas normas e legislações vigentes da profissão",
-      "Acesso a 22+ escalas clínicas atualizadas com pontuação automática",
-      "Atualizações contínuas e suporte priorizado",
-    ],
-  },
-];
-
-const MODULOS_SHOWCASE = [
-  { icon: ClipboardList, title: "Ganhe horas de sono no pós-plantão", desc: "A anotação técnica sai pronta enquanto você cuida. Você sai no horário e chega inteira em casa." },
-  { icon: BookOpen, title: "Nunca mais tenha medo de errar uma medicação", desc: "Farmacologia, diluição e aprazamento conferidos para você agir com segurança na correria." },
-  { icon: Award, title: "Passe nas provas sem abrir mão do seu descanso", desc: "Quizzes por tema com feedback imediato: estude pouco, fixe muito, durma bem." },
-  { icon: Brain, title: "Pare de travar na frente do papel", desc: "A SAE monta diagnóstico e prescrição a partir dos sinais e sintomas que você marcou." },
-  { icon: HeartPulse, title: "Segurança na beira do leito", desc: "22+ escalas clínicas prontas e offline — decisão rápida, sem insegurança." },
-  { icon: Stethoscope, title: "Confiança antes do procedimento", desc: "Punção, SVD, SNG e curativos passo a passo, para você nunca mais ficar na dúvida." },
-];
-
-const SEM_ADEC = [
-  "Uma hora a mais no posto terminando anotação",
-  "Caçar PDF de escala no meio do plantão",
-  "Medo de errar diluição ou aprazamento",
-  "Relatório de estágio feito de madrugada",
-  "Insegurança sobre o que a COFEN exige",
-];
-
-const COM_ADEC = [
-  "Anotação e evolução prontas em 2 cliques",
-  "22+ escalas clínicas offline, na palma da mão",
-  "Cálculo e aprazamento conferidos passo a passo",
-  "Diário de bordo vira relatório em ABNT",
-  "Conteúdo ancorado em COFEN, ANVISA, MS e OMS",
-];
-
-const SELOS = ["COFEN", "CORENs", "ANVISA", "Ministério da Saúde", "OMS", "PCDT atualizados"];
-
-/** Mini cards: título do conteúdo + uma linha do que se faz nele. */
-const CONTEUDOS_MINI_APPS: { t: string; d: string }[] = [
-  { t: "Anamnese", d: "Roteiro de entrevista para colher a história do paciente sem esquecer nada." },
-  { t: "Exame Físico", d: "Avaliação cefalocaudal passo a passo, com o que registrar em cada segmento." },
-  { t: "Diagnósticos de Enfermagem", d: "Dos sinais e sintomas marcados ao diagnóstico correto, com base científica." },
-  { t: "Evolução de Enfermagem", d: "Modelo pronto para descrever o turno de forma técnica e segura." },
-  { t: "Cálculos de Medicamentos", d: "Dose, diluição, gotejamento e bomba de infusão conferidos na hora." },
-  { t: "Farmacologia Clínica", d: "Catálogo A-Z com indicação, cuidados de enfermagem e sinais de alerta." },
-  { t: "Sinais Vitais", d: "Valores normais de adulto, idoso, criança e gestante — e quando é alerta." },
-  { t: "Escalas Clínicas", d: "22+ escalas (Braden, Glasgow, Morse, dor) prontas para pontuar offline." },
-  { t: "Punção Venosa e Flebite", d: "Punção ilustrada passo a passo e os graus de flebite com fotos reais." },
-  { t: "Cateterismo Vesical", d: "SVD/SVA feminino e masculino com técnica estéril imagem por imagem." },
-  { t: "SNG e Dispositivos", d: "Sonda enteral, TQT, CVC, PICC e dreno: fixação, higiene e complicações." },
-  { t: "Curativos e Feridas", d: "Escolha da cobertura certa e a técnica correta para cada tipo de lesão." },
-  { t: "IRAS e Precauções", d: "Isolamentos, paramentação e bundles para não levar infecção ao paciente." },
-  { t: "Segurança do Paciente", d: "As metas internacionais aplicadas à rotina, sem teoria solta." },
-  { t: "Sepse e Deterioração", d: "Triagem NEWS2, pacote da 1ª hora e o que o enfermeiro faz em cada passo." },
-  { t: "Sala de PCR e Carro de Emergência", d: "Conferência da sala, checklist do carro e sua função na parada." },
-  { t: "Simulações Clínicas", d: "Casos reais para treinar raciocínio clínico antes de encarar o leito." },
-  { t: "Quizzes e Simulados", d: "Questões por tema com correção na hora e ranking nacional." },
-  { t: "Obstetrícia, Saúde Mental e Idoso", d: "Cuidados específicos de cada público explicados de forma prática." },
-  { t: "Manual de Sobrevivência no Estágio", d: "Mochila, postura e comunicação com o preceptor desde o 1º dia." },
-  { t: "Certificados", d: "Emissão de certificado ao concluir as trilhas dos módulos." },
-];
-
-/** Os três recursos que geram documento pronto automaticamente. */
-const AUTOMATICOS = [
-  {
-    Icon: Brain,
-    title: "SAE Descomplicada e Automatizada",
-    para: "Acadêmico e Enfermeiro",
-    como:
-      "Você marca os sinais e sintomas do paciente (ou dita por voz) e o app cruza tudo com o banco autoral da ADEC, devolvendo o Processo de Enfermagem completo.",
-    passos: [
-      "Marque ou dite as evidências clínicas do paciente",
-      "O app sugere diagnósticos com o mecanismo científico por trás",
-      "Prescrição, aprazamento e prioridade clínica saem prontos em PDF/DOC",
-    ],
-  },
-  {
-    Icon: ClipboardList,
-    title: "Anotação de Enfermagem Automatizada",
-    para: "Técnico e Estudante de Técnico",
-    como:
-      "Durante o plantão você vai marcando o que fez em cada paciente, em abas separadas. No fim, a anotação técnica já está escrita.",
-    passos: [
-      "Um paciente por aba, sem misturar informação",
-      "Tudo que você marca vira rascunho salvo no aparelho",
-      "Clique em gerar e a anotação sai pronta para copiar ou baixar",
-    ],
-  },
-  {
-    Icon: BookOpen,
-    title: "Diário de Bordo → Relatório em ABNT",
-    para: "Acadêmico em estágio",
-    como:
-      "Você registra o dia de estágio em poucas linhas e o app transforma esses registros no relatório formatado nas normas ABNT.",
-    passos: [
-      "Anote o que viu e fez a cada dia de estágio",
-      "O app organiza por data, campo e competência",
-      "Gere o relatório final em ABNT sem virar a madrugada",
-    ],
-  },
-];
-
-
 export const Route = createFileRoute("/adec")({
   head: () => {
-    const title = "ADEC — Academia da Enfermagem | Licença Anual";
+    const title = "ADEC — Academia da Enfermagem | Acesso anual";
     const description =
-      "Plataforma privada de suporte à decisão clínica para estudantes, técnicos e enfermeiros. Anotações, evolução, SAE, cálculos e escalas clínicas com licença anual.";
+      "ADEC: 4 academias de suporte à decisão clínica para acadêmicos, técnicos e enfermeiros. Anotação automática, SAE, cálculos e escalas. Acesso anual a partir de R$ 37,99.";
     return {
       meta: [
         { title },
@@ -287,10 +117,10 @@ export const Route = createFileRoute("/adec")({
             mainEntity: [
               {
                 "@type": "Question",
-                name: "Como faço para adquirir o acesso?",
+                name: "Como adquirir o acesso anual?",
                 acceptedAnswer: {
                   "@type": "Answer",
-                  text: "Escolha o plano da sua categoria profissional, clique em 'Adquirir Licença Anual' e conclua o pagamento via PIX ou cartão. O acesso é liberado imediatamente após a confirmação.",
+                  text: "Escolha uma academia, identifique sua conta e pague pelo Mercado Pago. Acesso liberado após confirmação por 365 dias.",
                 },
               },
               {
@@ -345,14 +175,174 @@ function AdecPage() {
   }, []);
   const isLoggedIn = !!session;
 
-  const plansQ = useQuery({ queryKey: ["subscription_plans"], queryFn: fetchSubscriptionPlans });
+  
   const subsQ = useQuery({ queryKey: ["my_subs"], queryFn: fetchMyActiveSubscriptions, enabled: isLoggedIn });
   const textsQ = useAppTexts();
   const t = (k: string, fb: string) => textsQ.data?.[`vendas.${k}`] ?? fb;
 
+const CTA_TOPO = t("pagina_3", "ADQUIRIR ACESSO ANUAL →");
+const CTA_MEIO = t("pagina_4", "SIM, QUERO TRANSFORMAR MEU PLANTÃO");
+const CTA_RODAPE = t("pagina_5", "ESCOLHER MINHA ACADEMIA →");
+
+/** Fase de inauguração: sem números de usuários e sem depoimentos até termos casos reais. */
+
+
+const PLANOS = [
+  {
+    slug: "academico",
+    Icon: GraduationCap,
+    label: t("pagina_7", "Academia do Acadêmico"),
+    tag: t("pagina_8", "Para o graduando de Enfermagem"),
+    dor: t("pagina_9", "Do primeiro ao último estágio, sem sofrer."),
+    bullets: [
+      t("pagina_10", "Chegue no estágio sabendo exatamente o que fazer"),
+      t("pagina_11", "Escalas clínicas na mão — sem caçar PDF na hora"),
+      t("pagina_12", "Procedimentos passo a passo antes de encostar no paciente"),
+      t("pagina_13", "Obstetrícia, saúde mental e IRAS explicados de verdade"),
+      t("pagina_14", "Passe nas provas sem abrir mão do seu descanso"),
+    ],
+  },
+  {
+    slug: "tecnico-estudante",
+    Icon: BookMarked,
+    label: t("pagina_15", "Estudante de Técnico"),
+    tag: t("pagina_16", "Para quem ainda está no curso técnico"),
+    dor: t("pagina_17", "Passa na prova, encara o campo com confiança."),
+    bullets: [
+      t("pagina_18", "Reconheça sinais de alerta sem travar na hora"),
+      t("pagina_19", "Nunca mais tenha medo de errar uma medicação"),
+      t("pagina_20", "Simulações reais de plantão para perder o nervosismo"),
+      t("pagina_21", "Checklists que evitam o famoso branco no campo"),
+      t("pagina_22", "Passe nas provas sem abrir mão do seu descanso"),
+    ],
+  },
+  {
+    slug: "tecnico",
+    Icon: Stethoscope,
+    label: t("pagina_23", "Academia do Técnico"),
+    tag: t("pagina_24", "Para o Técnico em Enfermagem atuando"),
+    dor: t("pagina_25", "Prática segura, plantão tranquilo."),
+    bullets: [
+      t("pagina_26", "Ganhe horas de sono no pós-plantão com anotação automática"),
+      t("pagina_27", "Vários pacientes organizados por abas, sem se perder"),
+      t("pagina_28", "Nunca mais tenha medo de errar uma medicação"),
+      t("pagina_29", "Saia do plantão no horário, com tudo registrado"),
+      t("pagina_30", "Passe nas provas sem abrir mão do seu descanso"),
+    ],
+  },
+  {
+    slug: "enfermeiro",
+    Icon: UserRound,
+    label: t("pagina_31", "Academia do Enfermeiro"),
+    tag: t("pagina_32", "Para o Enfermeiro assistencial e liderança"),
+    dor: t("pagina_33", "Menos burocracia, mais assistência com tranquilidade."),
+    bullets: [
+      t("pagina_34", "Evolução e prescrição prontas em 2 cliques"),
+      t("pagina_35", "Ganhe horas de sono no pós-plantão"),
+      t("pagina_36", "Durma tranquila: tudo amparado por COFEN/COREN"),
+      t("pagina_37", "Acompanhe o plantão inteiro sem perder nenhum registro"),
+      t("pagina_38", "Passe nas provas e concursos sem abrir mão do descanso"),
+    ],
+  },
+];
+
+const MODULOS_SHOWCASE = [
+  { icon: ClipboardList, title: t("pagina_39", "Ganhe horas de sono no pós-plantão"), desc: t("pagina_40", "A anotação técnica sai pronta enquanto você cuida. Você sai no horário e chega inteira em casa.") },
+  { icon: BookOpen, title: t("pagina_41", "Nunca mais tenha medo de errar uma medicação"), desc: t("pagina_42", "Farmacologia, diluição e aprazamento conferidos para você agir com segurança na correria.") },
+  { icon: Award, title: t("pagina_43", "Passe nas provas sem abrir mão do seu descanso"), desc: t("pagina_44", "Quizzes por tema com feedback imediato: estude pouco, fixe muito, durma bem.") },
+  { icon: Brain, title: t("pagina_45", "Pare de travar na frente do papel"), desc: t("pagina_46", "A SAE monta diagnóstico e prescrição a partir dos sinais e sintomas que você marcou.") },
+  { icon: HeartPulse, title: t("pagina_47", "Segurança na beira do leito"), desc: t("pagina_48", "22+ escalas clínicas prontas e offline — decisão rápida, sem insegurança.") },
+  { icon: Stethoscope, title: t("pagina_49", "Confiança antes do procedimento"), desc: t("pagina_50", "Punção, SVD, SNG e curativos passo a passo, para você nunca mais ficar na dúvida.") },
+];
+
+const SEM_ADEC = [
+  t("pagina_51", "Uma hora a mais no posto terminando anotação"),
+  t("pagina_52", "Caçar PDF de escala no meio do plantão"),
+  t("pagina_53", "Medo de errar diluição ou aprazamento"),
+  t("pagina_54", "Relatório de estágio feito de madrugada"),
+  t("pagina_55", "Insegurança sobre o que a COFEN exige"),
+];
+
+const COM_ADEC = [
+  t("pagina_56", "Anotação e evolução prontas em 2 cliques"),
+  t("pagina_57", "22+ escalas clínicas offline, na palma da mão"),
+  t("pagina_58", "Cálculo e aprazamento conferidos passo a passo"),
+  t("pagina_59", "Diário de bordo vira relatório em ABNT"),
+  t("pagina_60", "Conteúdo ancorado em COFEN, ANVISA, MS e OMS"),
+];
+
+const SELOS = [t("pagina_61", "COFEN"), t("pagina_62", "CORENs"), t("pagina_63", "ANVISA"), t("pagina_64", "Ministério da Saúde"), t("pagina_65", "OMS"), t("pagina_66", "PCDT atualizados")];
+
+/** Mini cards: título do conteúdo + uma linha do que se faz nele. */
+const CONTEUDOS_MINI_APPS: { t: string; d: string }[] = [
+  { t: t("pagina_67", "Anamnese"), d: t("pagina_68", "Roteiro de entrevista para colher a história do paciente sem esquecer nada.") },
+  { t: t("pagina_69", "Exame Físico"), d: t("pagina_70", "Avaliação cefalocaudal passo a passo, com o que registrar em cada segmento.") },
+  { t: t("pagina_71", "Diagnósticos de Enfermagem"), d: t("pagina_72", "Dos sinais e sintomas marcados ao diagnóstico correto, com base científica.") },
+  { t: t("pagina_73", "Evolução de Enfermagem"), d: t("pagina_74", "Modelo pronto para descrever o turno de forma técnica e segura.") },
+  { t: t("pagina_75", "Cálculos de Medicamentos"), d: t("pagina_76", "Dose, diluição, gotejamento e bomba de infusão conferidos na hora.") },
+  { t: t("pagina_77", "Farmacologia Clínica"), d: t("pagina_78", "Catálogo A-Z com indicação, cuidados de enfermagem e sinais de alerta.") },
+  { t: t("pagina_79", "Sinais Vitais"), d: t("pagina_80", "Valores normais de adulto, idoso, criança e gestante — e quando é alerta.") },
+  { t: t("pagina_81", "Escalas Clínicas"), d: t("pagina_82", "22+ escalas (Braden, Glasgow, Morse, dor) prontas para pontuar offline.") },
+  { t: t("pagina_83", "Punção Venosa e Flebite"), d: t("pagina_84", "Punção ilustrada passo a passo e os graus de flebite com fotos reais.") },
+  { t: t("pagina_85", "Cateterismo Vesical"), d: t("pagina_86", "SVD/SVA feminino e masculino com técnica estéril imagem por imagem.") },
+  { t: t("pagina_87", "SNG e Dispositivos"), d: t("pagina_88", "Sonda enteral, TQT, CVC, PICC e dreno: fixação, higiene e complicações.") },
+  { t: t("pagina_89", "Curativos e Feridas"), d: t("pagina_90", "Escolha da cobertura certa e a técnica correta para cada tipo de lesão.") },
+  { t: t("pagina_91", "IRAS e Precauções"), d: t("pagina_92", "Isolamentos, paramentação e bundles para não levar infecção ao paciente.") },
+  { t: t("pagina_93", "Segurança do Paciente"), d: t("pagina_94", "As metas internacionais aplicadas à rotina, sem teoria solta.") },
+  { t: t("pagina_95", "Sepse e Deterioração"), d: t("pagina_96", "Triagem NEWS2, pacote da 1ª hora e o que o enfermeiro faz em cada passo.") },
+  { t: t("pagina_97", "Sala de PCR e Carro de Emergência"), d: t("pagina_98", "Conferência da sala, checklist do carro e sua função na parada.") },
+  { t: t("pagina_99", "Simulações Clínicas"), d: t("pagina_100", "Casos reais para treinar raciocínio clínico antes de encarar o leito.") },
+  { t: t("pagina_101", "Quizzes e Simulados"), d: t("pagina_102", "Questões por tema com correção na hora e ranking nacional.") },
+  { t: t("pagina_103", "Obstetrícia, Saúde Mental e Idoso"), d: t("pagina_104", "Cuidados específicos de cada público explicados de forma prática.") },
+  { t: t("pagina_105", "Manual de Sobrevivência no Estágio"), d: t("pagina_106", "Mochila, postura e comunicação com o preceptor desde o 1º dia.") },
+  { t: t("pagina_107", "Certificados avulsos"), d: t("pagina_108", "Certificação opcional vendida separadamente; não incluída no acesso anual.") },
+];
+
+/** Os três recursos que geram documento pronto automaticamente. */
+const AUTOMATICOS = [
+  {
+    Icon: Brain,
+    title: t("pagina_109", "SAE Descomplicada e Automatizada"),
+    para: t("pagina_110", "Acadêmico e Enfermeiro"),
+    como:
+      t("pagina_111", "Você marca os sinais e sintomas do paciente (ou dita por voz) e o app cruza tudo com o banco autoral da ADEC, devolvendo o Processo de Enfermagem completo."),
+    passos: [
+      t("pagina_112", "Marque ou dite as evidências clínicas do paciente"),
+      t("pagina_113", "O app sugere diagnósticos com o mecanismo científico por trás"),
+      t("pagina_114", "Prescrição, aprazamento e prioridade clínica saem prontos em PDF/DOC"),
+    ],
+  },
+  {
+    Icon: ClipboardList,
+    title: t("pagina_115", "Anotação de Enfermagem Automatizada"),
+    para: t("pagina_116", "Técnico e Estudante de Técnico"),
+    como:
+      t("pagina_117", "Durante o plantão você vai marcando o que fez em cada paciente, em abas separadas. No fim, a anotação técnica já está escrita."),
+    passos: [
+      t("pagina_118", "Um paciente por aba, sem misturar informação"),
+      t("pagina_119", "Tudo que você marca vira rascunho salvo no aparelho"),
+      t("pagina_120", "Clique em gerar e a anotação sai pronta para copiar ou baixar"),
+    ],
+  },
+  {
+    Icon: BookOpen,
+    title: t("pagina_121", "Diário de Bordo → Relatório em ABNT"),
+    para: t("pagina_122", "Acadêmico em estágio"),
+    como:
+      t("pagina_123", "Você registra o dia de estágio em poucas linhas e o app transforma esses registros no relatório formatado nas normas ABNT."),
+    passos: [
+      t("pagina_124", "Anote o que viu e fez a cada dia de estágio"),
+      t("pagina_125", "O app organiza por data, campo e competência"),
+      t("pagina_126", "Gere o relatório final em ABNT sem virar a madrugada"),
+    ],
+  },
+];
+
+
+
   const isSubscribed = (slug: string) => {
     const s = (subsQ.data ?? []).find((x) => x.plan_slug === slug);
-    return !!s && (s.status === "active" || s.status === "trial");
+    return !!s && s.status === "active";
   };
 
   const ctaStyle: React.CSSProperties = {
@@ -362,10 +352,10 @@ function AdecPage() {
   };
 
   const chips = [
-    { Icon: ShieldCheck, label: "Acesso Imediato" },
-    { Icon: CalendarCheck, label: "Licença Anual (Sem Mensalidades)" },
-    { Icon: WifiOff, label: "Funciona Offline no Celular" },
-    { Icon: RefreshCw, label: "Atualizações Contínuas" },
+    { Icon: CalendarCheck, label: t("chip_trial", "365 dias de acesso") },
+    { Icon: CreditCard, label: t("pagina_127", "Pagamento único anual") },
+    { Icon: WifiOff, label: t("pagina_128", "Funciona offline") },
+    { Icon: RefreshCw, label: t("pagina_129", "Atualizações contínuas") },
   ];
 
   return (
@@ -382,7 +372,7 @@ function AdecPage() {
           width="1"
           style={{ display: "none" }}
           alt=""
-          src="https://www.facebook.com/tr?id=2479743902438109&ev=PageView&noscript=1"
+          src={"https://www.facebook.com/tr?id=2479743902438109&ev=PageView&noscript=1"}
         />
       </noscript>
       {/* Camadas de luz em movimento (mesma paleta, só profundidade) */}
@@ -407,19 +397,10 @@ function AdecPage() {
         className="relative w-full overflow-hidden px-4 py-2.5 text-center text-[11px] font-extrabold tracking-wide md:text-xs"
         style={{ background: C.orange, color: "#fff" }}
       >
-        <div className="relative mx-auto flex max-w-7xl flex-col items-center justify-center gap-2 sm:flex-row sm:gap-4">
-          <p className="inline-flex items-center gap-1.5 leading-relaxed">
-            <span aria-hidden="true" className="text-base">⚡</span>
-            Plataforma ADEC: Otimize suas evoluções e cálculos de plantão em 2 cliques com Licença Anual.
-          </p>
-          <a
-            href="#planos"
-            className="inline-flex shrink-0 items-center justify-center gap-1 rounded-full bg-white px-4 py-2 font-black uppercase tracking-wide transition hover:-translate-y-0.5 hover:bg-amber-50"
-            style={{ color: C.cta }}
-          >
-            VER PLANOS ANUAIS <ArrowRight className="h-3.5 w-3.5" />
-          </a>
-        </div>
+        <span className="inline-flex items-center gap-1.5">
+          <Flame className="h-3.5 w-3.5" />
+          <PartyPopper className="h-3.5 w-3.5" />
+          {t("banner_text", "ADEC — acesso anual a partir de R$ 37,99")}</span>
         <span
           className="adec-shine pointer-events-none absolute inset-y-0 -left-1/3 w-1/3"
           style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)" }}
@@ -428,15 +409,14 @@ function AdecPage() {
 
       <header className="relative mx-auto flex max-w-7xl items-center justify-between px-5 pt-6">
         <Link to="/" className="flex items-center gap-2 opacity-90 transition hover:opacity-100">
-          <img src={logoAsset.url} alt="ADEC" className="h-10 w-auto" />
+          <img src={t("logo_image", "/__l5e/assets-v1/20892c4a-2b50-483d-a19d-a5067c9d5188/logo-adec.png")} alt={t("pagina_133", "ADEC")} className="h-10 w-auto" />
         </Link>
         <Link
           to="/"
           className="rounded-full border px-4 py-1.5 text-xs font-bold uppercase tracking-widest transition hover:bg-white/60"
           style={{ borderColor: C.line, color: C.cta, background: "rgba(255,255,255,0.5)" }}
         >
-          Loja completa
-        </Link>
+          {t("pagina_134", "Loja completa")}</Link>
       </header>
 
       <div className="relative mx-auto max-w-7xl px-5 pb-28 pt-8">
@@ -460,8 +440,8 @@ function AdecPage() {
                 initial={{ opacity: 0, scale: 0.9, y: -10 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-                src={logoAsset.url}
-                alt="ADEC — Avaliação Diagnóstica em Enfermagem Clínica"
+                src={t("logo_image", logoAsset.url)}
+                alt={t("pagina_135", "ADEC — Avaliação Diagnóstica em Enfermagem Clínica")}
                 className="h-28 w-auto drop-shadow-xl md:h-36"
               />
 
@@ -469,8 +449,7 @@ function AdecPage() {
                 className="mt-2 text-[10px] font-extrabold uppercase tracking-[0.35em] md:text-xs"
                 style={{ color: C.gold }}
               >
-                Avaliação Diagnóstica em Enfermagem Clínica
-              </p>
+                {t("pagina_136", "Avaliação Diagnóstica em Enfermagem Clínica")}</p>
               <div
                 className="mt-1 h-px w-40"
                 style={{ background: `linear-gradient(90deg, transparent, ${C.goldBright}, transparent)` }}
@@ -508,11 +487,15 @@ function AdecPage() {
               </motion.p>
 
               <div className="mt-8">
-                <ShineCTA href="#planos" style={ctaStyle}>
+                <ShineCTA href={safeLandingUrl(t("cta_target", "#planos"), '#planos')} style={ctaStyle}>
                   <Sparkles className="h-4 w-4" style={{ color: C.goldBright }} />
                   {CTA_TOPO}
                 </ShineCTA>
               </div>
+
+              <p className="mt-3 flex items-center gap-1.5 text-xs font-bold md:text-sm" style={{ color: C.orange }}>
+                <Sparkles className="h-3.5 w-3.5" />
+                {t("pagina_137", "365 dias de acesso à academia escolhida, com pagamento único")}</p>
 
               <div className="mt-7 flex flex-wrap justify-center gap-2 lg:justify-start">
                 {chips.map((c, i) => (
@@ -532,11 +515,10 @@ function AdecPage() {
 
               <p className="mt-6 flex items-center gap-1.5 text-xs font-semibold" style={{ color: C.inkSoft }}>
                 <ShieldCheck className="h-3.5 w-3.5" style={{ color: C.gold }} />
-                Compra 100% Segura • Acesso Imediato via PIX ou Cartão
-              </p>
+                {t("pagina_138", "Pagamento pelo Mercado Pago · acesso após confirmação")}</p>
             </div>
 
-            <PhoneMockup ink={C.ink} cta={C.cta} gold={C.goldBright} line={C.line} />
+            <PhoneMockup text={t} ink={C.ink} cta={C.cta} gold={C.goldBright} line={C.line} />
           </div>
         </section>
 
@@ -546,8 +528,7 @@ function AdecPage() {
           style={{ borderColor: C.line, background: C.card }}
         >
           <p className="mb-2 text-center text-[10px] font-extrabold uppercase tracking-[0.3em]" style={{ color: C.gold }}>
-            Base legal e científica
-          </p>
+            {t("pagina_139", "Base legal e científica")}</p>
           <Marquee items={SELOS} color={C.cta} />
         </section>
 
@@ -557,22 +538,16 @@ function AdecPage() {
           style={{ borderColor: C.line, background: C.card }}
         >
           <p className="mb-4 text-center text-xs font-extrabold uppercase tracking-widest" style={{ color: C.gold }}>
-            Conteúdo construído por quem vive o plantão e o consultório
-          </p>
+            {t("pagina_140", "Conteúdo construído por quem vive o plantão e o consultório")}</p>
           <div className="flex flex-wrap items-center justify-around gap-4 text-center">
             {[
-              { v: 35, suf: " anos", l: "De vivência em enfermagem" },
-              { v: 60, suf: "+", l: "MSDC — Módulos de Suporte à Decisão Clínica" },
-              { v: 22, suf: "+", l: "Escalas clínicas" },
-              { v: 100, suf: "%", l: "Base COFEN / COREN" },
+              { v: 35, suf: t("pagina_141", " anos"), l: t("pagina_142", "De vivência em enfermagem") },
+              { v: 60, suf: t("pagina_143", "+"), l: t("pagina_144", "MSDC — Módulos de Suporte à Decisão Clínica") },
+              { v: 22, suf: t("pagina_145", "+"), l: t("pagina_146", "Escalas clínicas") },
+              { v: 100, suf: t("pagina_147", "%"), l: t("pagina_148", "Base COFEN / COREN") },
             ].map((s) => (
               <div key={s.l} className="min-w-[140px]">
-                <CountUp
-                  value={s.v}
-                  suffix={s.suf}
-                  className="font-display text-3xl font-extrabold md:text-4xl"
-                  style={{ color: C.cta }}
-                />
+                <span className="font-display text-3xl font-extrabold md:text-4xl" style={{ color: C.cta }}>{t("stat_" + s.v, `${s.v}${s.suf}`)}</span>
                 <p
                   className="mt-1 text-[10px] font-bold uppercase tracking-wider"
                   style={{ color: C.inkSoft }}
@@ -586,7 +561,7 @@ function AdecPage() {
 
         {/* PARA QUEM É */}
         <section className="mt-16">
-          <SectionTitle eyebrow="Para quem é" title="Escolha o app da sua fase profissional" />
+          <SectionTitle eyebrow={t("pagina_149", "Para quem é")} title={t("pagina_150", "Escolha o app da sua fase profissional")} />
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {PLANOS.map((p, i) => (
               <Reveal key={p.slug} delay={i * 0.08}>
@@ -620,9 +595,9 @@ function AdecPage() {
         {/* BENEFÍCIOS */}
         <section className="mt-16">
           <SectionTitle
-            eyebrow="O que muda na sua vida"
-            title="Não é só um app. É o seu plantão de volta."
-            sub="Cada módulo resolve uma dor concreta do plantão, do consultório ou da prova — com base em evidência científica."
+            eyebrow={t("pagina_151", "O que muda na sua vida")}
+            title={t("pagina_152", "Não é só um app. É o seu plantão de volta.")}
+            sub={t("pagina_153", "Cada módulo resolve uma dor concreta do plantão, do consultório ou da prova — com base em evidência científica.")}
           />
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {MODULOS_SHOWCASE.map((m, i) => (
@@ -653,14 +628,14 @@ function AdecPage() {
           <div className="mt-6 grid gap-3 md:grid-cols-2">
             {[
               {
-                eyebrow: "Base de dados",
-                title: "Resoluções, normas, diretrizes e protocolos atualizados",
-                desc: "COFEN, CORENs, ANVISA, Ministério da Saúde, OMS — sempre em dia.",
+                eyebrow: t("pagina_154", "Base de dados"),
+                title: t("pagina_155", "Resoluções, normas, diretrizes e protocolos atualizados"),
+                desc: t("pagina_156", "COFEN, CORENs, ANVISA, Ministério da Saúde, OMS — sempre em dia."),
               },
               {
-                eyebrow: "Extra",
-                title: "Com certificação opcional",
-                desc: "Trilhas com emissão de certificado ao concluir os módulos.",
+                eyebrow: t("pagina_157", "Certificação avulsa opcional"),
+                title: t("pagina_158", "Certificados vendidos separadamente, sem emissão gratuita incluída."),
+                desc: t("pagina_159", "Certificação opcional, contratada separadamente do acesso anual."),
               },
             ].map((b, i) => (
               <Reveal key={b.eyebrow} delay={i * 0.08}>
@@ -683,7 +658,7 @@ function AdecPage() {
           </div>
 
           <Reveal className="mt-10 text-center">
-            <ShineCTA href="#planos" style={ctaStyle}>
+            <ShineCTA href={safeLandingUrl(t("cta_target", "#planos"), "#planos")} style={ctaStyle}>
               {CTA_MEIO}
               <ArrowRight className="h-4 w-4" style={{ color: C.goldBright }} />
             </ShineCTA>
@@ -693,9 +668,9 @@ function AdecPage() {
         {/* CONTEÚDOS DOS MINI APPS */}
         <section className="mt-16">
           <SectionTitle
-            eyebrow="Conteúdos"
-            title="O que você encontra dentro dos Mini Apps"
-            sub="Cada Mini App é um tema resolvido, direto ao ponto, para usar no plantão, no estágio ou na prova."
+            eyebrow={t("pagina_160", "Conteúdos")}
+            title={t("pagina_161", "O que você encontra dentro dos Mini Apps")}
+            sub={t("pagina_162", "Cada Mini App é um tema resolvido, direto ao ponto, para usar no plantão, no estágio ou na prova.")}
           />
           <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {CONTEUDOS_MINI_APPS.map((c, i) => (
@@ -721,9 +696,9 @@ function AdecPage() {
         {/* 3 APPS AUTOMÁTICOS */}
         <section className="mt-16">
           <SectionTitle
-            eyebrow="Exclusivo ADEC"
-            title="Os 3 automáticos: o app escreve por você"
-            sub="São três ferramentas que transformam o que você marcou em documento pronto — sem digitar tudo de novo."
+            eyebrow={t("pagina_163", "Exclusivo ADEC")}
+            title={t("pagina_164", "Os 3 automáticos: o app escreve por você")}
+            sub={t("pagina_165", "São três ferramentas que transformam o que você marcou em documento pronto — sem digitar tudo de novo.")}
           />
           <div className="mt-8 grid gap-4 lg:grid-cols-3">
             {AUTOMATICOS.map((a, i) => (
@@ -742,8 +717,7 @@ function AdecPage() {
                     className="absolute right-3 top-3 rounded-full px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-widest"
                     style={{ background: "rgba(212,175,55,0.25)", color: C.gold }}
                   >
-                    Automático
-                  </span>
+                    {t("pagina_166", "Automático")}</span>
                   <div
                     className="grid h-12 w-12 place-items-center rounded-xl"
                     style={{ background: C.cta, color: C.goldBright }}
@@ -783,9 +757,9 @@ function AdecPage() {
         {/* COMPARATIVO SEM x COM */}
         <section className="mt-16">
           <SectionTitle
-            eyebrow="A diferença"
-            title="Seu plantão sem a ADEC e com a ADEC"
-            sub="Mesma carga de trabalho. Duas experiências completamente diferentes."
+            eyebrow={t("pagina_167", "A diferença")}
+            title={t("pagina_168", "Seu plantão sem a ADEC e com a ADEC")}
+            sub={t("pagina_169", "Mesma carga de trabalho. Duas experiências completamente diferentes.")}
           />
           <div className="mt-8 grid gap-4 md:grid-cols-2">
             <Reveal>
@@ -794,8 +768,7 @@ function AdecPage() {
                 style={{ borderColor: C.line, background: "rgba(255,255,255,0.45)" }}
               >
                 <p className="text-xs font-extrabold uppercase tracking-[0.25em]" style={{ color: C.inkSoft }}>
-                  Sem a ADEC
-                </p>
+                  {t("pagina_170", "Sem a ADEC")}</p>
                 <ul className="mt-4 space-y-3">
                   {SEM_ADEC.map((s) => (
                     <li key={s} className="flex items-start gap-3 text-sm" style={{ color: C.inkSoft }}>
@@ -820,8 +793,7 @@ function AdecPage() {
                   style={{ background: "rgba(212,175,55,0.3)" }}
                 />
                 <p className="relative text-xs font-extrabold uppercase tracking-[0.25em]" style={{ color: C.gold }}>
-                  Com a ADEC
-                </p>
+                  {t("pagina_171", "Com a ADEC")}</p>
                 <ul className="relative mt-4 space-y-3">
                   {COM_ADEC.map((s) => (
                     <li key={s} className="flex items-start gap-3 text-sm font-semibold" style={{ color: C.ink }}>
@@ -840,14 +812,14 @@ function AdecPage() {
           className="mt-16 overflow-hidden rounded-3xl border p-8 md:p-12"
           style={{ borderColor: C.line, background: C.cardStrong }}
         >
-          <SectionTitle eyebrow="Na prática" title="Plantão com a Academia" />
+          <SectionTitle eyebrow={t("pagina_172", "Na prática")} title={t("pagina_173", "Plantão com a Academia")} />
           <ul className="mx-auto mt-8 max-w-3xl space-y-3">
             {[
-              "Você sai no horário: anotação e evolução saem prontas do que você já avaliou",
-              "Dorme tranquila: medicação e aprazamento conferidos pelas metas de segurança",
-              "Nunca mais trava na frente do papel: SAE e prescrição por paciente",
-              "Decide rápido na beira do leito: 22+ escalas clínicas, offline",
-              "Encara qualquer procedimento com confiança: passo a passo antes de começar",
+              t("pagina_174", "Você sai no horário: anotação e evolução saem prontas do que você já avaliou"),
+              t("pagina_175", "Dorme tranquila: medicação e aprazamento conferidos pelas metas de segurança"),
+              t("pagina_176", "Nunca mais trava na frente do papel: SAE e prescrição por paciente"),
+              t("pagina_177", "Decide rápido na beira do leito: 22+ escalas clínicas, offline"),
+              t("pagina_178", "Encara qualquer procedimento com confiança: passo a passo antes de começar"),
             ].map((b, i) => (
               <Reveal key={b} delay={i * 0.06}>
                 <li
@@ -867,9 +839,9 @@ function AdecPage() {
         {/* PLANOS */}
         <section id="planos" className="mt-16 scroll-mt-16">
           <SectionTitle
-            eyebrow="Escolha seu app"
+            eyebrow={t("pagina_179", "Escolha seu app")}
             title={t("planos_title", "4 apps, um só padrão de excelência")}
-            sub="Licença anual completa. Acesso imediato. Pague uma vez, use o ano todo."
+            sub={t("plans_subtitle", "Escolha sua academia. Pagamento único anual pelo Mercado Pago.")}
           />
 
           <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
@@ -896,8 +868,7 @@ function AdecPage() {
                         className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest shadow"
                         style={{ background: C.orange, color: "#fff" }}
                       >
-                        + escolhido
-                      </span>
+                        {t("pagina_180", "+ escolhido")}</span>
                     )}
                     {!destacado && (
                       <span
@@ -928,19 +899,23 @@ function AdecPage() {
                     <div className="mt-4">
                       <div className="flex items-baseline gap-1">
                         <span className="font-display text-3xl font-extrabold" style={{ color: C.ink }}>
-                          {p.price}
-                        </span>
+                          {t(`annual_price_${p.slug}`, isAnnualPlan(p.slug) ? formatPriceBRL(ANNUAL_PLANS[p.slug].cents) : "")}</span>
                         <span className="text-xs font-bold" style={{ color: C.inkSoft }}>
-                          /ano
-                        </span>
+                          {t("pagina_182", "/ano")}</span>
                       </div>
 
                       <p
                         className="mt-1 text-[11px] font-semibold leading-snug"
                         style={{ color: C.inkSoft }}
                       >
-                        {p.priceLabel}
-                      </p>
+                        <Sparkles className="h-3 w-3" />
+                        {t("plans_badge", "Acesso anual · pagamento único")}</p>
+
+                      <p
+                        className="mt-2 rounded-lg px-2 py-1.5 text-[11px] font-bold leading-snug"
+                        style={{ background: "rgba(212,175,55,0.16)", color: C.ink }}
+                      >
+                        {t("pagina_184", "Liberação após aprovação do pagamento. Sem renovação automática.")}</p>
                     </div>
 
 
@@ -961,11 +936,10 @@ function AdecPage() {
                           className="inline-flex items-center justify-center gap-1.5 rounded-xl px-4 py-3 text-sm font-extrabold transition hover:-translate-y-0.5"
                           style={ctaStyle}
                         >
-                          <CheckCircle2 className="h-4 w-4" /> Acessar meu app →
-                        </Link>
+                          <CheckCircle2 className="h-4 w-4" /> {t("pagina_185", "Acessar meu app →")}</Link>
                       ) : (
                         <a
-                          href={`/cadastro/${p.slug}`}
+                            href={safeLandingUrl(t("signup_" + p.slug, `/checkout?plan=${p.slug}&period=anual`), `/checkout?plan=${p.slug}&period=anual`)}
                           className="inline-flex items-center justify-center gap-1.5 rounded-xl px-4 py-3 text-center text-xs font-extrabold uppercase leading-tight tracking-wide transition hover:-translate-y-0.5"
                           style={ctaStyle}
                         >
@@ -984,22 +958,20 @@ function AdecPage() {
         <section className="mt-12 overflow-hidden rounded-[2rem] border-2 border-[#b8912f] bg-white p-6 shadow-xl">
           <div className="flex flex-col items-center text-center">
             <div className="inline-flex items-center gap-2 rounded-full bg-[#0d3b2e] px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-[#f0d489]">
-              <Award className="h-4 w-4" /> Certificados reconhecidos
-            </div>
+              <Award className="h-4 w-4" /> {t("pagina_186", "Certificados vendidos separadamente")}</div>
             <p className="mt-4 max-w-2xl text-sm font-medium text-[#0b3229]/80">
-              Nossos certificados possuem validade em todo território nacional para comprovação de horas complementares e atualização profissional.
-            </p>
+              {t("pagina_187", "O acesso anual não inclui certificados. A certificação avulsa possui contratação separada.")}</p>
             
             <div className="mt-8 grid grid-cols-2 gap-4">
               <div className="group relative">
-                <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-[#b8912f]">Frente (Modelo)</p>
+                <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-[#b8912f]">{t("pagina_188", "Frente (Modelo)")}</p>
                 <div className="overflow-hidden rounded-xl border border-[#b8912f]/30 shadow-sm transition-all hover:scale-[1.02] hover:shadow-md">
                   <Dialog>
                     <DialogTrigger asChild>
                       <button className="relative block w-full outline-none">
                         <img 
-                          src="https://academiadaenfermagem.com.br/lovable-uploads/763be538-348e-4903-888f-013697669d72.png" 
-                          alt="Modelo Frente do Certificado ADEC" 
+                          src={t("pagina_189", "https://academiadaenfermagem.com.br/lovable-uploads/763be538-348e-4903-888f-013697669d72.png")} 
+                          alt={t("pagina_190", "Modelo Frente do Certificado ADEC")} 
                           className="h-auto w-full"
                         />
                         <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 transition-opacity group-hover:opacity-100">
@@ -1010,8 +982,8 @@ function AdecPage() {
                     <DialogContent className="max-w-4xl border-none bg-transparent p-0 shadow-none sm:rounded-none">
                       <div className="relative p-2">
                         <img 
-                          src="https://academiadaenfermagem.com.br/lovable-uploads/763be538-348e-4903-888f-013697669d72.png" 
-                          alt="Modelo Frente do Certificado ADEC" 
+                          src={t("pagina_189", "https://academiadaenfermagem.com.br/lovable-uploads/763be538-348e-4903-888f-013697669d72.png")} 
+                          alt={t("pagina_192", "Modelo Frente do Certificado ADEC")} 
                           className="h-auto w-full rounded-lg shadow-2xl"
                         />
                         <DialogClose className="absolute -top-10 right-0 text-white hover:text-white/80">
@@ -1024,14 +996,14 @@ function AdecPage() {
               </div>
 
               <div className="group relative">
-                <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-[#b8912f]">Verso (Modelo)</p>
+                <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-[#b8912f]">{t("pagina_193", "Verso (Modelo)")}</p>
                 <div className="overflow-hidden rounded-xl border border-[#b8912f]/30 shadow-sm transition-all hover:scale-[1.02] hover:shadow-md">
                   <Dialog>
                     <DialogTrigger asChild>
                       <button className="relative block w-full outline-none">
                         <img 
-                          src="https://academiadaenfermagem.com.br/lovable-uploads/31804b77-b9c9-4a0b-8d59-3d127c52367d.png" 
-                          alt="Modelo Verso do Certificado ADEC" 
+                          src={t("pagina_194", "https://academiadaenfermagem.com.br/lovable-uploads/31804b77-b9c9-4a0b-8d59-3d127c52367d.png")} 
+                          alt={t("pagina_195", "Modelo Verso do Certificado ADEC")} 
                           className="h-auto w-full"
                         />
                         <div className="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 transition-opacity group-hover:opacity-100">
@@ -1042,8 +1014,8 @@ function AdecPage() {
                     <DialogContent className="max-w-4xl border-none bg-transparent p-0 shadow-none sm:rounded-none">
                       <div className="relative p-2">
                         <img 
-                          src="https://academiadaenfermagem.com.br/lovable-uploads/31804b77-b9c9-4a0b-8d59-3d127c52367d.png" 
-                          alt="Modelo Verso do Certificado ADEC" 
+                          src={t("pagina_194", "https://academiadaenfermagem.com.br/lovable-uploads/31804b77-b9c9-4a0b-8d59-3d127c52367d.png")} 
+                          alt={t("pagina_197", "Modelo Verso do Certificado ADEC")} 
                           className="h-auto w-full rounded-lg shadow-2xl"
                         />
                         <DialogClose className="absolute -top-10 right-0 text-white hover:text-white/80">
@@ -1065,12 +1037,10 @@ function AdecPage() {
               <div className="flex items-center gap-2">
                 <ShieldCheck className="h-6 w-6" style={{ color: C.cta }} />
                 <p className="font-display text-lg font-extrabold" style={{ color: C.ink }}>
-                  Pagamento 100% seguro
-                </p>
+                  {t("guarantee_title", "Compra identificada e segura")}</p>
               </div>
               <p className="mt-2 text-sm" style={{ color: C.inkSoft }}>
-                Pague via PIX ou cartão de crédito com total segurança. Licença anual sem mensalidade — pague uma vez e use o ano todo.
-              </p>
+                {t("pagina_200", "Entre ou crie sua conta, pague pelo Mercado Pago e acesse sua academia após a confirmação.")}</p>
             </div>
           </Reveal>
           <Reveal delay={0.1}>
@@ -1081,19 +1051,16 @@ function AdecPage() {
               <div className="flex items-center gap-2">
                 <MessageCircle className="h-6 w-6" style={{ color: C.orange }} />
                 <p className="font-display text-lg font-extrabold" style={{ color: C.ink }}>
-                  Grupo VIP no WhatsApp
-                </p>
+                  {t("pagina_201", "Sua academia por 365 dias")}</p>
               </div>
               <p className="mt-2 text-sm" style={{ color: C.inkSoft }}>
-                Tira-dúvidas direto com a fundadora, atualizações em primeira mão e trocas entre colegas de plantão.
-              </p>
+                {t("pagina_202", "A compra libera os conteúdos da academia escolhida durante um ano.")}</p>
               <p
                 className="mt-3 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-extrabold uppercase tracking-wide"
                 style={{ background: C.orange, color: "#fff" }}
               >
                 <Flame className="h-3.5 w-3.5" />
-                Atualizações contínuas para acompanhar sua prática profissional
-              </p>
+                {t("pagina_203", "Sem mensalidade ou renovação automática")}</p>
             </div>
           </Reveal>
         </section>
@@ -1101,8 +1068,8 @@ function AdecPage() {
         {/* BENEFÍCIOS DA LICENÇA ANUAL */}
         <section className="mt-16">
           <SectionTitle
-            eyebrow="Licença anual"
-            title={t("licenca_titulo", "Mais recursos para apoiar sua rotina de enfermagem")}
+            eyebrow={t("pagina_204", "Acesso anual")}
+            title={t("inauguracao_titulo", "Sua academia durante um ano")}
             sub={t(
               "licenca_sub",
               "Tenha acesso à sua academia profissional por um ano, com recursos práticos e atualizações contínuas.",
@@ -1112,18 +1079,18 @@ function AdecPage() {
             {[
               {
                 icon: Star,
-                title: "Licença anual completa",
-                desc: "Um único pagamento para ter acesso à sua categoria profissional durante 365 dias, sem mensalidades.",
+                title: t("pagina_205", "Pagamento único"),
+                desc: t("pagina_206", "Um pagamento garante 365 dias de acesso à academia escolhida."),
               },
               {
                 icon: MessageCircle,
-                title: "Recursos para sua rotina",
-                desc: "Ferramentas de apoio ao estudo, aos registros e ao raciocínio clínico, conforme sua academia.",
+                title: t("pagina_207", "Conteúdo da sua academia"),
+                desc: t("pagina_208", "Ferramentas de estudo e apoio à prática conforme os módulos da academia escolhida."),
               },
               {
                 icon: ShieldCheck,
-                title: "Acesso imediato",
-                desc: "Após a confirmação do pagamento, seu acesso é liberado na hora. Licença anual completa, sem mensalidade.",
+                title: t("pagina_209", "Liberação após pagamento"),
+                desc: t("launch_trial", "O Mercado Pago confirma a aprovação e o acesso é liberado na conta usada na compra."),
               },
             ].map((c, i) => (
               <Reveal key={c.title} delay={i * 0.1}>
@@ -1151,14 +1118,14 @@ function AdecPage() {
           className="mt-16 overflow-hidden rounded-[2rem] border p-8 md:p-12"
           style={{ borderColor: C.line, background: C.cardStrong }}
         >
-          <SectionTitle eyebrow="Sobre a autora" title="Conheça um pouco da minha História" />
+          <SectionTitle eyebrow={t("pagina_210", "Sobre a autora")} title={t("pagina_211", "Conheça um pouco da minha História")} />
 
           <div className="mt-8 grid gap-8 lg:grid-cols-[240px_1fr] lg:items-start">
             <Reveal className="mx-auto lg:mx-0">
               <div className="overflow-hidden rounded-3xl border-2 shadow-xl" style={{ borderColor: C.goldBright }}>
                 <img
-                  src={fotoFundadora.url}
-                  alt="Fundadora — Academia da Enfermagem"
+                  src={t("author_image", "/__l5e/assets-v1/1f1033de-3186-4e0c-a8ac-f1bb100a0745/foto-fundadora.jpeg")}
+                  alt={t("pagina_212", "Fundadora — Academia da Enfermagem")}
                   className="h-56 w-56 object-cover lg:h-60 lg:w-60"
                 />
               </div>
@@ -1167,16 +1134,16 @@ function AdecPage() {
             <div className="space-y-6">
               {[
                 {
-                  h: "A História",
-                  p: "A Academia da Enfermagem não nasceu em um escritório de tecnologia de computadores. Ela nasceu nos corredores de hospitais, nas noites em claro de plantão e na vivência real de quem dedicou 35 anos da vida à arte de cuidar. Sou auxiliar de enfermagem e Enfermeira e, assim como você, passei décadas sentindo a dor de usar horas preciosas do plantão preenchendo as burocracias necessárias em papéis e tentando decifrar manuais complexos, em vez de focar no que realmente importa: A assistência aos pacientes.",
+                  h: t("pagina_213", "A História"),
+                  p: t("pagina_214", "A Academia da Enfermagem não nasceu em um escritório de tecnologia de computadores. Ela nasceu nos corredores de hospitais, nas noites em claro de plantão e na vivência real de quem dedicou 35 anos da vida à arte de cuidar. Sou auxiliar de enfermagem e Enfermeira e, assim como você, passei décadas sentindo a dor de usar horas preciosas do plantão preenchendo as burocracias necessárias em papéis e tentando decifrar manuais complexos, em vez de focar no que realmente importa: A assistência aos pacientes."),
                 },
                 {
-                  h: "O Propósito",
-                  p: "Após me aposentar, a apenas 4 anos, decidi que a minha missão ainda não estava cumprida. Eu precisava usar toda a minha bagagem administrativa e prática para criar a ferramenta que eu sempre sonhei em ter na beira do leito. Um ecossistema simples, ágil e seguro, feito de enfermeira para a enfermagem, de enfermeira para estudante, a final, também passei por esse caminho.",
+                  h: t("pagina_215", "O Propósito"),
+                  p: t("pagina_216", "Após me aposentar, a apenas 4 anos, decidi que a minha missão ainda não estava cumprida. Eu precisava usar toda a minha bagagem administrativa e prática para criar a ferramenta que eu sempre sonhei em ter na beira do leito. Um ecossistema simples, ágil e seguro, feito de enfermeira para a enfermagem, de enfermeira para estudante, a final, também passei por esse caminho."),
                 },
                 {
-                  h: "Minha Promessa",
-                  p: "A Academia da Enfermagem é o resultado de uma vida inteira de dedicação. Ela foi feita para mitigar o seu tempo, descomplicar o seu estágio, garantir a precisão dos seus cálculos e te levar uma certa segurança jurídica, desde que bem empregada, tudo baseado rigorosamente nas leis do nosso COFEN. Seja muito bem-vindo à evolução da nossa categoria. Aqui, nós cuidamos de quem cuida!",
+                  h: t("pagina_217", "Minha Promessa"),
+                  p: t("pagina_218", "A Academia da Enfermagem é o resultado de uma vida inteira de dedicação. Ela foi feita para mitigar o seu tempo, descomplicar o seu estágio, garantir a precisão dos seus cálculos e te levar uma certa segurança jurídica, desde que bem empregada, tudo baseado rigorosamente nas leis do nosso COFEN. Seja muito bem-vindo à evolução da nossa categoria. Aqui, nós cuidamos de quem cuida!"),
                 },
               ].map((b, i) => (
                 <Reveal key={b.h} delay={i * 0.08}>
@@ -1194,7 +1161,7 @@ function AdecPage() {
                 className="inline-flex items-center gap-1.5 text-sm font-bold underline underline-offset-4 transition hover:opacity-80"
                 style={{ color: C.cta }}
               >
-                Ler minha história completa <ArrowRight className="h-4 w-4" />
+                {t("pagina_219", "Ler minha história completa")}<ArrowRight className="h-4 w-4" />
               </Link>
             </div>
           </div>
@@ -1202,32 +1169,32 @@ function AdecPage() {
 
         {/* FAQ */}
         <section className="mt-16">
-          <SectionTitle eyebrow="Dúvidas frequentes" title="Antes de decidir" />
+          <SectionTitle eyebrow={t("pagina_220", "Dúvidas frequentes")} title={t("pagina_221", "Antes de decidir")} />
           <div className="mx-auto mt-8 max-w-3xl space-y-2">
             {[
               {
-                q: "Como funciona a aquisição do acesso?",
-                a: "Escolha o plano da sua categoria, clique em 'Adquirir Licença Anual' e pague via PIX ou cartão. O acesso é liberado imediatamente após a confirmação do pagamento. Você recebe 365 dias de acesso completo, sem mensalidade.",
+                q: t("pagina_222", "Como o acesso é liberado?"),
+                a: t("faq_trial", "Escolha sua academia, entre ou crie sua conta e pague pelo Mercado Pago. O acesso é liberado após confirmação do pagamento."),
               },
               {
-                q: "Posso cancelar quando quiser?",
-                a: "Sim. A assinatura é mensal e sem fidelidade — cancele pelo checkout a qualquer momento.",
+                q: t("pagina_223", "Existe cobrança mensal ou renovação automática?"),
+                a: t("pagina_224", "Não. Você paga uma única vez por 365 dias. Para continuar após o vencimento, faça uma nova compra."),
               },
               {
-                q: "Funciona offline?",
-                a: "Sim. Instale como app no celular (PWA) e a maior parte do conteúdo funciona sem internet, ideal para plantão.",
+                q: t("pagina_225", "Funciona offline?"),
+                a: t("pagina_226", "Sim. Instale como app no celular (PWA) e a maior parte do conteúdo funciona sem internet, ideal para plantão."),
               },
               {
-                q: "Como entro no Grupo VIP do WhatsApp?",
-                a: "Assim que ativar seu acesso, o convite do grupo aparece dentro do app. As vagas de cada turma são limitadas.",
+                q: t("pagina_227", "A compra inclui bônus ou certificados?"),
+                a: t("pagina_228", "Não. O valor anual corresponde ao acesso à academia escolhida. Certificados avulsos são vendidos separadamente."),
               },
               {
-                q: "Posso usar no celular e no computador?",
-                a: "Sim. Basta entrar com seu login em qualquer aparelho — seu progresso e assinatura acompanham você.",
+                q: t("pagina_229", "Posso usar no celular e no computador?"),
+                a: t("pagina_230", "Sim. Basta entrar com seu login em qualquer aparelho — seu progresso e assinatura acompanham você."),
               },
               {
-                q: "Quem cria e revisa o conteúdo?",
-                a: "Enfermeira docente com base em COFEN, CORENs, ANVISA, Ministério da Saúde e OMS. Atualizações contínuas e automáticas.",
+                q: t("pagina_231", "Quem cria e revisa o conteúdo?"),
+                a: t("pagina_232", "Enfermeira docente com base em COFEN, CORENs, ANVISA, Ministério da Saúde e OMS. Atualizações contínuas e automáticas."),
               },
             ].map((f, i) => (
               <Reveal key={f.q} delay={i * 0.04}>
@@ -1276,15 +1243,12 @@ function AdecPage() {
               style={{ background: C.orange, color: "#fff" }}
             >
               <Clock className="h-3.5 w-3.5" />
-              Escolha sua licença anual
-            </div>
+              {t("pagina_233", "Turma de inauguração aberta agora")}</div>
             <Reveal>
               <h2 className="mt-4 font-display text-3xl font-extrabold md:text-5xl" style={{ color: "#fff" }}>
-                Saia do próximo plantão no horário
-              </h2>
+                {t("pagina_234", "Saia do próximo plantão no horário")}</h2>
               <p className="mx-auto mt-3 max-w-xl text-sm md:text-base" style={{ color: "rgba(255,255,255,0.85)" }}>
-                Pagamento único via PIX ou cartão. Acesso à sua academia por 365 dias, com atualizações contínuas.
-              </p>
+                {t("pagina_235", "Sem cartão de crédito. Sem fidelidade. Cancele quando quiser. Entre na turma de inauguração da ADEC.")}</p>
             </Reveal>
 
             <div className="mx-auto mt-8 grid max-w-3xl gap-3 sm:grid-cols-2">
@@ -1293,7 +1257,7 @@ function AdecPage() {
                 return (
                   <Reveal key={p.slug} delay={i * 0.07}>
                     <motion.a
-                      href={subscribed ? `/trilha/${p.slug}` : `/cadastro/${p.slug}`}
+                      href={subscribed ? `/trilha/${p.slug}` : safeLandingUrl(t("signup_" + p.slug, `/cadastro/${p.slug}`), `/cadastro/${p.slug}`)}
                       whileHover={{ y: -4 }}
                       className="group flex items-center justify-between gap-3 rounded-2xl border px-5 py-4 text-left backdrop-blur"
                       style={{ borderColor: C.goldBright, background: "rgba(255,255,255,0.1)" }}
@@ -1313,7 +1277,7 @@ function AdecPage() {
                             className="text-[11px] font-extrabold uppercase tracking-wide"
                             style={{ color: "rgba(255,255,255,0.8)" }}
                           >
-                            {subscribed ? "Acessar" : CTA_RODAPE}
+                            {subscribed ? t("access_short", "Acessar") : CTA_RODAPE}
                           </p>
                         </div>
                       </div>
@@ -1328,28 +1292,25 @@ function AdecPage() {
               className="mt-6 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-extrabold uppercase tracking-wide"
               style={{ background: "rgba(255,255,255,0.14)", color: "#fff" }}
             >
-              <ShieldCheck className="h-3.5 w-3.5" style={{ color: C.goldBright }} /> Compra 100% segura
-            </p>
+              <ShieldCheck className="h-3.5 w-3.5" style={{ color: C.goldBright }} /> {t("pagina_236", "Compra 100% segura")}</p>
           </div>
         </section>
 
         <footer className="mt-8 text-center text-[11px]" style={{ color: C.inkSoft }}>
-          <p className="mx-auto max-w-3xl leading-relaxed">
-            <strong>Aviso Legal e Institucional:</strong> A ADEC (Academia da Enfermagem) é um ecossistema autoral privado de suporte à decisão clínica e aprendizagem contínua. As ferramentas, modelos de evolução, calculadoras e guias foram desenvolvidos com base em literatura técnico-científica e nas resoluções públicas vigentes do COFEN, Ministério da Saúde e ANVISA. A ADEC é uma iniciativa independente e não possui vínculo, homologação ou endosso institucional direto por parte dos Conselhos de Enfermagem (COFEN/CORENs). O uso das ferramentas não substitui o julgamento técnico, ético e individual do profissional responsável.
-          </p>
+          <p className="mx-auto max-w-2xl leading-relaxed">
+            {t("pagina_237", "Aviso Legal: ferramenta de apoio à decisão clínica. Não substitui o julgamento técnico do profissional, o exame do paciente nem as fontes oficiais (COFEN, COREN, MS, ANVISA).")}</p>
           <p className="mt-2">
             <Link to="/legal" className="font-extrabold underline" style={{ color: C.goldBright }}>
-              Termos de Uso, Aviso Legal e Política de Privacidade
-            </Link>
+              {t("pagina_238", "Termos de Uso, Aviso Legal e Política de Privacidade")}</Link>
           </p>
-          <p className="mt-2">ADEC · Academia da Enfermagem · academiadaenfermagem.com.br</p>
+          <p className="mt-2">{t("pagina_239", "ADEC · Academia da Enfermagem · academiadaenfermagem.com.br")}</p>
         </footer>
       </div>
 
       <StickyCTA
-        href="#planos"
+        href={safeLandingUrl(t("cta_target", "#planos"), "#planos")}
         label={CTA_TOPO}
-        hint="Licença anual sem mensalidades · Acesso imediato via PIX ou cartão"
+        hint={t("sticky_hint", "Acesso anual · escolha sua academia")}
         bg={C.cta}
         fg="rgba(255,255,255,0.9)"
         accent={C.goldBright}

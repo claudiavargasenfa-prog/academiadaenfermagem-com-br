@@ -94,19 +94,19 @@ export function TrialCountdownBanner() {
   const paidStyles: Record<NonNullable<Stage>, { bg: string; title: string; body: string; cta: string }> = {
     blue: {
       bg: "bg-sky-500",
-      title: `⏳ Sua mensalidade vence em ${days} ${dayWord}`,
+      title: `⏳ Seu acesso anual vence em ${days} ${dayWord}`,
       body: `Olá, ${firstName}! Sua assinatura${track ? ` da ${track.label}` : ""} vence em ${dateLabel}. Renove para não perder o acesso aos conteúdos e às atualizações.`,
       cta: "🔁 RENOVAR ASSINATURA",
     },
     orange: {
       bg: "bg-orange-500",
-      title: "⚠️ Sua mensalidade vence em 3 dias",
-      body: `${firstName}, sua assinatura vence em ${dateLabel}. Renove por R$ ${priceLabel}/mês e mantenha tudo liberado sem interrupção.`,
+      title: "⚠️ Seu acesso anual vence em 3 dias",
+      body: `${firstName}, sua assinatura vence em ${dateLabel}. Renove por R$ ${priceLabel}/ano e mantenha tudo liberado sem interrupção.`,
       cta: "🔁 RENOVAR AGORA",
     },
     red: {
       bg: "bg-red-600",
-      title: "🚨 Sua mensalidade vence amanhã",
+      title: "🚨 Seu acesso anual vence amanhã",
       body: `${firstName}, sua assinatura vence em ${dateLabel}. Renove hoje para não perder o acesso ao conteúdo do seu app.`,
       cta: "🔁 RENOVAR HOJE",
     },

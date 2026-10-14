@@ -1,0 +1,13 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1791695825022,
+      "tag": "0000_annual_payment_access",
+      "breakpoints": true
+    }
+  ]
+}
