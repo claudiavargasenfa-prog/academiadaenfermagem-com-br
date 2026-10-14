@@ -63,6 +63,7 @@ const C = {
   ctaHover: "#082418",
   gold: "#b07d1a",
   goldBright: "#d4af37",
+  textOnDark: "#ffffff",
   orange: "#EA580C",
   line: "rgba(13,59,46,0.14)",
   card: "rgba(255,255,255,0.62)",
@@ -532,7 +533,7 @@ const AUTOMATICOS = [
         >
           <p className="mb-3 text-center text-xs font-extrabold uppercase tracking-[0.3em]" style={{ color: C.goldBright }}>
             {t("pagina_139", "Base legal e científica")}</p>
-          <Marquee items={SELOS} color="#fff" />
+          <Marquee items={SELOS} color={C.textOnDark} />
         </section>
 
         {/* CREDIBILIDADE — números animados */}

@@ -761,9 +761,9 @@ export const ADEC_FIELDS: LandingField[] = [
   },
   {
     "key": "pagina_111",
-    "label": "Você marca os sinais e sintomas do paciente (ou dita por voz) e o app cruza tudo com o banco…",
-    "group": "Apps automáticos",
-    "defaultValue": "Você marca os sinais e sintomas do paciente (ou dita por voz) e o app cruza tudo com o banco autoral da ADEC, devolvendo o Processo de Enfermagem completo.",
+    "label": "Você marca os sinais e sintomas e o motor clínico cruza tudo com o banco autoral da ADEC.",
+    "group": "Motores automatizados",
+    "defaultValue": "Você marca os sinais e sintomas do paciente (ou dita por voz) e o motor clínico cruza tudo com o banco autoral da ADEC, devolvendo o Processo de Enfermagem completo.",
     "kind": "text"
   },
   {
@@ -775,9 +775,9 @@ export const ADEC_FIELDS: LandingField[] = [
   },
   {
     "key": "pagina_113",
-    "label": "O app sugere diagnósticos com o mecanismo científico por trás",
-    "group": "Apps automáticos",
-    "defaultValue": "O app sugere diagnósticos com o mecanismo científico por trás",
+    "label": "O motor clínico sugere diagnósticos e apresenta o mecanismo científico por trás",
+    "group": "Motores automatizados",
+    "defaultValue": "O motor clínico sugere diagnósticos e apresenta o mecanismo científico por trás",
     "kind": "text"
   },
   {
@@ -831,9 +831,9 @@ export const ADEC_FIELDS: LandingField[] = [
   },
   {
     "key": "pagina_121",
-    "label": "Diário de Bordo → Relatório em ABNT",
-    "group": "Apps automáticos",
-    "defaultValue": "Diário de Bordo → Relatório em ABNT",
+    "label": "Diário de Bordo — Prévia do seu Relatório em ABNT",
+    "group": "Motores automatizados",
+    "defaultValue": "Diário de Bordo — Prévia do seu Relatório em ABNT",
     "kind": "text"
   },
   {
@@ -845,9 +845,9 @@ export const ADEC_FIELDS: LandingField[] = [
   },
   {
     "key": "pagina_123",
-    "label": "Você registra o dia de estágio em poucas linhas e o app transforma esses registros no relató…",
-    "group": "Apps automáticos",
-    "defaultValue": "Você registra o dia de estágio em poucas linhas e o app transforma esses registros no relatório formatado nas normas ABNT.",
+    "label": "Você registra o dia de estágio e o módulo transforma os registros no relatório em ABNT.",
+    "group": "Motores automatizados",
+    "defaultValue": "Você registra o dia de estágio em poucas linhas e o módulo transforma esses registros no relatório formatado nas normas ABNT.",
     "kind": "text"
   },
   {
@@ -859,9 +859,9 @@ export const ADEC_FIELDS: LandingField[] = [
   },
   {
     "key": "pagina_125",
-    "label": "O app organiza por data, campo e competência",
-    "group": "Apps automáticos",
-    "defaultValue": "O app organiza por data, campo e competência",
+    "label": "O módulo organiza por data, campo e competência",
+    "group": "Motores automatizados",
+    "defaultValue": "O módulo organiza por data, campo e competência",
     "kind": "text"
   },
   {
@@ -971,9 +971,9 @@ export const ADEC_FIELDS: LandingField[] = [
   },
   {
     "key": "pagina_141",
-    "label": " anos",
+    "label": "+ anos",
     "group": "CREDIBILIDADE — números animados",
-    "defaultValue": " anos",
+    "defaultValue": "+ anos",
     "kind": "text"
   },
   {
@@ -1044,6 +1044,20 @@ export const ADEC_FIELDS: LandingField[] = [
     "label": "O que muda na sua vida",
     "group": "BENEFÍCIOS",
     "defaultValue": "O que muda na sua vida",
+    "kind": "text"
+  },
+  {
+    "key": "pagina_concurso_titulo",
+    "label": "Preparação para provas e concursos",
+    "group": "PARA QUEM É",
+    "defaultValue": "Preparação para provas e concursos",
+    "kind": "text"
+  },
+  {
+    "key": "pagina_concurso_texto",
+    "label": "Conteúdo direto ao ponto, questões comentadas e raciocínio clínico para transformar estudo em resultado.",
+    "group": "PARA QUEM É",
+    "defaultValue": "Conteúdo direto ao ponto, questões comentadas e raciocínio clínico para transformar estudo em resultado.",
     "kind": "text"
   },
   {
