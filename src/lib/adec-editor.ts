@@ -1034,9 +1034,9 @@ export const ADEC_FIELDS: LandingField[] = [
   },
   {
     "key": "pagina_150",
-    "label": "Escolha o app da sua fase profissional",
+    "label": "Escolha a academia da sua fase profissional",
     "group": "PARA QUEM É",
-    "defaultValue": "Escolha o app da sua fase profissional",
+    "defaultValue": "Escolha a academia da sua fase profissional",
     "kind": "text"
   },
   {
@@ -1048,9 +1048,9 @@ export const ADEC_FIELDS: LandingField[] = [
   },
   {
     "key": "pagina_152",
-    "label": "Não é só um app. É o seu plantão de volta.",
+    "label": "Não é apenas conteúdo. É o seu plantão de volta.",
     "group": "BENEFÍCIOS",
-    "defaultValue": "Não é só um app. É o seu plantão de volta.",
+    "defaultValue": "Não é apenas conteúdo. É o seu plantão de volta.",
     "kind": "text"
   },
   {
@@ -1111,16 +1111,16 @@ export const ADEC_FIELDS: LandingField[] = [
   },
   {
     "key": "pagina_161",
-    "label": "O que você encontra dentro dos Mini Apps",
-    "group": "CONTEÚDOS DOS MINI APPS",
-    "defaultValue": "O que você encontra dentro dos Mini Apps",
+    "label": "O que você encontra nos Módulos de Decisão Clínica",
+    "group": "CONTEÚDOS DOS MÓDULOS",
+    "defaultValue": "O que você encontra nos Módulos de Decisão Clínica",
     "kind": "text"
   },
   {
     "key": "pagina_162",
-    "label": "Cada Mini App é um tema resolvido, direto ao ponto, para usar no plantão, no estágio ou na p…",
-    "group": "CONTEÚDOS DOS MINI APPS",
-    "defaultValue": "Cada Mini App é um tema resolvido, direto ao ponto, para usar no plantão, no estágio ou na prova.",
+    "label": "Cada módulo resolve um tema de forma direta, para usar no plantão, no estágio, nas provas e nos concursos.",
+    "group": "CONTEÚDOS DOS MÓDULOS",
+    "defaultValue": "Cada módulo resolve um tema de forma direta, para usar no plantão, no estágio, nas provas e nos concursos.",
     "kind": "text"
   },
   {
@@ -1132,9 +1132,9 @@ export const ADEC_FIELDS: LandingField[] = [
   },
   {
     "key": "pagina_164",
-    "label": "Os 3 automáticos: o app escreve por você",
-    "group": "3 APPS AUTOMÁTICOS",
-    "defaultValue": "Os 3 automáticos: o app escreve por você",
+    "label": "3 motores clínicos que transformam dados em documentos prontos",
+    "group": "3 MOTORES AUTOMATIZADOS",
+    "defaultValue": "3 motores clínicos que transformam dados em documentos prontos",
     "kind": "text"
   },
   {
@@ -1237,16 +1237,16 @@ export const ADEC_FIELDS: LandingField[] = [
   },
   {
     "key": "pagina_179",
-    "label": "Escolha seu app",
+    "label": "Escolha sua academia",
     "group": "PLANOS",
-    "defaultValue": "Escolha seu app",
+    "defaultValue": "Escolha sua academia",
     "kind": "text"
   },
   {
     "key": "planos_title",
-    "label": "4 apps, um só padrão de excelência",
+    "label": "4 academias, um só padrão de excelência",
     "group": "PLANOS",
-    "defaultValue": "4 apps, um só padrão de excelência",
+    "defaultValue": "4 academias, um só padrão de excelência",
     "kind": "text"
   },
   {
@@ -1272,16 +1272,16 @@ export const ADEC_FIELDS: LandingField[] = [
   },
   {
     "key": "pagina_184",
-    "label": "Período de teste grátis, 15 dias, para quem acessar entre os dias 10.08.2026 a 10.09.2026",
+    "label": "Liberação após aprovação do pagamento pelo Mercado Pago.",
     "group": "PLANOS",
-    "defaultValue": "Liberação após aprovação do pagamento. Sem renovação automática.",
+    "defaultValue": "Liberação após aprovação do pagamento pelo Mercado Pago.",
     "kind": "text"
   },
   {
     "key": "pagina_185",
-    "label": "Acessar meu app →",
+    "label": "Acessar minha academia →",
     "group": "PLANOS",
-    "defaultValue": "Acessar meu app →",
+    "defaultValue": "Acessar minha academia →",
     "kind": "text"
   },
   {
@@ -1307,9 +1307,9 @@ export const ADEC_FIELDS: LandingField[] = [
   },
   {
     "key": "pagina_189",
-    "label": "https://academiadaenfermagem.com.br/lovable-uploads/763be538-348e-4903-888f-013697669d72.png",
+    "label": "/__l5e/assets-v1/e91cb3c7-3513-48d0-9965-4aa88777f5a4/certificado-frente-adec.png",
     "group": "Banner Certificados Reconhecidos",
-    "defaultValue": "https://academiadaenfermagem.com.br/lovable-uploads/763be538-348e-4903-888f-013697669d72.png",
+    "defaultValue": "/__l5e/assets-v1/e91cb3c7-3513-48d0-9965-4aa88777f5a4/certificado-frente-adec.png",
     "kind": "image"
   },
   {
@@ -1335,9 +1335,9 @@ export const ADEC_FIELDS: LandingField[] = [
   },
   {
     "key": "pagina_194",
-    "label": "https://academiadaenfermagem.com.br/lovable-uploads/31804b77-b9c9-4a0b-8d59-3d127c52367d.png",
+    "label": "/__l5e/assets-v1/a282d08f-c7c5-4142-9881-0d56deaaac9b/certificado-verso-adec.png",
     "group": "Banner Certificados Reconhecidos",
-    "defaultValue": "https://academiadaenfermagem.com.br/lovable-uploads/31804b77-b9c9-4a0b-8d59-3d127c52367d.png",
+    "defaultValue": "/__l5e/assets-v1/a282d08f-c7c5-4142-9881-0d56deaaac9b/certificado-verso-adec.png",
     "kind": "image"
   },
   {
@@ -1377,9 +1377,9 @@ export const ADEC_FIELDS: LandingField[] = [
   },
   {
     "key": "pagina_203",
-    "label": "Grupo VIP da inauguração — o convite chega ao ativar seu teste",
+    "label": "Acesso anual à academia escolhida",
     "group": "GARANTIA + WHATSAPP",
-    "defaultValue": "Sem mensalidade ou renovação automática",
+    "defaultValue": "Acesso anual à academia escolhida",
     "kind": "text"
   },
   {
@@ -1531,16 +1531,16 @@ export const ADEC_FIELDS: LandingField[] = [
   },
   {
     "key": "pagina_223",
-    "label": "Posso cancelar quando quiser?",
+    "label": "Como funciona o acesso anual?",
     "group": "Dúvidas frequentes",
-    "defaultValue": "Existe cobrança mensal ou renovação automática?",
+    "defaultValue": "Como funciona o acesso anual?",
     "kind": "text"
   },
   {
     "key": "pagina_224",
-    "label": "Sim. A assinatura é mensal e sem fidelidade — cancele pelo checkout a qualquer momento.",
+    "label": "A aprovação do pagamento libera 365 dias de acesso à academia escolhida.",
     "group": "Dúvidas frequentes",
-    "defaultValue": "Não. Você paga uma única vez por 365 dias. Para continuar após o vencimento, faça uma nova compra.",
+    "defaultValue": "A aprovação do pagamento libera 365 dias de acesso à academia escolhida.",
     "kind": "text"
   },
   {
@@ -1552,9 +1552,9 @@ export const ADEC_FIELDS: LandingField[] = [
   },
   {
     "key": "pagina_226",
-    "label": "Sim. Instale como app no celular (PWA) e a maior parte do conteúdo funciona sem internet, id…",
+    "label": "Sim. Instale a plataforma no celular e a maior parte do conteúdo funciona sem internet, ideal para plantão.",
     "group": "Dúvidas frequentes",
-    "defaultValue": "Sim. Instale como app no celular (PWA) e a maior parte do conteúdo funciona sem internet, ideal para plantão.",
+    "defaultValue": "Sim. Instale a plataforma no celular e a maior parte do conteúdo funciona sem internet, ideal para plantão.",
     "kind": "text"
   },
   {
