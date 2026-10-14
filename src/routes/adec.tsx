@@ -26,6 +26,7 @@ import {
   WifiOff,
   RefreshCw,
   X,
+  PartyPopper,
 } from "lucide-react";
 import {
   Dialog,
@@ -295,7 +296,7 @@ const CONTEUDOS_MINI_APPS: { t: string; d: string }[] = [
   { t: t("pagina_101", "Quizzes e Simulados"), d: t("pagina_102", "Questões por tema com correção na hora e ranking nacional.") },
   { t: t("pagina_103", "Obstetrícia, Saúde Mental e Idoso"), d: t("pagina_104", "Cuidados específicos de cada público explicados de forma prática.") },
   { t: t("pagina_105", "Manual de Sobrevivência no Estágio"), d: t("pagina_106", "Mochila, postura e comunicação com o preceptor desde o 1º dia.") },
-  { t: t("pagina_107", "Certificados avulsos"), d: t("pagina_108", "Certificação opcional vendida separadamente; não incluída no acesso anual.") },
+  { t: t("pagina_107", "Certificação em cada módulo"), d: t("pagina_108", "Cada Módulo de Decisão Clínica conta com certificado de conclusão e horas complementares, com validação digital.") },
 ];
 
 /** Os três recursos que geram documento pronto automaticamente. */
@@ -346,9 +347,9 @@ const AUTOMATICOS = [
   };
 
   const ctaStyle: React.CSSProperties = {
-    background: C.cta,
+    background: "linear-gradient(135deg, #FF7A45 0%, #EA580C 100%)",
     color: "#fff",
-    boxShadow: "0 14px 34px -14px rgba(13,59,46,0.7)",
+    boxShadow: "0 16px 36px -12px rgba(234,88,12,0.75)",
   };
 
   const chips = [
@@ -634,7 +635,7 @@ const AUTOMATICOS = [
               },
               {
                 eyebrow: t("pagina_157", "Certificação avulsa opcional"),
-                title: t("pagina_158", "Certificados vendidos separadamente, sem emissão gratuita incluída."),
+                title: t("pagina_158", "Cada módulo tem certificado de conclusão com validação digital."),
                 desc: t("pagina_159", "Certificação opcional, contratada separadamente do acesso anual."),
               },
             ].map((b, i) => (
@@ -875,7 +876,7 @@ const AUTOMATICOS = [
                         className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-full px-3 py-1 text-[10px] font-extrabold uppercase tracking-widest shadow"
                         style={{ background: C.gold, color: "#fff" }}
                       >
-                        {p.tagSuperior}
+                        {p.tag}
                       </span>
                     )}
 
@@ -943,7 +944,7 @@ const AUTOMATICOS = [
                           className="inline-flex items-center justify-center gap-1.5 rounded-xl px-4 py-3 text-center text-xs font-extrabold uppercase leading-tight tracking-wide transition hover:-translate-y-0.5"
                           style={ctaStyle}
                         >
-                          {p.ctaLabel}
+                          {t("pagina_ctaplano", "Garantir meu acesso anual")}
                         </a>
                       )}
                     </div>
@@ -958,9 +959,9 @@ const AUTOMATICOS = [
         <section className="mt-12 overflow-hidden rounded-[2rem] border-2 border-[#b8912f] bg-white p-6 shadow-xl">
           <div className="flex flex-col items-center text-center">
             <div className="inline-flex items-center gap-2 rounded-full bg-[#0d3b2e] px-4 py-1.5 text-xs font-bold uppercase tracking-widest text-[#f0d489]">
-              <Award className="h-4 w-4" /> {t("pagina_186", "Certificados vendidos separadamente")}</div>
+              <Award className="h-4 w-4" /> {t("pagina_186", "Certificado em cada módulo")}</div>
             <p className="mt-4 max-w-2xl text-sm font-medium text-[#0b3229]/80">
-              {t("pagina_187", "O acesso anual não inclui certificados. A certificação avulsa possui contratação separada.")}</p>
+              {t("pagina_187", "Conteúdo exclusivo de qualidade, criado por quem entende a prática real da enfermagem. Cada módulo tem certificado de conclusão com validação digital.")}</p>
             
             <div className="mt-8 grid grid-cols-2 gap-4">
               <div className="group relative">
@@ -1185,8 +1186,8 @@ const AUTOMATICOS = [
                 a: t("pagina_226", "Sim. Instale como app no celular (PWA) e a maior parte do conteúdo funciona sem internet, ideal para plantão."),
               },
               {
-                q: t("pagina_227", "A compra inclui bônus ou certificados?"),
-                a: t("pagina_228", "Não. O valor anual corresponde ao acesso à academia escolhida. Certificados avulsos são vendidos separadamente."),
+                q: t("pagina_227", "Os módulos têm certificado?"),
+                a: t("pagina_228", "Não. O valor anual corresponde ao acesso à academia escolhida. Certificação em cada módulo são vendidos separadamente."),
               },
               {
                 q: t("pagina_229", "Posso usar no celular e no computador?"),

@@ -1,3 +1,4 @@
+import { certificatePriceCents } from "@/lib/certificate-prices";
 import { createServerFn } from '@tanstack/react-start';
 import { z } from 'zod';
 import { requireSupabaseAuth } from '@/integrations/supabase/auth-middleware';
@@ -33,10 +34,10 @@ export const createMpPreference = createServerFn({method:'POST'})
  .handler(async({data,context})=>{
   const {data:order}=await context.supabase.from('orders').select('id,amount_cents,metadata,status').eq('id',data.orderId).eq('user_id',context.userId).single();
   const meta=order?.metadata as {type?:string;hours?:number;theme?:string}|null;
-  if (!order || order.status!=='pending' || meta?.type!=='certificate' || ![10,20,30,40].includes(Number(meta.hours)) || order.amount_cents!==Number(meta.hours)*100) throw new Error('Pedido de certificado inválido.');
+  if (!order || order.status!=='pending' || meta?.type!=='certificate' || ![10,20,30,40].includes(Number(meta.hours)) || order.amount_cents!==certificatePriceCents(Number(meta.hours))) throw new Error('Pedido de certificado inválido.');
   const token=process.env['MP_ACCESS_TOKEN'];
   if (!token || !process.env['MP_WEBHOOK_SECRET']) throw new Error('Confirmação de pagamento ainda não configurada.');
-  const res=await fetch('https://api.mercadopago.com/checkout/preferences',{method:'POST',headers:{Authorization:`Bearer ${token}`,'Content-Type':'application/json'},body:JSON.stringify({items:[{id:order.id,title:`Certificado ADEC — ${meta.theme}`,quantity:1,unit_price:order.amount_cents/100,currency_id:'BRL'}],external_reference:order.id,notification_url:'https://academiadaenfermagem.com.br/api/public/payments',back_urls:{success:'https://academiadaenfermagem.com.br/minha-conta',failure:'https://academiadaenfermagem.com.br/minha-conta',pending:'https://academiadaenfermagem.com.br/minha-conta'}})});
+  const res=await fetch('https://api.mercadopago.com/checkout/preferences',{method:'POST',headers:{Authorization:`Bearer ${token}`,'Content-Type':'application/json'},body:JSON.stringify({items:[{id:order.id,title:`Taxa de Registro e Emissão de Certificado ADEC — ${meta.theme} (${meta.hours}h)`,quantity:1,unit_price:order.amount_cents/100,currency_id:'BRL'}],external_reference:order.id,notification_url:'https://academiadaenfermagem.com.br/api/public/payments',back_urls:{success:'https://academiadaenfermagem.com.br/minha-conta',failure:'https://academiadaenfermagem.com.br/minha-conta',pending:'https://academiadaenfermagem.com.br/minha-conta'}})});
   if(!res.ok)throw new Error('Não foi possível abrir o pagamento.');
   const result=await res.json() as {init_point:string};return {init_point:result.init_point};
  });

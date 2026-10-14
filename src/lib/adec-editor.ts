@@ -735,14 +735,14 @@ export const ADEC_FIELDS: LandingField[] = [
     "key": "pagina_107",
     "label": "Certificados",
     "group": "Conteúdos dos Mini Apps",
-    "defaultValue": "Certificados avulsos",
+    "defaultValue": "Certificação em cada módulo",
     "kind": "text"
   },
   {
     "key": "pagina_108",
     "label": "Emissão de certificado ao concluir as trilhas dos módulos.",
     "group": "Conteúdos dos Mini Apps",
-    "defaultValue": "Certificação opcional vendida separadamente; não incluída no acesso anual.",
+    "defaultValue": "Cada Módulo de Decisão Clínica conta com certificado de conclusão e horas complementares, com validação digital.",
     "kind": "text"
   },
   {
@@ -1092,7 +1092,7 @@ export const ADEC_FIELDS: LandingField[] = [
     "key": "pagina_158",
     "label": "Com certificação opcional",
     "group": "BENEFÍCIOS",
-    "defaultValue": "Certificados vendidos separadamente, sem emissão gratuita incluída.",
+    "defaultValue": "Cada módulo tem certificado de conclusão com validação digital.",
     "kind": "text"
   },
   {
@@ -1288,14 +1288,14 @@ export const ADEC_FIELDS: LandingField[] = [
     "key": "pagina_186",
     "label": "Certificados reconhecidos",
     "group": "Banner Certificados Reconhecidos",
-    "defaultValue": "Certificados vendidos separadamente",
+    "defaultValue": "Certificado em cada módulo",
     "kind": "text"
   },
   {
     "key": "pagina_187",
     "label": "Nossos certificados possuem validade em todo território nacional para comprovação de horas c…",
     "group": "Banner Certificados Reconhecidos",
-    "defaultValue": "O acesso anual não inclui certificados. A certificação avulsa possui contratação separada.",
+    "defaultValue": "Conteúdo exclusivo de qualidade, criado por quem entende a prática real da enfermagem. Cada módulo tem certificado de conclusão com validação digital.",
     "kind": "text"
   },
   {
@@ -1561,14 +1561,14 @@ export const ADEC_FIELDS: LandingField[] = [
     "key": "pagina_227",
     "label": "Como entro no Grupo VIP do WhatsApp?",
     "group": "Dúvidas frequentes",
-    "defaultValue": "A compra inclui bônus ou certificados?",
+    "defaultValue": "Os módulos têm certificado?",
     "kind": "text"
   },
   {
     "key": "pagina_228",
     "label": "Assim que ativar seu acesso, o convite do grupo aparece dentro do app. As vagas de cada turm…",
     "group": "Dúvidas frequentes",
-    "defaultValue": "Não. O valor anual corresponde ao acesso à academia escolhida. Certificados avulsos são vendidos separadamente.",
+    "defaultValue": "Não. O valor anual corresponde ao acesso à academia escolhida. Certificação em cada módulo são vendidos separadamente.",
     "kind": "text"
   },
   {

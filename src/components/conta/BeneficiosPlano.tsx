@@ -1,3 +1,4 @@
+import { CERTIFICATE_PRICES, brl } from "@/lib/certificate-prices";
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Award, Gift } from "lucide-react";
@@ -188,11 +189,17 @@ export default function BeneficiosPlano() {
               onChange={(e) => setHours(e.target.value)}
               className="w-full rounded-xl border border-input bg-background px-3 py-2 text-sm focus:ring-2 focus:ring-primary outline-none transition-all"
             >
-              <option value="10">10H - R$ 10,00</option>
-              <option value="20">20H - R$ 20,00</option>
-              <option value="30">30H - R$ 30,00</option>
-              <option value="40">40H - R$ 40,00</option>
+              {Object.entries(CERTIFICATE_PRICES).map(([h, p]) => (
+                <option key={h} value={h}>
+                  {h}H — de {brl(p.fromCents)} por {brl(p.cents)}{h === "40" ? " (mais procurado)" : ""}
+                </option>
+              ))}
             </select>
+            <p className="text-xs">
+              <span className="text-muted-foreground line-through">{brl(CERTIFICATE_PRICES[Number(hours)].fromCents)}</span>{" "}
+              <span className="font-black text-primary">por {brl(CERTIFICATE_PRICES[Number(hours)].cents)}</span>
+              <span className="block text-[10px] text-muted-foreground">Taxa administrativa de emissão, registro e validação digital</span>
+            </p>
           </div>
 
           <button
@@ -215,7 +222,7 @@ export default function BeneficiosPlano() {
                   .insert({
                     user_id: user.id,
                     plan_slug: "certificado-avulso",
-                    amount_cents: amount * 100,
+                    amount_cents: CERTIFICATE_PRICES[amount].cents,
                     payment_method: "mercadopago",
                     status: "pending",
                     metadata: {
