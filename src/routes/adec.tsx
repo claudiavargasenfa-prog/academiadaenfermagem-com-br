@@ -184,7 +184,7 @@ function AdecPage() {
   const textsQ = useAppTexts();
   const t = (k: string, fb: string) => textsQ.data?.[`vendas.${k}`] ?? fb;
 
-const CTA_TOPO = "QUERO MINHA LICENÇA ANUAL →";
+const CTA_TOPO = "QUERO ACESSO ANUAL IMEDIATO";
 const CTA_MEIO = t("pagina_4", "SIM, QUERO TRANSFORMAR MEU PLANTÃO");
 const CTA_RODAPE = t("pagina_5", "ESCOLHER MINHA ACADEMIA →");
 
@@ -350,9 +350,9 @@ const AUTOMATICOS = [
   };
 
   const ctaStyle: React.CSSProperties = {
-    background: "linear-gradient(135deg, #FF7A45 0%, #EA580C 100%)",
-    color: "#fff",
-    boxShadow: "0 16px 36px -12px rgba(234,88,12,0.75)",
+    background: "linear-gradient(135deg, #6EE7B7 0%, #34D399 100%)",
+    color: "#063B2D",
+    boxShadow: "0 16px 36px -12px rgba(52,211,153,0.55)",
   };
 
   const chips = [
@@ -473,9 +473,9 @@ const AUTOMATICOS = [
               </motion.span>
 
               <WordReveal
-                text="Otimize suas evoluções e cálculos de plantão em 2 cliques."
+                text="Domine o Plantão Sem Errar, Sem Levar Advertência e Sem Enlouquecer com sua Escala."
                 delay={0.2}
-                className="mt-6 max-w-3xl font-display text-3xl font-extrabold leading-[1.12] tracking-tight md:text-5xl"
+                className="mt-6 max-w-3xl font-display text-3xl font-extrabold leading-[1.08] tracking-tight md:text-5xl lg:text-6xl"
                 style={{ color: C.ink }}
               />
 
@@ -488,7 +488,7 @@ const AUTOMATICOS = [
               >
                 {t(
                   "hero_sub",
-                  "Você já saiu do plantão com a sensação de que passou mais tempo preenchendo papel do que cuidando? Ou teve aquele medo de errar um cálculo de medicação na correria? Se sim, você não está sozinha. Milhares de enfermeiras vivem isso todos os dias.",
+                  "A plataforma inteligente com motores de decisão clínica e cálculos de gotejamento automáticos para apoiar sua rotina e ajudar você a organizar melhor os plantões.",
                 )}
               </motion.p>
 
