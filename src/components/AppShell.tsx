@@ -128,9 +128,9 @@ export function AppShell({
               </p>
               <p
                 className={`${isStoreHome ? "text-emerald-100/75" : "text-primary-foreground/70"} ${isStoreHome ? "max-w-[260px] whitespace-normal leading-tight" : "truncate"}`}
-                style={{ fontSize: isStoreHome ? "9px" : `${parseFloat(headerSubtitleSize) || 11}px` }}
+                style={{ fontSize: isStoreHome ? "10px" : `${parseFloat(headerSubtitleSize) || 11}px` }}
               >
-                {isStoreHome ? "CENTRAL INTELIGENTE DE SUPORTE PARA ENFERMAGEM" : headerSubtitle}
+                {isStoreHome ? <>CENTRAL INTELIGENTE DE SUPORTE PARA<br className="hidden sm:block" /> ENFERMAGEM</> : headerSubtitle}
               </p>
             </div>
           </Link>
@@ -241,7 +241,7 @@ export function AppShell({
         )}
       </header>
 
-      <main className="mx-auto max-w-5xl px-4 pb-28 pt-6 page-enter md:pb-10">
+      <main className="mx-auto max-w-5xl px-4 pb-36 pt-6 page-enter md:pb-10">
         <BackBar />
         {children}
         {!hideReferences && <ReferencesFooter compact />}
@@ -258,8 +258,8 @@ export function AppShell({
       {pathname !== "/legal" && <LegalConsentGate />}
 
       {/* Mobile bottom tab nav */}
-      <nav className="fixed bottom-3 left-1/2 z-40 -translate-x-1/2 md:hidden">
-        <div className="flex items-center gap-1 rounded-2xl border border-gold/40 bg-primary/95 px-2 py-2 text-primary-foreground shadow-[var(--shadow-glass)] backdrop-blur">
+      <nav className="fixed bottom-2 left-1/2 z-40 w-[calc(100%-1.5rem)] max-w-md -translate-x-1/2 md:hidden">
+        <div className="flex items-center justify-around gap-1 rounded-2xl border border-gold/40 bg-primary/95 px-2 py-2 text-primary-foreground shadow-[var(--shadow-glass)] backdrop-blur">
           {navItems.slice(0, 6).map((n) => {
             const Icon = n.icon;
             const active = pathname === n.to;
