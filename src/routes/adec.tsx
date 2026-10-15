@@ -184,7 +184,7 @@ function AdecPage() {
   const textsQ = useAppTexts();
   const t = (k: string, fb: string) => textsQ.data?.[`vendas.${k}`] ?? fb;
 
-const CTA_TOPO = t("pagina_3", "ADQUIRIR ACESSO ANUAL →");
+const CTA_TOPO = "QUERO MINHA LICENÇA ANUAL →";
 const CTA_MEIO = t("pagina_4", "SIM, QUERO TRANSFORMAR MEU PLANTÃO");
 const CTA_RODAPE = t("pagina_5", "ESCOLHER MINHA ACADEMIA →");
 
@@ -356,12 +356,11 @@ const AUTOMATICOS = [
   };
 
   const chips = [
-    { Icon: CalendarCheck, label: t("chip_trial", "365 dias de acesso") },
-    { Icon: CreditCard, label: t("pagina_127", "Pagamento único anual") },
-    { Icon: WifiOff, label: t("pagina_128", "Funciona offline") },
-    { Icon: RefreshCw, label: t("pagina_129", "Atualizações contínuas") },
+    { Icon: CalendarCheck, label: "Acesso Imediato" },
+    { Icon: CreditCard, label: "Licença Anual (Sem Mensalidades)" },
+    { Icon: WifiOff, label: "Funciona Offline no Celular" },
+    { Icon: RefreshCw, label: "Atualizações Contínuas" },
   ];
-
   return (
     <div
       className="relative min-h-screen overflow-hidden"
@@ -402,9 +401,12 @@ const AUTOMATICOS = [
         style={{ background: C.orange, color: "#fff" }}
       >
         <span className="inline-flex items-center gap-1.5">
-          <Flame className="h-5 w-5 shrink-0 md:h-6 md:w-6" />
-          <PartyPopper className="h-5 w-5 shrink-0 md:h-6 md:w-6" />
-          {t("banner_text", "ADEC — acesso anual a partir de R$ 37,99")}</span>
+          <Flame className="h-4 w-4 shrink-0" />
+          ⚡ Plataforma ADEC: Otimize suas evoluções e cálculos de plantão em 2 cliques com Licença Anual.
+        </span>
+        <a href="#planos" className="inline-flex items-center gap-1 rounded-full bg-white/15 px-3 py-1 font-extrabold uppercase tracking-wide transition hover:bg-white/25">
+          VER PLANOS ANUAIS <ArrowRight className="h-3.5 w-3.5" />
+        </a>
         <span
           className="adec-shine pointer-events-none absolute inset-y-0 -left-1/3 w-1/3"
           style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)" }}
