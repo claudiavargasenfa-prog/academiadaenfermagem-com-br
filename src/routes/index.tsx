@@ -48,6 +48,8 @@ function StoreHomeContent() {
     { label: "Cálculos Automáticos", title: "Calculadoras de Bolso", description: "Gotejamento de macro e microgotas, diluições e dosagens calculadas em segundos.", mark: "02" },
     { label: "Gestão de Escalas", title: "PlantãoEquilíbrio", description: "Organização inteligente de múltiplos vínculos, controle de trocas de turnos e recursos para apoiar o equilíbrio da rotina profissional.", mark: "03" },
     { label: "Diário de Estágio", title: "Relatórios Práticos", description: "Prévia do seu relatório de estágio gerada rapidamente com base nas normas ABNT.", mark: "04" },
+    { label: "SAE & PE", title: "Sistematização da Assistência de Enfermagem", description: "Conheça recursos de apoio à SAE e ao Processo de Enfermagem para organizar o raciocínio clínico e estruturar etapas da assistência.", mark: "05" },
+    { label: "Anotações & Relatórios", title: "Registros de Enfermagem", description: "Organize anotações e relatórios da rotina assistencial com mais clareza, padronização e praticidade.", mark: "06" },
   ];
 
   return (
