@@ -521,7 +521,7 @@ const AUTOMATICOS = [
 
               <p className="mt-6 flex items-center gap-1.5 text-xs font-semibold" style={{ color: C.inkSoft }}>
                 <ShieldCheck className="h-3.5 w-3.5" style={{ color: C.gold }} />
-                {t("pagina_138", "Pagamento pelo Mercado Pago · acesso após confirmação")}</p>
+                {"Compra 100% Segura • Acesso Imediato via PIX ou Cartão"}</p>
             </div>
 
             <PhoneMockup text={t} ink={C.ink} cta={C.cta} gold={C.goldBright} line={C.line} />
