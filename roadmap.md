@@ -26,6 +26,7 @@
 - Ação da proprietária: concluir o quadro de autorização do Google quando ele aparecer; sem essa autorização, não é possível verificar o domínio nem enviar o sitemap ao Google.
 - Confirmar que o domínio oficial `https://academiadaenfermagem.com.br` pode ser descoberto pelos principais buscadores e orientar sobre o prazo normal de indexação.
 - Setembro Amarelo: aguardando 10 banners.
+- Redesenho dos cartões das Academias na página inicial: visual mais profissional (faixa de cor da academia, selo de preço anual, botão coral).
 
 ## Cuidando de Quem Cuida — conteúdo 100% editável (14/09/2026) — CONCLUÍDO
 - [x] Removida a tela fixa do mini app SAUDEMENTALPROF.

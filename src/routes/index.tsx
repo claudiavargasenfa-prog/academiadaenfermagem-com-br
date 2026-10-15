@@ -85,9 +85,7 @@ function StoreHomeContent() {
               const inTrial = !!sub && sub.status === "trial";
               const slug = plan.slug;
               const isMentalHealth = slug === "suporte-tecnico";
-              const cardStyle: React.CSSProperties = isMentalHealth
-                ? { background: "linear-gradient(135deg, #fffef0 0%, #fff9b8 52%, #fff176 100%)", color: "#422006" }
-                : { backgroundColor: appRow?.bg_color ?? "#F3F4F6", color: appRow?.fg_color ?? "#111827" };
+              const accent = appRow?.bg_color ?? "#F59E0B";
 
               if (isMentalHealth) {
                 return (
@@ -96,7 +94,7 @@ function StoreHomeContent() {
                     to="/trilha/$slug"
                     params={{ slug }}
                     className="group relative col-span-1 flex min-h-[250px] overflow-hidden rounded-3xl border-2 border-yellow-300 p-6 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl sm:col-span-2 md:min-h-[270px]"
-                    style={cardStyle}
+                    style={{ background: "linear-gradient(135deg, #fffef0 0%, #fff9b8 52%, #fff176 100%)", color: "#422006" }}
                   >
                     <div className="absolute -right-12 -top-16 h-48 w-48 rounded-full bg-yellow-300/40 blur-3xl transition-transform duration-500 group-hover:scale-125" />
                     <div className="absolute right-5 top-1/2 -translate-y-1/2 opacity-95 transition-transform duration-500 group-hover:scale-105 md:right-10">
@@ -120,31 +118,31 @@ function StoreHomeContent() {
               }
 
               return (
-                <div key={plan.id} className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/40 p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl" style={cardStyle} data-app={slug}>
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
-                  <div className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-white/30 blur-2xl" />
-                  <div className="relative mb-3 flex items-center gap-3">
-                    <span className="text-4xl transition-transform duration-500 group-hover:scale-110">{appRow?.emoji ?? "🚪"}</span>
-                    <h3 className="font-display text-lg font-black tracking-tight">{plan.name}</h3>
+                <div key={plan.id} className="group relative flex flex-col overflow-hidden rounded-3xl border border-border bg-card p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl" data-app={slug}>
+                  <div className="pointer-events-none absolute inset-x-0 top-0 h-1.5" style={{ backgroundColor: accent }} />
+                  <div className="relative mb-3 flex items-start gap-3">
+                    <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl text-2xl" style={{ backgroundColor: `color-mix(in oklab, ${accent} 16%, transparent)` }}>{appRow?.emoji ?? "🚪"}</span>
+                    <h3 className="font-display pt-0.5 text-base font-black leading-snug tracking-tight">{plan.name}</h3>
                   </div>
                   <PlanSlogan slug={slug} />
-                  {["academico","tecnico","tecnico-estudante","enfermeiro"].includes(slug) && <p className="mb-3 text-xl font-bold">{formatPriceBRL(plan.price_cents)}/ano</p>}
-                  <div className="relative mb-4 flex items-start gap-2 rounded-xl bg-black/5 p-2">
-                    <span className="mt-0.5">🔒</span>
-                    <p className="text-[10px] font-bold leading-tight opacity-80">CONTEÚDO PREMIUM EXCLUSIVO: Os módulos só podem ser visualizados por assinantes ou após clicar em descobrir.</p>
-                  </div>
+                  {["academico","tecnico","tecnico-estudante","enfermeiro"].includes(slug) && (
+                    <p className="mt-3 inline-flex w-fit items-baseline gap-1 rounded-full border border-gold/50 bg-gold/10 px-4 py-1.5 text-xl font-black text-foreground">
+                      {formatPriceBRL(plan.price_cents)}<span className="text-[11px] font-bold text-muted-foreground">/ano</span>
+                    </p>
+                  )}
+                  <p className="mt-3 text-[11px] font-semibold leading-tight text-muted-foreground">🔒 Conteúdo exclusivo para membros · Certificado de conclusão em cada módulo</p>
                   <div className="relative mt-auto space-y-2 pt-4">
                     {subscribed ? (
                       <>
-                        <Link to="/trilha/$slug" params={{ slug }} className="block w-full scale-100 rounded-xl bg-foreground py-3 text-center text-sm font-black uppercase tracking-wider text-background shadow-lg transition-transform active:scale-95 hover:scale-[1.02]">Acessar Agora →</Link>
-                        <span className="block w-full rounded-xl bg-white/40 py-2 text-center text-xs font-bold">{inTrial ? `🎁 Trial ativo · até ${new Date(sub?.expires_at ?? "").toLocaleDateString("pt-BR")}` : "✓ Assinatura ativa"}</span>
+                        <Link to="/trilha/$slug" params={{ slug }} className="block w-full rounded-xl bg-gradient-to-r from-orange-500 to-rose-500 py-3 text-center text-sm font-black uppercase tracking-wider text-background shadow-lg transition-transform active:scale-95 hover:scale-[1.02]">Acessar agora →</Link>
+                        <span className="block text-center text-xs font-bold text-primary">{inTrial ? `🎁 Trial ativo · até ${new Date(sub?.expires_at ?? "").toLocaleDateString("pt-BR")}` : "✓ Acesso ativo"}</span>
                       </>
                     ) : (
-                      <Link to="/planos/$slug" params={{ slug }} className="group/btn block w-full scale-100 rounded-xl bg-foreground py-3 text-center text-sm font-black uppercase tracking-wider text-background shadow-lg transition-all active:scale-95 hover:scale-[1.02] hover:shadow-black/20">
-                        <span className="inline-block transition-transform group-hover/btn:translate-x-1">Descobrir Conteúdo →</span>
+                      <Link to="/planos/$slug" params={{ slug }} className="group/btn block w-full rounded-xl bg-gradient-to-r from-orange-500 to-rose-500 py-3 text-center text-sm font-black uppercase tracking-wider text-background shadow-lg transition-all active:scale-95 hover:scale-[1.02]">
+                        <span className="inline-block transition-transform group-hover/btn:translate-x-1">Descobrir conteúdo →</span>
                       </Link>
                     )}
-                    <p className="text-center text-[11px] font-extrabold tracking-wide text-emerald-700"><RichText>{compraSegura}</RichText></p>
+                    <p className="text-center text-[11px] font-extrabold tracking-wide text-emerald-600"><RichText>{compraSegura}</RichText></p>
                   </div>
                 </div>
               );
