@@ -6,6 +6,7 @@ import { useApps } from "@/lib/apps";
 import { isBasePlanSlug } from "@/lib/plan-slugs";
 import { RichText, useText } from "@/lib/app-texts";
 import { FeedbackCollector } from "@/components/FeedbackCollector";
+import { useState } from "react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -41,6 +42,13 @@ function StoreHomeContent() {
   const homeDesc = useText("home.description", "Seis Academias, uma só plataforma. Conheça cada uma e encontre conteúdos para sua formação e prática na enfermagem.");
   const ctaSection = useText("home.cta_section", "Conheça as Academias");
   const compraSegura = useText("compra.segura", "🔒 COMPRA SEGURA");
+  const [activeSolution, setActiveSolution] = useState(0);
+  const solutionTabs = [
+    { label: "Prática Clínica", title: "Motores de Conduta", description: "Guia passo a passo de conduta rápida e tomada de decisão clínica segura no meio do plantão.", mark: "01" },
+    { label: "Cálculos Automáticos", title: "Calculadoras de Bolso", description: "Gotejamento de macro e microgotas, diluições e dosagens calculadas em segundos.", mark: "02" },
+    { label: "Gestão de Escalas", title: "PlantãoEquilíbrio", description: "Organização inteligente de múltiplos vínculos, controle de trocas de turnos e recursos para apoiar o equilíbrio da rotina profissional.", mark: "03" },
+    { label: "Diário de Estágio", title: "Relatórios Práticos", description: "Prévia do seu relatório de estágio gerada rapidamente com base nas normas ABNT.", mark: "04" },
+  ];
 
   return (
     <AppShell hideReferences publicRoute>
@@ -105,6 +113,33 @@ function StoreHomeContent() {
         </div>
       </section>
       <h2 className="sr-only"><RichText>{homeTitle}</RichText></h2>
+
+
+      <section className="mb-10 overflow-hidden rounded-3xl border border-emerald-400/30 bg-[#06121B] p-5 text-white shadow-[0_0_30px_rgba(16,185,129,0.08)] md:p-8">
+        <div className="mb-5">
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-300">Conheça as soluções</p>
+          <h2 className="mt-2 font-display text-2xl font-black md:text-3xl">Tudo o que acompanha sua rotina na enfermagem</h2>
+          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-300">Explore cada solução e veja como ela pode apoiar seus estudos, a organização e a prática profissional.</p>
+        </div>
+        <div role="tablist" aria-label="Soluções da Academia da Enfermagem" className="flex gap-2 overflow-x-auto border-b border-emerald-400/20 pb-3">
+          {solutionTabs.map((tab, index) => (
+            <button key={tab.mark} type="button" role="tab" id={"solution-tab-" + index} aria-selected={activeSolution === index} aria-controls="solution-panel" onClick={() => setActiveSolution(index)} className={"shrink-0 rounded-xl border px-4 py-3 text-left text-xs font-extrabold transition-all md:text-sm " + (activeSolution === index ? "border-emerald-300 bg-emerald-300 text-emerald-950 shadow-[0_0_18px_rgba(52,211,153,0.25)]" : "border-slate-700 bg-slate-900/70 text-slate-300 hover:border-emerald-400/60 hover:text-emerald-200")}>
+              {tab.label}
+            </button>
+          ))}
+        </div>
+        <div id="solution-panel" role="tabpanel" aria-labelledby={"solution-tab-" + activeSolution} className="relative mt-5 overflow-hidden rounded-2xl border border-emerald-400/20 bg-gradient-to-br from-emerald-950/70 via-slate-950 to-[#071521] p-5 md:p-7">
+          <div className="pointer-events-none absolute -right-8 -top-10 h-40 w-40 rounded-full bg-emerald-400/10 blur-3xl" />
+          <div className="relative flex items-start gap-4">
+            <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl border border-emerald-300/40 bg-emerald-300/10 text-lg font-black text-emerald-300">{solutionTabs[activeSolution].mark}</div>
+            <div>
+              <h3 className="font-display text-xl font-black text-emerald-200 md:text-2xl">{solutionTabs[activeSolution].title}</h3>
+              <p className="mt-2 max-w-3xl text-sm leading-relaxed text-slate-200 md:text-base">{solutionTabs[activeSolution].description}</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
 
       {activePlans.length > 0 && (
         <section id="aplicativos" className="mb-8 scroll-mt-20">
