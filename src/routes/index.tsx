@@ -56,6 +56,10 @@ function StoreHomeContent() {
             <a href="#aplicativos" className="mt-6 inline-flex w-full max-w-xl items-center justify-center gap-3 rounded-2xl border border-emerald-100/80 bg-gradient-to-r from-emerald-300 via-teal-200 to-emerald-100 px-5 py-4 text-center text-sm font-black uppercase tracking-wide text-emerald-950 shadow-[0_0_18px_rgba(52,211,153,0.85),0_0_45px_rgba(16,185,129,0.45)] transition-transform hover:scale-[1.02] md:py-5 md:text-base">
               <span className="text-xl text-emerald-700">↯</span><span>QUERO ACESSO ANUAL IMEDIATO<span className="block text-[11px] font-bold normal-case tracking-normal text-emerald-800">A partir de R$ 0,10 por dia</span></span><span className="text-2xl text-emerald-700">→</span>
             </a>
+            <div className="mt-3 flex flex-wrap items-center gap-1.5 text-xs text-amber-300/90">
+              <span aria-label="5 estrelas" className="text-sm tracking-[0.12em] text-amber-400">★★★★★</span>
+              <span className="text-slate-200">Aprovado por profissionais e estudantes de enfermagem</span>
+            </div>
           </div>
           <div className="relative mx-auto flex min-h-[340px] w-full max-w-[490px] items-center justify-center md:min-h-[440px]">
             <div className="pointer-events-none absolute inset-5 rounded-full bg-emerald-400/20 blur-3xl" />
@@ -94,7 +98,11 @@ function StoreHomeContent() {
             </div>
           ))}
         </div>
-        <p className="relative mt-6 text-center text-xs text-slate-300/80"><RichText>{homeDesc}</RichText> · Certificado de conclusão em cada módulo.</p>
+        <p className="relative mt-6 text-center text-xs text-slate-300/80"><RichText>{homeDesc}</RichText></p>
+        <div className="relative mt-3 flex flex-wrap items-center justify-center gap-2 rounded-xl border border-emerald-400/30 bg-emerald-400/5 px-4 py-3 text-center shadow-[0_0_20px_rgba(16,185,129,0.08)]">
+          <span className="text-lg text-emerald-300" aria-hidden="true">✦</span>
+          <p className="text-sm font-extrabold text-emerald-200 md:text-base">Certificado de conclusão em cada módulo</p>
+        </div>
       </section>
       <h2 className="sr-only"><RichText>{homeTitle}</RichText></h2>
 
