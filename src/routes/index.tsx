@@ -1,7 +1,6 @@
 ﻿import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { AppShell } from "@/components/AppShell";
-import mascotesAsset from "@/assets/mascotes-iras.png.asset.json";
 import { fetchSubscriptionPlans, fetchMyActiveSubscriptions, formatPriceBRL } from "@/lib/access";
 import { useApps } from "@/lib/apps";
 import { isBasePlanSlug } from "@/lib/plan-slugs";
@@ -45,31 +44,57 @@ function StoreHomeContent() {
 
   return (
     <AppShell hideReferences publicRoute>
-      <section className="relative mb-8 overflow-hidden rounded-3xl border-2 border-amber-500 bg-[#0B0F19] p-6 text-white shadow-2xl md:p-10">
-        <div className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-gold/20 blur-3xl" />
-        <div className="relative grid items-center gap-6 md:grid-cols-[1.4fr_1fr]">
-          <div>
-            <p className="mb-3 inline-flex rounded-full border border-amber-500 px-3 py-1 text-[11px] font-black uppercase tracking-widest text-amber-400">Acesso Completo por 365 Dias · Pagamento Único</p>
-            <h1 className="font-display text-3xl font-black leading-tight md:text-5xl">Domine o Plantão Sem Errar, Sem Levar Advertência e Sem Enlouquecer com sua Escala.</h1>
-            <p className="mt-4 max-w-xl text-sm opacity-85 md:text-base">A plataforma inteligente com motores de decisão clínica e cálculos de gotejamento automáticos para apoiar sua rotina e ajudar você a organizar melhor os plantões.</p>
-            <a href="#aplicativos" className="mt-6 inline-block rounded-2xl bg-emerald-500 px-6 py-4 text-center text-sm font-black uppercase tracking-wide text-slate-950 shadow-xl transition-transform hover:scale-105 [animation:pulse_2.5s_ease-in-out_infinite] md:px-9 md:py-5 md:text-base">QUERO ACESSO ANUAL IMEDIATO<span className="block text-[11px] font-bold normal-case opacity-90">A partir de R$ 0,10 por dia</span></a>
+      <section className="relative mb-8 overflow-hidden rounded-3xl border border-emerald-400/50 bg-[#02090D] p-5 text-white shadow-2xl md:p-8 lg:p-10">
+        <div className="pointer-events-none absolute -right-20 top-8 h-80 w-80 rounded-full bg-emerald-400/20 blur-3xl" />
+        <div className="pointer-events-none absolute right-[12%] top-12 h-72 w-72 rounded-full border-2 border-emerald-400/50 shadow-[0_0_55px_rgba(16,185,129,0.65)] md:right-[17%]" />
+        <div className="pointer-events-none absolute -bottom-10 left-1/3 h-20 w-2/3 rounded-full bg-emerald-400/30 blur-2xl" />
+        <div className="relative grid items-center gap-8 md:grid-cols-[1.05fr_0.95fr]">
+          <div className="relative z-10">
+            <p className="mb-4 inline-flex rounded-full border border-amber-400 px-3 py-1.5 text-[11px] font-black uppercase tracking-widest text-amber-400">Acesso completo por 365 dias · Pagamento único</p>
+            <h1 className="font-display text-3xl font-black leading-[1.08] md:text-4xl lg:text-5xl">Domine o Plantão <span className="text-emerald-300">Sem Errar, Sem Levar Advertência</span> e Sem Enlouquecer com sua Escala.</h1>
+            <p className="mt-5 max-w-xl text-sm leading-relaxed text-slate-200 md:text-base">A plataforma inteligente com motores de decisão clínica e cálculos de gotejamento automáticos para apoiar sua rotina e ajudar você a organizar melhor os plantões.</p>
+            <a href="#aplicativos" className="mt-6 inline-flex w-full max-w-xl items-center justify-center gap-3 rounded-2xl border border-emerald-100/80 bg-gradient-to-r from-emerald-300 via-teal-200 to-emerald-100 px-5 py-4 text-center text-sm font-black uppercase tracking-wide text-emerald-950 shadow-[0_0_18px_rgba(52,211,153,0.85),0_0_45px_rgba(16,185,129,0.45)] transition-transform hover:scale-[1.02] md:py-5 md:text-base">
+              <span className="text-xl text-emerald-700">↯</span><span>QUERO ACESSO ANUAL IMEDIATO<span className="block text-[11px] font-bold normal-case tracking-normal text-emerald-800">A partir de R$ 0,10 por dia</span></span><span className="text-2xl text-emerald-700">→</span>
+            </a>
           </div>
-          <img src={mascotesAsset.url} alt="Mascotes Academia da Enfermagem" className="mx-auto h-40 w-auto object-contain md:h-56" />
+          <div className="relative mx-auto flex min-h-[340px] w-full max-w-[490px] items-center justify-center md:min-h-[440px]">
+            <div className="pointer-events-none absolute inset-5 rounded-full bg-emerald-400/20 blur-3xl" />
+            <div className="relative z-10 w-[min(72%,270px)] rotate-[-5deg] rounded-[2.7rem] border-[5px] border-slate-500 bg-black p-2 shadow-[0_0_0_2px_#111827,0_0_40px_rgba(16,185,129,0.35)]">
+              <div className="overflow-hidden rounded-[2.1rem] border border-slate-700 bg-[#06121B]">
+                <div className="flex items-center justify-between px-4 pt-3 text-[9px] font-bold text-white"><span>9:41</span><span>● ▮ ▰</span></div>
+                <div className="flex items-center justify-between px-3 py-4"><div><p className="text-[10px] font-black text-amber-400">Academia da</p><p className="text-[10px] font-black text-amber-400">Enfermagem</p></div><span className="text-emerald-300">☰</span></div>
+                <div className="mx-2 rounded-xl border border-emerald-400/30 bg-gradient-to-br from-emerald-800 to-slate-900 p-3"><p className="text-xs font-bold text-white">Olá, profissional!</p><p className="mt-1 text-[9px] leading-relaxed text-emerald-100">Conhecimento técnico para uma rotina mais segura.</p></div>
+                <div className="grid grid-cols-2 gap-2 p-2">
+                  <div className="rounded-xl border border-emerald-400/60 bg-emerald-800/80 p-2"><p className="text-lg text-emerald-200">⌁</p><p className="text-[9px] font-bold leading-tight text-white">Motores de<br/>Decisão Clínica</p></div>
+                  <div className="rounded-xl border border-violet-400/60 bg-violet-900/80 p-2"><p className="text-lg text-violet-200">▦</p><p className="text-[9px] font-bold leading-tight text-white">Cálculos em<br/>Segundos</p></div>
+                  <div className="rounded-xl border border-amber-400/60 bg-amber-800/80 p-2"><p className="text-lg text-amber-100">滴</p><p className="text-[9px] font-bold leading-tight text-white">Gotejamento<br/>Automático</p></div>
+                  <div className="rounded-xl border border-sky-400/60 bg-sky-900/80 p-2"><p className="text-lg text-sky-200">▤</p><p className="text-[9px] font-bold leading-tight text-white">Protocolos e<br/>Diretrizes</p></div>
+                </div>
+                <div className="px-3 pb-2"><p className="mb-2 text-[10px] font-bold text-white">Meus Plantões</p><div className="rounded-lg border border-emerald-400/20 bg-slate-800 p-2 text-[9px] text-slate-200">Hoje · 07:00 às 19:00</div><div className="mt-2 rounded-lg border border-emerald-400/20 bg-slate-800 p-2 text-[9px] text-slate-200">Amanhã · 19:00 às 07:00</div></div>
+                <div className="flex justify-around border-t border-slate-700 bg-black/60 px-2 py-3 text-[8px] text-emerald-300"><span>⌂ Início</span><span>∿ Simulador</span><span>▤ Conteúdos</span></div>
+              </div>
+            </div>
+            <div className="absolute right-0 top-[17%] z-0 w-[39%] rotate-[7deg] rounded-[2rem] border-4 border-slate-600 bg-black p-2 opacity-90 shadow-[0_0_35px_rgba(16,185,129,0.25)]">
+              <div className="rounded-[1.5rem] bg-[#071521] p-3 text-white">
+                <p className="mb-4 text-[10px] font-black text-white">Cálculo de Gotejamento</p><p className="text-[8px] text-slate-400">Solução · SF 0,9%</p><div className="my-2 rounded-lg bg-slate-800 p-2 text-[9px]">Volume (mL) <b className="block text-white">500</b></div><div className="rounded-lg bg-slate-800 p-2 text-[9px]">Tempo (horas) <b className="block text-white">8</b></div><div className="mt-3 rounded-lg border border-emerald-400/30 bg-emerald-900/40 p-3 text-center"><p className="text-[8px] text-emerald-300">Velocidade de infusão</p><p className="text-lg font-black text-white">62,5</p><p className="text-[9px] text-emerald-200">mL/hora</p></div><div className="mt-3 rounded-lg bg-emerald-500 py-2 text-center text-[9px] font-black text-emerald-950">Calcular</div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="relative mt-8 grid gap-3 sm:grid-cols-3">
+        <div className="relative mt-5 grid gap-3 sm:grid-cols-3">
           {[
-            ["🧠", "Motores de Conduta Rápida", "Decisão clínica guiada, passo a passo, no meio do plantão."],
-            ["💉", "Cálculos em Segundos", "Gotejamento, diluições e dose por peso sem erro."],
-            ["📘", "Diário de Bordo em ABNT", "Prévia do seu relatório pronta para estágio e horas complementares."],
+            ["⌁", "Motores de Conduta Rápida", "Decisão clínica guiada, passo a passo, no meio do plantão."],
+            ["▦", "Cálculos em Segundos", "Gotejamento, diluições e dose por peso."],
+            ["▤", "Diário de Bordo em ABNT", "Prévia do relatório para estágio e horas complementares."],
           ].map(([i, t, d]) => (
-            <div key={t} className="rounded-2xl border border-amber-500/40 bg-white/5 p-4">
-              <p className="text-2xl">{i}</p>
+            <div key={t} className="rounded-2xl border border-emerald-400/40 bg-slate-950/75 p-4 shadow-[0_0_18px_rgba(16,185,129,0.08)]">
+              <p className="text-2xl text-emerald-300">{i}</p>
               <p className="mt-1 font-black text-emerald-300">{t}</p>
-              <p className="text-xs opacity-80">{d}</p>
+              <p className="text-xs text-slate-200/85">{d}</p>
             </div>
           ))}
         </div>
-        <p className="relative mt-6 text-center text-xs opacity-75"><RichText>{homeDesc}</RichText> · Certificado de conclusão em cada módulo.</p>
+        <p className="relative mt-6 text-center text-xs text-slate-300/80"><RichText>{homeDesc}</RichText> · Certificado de conclusão em cada módulo.</p>
       </section>
       <h2 className="sr-only"><RichText>{homeTitle}</RichText></h2>
 
