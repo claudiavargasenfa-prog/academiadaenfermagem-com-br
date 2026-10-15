@@ -50,7 +50,6 @@ export function AppShell({
 
   const lojaLabel = useText("menu.loja", "Loja");
   const minhaContaLabel = useText("menu.minha_conta", "Minha Conta");
-  const adminLabel = useText("menu.admin", "Admin");
   const headerTitle = useText("header.title", "Academia da Enfermagem");
   const headerSubtitle = useText("header.subtitle", "Central Inteligente de Conhecimento");
   const headerTitleSize = useText("header.title.size", "16");
@@ -67,9 +66,7 @@ export function AppShell({
     { to: "/minha-historia" as const, label: historiaLabel, icon: BookOpen },
   ];
 
-  const navItems = admin
-    ? [...baseNav, { to: "/admin" as const, label: adminLabel, icon: Shield }]
-    : baseNav;
+  const navItems = baseNav;
 
   async function handleShare() {
     const shareUrl = "https://academiadaenfermagem.com.br";
@@ -221,6 +218,15 @@ export function AppShell({
                 <Share2 className="h-4 w-4" />
                 {compartilharLabel}
               </button>
+              {admin && (
+                <Link
+                  to="/admin"
+                  onClick={() => setOpen(false)}
+                  className="flex items-center gap-2 rounded-xl border border-emerald-400/50 bg-emerald-400/10 px-3 py-2.5 text-sm font-bold text-emerald-200"
+                >
+                  <Shield className="h-4 w-4" /> Painel Admin
+                </Link>
+              )}
               {isSignedIn && (
                 <button
                   onClick={handleSignOut}
