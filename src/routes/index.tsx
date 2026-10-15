@@ -142,6 +142,21 @@ function StoreHomeContent() {
         </div>
       </section>
 
+      <section aria-labelledby="bonus-lancamento-title" className="mb-8 overflow-hidden rounded-3xl border-2 border-dashed border-orange-400 bg-gradient-to-br from-[#1A1008] via-[#10131B] to-[#071521] p-5 text-white shadow-[0_0_28px_rgba(251,146,60,0.16)] md:p-7">
+        <div className="flex items-start gap-4">
+          <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl border border-orange-400/50 bg-orange-400/10 text-2xl" aria-hidden="true">🔥</div>
+          <div>
+            <p className="text-xs font-black uppercase tracking-[0.18em] text-orange-300">Bônus para quem está chegando</p>
+            <h2 id="bonus-lancamento-title" className="mt-1 font-display text-xl font-black uppercase leading-tight text-orange-300 md:text-2xl">Bônus exclusivo de lançamento</h2>
+            <p className="mt-3 text-sm font-bold leading-relaxed text-slate-100 md:text-base">Adquirindo qualquer uma das Academias ou a ESCALA — Central Inteligente de Plantão, você receberá um bônus exclusivo de lançamento!</p>
+          </div>
+        </div>
+        <div className="mt-5 rounded-2xl border border-orange-400/25 bg-black/25 p-4 md:p-5">
+          <h3 className="font-display text-lg font-black text-white md:text-xl">Calculadora Digital de Gotejamento em Adulto</h3>
+          <p className="mt-2 text-sm leading-relaxed text-slate-200 md:text-base">Um simulador automático e interativo que faz as contas por você, com cálculo em horas ou minutos, diretamente no celular.</p>
+          <p className="mt-3 text-sm font-semibold leading-relaxed text-orange-100">Ganhe praticidade na rotina de enfermagem! Tenha apoio nos cálculos de gotejamento sem depender de fazer fórmulas complexas de cabeça sob o estresse do plantão.</p>
+        </div>
+      </section>
 
       {activePlans.length > 0 && (
         <section id="aplicativos" className="mb-8 scroll-mt-20">
