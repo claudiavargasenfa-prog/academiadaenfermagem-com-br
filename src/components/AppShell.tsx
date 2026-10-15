@@ -111,8 +111,8 @@ export function AppShell({
     <div className="min-h-dvh" style={bgStyle} data-app={trackSlug}>
       <TrialCountdownBanner />
       <header className={`sticky top-0 z-40 border-b text-primary-foreground shadow-[var(--shadow-soft)] ${isStoreHome ? "border-emerald-400/40 bg-[#03150F] shadow-[0_4px_24px_rgba(16,185,129,0.12)]" : "border-gold/30 bg-primary"}`}>
-        <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3">
-          <Link to="/" className="flex min-w-0 items-center gap-3">
+        <div className="mx-auto flex max-w-5xl items-center justify-between gap-1.5 px-3 py-3">
+          <Link to="/" className="flex min-w-0 items-center gap-2">
             <img
               src={logoUrl}
               alt="Logotipo Academia da Enfermagem"
@@ -130,7 +130,7 @@ export function AppShell({
                 className={`truncate ${isStoreHome ? "text-emerald-100/75" : "text-primary-foreground/70"}`}
                 style={{ fontSize: `${parseFloat(headerSubtitleSize) || 11}px` }}
               >
-                {isStoreHome ? "Conhecimento para a enfermagem" : headerSubtitle}
+                {isStoreHome ? "CENTRAL INTELIGENTE DE CONHECIMENTO PARA ENFERMAGEM" : headerSubtitle}
               </p>
             </div>
           </Link>
@@ -152,14 +152,14 @@ export function AppShell({
               {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
           </div>
-          <nav className="hidden items-center gap-1 md:flex">
+          <nav className="hidden items-center gap-0.5 md:flex">
             {navItems.map((n) => {
               const active = pathname === n.to;
               return (
                 <Link
                   key={n.to}
                   to={n.to}
-                  className={`rounded-lg px-2.5 py-1.5 text-xs font-semibold transition-colors ${
+                  className={`rounded-lg px-1.5 py-1.5 text-[11px] font-semibold transition-colors ${
                     active
                       ? (isStoreHome ? "bg-amber-400 text-emerald-950 shadow-[0_0_16px_rgba(16,185,129,0.28)]" : "gold-gradient shadow-[var(--shadow-soft)]")
                       : (isStoreHome ? "text-emerald-50/90 hover:bg-emerald-400/10 hover:text-emerald-300" : "text-primary-foreground/80 hover:bg-white/10 hover:text-gold")
@@ -171,7 +171,7 @@ export function AppShell({
             })}
             <button
               onClick={handleShare}
-              className={`flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-semibold transition-colors ${isStoreHome ? "text-emerald-50/90 hover:bg-emerald-400/10 hover:text-emerald-300" : "text-primary-foreground/80 hover:bg-white/10 hover:text-gold"}`}
+              className={`flex items-center gap-1 rounded-lg px-1.5 py-1.5 text-[11px] font-semibold transition-colors ${isStoreHome ? "text-emerald-50/90 hover:bg-emerald-400/10 hover:text-emerald-300" : "text-primary-foreground/80 hover:bg-white/10 hover:text-gold"}`}
               aria-label={compartilharLabel}
             >
               <Share2 className="h-3.5 w-3.5" />
@@ -181,7 +181,7 @@ export function AppShell({
             {admin && (
                <Link 
                  to="/admin" 
-                 className={`ml-2 flex items-center gap-1 rounded-lg border px-2.5 py-1.5 text-[10px] font-black uppercase ${isStoreHome ? "border-emerald-400/60 bg-emerald-400/10 text-emerald-300 hover:bg-emerald-400/20" : "border-gold/50 bg-gold/10 text-gold hover:bg-gold/20"}`}
+                 className={`ml-1 flex items-center gap-1 rounded-lg border px-1.5 py-1.5 text-[9px] font-black uppercase ${isStoreHome ? "border-emerald-400/60 bg-emerald-400/10 text-emerald-300 hover:bg-emerald-400/20" : "border-gold/50 bg-gold/10 text-gold hover:bg-gold/20"}`}
                >
                  <Shield className="h-3 w-3" />
                  Painel Admin
