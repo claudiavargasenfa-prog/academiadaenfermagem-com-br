@@ -133,7 +133,7 @@ export function AppShell({
                 className={`truncate ${isStoreHome ? "text-emerald-100/75" : "text-primary-foreground/70"}`}
                 style={{ fontSize: `${parseFloat(headerSubtitleSize) || 11}px` }}
               >
-                {headerSubtitle}
+                {isStoreHome ? "Conhecimento para a enfermagem" : headerSubtitle}
               </p>
             </div>
           </Link>
