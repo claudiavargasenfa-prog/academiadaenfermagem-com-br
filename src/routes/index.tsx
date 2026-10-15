@@ -50,9 +50,9 @@ function StoreHomeContent() {
         <div className="relative grid items-center gap-6 md:grid-cols-[1.4fr_1fr]">
           <div>
             <p className="mb-3 inline-flex rounded-full border border-gold px-3 py-1 text-[11px] font-black uppercase tracking-widest text-gold">Acesso Completo por 365 Dias · Pagamento Único</p>
-            <h1 className="font-display text-3xl font-black leading-tight md:text-5xl">Sobreviva ao Plantão Sem Errar, Sem Levar Advertência e Sem Enlouquecer com a sua Escala.</h1>
-            <p className="mt-4 max-w-xl text-sm opacity-85 md:text-base">Módulos de Decisão Clínica, Motores Clínicos Automatizados e cálculos em segundos — construídos com mais de 35 anos de vivência na enfermagem.</p>
-            <a href="#aplicativos" className="mt-6 inline-block rounded-2xl bg-gradient-to-r from-orange-500 to-rose-500 px-6 py-4 text-center text-sm font-black uppercase tracking-wide shadow-xl transition-transform hover:scale-105 [animation:pulse_2.5s_ease-in-out_infinite] md:text-base">Quero acesso anual imediato →<span className="block text-[11px] font-bold normal-case opacity-90">A partir de R$ 0,10 por dia</span></a>
+            <h1 className="font-display text-3xl font-black leading-tight md:text-5xl">Domine o Plantão Sem Errar, Sem Levar Advertência e Sem Enlouquecer com sua Escala.</h1>
+            <p className="mt-4 max-w-xl text-sm opacity-85 md:text-base">A plataforma inteligente com motores de decisão clínica e cálculos de gotejamento automáticos para apoiar sua rotina e ajudar você a organizar melhor os plantões.</p>
+            <a href="#aplicativos" className="mt-6 inline-block rounded-2xl bg-gradient-to-r from-emerald-300 to-emerald-500 px-6 py-4 text-center text-sm font-black uppercase tracking-wide text-slate-950 shadow-xl transition-transform hover:scale-105 [animation:pulse_2.5s_ease-in-out_infinite] md:px-9 md:py-5 md:text-base">QUERO ACESSO ANUAL IMEDIATO<span className="block text-[11px] font-bold normal-case opacity-90">A partir de R$ 0,10 por dia</span></a>
           </div>
           <img src={mascotesAsset.url} alt="Mascotes Academia da Enfermagem" className="mx-auto h-40 w-auto object-contain md:h-56" />
         </div>
