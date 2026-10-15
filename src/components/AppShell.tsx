@@ -46,6 +46,7 @@ export function AppShell({
   const authEmail = auth.user?.email;
   const admin = !!adminQ.data || authEmail === "enfa.contato@gmail.com";
   const isSignedIn = !!auth.user;
+  const isStoreHome = pathname === "/";
 
   const lojaLabel = useText("menu.loja", "Loja");
   const minhaContaLabel = useText("menu.minha_conta", "Minha Conta");
@@ -112,7 +113,7 @@ export function AppShell({
   const shell = (
     <div className="min-h-dvh" style={bgStyle} data-app={trackSlug}>
       <TrialCountdownBanner />
-      <header className="sticky top-0 z-40 border-b border-gold/30 bg-primary text-primary-foreground shadow-[var(--shadow-soft)]">
+      <header className={`sticky top-0 z-40 border-b text-primary-foreground shadow-[var(--shadow-soft)] ${isStoreHome ? "border-emerald-400/40 bg-[#03150F] shadow-[0_4px_24px_rgba(16,185,129,0.12)]" : "border-gold/30 bg-primary"}`}>
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3">
           <Link to="/" className="flex min-w-0 items-center gap-3">
             <img
@@ -123,13 +124,13 @@ export function AppShell({
 
             <div className="min-w-0 leading-tight">
               <p
-                className="truncate font-display font-extrabold tracking-tight text-gold"
+                className={`truncate font-display font-extrabold tracking-tight ${isStoreHome ? "text-amber-400" : "text-gold"}`}
                 style={{ fontSize: `${parseFloat(headerTitleSize) || 16}px` }}
               >
                 {headerTitle}
               </p>
               <p
-                className="truncate text-primary-foreground/70"
+                className={`truncate ${isStoreHome ? "text-emerald-100/75" : "text-primary-foreground/70"}`}
                 style={{ fontSize: `${parseFloat(headerSubtitleSize) || 11}px` }}
               >
                 {headerSubtitle}
@@ -163,8 +164,8 @@ export function AppShell({
                   to={n.to}
                   className={`rounded-lg px-2.5 py-1.5 text-xs font-semibold transition-colors ${
                     active
-                      ? "gold-gradient shadow-[var(--shadow-soft)]"
-                      : "text-primary-foreground/80 hover:bg-white/10 hover:text-gold"
+                      ? (isStoreHome ? "bg-amber-400 text-emerald-950 shadow-[0_0_16px_rgba(16,185,129,0.28)]" : "gold-gradient shadow-[var(--shadow-soft)]")
+                      : (isStoreHome ? "text-emerald-50/90 hover:bg-emerald-400/10 hover:text-emerald-300" : "text-primary-foreground/80 hover:bg-white/10 hover:text-gold")
                   }`}
                 >
                   {n.label}
@@ -173,7 +174,7 @@ export function AppShell({
             })}
             <button
               onClick={handleShare}
-              className="flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-primary-foreground/80 transition-colors hover:bg-white/10 hover:text-gold"
+              className={`flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-semibold transition-colors ${isStoreHome ? "text-emerald-50/90 hover:bg-emerald-400/10 hover:text-emerald-300" : "text-primary-foreground/80 hover:bg-white/10 hover:text-gold"}`}
               aria-label={compartilharLabel}
             >
               <Share2 className="h-3.5 w-3.5" />
@@ -183,7 +184,7 @@ export function AppShell({
             {admin && (
                <Link 
                  to="/admin" 
-                 className="ml-2 flex items-center gap-1 rounded-lg border border-gold/50 bg-gold/10 px-2.5 py-1.5 text-[10px] font-black uppercase text-gold hover:bg-gold/20"
+                 className={`ml-2 flex items-center gap-1 rounded-lg border px-2.5 py-1.5 text-[10px] font-black uppercase ${isStoreHome ? "border-emerald-400/60 bg-emerald-400/10 text-emerald-300 hover:bg-emerald-400/20" : "border-gold/50 bg-gold/10 text-gold hover:bg-gold/20"}`}
                >
                  <Shield className="h-3 w-3" />
                  Painel Admin
