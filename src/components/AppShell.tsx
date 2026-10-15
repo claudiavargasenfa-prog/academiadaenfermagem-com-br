@@ -52,9 +52,9 @@ export function AppShell({
   const minhaContaLabel = useText("menu.minha_conta", "Minha Conta");
   const adminLabel = useText("menu.admin", "Admin");
   const headerTitle = useText("header.title", "Academia da Enfermagem");
-  const headerSubtitle = useText("header.subtitle", "Informação Atualizada em suas Mãos");
+  const headerSubtitle = useText("header.subtitle", "Central Inteligente de Conhecimento");
   const headerTitleSize = useText("header.title.size", "16");
-  const headerSubtitleSize = useText("header.subtitle.size", "11");
+  const headerSubtitleSize = useText("header.subtitle.size", "9");
   const logoUrl = useText("branding.logo_url", DEFAULT_LOGO_URL) || DEFAULT_LOGO_URL;
 
   const historiaLabel = useText("menu.minha_historia", "Minha História");
