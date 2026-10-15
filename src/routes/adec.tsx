@@ -493,7 +493,7 @@ const AUTOMATICOS = [
               </motion.p>
 
               <div className="mt-8">
-                <ShineCTA href={safeLandingUrl(t("cta_target", "#planos"), '#planos')} style={ctaStyle}>
+                <ShineCTA href={safeLandingUrl(t("cta_target", "#planos"), '#planos')} style={ctaStyle} className="animate-pulse px-9 py-5 text-base md:text-lg">
                   <Sparkles className="h-4 w-4" style={{ color: C.goldBright }} />
                   {CTA_TOPO}
                 </ShineCTA>
