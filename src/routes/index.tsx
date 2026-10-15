@@ -45,14 +45,14 @@ function StoreHomeContent() {
 
   return (
     <AppShell hideReferences publicRoute>
-      <section className="relative mb-8 overflow-hidden rounded-3xl border-2 border-gold bg-foreground p-6 text-background shadow-2xl md:p-10">
+      <section className="relative mb-8 overflow-hidden rounded-3xl border-2 border-amber-500 bg-[#0B0F19] p-6 text-white shadow-2xl md:p-10">
         <div className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-gold/20 blur-3xl" />
         <div className="relative grid items-center gap-6 md:grid-cols-[1.4fr_1fr]">
           <div>
-            <p className="mb-3 inline-flex rounded-full border border-gold px-3 py-1 text-[11px] font-black uppercase tracking-widest text-gold">Acesso Completo por 365 Dias · Pagamento Único</p>
+            <p className="mb-3 inline-flex rounded-full border border-amber-500 px-3 py-1 text-[11px] font-black uppercase tracking-widest text-amber-400">Acesso Completo por 365 Dias · Pagamento Único</p>
             <h1 className="font-display text-3xl font-black leading-tight md:text-5xl">Domine o Plantão Sem Errar, Sem Levar Advertência e Sem Enlouquecer com sua Escala.</h1>
             <p className="mt-4 max-w-xl text-sm opacity-85 md:text-base">A plataforma inteligente com motores de decisão clínica e cálculos de gotejamento automáticos para apoiar sua rotina e ajudar você a organizar melhor os plantões.</p>
-            <a href="#aplicativos" className="mt-6 inline-block rounded-2xl bg-gradient-to-r from-emerald-300 to-emerald-500 px-6 py-4 text-center text-sm font-black uppercase tracking-wide text-slate-950 shadow-xl transition-transform hover:scale-105 [animation:pulse_2.5s_ease-in-out_infinite] md:px-9 md:py-5 md:text-base">QUERO ACESSO ANUAL IMEDIATO<span className="block text-[11px] font-bold normal-case opacity-90">A partir de R$ 0,10 por dia</span></a>
+            <a href="#aplicativos" className="mt-6 inline-block rounded-2xl bg-emerald-500 px-6 py-4 text-center text-sm font-black uppercase tracking-wide text-slate-950 shadow-xl transition-transform hover:scale-105 [animation:pulse_2.5s_ease-in-out_infinite] md:px-9 md:py-5 md:text-base">QUERO ACESSO ANUAL IMEDIATO<span className="block text-[11px] font-bold normal-case opacity-90">A partir de R$ 0,10 por dia</span></a>
           </div>
           <img src={mascotesAsset.url} alt="Mascotes Academia da Enfermagem" className="mx-auto h-40 w-auto object-contain md:h-56" />
         </div>
@@ -62,9 +62,9 @@ function StoreHomeContent() {
             ["💉", "Cálculos em Segundos", "Gotejamento, diluições e dose por peso sem erro."],
             ["📘", "Diário de Bordo em ABNT", "Prévia do seu relatório pronta para estágio e horas complementares."],
           ].map(([i, t, d]) => (
-            <div key={t} className="rounded-2xl border border-gold/40 bg-background/5 p-4">
+            <div key={t} className="rounded-2xl border border-amber-500/40 bg-white/5 p-4">
               <p className="text-2xl">{i}</p>
-              <p className="mt-1 font-black">{t}</p>
+              <p className="mt-1 font-black text-emerald-300">{t}</p>
               <p className="text-xs opacity-80">{d}</p>
             </div>
           ))}
