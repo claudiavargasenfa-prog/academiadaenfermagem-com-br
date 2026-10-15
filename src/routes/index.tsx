@@ -45,15 +45,33 @@ function StoreHomeContent() {
 
   return (
     <AppShell hideReferences publicRoute>
-      <div className="mb-6">
-        <p className="mb-1 text-xs font-semibold uppercase tracking-widest text-gold">Loja</p>
-        <h1 className="font-display text-3xl font-bold text-foreground md:text-4xl"><RichText>{homeTitle}</RichText></h1>
-        <p className="mt-2 max-w-2xl text-sm text-muted-foreground md:text-base"><RichText>{homeDesc}</RichText></p>
-      </div>
-
-      <div className="mb-8 flex justify-center">
-        <img src={mascotesAsset.url} alt="Mascotes Academia da Enfermagem — Time contra as IRAS" className="h-40 w-auto object-contain sm:h-52 md:h-60 [animation:pulse_3s_ease-in-out_infinite]" />
-      </div>
+      <section className="relative mb-8 overflow-hidden rounded-3xl border-2 border-gold bg-foreground p-6 text-background shadow-2xl md:p-10">
+        <div className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-gold/20 blur-3xl" />
+        <div className="relative grid items-center gap-6 md:grid-cols-[1.4fr_1fr]">
+          <div>
+            <p className="mb-3 inline-flex rounded-full border border-gold px-3 py-1 text-[11px] font-black uppercase tracking-widest text-gold">Acesso Completo por 365 Dias · Pagamento Único</p>
+            <h1 className="font-display text-3xl font-black leading-tight md:text-5xl">Sobreviva ao Plantão Sem Errar, Sem Levar Advertência e Sem Enlouquecer com a sua Escala.</h1>
+            <p className="mt-4 max-w-xl text-sm opacity-85 md:text-base">Módulos de Decisão Clínica, Motores Clínicos Automatizados e cálculos em segundos — construídos com mais de 35 anos de vivência na enfermagem.</p>
+            <a href="#aplicativos" className="mt-6 inline-block rounded-2xl bg-gradient-to-r from-orange-500 to-rose-500 px-6 py-4 text-center text-sm font-black uppercase tracking-wide shadow-xl transition-transform hover:scale-105 [animation:pulse_2.5s_ease-in-out_infinite] md:text-base">Quero acesso anual imediato →<span className="block text-[11px] font-bold normal-case opacity-90">A partir de R$ 0,10 por dia</span></a>
+          </div>
+          <img src={mascotesAsset.url} alt="Mascotes Academia da Enfermagem" className="mx-auto h-40 w-auto object-contain md:h-56" />
+        </div>
+        <div className="relative mt-8 grid gap-3 sm:grid-cols-3">
+          {[
+            ["🧠", "Motores de Conduta Rápida", "Decisão clínica guiada, passo a passo, no meio do plantão."],
+            ["💉", "Cálculos em Segundos", "Gotejamento, diluições e dose por peso sem erro."],
+            ["📘", "Diário de Bordo em ABNT", "Prévia do seu relatório pronta para estágio e horas complementares."],
+          ].map(([i, t, d]) => (
+            <div key={t} className="rounded-2xl border border-gold/40 bg-background/5 p-4">
+              <p className="text-2xl">{i}</p>
+              <p className="mt-1 font-black">{t}</p>
+              <p className="text-xs opacity-80">{d}</p>
+            </div>
+          ))}
+        </div>
+        <p className="relative mt-6 text-center text-xs opacity-75"><RichText>{homeDesc}</RichText> · Certificado de conclusão em cada módulo.</p>
+      </section>
+      <h2 className="sr-only"><RichText>{homeTitle}</RichText></h2>
 
       {activePlans.length > 0 && (
         <section id="aplicativos" className="mb-8 scroll-mt-20">
