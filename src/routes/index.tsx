@@ -203,7 +203,7 @@ function StoreHomeContent() {
               }
 
               return (
-                <div key={plan.id} className="group relative flex min-h-[230px] flex-col overflow-hidden rounded-2xl border border-border bg-card p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl md:min-h-[250px]" data-app={slug}>
+                <div key={plan.id} className="group relative flex min-h-[230px] flex-col overflow-hidden rounded-2xl border p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl md:min-h-[250px]" style={{ background: `linear-gradient(135deg, color-mix(in oklab, ${accent} 22%, white), color-mix(in oklab, ${accent} 8%, white))`, borderColor: `color-mix(in oklab, ${accent} 48%, #D1D5DB)` }} data-app={slug}>
                   <div className="pointer-events-none absolute inset-x-0 top-0 h-1.5" style={{ backgroundColor: accent }} />
                   <div className="relative mb-3 flex items-start gap-3">
                     <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl text-2xl" style={{ backgroundColor: `color-mix(in oklab, ${accent} 16%, transparent)` }}>{appRow?.emoji ?? "🚪"}</span>
