@@ -249,6 +249,7 @@ function TrilhaPage() {
                 <TrackAppCard
                   key={mini.id}
                   app={mini}
+                  academySlug={app.slug}
                   unlocked={isAdminUser || mini.gratuito || trackActive || !!extraAccessByApp[mini.id]}
                   extraExpiresAt={extraAccessByApp[mini.id] ?? null}
                   isAdmin={isAdminUser}
@@ -342,7 +343,7 @@ function TrilhaPage() {
   );
 }
 
-function TrackAppCard({ app, unlocked, extraExpiresAt, isAdmin, isPremium }: { app: MiniApp; unlocked: boolean; extraExpiresAt: string | null; isAdmin?: boolean; isPremium?: boolean }) {
+function TrackAppCard({ app, academySlug, unlocked, extraExpiresAt, isAdmin, isPremium }: { app: MiniApp; academySlug: string; unlocked: boolean; extraExpiresAt: string | null; isAdmin?: boolean; isPremium?: boolean }) {
   const savedRoute = app.route_path?.trim();
   const route = savedRoute?.startsWith("/") ? savedRoute : `/app/${app.slug}`;
   return (
@@ -374,14 +375,10 @@ function TrackAppCard({ app, unlocked, extraExpiresAt, isAdmin, isPremium }: { a
           <Link to={route} className={`block w-full rounded-xl py-2 text-center text-sm font-semibold ${isPremium ? 'bg-[#D4AF37] text-black hover:bg-[#C5A028]' : 'bg-primary text-primary-foreground'}`}>
             Acessar
           </Link>
-        ) : isMercadoPagoUrl(app.cakto_checkout_url) ? (
-          <a href={app.cakto_checkout_url!} target="_blank" rel="noreferrer" className="flex w-full items-center justify-center gap-1 rounded-xl gold-gradient py-2 text-sm font-bold text-foreground">
-            {extraExpiresAt ? "Renovar" : "Comprar avulso"} <ExternalLink className="h-3.5 w-3.5" />
-          </a>
         ) : (
-          <button disabled className="w-full cursor-not-allowed rounded-xl bg-foreground/10 py-2 text-sm font-semibold text-foreground/50">
-            Bloqueado
-          </button>
+          <Link to="/planos/$slug" params={{ slug: academySlug }} className="block w-full rounded-xl bg-emerald-600 py-2.5 text-center text-sm font-extrabold text-white shadow-md transition hover:bg-emerald-500">
+            QUERO MEU ACESSO →
+          </Link>
         )}
       </div>
     </div>
