@@ -10,9 +10,9 @@ import { useState } from "react";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Loja — Academia da Enfermagem | SAE e PE automatizados" },
+      { title: "Academia da Enfermagem | SAE e PE automatizados" },
       { name: "description", content: "Academia da Enfermagem: Módulos de Decisão Clínica e Motores Clínicos Automatizados para estudantes de técnico, técnicos, acadêmicos e enfermeiros. Acesso anual." },
-      { property: "og:title", content: "Loja — Academia da Enfermagem | SAE e PE automatizados" },
+      { property: "og:title", content: "Academia da Enfermagem | SAE e PE automatizados" },
       { property: "og:description", content: "Conheça as 6 Academias da Academia da Enfermagem, com conteúdos para formação e prática profissional." },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://academiadaenfermagem.com.br/" },
