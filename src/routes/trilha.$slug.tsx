@@ -353,16 +353,24 @@ function isManagedAcademy(slug: string) {
 function normalizeContentLabel(value: string | null | undefined) {
   return (value ?? "")
     .normalize("NFD")
-    .replace(/[\\u0300-\\u036f]/g, "")
+    .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, " ")
     .trim();
 }
 
 function isFreeByAcademy(mini: MiniApp, academySlug: string) {
-  const label = normalizeContentLabel(`${mini.name ?? ""} ${mini.slug ?? ""}`);
+  const label = normalizeContentLabel(`${mini.name ?? ""} ${mini.slug ?? ""} ${mini.description ?? ""} ${JSON.stringify((mini as any).badges ?? "")}`);
   const isSurviveInternship = label.includes("como sobreviver ao estagio") || label.includes("como sobreviver no estagio");
   const isAdultVitalSigns = label.includes("sinais vitais no adulto") || label.includes("sinais vitais adulto");
+  const clinicalScaleKeywords = [
+    "escala", "escalas", "braden", "morse", "glasgow", "rass", "ramsay",
+    "waterlow", "norton", "barthel", "apgar", "news", "qsofa", "sofa",
+    "downton", "humpty dumpty", "caprini", "padua", "richmond", "cam icu",
+    "cam icu", "nihss", "rankin", "katz", "lawton", "zarit", "aldrete",
+    "borg", "gcs", "mews", "fugulin", "perroca", "elpo", "maddox",
+  ];
+  const isClinicalScale = clinicalScaleKeywords.some((keyword) => label.includes(keyword));
 
   if (academySlug === "tecnico-estudante" || academySlug === "academico") {
     return isSurviveInternship;
@@ -370,9 +378,9 @@ function isFreeByAcademy(mini: MiniApp, academySlug: string) {
   if (academySlug === "tecnico") {
     return isAdultVitalSigns;
   }
-  // Na Academia do Enfermeiro, somente Escalas Clínicas fica gratuito.
+  // Na Academia do Enfermeiro, liberar gratuitamente as escalas clínicas individuais.
   if (academySlug === "enfermeiro") {
-    return label.includes("escala clinica") || label.includes("escalas clinicas");
+    return isClinicalScale;
   }
   return false;
 }
@@ -448,4 +456,3 @@ function MeuEstagioCard() {
     </Card>
   );
 }
-
