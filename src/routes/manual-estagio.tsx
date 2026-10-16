@@ -5,6 +5,7 @@ import { Instagram, Lock, Sparkles, FileText, Calculator, Award } from "lucide-r
 import { supabase } from "@/integrations/supabase/client";
 import { ContentProtection } from "@/components/ContentProtection";
 import { Card, PageHeader } from "@/components/AppShell";
+import manualBanner from "@/assets/manual-banner.png";
 
 const URL = "https://academiadaenfermagem.com.br/manual-estagio";
 const TITLE = "Manual de Estágio — O Mundo da Enfermagem";
@@ -78,6 +79,10 @@ function Portaria({ onDone }: { onDone: () => void }) {
 
   return (
     <div className="mx-auto max-w-2xl py-4">
+      <div className="relative mb-8 overflow-hidden rounded-3xl border-4 border-gold shadow-2xl">
+        <img src={manualBanner} alt="Manual de Sobrevivência no Estágio — O Mundo da Enfermagem, 100% grátis" width={1600} height={900} className="w-full" />
+        <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-gold/30" />
+      </div>
       <div className="relative mb-8 overflow-hidden rounded-3xl border-4 border-gold bg-primary px-6 py-10 text-center text-primary-foreground shadow-2xl">
         <div className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-gold/30 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-20 -left-16 h-56 w-56 rounded-full bg-gold/20 blur-3xl" />
