@@ -77,15 +77,32 @@ function Portaria({ onDone }: { onDone: () => void }) {
   }
 
   return (
-    <div className="mx-auto max-w-lg py-6">
-      <div className="mb-6 text-center">
-        <p className="text-xs font-bold uppercase tracking-widest text-gold">O Mundo da Enfermagem</p>
-        <h1 className="mt-2 font-display text-3xl font-bold">Manual de Sobrevivência no Estágio</h1>
-        <p className="mt-3 text-muted-foreground">
-          O que ninguém te conta antes do primeiro dia de campo. Acesso reservado — libere o seu em 30 segundos.
-        </p>
+    <div className="mx-auto max-w-2xl py-4">
+      <div className="relative mb-8 overflow-hidden rounded-3xl border-4 border-gold bg-primary px-6 py-10 text-center text-primary-foreground shadow-2xl">
+        <div className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-gold/30 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-20 -left-16 h-56 w-56 rounded-full bg-gold/20 blur-3xl" />
+        <div className="relative">
+          <span className="inline-block -rotate-2 animate-pulse rounded-full bg-gold px-5 py-1.5 text-sm font-black uppercase tracking-widest text-foreground shadow-lg">
+            🎁 Presente 100% grátis
+          </span>
+          <p className="mt-5 text-xs font-black uppercase tracking-[0.3em] text-gold">O Mundo da Enfermagem</p>
+          <h1 className="mt-2 font-display text-4xl font-black uppercase leading-[0.95] md:text-6xl">
+            Não pise no estágio <span className="text-gold">sem isto.</span>
+          </h1>
+          <p className="mx-auto mt-5 max-w-md text-lg font-semibold opacity-90">
+            O Manual de Sobrevivência no Estágio: tudo o que ninguém te conta antes do primeiro dia de campo.
+          </p>
+          <ul className="mx-auto mt-6 grid max-w-md gap-2 text-left text-sm font-bold">
+            {["Postura que o preceptor quer ver", "Segurança do paciente sem errar", "Passagem de plantão ISBAR na prática", "Os erros que reprovam no campo"].map((t) => (
+              <li key={t} className="flex items-center gap-2 rounded-lg bg-background/10 px-3 py-2">
+                <span className="text-gold">✔</span> {t}
+              </li>
+            ))}
+          </ul>
+          <p className="mt-6 text-sm font-black uppercase tracking-wider text-gold">⬇ Libere o seu agora, em 30 segundos ⬇</p>
+        </div>
       </div>
-      <Card>
+      <Card className="border-4 border-gold shadow-2xl">
         <form onSubmit={enviar} className="space-y-4">
           <label className="block text-sm font-medium">Seu nome
             <input value={nome} onChange={(e) => setNome(e.target.value)} maxLength={100}
@@ -118,8 +135,8 @@ function Portaria({ onDone }: { onDone: () => void }) {
           )}
           {erro && <p className="text-sm text-destructive">{erro}</p>}
           <button disabled={enviando || !seguiu || falta > 0}
-            className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 font-bold text-primary-foreground disabled:opacity-60">
-            <Lock className="h-4 w-4" /> {enviando ? "Liberando..." : seguiu && falta === 0 ? "✓ Perfil validado! Liberar meu Manual" : "Liberar meu Manual"}
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-4 text-lg font-black uppercase text-primary-foreground shadow-lg transition-transform enabled:hover:scale-[1.02] disabled:opacity-60">
+            <Lock className="h-5 w-5" /> {enviando ? "Liberando..." : seguiu && falta === 0 ? "✓ Perfil validado! Quero meu presente" : "Quero meu Manual grátis"}
           </button>
         </form>
       </Card>
