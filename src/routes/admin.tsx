@@ -10,6 +10,7 @@ import { SubscriptionsAdmin } from "@/components/admin/SubscriptionsAdmin";
 import { UsersAdmin } from "@/components/admin/UsersAdmin";
 import { TextsAdmin } from "@/components/admin/TextsAdmin";
 import { BadgesEditor } from "@/components/admin/BadgesEditor";
+import { LeadsAlert } from "@/components/admin/LeadsAlert";
 import { SubtopicsAdmin } from "@/components/admin/SubtopicsAdmin";
 import { AppsAdmin } from "@/components/admin/AppsAdmin";
 import { fetchApps } from "@/lib/apps";
@@ -242,6 +243,9 @@ function AdminContent() {
         title="Academia da Enfermagem"
         description="Gerencie os Mini Apps e conteúdos técnicos de cada aplicativo separadamente."
       />
+
+      <LeadsAlert />
+
 
       <div className="mb-4 flex flex-wrap gap-2 rounded-xl bg-foreground/5 p-1 text-sm font-semibold">
         <button
