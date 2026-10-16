@@ -20,6 +20,7 @@ import BeneficiosPlano from "@/components/conta/BeneficiosPlano";
 import ComparativoUpgrade from "@/components/conta/ComparativoUpgrade";
 import { CertificadoFAQ } from "@/components/CertificadoFAQ";
 import MinhasMensagens from "@/components/conta/MinhasMensagens";
+import { FeedbackCollector } from "@/components/FeedbackCollector";
 
 
 
@@ -85,6 +86,19 @@ function MinhaContaPage() {
       />
 
       <MinhasMensagens />
+
+      <section className="mb-6 rounded-2xl border border-emerald-700/20 bg-emerald-950/[0.03] p-4 sm:p-5">
+        <div className="mb-3 flex items-center gap-3">
+          <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-emerald-800 text-amber-300">
+            <span aria-hidden="true" className="text-xl">💬</span>
+          </div>
+          <div>
+            <h2 className="font-display text-lg font-extrabold">Sua experiência importa</h2>
+            <p className="text-sm text-muted-foreground">Envie seu feedback ou consulte suas avaliações anteriores nesta área.</p>
+          </div>
+        </div>
+        <FeedbackCollector />
+      </section>
 
       {mySubs.length > 0 && (
         <section className="mb-6">
