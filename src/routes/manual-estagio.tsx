@@ -180,6 +180,7 @@ function Conteudo() {
     const mapa: Array<[string, string]> = [
       ["isbar", "topico-isbar"],
       ["passagem de plantão", "topico-isbar"],
+      ["primeiro", "topico-primeiro-dia"],
       ["postura", "topico-postura"],
       ["relacionamento", "topico-relacionamento"],
       ["técnicas", "topico-tecnicas"],
@@ -200,6 +201,26 @@ function Conteudo() {
       const alvo = document.getElementById(hash.slice(1));
       if (alvo) alvo.scrollIntoView({ behavior: "smooth", block: "start" });
     }
+    const chips: Array<[RegExp, string]> = [
+      [/Postura e Conduta/, "topico-postura"],
+      [/Técnicas Essenciais/, "topico-tecnicas"],
+      [/Relacionamento com Equipe/, "topico-relacionamento"],
+      [/Segurança do Paciente/, "topico-seguranca"],
+      [/Primeiro Plantão/, "topico-primeiro-dia"],
+    ];
+    el.querySelectorAll("span").forEach((s) => {
+      const t = s.textContent || "";
+      for (const [re, id] of chips) {
+        if (re.test(t) && document.getElementById(id) && !s.closest("a")) {
+          const a = document.createElement("a");
+          a.href = `#${id}`;
+          a.style.cursor = "pointer";
+          s.parentNode?.insertBefore(a, s);
+          a.appendChild(s);
+          break;
+        }
+      }
+    });
   }, [html]);
   const pontes = [
     { icon: FileText, t: "Diário de Bordo em ABNT", d: "Seu relatório de estágio organizado enquanto você vive o plantão." },
