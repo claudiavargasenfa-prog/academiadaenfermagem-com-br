@@ -43,7 +43,11 @@ function Shell({ children }: { children: React.ReactNode }) {
 
 function Page() {
   const [ok, setOk] = useState<boolean | null>(null);
-  useEffect(() => setOk(localStorage.getItem(KEY) === "1"), []);
+  useEffect(() => {
+    // ?novo=1 mostra a tela de cadastro de novo (para testar como visitante novo)
+    if (new URLSearchParams(window.location.search).has("novo")) localStorage.removeItem(KEY);
+    setOk(localStorage.getItem(KEY) === "1");
+  }, []);
   if (ok === null) return <Shell><div className="py-20" /></Shell>;
   return <Shell>{ok ? <Conteudo /> : <Portaria onDone={() => setOk(true)} />}</Shell>;
 }
@@ -231,6 +235,8 @@ function Conteudo() {
     <ContentProtection allowPrint>
       <PageHeader eyebrow="O Mundo da Enfermagem" title="Manual de Sobrevivência no Estágio"
         description="Seu acesso está liberado. Bom estágio!" />
+      <button type="button" onClick={() => { localStorage.removeItem(KEY); window.location.reload(); }}
+        className="mb-4 text-xs text-muted-foreground underline">Ver a tela de cadastro novamente</button>
       {html === null ? <p className="py-10 text-center text-muted-foreground">Carregando...</p> : <div className="manual-conteudo overflow-x-auto" dangerouslySetInnerHTML={{ __html: html }} />}
       <Card className="mt-6">
         <div className="mb-3 flex items-center gap-2 text-gold"><Sparkles className="h-5 w-5" />
