@@ -370,9 +370,9 @@ function isFreeByAcademy(mini: MiniApp, academySlug: string) {
   if (academySlug === "tecnico") {
     return isAdultVitalSigns;
   }
-  // Na Academia do Enfermeiro, nenhum conteúdo é gratuito por padrão.
+  // Na Academia do Enfermeiro, somente Escalas Clínicas fica gratuito.
   if (academySlug === "enfermeiro") {
-    return false;
+    return label.includes("escala clinica") || label.includes("escalas clinicas");
   }
   return false;
 }
