@@ -141,15 +141,8 @@ function Portaria({ onDone }: { onDone: () => void }) {
             href={INSTAGRAM}
             target="_blank"
             rel="noopener noreferrer"
-            onClick={(e) => {
+            onClick={() => {
               if (!seguiu) { setSeguiu(true); setFalta(18); }
-              // Na prévia (dentro de um quadro), a abertura em nova aba pode ser bloqueada:
-              // força a abertura por script e, se falhar, navega na própria aba.
-              if (window.self !== window.top) {
-                e.preventDefault();
-                const w = window.open(INSTAGRAM, "_blank", "noopener,noreferrer");
-                if (!w) window.location.href = INSTAGRAM;
-              }
             }}
             className="flex cursor-pointer items-center justify-center gap-2 rounded-xl border-2 border-gold px-4 py-3 font-bold">
             <Instagram className="h-5 w-5" /> {seguiu ? "@enfnapraticaoficial" : "Seguir @enfnapraticaoficial no Instagram"}
