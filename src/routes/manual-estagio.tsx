@@ -53,6 +53,12 @@ function Portaria({ onDone }: { onDone: () => void }) {
   const [whats, setWhats] = useState("");
   const [perfil, setPerfil] = useState("estudante_tecnico");
   const [seguiu, setSeguiu] = useState(false);
+  const [falta, setFalta] = useState(0);
+  useEffect(() => {
+    if (falta <= 0) return;
+    const t = setTimeout(() => setFalta((f) => f - 1), 1000);
+    return () => clearTimeout(t);
+  }, [falta]);
   const [erro, setErro] = useState("");
   const [enviando, setEnviando] = useState(false);
 
@@ -97,14 +103,23 @@ function Portaria({ onDone }: { onDone: () => void }) {
               <option value="profissional">Profissional formado(a)</option>
             </select>
           </label>
-          <a href={INSTAGRAM} target="_blank" rel="noopener noreferrer" onClick={() => setSeguiu(true)}
+          <a href={INSTAGRAM} target="_blank" rel="noopener noreferrer" onClick={() => { if (!seguiu) { setSeguiu(true); setFalta(18); } }}
             className="flex items-center justify-center gap-2 rounded-xl border-2 border-gold px-4 py-3 font-bold">
-            <Instagram className="h-5 w-5" /> {seguiu ? "✓ Seguindo @enfnapraticaoficial" : "1º passo: seguir @enfnapraticaoficial"}
+            <Instagram className="h-5 w-5" /> {seguiu ? "@enfnapraticaoficial" : "Seguir @enfnapraticaoficial no Instagram"}
           </a>
+          {seguiu && falta > 0 && (
+            <div className="rounded-xl border border-gold/50 bg-gold/10 p-3 text-sm">
+              <p className="font-semibold">⏳ Conferindo novo seguidor em @enfnapraticaoficial... {falta}s</p>
+              <p className="mt-1 text-muted-foreground">Ainda não detectamos o seu perfil. Abra o Instagram, clique em SEGUIR e aguarde a validação.</p>
+              <div className="mt-2 h-2 overflow-hidden rounded-full bg-muted">
+                <div className="h-full bg-gold transition-all duration-1000" style={{ width: `${((18 - falta) / 18) * 100}%` }} />
+              </div>
+            </div>
+          )}
           {erro && <p className="text-sm text-destructive">{erro}</p>}
-          <button disabled={enviando}
+          <button disabled={enviando || !seguiu || falta > 0}
             className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 font-bold text-primary-foreground disabled:opacity-60">
-            <Lock className="h-4 w-4" /> {enviando ? "Liberando..." : "Liberar meu Manual"}
+            <Lock className="h-4 w-4" /> {enviando ? "Liberando..." : seguiu && falta === 0 ? "✓ Perfil validado! Liberar meu Manual" : "Liberar meu Manual"}
           </button>
         </form>
       </Card>
