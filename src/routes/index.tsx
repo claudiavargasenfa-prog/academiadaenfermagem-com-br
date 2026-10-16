@@ -203,10 +203,10 @@ function StoreHomeContent() {
               }
 
               return (
-                <div key={plan.id} className="group relative flex min-h-[230px] flex-col overflow-hidden rounded-2xl border p-5 shadow-[0_8px_24px_rgba(0,0,0,0.18)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_14px_30px_rgba(0,0,0,0.28)] md:min-h-[250px]" style={{ backgroundColor: "#101D23", borderColor: "rgba(52,211,153,0.42)", color: "#E5E7EB" }} data-app={slug}>
+                <div key={plan.id} className="group relative flex min-h-[230px] flex-col overflow-hidden rounded-2xl border p-5 shadow-[0_8px_24px_rgba(0,0,0,0.18)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_14px_30px_rgba(0,0,0,0.28)] md:min-h-[250px]" style={{ backgroundColor: "#102A27", borderColor: "rgba(83,174,143,0.48)", color: "#F1F5F3" }} data-app={slug}>
                   <div className="relative mb-3 flex items-start gap-3">
-                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-xl" style={{ color: "#54D6B0", backgroundColor: "rgba(52,211,153,0.08)" }}>{appRow?.emoji ?? "📚"}</span>
-                    <h3 className="font-display pt-0.5 text-base font-black leading-snug tracking-tight" style={{ color: "#F4C34E" }}>{plan.name}</h3>
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-xl" style={{ color: "#D9B86C", backgroundColor: "rgba(217,184,108,0.10)" }}>{appRow?.emoji ?? "📚"}</span>
+                    <h3 className="font-display pt-0.5 text-base font-black leading-snug tracking-tight" style={{ color: "#D9B86C" }}>{plan.name}</h3>
                   </div>
                   <PlanSlogan slug={slug} />
                   <AcademyAudience slug={slug} />
@@ -214,11 +214,11 @@ function StoreHomeContent() {
                   <div className="relative mt-auto space-y-2 pt-4">
                     {subscribed ? (
                       <>
-                        <Link to="/trilha/$slug" params={{ slug }} className="block w-full rounded-xl bg-gradient-to-r from-orange-500 to-rose-500 py-3 text-center text-sm font-black uppercase tracking-wider text-background shadow-lg transition-transform active:scale-95 hover:scale-[1.02]">Acessar agora →</Link>
+                        <Link to="/trilha/$slug" params={{ slug }} className="block w-full rounded-xl bg-emerald-600 py-3 text-center text-sm font-black uppercase tracking-wider text-white shadow-md shadow-emerald-950/20 transition-all active:scale-95 hover:scale-[1.02] hover:bg-emerald-500">Acessar agora →</Link>
                         <span className="block text-center text-xs font-bold text-primary">{inTrial ? `🎁 Trial ativo · até ${new Date(sub?.expires_at ?? "").toLocaleDateString("pt-BR")}` : "✓ Acesso ativo"}</span>
                       </>
                     ) : (
-                      <Link to="/trilha/$slug" params={{ slug }} className="group/btn block w-full rounded-xl bg-gradient-to-r from-orange-500 to-rose-500 py-3 text-center text-sm font-black uppercase tracking-wider text-background shadow-lg transition-all active:scale-95 hover:scale-[1.02]">
+                      <Link to="/trilha/$slug" params={{ slug }} className="group/btn block w-full rounded-xl bg-emerald-600 py-3 text-center text-sm font-black uppercase tracking-wider text-white shadow-md shadow-emerald-950/20 transition-all active:scale-95 hover:scale-[1.02] hover:bg-emerald-500">
                         <span className="inline-block transition-transform group-hover/btn:translate-x-1">Veja o conteúdo →</span>
                       </Link>
                     )}
