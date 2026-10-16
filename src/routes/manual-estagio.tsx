@@ -82,40 +82,47 @@ function Portaria({ onDone }: { onDone: () => void }) {
 
   return (
     <div className="mx-auto max-w-2xl py-4">
-      <div className="relative mb-8 overflow-hidden rounded-[2rem] border-2 border-[#D9B64C] bg-[#003F25] px-5 py-8 text-center text-white shadow-[0_24px_60px_rgba(0,48,28,0.28)] sm:px-8 sm:py-10">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_85%_12%,rgba(217,182,76,0.22),transparent_30%),radial-gradient(circle_at_8%_100%,rgba(37,135,79,0.4),transparent_38%)]" />
-        <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-[#F2D778] to-transparent" />
-        <div className="relative mx-auto max-w-3xl">
-          <span className="inline-flex -rotate-1 items-center rounded-full border border-[#D9B64C]/70 bg-[#D9B64C] px-5 py-1.5 text-xs font-black uppercase tracking-[0.18em] text-[#073923] shadow-md sm:text-sm">
-            🎁 Presente 100% grátis
-          </span>
-          <p className="mt-5 text-xs font-extrabold uppercase tracking-[0.28em] text-[#F2D778]">O Mundo da Enfermagem</p>
-          <h1 className="mt-3 font-display text-3xl font-black uppercase leading-[0.98] tracking-tight sm:text-5xl md:text-6xl">
-            Não pise no estágio <span className="text-[#F2C94C]">sem isto.</span>
-          </h1>
-          <p className="mx-auto mt-5 max-w-2xl text-base font-medium leading-relaxed text-white/85 sm:text-lg">
-            O Manual de Sobrevivência no Estágio: tudo o que ninguém te conta antes do primeiro dia de campo.
-          </p>
-          <div className="mx-auto mt-7 max-w-2xl">
-            <p className="mb-3 text-xs font-extrabold uppercase tracking-[0.22em] text-[#F2D778]">Dentro do manual</p>
-            <ul className="grid gap-2 text-left text-sm font-semibold sm:grid-cols-2">
-              {[
-                { t: "Postura que o preceptor quer ver", href: "#topico-postura" },
-                { t: "Relacionamento com paciente e família", href: "#topico-relacionamento" },
-                { t: "Técnicas essenciais e cálculos", href: "#topico-tecnicas" },
-                { t: "Segurança do paciente sem errar", href: "#topico-seguranca" },
-                { t: "Passagem de plantão ISBAR na prática", href: "#topico-isbar" },
-                { t: "Os erros que reprovam no campo", href: "#topico-erros" },
-              ].map((i) => (
-                <li key={i.href}>
-                  <a href={i.href} className="flex min-h-11 items-center gap-2 rounded-xl border border-white/10 bg-white/[0.08] px-3 py-2.5 transition-colors hover:border-[#D9B64C]/70 hover:bg-[#D9B64C]/15">
-                    <span className="font-black text-[#F2C94C]">✓</span> {i.t}
-                  </a>
-                </li>
-              ))}
-            </ul>
+      <div className="relative mb-8 overflow-hidden rounded-[1.75rem] border-2 border-[#D9B64C] bg-[#003F25] text-white shadow-[0_22px_55px_rgba(0,48,28,0.3)]">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_90%_0%,rgba(217,182,76,0.24),transparent_34%),radial-gradient(ellipse_at_0%_100%,rgba(45,145,87,0.42),transparent_45%)]" />
+        <div className="pointer-events-none absolute right-[-3rem] top-[-4rem] h-48 w-48 rounded-full border border-[#F2D778]/20 sm:right-[-2rem] sm:top-[-5rem] sm:h-64 sm:w-64" />
+        <div className="pointer-events-none absolute right-[-1.5rem] top-[-2.5rem] h-36 w-36 rounded-full border border-[#F2D778]/15 sm:right-0 sm:top-[-3.5rem] sm:h-48 sm:w-48" />
+        <div className="relative mx-auto max-w-4xl px-5 py-8 sm:px-10 sm:py-11">
+          <div className="flex flex-col items-center text-center">
+            <span className="inline-flex items-center rounded-full bg-[#D9B64C] px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-[#073923] shadow-md sm:text-xs">
+              🎁 Presente 100% grátis
+            </span>
+            <p className="mt-5 text-[10px] font-extrabold uppercase tracking-[0.3em] text-[#F2D778] sm:text-xs">O Mundo da Enfermagem</p>
+            <h1 className="mt-3 max-w-3xl font-display text-3xl font-black uppercase leading-[0.98] tracking-tight sm:text-5xl md:text-6xl">
+              Não pise no estágio <span className="text-[#F2C94C]">sem isto.</span>
+            </h1>
+            <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-white/85 sm:mt-5 sm:text-lg">
+              O manual de sobrevivência que você precisa antes do primeiro dia de campo.
+            </p>
+            <div className="mt-7 w-full max-w-3xl">
+              <p className="mb-3 text-[10px] font-extrabold uppercase tracking-[0.22em] text-[#F2D778] sm:text-xs">O que você vai encontrar</p>
+              <ul className="grid gap-2 sm:grid-cols-2">
+                {[
+                  { t: "Postura que o preceptor quer ver", href: "#topico-postura" },
+                  { t: "Relacionamento com paciente e família", href: "#topico-relacionamento" },
+                  { t: "Técnicas essenciais e cálculos", href: "#topico-tecnicas" },
+                  { t: "Segurança do paciente sem errar", href: "#topico-seguranca" },
+                  { t: "Passagem de plantão ISBAR na prática", href: "#topico-isbar" },
+                  { t: "Os erros que reprovam no campo", href: "#topico-erros" },
+                ].map((i, index) => (
+                  <li key={i.href}>
+                    <a href={i.href} className="group flex min-h-[48px] items-center gap-3 rounded-xl border border-white/15 bg-[#075333]/75 px-3 py-3 text-left text-xs font-bold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:border-[#F2D778] hover:bg-[#0A6040] sm:text-sm">
+                      <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full border border-[#F2D778]/50 bg-[#D9B64C]/10 text-xs font-black text-[#F2D778]">{String(index + 1).padStart(2, "0")}</span>
+                      <span className="flex-1">{i.t}</span>
+                      <span className="text-base text-[#F2D778] transition-transform group-hover:translate-x-1">↗</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <p className="mt-7 inline-flex items-center gap-2 rounded-full border border-[#F2D778]/35 bg-black/10 px-4 py-2 text-[10px] font-extrabold uppercase tracking-[0.12em] text-[#F2D778] sm:text-xs">
+              <span>↓</span> Libere seu manual gratuito em cerca de 30 segundos
+            </p>
           </div>
-          <p className="mt-7 text-xs font-black uppercase tracking-[0.14em] text-[#F2D778] sm:text-sm">↓ Libere seu manual gratuito em cerca de 30 segundos ↓</p>
         </div>
       </div>
       <Card className="border-4 border-gold shadow-2xl">
