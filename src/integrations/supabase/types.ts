@@ -341,6 +341,30 @@ export type Database = {
         }
         Relationships: []
       }
+      manual_leads: {
+        Row: {
+          created_at: string
+          id: string
+          nome: string
+          perfil: string
+          whatsapp: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          nome: string
+          perfil: string
+          whatsapp: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          nome?: string
+          perfil?: string
+          whatsapp?: string
+        }
+        Relationships: []
+      }
       mini_app_placements: {
         Row: {
           app_id: string
