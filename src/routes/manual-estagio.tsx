@@ -140,8 +140,11 @@ function Portaria({ onDone }: { onDone: () => void }) {
             href={INSTAGRAM}
             target="_blank"
             rel="noopener noreferrer"
-            onClick={() => {
+            onClick={(e) => {
+              e.preventDefault();
               if (!seguiu) { setSeguiu(true); setFalta(18); }
+              const w = window.open(INSTAGRAM, "_blank", "noopener,noreferrer");
+              if (!w) { try { (window.top ?? window).location.href = INSTAGRAM; } catch { window.open(INSTAGRAM, "_blank"); } }
             }}
             className="flex cursor-pointer items-center justify-center gap-2 rounded-xl border-2 border-gold px-4 py-3 font-bold">
             <Instagram className="h-5 w-5" /> {seguiu ? "@enfnapraticaoficial" : "Seguir @enfnapraticaoficial no Instagram"}
@@ -229,7 +232,7 @@ function Conteudo() {
     <ContentProtection allowPrint>
       <PageHeader eyebrow="O Mundo da Enfermagem" title="Manual de Sobrevivência no Estágio"
         description="Seu acesso está liberado. Bom estágio!" />
-      <button type="button" onClick={() => { sessionStorage.removeItem(KEY); window.location.reload(); }}
+      <button type="button" onClick={() => { localStorage.removeItem(KEY); window.location.reload(); }}
         className="mb-4 text-xs text-muted-foreground underline">Ver a tela de cadastro novamente</button>
       {html === null ? <p className="py-10 text-center text-muted-foreground">Carregando...</p> : <div className="manual-conteudo overflow-x-auto" dangerouslySetInnerHTML={{ __html: html }} />}
       <Card className="mt-6">
