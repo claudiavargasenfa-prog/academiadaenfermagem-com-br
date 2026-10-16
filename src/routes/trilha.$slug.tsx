@@ -250,7 +250,7 @@ function TrilhaPage() {
                   key={mini.id}
                   app={mini}
                   academySlug={app.slug}
-                  unlocked={isAdminUser || mini.gratuito || trackActive || !!extraAccessByApp[mini.id]}
+                  unlocked={isAdminUser || isFreeByAcademy(mini, app.slug) || (!isManagedAcademy(app.slug) && mini.gratuito) || trackActive || !!extraAccessByApp[mini.id]}
                   extraExpiresAt={extraAccessByApp[mini.id] ?? null}
                   isAdmin={isAdminUser}
                   isPremium={isPremium}
@@ -341,6 +341,40 @@ function TrilhaPage() {
       )}
     </AppShell>
   );
+}
+
+
+const MANAGED_ACADEMY_SLUGS = new Set(["tecnico-estudante", "academico", "tecnico", "enfermeiro"]);
+
+function isManagedAcademy(slug: string) {
+  return MANAGED_ACADEMY_SLUGS.has(slug);
+}
+
+function normalizeContentLabel(value: string | null | undefined) {
+  return (value ?? "")
+    .normalize("NFD")
+    .replace(/[\\u0300-\\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
+}
+
+function isFreeByAcademy(mini: MiniApp, academySlug: string) {
+  const label = normalizeContentLabel(`${mini.name ?? ""} ${mini.slug ?? ""}`);
+  const isSurviveInternship = label.includes("como sobreviver ao estagio") || label.includes("como sobreviver no estagio");
+  const isAdultVitalSigns = label.includes("sinais vitais no adulto") || label.includes("sinais vitais adulto");
+
+  if (academySlug === "tecnico-estudante" || academySlug === "academico") {
+    return isSurviveInternship;
+  }
+  if (academySlug === "tecnico") {
+    return isAdultVitalSigns;
+  }
+  // Na Academia do Enfermeiro, nenhum conteúdo é gratuito por padrão.
+  if (academySlug === "enfermeiro") {
+    return false;
+  }
+  return false;
 }
 
 function TrackAppCard({ app, academySlug, unlocked, extraExpiresAt, isAdmin, isPremium }: { app: MiniApp; academySlug: string; unlocked: boolean; extraExpiresAt: string | null; isAdmin?: boolean; isPremium?: boolean }) {
