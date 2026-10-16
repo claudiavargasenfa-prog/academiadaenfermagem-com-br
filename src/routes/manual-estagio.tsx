@@ -5,7 +5,6 @@ import { Instagram, Lock, Sparkles, FileText, Calculator, Award } from "lucide-r
 import { supabase } from "@/integrations/supabase/client";
 import { ContentProtection } from "@/components/ContentProtection";
 import { Card, PageHeader } from "@/components/AppShell";
-import manualBanner from "@/assets/manual-banner.png";
 
 const URL = "https://academiadaenfermagem.com.br/manual-estagio";
 const TITLE = "Manual de Estágio — O Mundo da Enfermagem";
@@ -79,11 +78,8 @@ function Portaria({ onDone }: { onDone: () => void }) {
 
   return (
     <div className="mx-auto max-w-2xl py-4">
-      <div className="relative mb-8 overflow-hidden rounded-3xl border-4 border-gold shadow-2xl">
-        <img src={manualBanner} alt="Manual de Sobrevivência no Estágio — O Mundo da Enfermagem, 100% grátis" width={1600} height={900} className="w-full" />
-        <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-inset ring-gold/30" />
-      </div>
       <div className="relative mb-8 overflow-hidden rounded-3xl border-4 border-gold bg-primary px-6 py-10 text-center text-primary-foreground shadow-2xl">
+        <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-transparent via-gold to-transparent" />
         <div className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-gold/30 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-20 -left-16 h-56 w-56 rounded-full bg-gold/20 blur-3xl" />
         <div className="relative">
@@ -97,10 +93,20 @@ function Portaria({ onDone }: { onDone: () => void }) {
           <p className="mx-auto mt-5 max-w-md text-lg font-semibold opacity-90">
             O Manual de Sobrevivência no Estágio: tudo o que ninguém te conta antes do primeiro dia de campo.
           </p>
-          <ul className="mx-auto mt-6 grid max-w-md gap-2 text-left text-sm font-bold">
-            {["Postura que o preceptor quer ver", "Segurança do paciente sem errar", "Passagem de plantão ISBAR na prática", "Os erros que reprovam no campo"].map((t) => (
-              <li key={t} className="flex items-center gap-2 rounded-lg bg-background/10 px-3 py-2">
-                <span className="text-gold">✔</span> {t}
+          <p className="mt-5 text-xs font-black uppercase tracking-widest text-gold/90">Dentro do manual</p>
+          <ul className="mx-auto mt-2 grid max-w-md gap-2 text-left text-sm font-bold">
+            {[
+              { t: "Postura que o preceptor quer ver", href: "#topico-postura" },
+              { t: "Relacionamento com paciente e família", href: "#topico-relacionamento" },
+              { t: "Técnicas essenciais e cálculos", href: "#topico-tecnicas" },
+              { t: "Segurança do paciente sem errar", href: "#topico-seguranca" },
+              { t: "Passagem de plantão ISBAR na prática", href: "#topico-isbar" },
+              { t: "Os erros que reprovam no campo", href: "#topico-erros" },
+            ].map((i) => (
+              <li key={i.href}>
+                <a href={i.href} className="flex items-center gap-2 rounded-lg bg-background/10 px-3 py-2 transition-colors hover:bg-gold/20">
+                  <span className="text-gold">✔</span> {i.t}
+                </a>
               </li>
             ))}
           </ul>
