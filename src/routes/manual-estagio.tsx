@@ -4,8 +4,7 @@ import { z } from "zod";
 import { Instagram, Lock, Sparkles, FileText, Calculator, Award } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { ContentProtection } from "@/components/ContentProtection";
-import { AppShell, Card, PageHeader } from "@/components/AppShell";
-import { MiniAppContent } from "@/components/MiniAppContent";
+import { Card, PageHeader } from "@/components/AppShell";
 
 const URL = "https://academiadaenfermagem.com.br/manual-estagio";
 const TITLE = "Manual de Estágio — O Mundo da Enfermagem";
@@ -38,11 +37,15 @@ const schema = z.object({
   perfil: z.enum(["estudante_tecnico", "academico", "profissional"]),
 });
 
+function Shell({ children }: { children: React.ReactNode }) {
+  return <main className="mx-auto min-h-screen max-w-4xl px-4 py-6">{children}</main>;
+}
+
 function Page() {
   const [ok, setOk] = useState<boolean | null>(null);
   useEffect(() => setOk(localStorage.getItem(KEY) === "1"), []);
-  if (ok === null) return <AppShell><div className="py-20" /></AppShell>;
-  return <AppShell>{ok ? <Conteudo /> : <Portaria onDone={() => setOk(true)} />}</AppShell>;
+  if (ok === null) return <Shell><div className="py-20" /></Shell>;
+  return <Shell>{ok ? <Conteudo /> : <Portaria onDone={() => setOk(true)} />}</Shell>;
 }
 
 function Portaria({ onDone }: { onDone: () => void }) {
@@ -110,6 +113,10 @@ function Portaria({ onDone }: { onDone: () => void }) {
 }
 
 function Conteudo() {
+  const [html, setHtml] = useState<string | null>(null);
+  useEffect(() => {
+    supabase.rpc("get_manual_estagio_content").then(({ data }) => setHtml((data as string) ?? ""));
+  }, []);
   const pontes = [
     { icon: FileText, t: "Diário de Bordo em ABNT", d: "Seu relatório de estágio organizado enquanto você vive o plantão." },
     { icon: Calculator, t: "Motores de Cálculo Clínico", d: "Gotejamento, diluição e dose por peso em segundos." },
@@ -119,7 +126,7 @@ function Conteudo() {
     <ContentProtection allowPrint>
       <PageHeader eyebrow="O Mundo da Enfermagem" title="Manual de Sobrevivência no Estágio"
         description="Seu acesso está liberado. Bom estágio!" />
-      <MiniAppContent slug="manual-sobrevivencia" />
+      {html === null ? <p className="py-10 text-center text-muted-foreground">Carregando...</p> : <div className="manual-conteudo overflow-x-auto" dangerouslySetInnerHTML={{ __html: html }} />}
       <Card className="mt-6">
         <div className="mb-3 flex items-center gap-2 text-gold"><Sparkles className="h-5 w-5" />
           <h2 className="font-display text-lg font-bold text-foreground">Isso é só a porta de entrada</h2></div>
