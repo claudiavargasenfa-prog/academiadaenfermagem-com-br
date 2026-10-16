@@ -274,11 +274,11 @@ function StoreHomeContent() {
                   <div className="relative mt-auto space-y-2 pt-4">
                     {subscribed ? (
                       <>
-                        <Link to="/trilha/$slug" params={{ slug }} className="block w-full rounded-xl bg-emerald-600 py-3 text-center text-sm font-black uppercase tracking-wider text-white shadow-md shadow-emerald-950/20 transition-all active:scale-95 hover:scale-[1.02] hover:bg-emerald-500">Acessar agora →</Link>
+                        <Link to="/trilha/$slug" params={{ slug }} className="block w-full rounded-xl bg-emerald-600 py-3 text-center text-sm font-black normal-case tracking-normal text-white shadow-md shadow-emerald-950/20 transition-all active:scale-95 hover:scale-[1.02] hover:bg-emerald-500">Acessar agora →</Link>
                         <span className="block text-center text-xs font-bold text-primary">{inTrial ? `🎁 Trial ativo · até ${new Date(sub?.expires_at ?? "").toLocaleDateString("pt-BR")}` : "✓ Acesso ativo"}</span>
                       </>
                     ) : (
-                      <Link to="/trilha/$slug" params={{ slug }} className="group/btn block w-full rounded-xl bg-emerald-600 py-3 text-center text-sm font-black uppercase tracking-wider text-white shadow-md shadow-emerald-950/20 transition-all active:scale-95 hover:scale-[1.02] hover:bg-emerald-500">
+                      <Link to="/trilha/$slug" params={{ slug }} className="group/btn block w-full rounded-xl bg-emerald-600 py-3 text-center text-sm font-black normal-case tracking-normal text-white shadow-md shadow-emerald-950/20 transition-all active:scale-95 hover:scale-[1.02] hover:bg-emerald-500">
                         <span className="inline-block transition-transform group-hover/btn:translate-x-1">Veja o conteúdo →</span>
                       </Link>
                     )}
@@ -309,6 +309,6 @@ function AcademyAudience({ slug }: { slug: string }) {
 function PlanSlogan({ slug }: { slug: string }) {
   const txt = useText(`aplicativo.${slug}.slogan`, "");
   if (!txt.trim()) return null;
-  return <p className="mb-2 text-xs font-extrabold uppercase tracking-wide"><RichText>{txt}</RichText></p>;
+  return <p className="mb-2 text-xs font-extrabold normal-case tracking-normal"><RichText>{txt}</RichText></p>;
 }
 
