@@ -1,0 +1,5 @@
+UPDATE public.mini_apps SET
+  name = regexp_replace(regexp_replace(regexp_replace(regexp_replace(name, 'NANDA(-I)?\s*/\s*NIC\s*/\s*NOC', 'ADEC', 'g'), '\mNANDA(-I)?\M', 'ADEC', 'g'), '\mNIC\M', 'Condutas ADEC', 'g'), '\mNOC\M', 'Metas ADEC', 'g'),
+  description = regexp_replace(regexp_replace(regexp_replace(regexp_replace(description, 'NANDA(-I)?\s*/\s*NIC\s*/\s*NOC', 'ADEC', 'g'), '\mNANDA(-I)?\M', 'ADEC', 'g'), '\mNIC\M', 'Condutas ADEC', 'g'), '\mNOC\M', 'Metas ADEC', 'g'),
+  content_md = regexp_replace(regexp_replace(regexp_replace(regexp_replace(content_md, 'NANDA(-I)?\s*/\s*NIC\s*/\s*NOC', 'ADEC', 'g'), '\mNANDA(-I)?\M', 'ADEC', 'g'), '\mNIC\M', 'Condutas ADEC', 'g'), '\mNOC\M', 'Metas ADEC', 'g')
+WHERE coalesce(name,'')||coalesce(description,'')||coalesce(content_md,'') ~ '\m(NANDA|NIC|NOC)\M';
