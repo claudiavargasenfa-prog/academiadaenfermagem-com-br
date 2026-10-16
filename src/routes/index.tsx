@@ -162,7 +162,7 @@ function StoreHomeContent() {
         <section id="aplicativos" className="mb-8 scroll-mt-20">
           <h2 className="mb-1 font-display text-lg font-bold"><RichText>{ctaSection}</RichText></h2>
           <p className="mb-5 max-w-3xl text-sm leading-relaxed text-muted-foreground">Acesse a Academia que desejar. Cada uma oferece conteúdos direcionados à sua formação e às suas atribuições profissionais, com referências teóricas e recursos dinâmicos. Conteúdos atualizados em 2026. Escolha a sua e vamos começar!</p>
-          <div className="grid gap-3 sm:grid-cols-2">
+          <div className="grid items-stretch gap-4 sm:grid-cols-2">
             {activePlans.map((plan) => {
               const appRow = appBySlug.get(plan.slug);
               const sub = mySubs.find((s) => s.plan_slug === plan.slug);
@@ -203,11 +203,10 @@ function StoreHomeContent() {
               }
 
               return (
-                <div key={plan.id} className="group relative flex min-h-[230px] flex-col overflow-hidden rounded-2xl border p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl md:min-h-[250px]" style={{ background: `linear-gradient(135deg, color-mix(in oklab, ${accent} 22%, white), color-mix(in oklab, ${accent} 8%, white))`, borderColor: `color-mix(in oklab, ${accent} 48%, #D1D5DB)` }} data-app={slug}>
-                  <div className="pointer-events-none absolute inset-x-0 top-0 h-1.5" style={{ backgroundColor: accent }} />
+                <div key={plan.id} className="group relative flex min-h-[230px] flex-col overflow-hidden rounded-2xl border p-5 shadow-[0_8px_24px_rgba(0,0,0,0.18)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_14px_30px_rgba(0,0,0,0.28)] md:min-h-[250px]" style={{ backgroundColor: "#101D23", borderColor: "rgba(52,211,153,0.42)", color: "#E5E7EB" }} data-app={slug}>
                   <div className="relative mb-3 flex items-start gap-3">
-                    <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl text-2xl" style={{ backgroundColor: `color-mix(in oklab, ${accent} 16%, transparent)` }}>{appRow?.emoji ?? "🚪"}</span>
-                    <h3 className="font-display pt-0.5 text-base font-black leading-snug tracking-tight">{plan.name}</h3>
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-xl" style={{ color: "#54D6B0", backgroundColor: "rgba(52,211,153,0.08)" }}>{appRow?.emoji ?? "📚"}</span>
+                    <h3 className="font-display pt-0.5 text-base font-black leading-snug tracking-tight" style={{ color: "#F4C34E" }}>{plan.name}</h3>
                   </div>
                   <PlanSlogan slug={slug} />
                   <AcademyAudience slug={slug} />
