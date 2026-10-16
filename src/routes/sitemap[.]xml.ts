@@ -42,7 +42,7 @@ export const Route = createFileRoute("/sitemap.xml")({
           { path: "/confianca", changefreq: "monthly", priority: "0.6" },
           { path: "/legal", changefreq: "monthly", priority: "0.5" },
           { path: "/minha-historia", changefreq: "monthly", priority: "0.6" },
-          { path: "/manual-sobrevivencia", changefreq: "monthly", priority: "0.7" },
+          { path: "/manual-estagio", changefreq: "monthly", priority: "0.7" },
           ...PUBLIC_CONTENT_PATHS.map((path) => ({
             path,
             changefreq: "monthly" as const,

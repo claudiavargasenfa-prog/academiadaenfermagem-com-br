@@ -341,6 +341,30 @@ export type Database = {
         }
         Relationships: []
       }
+      manual_leads: {
+        Row: {
+          created_at: string
+          id: string
+          nome: string
+          perfil: string
+          whatsapp: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          nome: string
+          perfil: string
+          whatsapp: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          nome?: string
+          perfil?: string
+          whatsapp?: string
+        }
+        Relationships: []
+      }
       mini_app_placements: {
         Row: {
           app_id: string
@@ -1348,6 +1372,7 @@ export type Database = {
       }
       create_annual_order: { Args: { _plan_slug: string }; Returns: string }
       expire_finished_trials: { Args: never; Returns: number }
+      get_manual_estagio_content: { Args: never; Returns: string }
       get_mini_app_meta: {
         Args: { _slug: string }
         Returns: {

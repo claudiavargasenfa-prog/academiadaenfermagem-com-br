@@ -25,6 +25,7 @@ import { Route as FarmacologiaAvancadaRouteImport } from './routes/farmacologia-
 import { Route as IrasRouteImport } from './routes/iras'
 import { Route as LegalRouteImport } from './routes/legal'
 import { Route as LojaRouteImport } from './routes/loja'
+import { Route as ManualEstagioRouteImport } from './routes/manual-estagio'
 import { Route as ManualSobrevivenciaRouteImport } from './routes/manual-sobrevivencia'
 import { Route as McpRouteImport } from './routes/mcp'
 import { Route as MinhaContaRouteImport } from './routes/minha-conta'
@@ -138,6 +139,11 @@ const LegalRoute = LegalRouteImport.update({
 const LojaRoute = LojaRouteImport.update({
   id: '/loja',
   path: '/loja',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ManualEstagioRoute = ManualEstagioRouteImport.update({
+  id: '/manual-estagio',
+  path: '/manual-estagio',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ManualSobrevivenciaRoute = ManualSobrevivenciaRouteImport.update({
@@ -329,6 +335,7 @@ export interface FileRoutesByFullPath {
   '/iras': typeof IrasRoute
   '/legal': typeof LegalRoute
   '/loja': typeof LojaRoute
+  '/manual-estagio': typeof ManualEstagioRoute
   '/manual-sobrevivencia': typeof ManualSobrevivenciaRoute
   '/mcp': typeof McpRoute
   '/minha-conta': typeof MinhaContaRoute
@@ -381,6 +388,7 @@ export interface FileRoutesByTo {
   '/iras': typeof IrasRoute
   '/legal': typeof LegalRoute
   '/loja': typeof LojaRoute
+  '/manual-estagio': typeof ManualEstagioRoute
   '/manual-sobrevivencia': typeof ManualSobrevivenciaRoute
   '/mcp': typeof McpRoute
   '/minha-conta': typeof MinhaContaRoute
@@ -433,6 +441,7 @@ export interface FileRoutesById {
   '/iras': typeof IrasRoute
   '/legal': typeof LegalRoute
   '/loja': typeof LojaRoute
+  '/manual-estagio': typeof ManualEstagioRoute
   '/manual-sobrevivencia': typeof ManualSobrevivenciaRoute
   '/mcp': typeof McpRoute
   '/minha-conta': typeof MinhaContaRoute
@@ -487,6 +496,7 @@ export interface FileRouteTypes {
     | '/iras'
     | '/legal'
     | '/loja'
+    | '/manual-estagio'
     | '/manual-sobrevivencia'
     | '/mcp'
     | '/minha-conta'
@@ -539,6 +549,7 @@ export interface FileRouteTypes {
     | '/iras'
     | '/legal'
     | '/loja'
+    | '/manual-estagio'
     | '/manual-sobrevivencia'
     | '/mcp'
     | '/minha-conta'
@@ -590,6 +601,7 @@ export interface FileRouteTypes {
     | '/iras'
     | '/legal'
     | '/loja'
+    | '/manual-estagio'
     | '/manual-sobrevivencia'
     | '/mcp'
     | '/minha-conta'
@@ -643,6 +655,7 @@ export interface RootRouteChildren {
   IrasRoute: typeof IrasRoute
   LegalRoute: typeof LegalRoute
   LojaRoute: typeof LojaRoute
+  ManualEstagioRoute: typeof ManualEstagioRoute
   ManualSobrevivenciaRoute: typeof ManualSobrevivenciaRoute
   McpRoute: typeof McpRoute
   MinhaContaRoute: typeof MinhaContaRoute
@@ -788,6 +801,13 @@ declare module '@tanstack/react-router' {
       path: '/loja'
       fullPath: '/loja'
       preLoaderRoute: typeof LojaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/manual-estagio': {
+      id: '/manual-estagio'
+      path: '/manual-estagio'
+      fullPath: '/manual-estagio'
+      preLoaderRoute: typeof ManualEstagioRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/manual-sobrevivencia': {
@@ -1072,6 +1092,7 @@ const rootRouteChildren: RootRouteChildren = {
   IrasRoute: IrasRoute,
   LegalRoute: LegalRoute,
   LojaRoute: LojaRoute,
+  ManualEstagioRoute: ManualEstagioRoute,
   ManualSobrevivenciaRoute: ManualSobrevivenciaRoute,
   McpRoute: McpRoute,
   MinhaContaRoute: MinhaContaRoute,
