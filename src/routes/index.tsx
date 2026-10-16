@@ -108,8 +108,8 @@ function StoreHomeContent() {
             </div>
           ))}
         </div>
-        <p className="relative mt-6 text-center text-xs text-slate-300/80"><RichText>{homeDesc}</RichText></p>
-        <div className="relative mt-3 flex flex-wrap items-center justify-center gap-2 rounded-xl border border-emerald-400/30 bg-emerald-400/5 px-4 py-3 text-center shadow-[0_0_20px_rgba(16,185,129,0.08)]">
+        <p className="relative mt-3 text-center text-xs leading-snug text-slate-300/80 md:mt-6"><RichText>{homeDesc}</RichText></p>
+        <div className="relative mt-2 flex flex-wrap items-center justify-center gap-1.5 rounded-xl border border-emerald-400/30 bg-emerald-400/5 px-4 py-2.5 text-center shadow-[0_0_20px_rgba(16,185,129,0.08)] md:mt-3 md:gap-2 md:py-3">
           <span className="text-lg text-emerald-300" aria-hidden="true">✦</span>
           <p className="text-sm font-extrabold text-emerald-200 md:text-base">Certificado de conclusão em cada módulo</p>
         </div>
