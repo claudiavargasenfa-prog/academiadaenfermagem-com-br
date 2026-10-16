@@ -193,7 +193,6 @@ export const CASOS: CasoClinico[] = [
     referencias: [
       "COFEN. Resolução nº 736/2024. Dispõe sobre a implementação do Processo de Enfermagem.",
       "SOCIEDADE BRASILEIRA DE DIABETES (SBD). Diretrizes da Sociedade Brasileira de Diabetes 2024. São Paulo: Clannad, 2024.",
-      "HERDMAN, T. H.; KAMITSURU, S. (Org.). Diagnósticos de Enfermagem da NANDA-I: Definições e Classificação 2021-2023. Porto Alegre: Artmed, 2021.",
     ],
   },
   {
@@ -827,7 +826,7 @@ export const CASOS: CasoClinico[] = [
           "Administrar Sulfato de Magnésio conforme protocolo institucional (dose de ataque e manutenção), monitorar rigorosamente o reflexo patelar, a frequência respiratória e o débito urinário.",
         correta: true,
         feedback:
-          "PARABÉNS! VOCÊ ESTÁ NO CAMINHO CERTO. O Sulfato de Magnésio é o padrão-ouro para prevenção e controle de crises convulsivas na pré-eclâmpsia grave. A vigilância dos sinais de toxicidade (hiporreflexia e bradipneia) é intervenção crítica de enfermagem (NIC: Controle da Eclâmpsia).",
+          "PARABÉNS! VOCÊ ESTÁ NO CAMINHO CERTO. O Sulfato de Magnésio é o padrão-ouro para prevenção e controle de crises convulsivas na pré-eclâmpsia grave. A vigilância dos sinais de toxicidade (hiporreflexia e bradipneia) é intervenção crítica de enfermagem (Conduta ADEC: Controle da Eclâmpsia).",
       },
       {
         texto:
@@ -947,7 +946,7 @@ export const CASOS: CasoClinico[] = [
           "Iniciar expansão volêmica imediata com Cristaloides (Soro Fisiológico 0,9%) na dose de 20 ml/kg em bólus, monitorando continuamente sinais vitais e nível de consciência.",
         correta: true,
         feedback:
-          "PARABÉNS! VOCÊ ESTÁ NO CAMINHO CERTO. Na desidratação grave com sinais de choque, a via parenteral é mandatória. A expansão rápida restaura o volume intravascular e a perfusão de órgãos vitais (NIC: Redução do Choque: Volume).",
+          "PARABÉNS! VOCÊ ESTÁ NO CAMINHO CERTO. Na desidratação grave com sinais de choque, a via parenteral é mandatória. A expansão rápida restaura o volume intravascular e a perfusão de órgãos vitais (Conduta ADEC: Redução do Choque: Volume).",
       },
       {
         texto:
@@ -1007,7 +1006,7 @@ export const CASOS: CasoClinico[] = [
           "Implementar contenção mecânica terapêutica conforme protocolo ético e técnico, manter vigilância 1:1, retirar objetos de risco do entorno e administrar medicação de urgência conforme prescrição.",
         correta: true,
         feedback:
-          "PARABÉNS! VOCÊ ESTÁ NO CAMINHO CERTO. Em situações de risco iminente de auto ou heteroagressão, a contenção mecânica é medida de proteção, não punição. Deve ser realizada por equipe treinada, com monitorização constante de perfusão e nível de consciência (NIC: Controle do Comportamento: Autolesão).",
+          "PARABÉNS! VOCÊ ESTÁ NO CAMINHO CERTO. Em situações de risco iminente de auto ou heteroagressão, a contenção mecânica é medida de proteção, não punição. Deve ser realizada por equipe treinada, com monitorização constante de perfusão e nível de consciência (Conduta ADEC: Controle do Comportamento: Autolesão).",
       },
       {
         texto:

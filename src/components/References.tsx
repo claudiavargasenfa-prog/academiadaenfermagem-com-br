@@ -9,7 +9,6 @@ export const REFERENCES: { n: string; src: string }[] = [
   { n: "AHA/PALS", src: "Pediatric Advanced Life Support — American Heart Association, 2020." },
   { n: "Potter & Perry", src: "Fundamentos de Enfermagem, 9ª ed., Elsevier." },
   { n: "Brunner & Suddarth", src: "Tratado de Enfermagem Médico-Cirúrgica, 14ª ed., Guanabara Koogan." },
-  { n: "NANDA-I", src: "Diagnósticos de Enfermagem da NANDA-I: definições e classificação 2021–2023." },
   { n: "ONU/ODS 3", src: "Agenda 2030 — Objetivo de Desenvolvimento Sustentável nº 3: Saúde e Bem-Estar." },
 ];
 
