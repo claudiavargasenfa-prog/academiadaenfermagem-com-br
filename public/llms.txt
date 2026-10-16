@@ -7,7 +7,7 @@
 - [Loja](/): Os quatro aplicativos da Academia da Enfermagem e como começar com 15 dias grátis.
 - [ADEC](/adec): Página de apresentação e vendas dos módulos de suporte à decisão clínica.
 - [Aplicativos](/loja): Catálogo dos aplicativos por perfil profissional.
-- [Manual de Sobrevivência do Estágio](/manual-sobrevivencia): Conteúdo gratuito com checklist da mochila, postura no campo e comunicação com o preceptor.
+- [Manual de Sobrevivência do Estágio](/manual-estagio): Conteúdo gratuito com checklist da mochila, postura no campo e comunicação com o preceptor.
 - [Minha História](/minha-historia): História da fundadora e propósito do projeto.
 - [Confiança](/confianca): Bases legais e científicas (COFEN, CORENs, ANVISA, MS, OMS).
 

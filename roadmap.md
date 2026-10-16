@@ -37,3 +37,4 @@
 - [ ] Validar e atualizar os resultados
 
 - [x] GitHub: junção concluída no ramo principal, incluindo o commit a292617.
+- [ ] Remover NANDA/NIC/NOC dos outros 14 conteúdos (aguardando confirmação)
