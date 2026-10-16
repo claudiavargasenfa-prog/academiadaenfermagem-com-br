@@ -5,7 +5,6 @@ import { fetchSubscriptionPlans, fetchMyActiveSubscriptions, formatPriceBRL } fr
 import { useApps } from "@/lib/apps";
 import { isBasePlanSlug } from "@/lib/plan-slugs";
 import { RichText, useText } from "@/lib/app-texts";
-import { FeedbackCollector } from "@/components/FeedbackCollector";
 import { useState } from "react";
 
 export const Route = createFileRoute("/")({
@@ -231,7 +230,6 @@ function StoreHomeContent() {
         </section>
       )}
 
-      <FeedbackCollector />
     </AppShell>
   );
 }
