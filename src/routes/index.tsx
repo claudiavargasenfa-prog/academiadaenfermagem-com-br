@@ -161,7 +161,7 @@ function StoreHomeContent() {
       {activePlans.length > 0 && (
         <section id="aplicativos" className="mb-8 scroll-mt-20">
           <h2 className="mb-1 font-display text-lg font-bold"><RichText>{ctaSection}</RichText></h2>
-          <p className="mb-4 text-sm text-muted-foreground">Escolha a sua porta. O conteúdo de cada Academia só é revelado dentro da página dela.</p>
+          <p className="mb-5 max-w-3xl text-sm leading-relaxed text-muted-foreground">Acesse a Academia que desejar. Cada uma oferece conteúdos direcionados à sua formação e às suas atribuições profissionais, com referências teóricas e recursos dinâmicos. Conteúdos atualizados em 2026. Escolha a sua e vamos começar!</p>
           <div className="grid gap-3 sm:grid-cols-2">
             {activePlans.map((plan) => {
               const appRow = appBySlug.get(plan.slug);
@@ -203,18 +203,14 @@ function StoreHomeContent() {
               }
 
               return (
-                <div key={plan.id} className="group relative flex flex-col overflow-hidden rounded-3xl border border-border bg-card p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl" data-app={slug}>
+                <div key={plan.id} className="group relative flex min-h-[230px] flex-col overflow-hidden rounded-2xl border border-border bg-card p-5 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl md:min-h-[250px]" data-app={slug}>
                   <div className="pointer-events-none absolute inset-x-0 top-0 h-1.5" style={{ backgroundColor: accent }} />
                   <div className="relative mb-3 flex items-start gap-3">
                     <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl text-2xl" style={{ backgroundColor: `color-mix(in oklab, ${accent} 16%, transparent)` }}>{appRow?.emoji ?? "🚪"}</span>
                     <h3 className="font-display pt-0.5 text-base font-black leading-snug tracking-tight">{plan.name}</h3>
                   </div>
                   <PlanSlogan slug={slug} />
-                  {["academico","tecnico","tecnico-estudante","enfermeiro"].includes(slug) && (
-                    <p className="mt-3 inline-flex w-fit items-baseline gap-1 rounded-full border border-gold/50 bg-gold/10 px-4 py-1.5 text-xl font-black text-foreground">
-                      {formatPriceBRL(plan.price_cents)}<span className="text-[11px] font-bold text-muted-foreground">/ano</span>
-                    </p>
-                  )}
+                  <AcademyAudience slug={slug} />
                   <p className="mt-3 text-[11px] font-semibold leading-tight text-muted-foreground">🔒 Conteúdo exclusivo para membros · Certificado de conclusão em cada módulo</p>
                   <div className="relative mt-auto space-y-2 pt-4">
                     {subscribed ? (
@@ -223,8 +219,8 @@ function StoreHomeContent() {
                         <span className="block text-center text-xs font-bold text-primary">{inTrial ? `🎁 Trial ativo · até ${new Date(sub?.expires_at ?? "").toLocaleDateString("pt-BR")}` : "✓ Acesso ativo"}</span>
                       </>
                     ) : (
-                      <Link to="/planos/$slug" params={{ slug }} className="group/btn block w-full rounded-xl bg-gradient-to-r from-orange-500 to-rose-500 py-3 text-center text-sm font-black uppercase tracking-wider text-background shadow-lg transition-all active:scale-95 hover:scale-[1.02]">
-                        <span className="inline-block transition-transform group-hover/btn:translate-x-1">Descobrir conteúdo →</span>
+                      <Link to="/trilha/$slug" params={{ slug }} className="group/btn block w-full rounded-xl bg-gradient-to-r from-orange-500 to-rose-500 py-3 text-center text-sm font-black uppercase tracking-wider text-background shadow-lg transition-all active:scale-95 hover:scale-[1.02]">
+                        <span className="inline-block transition-transform group-hover/btn:translate-x-1">Veja o conteúdo →</span>
                       </Link>
                     )}
                     <p className="text-center text-[11px] font-extrabold tracking-wide text-emerald-600"><RichText>{compraSegura}</RichText></p>
@@ -239,6 +235,17 @@ function StoreHomeContent() {
       <FeedbackCollector />
     </AppShell>
   );
+}
+
+function AcademyAudience({ slug }: { slug: string }) {
+  const descriptions: Record<string, string> = {
+    "tecnico-estudante": "Conteúdo direcionado ao estudante do curso Técnico em Enfermagem.",
+    tecnico: "Conteúdo direcionado à atuação do Técnico em Enfermagem.",
+    academico: "Conteúdo direcionado ao acadêmico de Enfermagem, dos estudos aos estágios.",
+    enfermeiro: "Conteúdo direcionado ao exercício profissional do enfermeiro.",
+  };
+  const description = descriptions[slug];
+  return description ? <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{description}</p> : null;
 }
 
 function PlanSlogan({ slug }: { slug: string }) {
