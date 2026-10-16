@@ -45,9 +45,8 @@ function Page() {
   const [ok, setOk] = useState<boolean | null>(null);
   useEffect(() => {
     // Sempre começa pela tela de cadastro: a liberação vale só para a aba aberta.
-    localStorage.removeItem(KEY);
-    if (new URLSearchParams(window.location.search).has("novo")) sessionStorage.removeItem(KEY);
-    setOk(sessionStorage.getItem(KEY) === "1");
+    if (new URLSearchParams(window.location.search).has("novo")) localStorage.removeItem(KEY);
+    setOk(localStorage.getItem(KEY) === "1");
   }, []);
   if (ok === null) return <Shell><div className="py-20" /></Shell>;
   return <Shell>{ok ? <Conteudo /> : <Portaria onDone={() => setOk(true)} />}</Shell>;
@@ -77,7 +76,7 @@ function Portaria({ onDone }: { onDone: () => void }) {
     const { error } = await supabase.from("manual_leads").insert(r.data);
     setEnviando(false);
     if (error) return setErro("Não conseguimos liberar agora. Tente de novo.");
-    sessionStorage.setItem(KEY, "1");
+    localStorage.setItem(KEY, "1");
     onDone();
   }
 
