@@ -83,39 +83,40 @@ function Portaria({ onDone }: { onDone: () => void }) {
 
   return (
     <div className="mx-auto max-w-2xl py-4">
-      <div className="relative mb-8 overflow-hidden rounded-3xl border-4 border-gold bg-primary px-6 py-10 text-center text-primary-foreground shadow-2xl">
-        <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-transparent via-gold to-transparent" />
-        <div className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-gold/30 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-20 -left-16 h-56 w-56 rounded-full bg-gold/20 blur-3xl" />
-        <div className="relative">
-          <span className="inline-block -rotate-2 animate-pulse rounded-full bg-gold px-5 py-1.5 text-sm font-black uppercase tracking-widest text-foreground shadow-lg">
+      <div className="relative mb-8 overflow-hidden rounded-[2rem] border-2 border-[#D9B64C] bg-[#003F25] px-5 py-8 text-center text-white shadow-[0_24px_60px_rgba(0,48,28,0.28)] sm:px-8 sm:py-10">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_85%_12%,rgba(217,182,76,0.22),transparent_30%),radial-gradient(circle_at_8%_100%,rgba(37,135,79,0.4),transparent_38%)]" />
+        <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-[#F2D778] to-transparent" />
+        <div className="relative mx-auto max-w-3xl">
+          <span className="inline-flex -rotate-1 items-center rounded-full border border-[#D9B64C]/70 bg-[#D9B64C] px-5 py-1.5 text-xs font-black uppercase tracking-[0.18em] text-[#073923] shadow-md sm:text-sm">
             🎁 Presente 100% grátis
           </span>
-          <p className="mt-5 text-xs font-black uppercase tracking-[0.3em] text-gold">O Mundo da Enfermagem</p>
-          <h1 className="mt-2 font-display text-4xl font-black uppercase leading-[0.95] md:text-6xl">
-            Não pise no estágio <span className="text-gold">sem isto.</span>
+          <p className="mt-5 text-xs font-extrabold uppercase tracking-[0.28em] text-[#F2D778]">O Mundo da Enfermagem</p>
+          <h1 className="mt-3 font-display text-3xl font-black uppercase leading-[0.98] tracking-tight sm:text-5xl md:text-6xl">
+            Não pise no estágio <span className="text-[#F2C94C]">sem isto.</span>
           </h1>
-          <p className="mx-auto mt-5 max-w-md text-lg font-semibold opacity-90">
+          <p className="mx-auto mt-5 max-w-2xl text-base font-medium leading-relaxed text-white/85 sm:text-lg">
             O Manual de Sobrevivência no Estágio: tudo o que ninguém te conta antes do primeiro dia de campo.
           </p>
-          <p className="mt-5 text-xs font-black uppercase tracking-widest text-gold/90">Dentro do manual</p>
-          <ul className="mx-auto mt-2 grid max-w-md gap-2 text-left text-sm font-bold">
-            {[
-              { t: "Postura que o preceptor quer ver", href: "#topico-postura" },
-              { t: "Relacionamento com paciente e família", href: "#topico-relacionamento" },
-              { t: "Técnicas essenciais e cálculos", href: "#topico-tecnicas" },
-              { t: "Segurança do paciente sem errar", href: "#topico-seguranca" },
-              { t: "Passagem de plantão ISBAR na prática", href: "#topico-isbar" },
-              { t: "Os erros que reprovam no campo", href: "#topico-erros" },
-            ].map((i) => (
-              <li key={i.href}>
-                <a href={i.href} className="flex items-center gap-2 rounded-lg bg-background/10 px-3 py-2 transition-colors hover:bg-gold/20">
-                  <span className="text-gold">✔</span> {i.t}
-                </a>
-              </li>
-            ))}
-          </ul>
-          <p className="mt-6 text-sm font-black uppercase tracking-wider text-gold">⬇ Libere o seu agora, em 30 segundos ⬇</p>
+          <div className="mx-auto mt-7 max-w-2xl">
+            <p className="mb-3 text-xs font-extrabold uppercase tracking-[0.22em] text-[#F2D778]">Dentro do manual</p>
+            <ul className="grid gap-2 text-left text-sm font-semibold sm:grid-cols-2">
+              {[
+                { t: "Postura que o preceptor quer ver", href: "#topico-postura" },
+                { t: "Relacionamento com paciente e família", href: "#topico-relacionamento" },
+                { t: "Técnicas essenciais e cálculos", href: "#topico-tecnicas" },
+                { t: "Segurança do paciente sem errar", href: "#topico-seguranca" },
+                { t: "Passagem de plantão ISBAR na prática", href: "#topico-isbar" },
+                { t: "Os erros que reprovam no campo", href: "#topico-erros" },
+              ].map((i) => (
+                <li key={i.href}>
+                  <a href={i.href} className="flex min-h-11 items-center gap-2 rounded-xl border border-white/10 bg-white/[0.08] px-3 py-2.5 transition-colors hover:border-[#D9B64C]/70 hover:bg-[#D9B64C]/15">
+                    <span className="font-black text-[#F2C94C]">✓</span> {i.t}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <p className="mt-7 text-xs font-black uppercase tracking-[0.14em] text-[#F2D778] sm:text-sm">↓ Libere seu manual gratuito em cerca de 30 segundos ↓</p>
         </div>
       </div>
       <Card className="border-4 border-gold shadow-2xl">
