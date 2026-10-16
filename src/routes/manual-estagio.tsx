@@ -201,6 +201,26 @@ function Conteudo() {
       const alvo = document.getElementById(hash.slice(1));
       if (alvo) alvo.scrollIntoView({ behavior: "smooth", block: "start" });
     }
+    const chips: Array<[RegExp, string]> = [
+      [/Postura e Conduta/, "topico-postura"],
+      [/Técnicas Essenciais/, "topico-tecnicas"],
+      [/Relacionamento com Equipe/, "topico-relacionamento"],
+      [/Segurança do Paciente/, "topico-seguranca"],
+      [/Primeiro Plantão/, "topico-primeiro-dia"],
+    ];
+    el.querySelectorAll("span").forEach((s) => {
+      const t = s.textContent || "";
+      for (const [re, id] of chips) {
+        if (re.test(t) && document.getElementById(id) && !s.closest("a")) {
+          const a = document.createElement("a");
+          a.href = `#${id}`;
+          a.style.cursor = "pointer";
+          s.parentNode?.insertBefore(a, s);
+          a.appendChild(s);
+          break;
+        }
+      }
+    });
   }, [html]);
   const pontes = [
     { icon: FileText, t: "Diário de Bordo em ABNT", d: "Seu relatório de estágio organizado enquanto você vive o plantão." },
@@ -211,30 +231,6 @@ function Conteudo() {
     <ContentProtection allowPrint>
       <PageHeader eyebrow="O Mundo da Enfermagem" title="Manual de Sobrevivência no Estágio"
         description="Seu acesso está liberado. Bom estágio!" />
-      <div className="relative mb-6 overflow-hidden rounded-3xl bg-gradient-to-br from-primary via-primary to-primary/90 px-4 py-10 text-center text-primary-foreground shadow-xl">
-        <div className="pointer-events-none absolute -left-10 -top-10 h-40 w-40 rounded-full bg-gold/20 blur-3xl" />
-        <div className="pointer-events-none absolute -bottom-10 -right-10 h-40 w-40 rounded-full bg-gold/10 blur-3xl" />
-        <div className="relative">
-          <div className="text-5xl">📚</div>
-          <h2 className="mt-3 font-display text-3xl font-black leading-tight md:text-4xl">Manual de Sobrevivência do Estágio</h2>
-          <p className="mt-2 text-lg font-bold text-gold">Enfermagem</p>
-          <div className="mx-auto mt-2 h-px w-24 bg-gold/60" />
-          <p className="mx-auto mt-3 max-w-md text-sm italic opacity-90">Do primeiro dia ao último plantão — tudo o que você precisa saber para brilhar no estágio</p>
-          <div className="mt-5 flex flex-wrap justify-center gap-2">
-            {[
-              { t: "Postura e Conduta", h: "#topico-postura" },
-              { t: "Técnicas Essenciais", h: "#topico-tecnicas" },
-              { t: "Relacionamento com Equipe", h: "#topico-relacionamento" },
-              { t: "Segurança do Paciente", h: "#topico-seguranca" },
-              { t: "Primeiro Plantão", h: "#topico-primeiro-dia" },
-            ].map((i) => (
-              <a key={i.h} href={i.h} className="rounded-full bg-background/10 px-4 py-2 text-sm font-semibold transition-colors hover:bg-gold/20">
-                📖 {i.t}
-              </a>
-            ))}
-          </div>
-        </div>
-      </div>
       {html === null ? <p className="py-10 text-center text-muted-foreground">Carregando...</p> : <div className="manual-conteudo overflow-x-auto" dangerouslySetInnerHTML={{ __html: html }} />}
       <Card className="mt-6">
         <div className="mb-3 flex items-center gap-2 text-gold"><Sparkles className="h-5 w-5" />
