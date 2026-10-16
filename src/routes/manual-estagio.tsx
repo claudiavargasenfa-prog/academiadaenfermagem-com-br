@@ -173,6 +173,34 @@ function Conteudo() {
   useEffect(() => {
     supabase.rpc("get_manual_estagio_content").then(({ data }) => setHtml((data as string) ?? ""));
   }, []);
+  useEffect(() => {
+    if (!html) return;
+    const el = document.querySelector(".manual-conteudo");
+    if (!el) return;
+    const mapa: Array<[string, string]> = [
+      ["isbar", "topico-isbar"],
+      ["passagem de plantão", "topico-isbar"],
+      ["postura", "topico-postura"],
+      ["relacionamento", "topico-relacionamento"],
+      ["técnicas", "topico-tecnicas"],
+      ["segurança", "topico-seguranca"],
+      ["erro", "topico-erros"],
+    ];
+    el.querySelectorAll("h1, h2, h3").forEach((h) => {
+      const t = (h.textContent || "").toLowerCase();
+      for (const [kw, id] of mapa) {
+        if (t.includes(kw) && !document.getElementById(id)) {
+          h.id = id;
+          break;
+        }
+      }
+    });
+    const hash = window.location.hash;
+    if (hash.startsWith("#topico-")) {
+      const alvo = document.getElementById(hash.slice(1));
+      if (alvo) alvo.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [html]);
   const pontes = [
     { icon: FileText, t: "Diário de Bordo em ABNT", d: "Seu relatório de estágio organizado enquanto você vive o plantão." },
     { icon: Calculator, t: "Motores de Cálculo Clínico", d: "Gotejamento, diluição e dose por peso em segundos." },
