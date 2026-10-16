@@ -427,11 +427,8 @@
   </div>
 </div>
 
-<!-- NANDA -->
+<!-- MATRIZ ADEC -->
 <div style="background: #f0faf4; border-radius: 16px; padding: 20px 25px; margin-bottom: 20px; border: 2px dashed #1a6b3a;">
-  <div style="display: flex; gap: 14px; align-items: flex-start;">
-    <span style="font-size: 28px;">📋</span>
-    <div>
-      <h4 style="color: #0d3b1e; margin: 0 0 6px 0; font-size: 15px;">Diagnósticos de Enfermagem Relacionados ao Estagiário — NANDA/NIC/NOC 2026</h4>
-      <p style="color: #333; line-height: 1.7; margin: 0; font-size: 13px;">
-        <strong>NANDA:</strong> Ansiedade (00146) relacionada a novo ambiente e procedimentos desconhecidos | Medo (00148) de cometer erros durante a assistência | Risco de baixa autoestima situacional (00153) após críticas da equipe ou erros | Disposição para conhecimento
+  <h4 style="color: #0d3b1e; margin: 0 0 6px 0; font-size: 15px;">📋 Matriz ADEC de Decisão Clínica do Estagiário</h4>
+  <p style="color: #333; line-height: 1.7; margin: 0; font-size: 13px;">Diagnósticos autorais ADEC: ansiedade de adaptação ao setor | bloqueio situacional diante de procedimentos | sobrecarga sensorial no plantão | insegurança na conduta assistencial. Conduta: supervisão próxima, checklist antes de cada procedimento, comunicação ISBAR e registro imediato.</p>
+</div>
