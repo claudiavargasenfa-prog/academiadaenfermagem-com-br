@@ -45,9 +45,8 @@ function Page() {
   const [ok, setOk] = useState<boolean | null>(null);
   useEffect(() => {
     // Sempre começa pela tela de cadastro: a liberação vale só para a aba aberta.
-    localStorage.removeItem(KEY);
-    if (new URLSearchParams(window.location.search).has("novo")) sessionStorage.removeItem(KEY);
-    setOk(sessionStorage.getItem(KEY) === "1");
+    if (new URLSearchParams(window.location.search).has("novo")) localStorage.removeItem(KEY);
+    setOk(localStorage.getItem(KEY) === "1");
   }, []);
   if (ok === null) return <Shell><div className="py-20" /></Shell>;
   return <Shell>{ok ? <Conteudo /> : <Portaria onDone={() => setOk(true)} />}</Shell>;
@@ -77,7 +76,7 @@ function Portaria({ onDone }: { onDone: () => void }) {
     const { error } = await supabase.from("manual_leads").insert(r.data);
     setEnviando(false);
     if (error) return setErro("Não conseguimos liberar agora. Tente de novo.");
-    sessionStorage.setItem(KEY, "1");
+    localStorage.setItem(KEY, "1");
     onDone();
   }
 
@@ -141,8 +140,11 @@ function Portaria({ onDone }: { onDone: () => void }) {
             href={INSTAGRAM}
             target="_blank"
             rel="noopener noreferrer"
-            onClick={() => {
+            onClick={(e) => {
+              e.preventDefault();
               if (!seguiu) { setSeguiu(true); setFalta(18); }
+              const w = window.open(INSTAGRAM, "_blank", "noopener,noreferrer");
+              if (!w) { try { (window.top ?? window).location.href = INSTAGRAM; } catch { window.open(INSTAGRAM, "_blank"); } }
             }}
             className="flex cursor-pointer items-center justify-center gap-2 rounded-xl border-2 border-gold px-4 py-3 font-bold">
             <Instagram className="h-5 w-5" /> {seguiu ? "@enfnapraticaoficial" : "Seguir @enfnapraticaoficial no Instagram"}
@@ -230,7 +232,7 @@ function Conteudo() {
     <ContentProtection allowPrint>
       <PageHeader eyebrow="O Mundo da Enfermagem" title="Manual de Sobrevivência no Estágio"
         description="Seu acesso está liberado. Bom estágio!" />
-      <button type="button" onClick={() => { sessionStorage.removeItem(KEY); window.location.reload(); }}
+      <button type="button" onClick={() => { localStorage.removeItem(KEY); window.location.reload(); }}
         className="mb-4 text-xs text-muted-foreground underline">Ver a tela de cadastro novamente</button>
       {html === null ? <p className="py-10 text-center text-muted-foreground">Carregando...</p> : <div className="manual-conteudo overflow-x-auto" dangerouslySetInnerHTML={{ __html: html }} />}
       <Card className="mt-6">
