@@ -223,6 +223,207 @@ function Conteudo() {
       .sort((a, b) => (a.textContent || "").length - (b.textContent || "").length)[0];
     if (dicaAntiga) {
       dicaAntiga.innerHTML = '<strong>💡 Dica de Enfermeiro Veterano:</strong> Chegue sempre 15 minutos antes para que tenha tempo de descansar e refletir. Isso também demonstra interesse e compromisso.';
+      const bannerAnterior = el.querySelector("#atividades-estagio-sanfona");
+      if (bannerAnterior) bannerAnterior.remove();
+
+      const banner = document.createElement("section");
+      banner.id = "atividades-estagio-sanfona";
+      banner.setAttribute("aria-labelledby", "atividades-estagio-titulo");
+      banner.style.cssText = "margin:24px 0;padding:clamp(16px,3vw,28px);border:1px solid #eadff4;border-radius:22px;background:linear-gradient(135deg,#fff8fb 0%,#f5faff 52%,#f8fff8 100%);box-shadow:0 10px 28px rgba(173,156,194,.12);";
+      banner.innerHTML = `
+        <div style="text-align:center;margin-bottom:20px">
+          <span style="display:inline-block;padding:6px 12px;border-radius:999px;background:#fce7f3;color:#9d4775;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase">Guia de prática</span>
+          <h2 id="atividades-estagio-titulo" style="margin:10px 0 6px;color:#5b5277;font-size:clamp(21px,4vw,28px);font-weight:800;line-height:1.2">Atividades por campo de estágio</h2>
+          <p style="margin:0 auto;max-width:620px;color:#716b7c;font-size:14px;line-height:1.65">Explore as áreas e veja exemplos de experiências que podem fazer parte da aprendizagem prática. Todas as atividades devem respeitar o nível de formação, os protocolos do serviço e a supervisão responsável.</p>
+        </div>
+        <div style="display:grid;gap:10px">
+          <details style="border:1px solid #f1cfe1;border-radius:14px;background:#fffafd;overflow:hidden">
+            <summary style="cursor:pointer;padding:15px 17px;background:#fdebf4;color:#8e4d72;font-weight:800">🌷 Saúde pública e atendimento ambulatorial</summary>
+            <div style="padding:16px 18px;color:#554e5e;font-size:14px;line-height:1.75">
+              <ol style="padding-left:20px;margin:0">
+                <li>Conhecer os diferentes setores, observando a rotina e a organização do atendimento.</li>
+                <li>Identificar os integrantes da equipe e compreender as responsabilidades de cada função.</li>
+                <li>Participar do acolhimento e da orientação inicial dos usuários.</li>
+                <li>Verificar e registrar sinais vitais.</li>
+                <li>Auxiliar na realização de curativos conforme orientação e supervisão.</li>
+                <li>Acompanhar o preparo e a administração de medicamentos e soluções prescritas.</li>
+                <li>Conhecer a organização da sala de vacinação, os registros vacinais e o processo de administração de imunizantes.</li>
+                <li>Observar ou auxiliar, conforme autorização, na punção venosa e na coleta de amostras para exames.</li>
+                <li>Acompanhar a coleta de material para exame citopatológico do colo do útero.</li>
+                <li>Orientar, junto à equipe, sobre amamentação e cuidados básicos com o bebê.</li>
+                <li>Colaborar no planejamento e na execução de atividades educativas em saúde.</li>
+                <li>Preparar materiais para nebulização ou inalação, conforme prescrição e protocolo.</li>
+                <li>Realizar a verificação da glicemia capilar quando autorizado e supervisionado.</li>
+                <li>Efetuar registros de enfermagem claros, completos e oportunos.</li>
+              </ol>
+            </div>
+          </details>
+          <details style="border:1px solid #cfe3f7;border-radius:14px;background:#fbfdff;overflow:hidden">
+            <summary style="cursor:pointer;padding:15px 17px;background:#eaf4ff;color:#426d9a;font-weight:800">🩵 Clínica médica e cirúrgica</summary>
+            <div style="padding:16px 18px;color:#4f5967;font-size:14px;line-height:1.75">
+              <ol style="padding-left:20px;margin:0">
+                <li>Observar os fluxos de trabalho e as atribuições dos profissionais da equipe.</li>
+                <li>Acompanhar a admissão, a identificação e o acolhimento do paciente.</li>
+                <li>Mensurar e registrar os sinais vitais.</li>
+                <li>Preparar o leito para receber o paciente e conhecer a organização do leito no pós-operatório.</li>
+                <li>Prestar cuidados de higiene e conforto, incluindo higiene oral, banho no chuveiro ou no leito e hidratação da pele.</li>
+                <li>Acompanhar procedimentos de sondagem urinária de alívio ou de demora, respeitando as atribuições e a supervisão exigidas.</li>
+                <li>Observar a preparação e a instalação de sondas nasogástricas ou nasoentéricas por profissional habilitado.</li>
+                <li>Auxiliar na oferta segura da alimentação conforme a condição clínica e a orientação da equipe.</li>
+                <li>Registrar entradas e saídas de líquidos para acompanhamento do balanço hídrico.</li>
+                <li>Realizar ou auxiliar em curativos de acordo com a orientação recebida.</li>
+                <li>Verificar glicemia capilar quando indicado.</li>
+                <li>Participar do preparo e da administração segura de medicamentos prescritos.</li>
+                <li>Conhecer os materiais utilizados para acesso venoso periférico e acompanhar sua utilização.</li>
+                <li>Acompanhar o preparo de soluções intravenosas e a conferência da velocidade de infusão.</li>
+                <li>Participar dos cuidados e da conferência pré-operatória.</li>
+                <li>Acompanhar o transporte e o encaminhamento do paciente para exames.</li>
+                <li>Observar a avaliação após a cirurgia e contribuir para os registros pertinentes.</li>
+                <li>Manter os registros de enfermagem completos e objetivos.</li>
+                <li>Acompanhar a passagem de plantão, com comunicação organizada das informações essenciais.</li>
+              </ol>
+            </div>
+          </details>
+          <details style="border:1px solid #d4ead8;border-radius:14px;background:#fbfffb;overflow:hidden">
+            <summary style="cursor:pointer;padding:15px 17px;background:#eaf8ed;color:#477653;font-weight:800">🌿 Pediatria</summary>
+            <div style="padding:16px 18px;color:#4f5f53;font-size:14px;line-height:1.75">
+              <ol style="padding-left:20px;margin:0">
+                <li>Conhecer a rotina pediátrica e as funções dos profissionais envolvidos no cuidado.</li>
+                <li>Acompanhar a recepção e a admissão da criança, considerando as necessidades da família.</li>
+                <li>Verificar e registrar peso e estatura conforme a faixa etária e o procedimento adotado.</li>
+                <li>Aferir os sinais vitais com parâmetros adequados à idade.</li>
+                <li>Acompanhar a administração de medicamentos prescritos, com conferência cuidadosa da dose.</li>
+                <li>Observar o preparo e o controle da infusão de soluções intravenosas.</li>
+                <li>Conhecer os materiais para acesso venoso periférico e acompanhar procedimentos realizados por profissional habilitado.</li>
+                <li>Aprender os princípios de diluição e cálculo de doses pediátricas, sempre com dupla checagem e supervisão.</li>
+                <li>Acompanhar terapias inalatórias e oferta de oxigênio quando indicadas.</li>
+                <li>Participar dos cuidados de preparo da criança antes de uma cirurgia.</li>
+                <li>Acompanhar o encaminhamento seguro ao setor cirúrgico.</li>
+                <li>Observar os cuidados no período pós-operatório.</li>
+                <li>Auxiliar nos cuidados de higiene, conforto e proteção da criança.</li>
+                <li>Conhecer medidas de conforto e monitoramento em situações de febre, conforme orientação clínica.</li>
+                <li>Realizar registros de enfermagem pertinentes ao cuidado prestado.</li>
+                <li>Participar da passagem de plantão, comunicando informações relevantes de forma clara.</li>
+              </ol>
+            </div>
+          </details>
+          <details style="border:1px solid #d9d2f5;border-radius:14px;background:#fdfcff;overflow:hidden">
+            <summary style="cursor:pointer;padding:15px 17px;background:#f0edff;color:#665a9b;font-weight:800">💜 Unidade de terapia intensiva</summary>
+            <div style="padding:16px 18px;color:#57536c;font-size:14px;line-height:1.75">
+              <ol style="padding-left:20px;margin:0">
+                <li>Observar a dinâmica da unidade e a atuação dos profissionais na assistência ao paciente crítico.</li>
+                <li>Acompanhar a admissão e a avaliação inicial do paciente.</li>
+                <li>Verificar sinais vitais e reconhecer alterações que precisam ser comunicadas imediatamente.</li>
+                <li>Conhecer os cuidados de higiene e conforto no leito.</li>
+                <li>Observar a monitorização cardíaca e o reconhecimento de alarmes.</li>
+                <li>Acompanhar a realização e a finalidade do eletrocardiograma.</li>
+                <li>Monitorar a saturação periférica de oxigênio por oximetria, conforme orientação.</li>
+                <li>Verificar glicemia capilar quando indicada.</li>
+                <li>Conhecer os materiais para acesso venoso periférico e acompanhar os cuidados com o dispositivo.</li>
+                <li>Aprender medidas de manutenção, observação e prevenção de complicações relacionadas ao acesso venoso.</li>
+                <li>Acompanhar a coleta e o encaminhamento de amostras biológicas para análise laboratorial.</li>
+                <li>Observar a preparação, a conferência e a administração de medicamentos sob supervisão.</li>
+                <li>Reconhecer os materiais e medicamentos do carrinho de emergência e compreender sua organização.</li>
+                <li>Observar os alarmes e os parâmetros do ventilador mecânico, comunicando alterações à equipe responsável.</li>
+                <li>Controlar e registrar o balanço hídrico conforme orientação.</li>
+                <li>Acompanhar a realização de curativos e a avaliação da pele.</li>
+                <li>Prestar cuidados de higiene e conforto de acordo com a condição clínica.</li>
+                <li>Acompanhar o transporte seguro para exames de imagem.</li>
+                <li>Manter registros objetivos sobre observações e cuidados realizados.</li>
+                <li>Participar da passagem de plantão com foco na continuidade e segurança da assistência.</li>
+              </ol>
+            </div>
+          </details>
+          <details style="border:1px solid #f2dfb9;border-radius:14px;background:#fffefa;overflow:hidden">
+            <summary style="cursor:pointer;padding:15px 17px;background:#fff3d9;color:#8b6b32;font-weight:800">🌼 Sala de parto e maternidade</summary>
+            <div style="padding:16px 18px;color:#665b49;font-size:14px;line-height:1.75">
+              <ol style="padding-left:20px;margin:0">
+                <li>Conhecer a rotina do setor e as responsabilidades dos profissionais que acompanham o parto e o puerpério.</li>
+                <li>Acompanhar a admissão e o acolhimento da gestante no período que antecede o parto.</li>
+                <li>Orientar, com apoio da equipe, sobre cuidados iniciais com o recém-nascido.</li>
+                <li>Incentivar e esclarecer dúvidas sobre amamentação, conforme as necessidades da mãe e do bebê.</li>
+                <li>Observar a instalação e o acompanhamento de soluções intravenosas prescritas.</li>
+                <li>Oferecer acolhimento e apoio à mulher durante o trabalho de parto, respeitando suas escolhas e privacidade.</li>
+                <li>Acompanhar a recepção e a avaliação inicial do recém-nascido pela equipe responsável.</li>
+                <li>Conhecer os cuidados de higiene do bebê e a limpeza do coto umbilical.</li>
+                <li>Aprender sobre a ordenha manual do leite materno e seu manejo seguro.</li>
+                <li>Observar os lóquios e comunicar alterações à equipe responsável.</li>
+                <li>Auxiliar nos cuidados de higiene e conforto da mulher no pós-parto.</li>
+                <li>Reforçar orientações de alta, sinais de alerta e continuidade dos cuidados.</li>
+                <li>Realizar os registros pertinentes à assistência prestada.</li>
+                <li>Participar da passagem de plantão, preservando a continuidade do cuidado materno-infantil.</li>
+              </ol>
+            </div>
+          </details>
+          <details style="border:1px solid #f5d6c8;border-radius:14px;background:#fffaf8;overflow:hidden">
+            <summary style="cursor:pointer;padding:15px 17px;background:#ffede5;color:#9a604a;font-weight:800">🍑 Central de material e esterilização</summary>
+            <div style="padding:16px 18px;color:#6b554d;font-size:14px;line-height:1.75">
+              <ol style="padding-left:20px;margin:0">
+                <li>Conhecer as áreas de trabalho e o fluxo de materiais entre as etapas do processamento.</li>
+                <li>Observar a limpeza, a inspeção e a secagem dos instrumentais, conforme protocolo.</li>
+                <li>Acompanhar a montagem e a identificação de conjuntos de roupas e instrumentais.</li>
+                <li>Conhecer o funcionamento da autoclave e os cuidados de segurança durante o processo.</li>
+                <li>Observar os indicadores e testes utilizados para verificar a eficácia do processamento e da esterilização.</li>
+              </ol>
+            </div>
+          </details>
+          <details style="border:1px solid #d5e6f2;border-radius:14px;background:#fbfdff;overflow:hidden">
+            <summary style="cursor:pointer;padding:15px 17px;background:#e8f4fa;color:#47758d;font-weight:800">🫧 Centro cirúrgico</summary>
+            <div style="padding:16px 18px;color:#4e606a;font-size:14px;line-height:1.75">
+              <ol style="padding-left:20px;margin:0">
+                <li>Observar a organização do setor e as funções dos profissionais da equipe cirúrgica.</li>
+                <li>Conhecer as etapas de paramentação e as medidas para manter a técnica asséptica.</li>
+                <li>Acompanhar, como observador, a preparação para a anestesia e a indução anestésica.</li>
+                <li>Auxiliar a equipe de circulação dentro das atribuições permitidas e sob orientação.</li>
+                <li>Acompanhar o transporte e a transferência segura do paciente para a sala operatória.</li>
+                <li>Conhecer os princípios de posicionamento cirúrgico e prevenção de lesões.</li>
+                <li>Observar a assistência na recuperação pós-anestésica imediata.</li>
+                <li>Registrar ou acompanhar os registros de enfermagem pertinentes às atividades realizadas.</li>
+              </ol>
+            </div>
+          </details>
+          <details style="border:1px solid #e6d9f1;border-radius:14px;background:#fefcff;overflow:hidden">
+            <summary style="cursor:pointer;padding:15px 17px;background:#f4eafa;color:#805b97;font-weight:800">🪻 Cuidado à pessoa idosa</summary>
+            <div style="padding:16px 18px;color:#61546a;font-size:14px;line-height:1.75">
+              <ol style="padding-left:20px;margin:0">
+                <li>Conhecer a organização do serviço e a rotina de cuidado à pessoa idosa.</li>
+                <li>Acolher a pessoa idosa e acompanhar sua admissão, respeitando autonomia e preferências.</li>
+                <li>Verificar sinais vitais e comunicar alterações observadas.</li>
+                <li>Preparar o leito para conforto, segurança e prevenção de quedas.</li>
+                <li>Auxiliar nos cuidados de higiene oral, banho, hidratação da pele e conforto.</li>
+                <li>Acompanhar a alimentação e observar dificuldades para comer ou engolir.</li>
+                <li>Participar dos cuidados com feridas e curativos, conforme orientação.</li>
+                <li>Verificar glicemia capilar quando indicada.</li>
+                <li>Acompanhar o preparo e a administração de medicamentos sob supervisão.</li>
+                <li>Conhecer os cuidados com dispositivos de acesso venoso periférico.</li>
+                <li>Observar as necessidades físicas, funcionais, emocionais e sociais da pessoa idosa.</li>
+                <li>Participar do exame físico e comunicar achados relevantes ao supervisor.</li>
+                <li>Colaborar em atividades de convivência, recreação e estímulo à socialização.</li>
+                <li>Manter registros de enfermagem pertinentes ao cuidado prestado.</li>
+              </ol>
+            </div>
+          </details>
+          <details style="border:1px solid #cfe8e3;border-radius:14px;background:#fbfffe;overflow:hidden">
+            <summary style="cursor:pointer;padding:15px 17px;background:#e5f7f2;color:#39796f;font-weight:800">🌱 Saúde mental e cuidado psicossocial</summary>
+            <div style="padding:16px 18px;color:#4d625e;font-size:14px;line-height:1.75">
+              <ol style="padding-left:20px;margin:0">
+                <li>Conhecer a organização do serviço e a rotina de atendimento psicossocial.</li>
+                <li>Identificar as funções dos profissionais e a contribuição de cada área para o cuidado integrado.</li>
+                <li>Observar sinais de sofrimento psíquico e necessidades de acolhimento, sem julgamentos.</li>
+                <li>Desenvolver comunicação respeitosa e vínculo terapêutico, respeitando limites profissionais.</li>
+                <li>Interagir com a equipe de cuidado para compreender os objetivos do plano terapêutico.</li>
+                <li>Quando previsto e autorizado, acompanhar visitas domiciliares com a equipe responsável.</li>
+                <li>Colaborar em atividades de lazer e convivência adequadas às necessidades dos usuários.</li>
+                <li>Participar de iniciativas que favoreçam a integração entre usuário, família e comunidade.</li>
+                <li>Contribuir para ações de educação em saúde e promoção do bem-estar psicossocial.</li>
+              </ol>
+            </div>
+          </details>
+        </div>
+        <p style="margin:18px 2px 0;color:#777184;font-size:12px;line-height:1.6">Importante: esta lista é orientativa. A realização de procedimentos depende da legislação profissional, do estágio de formação, da autorização do campo e da supervisão do enfermeiro responsável.</p>
+      `;
+      const caixaDica = dicaAntiga.closest('[style*="background"], [class*="yellow"], [class*="amber"]') || dicaAntiga;
+      caixaDica.insertAdjacentElement("afterend", banner);
     }
     const chips: Array<[RegExp, string]> = [
       [/Postura e Conduta/, "topico-postura"],
