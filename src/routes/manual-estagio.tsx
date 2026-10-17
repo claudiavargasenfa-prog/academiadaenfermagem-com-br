@@ -195,6 +195,19 @@ function Conteudo() {
       const alvo = document.getElementById(hash.slice(1));
       if (alvo) alvo.scrollIntoView({ behavior: "smooth", block: "start" });
     }
+    // Substitui somente o banner antigo dentro do HTML vindo do Supabase.
+    const tituloHero = Array.from(el.querySelectorAll("h1, h2, h3")).find((h) =>
+      /manual de sobrevivência no estágio/i.test(h.textContent || "")
+    );
+    if (tituloHero) {
+      let candidato: HTMLElement = tituloHero as HTMLElement;
+      const temasHero = ["Postura e Conduta", "Técnicas Essenciais", "Relacionamento com Equipe", "Segurança do Paciente", "Primeiro Plantão"];
+      const contaTemas = (node: HTMLElement) => temasHero.filter((tema) => (node.textContent || "").includes(tema)).length;
+      while (candidato.parentElement && candidato.parentElement !== el && contaTemas(candidato) < 3) {
+        candidato = candidato.parentElement;
+      }
+      if (contaTemas(candidato) >= 3) candidato.style.display = "none";
+    }
     const chips: Array<[RegExp, string]> = [
       [/Postura e Conduta/, "topico-postura"],
       [/Técnicas Essenciais/, "topico-tecnicas"],
@@ -227,6 +240,29 @@ function Conteudo() {
         description="Seu acesso está liberado. Bom estágio!" />
       <button type="button" onClick={() => { localStorage.removeItem(KEY); window.location.reload(); }}
         className="mb-4 text-xs text-muted-foreground underline">Ver a tela de cadastro novamente</button>
+      <section className="relative mb-6 overflow-hidden rounded-[1.5rem] border-[3px] border-[#D7AF42] bg-[#004225] text-white shadow-[0_20px_45px_rgba(0,45,27,0.22)]">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(215,175,66,0.15),transparent_42%),radial-gradient(ellipse_at_bottom_left,rgba(215,175,66,0.08),transparent_38%)]" />
+        <div className="relative mx-auto max-w-2xl px-5 py-7 text-center sm:px-10 sm:py-8">
+          <span className="inline-flex -rotate-2 items-center rounded-full bg-[#D7AF42] px-5 py-1.5 text-[10px] font-black uppercase tracking-[0.12em] text-[#073923] sm:text-xs">🎁 Presente 100% grátis</span>
+          <p className="mt-4 text-[10px] font-extrabold uppercase tracking-[0.28em] text-[#F3D77B] sm:text-xs">O Mundo da Enfermagem</p>
+          <h2 className="mx-auto mt-2 max-w-2xl font-display text-4xl font-black uppercase leading-[0.98] tracking-[-0.04em] sm:text-5xl">Não pise no<br className="hidden sm:block" /> estágio <span className="text-[#F2C94C]">sem isto.</span></h2>
+          <p className="mx-auto mt-4 max-w-lg text-sm font-semibold leading-relaxed text-white/85 sm:text-base">O Manual de Sobrevivência no Estágio: tudo o que ninguém te conta antes do primeiro dia de campo.</p>
+          <p className="mt-5 text-[10px] font-black uppercase tracking-[0.14em] text-[#F2C94C]">Dentro do manual</p>
+          <ul className="mx-auto mt-2 grid max-w-md gap-1.5 text-left">
+            {[
+              { t: "Postura que o preceptor quer ver", href: "#topico-postura" },
+              { t: "Relacionamento com paciente e família", href: "#topico-relacionamento" },
+              { t: "Técnicas essenciais e cálculos", href: "#topico-tecnicas" },
+              { t: "Segurança do paciente sem errar", href: "#topico-seguranca" },
+              { t: "Passagem de plantão ISBAR na prática", href: "#topico-isbar" },
+              { t: "Os erros que reprovam no campo", href: "#topico-erros" },
+            ].map((item) => (
+              <li key={item.href}><a href={item.href} className="flex min-h-8 items-center gap-2 rounded-full bg-white/[0.09] px-3 py-1.5 text-left text-[11px] font-bold text-white transition-colors hover:bg-white/[0.15] sm:text-xs"><span className="font-black text-[#F2C94C]">✓</span><span>{item.t}</span></a></li>
+            ))}
+          </ul>
+          <p className="mt-5 text-[10px] font-black uppercase tracking-[0.12em] text-[#F2C94C] sm:text-xs">↓ Conteúdo gratuito — escolha um assunto acima ↓</p>
+        </div>
+      </section>
       {html === null ? <p className="py-10 text-center text-muted-foreground">Carregando...</p> : <div className="manual-conteudo overflow-x-auto" dangerouslySetInnerHTML={{ __html: html }} />}
       <Card className="mt-6">
         <div className="mb-3 flex items-center gap-2 text-gold"><Sparkles className="h-5 w-5" />
