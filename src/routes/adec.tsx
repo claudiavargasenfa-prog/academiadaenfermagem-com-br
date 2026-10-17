@@ -528,6 +528,69 @@ const AUTOMATICOS = [
           </div>
         </section>
 
+        {/* DEPOIMENTOS — reprodução do banner da página principal */}
+        <section aria-labelledby="depoimentos-title" className="mt-8 mb-10 overflow-hidden rounded-3xl border border-emerald-400/30 bg-[#06121B] py-6 text-white shadow-[0_0_30px_rgba(16,185,129,0.08)] md:py-8">
+                <div className="mb-5 px-5 md:px-8">
+                  <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-300">Quem vive a rotina da enfermagem</p>
+                  <h2 id="depoimentos-title" className="mt-2 font-display text-2xl font-black md:text-3xl">Mais praticidade para estudar, cuidar e organizar os plantões</h2>
+                  <p className="mt-2 max-w-3xl text-sm leading-relaxed text-slate-300">Conheça exemplos de situações em que os recursos da plataforma podem ajudar na rotina de estudantes e profissionais.</p>
+                  <p className="mt-2 text-xs text-amber-200/80">Imagens e relatos ilustrativos, usados para apresentar possíveis experiências de uso — não são avaliações verificadas de clientes.</p>
+                </div>
+                <style>{`
+                  @keyframes academia-depoimentos-marquee {
+                    from { transform: translateX(0); }
+                    to { transform: translateX(-50%); }
+                  }
+                  .academia-depoimentos-track {
+                    animation: academia-depoimentos-marquee 72s linear infinite;
+                    width: max-content;
+                  }
+                  .academia-depoimentos-track:hover { animation-play-state: paused; }
+                  @media (prefers-reduced-motion: reduce) {
+                    .academia-depoimentos-track { animation: none; }
+                  }
+                `}</style>
+                <div className="overflow-hidden">
+                  <div className="academia-depoimentos-track flex gap-4 px-4">
+                    {[
+                      { quote: "O Diário de Estágio pode ajudar a organizar as anotações do campo e agilizar a preparação do relatório.", name: "Estudante de Enfermagem", role: "Estágio e formação", photo: "photo-1559839734-2b71ea197ec2" },
+                      { quote: "Ter uma calculadora de gotejamento à mão facilita a conferência dos cálculos durante os estudos e a rotina supervisionada.", name: "Técnico em formação", role: "Cálculos de enfermagem", photo: "photo-1612349316876-ef7a7b3b7c2b" },
+                      { quote: "Conteúdos objetivos no celular ajudam a revisar conceitos e consultar materiais de apoio sem carregar vários livros.", name: "Acadêmica de Enfermagem", role: "Estudos e prática supervisionada", photo: "photo-1594824476967-48c8b964273f" },
+                      { quote: "Recursos organizados por tema podem facilitar a revisão de protocolos e a consulta durante a preparação para o plantão.", name: "Enfermeiro assistencial", role: "Apoio à rotina clínica", photo: "photo-1622253692010-333f2da6031d" },
+                      { quote: "Centralizar escalas e compromissos em um só lugar ajuda a visualizar melhor os turnos e planejar os horários.", name: "Profissional plantonista", role: "Organização de turnos", photo: "photo-1584515933487-779824d29309" },
+                      { quote: "Acompanhar sinais de cansaço e respeitar os próprios limites é importante para cuidar da saúde e buscar apoio quando necessário.", name: "Profissional de Enfermagem", role: "Bem-estar e autocuidado", photo: "photo-1551601651-2a8555f1a136" },
+                      { quote: "Uma visão mais clara dos plantões previstos pode contribuir para organizar compromissos, descanso e planejamento financeiro.", name: "Enfermeiro plantonista", role: "Planejamento mensal", photo: "photo-1612531386530-97286d97c2d2" },
+                      { quote: "Reunir ferramentas de estudo, apoio técnico e organização da rotina em uma plataforma torna a consulta mais prática.", name: "Técnica de Enfermagem", role: "Rotina profissional", photo: "photo-1581056771107-24ca5f033842" },
+                      { quote: "A navegação simples no celular é útil quando preciso encontrar rapidamente o material que estou estudando.", name: "Enfermeira", role: "Consulta pelo celular", photo: "photo-1559839734-2b71ea197ec2" },
+                      { quote: "Ter ferramentas de apoio reunidas em um só lugar pode ajudar a manter os estudos e a organização dos turnos em dia.", name: "Profissional de Enfermagem", role: "Estudo e organização", photo: "photo-1612349316876-ef7a7b3b7c2b" },
+                    ].concat([
+                      { quote: "O Diário de Estágio pode ajudar a organizar as anotações do campo e agilizar a preparação do relatório.", name: "Estudante de Enfermagem", role: "Estágio e formação", photo: "photo-1559839734-2b71ea197ec2" },
+                      { quote: "Ter uma calculadora de gotejamento à mão facilita a conferência dos cálculos durante os estudos e a rotina supervisionada.", name: "Técnico em formação", role: "Cálculos de enfermagem", photo: "photo-1612349316876-ef7a7b3b7c2b" },
+                      { quote: "Conteúdos objetivos no celular ajudam a revisar conceitos e consultar materiais de apoio sem carregar vários livros.", name: "Acadêmica de Enfermagem", role: "Estudos e prática supervisionada", photo: "photo-1594824476967-48c8b964273f" },
+                      { quote: "Recursos organizados por tema podem facilitar a revisão de protocolos e a consulta durante a preparação para o plantão.", name: "Enfermeiro assistencial", role: "Apoio à rotina clínica", photo: "photo-1622253692010-333f2da6031d" },
+                      { quote: "Centralizar escalas e compromissos em um só lugar ajuda a visualizar melhor os turnos e planejar os horários.", name: "Profissional plantonista", role: "Organização de turnos", photo: "photo-1584515933487-779824d29309" },
+                      { quote: "Acompanhar sinais de cansaço e respeitar os próprios limites é importante para cuidar da saúde e buscar apoio quando necessário.", name: "Profissional de Enfermagem", role: "Bem-estar e autocuidado", photo: "photo-1551601651-2a8555f1a136" },
+                      { quote: "Uma visão mais clara dos plantões previstos pode contribuir para organizar compromissos, descanso e planejamento financeiro.", name: "Enfermeiro plantonista", role: "Planejamento mensal", photo: "photo-1612531386530-97286d97c2d2" },
+                      { quote: "Reunir ferramentas de estudo, apoio técnico e organização da rotina em uma plataforma torna a consulta mais prática.", name: "Técnica de Enfermagem", role: "Rotina profissional", photo: "photo-1581056771107-24ca5f033842" },
+                      { quote: "A navegação simples no celular é útil quando preciso encontrar rapidamente o material que estou estudando.", name: "Enfermeira", role: "Consulta pelo celular", photo: "photo-1559839734-2b71ea197ec2" },
+                      { quote: "Ter ferramentas de apoio reunidas em um só lugar pode ajudar a manter os estudos e a organização dos turnos em dia.", name: "Profissional de Enfermagem", role: "Estudo e organização", photo: "photo-1612349316876-ef7a7b3b7c2b" },
+                    ]).map((item, index) => (
+                      <article key={index} className="flex w-[290px] shrink-0 flex-col rounded-2xl border border-emerald-400/25 bg-slate-900 p-5 shadow-lg md:w-[330px]">
+                        <div className="flex items-center gap-3">
+                          <img src={`https://images.unsplash.com/${item.photo}?auto=format&fit=crop&w=160&h=160&q=80`} alt="Foto ilustrativa de profissional" loading="lazy" className="h-14 w-14 shrink-0 rounded-full border-2 border-emerald-300/60 object-cover" />
+                          <div>
+                            <p className="text-sm font-black text-white">{item.name}</p>
+                            <p className="mt-1 text-xs leading-snug text-slate-400">{item.role}</p>
+                            <p className="mt-1 text-sm tracking-widest text-amber-400" aria-label="Exemplo ilustrativo, não é avaliação de cliente">★★★★★</p>
+                          </div>
+                        </div>
+                        <p className="mt-4 flex-1 text-sm leading-relaxed text-slate-200">“{item.quote}”</p>
+                      </article>
+                    ))}
+                  </div>
+                </div>
+              </section>
+
         {/* SELOS EM MARQUEE */}
         <section
           className="mt-6 overflow-hidden rounded-3xl border-2 py-5 shadow-xl"
