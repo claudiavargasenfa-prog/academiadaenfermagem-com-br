@@ -420,7 +420,12 @@ function Conteudo() {
             </div>
           </details>
         </div>
-        <p style="margin:18px 2px 0;color:#777184;font-size:12px;line-height:1.6">Importante: esta lista é orientativa. A realização de procedimentos depende da legislação profissional, do estágio de formação, da autorização do campo e da supervisão do enfermeiro responsável.</p>
+        <p style="margin:18px 2px 0;color:#777184;font-size:12px;line-height:1.6"><strong>Importante:</strong> esta lista é orientativa. A realização de procedimentos depende da legislação profissional, do estágio de formação, da autorização do campo e da supervisão do enfermeiro responsável.</p>
+        <p style="margin:12px 2px 0;color:#716b7c;font-size:12px;line-height:1.6"><strong>OBS.:</strong> essas informações podem variar de acordo com a instituição de ensino.</p>
+        <div style="margin-top:18px;padding:14px 16px;border:1px solid #e6e0ef;border-radius:14px;background:rgba(255,255,255,.72);color:#696277;font-size:13px;line-height:1.65">
+          <p style="margin:0">Quer chegar ao estágio com mais segurança para revisar técnicas, cálculos e cuidados de enfermagem? 🌷</p>
+          <p style="margin:6px 0 0">Continue seus estudos com os conteúdos e recursos de apoio disponíveis na <a href="/" style="color:#79649a;font-weight:800;text-decoration:underline;text-underline-offset:3px">Academia da Enfermagem</a>.</p>
+        </div>
       `;
       const caixaDica = dicaAntiga.closest('[style*="background"], [class*="yellow"], [class*="amber"]') || dicaAntiga;
       caixaDica.insertAdjacentElement("afterend", banner);
