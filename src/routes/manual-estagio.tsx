@@ -195,8 +195,8 @@ function Conteudo() {
       const alvo = document.getElementById(hash.slice(1));
       if (alvo) alvo.scrollIntoView({ behavior: "smooth", block: "start" });
     }
-    // Remove somente o menor contêiner que corresponde ao banner antigo duplicado.
-    const texto = (node: Element) => (node.textContent || "").toLocaleLowerCase("pt-BR");
+    // Remove o banner antigo do HTML do Supabase, sem tocar no restante do manual.
+    const texto = (node: Element) => (node.textContent || "").toLocaleLowerCase("pt-BR").replace(/\\s+/g, " ").trim();
     const assuntosAntigos = [
       "postura e conduta",
       "técnicas essenciais",
@@ -204,20 +204,18 @@ function Conteudo() {
       "segurança do paciente",
       "primeiro plantão",
     ];
-    const candidatosAntigos = Array.from(el.querySelectorAll("div, section, article"))
+    const candidatosAntigos = Array.from(el.querySelectorAll("div, section, article, header"))
       .filter((node) => {
+        if (node === el || node.classList.contains("manual-conteudo")) return false;
         const t = texto(node);
+        const quantidadeAssuntos = assuntosAntigos.filter((assunto) => t.includes(assunto)).length;
         return /manual de sobrevivência (no|do) estágio/.test(t) &&
-          assuntosAntigos.every((assunto) => t.includes(assunto));
+          quantidadeAssuntos >= 3 &&
+          t.length < 1800;
       })
-      .sort((a, b) => (a.textContent || "").length - (b.textContent || "").length);
+      .sort((a, b) => texto(a).length - texto(b).length);
     const bannerAntigo = candidatosAntigos[0];
-    if (bannerAntigo && bannerAntigo !== el) {
-      const classes = (bannerAntigo as HTMLElement).className?.toString() || "";
-      if (/rounded|gradient|bg-|shadow/i.test(classes)) {
-        (bannerAntigo as HTMLElement).remove();
-      }
-    }
+    if (bannerAntigo) bannerAntigo.remove();
 
     // Corrige apenas a caixa amarela da dica, sem substituir o restante do manual.
     const dicaAntiga = Array.from(el.querySelectorAll("p, div, aside, blockquote"))
