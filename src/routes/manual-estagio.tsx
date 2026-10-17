@@ -195,18 +195,32 @@ function Conteudo() {
       const alvo = document.getElementById(hash.slice(1));
       if (alvo) alvo.scrollIntoView({ behavior: "smooth", block: "start" });
     }
-    // Substitui somente o banner antigo dentro do HTML vindo do Supabase.
+    // Remove apenas o banner antigo dentro do HTML do manual; o banner novo fica fora dele.
     const tituloHero = Array.from(el.querySelectorAll("h1, h2, h3")).find((h) =>
       /manual de sobrevivência no estágio/i.test(h.textContent || "")
     );
     if (tituloHero) {
-      let candidato: HTMLElement = tituloHero as HTMLElement;
-      const temasHero = ["Postura e Conduta", "Técnicas Essenciais", "Relacionamento com Equipe", "Segurança do Paciente", "Primeiro Plantão"];
-      const contaTemas = (node: HTMLElement) => temasHero.filter((tema) => (node.textContent || "").includes(tema)).length;
-      while (candidato.parentElement && candidato.parentElement !== el && contaTemas(candidato) < 3) {
+      const temasHero = [
+        "postura e conduta",
+        "técnicas essenciais",
+        "relacionamento com equipe",
+        "segurança do paciente",
+        "primeiro plantão",
+      ];
+      const contaTemas = (node: HTMLElement) => {
+        const texto = (node.textContent || "").toLocaleLowerCase("pt-BR");
+        return temasHero.filter((tema) => texto.includes(tema)).length;
+      };
+      let candidato: HTMLElement | null = tituloHero as HTMLElement;
+      let bannerAntigo: HTMLElement | null = null;
+      while (candidato && candidato !== el) {
+        if (contaTemas(candidato) >= 3) {
+          bannerAntigo = candidato;
+          break;
+        }
         candidato = candidato.parentElement;
       }
-      if (contaTemas(candidato) >= 3) candidato.style.display = "none";
+      if (bannerAntigo) bannerAntigo.remove();
     }
     const chips: Array<[RegExp, string]> = [
       [/Postura e Conduta/, "topico-postura"],
