@@ -195,7 +195,37 @@ function Conteudo() {
       const alvo = document.getElementById(hash.slice(1));
       if (alvo) alvo.scrollIntoView({ behavior: "smooth", block: "start" });
     }
-    // Não remover elementos do HTML do manual em bloco: o conteúdo é carregado integralmente do Supabase.
+    // Remove somente o menor contêiner que corresponde ao banner antigo duplicado.
+    const texto = (node: Element) => (node.textContent || "").toLocaleLowerCase("pt-BR");
+    const assuntosAntigos = [
+      "postura e conduta",
+      "técnicas essenciais",
+      "relacionamento com equipe",
+      "segurança do paciente",
+      "primeiro plantão",
+    ];
+    const candidatosAntigos = Array.from(el.querySelectorAll("div, section, article"))
+      .filter((node) => {
+        const t = texto(node);
+        return /manual de sobrevivência (no|do) estágio/.test(t) &&
+          assuntosAntigos.every((assunto) => t.includes(assunto));
+      })
+      .sort((a, b) => (a.textContent || "").length - (b.textContent || "").length);
+    const bannerAntigo = candidatosAntigos[0];
+    if (bannerAntigo && bannerAntigo !== el) {
+      const classes = (bannerAntigo as HTMLElement).className?.toString() || "";
+      if (/rounded|gradient|bg-|shadow/i.test(classes)) {
+        (bannerAntigo as HTMLElement).remove();
+      }
+    }
+
+    // Corrige apenas a caixa amarela da dica, sem substituir o restante do manual.
+    const dicaAntiga = Array.from(el.querySelectorAll("p, div, aside, blockquote"))
+      .filter((node) => /dica de enfermeiro veterano/i.test(texto(node)) && /chegue 30 minutos antes/i.test(texto(node)))
+      .sort((a, b) => (a.textContent || "").length - (b.textContent || "").length)[0];
+    if (dicaAntiga) {
+      dicaAntiga.innerHTML = '<strong>💡 Dica de Enfermeiro Veterano:</strong> Chegue sempre 15 minutos antes para que tenha tempo de descansar e refletir. Isso também demonstra interesse e compromisso.';
+    }
     const chips: Array<[RegExp, string]> = [
       [/Postura e Conduta/, "topico-postura"],
       [/Técnicas Essenciais/, "topico-tecnicas"],
