@@ -195,32 +195,28 @@ function Conteudo() {
       const alvo = document.getElementById(hash.slice(1));
       if (alvo) alvo.scrollIntoView({ behavior: "smooth", block: "start" });
     }
-    // Remove apenas o banner antigo dentro do HTML do manual; o banner novo fica fora dele.
-    const tituloHero = Array.from(el.querySelectorAll("h1, h2, h3")).find((h) =>
-      /manual de sobrevivência no estágio/i.test(h.textContent || "")
-    );
-    if (tituloHero) {
-      const temasHero = [
-        "postura e conduta",
-        "técnicas essenciais",
-        "relacionamento com equipe",
-        "segurança do paciente",
-        "primeiro plantão",
-      ];
-      const contaTemas = (node: HTMLElement) => {
-        const texto = (node.textContent || "").toLocaleLowerCase("pt-BR");
-        return temasHero.filter((tema) => texto.includes(tema)).length;
-      };
-      let candidato: HTMLElement | null = tituloHero as HTMLElement;
-      let bannerAntigo: HTMLElement | null = null;
-      while (candidato && candidato !== el) {
-        if (contaTemas(candidato) >= 3) {
-          bannerAntigo = candidato;
-          break;
-        }
-        candidato = candidato.parentElement;
-      }
-      if (bannerAntigo) bannerAntigo.remove();
+    // Remove o banner antigo duplicado do HTML armazenado no Supabase.
+    const temasHero = [
+      "postura e conduta",
+      "técnicas essenciais",
+      "relacionamento com equipe",
+      "segurança do paciente",
+      "primeiro plantão",
+    ];
+    const textoDe = (node: Element) => (node.textContent || "").toLocaleLowerCase("pt-BR");
+    const eBannerAntigo = (node: Element) =>
+      /manual de sobrevivência no estágio/.test(textoDe(node)) &&
+      temasHero.filter((tema) => textoDe(node).includes(tema)).length >= 3;
+    const candidatosBanner = Array.from(el.querySelectorAll("div, section, article, header"))
+      .filter((node) => eBannerAntigo(node) && !Array.from(node.children).some((child) => eBannerAntigo(child)));
+    candidatosBanner.forEach((node) => (node as HTMLElement).remove());
+
+    // Corrige a orientação de segurança: estudante nunca entra na unidade sem o preceptor.
+    const dica = Array.from(el.querySelectorAll("div, p, aside, blockquote"))
+      .find((node) => /dica de enfermeiro veterano/i.test(textoDe(node)) && /chegue 30 minutos antes/i.test(textoDe(node)));
+    if (dica) {
+      const caixa = dica as HTMLElement;
+      caixa.innerHTML = '<strong>💡 Dica de Enfermeiro Veterano:</strong> Combine previamente o horário com seu preceptor e aguarde sua chegada. <strong>É proibida a entrada do aluno no setor sem a presença do preceptor.</strong> Aproveite esse momento para confirmar o local de encontro e as orientações iniciais. Nunca entre sozinho na unidade.';
     }
     const chips: Array<[RegExp, string]> = [
       [/Postura e Conduta/, "topico-postura"],
