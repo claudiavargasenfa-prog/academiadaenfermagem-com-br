@@ -7,7 +7,7 @@ import { ContentProtection } from "@/components/ContentProtection";
 import { Card, PageHeader } from "@/components/AppShell";
 
 const URL = "https://academiadaenfermagem.com.br/manual-estagio";
-const TITLE = "Manual de Estágio — O Mundo da Enfermagem";
+const TITLE = "Manual de Sobrevivência do Estágio - Grátis";
 const DESC =
   "Manual gratuito de sobrevivência no estágio de enfermagem: preparação, comunicação, segurança do paciente e erros que você precisa evitar.";
 const INSTAGRAM = "https://www.instagram.com/enfnapraticaoficial/";
