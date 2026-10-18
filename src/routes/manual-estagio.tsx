@@ -489,8 +489,11 @@ function Conteudo() {
       <Card className="mt-6">
         <div className="mb-3 flex items-center gap-2 text-gold"><Sparkles className="h-5 w-5" />
           <h2 className="font-display text-lg font-bold text-foreground">Isso é só a porta de entrada</h2></div>
-        <p className="mb-4 text-sm text-muted-foreground">
-          Dentro da Academia da Enfermagem você encontra conteúdos atualizados todo mês e ferramentas que salvam o seu plantão:
+        <p className="mb-3 text-sm text-muted-foreground">
+          Dentro da Academia da Enfermagem você encontra conteúdos atualizados todo mês e ferramentas que salvam o seu plantão.
+        </p>
+        <p className="mb-4 rounded-xl border border-gold/40 bg-gold/5 p-4 text-sm leading-relaxed text-foreground">
+          <strong>Existe um plano ADEC pensado para cada nível de formação.</strong> São quatro planos para que estudantes de Técnico em Enfermagem, acadêmicos e profissionais encontrem recursos de apoio adequados à sua etapa de aprendizagem e atuação.
         </p>
         <div className="grid gap-3 md:grid-cols-3">
           {pontes.map((p) => (
