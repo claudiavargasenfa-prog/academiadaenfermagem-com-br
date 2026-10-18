@@ -500,7 +500,27 @@ function Conteudo() {
             </div>
           ))}
         </div>
-        <Link to="/" className="mt-5 block rounded-xl bg-primary px-4 py-3 text-center font-bold text-primary-foreground">
+        <div className="relative mt-6 overflow-hidden rounded-2xl border-2 border-[#D7AF42] bg-gradient-to-br from-[#063d29] via-[#075136] to-[#0b6040] p-5 text-center text-white shadow-[0_14px_35px_rgba(0,45,27,0.22)] sm:p-7">
+          <div className="pointer-events-none absolute -right-8 -top-8 h-28 w-28 rounded-full border border-[#F2C94C]/25" />
+          <div className="pointer-events-none absolute -bottom-10 -left-8 h-32 w-32 rounded-full border border-[#F2C94C]/20" />
+          <div className="relative">
+            <span className="inline-flex items-center gap-2 rounded-full bg-[#F2C94C] px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.14em] text-[#073923] sm:text-xs">
+              <Sparkles className="h-4 w-4" /> Recompensa exclusiva para você
+            </span>
+            <h3 className="mx-auto mt-4 max-w-xl font-display text-2xl font-black leading-tight sm:text-3xl">
+              Sua próxima etapa na Enfermagem começa com <span className="text-[#F2C94C]">20% OFF</span>
+            </h3>
+            <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-white/90 sm:text-base">
+              Como recompensa por ter baixado este manual, você ganha <strong className="text-[#F2C94C]">20% de desconto na assinatura anual</strong>. Oferta válida nas próximas 24 horas.
+            </p>
+            <div className="mx-auto mt-5 max-w-xs rounded-xl border border-dashed border-[#F2C94C]/80 bg-black/15 px-4 py-3">
+              <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-white/75">Use seu cupom exclusivo</p>
+              <p className="mt-1 font-mono text-2xl font-black tracking-[0.16em] text-[#F2C94C] sm:text-3xl">ESTAGIO20</p>
+            </div>
+            <p className="mt-3 text-xs text-white/70">Aproveite sua recompensa e continue evoluindo na prática.</p>
+          </div>
+        </div>
+        <Link to="/" className="mt-4 block rounded-xl border-2 border-[#D7AF42] bg-primary px-4 py-3.5 text-center font-bold text-primary-foreground shadow-md transition-transform hover:-translate-y-0.5">
           Conhecer os Módulos de Decisão Clínica
         </Link>
       </Card>
