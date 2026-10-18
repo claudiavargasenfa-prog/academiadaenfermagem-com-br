@@ -516,10 +516,6 @@ function Conteudo() {
             <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-white/90 sm:text-base">
               Como recompensa por ter baixado este manual, você ganha <strong className="text-[#F2C94C]">20% de desconto na assinatura anual</strong>. Oferta válida nas próximas 24 horas.
             </p>
-            <div className="mx-auto mt-5 max-w-xs rounded-xl border border-dashed border-[#F2C94C]/80 bg-black/15 px-4 py-3">
-              <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-white/75">Use seu cupom exclusivo</p>
-              <p className="mt-1 font-mono text-2xl font-black tracking-[0.16em] text-[#F2C94C] sm:text-3xl">ESTAGIO20</p>
-            </div>
             <p className="mt-3 text-xs text-white/70">Aproveite sua recompensa e continue evoluindo na prática.</p>
           </div>
         </div>
