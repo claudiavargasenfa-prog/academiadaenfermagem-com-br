@@ -523,6 +523,25 @@ function Conteudo() {
             <p className="mt-3 text-xs text-white/70">Aproveite sua recompensa e continue evoluindo na prática.</p>
           </div>
         </div>
+        <section className="mt-6 rounded-2xl border border-border bg-background p-5 sm:p-6" aria-labelledby="experiencias-alunos">
+          <div className="mb-4 text-center">
+            <span className="text-xs font-extrabold uppercase tracking-[0.16em] text-gold">Aprendizagem com propósito</span>
+            <h3 id="experiencias-alunos" className="mt-1 font-display text-xl font-bold text-foreground">O próximo passo da sua jornada</h3>
+            <p className="mx-auto mt-2 max-w-xl text-sm text-muted-foreground">A plataforma reúne recursos para apoiar seus estudos e ajudar você a se preparar para os desafios da Enfermagem.</p>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-2">
+            <blockquote className="rounded-xl border border-gold/30 bg-gold/5 p-4">
+              <span className="text-2xl leading-none text-gold">“</span>
+              <p className="mt-1 text-sm leading-relaxed text-foreground">Quero ter mais segurança para revisar conteúdos e me preparar para as atividades práticas.</p>
+              <footer className="mt-3 text-xs font-semibold text-muted-foreground">Mensagem ilustrativa — substituir por depoimento real autorizado</footer>
+            </blockquote>
+            <blockquote className="rounded-xl border border-gold/30 bg-gold/5 p-4">
+              <span className="text-2xl leading-none text-gold">“</span>
+              <p className="mt-1 text-sm leading-relaxed text-foreground">Ter materiais e ferramentas de apoio reunidos em um só lugar facilita minha rotina de estudos.</p>
+              <footer className="mt-3 text-xs font-semibold text-muted-foreground">Mensagem ilustrativa — substituir por depoimento real autorizado</footer>
+            </blockquote>
+          </div>
+        </section>
         <Link to="/" className="mt-4 block rounded-xl border-2 border-[#D7AF42] bg-primary px-4 py-3.5 text-center font-bold text-primary-foreground shadow-md transition-transform hover:-translate-y-0.5">
           Conhecer os Módulos de Decisão Clínica
         </Link>
