@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { AppShell } from "@/components/AppShell";
 import { fetchSubscriptionPlans, fetchMyActiveSubscriptions, formatPriceBRL } from "@/lib/access";
 import { useApps } from "@/lib/apps";
-import { isBasePlanSlug } from "@/lib/plan-slugs";
+import { storeAcademies } from "@/lib/store-academies";
 import { RichText, useText } from "@/lib/app-texts";
 import { useState } from "react";
 
@@ -32,10 +32,7 @@ function StoreHomeContent() {
   const appBySlug = new Map((appsQ.data ?? []).map((a) => [a.slug, a]));
   const lojaSortMode = useText("ordenacao.loja", "numeric");
   // Toda Academia cadastrada em Admin → Apps aparece automaticamente na loja.
-  const activePlans = (plansQ.data ?? []).filter((p) => p.is_active && (appBySlug.has(p.slug) || isBasePlanSlug(p.slug))).slice().sort((a, b) => {
-    if (lojaSortMode === "alpha") return a.name.localeCompare(b.name, "pt-BR");
-    return ((a as any).sort_order ?? 0) - ((b as any).sort_order ?? 0);
-  });
+  const activePlans = storeAcademies(plansQ.data ?? [], appsQ.data ?? [], lojaSortMode);
   const mySubs = mySubsQ.data ?? [];
   const homeTitle = useText("home.title", "Academia da Enfermagem");
   const homeDesc = useText("home.description", "Seis Academias, uma só plataforma. Conheça cada uma e encontre conteúdos para sua formação e prática na enfermagem.");
