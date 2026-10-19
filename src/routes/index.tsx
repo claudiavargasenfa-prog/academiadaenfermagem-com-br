@@ -235,12 +235,12 @@ function StoreHomeContent() {
                     key={plan.id}
                     to="/trilha/$slug"
                     params={{ slug }}
-                    className="group relative col-span-1 flex min-h-[250px] overflow-hidden rounded-3xl border-2 border-yellow-300 p-6 shadow-lg transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl sm:col-span-2 md:min-h-[270px]"
+                    className="group relative flex min-h-[230px] flex-col overflow-hidden rounded-2xl border-2 border-yellow-300 p-5 shadow-[0_8px_24px_rgba(0,0,0,0.18)] transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_14px_30px_rgba(0,0,0,0.28)] md:min-h-[250px]"
                     style={{ background: "linear-gradient(135deg, #fffef0 0%, #fff9b8 52%, #fff176 100%)", color: "#422006" }}
                   >
                     <div className="absolute -right-12 -top-16 h-48 w-48 rounded-full bg-yellow-300/40 blur-3xl transition-transform duration-500 group-hover:scale-125" />
-                    <div className="absolute right-5 top-1/2 -translate-y-1/2 opacity-95 transition-transform duration-500 group-hover:scale-105 md:right-10">
-                      <svg width="150" height="190" viewBox="0 0 150 190" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Laço amarelo de conscientização e prevenção do suicídio">
+                    <div className="absolute right-3 top-1/2 -translate-y-1/2 opacity-95 transition-transform duration-500 group-hover:scale-105 md:right-5">
+                      <svg width="92" height="116" viewBox="0 0 150 190" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Laço amarelo de conscientização e prevenção do suicídio">
                         <path d="M69 12C42 25 25 48 25 77C25 108 47 126 70 143C90 158 105 170 105 181" stroke="#F4C400" strokeWidth="25" strokeLinecap="round" />
                         <path d="M81 12C108 25 125 48 125 77C125 108 103 126 80 143C60 158 45 170 45 181" stroke="#FFE45C" strokeWidth="25" strokeLinecap="round" />
                         <path d="M69 12C42 25 25 48 25 77C25 108 47 126 70 143C90 158 105 170 105 181" stroke="#DCA900" strokeWidth="5" strokeLinecap="round" opacity="0.65" />
@@ -248,12 +248,12 @@ function StoreHomeContent() {
                       </svg>
                     </div>
 
-                    <div className="relative z-10 max-w-3xl pr-20 md:pr-36">
-                      <span className="mb-3 inline-flex rounded-full bg-yellow-300 px-3 py-1 text-xs font-black uppercase tracking-wider text-yellow-950">ACESSO EXCLUSIVO</span>
-                      <h3 className="font-display text-2xl font-black tracking-tight text-yellow-950 md:text-3xl">🎗️ Academia de Saúde Mental</h3>
-                      <p className="mt-2 text-sm font-black uppercase leading-relaxed text-yellow-950 md:text-base">SETEMBRO · OUTUBRO AMARELO — PREVENÇÃO AO SUICÍDIO</p>
-                      <p className="mt-1 text-sm font-medium leading-relaxed text-yellow-900 md:text-base">Um espaço de acolhimento, fortalecimento e cuidado para quem vive a enfermagem.</p>
-                      <span className="mt-5 inline-flex rounded-xl bg-yellow-400 px-5 py-3 text-sm font-black uppercase tracking-wide text-yellow-950 shadow-md transition-transform group-hover:translate-x-1">Acessar gratuitamente →</span>
+                    <div className="relative z-10 pr-16 md:pr-24">
+                      <span className="mb-3 inline-flex rounded-full bg-yellow-300 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-yellow-950">ACESSO EXCLUSIVO</span>
+                      <h3 className="font-display text-lg font-black tracking-tight text-yellow-950 md:text-xl">🎗️ Academia de Saúde Mental</h3>
+                      <p className="mt-2 text-[11px] font-black uppercase leading-relaxed text-yellow-950 md:text-xs">SETEMBRO · OUTUBRO AMARELO — PREVENÇÃO AO SUICÍDIO</p>
+                      <p className="mt-1 text-xs font-medium leading-relaxed text-yellow-900 md:text-sm">Um espaço de acolhimento, fortalecimento e cuidado para quem vive a enfermagem.</p>
+                      <span className="mt-5 inline-flex rounded-xl bg-yellow-400 px-4 py-2.5 text-xs font-black uppercase tracking-wide text-yellow-950 shadow-md transition-transform group-hover:translate-x-1 md:text-sm">Acessar gratuitamente →</span>
                     </div>
                   </Link>
                 );
