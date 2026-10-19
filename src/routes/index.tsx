@@ -267,6 +267,32 @@ function StoreHomeContent() {
                   </div>
                   <PlanSlogan slug={slug} />
                   <AcademyAudience slug={slug} />
+                  {({
+                    "tecnico-estudante": { de: "R$ 59,99", por: "R$ 37,99" },
+                    tecnico: { de: "R$ 69,99", por: "R$ 57,99" },
+                    academico: { de: "R$ 99,99", por: "R$ 77,99" },
+                    enfermeiro: { de: "R$ 109,99", por: "R$ 97,99" },
+                  } as Record<string, { de: string; por: string }>)[slug] && (
+                    <div className="mt-3 flex items-baseline gap-2">
+                      <span className="text-sm font-semibold text-slate-300 line-through">
+                        De {({
+                          "tecnico-estudante": "R$ 59,99",
+                          tecnico: "R$ 69,99",
+                          academico: "R$ 99,99",
+                          enfermeiro: "R$ 109,99",
+                        } as Record<string, string>)[slug]}
+                      </span>
+                      <span className="text-xl font-black text-emerald-300">
+                        por {({
+                          "tecnico-estudante": "R$ 37,99",
+                          tecnico: "R$ 57,99",
+                          academico: "R$ 77,99",
+                          enfermeiro: "R$ 97,99",
+                        } as Record<string, string>)[slug]}
+                      </span>
+                      <span className="text-xs font-semibold text-slate-300">/ano</span>
+                    </div>
+                  )}
                   <p className="mt-3 text-[11px] font-semibold leading-tight text-muted-foreground">🔒 Conteúdo exclusivo para membros · Certificado de conclusão em cada módulo</p>
                   <div className="relative mt-auto space-y-2 pt-4">
                     {subscribed ? (
