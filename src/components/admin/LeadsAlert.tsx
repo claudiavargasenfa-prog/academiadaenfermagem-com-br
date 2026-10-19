@@ -30,6 +30,7 @@ export function LeadsAlert() {
   const [selecionados, setSelecionados] = useState<Set<string>>(new Set());
   const [excluindo, setExcluindo] = useState(false);
   const [confirmar, setConfirmar] = useState(false);
+  const [copiado, setCopiado] = useState<string | null>(null);
   const lastSeen = useRef<string | null>(null);
 
   useEffect(() => {
@@ -76,6 +77,11 @@ export function LeadsAlert() {
       setLeads((prev) => prev.filter((l) => !selecionados.has(l.id)));
       setSelecionados(new Set());
     }
+  };
+
+  const fone = (n: string) => {
+    const d = n.replace(/\D/g, "").replace(/^55(?=\d{10,11}$)/, "");
+    return d.length === 11 ? `(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d.slice(7)}` : d.length === 10 ? `(${d.slice(0, 2)}) ${d.slice(2, 6)}-${d.slice(6)}` : n;
   };
 
   const wa = (l: Lead) =>
@@ -134,12 +140,30 @@ export function LeadsAlert() {
                 aria-label={`Selecionar ${l.nome}`}
                 className="h-4 w-4 accent-primary"
               />
-              <strong>{l.nome}</strong> · {l.perfil ?? ""} ·{" "}
+              <strong>{l.nome}</strong> · {l.perfil ?? ""} · <strong>{fone(l.whatsapp)}</strong> ·{" "}
               {new Date(l.created_at).toLocaleString("pt-BR")}
             </span>
-            <a href={wa(l)} target="_blank" rel="noreferrer" className="rounded-lg bg-accent px-3 py-1 text-xs font-semibold text-accent-foreground">
-              Chamar no WhatsApp
-            </a>
+            <span className="flex gap-2">
+              <a href={wa(l)} target="_top" rel="noreferrer" className="rounded-lg bg-accent px-3 py-1 text-xs font-semibold text-accent-foreground">
+                Chamar no WhatsApp
+              </a>
+              <button
+                type="button"
+                onClick={async () => {
+                  try {
+                    await navigator.clipboard.writeText(wa(l));
+                  } catch {
+                    window.prompt("Copie o link:", wa(l));
+                    return;
+                  }
+                  setCopiado(l.id);
+                  setTimeout(() => setCopiado(null), 2000);
+                }}
+                className="rounded-lg border border-border px-3 py-1 text-xs font-semibold"
+              >
+                {copiado === l.id ? "Copiado ✓" : "Copiar link"}
+              </button>
+            </span>
           </li>
         ))}
       </ul>
