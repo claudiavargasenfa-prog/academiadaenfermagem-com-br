@@ -416,6 +416,16 @@ function TrackAppCard({ app, academySlug, unlocked, extraExpiresAt, isAdmin, isP
           Aprenda os principais cuidados relacionados ao cateterismo vesical, incluindo indicações, materiais necessários, técnica asséptica, prevenção de infecções e cuidados com o paciente. O procedimento deve ser realizado conforme os protocolos institucionais e as atribuições profissionais.
         </p>
       )}
+      {academySlug === "academico" && normalizeContentLabel(`${app.name ?? ""} ${app.slug ?? ""}`).includes("suporte a decisao clinica") && (
+        <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+          Aprenda a relacionar sinais, sintomas, alterações fisiológicas e mecanismos fisiopatológicos para compreender as condições clínicas dos pacientes. Desenvolva o raciocínio clínico, interprete achados relevantes e utilize informações clínicas para apoiar a identificação de problemas e o planejamento da assistência de enfermagem.
+        </p>
+      )}
+      {academySlug === "academico" && normalizeContentLabel(`${app.name ?? ""} ${app.slug ?? ""}`).includes("sinais vitais adulto") && (
+        <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+          Revise as técnicas de aferição da pressão arterial, frequência cardíaca, frequência respiratória, temperatura e saturação periférica de oxigênio. Aprenda a interpretar os resultados considerando os parâmetros de referência, identificar alterações importantes e registrar e comunicar os achados para contribuir com a segurança do paciente.
+        </p>
+      )}
       {academySlug === "academico" && normalizeContentLabel(`${app.name ?? ""} ${app.slug ?? ""}`).includes("procedimentos tecnicos") && (
         <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
           Conheça os principais cuidados de enfermagem relacionados ao cateter venoso central (CVC), à sonda vesical de demora (SVD), à traqueostomia (TQT), aos drenos e ao cateter central de inserção periférica (PICC). Aprenda sobre indicações, manuseio seguro, manutenção, prevenção de infecções, identificação de complicações e monitoramento do paciente, conforme os protocolos institucionais e as atribuições profissionais.
