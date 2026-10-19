@@ -86,6 +86,7 @@ export function SubscriptionsAdmin() {
                   )}
                 </div>
                 <button
+                  type="button"
                   onClick={() => setEditingPlan(p)}
                   className="rounded-lg bg-primary/10 p-2 text-primary hover:bg-primary/20"
                   aria-label="Editar plano"
@@ -97,15 +98,20 @@ export function SubscriptionsAdmin() {
           ))}
         </div>
         {editingPlan && (
-          <div className="mt-3">
-            <PlanForm
-              plan={editingPlan}
-              onClose={() => {
-                setEditingPlan(null);
-                qc.invalidateQueries({ queryKey: ["admin_plans"] });
-                qc.invalidateQueries({ queryKey: ["subscription_plans"] });
-              }}
-            />
+          <div
+            className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-background/80 p-3 pt-10 backdrop-blur-sm"
+            onClick={(e) => { if (e.target === e.currentTarget) setEditingPlan(null); }}
+          >
+            <div className="w-full max-w-lg">
+              <PlanForm
+                plan={editingPlan}
+                onClose={() => {
+                  setEditingPlan(null);
+                  qc.invalidateQueries({ queryKey: ["admin_plans"] });
+                  qc.invalidateQueries({ queryKey: ["subscription_plans"] });
+                }}
+              />
+            </div>
           </div>
         )}
       </section>
