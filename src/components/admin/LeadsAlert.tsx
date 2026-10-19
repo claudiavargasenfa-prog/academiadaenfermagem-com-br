@@ -87,16 +87,37 @@ export function LeadsAlert() {
     <div className="mb-4 rounded-xl border border-border bg-card p-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h2 className="font-bold">🔔 Novos contatos do Manual</h2>
-        <button
-          type="button"
-          onClick={() => {
-            setSom((s) => !s);
-            if (!som) plim();
-          }}
-          className="rounded-lg bg-primary px-3 py-1.5 text-sm font-semibold text-primary-foreground"
-        >
-          {som ? "Aviso sonoro ligado ✓" : "Ligar aviso sonoro"}
-        </button>
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={() => {
+              setSom((s) => !s);
+              if (!som) plim();
+            }}
+            className="rounded-lg bg-primary px-3 py-1.5 text-sm font-semibold text-primary-foreground"
+          >
+            {som ? "Aviso sonoro ligado ✓" : "Ligar aviso sonoro"}
+          </button>
+          {leads.length > 0 && (
+            <button
+              type="button"
+              onClick={() => setSelecionados(todosMarcados ? new Set() : new Set(leads.map((l) => l.id)))}
+              className="rounded-lg border border-border px-3 py-1.5 text-sm font-semibold text-foreground"
+            >
+              {todosMarcados ? "Desmarcar todos" : "Marcar todos"}
+            </button>
+          )}
+          {selecionados.size > 0 && (
+            <button
+              type="button"
+              onClick={() => setConfirmar(true)}
+              disabled={excluindo}
+              className="rounded-lg bg-destructive px-3 py-1.5 text-sm font-semibold text-destructive-foreground"
+            >
+              🗑️ Excluir selecionados ({selecionados.size})
+            </button>
+          )}
+        </div>
       </div>
       <p className="mt-1 text-xs text-muted-foreground">
         Com o aviso ligado e esta página aberta, toca um "plim" quando alguém se cadastrar.
@@ -105,7 +126,14 @@ export function LeadsAlert() {
         {leads.length === 0 && <li className="text-muted-foreground">Nenhum contato ainda.</li>}
         {leads.map((l) => (
           <li key={l.id} className="flex flex-wrap items-center justify-between gap-2">
-            <span>
+            <span className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                checked={selecionados.has(l.id)}
+                onChange={() => alternar(l.id)}
+                aria-label={`Selecionar ${l.nome}`}
+                className="h-4 w-4 accent-primary"
+              />
               <strong>{l.nome}</strong> · {l.perfil ?? ""} ·{" "}
               {new Date(l.created_at).toLocaleString("pt-BR")}
             </span>
@@ -115,6 +143,39 @@ export function LeadsAlert() {
           </li>
         ))}
       </ul>
+
+      {confirmar && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
+          onClick={() => setConfirmar(false)}
+        >
+          <div
+            className="w-full max-w-sm rounded-xl border border-border bg-card p-5 shadow-lg"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 className="font-bold">Excluir {selecionados.size} contato(s)?</h3>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Isso apaga os cadastros selecionados de forma permanente.
+            </p>
+            <div className="mt-4 flex justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => setConfirmar(false)}
+                className="rounded-lg border border-border px-3 py-1.5 text-sm font-semibold"
+              >
+                Cancelar
+              </button>
+              <button
+                type="button"
+                onClick={excluirEmMassa}
+                className="rounded-lg bg-destructive px-3 py-1.5 text-sm font-semibold text-destructive-foreground"
+              >
+                Excluir de vez
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
