@@ -32,6 +32,7 @@ export function AppsAdmin() {
 }
 
 function AppForm({ app, onClose }: { app: AppRow | null; onClose: () => void }) {
+  const qc = useQueryClient();
   const [form, setForm] = useState({ slug: app?.slug ?? "", name: app?.name ?? "", short_name: app?.short_name ?? "", emoji: app?.emoji ?? "📱", bg_color: app?.bg_color ?? "#E0F2FE", fg_color: app?.fg_color ?? "#0C4A6E", description: app?.description ?? "", ordem: app?.ordem ?? 0, is_active: app?.is_active ?? true });
   const [busy, setBusy] = useState(false); const [err, setErr] = useState<string | null>(null); const [ok, setOk] = useState<string | null>(null);
   async function handleSave(e: React.FormEvent) {
@@ -45,7 +46,12 @@ function AppForm({ app, onClose }: { app: AppRow | null; onClose: () => void }) 
       if (existingPlan) await supabase.from("subscription_plans").update({ name: payload.name, description: payload.description, is_active: payload.is_active, sort_order: payload.ordem }).eq("id", existingPlan.id);
       else await supabase.from("subscription_plans").insert({ slug: payload.slug, name: payload.name, description: payload.description, is_active: payload.is_active, sort_order: payload.ordem, price_cents: 0 });
     }
-    setBusy(false); setOk("✅ Salvo com sucesso. A Academia já aparece na loja e pode receber Mini Apps."); window.setTimeout(onClose, 450);
+    await Promise.all([
+      qc.invalidateQueries({ queryKey: ["apps"] }),
+      qc.invalidateQueries({ queryKey: ["subscription_plans"] }),
+      qc.invalidateQueries({ queryKey: ["admin_plans"] }),
+    ]);
+    setBusy(false); setOk("✅ Salvo com sucesso."); window.setTimeout(onClose, 450);
   }
   return <Card className="border-primary/40"><form onSubmit={handleSave} className="space-y-3 text-sm"><h3 className="font-display text-base font-bold">{app ? "Editar app" : "Novo app"}</h3><div className="grid gap-3 sm:grid-cols-2"><Field label="Nome"><input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className={input} /></Field><Field label="Nome curto (chips/menu)"><input value={form.short_name} onChange={(e) => setForm({ ...form, short_name: e.target.value })} className={input} /></Field><Field label="Slug (url, sem espaço)"><input required value={form.slug} onChange={(e) => setForm({ ...form, slug: e.target.value.toLowerCase().replace(/\s+/g, "-") })} className={input} placeholder="ex: tecnico-estudante" /></Field><Field label="Emoji"><input value={form.emoji} onChange={(e) => setForm({ ...form, emoji: e.target.value })} className={input} /></Field><Field label="Cor de fundo"><input type="color" value={form.bg_color} onChange={(e) => setForm({ ...form, bg_color: e.target.value })} className="h-10 w-full rounded-lg" /></Field><Field label="Cor do texto"><input type="color" value={form.fg_color} onChange={(e) => setForm({ ...form, fg_color: e.target.value })} className="h-10 w-full rounded-lg" /></Field></div><Field label="Descrição"><textarea rows={2} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className={input} /></Field><div className="flex flex-wrap items-center gap-4"><label className="flex items-center gap-2"><input type="checkbox" checked={form.is_active} onChange={(e) => setForm({ ...form, is_active: e.target.checked })} />Ativo (visível na loja)</label><Field label="Ordem"><input type="number" value={form.ordem} onChange={(e) => setForm({ ...form, ordem: Number(e.target.value) })} className={`${input} w-24`} /></Field></div>{err && <p className="text-xs text-destructive">{err}</p>}{ok && <p className="rounded-lg bg-emerald-500/10 px-3 py-2 text-xs font-bold text-emerald-700">{ok}</p>}<div className="flex justify-end gap-2 pt-2"><button type="button" onClick={onClose} className="rounded-xl bg-foreground/10 px-4 py-2 text-sm font-semibold">Cancelar</button><button type="submit" disabled={busy} className="rounded-xl bg-primary px-4 py-2 text-sm font-bold text-primary-foreground shadow-sm transition hover:brightness-110 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-60">{busy ? "Salvando..." : ok ? "Salvo" : "Salvar"}</button></div></form></Card>;
 }
