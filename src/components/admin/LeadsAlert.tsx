@@ -27,6 +27,9 @@ function plim() {
 export function LeadsAlert() {
   const [leads, setLeads] = useState<Lead[]>([]);
   const [som, setSom] = useState(false);
+  const [selecionados, setSelecionados] = useState<Set<string>>(new Set());
+  const [excluindo, setExcluindo] = useState(false);
+  const [confirmar, setConfirmar] = useState(false);
   const lastSeen = useRef<string | null>(null);
 
   useEffect(() => {
@@ -42,6 +45,7 @@ export function LeadsAlert() {
       if (lastSeen.current && top && top > lastSeen.current && som) plim();
       if (top) lastSeen.current = top;
       setLeads(data as Lead[]);
+      setSelecionados((prev) => new Set([...prev].filter((id) => data.some((d) => d.id === id))));
     };
     load();
     const id = setInterval(load, 15000);
@@ -50,6 +54,29 @@ export function LeadsAlert() {
       clearInterval(id);
     };
   }, [som]);
+
+  const alternar = (id: string) =>
+    setSelecionados((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+
+  const todosMarcados = leads.length > 0 && leads.every((l) => selecionados.has(l.id));
+
+  const excluirEmMassa = async () => {
+    const ids = [...selecionados];
+    if (ids.length === 0) return;
+    setExcluindo(true);
+    setConfirmar(false);
+    const { error } = await supabase.from("manual_leads").delete().in("id", ids);
+    setExcluindo(false);
+    if (!error) {
+      setLeads((prev) => prev.filter((l) => !selecionados.has(l.id)));
+      setSelecionados(new Set());
+    }
+  };
 
   const wa = (l: Lead) =>
     `https://wa.me/55${l.whatsapp.replace(/\D/g, "").replace(/^55/, "")}?text=${encodeURIComponent(
