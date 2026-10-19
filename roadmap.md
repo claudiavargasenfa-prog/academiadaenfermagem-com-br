@@ -1,6 +1,7 @@
 # Roadmap ADEC
 
 ## Correção atual
+- [x] Mostrar todas as Academias e módulos, inclusive UTI e novos cadastros inativos, nas opções de administração sem ativá-los na loja; cinco testes aprovados e UTI conferida no painel autenticado.
 - [x] Separar a identidade da Academia do Enfermeiro da UTI na loja e preservar ativação independente; cadastro anual corrigido e 11 testes aprovados.
 
 ## Concluído

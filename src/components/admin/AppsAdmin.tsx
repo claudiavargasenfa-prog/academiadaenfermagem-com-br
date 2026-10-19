@@ -7,6 +7,7 @@ import { CSS } from "@dnd-kit/utilities";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/AppShell";
 import { fetchApps, fetchAppSections, fetchPlacementsForApp, type AppRow, type AppSection, type MiniAppPlacement } from "@/lib/apps";
+import { adminAcademies } from "@/lib/admin-academies";
 
 export function AppsAdmin() {
   const qc = useQueryClient();
@@ -71,8 +72,7 @@ function AppContent({ app }: { app: AppRow }) {
   const placementsQ = useQuery({ queryKey: ["app_placements", app.id], queryFn: () => fetchPlacementsForApp(app.id) });
   const miniAppsQ = useQuery({ queryKey: ["admin_mini_apps_all"], queryFn: async () => { const { data, error } = await supabase.from("mini_apps").select("*").order("sort_order", { ascending: true }).order("name", { ascending: true }); if (error) throw error; return data ?? []; } });
   const allAppsQ = useQuery({ queryKey: ["apps"], queryFn: fetchApps });
-  const activeApps = (allAppsQ.data ?? []).filter((a) => a.is_active && a.slug !== "arquivo-2-projeto");
-  const targetApps = activeApps.filter((a) => a.id !== app.id);
+  const targetApps = adminAcademies(allAppsQ.data ?? []).filter((a) => a.id !== app.id && a.slug !== "arquivo-2-projeto");
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 6 } }), useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }));
   const sections = sectionsQ.data ?? []; const placements = placementsQ.data ?? []; const miniApps = miniAppsQ.data ?? [];
   const miniById = useMemo(() => new Map(miniApps.map((m) => [m.id, m])), [miniApps]);

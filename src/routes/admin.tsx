@@ -14,6 +14,8 @@ import { LeadsAlert } from "@/components/admin/LeadsAlert";
 import { SubtopicsAdmin } from "@/components/admin/SubtopicsAdmin";
 import { AppsAdmin } from "@/components/admin/AppsAdmin";
 import { fetchApps } from "@/lib/apps";
+import { adminAcademies } from "@/lib/admin-academies";
+import { Button } from "@/components/ui/button";
 import { FeedbackAdmin } from "@/components/admin/FeedbackAdmin";
 import { PixMonitor } from "@/components/admin/PixMonitor";
 import { PaymentsAdmin } from "@/components/admin/PaymentsAdmin";
@@ -382,11 +384,13 @@ function AdminContent() {
         <AppsAdmin />
       ) : tab === "apps" && !selectedAppId ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
-          {(availableAppsQ.data ?? []).filter(a => a.is_active).map((app) => (
-            <button
+          {adminAcademies(availableAppsQ.data ?? []).map((app) => (
+            <Button
+              type="button"
+              variant="outline"
               key={app.id}
               onClick={() => setSelectedAppId(app.id)}
-              className="group relative overflow-hidden rounded-3xl border border-foreground/10 bg-background p-6 text-left transition-all hover:border-gold/50 hover:shadow-2xl hover:shadow-gold/10"
+              className="group relative block h-auto whitespace-normal overflow-hidden rounded-lg border border-foreground/10 bg-background p-6 text-left transition-all hover:border-gold/50"
             >
               <div className="absolute inset-0 bg-gold/5 opacity-0 transition-opacity group-hover:opacity-100" />
               <div className="relative z-10">
@@ -396,6 +400,7 @@ function AdminContent() {
                 <h3 className="mb-1 font-display text-lg font-black uppercase tracking-tight text-foreground">
                   {app.name}
                 </h3>
+                {!app.is_active && <span className="mb-2 inline-block text-xs font-semibold text-muted-foreground">Inativa</span>}
                 <p className="text-xs text-muted-foreground line-clamp-2">
                   {app.description || "Gerencie o conteúdo deste aplicativo."}
                 </p>
@@ -404,7 +409,7 @@ function AdminContent() {
                   <Plus className="h-3 w-3" />
                 </div>
               </div>
-            </button>
+            </Button>
           ))}
           
           <button
@@ -542,10 +547,7 @@ function AdminContent() {
             )
           : filteredByApp;
 
-        const availableApps = (availableAppsQ.data ?? [])
-          .filter((a) => a.is_active)
-          .slice()
-          .sort((a, b) => a.ordem - b.ordem || (a.name ?? "").localeCompare(b.name ?? "", "pt-BR"));
+        const availableApps = adminAcademies(availableAppsQ.data ?? []);
         const appBySlug = new Map(availableApps.map((a) => [a.slug, a]));
         // placementsByMiniApp já foi declarado acima
 
