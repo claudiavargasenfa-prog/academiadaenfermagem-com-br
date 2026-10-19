@@ -344,7 +344,7 @@ function PlanoPage() {
         >
           <h2 className="font-display text-2xl font-extrabold md:text-3xl">{ctaFinalTitle}</h2>
           <p className="mt-2 text-sm opacity-80">
-            {formatPriceBRL(price)}/ano · 365 dias · sem renovação automática
+            {slug === "academico" ? "Taxa única de R$ 77,99 por ano" : `${formatPriceBRL(price)}/ano · 365 dias · sem renovação automática`}
           </p>
           <div className="mt-5 flex flex-wrap justify-center gap-3">
             {subscribed ? (
