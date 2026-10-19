@@ -416,6 +416,11 @@ function TrackAppCard({ app, academySlug, unlocked, extraExpiresAt, isAdmin, isP
           Aprenda os principais cuidados relacionados ao cateterismo vesical, incluindo indicações, materiais necessários, técnica asséptica, prevenção de infecções e cuidados com o paciente. O procedimento deve ser realizado conforme os protocolos institucionais e as atribuições profissionais.
         </p>
       )}
+      {academySlug === "academico" && normalizeContentLabel(`${app.name ?? ""} ${app.slug ?? ""}`).includes("procedimentos tecnicos") && (
+        <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+          Conheça os principais cuidados de enfermagem relacionados ao cateter venoso central (CVC), à sonda vesical de demora (SVD), à traqueostomia (TQT), aos drenos e ao cateter central de inserção periférica (PICC). Aprenda sobre indicações, manuseio seguro, manutenção, prevenção de infecções, identificação de complicações e monitoramento do paciente, conforme os protocolos institucionais e as atribuições profissionais.
+        </p>
+      )}
 
       <div className="mt-3">
         {unlocked ? (
