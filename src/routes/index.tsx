@@ -248,12 +248,12 @@ function StoreHomeContent() {
                       </svg>
                     </div>
 
-                    <div className="relative z-10 max-w-3xl pr-20 md:pr-36">
-                      <span className="mb-3 inline-flex rounded-full bg-yellow-300 px-3 py-1 text-xs font-black uppercase tracking-wider text-yellow-950">ACESSO EXCLUSIVO</span>
-                      <h3 className="font-display text-2xl font-black tracking-tight text-yellow-950 md:text-3xl">🎗️ Academia de Saúde Mental</h3>
-                      <p className="mt-2 text-sm font-black uppercase leading-relaxed text-yellow-950 md:text-base">SETEMBRO · OUTUBRO AMARELO — PREVENÇÃO AO SUICÍDIO</p>
-                      <p className="mt-1 text-sm font-medium leading-relaxed text-yellow-900 md:text-base">Um espaço de acolhimento, fortalecimento e cuidado para quem vive a enfermagem.</p>
-                      <span className="mt-5 inline-flex rounded-xl bg-yellow-400 px-5 py-3 text-sm font-black uppercase tracking-wide text-yellow-950 shadow-md transition-transform group-hover:translate-x-1">Acessar gratuitamente →</span>
+                    <div className="relative z-10 pr-16 md:pr-24">
+                      <span className="mb-3 inline-flex rounded-full bg-yellow-300 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-yellow-950">ACESSO EXCLUSIVO</span>
+                      <h3 className="font-display text-lg font-black tracking-tight text-yellow-950 md:text-xl">🎗️ Academia de Saúde Mental</h3>
+                      <p className="mt-2 text-[11px] font-black uppercase leading-relaxed text-yellow-950 md:text-xs">SETEMBRO · OUTUBRO AMARELO — PREVENÇÃO AO SUICÍDIO</p>
+                      <p className="mt-1 text-xs font-medium leading-relaxed text-yellow-900 md:text-sm">Um espaço de acolhimento, fortalecimento e cuidado para quem vive a enfermagem.</p>
+                      <span className="mt-5 inline-flex rounded-xl bg-yellow-400 px-4 py-2.5 text-xs font-black uppercase tracking-wide text-yellow-950 shadow-md transition-transform group-hover:translate-x-1 md:text-sm">Acessar gratuitamente →</span>
                     </div>
                   </Link>
                 );
