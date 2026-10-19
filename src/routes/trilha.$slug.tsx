@@ -213,7 +213,7 @@ function TrilhaPage() {
                 params={{ slug: app.slug }}
                 className={`inline-flex items-center gap-1 rounded-full px-4 py-2 text-sm font-bold ${isPremium ? "bg-[#D4AF37] text-black hover:bg-[#C5A028]" : "bg-foreground text-background"}`}
               >
-                Assinar a partir de {formatPriceBRL((plan as any).price_novo_cents ?? plan.price_cents)}/mês
+                {app.slug === "academico" ? "Taxa única de R$ 77,99 por ano" : `Assinar a partir de ${formatPriceBRL((plan as any).price_novo_cents ?? plan.price_cents)}/mês`}
               </Link>
               <span className="rounded-full bg-emerald-500/20 px-3 py-1 text-xs font-extrabold uppercase tracking-wide text-emerald-800">
                 🔒 Compra Segura
