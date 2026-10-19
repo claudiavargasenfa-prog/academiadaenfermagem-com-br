@@ -1,7 +1,7 @@
 # Roadmap ADEC
 
 ## Correção atual
-- [ ] Separar a identidade da Academia do Enfermeiro da UTI na loja e preservar ativação independente.
+- [x] Separar a identidade da Academia do Enfermeiro da UTI na loja e preservar ativação independente; cadastro anual corrigido e 11 testes aprovados.
 
 ## Concluído
 - Edição da página ADEC no Admin: textos, imagens e destinos dos botões do banner ao rodapé; salvamento autenticado conferido na página.
