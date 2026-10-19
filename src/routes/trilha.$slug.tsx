@@ -411,6 +411,11 @@ function TrackAppCard({ app, academySlug, unlocked, extraExpiresAt, isAdmin, isP
       <BadgeList value={(app as any).badges} />
       <h3 className="mt-1 font-display text-base font-bold">{app.name}</h3>
       {app.description && <p className="mt-1 text-xs text-muted-foreground">{app.description}</p>}
+      {academySlug === "academico" && normalizeContentLabel(`${app.name ?? ""} ${app.slug ?? ""}`).includes("cateterismo vesical") && (
+        <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+          Aprenda os principais cuidados relacionados ao cateterismo vesical, incluindo indicações, materiais necessários, técnica asséptica, prevenção de infecções e cuidados com o paciente. O procedimento deve ser realizado conforme os protocolos institucionais e as atribuições profissionais.
+        </p>
+      )}
 
       <div className="mt-3">
         {unlocked ? (
