@@ -206,6 +206,11 @@ function StoreHomeContent() {
             <p className="text-xs font-black uppercase tracking-[0.18em] text-orange-300">Bônus para quem está chegando</p>
             <h2 id="bonus-lancamento-title" className="mt-1 font-display text-xl font-black uppercase leading-tight text-orange-300 md:text-2xl">Bônus exclusivo de lançamento</h2>
             <p className="mt-3 text-sm font-bold leading-relaxed text-slate-100 md:text-base">Adquirindo qualquer uma das Academias ou a ESCALA — Central Inteligente de Plantão, você receberá um bônus exclusivo de lançamento!</p>
+            <div className="mt-3 flex flex-wrap items-baseline gap-2">
+              <span className="text-sm font-semibold text-slate-300 line-through">De R$ 39,99</span>
+              <span className="text-2xl font-black text-orange-300">por R$ 24,99</span>
+              <span className="text-sm font-semibold text-slate-200">/ano</span>
+            </div>
           </div>
         </div>
         <div className="mt-5 rounded-2xl border border-orange-400/25 bg-black/25 p-4 md:p-5">
