@@ -7,7 +7,10 @@ import { MiniAppContent } from "@/components/MiniAppContent";
 import { CuidandoQuemCuida } from "@/components/miniapps/CuidandoQuemCuida";
 import { supabase } from "@/integrations/supabase/client";
 
+import { EscalaPro } from "@/components/miniapps/EscalaPro";
+
 const CUIDANDO_SLUG = "SAUDEMENTALPROF.";
+const ESCALA_SLUG = "Escala_2026";
 
 export const Route = createFileRoute("/app/$slug/")({
   beforeLoad: ({ params }) => {
@@ -166,6 +169,7 @@ function Page() {
           </Card>
         )}
       </AppAccessGate>
+      )}
     </AppShell>
   );
 }
