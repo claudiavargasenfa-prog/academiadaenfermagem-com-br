@@ -121,6 +121,11 @@ function Page() {
         title={app.name}
         description={app.description ?? undefined}
       />
+      {slug === ESCALA_SLUG ? (
+        <AppAccessGate slug={slug}>
+          <EscalaPro />
+        </AppAccessGate>
+      ) : (
       <AppAccessGate slug={slug}>
         <MiniAppContent slug={slug} />
 
