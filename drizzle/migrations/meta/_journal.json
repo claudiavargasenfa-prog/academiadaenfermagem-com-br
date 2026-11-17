@@ -8,6 +8,20 @@
       "when": 1791695825022,
       "tag": "0000_annual_payment_access",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1794940214084,
+      "tag": "0001_migration",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1794940232417,
+      "tag": "0002_migration",
+      "breakpoints": true
     }
   ]
 }
