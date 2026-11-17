@@ -149,6 +149,12 @@ export function useAppAccess(slug: string) {
       if (!app) return { app: null, granted: false, expiresAt: null as string | null, viaAdmin: false, accessType: "none" as const };
       if (!user) return { app, granted: false, expiresAt: null as string | null, viaAdmin: false, accessType: "none" as const };
 
+      // Acesso administrativo de contingência somente para a Escala 2026.
+      // Mantém a exceção restrita ao e-mail institucional da administradora.
+      if (slug === "Escala_2026" && user.email?.trim().toLowerCase() === "enfa.contato@gmail.com") {
+        return { app, granted: true, expiresAt: null as string | null, viaAdmin: true, accessType: "admin" as const };
+      }
+
       const { data: roleRow } = await supabase.from("user_roles").select("role").eq("user_id", user.id).eq("role", "admin").maybeSingle();
       if (roleRow) return { app, granted: true, expiresAt: null as string | null, viaAdmin: true, accessType: "admin" as const };
 
