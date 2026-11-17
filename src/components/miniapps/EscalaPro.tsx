@@ -27,6 +27,7 @@ export function EscalaPro() {
   const [estagios, setEstagios] = useLocal<Estagio[]>("escala.estagios", []);
   const [provas, setProvas] = useLocal<Prova[]>("escala.provas", []);
   const [comp, setComp] = useLocal<Comp[]>("escala.comp", []);
+  const [anotacoes, setAnotacoes] = useLocal<Record<string, string>>("escala.anotacoes-dia", {});
   const [meta, setMeta] = useLocal("escala.meta", 100);
   const hoje = new Date();
   const [mes, setMes] = useState({ y: hoje.getFullYear(), m: hoje.getMonth() });
@@ -86,6 +87,7 @@ export function EscalaPro() {
             return (
               <button type="button" key={d} onClick={() => setSel(d)} className={`relative min-h-[46px] rounded-lg border p-1 ${sel === d ? "border-primary ring-2 ring-primary" : "border-border"} ${conf.has(d) ? "bg-destructive/15" : ""}`}>
                 <span className="font-semibold">{i + 1}</span>
+                {anotacoes[d]?.trim() && <span title="Este dia tem anotação" className="absolute right-1 top-1 h-1.5 w-1.5 rounded-full bg-amber-500" />}
                 <div className="mt-1 flex flex-wrap justify-center gap-0.5">
                   {ts.map((t, k) => <span key={k} className="h-2 w-2 rounded-full" style={{ background: t.cor }} />)}
                   {temExtra && <span className="h-2 w-2 rounded-full bg-accent-foreground" />}
@@ -109,6 +111,17 @@ export function EscalaPro() {
           {turnosDia.map((t, k) => <p key={k}>🏥 {t.vinculo} — {t.horas}h</p>)}
           {extrasDia.map((e) => <p key={e.id}>➕ Dobra {e.vinculo} — {e.horas}h <button type="button" className="ml-2 text-destructive underline" onClick={() => setExtras(extras.filter((x) => x.id !== e.id))}>remover</button></p>)}
           {conf.has(sel) && <p className="mt-1 font-bold text-destructive">⚠ Conflito de horário neste dia.</p>}
+          <label className="mt-3 block text-sm font-semibold" htmlFor="anotacao-dia">Anotação deste dia</label>
+          <textarea
+            id="anotacao-dia"
+            rows={2}
+            maxLength={180}
+            className={`${inp} mt-1 min-h-[64px] resize-y`}
+            placeholder="Ex.: Trabalhei 12h e troquei as outras 12h; estou pagando horas que devo à instituição..."
+            value={anotacoes[sel] ?? ""}
+            onChange={(e) => setAnotacoes({ ...anotacoes, [sel]: e.target.value })}
+          />
+          <p className="mt-1 text-xs text-muted-foreground">A anotação fica salva somente nesta data e pode ser alterada quando quiser.</p>
         </div>
       </section>
 
