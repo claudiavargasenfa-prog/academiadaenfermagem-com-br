@@ -28,6 +28,7 @@ export function EscalaPro() {
   const [provas, setProvas] = useLocal<Prova[]>("escala.provas", []);
   const [comp, setComp] = useLocal<Comp[]>("escala.comp", []);
   const [anotacoes, setAnotacoes] = useLocal<Record<string, string>>("escala.anotacoes-dia", {});
+  const [checkPlantao, setCheckPlantao] = useLocal<Record<string, boolean>>("plantao.checklist", {});
   const [meta, setMeta] = useLocal("escala.meta", 100);
   const hoje = new Date();
   const [mes, setMes] = useState({ y: hoje.getFullYear(), m: hoje.getMonth() });
@@ -128,22 +129,22 @@ export function EscalaPro() {
       {modo === "pro" ? (
         <>
           <section className={box}>
-            <h3 className="font-display text-lg font-bold">Gerador de escalas</h3>
+            <h3 className="font-display text-lg font-bold">Organização dos plantões</h3>
             <div className="mt-3 grid gap-3 sm:grid-cols-2">
               <L t="Hospital ou instituição"><input className={inp} value={fv.nome} onChange={(e) => setFv({ ...fv, nome: e.target.value })} placeholder="Nome do hospital" /></L>
               <L t="Data do primeiro plantão"><input type="date" className={inp} value={fv.inicio} onChange={(e) => setFv({ ...fv, inicio: e.target.value })} /></L>
-              <L t="Padrão de escala"><select className={inp} value={fv.padrao} onChange={(e) => setFv({ ...fv, padrao: e.target.value as Padrao })}>{Object.entries(PADROES).map(([k, p]) => <option key={k} value={k}>{p.label}</option>)}</select></L>
+              <L t="Jornada de trabalho"><select className={inp} value={fv.padrao} onChange={(e) => setFv({ ...fv, padrao: e.target.value as Padrao })}>{Object.entries(PADROES).map(([k, p]) => <option key={k} value={k}>{p.label}</option>)}</select></L>
               <div className="grid grid-cols-2 gap-2">
                 <L t="Início"><input type="time" className={inp} value={fv.hIni} onChange={(e) => setFv({ ...fv, hIni: e.target.value })} /></L>
                 <L t="Término"><input type="time" className={inp} value={fv.hFim} onChange={(e) => setFv({ ...fv, hFim: e.target.value })} /></L>
               </div>
             </div>
-            <button type="button" className={`${btn} mt-4 w-full`} onClick={addVinculo}>Gerar escala anual</button>
+            <button type="button" className={`${btn} mt-4 w-full`} onClick={addVinculo}>Cadastrar jornada anual</button>
           </section>
 
           <section className={box}>
             <h3 className="font-display text-lg font-bold">Meus vínculos profissionais</h3>
-            {vinculos.length === 0 && <p className="mt-2 text-sm text-muted-foreground">Nenhum vínculo ainda. Gere sua primeira escala acima.</p>}
+            {vinculos.length === 0 && <p className="mt-2 text-sm text-muted-foreground">Nenhum vínculo ainda. Cadastre seu primeiro vínculo de trabalho acima.</p>}
             {vinculos.map((v) => (
               <div key={v.id} className="mt-3 flex items-center justify-between gap-2 rounded-xl border border-border p-3 text-sm">
                 <div><p className="font-bold"><span style={{ color: v.cor }}>●</span> {v.nome}</p><p className="text-muted-foreground">{PADROES[v.padrao].label} · {v.hIni}–{v.hFim} · {v.datas.length} plantões no ano</p></div>
@@ -187,6 +188,36 @@ export function EscalaPro() {
       ) : (
         <Academico {...{ aulas, setAulas, estagios, setEstagios, provas, setProvas, comp, setComp, meta, setMeta, sel }} />
       )}
+      <section className={box}>
+        <h3 className="font-display text-lg font-bold">Preparação para o plantão</h3>
+        <p className="mt-1 text-sm text-muted-foreground">Confira os itens pessoais antes de sair para o trabalho. A lista fica associada à data selecionada.</p>
+        <div className="mt-3 space-y-2">
+          {["Conferir horário e local do plantão","Separar crachá e identificação profissional","Conferir materiais de uso pessoal necessários","Organizar transporte e horário de saída","Revisar anotações e pendências do último plantão"].map((item) => {
+            const key = sel + ":" + item;
+            return <label key={item} className="flex items-start gap-2 text-sm">
+              <input type="checkbox" checked={!!checkPlantao[key]} onChange={(e) => setCheckPlantao({ ...checkPlantao, [key]: e.target.checked })} />
+              <span className={checkPlantao[key] ? "text-muted-foreground line-through" : ""}>{item}</span>
+            </label>;
+          })}
+        </div>
+      </section>
+
+      <section className={box}>
+        <h3 className="font-display text-lg font-bold">Conheça também</h3>
+        <div className="mt-3 grid gap-3 sm:grid-cols-2">
+          <a href="https://academiadaenfermagem.com.br" target="_blank" rel="noopener noreferrer" className="rounded-xl border border-border p-4 transition hover:border-primary">
+            <p className="font-bold">Academia da Enfermagem</p>
+            <p className="mt-1 text-sm text-muted-foreground">Ferramentas clínicas, conteúdos e recursos digitais para apoiar a prática da enfermagem.</p>
+            <span className="mt-3 inline-block text-sm font-bold text-primary">Acessar plataforma →</span>
+          </a>
+          <div className="rounded-xl border border-border p-4">
+            <p className="font-bold">ConcursEnf</p>
+            <p className="mt-1 text-sm text-muted-foreground">Preparação para concursos de enfermagem com questões, simulados, flashcards e organização dos estudos.</p>
+            <span className="mt-3 inline-block text-sm font-bold text-muted-foreground">Link de acesso aguardando confirmação</span>
+          </div>
+        </div>
+      </section>
+
       <p className="text-center text-xs text-muted-foreground">Seus dados ficam salvos neste aparelho e funcionam mesmo sem internet.</p>
     </div>
   );
