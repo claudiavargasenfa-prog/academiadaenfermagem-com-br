@@ -7,7 +7,7 @@ import { MiniAppContent } from "@/components/MiniAppContent";
 import { CuidandoQuemCuida } from "@/components/miniapps/CuidandoQuemCuida";
 import { supabase } from "@/integrations/supabase/client";
 
-import { EscalaPro } from "@/components/miniapps/EscalaPro";
+import { EscalaGate } from "@/components/miniapps/EscalaGate";
 
 const CUIDANDO_SLUG = "SAUDEMENTALPROF.";
 const ESCALA_SLUG = "Escala_2026";
@@ -125,9 +125,7 @@ function Page() {
         description={app.description ?? undefined}
       />
       {slug === ESCALA_SLUG ? (
-        <AppAccessGate slug={slug}>
-          <EscalaPro />
-        </AppAccessGate>
+        <EscalaGate slug={slug} />
       ) : (
       <AppAccessGate slug={slug}>
         <MiniAppContent slug={slug} />

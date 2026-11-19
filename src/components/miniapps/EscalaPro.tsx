@@ -1,5 +1,7 @@
 import { useMemo, useState } from "react";
 import { useLocal } from "@/lib/storage";
+import { useText } from "@/lib/app-texts";
+import { avisoRenovacao } from "@/lib/escala-renovacao";
 import { PADROES, conflitos, gerarDatas, iso, media, type Padrao } from "@/lib/escala";
 
 type Vinculo = { id: string; nome: string; padrao: Padrao; inicio: string; hIni: string; hFim: string; cor: string; datas: string[] };
@@ -18,7 +20,11 @@ const inp = "w-full rounded-lg border border-input bg-background px-3 py-2 text-
 const btn = "rounded-lg bg-primary px-4 py-2 text-sm font-bold text-primary-foreground hover:opacity-90 disabled:opacity-50";
 const box = "rounded-3xl border border-border bg-gradient-to-br from-card to-muted/40 p-5 text-card-foreground shadow-lg";
 
-export function EscalaPro() {
+export function EscalaPro({ bloqueada = false }: { bloqueada?: boolean } = {}) {
+  const aviso = avisoRenovacao(new Date());
+  const link30 = useText("escala.renovacao.link30", "");
+  const link20 = useText("escala.renovacao.link20", "");
+  const linkPag = aviso?.desconto === 30 ? link30 : link20;
   const [modo, setModo] = useLocal<"pro" | "aca">("escala.modo", "pro");
   const [vinculos, setVinculos] = useLocal<Vinculo[]>("escala.vinculos", []);
   const [extras, setExtras] = useLocal<Extra[]>("escala.extras", []);
@@ -61,6 +67,14 @@ export function EscalaPro() {
 
   return (
     <div className="space-y-5">
+      {bloqueada && (
+        <div className="rounded-2xl border-2 border-destructive bg-destructive/10 p-4 text-sm">
+          <p className="font-bold">🔒 Sua Escala está bloqueada para edição</p>
+          <p className="mt-1">Você pode ver tudo o que já registrou, mas para escrever e marcar no novo ano é preciso renovar a adesão. Assim que o pagamento for confirmado, tudo é liberado e seu ano anterior continua em sequência. A confirmação da adesão pode levar até 36 horas.</p>
+          {linkPag && <a href={linkPag} target="_blank" rel="noopener noreferrer" className={`${btn} mt-3 inline-block`}>Renovar agora</a>}
+        </div>
+      )}
+      <fieldset disabled={bloqueada} className="contents">
       <div className="flex gap-2">
         {(["pro", "aca"] as const).map((m) => (
           <button key={m} type="button" onClick={() => setModo(m)} className={`flex-1 rounded-xl border px-4 py-3 text-sm font-bold ${modo === m ? "border-primary bg-primary text-primary-foreground" : "border-border bg-card"}`}>
@@ -126,6 +140,13 @@ export function EscalaPro() {
         </div>
         </div>
       </section>
+      {aviso && (
+        <div className="animate-pulse rounded-2xl border-2 border-primary bg-primary/10 p-4 text-center text-sm [animation-duration:3s]">
+          <p className="font-bold">🎉 Renove sua Escala Inteligente para {aviso.ano} com {aviso.desconto}% de desconto{aviso.desconto === 20 ? " (até 20/12)" : ""}!</p>
+          {linkPag ? <a href={linkPag} target="_blank" rel="noopener noreferrer" className="mt-1 inline-block font-bold text-primary underline">Clique aqui para renovar</a> : <p className="mt-1 text-muted-foreground">Link de renovação em breve.</p>}
+          <p className="mt-1 text-xs text-muted-foreground">Sem a renovação confirmada, a escala de {aviso.ano} fica bloqueada para edição. A confirmação pode levar até 36 horas.</p>
+        </div>
+      )}
 
       {modo === "pro" ? (
         <>
@@ -229,6 +250,7 @@ export function EscalaPro() {
       </section>
 
       <p className="text-center text-xs text-muted-foreground">Seus dados ficam salvos neste aparelho e funcionam mesmo sem internet.</p>
+      </fieldset>
     </div>
   );
 }
