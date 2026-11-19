@@ -111,7 +111,7 @@ export function AppShell({
     <div className="min-h-dvh" style={bgStyle} data-app={trackSlug}>
       <TrialCountdownBanner />
       <header className={`sticky top-0 z-40 border-b text-primary-foreground shadow-[var(--shadow-soft)] ${isStoreHome ? "border-emerald-400/40 bg-[#03150F] shadow-[0_4px_24px_rgba(16,185,129,0.12)]" : "border-gold/30 bg-primary"}`}>
-        <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-3">
+        <div className="mx-auto flex w-full max-w-[1600px] items-center justify-between gap-3 px-4 py-3">
           <Link to="/" className="flex min-w-0 flex-1 items-center gap-3">
             <img
               src={logoUrl}
@@ -241,7 +241,7 @@ export function AppShell({
         )}
       </header>
 
-      <main className="mx-auto max-w-5xl px-4 pb-36 pt-6 page-enter md:pb-10">
+      <main className="mx-auto w-full max-w-[1600px] px-4 md:px-8 lg:px-12 pb-36 pt-6 page-enter md:pb-10">
         <BackBar />
         {children}
         {!hideReferences && <ReferencesFooter compact />}
