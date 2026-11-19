@@ -4,7 +4,7 @@ import { PADROES, conflitos, gerarDatas, iso, media, type Padrao } from "@/lib/e
 
 type Vinculo = { id: string; nome: string; padrao: Padrao; inicio: string; hIni: string; hFim: string; cor: string; datas: string[] };
 type Extra = { id: string; data: string; vinculo: string; horas: number };
-type Troca = { id: string; tipo: "passei" | "cobri"; colega: string; data: string; obs: string; status: "Pendente" | "Devolvido" };
+type Troca = { id: string; meuDia: string; modo: "troca" | "pago"; nome: string; dataCombinada: string; obs: string; status: "Pendente" | "Concluído" };
 type Aula = { id: string; dia: number; materia: string; inicio: string; fim: string; sala: string; prof: string };
 type Estagio = { id: string; local: string; dias: string; preceptor: string; orient: string };
 type Prova = { id: string; titulo: string; data: string };
@@ -16,7 +16,7 @@ const MESES = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Ag
 const uid = () => Math.random().toString(36).slice(2, 10);
 const inp = "w-full rounded-lg border border-input bg-background px-3 py-2 text-sm";
 const btn = "rounded-lg bg-primary px-4 py-2 text-sm font-bold text-primary-foreground hover:opacity-90 disabled:opacity-50";
-const box = "rounded-2xl border border-border bg-card p-4 text-card-foreground";
+const box = "rounded-3xl border border-border bg-gradient-to-br from-card to-muted/40 p-5 text-card-foreground shadow-lg";
 
 export function EscalaPro() {
   const [modo, setModo] = useLocal<"pro" | "aca">("escala.modo", "pro");
@@ -54,8 +54,7 @@ export function EscalaPro() {
     setFv({ ...fv, nome: "" });
   };
 
-  const [fx, setFx] = useState({ vinculo: "", horas: 12 });
-  const [ft, setFt] = useState({ tipo: "passei" as Troca["tipo"], colega: "", data: iso(hoje), obs: "" });
+  const [ft, setFt] = useState({ meuDia: iso(hoje), modo: "troca" as Troca["modo"], nome: "", dataCombinada: "", obs: "" });
 
   const turnosDia = turnos.filter((t) => t.data === sel);
   const extrasDia = extras.filter((e) => e.data === sel);
@@ -71,14 +70,15 @@ export function EscalaPro() {
       </div>
 
       {/* Calendário */}
-      <section className={box}>
-        <div className="flex items-center justify-between gap-2">
-          <button type="button" className="rounded-lg border border-border px-3 py-2 text-sm font-bold" onClick={() => mudarMes(-1)}>‹ Anterior</button>
-          <h3 className="font-display text-lg font-bold">{MESES[mes.m]} {mes.y}</h3>
-          <button type="button" className="rounded-lg border border-border px-3 py-2 text-sm font-bold" onClick={() => mudarMes(1)}>Próximo ›</button>
+      <section className={`${box} overflow-hidden p-0`}>
+        <div className="flex items-center justify-between gap-2 bg-gradient-to-r from-primary to-accent px-4 py-4 text-primary-foreground">
+          <button type="button" className="rounded-full bg-background/20 px-4 py-2 text-sm font-bold backdrop-blur hover:bg-background/30" onClick={() => mudarMes(-1)}>‹</button>
+          <div className="text-center"><p className="text-xs uppercase tracking-widest opacity-80">Minha escala</p><h3 className="font-display text-2xl font-extrabold">{MESES[mes.m]} {mes.y}</h3></div>
+          <button type="button" className="rounded-full bg-background/20 px-4 py-2 text-sm font-bold backdrop-blur hover:bg-background/30" onClick={() => mudarMes(1)}>›</button>
         </div>
-        <div className="mt-3 grid grid-cols-7 gap-1 text-center text-xs">
-          {DIAS.map((d) => <div key={d} className="py-1 font-bold">{d}</div>)}
+        <div className="p-4">
+        <div className="grid grid-cols-7 gap-1.5 text-center text-xs">
+          {DIAS.map((d, i) => <div key={d} className={`py-1 text-[11px] font-extrabold uppercase tracking-wide ${i === 0 || i === 6 ? "text-primary" : "text-muted-foreground"}`}>{d}</div>)}
           {Array.from({ length: primeiro }).map((_, i) => <div key={"v" + i} />)}
           {Array.from({ length: nDias }).map((_, i) => {
             const d = `${prefixo}-${String(i + 1).padStart(2, "0")}`;
@@ -86,8 +86,8 @@ export function EscalaPro() {
             const temExtra = extras.some((e) => e.data === d);
             const temProva = provas.some((p) => p.data === d);
             return (
-              <button type="button" key={d} onClick={() => setSel(d)} className={`relative min-h-[46px] rounded-lg border p-1 ${sel === d ? "border-primary ring-2 ring-primary" : "border-border"} ${conf.has(d) ? "bg-destructive/15" : ""}`}>
-                <span className="font-semibold">{i + 1}</span>
+              <button type="button" key={d} onClick={() => setSel(d)} style={ts[0] && !conf.has(d) ? { background: `${ts[0].cor}22`, borderColor: `${ts[0].cor}88` } : undefined} className={`relative min-h-[56px] rounded-xl border bg-background p-1 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md ${sel === d ? "ring-2 ring-primary ring-offset-1" : "border-border"} ${conf.has(d) ? "border-destructive bg-destructive/15" : ""} ${d === iso(hoje) ? "font-extrabold" : ""}`}>
+                <span className={`inline-flex h-6 w-6 items-center justify-center rounded-full text-sm ${d === iso(hoje) ? "bg-primary text-primary-foreground" : ""}`}>{i + 1}</span>
                 {anotacoes[d]?.trim() && <span title="Este dia tem anotação" className="absolute right-1 top-1 h-1.5 w-1.5 rounded-full bg-amber-500" />}
                 <div className="mt-1 flex flex-wrap justify-center gap-0.5">
                   {ts.map((t, k) => <span key={k} className="h-2 w-2 rounded-full" style={{ background: t.cor }} />)}
@@ -124,6 +124,7 @@ export function EscalaPro() {
           />
           <p className="mt-1 text-xs text-muted-foreground">A anotação fica salva somente nesta data e pode ser alterada quando quiser.</p>
         </div>
+        </div>
       </section>
 
       {modo === "pro" ? (
@@ -155,34 +156,43 @@ export function EscalaPro() {
           </section>
 
           <section className={box}>
-            <h3 className="font-display text-lg font-bold">Dobras e horas extras</h3>
-            <p className="text-sm text-muted-foreground">Dia selecionado no calendário: {sel.split("-").reverse().join("/")}</p>
-            <div className="mt-3 grid grid-cols-2 gap-2">
-              <input className={inp} placeholder="Hospital" value={fx.vinculo} onChange={(e) => setFx({ ...fx, vinculo: e.target.value })} />
-              <input type="number" className={inp} min={1} max={24} value={fx.horas} onChange={(e) => setFx({ ...fx, horas: Number(e.target.value) })} />
-            </div>
-            <button type="button" className={`${btn} mt-3 w-full`} onClick={() => { if (!fx.vinculo.trim()) return alert("Informe o hospital."); setExtras([...extras, { id: uid(), data: sel, vinculo: fx.vinculo.trim(), horas: fx.horas || 0 }]); }}>+ Marcar dobra</button>
-            <p className="mt-2 text-sm">Horas adicionais no mês: <b>{extrasMes.reduce((a, e) => a + e.horas, 0)}h</b></p>
-          </section>
-
-          <section className={box}>
-            <h3 className="font-display text-lg font-bold">Trocas de plantão</h3>
-            <div className="mt-3 grid gap-2 sm:grid-cols-2">
-              <select className={inp} value={ft.tipo} onChange={(e) => setFt({ ...ft, tipo: e.target.value as Troca["tipo"] })}><option value="passei">Passei o plantão para um colega</option><option value="cobri">Cobri o plantão de um colega</option></select>
-              <input className={inp} placeholder="Nome do colega" value={ft.colega} onChange={(e) => setFt({ ...ft, colega: e.target.value })} />
-              <input type="date" className={inp} value={ft.data} onChange={(e) => setFt({ ...ft, data: e.target.value })} />
-              <input className={inp} placeholder="Observações" value={ft.obs} onChange={(e) => setFt({ ...ft, obs: e.target.value })} />
-            </div>
-            <button type="button" className={`${btn} mt-3 w-full`} onClick={() => { if (!ft.colega.trim()) return alert("Informe o colega."); setTrocas([{ id: uid(), ...ft, status: "Pendente" }, ...trocas]); setFt({ ...ft, colega: "", obs: "" }); }}>Registrar movimentação</button>
-            {trocas.map((t) => (
-              <div key={t.id} className="mt-2 flex items-center justify-between gap-2 rounded-xl border border-border p-3 text-sm">
-                <div><b>{t.tipo === "passei" ? "Passei o plantão" : "Cobri o plantão"}</b> · {t.colega} · {t.data.split("-").reverse().join("/")}{t.obs && <p className="text-muted-foreground">{t.obs}</p>}</div>
-                <div className="flex gap-2">
-                  <button type="button" className="rounded-full bg-muted px-3 py-1 text-xs font-bold" onClick={() => setTrocas(trocas.map((x) => x.id === t.id ? { ...x, status: x.status === "Pendente" ? "Devolvido" : "Pendente" } : x))}>{t.status}</button>
-                  <button type="button" className="text-xs text-destructive underline" onClick={() => setTrocas(trocas.filter((x) => x.id !== t.id))}>Excluir</button>
+            <h3 className="font-display text-lg font-bold">🔁 Trocas de plantão</h3>
+            <div className="mt-3 grid gap-3 sm:grid-cols-2">
+              <L t="Meu plantão do dia"><input type="date" className={inp} value={ft.meuDia} onChange={(e) => setFt({ ...ft, meuDia: e.target.value })} /></L>
+              <div><span className="mb-1 block text-xs font-bold text-muted-foreground">Tipo</span>
+                <div className="flex gap-4 rounded-lg border border-input bg-background px-3 py-2 text-sm">
+                  {(["troca", "pago"] as const).map((m) => <label key={m} className="flex items-center gap-2 font-semibold"><input type="radio" name="modo-troca" checked={ft.modo === m} onChange={() => setFt({ ...ft, modo: m })} />{m === "troca" ? "Troca" : "Pago"}</label>)}
                 </div>
               </div>
-            ))}
+              <L t="Nome de quem vai fazer ou receber"><input className={inp} value={ft.nome} onChange={(e) => setFt({ ...ft, nome: e.target.value })} placeholder="Nome do colega" /></L>
+              <L t="Data que a pessoa quer que eu faça *">
+                <div className="space-y-2">
+                  <input type="date" className={inp} value={/^\d{4}-/.test(ft.dataCombinada) ? ft.dataCombinada : ""} onChange={(e) => setFt({ ...ft, dataCombinada: e.target.value })} />
+                  <div className="flex flex-wrap gap-2">
+                    {["A combinar", "Quando for troca"].map((o) => <button key={o} type="button" onClick={() => setFt({ ...ft, dataCombinada: o })} className={`rounded-full border px-3 py-1 text-xs font-bold ${ft.dataCombinada === o ? "border-primary bg-primary text-primary-foreground" : "border-border bg-background"}`}>{o}</button>)}
+                  </div>
+                </div>
+              </L>
+            </div>
+            <L t="Observação"><textarea rows={2} className={`${inp} mt-1`} value={ft.obs} onChange={(e) => setFt({ ...ft, obs: e.target.value })} placeholder="Ex.: combinado pelo WhatsApp com a supervisão" /></L>
+            <button type="button" className={`${btn} mt-3 w-full`} onClick={() => {
+              if (!ft.meuDia) return alert("Informe a data do seu plantão.");
+              if (!ft.nome.trim()) return alert("Informe o nome de quem vai fazer ou receber.");
+              if (!ft.dataCombinada.trim()) return alert("Informe a data, ou escolha \"A combinar\" / \"Quando for troca\".");
+              setTrocas([{ id: uid(), ...ft, nome: ft.nome.trim(), status: "Pendente" }, ...trocas]);
+              setFt({ ...ft, nome: "", dataCombinada: "", obs: "" });
+            }}>Registrar troca</button>
+            {trocas.map((t) => {
+              const br = (x?: string) => x && /^\d{4}-/.test(x) ? x.split("-").reverse().join("/") : (x || "—");
+              return (
+              <div key={t.id} className="mt-2 flex items-center justify-between gap-2 rounded-xl border border-border bg-background p-3 text-sm">
+                <div><b>{t.modo === "pago" ? "💰 Pago" : "🔁 Troca"}</b> · meu dia {br(t.meuDia)} · {t.nome} · faço em {br(t.dataCombinada)}{t.obs && <p className="text-muted-foreground">{t.obs}</p>}</div>
+                <div className="flex gap-2">
+                  <button type="button" className="rounded-full bg-muted px-3 py-1 text-xs font-bold" onClick={() => setTrocas(trocas.map((x) => x.id === t.id ? { ...x, status: x.status === "Pendente" ? "Concluído" : "Pendente" } : x))}>{t.status}</button>
+                  <button type="button" className="text-xs text-destructive underline" onClick={() => setTrocas(trocas.filter((x) => x.id !== t.id))}>Excluir</button>
+                </div>
+              </div>);
+            })}
           </section>
         </>
       ) : (
