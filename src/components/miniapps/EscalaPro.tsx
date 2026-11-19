@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
+import { createEscalaCheckout } from "@/lib/mercadopago.functions";
 import { useLocal } from "@/lib/storage";
-import { useText } from "@/lib/app-texts";
 import { avisoRenovacao, PRECO_CHEIO, PRECO_OFERTA } from "@/lib/escala-renovacao";
 import { PADROES, conflitos, gerarDatas, iso, media, type Padrao } from "@/lib/escala";
 
@@ -22,7 +23,14 @@ const box = "rounded-3xl border border-border bg-gradient-to-br from-card to-mut
 
 export function EscalaPro({ bloqueada = false }: { bloqueada?: boolean } = {}) {
   const aviso = avisoRenovacao(new Date());
-  const linkPag = useText("escala.renovacao.link30", "https://mpago.la/2WYB4ya");
+  const pagar = useServerFn(createEscalaCheckout);
+  const [pagando, setPagando] = useState(false);
+  const [erroPag, setErroPag] = useState("");
+  async function renovar() {
+    setPagando(true); setErroPag("");
+    try { const r = await pagar(); window.top ? (window.top.location.href = r.url) : window.location.assign(r.url); }
+    catch (e) { setErroPag(e instanceof Error ? e.message : "Não foi possível abrir o pagamento."); setPagando(false); }
+  }
   const [modo, setModo] = useLocal<"pro" | "aca">("escala.modo", "pro");
   const [vinculos, setVinculos] = useLocal<Vinculo[]>("escala.vinculos", []);
   const [extras, setExtras] = useLocal<Extra[]>("escala.extras", []);
@@ -69,7 +77,7 @@ export function EscalaPro({ bloqueada = false }: { bloqueada?: boolean } = {}) {
         <div className="rounded-2xl border-2 border-destructive bg-destructive/10 p-4 text-sm">
           <p className="font-bold">🔒 Sua Escala está bloqueada para edição</p>
           <p className="mt-1">Você pode ver tudo o que já registrou, mas para escrever e marcar no novo ano é preciso renovar a adesão. Assim que o pagamento for confirmado, tudo é liberado e seu ano anterior continua em sequência. A confirmação da adesão pode levar até 36 horas.</p>
-          {linkPag && <a href={linkPag} target="_blank" rel="noopener noreferrer" className={`${btn} mt-3 inline-block`}>Renovar agora</a>}
+          <button type="button" onClick={renovar} disabled={pagando} className={`${btn} mt-3`}>{pagando ? "Abrindo pagamento..." : "Renovar agora — R$ 37,97"}</button>{erroPag && <p className="mt-1 text-destructive">{erroPag}</p>}
         </div>
       )}
       <fieldset disabled={bloqueada} className="contents">
@@ -141,7 +149,7 @@ export function EscalaPro({ bloqueada = false }: { bloqueada?: boolean } = {}) {
       {aviso && (
         <div className="animate-pulse rounded-2xl border-2 border-primary bg-primary/10 p-4 text-center text-sm [animation-duration:3s]">
           <p className="font-bold">🎉 Garanta sua Escala Inteligente para {aviso.ano}: de <s>{PRECO_CHEIO}</s> por apenas {PRECO_OFERTA} (até 20/12/{aviso.ano - 1})!</p>
-          {linkPag ? <a href={linkPag} target="_blank" rel="noopener noreferrer" className="mt-1 inline-block font-bold text-primary underline">Clique aqui para renovar</a> : <p className="mt-1 text-muted-foreground">Link de renovação em breve.</p>}
+          <button type="button" onClick={renovar} disabled={pagando} className="mt-2 inline-block rounded-lg bg-primary px-4 py-2 font-bold text-primary-foreground disabled:opacity-50">{pagando ? "Abrindo pagamento..." : "Clique aqui para garantir 2027"}</button>{erroPag && <p className="mt-1 text-destructive">{erroPag}</p>}
           <p className="mt-1 text-xs text-muted-foreground">Sem a renovação confirmada, a escala de {aviso.ano} fica bloqueada para edição. A confirmação pode levar até 36 horas.</p>
         </div>
       )}

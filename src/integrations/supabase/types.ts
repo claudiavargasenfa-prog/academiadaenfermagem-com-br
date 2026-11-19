@@ -1371,6 +1371,7 @@ export type Database = {
         Returns: number
       }
       create_annual_order: { Args: { _plan_slug: string }; Returns: string }
+      create_escala_order: { Args: never; Returns: string }
       expire_finished_trials: { Args: never; Returns: number }
       get_manual_estagio_content: { Args: never; Returns: string }
       get_mini_app_meta: {
@@ -1465,6 +1466,15 @@ export type Database = {
         Args: {
           _amount_cents: number
           _approved_at: string
+          _order_id: string
+          _payment_id: string
+          _status: string
+        }
+        Returns: undefined
+      }
+      process_escala_payment: {
+        Args: {
+          _amount_cents: number
           _order_id: string
           _payment_id: string
           _status: string

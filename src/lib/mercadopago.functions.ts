@@ -41,3 +41,24 @@ export const createMpPreference = createServerFn({method:'POST'})
   if(!res.ok)throw new Error('Não foi possível abrir o pagamento.');
   const result=await res.json() as {init_point:string};return {init_point:result.init_point};
  });
+
+// Escala Inteligente 2027: pedido vinculado à conta; liberação só pelo webhook com pagamento aprovado.
+export const ESCALA_2027_CENTS = 3797;
+export const createEscalaCheckout = createServerFn({ method: 'POST' })
+ .middleware([requireSupabaseAuth])
+ .handler(async ({ context }) => {
+  const token = process.env['MP_ACCESS_TOKEN'];
+  if (!token || !process.env['MP_WEBHOOK_SECRET']) throw new Error('Pagamento temporariamente indisponível.');
+  const { data: orderId, error } = await context.supabase.rpc('create_escala_order');
+  if (error || !orderId) throw new Error('Não foi possível registrar seu pedido.');
+  const site = 'https://academiadaenfermagem.com.br';
+  const back = `${site}/app/Escala_2026`;
+  const res = await fetch('https://api.mercadopago.com/checkout/preferences', {
+   method: 'POST', headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json', 'X-Idempotency-Key': orderId },
+   body: JSON.stringify({ items: [{ id: orderId, title: 'Escala Inteligente Automática — ano 2027', quantity: 1, unit_price: ESCALA_2027_CENTS / 100, currency_id: 'BRL' }], external_reference: orderId, back_urls: { success: back, failure: back, pending: back }, auto_return: 'approved', notification_url: `${site}/api/public/payments` }),
+  });
+  if (!res.ok) { console.error('Falha Mercado Pago Escala', res.status, await res.text()); throw new Error('Não foi possível abrir o Mercado Pago. Tente novamente.'); }
+  const pref = await res.json() as { init_point?: string };
+  if (!pref.init_point || !new URL(pref.init_point).hostname.endsWith('.mercadopago.com.br')) throw new Error('Endereço de pagamento inválido.');
+  return { url: pref.init_point };
+ });

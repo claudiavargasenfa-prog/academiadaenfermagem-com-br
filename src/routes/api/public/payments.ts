@@ -23,6 +23,13 @@ export const Route = createFileRoute('/api/public/payments')({server:{handlers:{
   const {data:order,error}=await supabaseAdmin.from('orders').select('id,amount_cents,metadata').eq('id',payment.external_reference).maybeSingle();
   if (error) return Response.json({error:'order_read_failed'},{status:503});
   if (!order) return Response.json({received:true});
+  if ((order.metadata as {type?:string}|null)?.type==='escala_2027') {
+   if (!validAnnualPayment(payment,order,me.id) || String(payment.id)!==id) return Response.json({error:'payment_mismatch'},{status:400});
+   const {error:e2}=await supabaseAdmin.rpc('process_escala_payment',{_order_id:order.id,_payment_id:id,_status:payment.status,_amount_cents:Math.round(payment.transaction_amount*100)});
+   if (e2) {console.error('Falha liberação Escala',e2.code);return Response.json({error:'processing_failed'},{status:503});}
+   await supabaseAdmin.from('payment_webhooks').insert({provider:'mercadopago',payload:{payment_id:id,status:payment.status,order_id:order.id},processed:true});
+   return Response.json({received:true});
+  }
   if (!validAnnualPayment(payment,order,me.id) || String(payment.id)!==id) return Response.json({error:'payment_mismatch'},{status:400});
   if ((order.metadata as {type?:string}|null)?.type!=='annual_membership') return Response.json({error:'legacy_order_requires_review'},{status:409});
   if (payment.status==='refunded' && (payment.transaction_amount_refunded ?? 0)<payment.transaction_amount) return Response.json({error:'partial_refund_requires_review'},{status:409});
