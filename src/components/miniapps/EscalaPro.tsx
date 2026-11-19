@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { useLocal } from "@/lib/storage";
 import { useText } from "@/lib/app-texts";
-import { avisoRenovacao } from "@/lib/escala-renovacao";
+import { avisoRenovacao, PRECO_CHEIO, PRECO_OFERTA } from "@/lib/escala-renovacao";
 import { PADROES, conflitos, gerarDatas, iso, media, type Padrao } from "@/lib/escala";
 
 type Vinculo = { id: string; nome: string; padrao: Padrao; inicio: string; hIni: string; hFim: string; cor: string; datas: string[] };
@@ -22,9 +22,7 @@ const box = "rounded-3xl border border-border bg-gradient-to-br from-card to-mut
 
 export function EscalaPro({ bloqueada = false }: { bloqueada?: boolean } = {}) {
   const aviso = avisoRenovacao(new Date());
-  const link30 = useText("escala.renovacao.link30", "");
-  const link20 = useText("escala.renovacao.link20", "");
-  const linkPag = aviso?.desconto === 30 ? link30 : link20;
+  const linkPag = useText("escala.renovacao.link30", "https://mpago.la/2WYB4ya");
   const [modo, setModo] = useLocal<"pro" | "aca">("escala.modo", "pro");
   const [vinculos, setVinculos] = useLocal<Vinculo[]>("escala.vinculos", []);
   const [extras, setExtras] = useLocal<Extra[]>("escala.extras", []);
@@ -142,7 +140,7 @@ export function EscalaPro({ bloqueada = false }: { bloqueada?: boolean } = {}) {
       </section>
       {aviso && (
         <div className="animate-pulse rounded-2xl border-2 border-primary bg-primary/10 p-4 text-center text-sm [animation-duration:3s]">
-          <p className="font-bold">🎉 Renove sua Escala Inteligente para {aviso.ano} com {aviso.desconto}% de desconto{aviso.desconto === 20 ? " (até 20/12)" : ""}!</p>
+          <p className="font-bold">🎉 Garanta sua Escala Inteligente para {aviso.ano}: de <s>{PRECO_CHEIO}</s> por apenas {PRECO_OFERTA} (até 20/12/{aviso.ano - 1})!</p>
           {linkPag ? <a href={linkPag} target="_blank" rel="noopener noreferrer" className="mt-1 inline-block font-bold text-primary underline">Clique aqui para renovar</a> : <p className="mt-1 text-muted-foreground">Link de renovação em breve.</p>}
           <p className="mt-1 text-xs text-muted-foreground">Sem a renovação confirmada, a escala de {aviso.ano} fica bloqueada para edição. A confirmação pode levar até 36 horas.</p>
         </div>

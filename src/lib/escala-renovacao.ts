@@ -1,8 +1,9 @@
-/** Aviso de renovação: 10 a 30/11 → 30%; 1 a 20/12 → 20%; fora disso, nenhum. */
-export function avisoRenovacao(now: Date): { desconto: 30 | 20; ano: number } | null {
+/** Oferta única de renovação: de 10/11 até 20/12 — de R$ 49,36 por R$ 37,97. */
+export const PRECO_CHEIO = "R$ 49,36";
+export const PRECO_OFERTA = "R$ 37,97";
+export function avisoRenovacao(now: Date): { ano: number } | null {
   const m = now.getMonth(), d = now.getDate();
-  if (m === 10 && d >= 10) return { desconto: 30, ano: now.getFullYear() + 1 };
-  if (m === 11 && d <= 20) return { desconto: 20, ano: now.getFullYear() + 1 };
+  if ((m === 10 && d >= 10) || (m === 11 && d <= 20)) return { ano: now.getFullYear() + 1 };
   return null;
 }
 
