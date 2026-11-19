@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as Escala_2026RouteImport } from './routes/Escala_2026'
 import { Route as AclsRouteImport } from './routes/acls'
 import { Route as AdecRouteImport } from './routes/adec'
 import { Route as AdminRouteImport } from './routes/admin'
@@ -64,6 +65,11 @@ import { Route as AppSlugSubtopicRouteImport } from './routes/app.$slug.$subtopi
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const Escala_2026Route = Escala_2026RouteImport.update({
+  id: '/Escala_2026',
+  path: '/Escala_2026',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AclsRoute = AclsRouteImport.update({
@@ -320,6 +326,7 @@ const AppSlugSubtopicRoute = AppSlugSubtopicRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/Escala_2026': typeof Escala_2026Route
   '/acls': typeof AclsRoute
   '/adec': typeof AdecRoute
   '/admin': typeof AdminRoute
@@ -373,6 +380,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/Escala_2026': typeof Escala_2026Route
   '/acls': typeof AclsRoute
   '/adec': typeof AdecRoute
   '/admin': typeof AdminRoute
@@ -426,6 +434,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/Escala_2026': typeof Escala_2026Route
   '/acls': typeof AclsRoute
   '/adec': typeof AdecRoute
   '/admin': typeof AdminRoute
@@ -481,6 +490,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/Escala_2026'
     | '/acls'
     | '/adec'
     | '/admin'
@@ -534,6 +544,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/Escala_2026'
     | '/acls'
     | '/adec'
     | '/admin'
@@ -586,6 +597,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/Escala_2026'
     | '/acls'
     | '/adec'
     | '/admin'
@@ -640,6 +652,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  Escala_2026Route: typeof Escala_2026Route
   AclsRoute: typeof AclsRoute
   AdecRoute: typeof AdecRoute
   AdminRoute: typeof AdminRoute
@@ -696,6 +709,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/Escala_2026': {
+      id: '/Escala_2026'
+      path: '/Escala_2026'
+      fullPath: '/Escala_2026'
+      preLoaderRoute: typeof Escala_2026RouteImport
       parentRoute: typeof rootRouteImport
     }
     '/acls': {
@@ -1077,6 +1097,7 @@ const AppSlugRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  Escala_2026Route: Escala_2026Route,
   AclsRoute: AclsRoute,
   AdecRoute: AdecRoute,
   AdminRoute: AdminRoute,

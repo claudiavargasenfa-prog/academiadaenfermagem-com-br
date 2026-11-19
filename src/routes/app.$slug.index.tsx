@@ -115,7 +115,7 @@ function Page() {
   }
 
   return (
-    <AppShell>
+    <AppShell hideReferences={slug === ESCALA_SLUG}>
       <Link to="/" className="mb-3 inline-flex items-center gap-1 text-sm font-semibold text-muted-foreground hover:text-foreground">
         <ArrowLeft className="h-4 w-4" /> Voltar
       </Link>
