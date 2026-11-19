@@ -75,8 +75,8 @@ export function EscalaPro({ bloqueada = false }: { bloqueada?: boolean } = {}) {
     <div className="space-y-5">
       {bloqueada && (
         <div className="rounded-2xl border-2 border-destructive bg-destructive/10 p-4 text-sm">
-          <p className="font-bold">🔒 Sua Escala está bloqueada para edição</p>
-          <p className="mt-1">Você pode ver tudo o que já registrou, mas para escrever e marcar no novo ano é preciso renovar a adesão. Assim que o pagamento for confirmado, tudo é liberado e seu ano anterior continua em sequência. A confirmação da adesão pode levar até 36 horas.</p>
+          <p className="font-bold">🔒 Seu período de teste encerrou! Sua escala de 2027 está salva aqui.</p>
+          <p className="mt-1">Clique abaixo para desbloquear seu ano inteiro por apenas R$ 37,97 por ano. Assim que o pagamento for confirmado, tudo é liberado e seu ano anterior continua em sequência. A confirmação da adesão pode levar até 36 horas.</p>
           <button type="button" onClick={renovar} disabled={pagando} className={`${btn} mt-3`}>{pagando ? "Abrindo pagamento..." : "Renovar agora — R$ 37,97"}</button>{erroPag && <p className="mt-1 text-destructive">{erroPag}</p>}
         </div>
       )}

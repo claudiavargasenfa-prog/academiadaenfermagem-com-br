@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { AppAccessGate } from "@/components/ContentProtection";
 import { useAppAccess, useAuthReady } from "@/lib/access";
-import { escalaBloqueada } from "@/lib/escala-renovacao";
+import { escalaBloqueada, testeAtivo, avisoTeste } from "@/lib/escala-renovacao";
 import { EscalaPro } from "./EscalaPro";
 
 /** Quem já pagou um dia continua vendo a Escala; sem pagamento vigente fica só leitura. */
@@ -24,5 +24,10 @@ export function EscalaGate({ slug }: { slug: string }) {
   }
   if (antigo.isLoading) return null;
   if (antigo.data) return <EscalaPro bloqueada />;
+  if (user) {
+    const agora = new Date();
+    if (testeAtivo(agora)) return (<div className="space-y-3"><div className="rounded-2xl border-2 border-primary bg-primary/10 p-4 text-sm font-bold">{avisoTeste(agora)}</div><EscalaPro /></div>);
+    return <EscalaPro bloqueada />;
+  }
   return <AppAccessGate slug={slug}><EscalaPro /></AppAccessGate>;
 }
