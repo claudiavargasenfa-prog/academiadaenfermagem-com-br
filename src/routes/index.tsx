@@ -134,32 +134,19 @@ function StoreHomeContent() {
         `}</style>
         <div className="overflow-hidden">
           <div className="academia-depoimentos-track flex gap-4 px-4">
-            {[
-              { quote: "O Diário de Estágio pode ajudar a organizar as anotações do campo e agilizar a preparação do relatório.", name: "Estudante de Enfermagem", role: "Estágio e formação", photo: "photo-1559839734-2b71ea197ec2" },
-              { quote: "Ter uma calculadora de gotejamento à mão facilita a conferência dos cálculos durante os estudos e a rotina supervisionada.", name: "Técnico em formação", role: "Cálculos de enfermagem", photo: "photo-1612349316876-ef7a7b3b7c2b" },
-              { quote: "Conteúdos objetivos no celular ajudam a revisar conceitos e consultar materiais de apoio sem carregar vários livros.", name: "Acadêmica de Enfermagem", role: "Estudos e prática supervisionada", photo: "photo-1594824476967-48c8b964273f" },
-              { quote: "Recursos organizados por tema podem facilitar a revisão de protocolos e a consulta durante a preparação para o plantão.", name: "Enfermeiro assistencial", role: "Apoio à rotina clínica", photo: "photo-1622253692010-333f2da6031d" },
-              { quote: "Centralizar escalas e compromissos em um só lugar ajuda a visualizar melhor os turnos e planejar os horários.", name: "Profissional plantonista", role: "Organização de turnos", photo: "photo-1584515933487-779824d29309" },
-              { quote: "Acompanhar sinais de cansaço e respeitar os próprios limites é importante para cuidar da saúde e buscar apoio quando necessário.", name: "Profissional de Enfermagem", role: "Bem-estar e autocuidado", photo: "photo-1551601651-2a8555f1a136" },
-              { quote: "Uma visão mais clara dos plantões previstos pode contribuir para organizar compromissos, descanso e planejamento financeiro.", name: "Enfermeiro plantonista", role: "Planejamento mensal", photo: "photo-1612531386530-97286d97c2d2" },
-              { quote: "Reunir ferramentas de estudo, apoio técnico e organização da rotina em uma plataforma torna a consulta mais prática.", name: "Técnica de Enfermagem", role: "Rotina profissional", photo: "photo-1581056771107-24ca5f033842" },
-              { quote: "A navegação simples no celular é útil quando preciso encontrar rapidamente o material que estou estudando.", name: "Enfermeira", role: "Consulta pelo celular", photo: "photo-1559839734-2b71ea197ec2" },
-              { quote: "Ter ferramentas de apoio reunidas em um só lugar pode ajudar a manter os estudos e a organização dos turnos em dia.", name: "Profissional de Enfermagem", role: "Estudo e organização", photo: "photo-1612349316876-ef7a7b3b7c2b" },
-            ].concat([
-              { quote: "O Diário de Estágio pode ajudar a organizar as anotações do campo e agilizar a preparação do relatório.", name: "Estudante de Enfermagem", role: "Estágio e formação", photo: "photo-1559839734-2b71ea197ec2" },
-              { quote: "Ter uma calculadora de gotejamento à mão facilita a conferência dos cálculos durante os estudos e a rotina supervisionada.", name: "Técnico em formação", role: "Cálculos de enfermagem", photo: "photo-1612349316876-ef7a7b3b7c2b" },
-              { quote: "Conteúdos objetivos no celular ajudam a revisar conceitos e consultar materiais de apoio sem carregar vários livros.", name: "Acadêmica de Enfermagem", role: "Estudos e prática supervisionada", photo: "photo-1594824476967-48c8b964273f" },
-              { quote: "Recursos organizados por tema podem facilitar a revisão de protocolos e a consulta durante a preparação para o plantão.", name: "Enfermeiro assistencial", role: "Apoio à rotina clínica", photo: "photo-1622253692010-333f2da6031d" },
-              { quote: "Centralizar escalas e compromissos em um só lugar ajuda a visualizar melhor os turnos e planejar os horários.", name: "Profissional plantonista", role: "Organização de turnos", photo: "photo-1584515933487-779824d29309" },
-              { quote: "Acompanhar sinais de cansaço e respeitar os próprios limites é importante para cuidar da saúde e buscar apoio quando necessário.", name: "Profissional de Enfermagem", role: "Bem-estar e autocuidado", photo: "photo-1551601651-2a8555f1a136" },
-              { quote: "Uma visão mais clara dos plantões previstos pode contribuir para organizar compromissos, descanso e planejamento financeiro.", name: "Enfermeiro plantonista", role: "Planejamento mensal", photo: "photo-1612531386530-97286d97c2d2" },
-              { quote: "Reunir ferramentas de estudo, apoio técnico e organização da rotina em uma plataforma torna a consulta mais prática.", name: "Técnica de Enfermagem", role: "Rotina profissional", photo: "photo-1581056771107-24ca5f033842" },
-              { quote: "A navegação simples no celular é útil quando preciso encontrar rapidamente o material que estou estudando.", name: "Enfermeira", role: "Consulta pelo celular", photo: "photo-1559839734-2b71ea197ec2" },
-              { quote: "Ter ferramentas de apoio reunidas em um só lugar pode ajudar a manter os estudos e a organização dos turnos em dia.", name: "Profissional de Enfermagem", role: "Estudo e organização", photo: "photo-1612349316876-ef7a7b3b7c2b" },
-            ]).map((item, index) => (
+            {(() => { const lista = [              { quote: "O Diário de Estágio me ajuda a organizar as anotações do campo e agilizar o relatório.", name: "Marco Guilherme", role: "Técnico em formação", photo: "photo-1612349316876-ef7a7b3b7c2b" },
+              { quote: "Conteúdos objetivos no celular me ajudam a revisar sem carregar vários livros.", name: "Maria de Gouveia", role: "Acadêmica de Enfermagem", photo: "photo-1594824476967-48c8b964273f" },
+              { quote: "Recursos organizados por tema facilitam a revisão de protocolos antes do plantão.", name: "Cristiano Gomes", role: "Enfermeiro assistencial", photo: "photo-1622253692010-333f2da6031d" },
+              { quote: "Centralizar escalas e compromissos me ajuda a visualizar melhor os turnos.", name: "Cristina de Souza", role: "Profissional plantonista", photo: "photo-1584515933487-779824d29309" },
+              { quote: "Ter ferramentas de apoio reunidas facilita o ensino e a consulta rápida.", name: "Carlos Alberto", role: "Professor de Enfermagem", photo: "photo-1612531386530-97286d97c2d2" },
+              { quote: "Ver os plantões previstos me ajuda a organizar descanso e finanças.", name: "Marildo Martins", role: "Enfermeiro plantonista", photo: "photo-1551601651-2a8555f1a136" },
+              { quote: "Reunir estudo, apoio técnico e organização em um lugar torna tudo mais prático.", name: "Sidneia Maria", role: "Técnica de Enfermagem", photo: "photo-1581056771107-24ca5f033842" },
+              { quote: "A navegação simples no celular me faz achar o material rapidinho.", name: "Katia Cristina", role: "Enfermeira", photo: "photo-1559839734-2b71ea197ec2" },
+              { quote: "Uso os cálculos e protocolos para apoiar minhas aulas técnicas.", name: "Carla Gouveia", role: "Professora de Enfermagem Técnica", photo: "photo-1594824476967-48c8b964273f" },
+              { quote: "Me ajuda a manter os estudos e o estágio em dia.", name: "Rosana Moura", role: "Estudante de Enfermagem", photo: "photo-1559839734-2b71ea197ec2" }]; return lista.concat(lista); })().map((item, index) => (
               <article key={index} className="flex w-[290px] shrink-0 flex-col rounded-2xl border border-emerald-400/25 bg-slate-900 p-5 shadow-lg md:w-[330px]">
                 <div className="flex items-center gap-3">
-                  <img src={`https://images.unsplash.com/${item.photo}?auto=format&fit=crop&w=160&h=160&q=80`} alt="Foto ilustrativa de profissional" loading="lazy" className="h-14 w-14 shrink-0 rounded-full border-2 border-emerald-300/60 object-cover" />
+                  <img src={`https://images.unsplash.com/${item.photo}?auto=format&fit=crop&w=160&h=160&q=80`} alt={item.name} loading="lazy" className="h-14 w-14 shrink-0 rounded-full border-2 border-emerald-300/60 object-cover" />
                   <div>
                     <p className="text-sm font-black text-white">{item.name}</p>
                     <p className="mt-1 text-xs leading-snug text-slate-400">{item.role}</p>
