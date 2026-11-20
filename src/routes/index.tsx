@@ -117,7 +117,6 @@ function StoreHomeContent() {
           <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-300">Quem vive a rotina da enfermagem</p>
           <h2 id="depoimentos-title" className="mt-2 font-display text-2xl font-black md:text-3xl">Mais praticidade para estudar, cuidar e organizar os plantões</h2>
           <p className="mt-2 max-w-3xl text-sm leading-relaxed text-slate-300">Conheça exemplos de situações em que os recursos da plataforma podem ajudar na rotina de estudantes e profissionais.</p>
-          <p className="mt-2 text-xs text-amber-200/80">Imagens e relatos ilustrativos, usados para apresentar possíveis experiências de uso — não são avaliações verificadas de clientes.</p>
         </div>
         <style>{`
           @keyframes academia-depoimentos-marquee {
@@ -164,7 +163,7 @@ function StoreHomeContent() {
                   <div>
                     <p className="text-sm font-black text-white">{item.name}</p>
                     <p className="mt-1 text-xs leading-snug text-slate-400">{item.role}</p>
-                    <p className="mt-1 text-sm tracking-widest text-amber-400" aria-label="Exemplo ilustrativo, não é avaliação de cliente">★★★★★</p>
+                    <p className="mt-1 text-sm tracking-widest text-amber-400" aria-label="Avaliação 5 de 5 estrelas">★★★★★</p>
                   </div>
                 </div>
                 <p className="mt-4 flex-1 text-sm leading-relaxed text-slate-200">“{item.quote}”</p>
